@@ -1,0 +1,8 @@
+# Fichier de configuration pour le répertoire / 
+RewriteEngine On
+RewriteRule   login/([a-zA-Z]+)  createLogin.php?lang=$1 [L]
+RewriteRule   securite/([a-zA-Z]+)  indexcaptcha.php?lang=$1 [L]
+RewriteRule   contact/([a-zA-Z]+)  createContact.php?lang=$1 [L]
+RewriteRule   compte/([a-zA-Z]+)  indexchoix.php?lang=$1 [L]
+
+

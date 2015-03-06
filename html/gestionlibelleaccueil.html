@@ -1,0 +1,436 @@
+<?php
+$db = BD::connecter();
+$manager = new Manager($db);
+if (isset($_GET['erreur'])){
+			echo $_GET['erreur'];
+}
+if(isset($_GET['msgupdateconnexion'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msgencours' >
+                <?php echo TXT_MSGUPDATELIBELLE; ?>
+            </fieldset>
+
+        </td>
+    </tr>
+</table>
+
+<?php }?>
+<form data-dojo-type="dijit/form/Form" method="post" name="acccueiledit" id="acccueiledit" 	
+      action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updatelibelleaccueil.php?lang=<?php echo $lang; ?>">
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+				
+    <fieldset id="gestionlibelle" style="margin-top:25px">
+        <legend>
+            <b><?php echo TXT_PARTADMINNATIONNAL ;?></b></legend>
+        <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px"
+						style="margin-left:20px"/>
+    <span style="text-align: left;padding:10px;width: 945px;height:200px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+        <?php
+        $connexionadminnation0 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+								'TXT_ACCUEILPROJETADMIN');
+        $connexionadminnation1 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+								'TXT_PROJETADMIN');
+        $connexionadminnation2 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+								'TXT_ACCUEILPROJETADMIN0');
+        $connexionadminnation3 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+								'TXT_ACCUEILPROJETADMIN1');
+        $connexionadminnation4 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+								'TXT_ACCUEILPROJETADMIN2');
+        $connexionadminnation5 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+								'TXT_ACCUEILPROJETADMIN3');
+        $connexionadminnation6 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+								'TXT_MODIFPROFILADMIN');
+        if($lang=='fr'){
+            echo '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation0[0]['libellefrancais']))).' '.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation1[0]['libellefrancais']))).'<br>'.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation2[0]['libellefrancais']))).TXT_LISTE.', '.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation3[0]['libellefrancais']))).TXT_STATISTIQUE.', '.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation4[0]['libellefrancais']))).TXT_GESTIONCOMPTE.', '.            
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation5[0]['libellefrancais']))).'<br><br>'.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation6[0]['libellefrancais']))).TXT_MONCOMPTE;
+        }elseif($lang=='en'){
+            echo '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation0[0]['libelleanglais']))).' '.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation1[0]['libelleanglais']))).'<br>'.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation2[0]['libelleanglais']))).TXT_LISTE.', '.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation3[0]['libelleanglais']))).TXT_STATISTIQUE.', '.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation4[0]['libelleanglais']))).TXT_GESTIONCOMPTE.', '.            
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation5[0]['libelleanglais']))).'<br><br>'.
+            stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminnation6[0]['libelleanglais']))).TXT_MONCOMPTE;
+        }
+        ?>
+    </span>
+</a>
+        <table>
+            <tr>
+                <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                        <?php echo TXT_FRANCAIS;?></div></td>
+                <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                        <?php echo TXT_ANGLAIS;?></div></td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php
+                    $accueilfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN')));
+                    $accueilen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN')));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo strip_tags($accueilfr); ?>"
+																											onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueillibedit" name="accueillibedit"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"	 value="<?php echo strip_tags($accueilen); ?>"
+																											onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueilenlibedit"
+                           name="accueilenlibedit"  >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php
+                    $projetadminfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                    where reflibelle=?', 'TXT_PROJETADMIN')));
+                    $projetadminen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                    where reflibelle=?', 'TXT_PROJETADMIN')));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" id="projetadminfr" name="projetadminfr"
+                           value="<?php echo strip_tags($projetadminfr); ?>"				onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"		onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                           value="<?php echo strip_tags($projetadminen); ?>" name="projetadminen"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="projetadminen">
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php
+                    $accueil0fr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN0')));
+                    $accueil0en =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN0')));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"  id="accueil0libedit" name="accueil0libedit"
+                           value="<?php echo strip_tags($accueil0fr); ?>"				onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px" 
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"		onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                           value="<?php echo strip_tags($accueil0en); ?>" id="accueil0enlibedit" name="accueil0enlibedit"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   >
+                </td>
+            </tr>									           
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php
+                    $accueil1fr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN1')));
+                    $accueil1en =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN1')));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo strip_tags($accueil1fr); ?>"				onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueillibedit1" name="accueillibedit1"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"		onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                           value="<?php echo strip_tags($accueil1en); ?>"	id="accueilenlibedit1" name="accueilenlibedit1"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php
+                    $accueil2fr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN2')));
+                    $accueil2en =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN2')));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo strip_tags($accueil2fr); ?>"				onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueillibedit2" name="accueillibedit2"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"		onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                           value="<?php echo strip_tags($accueil2en); ?>"	id="accueilenlibedit2" name="accueilenlibedit2"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php
+                    $accueil3fr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN3')));
+                    $accueil3en =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                    where reflibelle=?', 'TXT_ACCUEILPROJETADMIN3')));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo strip_tags($accueil3fr); ?>"				onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueillibedit3" name="accueillibedit3"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"		onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                           value="<?php echo strip_tags($accueil3en); ?>"	id="accueilenlibedit3" name="accueilenlibedit3"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php
+                    $accueilprofilfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                    where reflibelle=?', 'TXT_MODIFPROFILADMIN')));
+                    $accueilprofilen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                    where reflibelle=?', 'TXT_MODIFPROFILADMIN')));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo strip_tags($accueilprofilfr); ?>"
+																											onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);" id="accueilprofillibedit"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px" name="accueilprofillibedit"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"		onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                           value="<?php echo strip_tags($accueilprofilen); ?>"	id="accueilprofilenlibedit" name="accueilprofilenlibedit"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   >
+                </td>
+            </tr>
+        </table>
+				</fieldset>
+        <fieldset id="gestionlibelleautres" style="margin-top: 25px">
+            <legend><b><?php echo TXT_PARTAUTRE ;?></b></legend>
+            <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px"
+																																															style="margin-left:20px"/>
+            <span style="text-align: left;padding:10px;width: 945px;height:280px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+                <?php
+                $connexionadminlocal0 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_ACCUEILPROJET0');
+                $connexionadminlocal01 =$manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_CLICK');
+                $connexionadminlocal1 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_ACCUEILPROJET1');
+                $connexionadminlocal2 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_ACCUEILPROJETSOUMIS0');
+                $connexionadminlocal3 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_ACCUEILPROJETSOUMIS1');
+                $connexionadminlocal4 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_ACCUEILPROJETUSER0');
+                $connexionadminlocal5 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_ACCUEILPROJETUSER1');
+                $connexionadminlocal6 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_MODIFPROFIL');
+                $connexionadminlocal7 = $manager->getList2("select libellefrancais,libelleanglais from libelleapplication where reflibelle=?",
+																'TXT_PROJETREALISABLE');
+                if($lang=='fr'){
+                    echo '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal0[0]['libellefrancais']))).'<br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal1[0]['libellefrancais']))).
+																				strtolower($connexionadminlocal01[0]['libellefrancais']).' '.TXT_CREERPROJET.'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal7[0]['libellefrancais']))).', '.
+																				strtolower($connexionadminlocal01[0]['libellefrancais']).TXT_DEMANDEPROJET.'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal2[0]['libellefrancais']))).', '.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal3[0]['libellefrancais']))).' '.
+																				strtolower(TXT_CONSULTERPROJET).', '.'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal4[0]['libellefrancais'])))
+																				.stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal5[0]['libellefrancais']))).
+																				' '.strtolower(TXT_VUESUIVIPROJETCENTRALE).'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal6[0]['libellefrancais'])))
+																				.stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal5[0]['libellefrancais']))).' '.strtolower(TXT_MONCOMPTE);
+                }elseif($lang=='en'){
+                     echo '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal0[0]['libelleanglais']))).'<br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal1[0]['libelleanglais']))).
+																				strtolower($connexionadminlocal01[0]['libelleanglais']).' '.TXT_CREERPROJET.'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal7[0]['libelleanglais']))).', '.
+																				strtolower($connexionadminlocal01[0]['libelleanglais']).TXT_DEMANDEPROJET.'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal2[0]['libelleanglais']))).', '.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal3[0]['libelleanglais']))).' '.
+																				strtolower(TXT_CONSULTERPROJET).', '.'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal4[0]['libelleanglais'])))
+																				.stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal5[0]['libelleanglais']))).
+																				' '.strtolower(TXT_VUESUIVIPROJETCENTRALE).'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal6[0]['libelleanglais'])))
+																				.stripslashes(str_replace("''","'",str_replace("’’","'",$connexionadminlocal5[0]['libelleanglais']))).' '.strtolower(TXT_MONCOMPTE);
+                }
+                ?>
+            </span>
+        </a>
+            <table>
+                <tr>
+                    <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                            <?php echo TXT_FRANCAIS;?></div></td>
+                    <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                            <?php echo TXT_ANGLAIS;?></div></td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php
+                        $accueiluser0fr =  stripslashes(str_replace("''","'",$manager->getSingle2('select libellefrancais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJET0')));
+                        $accueiluser0en =  stripslashes(str_replace("''","'",$manager->getSingle2('select libelleanglais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJET0')));
+                        ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox" name="accueiluser0libedit"
+                               value="<?php echo strip_tags($accueiluser0fr); ?>" onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueiluser0libedit"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <input data-dojo-type="dijit/form/ValidationTextBox" onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                               value="<?php echo strip_tags($accueiluser0en); ?>" id="accueiluser0enlibedit"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   name="accueiluser0enlibedit">
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php
+                        $accueiluser1fr =  stripslashes(str_replace("''","'",$manager->getSingle2('select libellefrancais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJET1')));
+                        $accueiluser1en =  stripslashes(str_replace("''","'",$manager->getSingle2('select libelleanglais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJET1')));
+                        ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"
+                               value="<?php echo strip_tags($accueiluser1fr); ?>"
+																															onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);" name="accueiluser1libedit"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueiluser1libedit"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <input data-dojo-type="dijit/form/ValidationTextBox" onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                               value="<?php echo strip_tags($accueiluser1en); ?>" id="accueiluser1enlibedit"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   name="accueiluser1enlibedit">
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php
+                        $accueilprojetsoumis0fr =  stripslashes(str_replace("''","'",$manager->getSingle2('select libellefrancais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJETSOUMIS0')));
+                        $accueilprojetsoumis0en =  stripslashes(str_replace("''","'",$manager->getSingle2('select libelleanglais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJETSOUMIS0')));
+                        ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"
+                               value="<?php echo strip_tags($accueilprojetsoumis0fr); ?>"
+																															onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"	name="accueilprojetsoumis0fr"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueilprojetsoumis0fr"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <input data-dojo-type="dijit/form/ValidationTextBox"		onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                               value="<?php echo strip_tags($accueilprojetsoumis0en); ?>" id="accueilprojetsoumis0en"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   name="accueilprojetsoumis0en">
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php
+                        $accueilprojetsoumis1fr =  stripslashes(str_replace("''","'",$manager->getSingle2('select libellefrancais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJETSOUMIS1')));
+                        $accueilprojetsoumis1en =  stripslashes(str_replace("''","'",$manager->getSingle2('select libelleanglais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJETSOUMIS1')));
+                        ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"
+                               value="<?php echo strip_tags($accueilprojetsoumis1fr); ?>"
+																															onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);" name="accueilprojetsoumis1fr"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueilprojetsoumis1fr"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <input data-dojo-type="dijit/form/ValidationTextBox" onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                               value="<?php echo strip_tags($accueilprojetsoumis1en); ?>" id="accueilprojetsoumis1en"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   name="accueilprojetsoumis1en">
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php
+                        $accueilprojetuser0fr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJETUSER0')));
+                        $accueilprojetuser0en =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJETUSER0')));
+                        ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"
+                               value="<?php echo strip_tags($accueilprojetuser0fr); ?>"
+																															onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"	 name="accueilprojetuser0fr"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueilprojetuser0fr"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <input data-dojo-type="dijit/form/ValidationTextBox"    onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                               value="<?php echo strip_tags($accueilprojetuser0en); ?>" id="accueilprojetuser0en"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   name="accueilprojetuser0en">
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php
+                        $accueilprojetuser1fr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJETUSER1')));
+                        $accueilprojetuser1en =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                        where reflibelle=?', 'TXT_ACCUEILPROJETUSER1')));
+                        ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"
+                               value="<?php echo strip_tags($accueilprojetuser1fr); ?>"
+																															onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);" name="accueilprojetuser1fr"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="accueilprojetuser1fr"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <input data-dojo-type="dijit/form/ValidationTextBox" onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                               value="<?php echo strip_tags($accueilprojetuser1en); ?>" id="accueilprojetuser1en"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   name="accueilprojetuser1en">
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php
+                        $modifprofilfr =  stripslashes(str_replace("''","'",$manager->getSingle2('select libellefrancais from libelleapplication
+                        where reflibelle=?', 'TXT_MODIFPROFIL')));
+                        $modifprofilen =  stripslashes(str_replace("''","'",$manager->getSingle2('select libelleanglais from libelleapplication
+                        where reflibelle=?', 'TXT_MODIFPROFIL')));
+                        ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"
+                               value="<?php echo strip_tags($modifprofilfr); ?>"    onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="modifprofilfr" name="modifprofilfr"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <input data-dojo-type="dijit/form/ValidationTextBox"    onfocus="dijit.byId('btnaccueil').setAttribute('disabled', false);"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\’]+'"
+                               value="<?php echo strip_tags($modifprofilen); ?>" id="modifprofilen"
+                               style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"   name="modifprofilen">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+				<table>
+							<tr><td>&nbsp;</td></tr>
+							<tr><td>
+													<input style="text-align: left;margin-left: 10px"  type="submit" id ="btnaccueil" name="btnaccueil"
+																				label="<?php echo TXT_MODIFIER ;?>"   data-dojo-type="dijit/form/Button" disabled="disabled"				>
+										</td>
+							</tr>
+							<tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
+				</table>
+</form>
+<?php BD::deconnecter(); ?>

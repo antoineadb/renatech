@@ -1,0 +1,688 @@
+<?php
+include_once 'class/Manager.php';
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+if(!empty($_GET['idprojet'])){
+    $idprojet=$_GET['idprojet'];
+    $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+}elseif(isset($_GET['numProjet'])){
+    $numProjet=$_GET['numProjet'];
+    $idprojet = $manager->getSingle2("select idprojet from projet where numero =?",$numProjet);//récupération de l'idprojet à l'aide de $numProjet
+}else{
+    $idprojet =$_GET['idprojet'];
+    $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+}
+$rowModif = $manager->getList2("SELECT contexte,titre,libellecentrale,datedebutprojet FROM projet,concerne,centrale WHERE idprojet = idprojet_projet  AND idcentrale_centrale = idcentrale and idprojet =?",$idprojet);
+$titre =stripslashes(str_replace("''","'",$rowModif[0]['titre']));
+$Contexteobjectif =filterEditor(stripslashes(str_replace("''","'",$rowModif[0]['contexte'])));
+$arrayentity = $manager->getList2("select libellecentrale,codeunite from concerne,centrale where idcentrale_centrale = idcentrale and idprojet_projet=?",$idprojet);
+$entityprojet = $arrayentity[0]['libellecentrale'].' / '.$arrayentity[0]['codeunite'];
+//Funding Source
+$sSourcefinancement='';
+$arrraySF= $manager->getList2("select libellesourcefinancement,acronymesource from projetsourcefinancement,sourcefinancement where idsourcefinancement_sourcefinancement=idsourcefinancement and idprojet_projet=?",$idprojet);
+$nbSF=count($arrraySF);
+for($i=0;$i<$nbSF;$i++){
+    if($arrraySF[$i]['libellesourcefinancement']==TXT_AUTRES){
+        $sSourcefinancement.=$arrraySF[$i]['acronymesource'].',';
+    }else{
+        $sSourcefinancement.=$arrraySF[$i]['libellesourcefinancement'].',';
+    }
+}
+$s_Sourcefinancement = substr($sSourcefinancement,0,-1);
+
+$rowResult = $manager->getListbyArray("SELECT idutilisateur,nom, prenom, entrepriselaboratoire FROM utilisateur, projet, creer WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=?",array($idprojet));
+$demandeur =$rowResult[0]['nom'].' '.$rowResult[0]['prenom'];
+$entrepriselaboratoireo=stripslashes(str_replace("''",	"'",$rowResult[0]['entrepriselaboratoire']));
+$arrayvillepays=$manager->getList2("select ville,nompays from pays,utilisateur where idpays_pays=idpays and idutilisateur=?",$rowResult[0]['idutilisateur']);    
+$villePays = $arrayvillepays[0]['ville'].' / '.$arrayvillepays[0]['nompays'];
+//collaborator
+$s_Collaborator='';
+$_acolaborator = $manager->getList2("select centralepartenaireprojet,partenaire1 from projet where idprojet=?",$idprojet);
+$s_Collaborator=$_acolaborator[0]['centralepartenaireprojet'].' '.$_acolaborator[0]['partenaire1'].',';
+if(!empty($_acolaborator)){
+    $arraycollaborator = $manager->getList2("select nompartenaire,nomlaboentreprise from partenaireprojet,projetpartenaire where idpartenaire_partenaireprojet= idpartenaire and idprojet_projet=?",$idprojet);
+    $nbarraycollaborator = count($arraycollaborator);
+    for($i=0;$i<$nbarraycollaborator;$i++){
+        $s_Collaborator.=$arraycollaborator[$i]['nomlaboentreprise'].' - '.$arraycollaborator[$i]['nompartenaire'].',';
+    }
+}
+$s_collaborator=substr($s_Collaborator,0,-1);
+
+$Thematics = $manager->getSingle2("SELECT libellethematique FROM projet,thematique WHERE idthematique=idthematique_thematique and idprojet =?",$idprojet);
+$Startingdate=$rowModif[0]['datedebutprojet'];
+//RESSOURCE
+$s_ressource='';
+$arrayresssource = $manager->getList2("select libelleressourceen from ressource, ressourceprojet where idressource_ressource = idressource and idprojet_projet=?",$idprojet);
+$nbarrayresssource = count($arrayresssource);
+for($i=0;$i<$nbarrayresssource;$i++){
+    $s_ressource.=$arrayresssource[$i]['libelleressourceen'].',';
+}
+$Technicalwork = substr($s_ressource,0,-1);
+$arrayrapport= $manager->getList2("select * from rapport where idprojet=?",$idprojet);
+
+if(!empty($arrayrapport[0]['logo'])){
+    $logo = $arrayrapport[0]['logo'];
+}
+if(!empty($arrayrapport[0]['figure'])){
+    $figure = $arrayrapport[0]['figure'];
+}
+if(!empty($arrayrapport[0]['valorization'])){
+    $valorisation =str_replace("''","'", $arrayrapport[0]['valorization']);
+}
+if(!empty($arrayrapport[0]['results'])){
+    $results=str_replace("''","'",$arrayrapport[0]['results']);
+}
+if(!empty($arrayrapport[0]['entity'])){
+    $entity=str_replace("''","'",$arrayrapport[0]['entity']);
+}else{
+   $entity=$entityprojet;
+}
+
+if(!empty($arrayrapport[0]['title'])){
+    $title=str_replace("''","'",$arrayrapport[0]['title']);
+}
+if(!empty($arrayrapport[0]['author'])){
+    $author=str_replace("''","'",$arrayrapport[0]['author']);
+}else{
+    $author=str_replace("''","'",$demandeur);
+}
+
+if(!empty($arrayrapport[0]['villepays'])){
+    $villepays=str_replace("''","'",$arrayrapport[0]['villepays']);
+}else{
+    $villepays=str_replace("''","'",$villePays);
+}
+if(!empty($arrayrapport[0]['instituteinterest'])){
+    $instituteinterest=str_replace("''","'",$arrayrapport[0]['instituteinterest']);
+}else{
+    $instituteinterest='';
+}
+if(!empty($arrayrapport[0]['fundingsource'])){
+   $fundingsource=str_replace("''","'",$arrayrapport[0]['fundingsource']);
+}else{
+      $fundingsource=str_replace("''","'",$s_Sourcefinancement);
+}
+if(!empty($arrayrapport[0]['collaborator'])){
+   $collaborator=str_replace("''","'",$arrayrapport[0]['collaborator']);
+}else{
+      $collaborator=str_replace("''","'",$s_collaborator);
+}
+if(!empty($arrayrapport[0]['thematics'])){
+   $thematics=$arrayrapport[0]['thematics'];
+}else{
+      $thematics=$Thematics;
+}
+if(!empty($arrayrapport[0]['startingdate'])){
+   $startingdate=$arrayrapport[0]['startingdate'];
+}else{
+      $startingdate=$Startingdate;
+}
+if(!empty($arrayrapport[0]['objectif'])){
+   $contexteobjectif=str_replace("''","'",$arrayrapport[0]['objectif']);
+}else{
+      $contexteobjectif=str_replace("''","'",$Contexteobjectif);
+}
+if(!empty($arrayrapport[0]['technologicalwc'])){
+   $technicalwork=str_replace("''","'",$arrayrapport[0]['technologicalwc']);
+}else{
+      $technicalwork=str_replace("''","'",$Technicalwork);
+}
+if(!empty($arrayrapport[0]['logocentrale'])){
+   $logocentralerattachement=$arrayrapport[0]['logocentrale'];
+}else{
+      $logocentralerattachement='';
+}
+$logocentrale=$manager->getSingle2("select adresselogcentrale from sitewebapplication where refsiteweb = (SELECT libellecentrale from centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?)", $idprojet);
+ 
+if(isset($_GET['statut'])){
+    $idstatut = $_GET['statut'];
+}else{
+    $idstatut = $manager->getSingle2("SELECT  idstatutprojet_statutprojet FROM concerne,projet WHERE idprojet_projet = idprojet and idprojet = ?",$idprojet);
+}?>
+
+<div name="rapport" data-dojo-type="dijit/form/Form" id="rapport"   method="post" 
+      action="<?php echo '/'.REPERTOIRE; ?>/modifBase/updateRapport.php?lang=<?php echo $lang; ?>&idprojet=<?php echo $idprojet ;?>&idstatut=<?php echo $idstatut ;?>" enctype="multipart/form-data" >
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+    <script type="dojo/on" data-dojo-event="submit">
+                var nbcontexte= strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
+                var nbresults= strip_tags(trim(dijit.byId("results").value),'').length;
+                var nbvalorization =strip_tags(trim(dijit.byId("valorization").value),'').length;
+                if(nbcontexte>1080){
+                    alert("<?php echo 'The number of characters for the Project objectives  must be less than 1080, please correct'; ?>");
+                    return false;                    
+                    exit();                
+                }else if(nbresults>1055){
+                    alert("<?php echo 'The number of characters for the Rsults must be less than 1055, please correct'; ?>");
+                    return false;                    
+                    exit();                
+                }else if(nbvalorization>340){
+                    alert("<?php echo 'The number of characters for the Valorization must be less than 340, please correct'; ?>");
+                    return false;                    
+                    exit();                
+                }else if (this.validate()){
+                    return true;
+                }else{
+                    alert("<?php echo TXT_ERR; ?>");
+                    return false;
+                }
+        </script>
+    
+    <?php 
+        if(isset($_GET['erreuruploadsizerapportfig'])) {
+            $idrapport = $manager->getSingle2("select idrapport from raport where idprojet=?",$idprojet);
+            $rapportfigure = new Rapportfigure($idrapport,'');//effacement de l'attachement
+            $manager->updateRapportfigure($rapportfigure,$idrapport);
+            echo "<tr  id='msgerrdescriptechno'><td><fieldset class='msgerrdescriptechno' ><legend>ERROR!</legend>The size of the figure must not be above 1500px by 300px and 200Ko.</fieldset></td></tr>";
+        }elseif(isset($_GET['erreuruploadsizerapport'])) {
+            $idrapport = $manager->getSingle2("select idrapport from raport where idprojet=?",$idprojet);
+            $rapportfigure = new Rapportfigure($idrapport,'');//effacement de l'attachement
+            $manager->updateRapportfigure($rapportfigure,$idrapport);
+            echo "<tr  id='msgerrdescriptechno'><td><fieldset class='msgerrdescriptechno' ><legend>ERROR!</legend>The size of the logos must not be above 400px by 300px and 200Ko.</fieldset></td></tr>";
+        }elseif(isset($_GET['erreuruploadsextension'])) {
+            $idrapport = $manager->getSingle2("select idrapport from raport where idprojet=?",$idprojet);
+            $rapportfigure = new Rapportfigure($idrapport,'');//effacement de l'attachement
+            $manager->updateRapportfigure($rapportfigure,$idrapport);
+            echo "<tr  id='msgerrdescriptechno'><td><fieldset class='msgerrdescriptechno' ><legend>ERROR!</legend>The extension of the figure and the logos authorized are jpg,jpeg,png and gif.</fieldset></td></tr>";
+        }elseif(isset($_GET['erreuruploadsizerapportfiglog'])) {
+            $idrapport = $manager->getSingle2("select idrapport from raport where idprojet=?",$idprojet);
+            $rapportfigure = new Rapportfigure($idrapport,'');//effacement de l'attachement
+            $manager->updateRapportfigure($rapportfigure,$idrapport);
+            echo "<tr  id='msgerrdescriptechno'><td><fieldset class='msgerrdescriptechno' ><legend>ERROR!</legend>The size of the logos must not be above 400px by 300px and for the figure not above 350 x 200px and 200ko</fieldset></td></tr>";
+        }
+    ?>
+    
+    <input type="hidden" id="contexteobjectif" name="contexteobjectif"  >
+    <input type="hidden" id="resultats" name="resultats" >
+    <input type="hidden" id="valorisation" name="valorisation" >
+    <?php 
+        $idrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?",$idprojet);
+        if(!empty($idrapport)){
+    ?>
+    <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td style="width:50%"></td>
+            <td style="background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;margin-top: 1px;padding: 10px;text-align: center;width: 300px;"><?php echo 'The report must be written in English';?></td>
+        </tr>
+</table>
+    <table style="width:250px;float: right;margin-right: 20px;margin-top:30px;border-color: #5D8BA2;">
+        <tr>
+            <td>
+            <div style='padding-left: 200px' >
+            <a href="<?php echo '/'.REPERTOIRE.'/pdf_report/'.$lang.'/'.$idprojet; ?>" target="_blank" title="<?php echo 'Create the report' ;?>"><img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/pdficon.png"  ></a>
+            </div>
+            </td>    
+        </tr>
+    </table> 
+    <?php }else{ ?>
+    <table style="width:250px;margin-right: 20px;margin-top:30px;border-color: #5D8BA2;">
+        <tr>
+            <td>
+                <fieldset style='   border: 1px solid darkblue;border-radius: 5px;color: darkblue;font-family: verdana;margin-top: -30px;padding-top: 4px;padding-bottom: 6px;padding-left: 15px;padding-right: 15px;text-align: center;width: 995px;'>Complete in English and save the report before generating the pdf file </fieldset>
+            </td>
+        </tr>
+    </table>
+        <?php } ?>
+        <script>
+            function updateInput(id,id1){
+                if(dijit.byId(id1)){
+                    dijit.byId(id).set("value",dijit.byId(id1).get('value'));
+                }else if(document.getElementById(id1)) {console.log(document.getElementById(id1));
+                    dijit.byId(id).set("value",document.getElementById(id1).value);
+                }
+            }
+        </script>
+    <table>
+        <tr>
+            <td>
+                <label for="titre" style="width: 100px;margin-bottom: 10px;float: left;margin-left: 20px;font-weight:bold;margin-top:30px"><?php echo 'Title :'; ?></label>
+                <input id="titre" value="<?php if(!empty($title)){echo $title;}else{echo $titre;} ?>"  type="text"  data-dojo-type="dijit/form/ValidationTextBox" name= "titre" 
+                       maxlength="300" style=";margin-left: 20px;margin-top:30px;margin-bottom: 10px;width: 566px"  ></td>
+            <td>
+                <a href="javascript:updateInput('titre','titreProjet')"  title="<?php echo 'Update the title from the project' ;?>">
+                    <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;margin-top: 20px"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="author" style="width: 100px;margin-bottom: 10px;float: left;margin-left: 20px;font-weight:bold"><?php echo 'Authors : '?></label>
+                <input id="author" value="<?php echo $author; ?>"  type="text" maxlength="60"   data-dojo-type="dijit/form/ValidationTextBox" name= "author" 
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	
+                           style="margin-left: 20px;float: left;margin-bottom: 10px;width:565px" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
+            </td>
+            <td>
+                <a href="javascript:updateInput('author','demandeur')"  title="<?php echo 'Update the Author from the project' ;?>">
+                    <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;margin-bottom: 5px"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+        <table>
+        <tr>
+            <td>
+                <label for="entity" style="width: 150px;margin-bottom: 10px;float: left;margin-left: 20px;font-weight:bold"><?php echo 'Entity,CNRS code : ' ?></label>
+                <input id="entity" value="<?php echo $entity; ?>"  type="text"  maxlength="75"  data-dojo-type="dijit/form/ValidationTextBox" name= "entity" 
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	
+                           style="margin-left: 20px;float: left;margin-bottom: 10px;width:565px" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"
+                             />
+            </td>
+            <td>
+                <a href="javascript:updateInput('entity','entityCNRSCode')"  title="<?php echo 'Update the Entity,CNRS Code from the project' ;?>">
+                    <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;margin-bottom: 5px"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="villepays" style="width: 150px;margin-bottom: 10px;float: left;margin-left: 20px;font-weight:bold"><?php echo 'Town, Country : ' ?></label>
+                <input id="villepays" value="<?php echo $villepays; ?>"  type="text" maxlength="60"   data-dojo-type="dijit/form/ValidationTextBox" name= "villepays" 
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	
+                           style="margin-left: 20px;float: left;margin-bottom: 10px;width:566px" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
+            </td>
+             <td>
+                <a href="javascript:updateInput('villepays','townCountry')"  title="<?php echo 'Update the Entity,CNRS Code from the project' ;?>">
+                    <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;margin-bottom: 5px"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="instituteinterest" style="width: 220px;margin-bottom: 10px;float: left;margin-left: 20px;font-weight:bold"><?php echo 'CNRS institute of interest : ' ?></label>
+                <input id="instituteinterest" value="<?php echo $instituteinterest;?>"  type="text" maxlength="50"   data-dojo-type="dijit/form/ValidationTextBox" name= "instituteinterest" 
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	
+                           style="margin-left: 20px;float: left;margin-bottom: 10px;width:496px" 
+                           data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
+            </td>
+        </tr>
+        </table>
+    <table>
+        <tr>
+            <td>
+                <label for="fundingsource" style="width: 140px;margin-bottom: 10px;float: left;margin-left: 20px;font-weight:bold"><?php echo 'Funding source : ' ?></label>
+                <input id="fundingsource" value="<?php echo $fundingsource; ?>"  type="text" maxlength="80"   data-dojo-type="dijit/form/ValidationTextBox" name= "fundingsource" 
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	
+                           style="margin-left: 20px;float: right;width:810px;margin-bottom: 10px" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
+            </td>
+            <td>
+                <a href="javascript:updateInput('fundingsource','sourceFinancement')"  title="<?php echo 'Update the Funding source from the project' ;?>">
+                    <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;margin-bottom: 5px"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+    </table>    
+    <table>
+        <tr>
+            <td>
+                <label for="collaborator" style="width: 350px;margin-bottom: 10px;float: left;margin-left: 20px;font-weight:bold"><?php echo 'Collaborators in the project or consortium : ' ?></label>
+                <input id="collaborator" value="<?php echo $collaborator; ?>"  type="text"    data-dojo-type="dijit/form/ValidationTextBox" name= "collaborator" maxlength="64"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	
+                           style="margin-left: 20px;float: right;width:600px;margin-bottom: 10px" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
+            </td>
+            <td>
+                <a href="javascript:updateInput('collaborator','collaborators')"  title="<?php echo 'Update the Collaborators from the project' ;?>">
+                    <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;margin-bottom: 5px"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <table>
+        <tr>
+              <td style="width: 25%"></td>
+            <td style="background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;margin-top: 1px;padding: 10px;text-align: center;width: 625px;"><?php echo 'Max size width=400px, height= 350px, weight = 200Ko, extensions = jpg,jpeg,png or gif';?></td>
+        </tr>
+    </table>
+    <?php
+        //CALCUL DES DIMENSIONS DU LOGO                
+        if(isset($logocentralerattachement)&&!empty($logocentralerattachement)){            
+            $arrayInfoImg =getimagesize("uploadlogo/".$logocentralerattachement);            
+        }else{        
+            $arrayInfoImg =getimagesize($logocentrale);
+        }
+        if($arrayInfoImg[0]>160){
+            $f=160/$arrayInfoImg[0];                
+            $width = $f*$arrayInfoImg[0];
+            $height = $f*$arrayInfoImg[1];
+        }else{
+            $width = $arrayInfoImg[0];
+            $height = $arrayInfoImg[1];
+        }
+        ?>
+    <table>
+        <tr>
+        <td style="width:50%;float: left;margin-left:20px"><label  style="font-weight:bold;padding-bottom: 20px;margin-top:10px"><?php echo 'Central Logo :' ?></label>
+        <div id="file2Rapport" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader2Rapport"' name='file2Rapport' ></div>
+        <?php if($logocentralerattachement==''){?>        
+        <img src='<?php echo "/".REPERTOIRE."/".$logocentrale;?>' width="<?php echo $width; ?>" height="<?php echo $height; ?>"/><br>        
+        <input name="logorapportcentrale" id="uploader2Rapport" type="file" data-dojo-type="dojox/form/Uploader"  style="font-size: 1em;" 
+                   data-dojo-props='label:"<?php echo "add / change the logo";?>"'/>
+        </td>
+        <?php }else{?>
+        <div style="width: 160px;height:160px">
+            <img src='<?php echo "/".REPERTOIRE."/uploadlogo/".$logocentralerattachement;?>' width="<?php echo $width; ?>" height="<?php echo $height; ?>" />
+        </div>    
+            <input name="logorapportcentrale" id="uploader2Rapport" type="file" data-dojo-type="dojox/form/Uploader"  style="font-size: 1em;width: 210px;" 
+                       data-dojo-props='label:"<?php echo "add / change the logo";?>"'/>
+            </td>
+        <?php }?>
+        <td style="width:40%;float: left">
+            <label  style="font-weight:bold;padding-bottom: 20px;margin-top:10px"><?php echo 'Laboratory logo: ' ?></label>
+        <div id="fileRapport" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploaderRapport"' name='fileRapport' ></div>
+        <?php 
+                if(isset($logo)){
+                    //CALCUL DES DIMENSIONS DU LOGO                
+                    $arrayInfoImg =getimagesize("uploadlogo/".$logo);
+                    if($arrayInfoImg[0]>160){
+                       $f=160/$arrayInfoImg[0];                
+                        $width = $f*$arrayInfoImg[0];
+                        $height = $f*$arrayInfoImg[1];
+                    }else{
+                        $width = $arrayInfoImg[0];
+                        $height = $arrayInfoImg[1];
+                    }?>
+                    <div style="width: 160px;height:160px">
+        <img src='<?php echo "/".REPERTOIRE."/uploadlogo/".$logo;?>'  width="<?php echo $width; ?>" height="<?php echo $height; ?>"/>
+                <input name="logorapport" type="file" data-dojo-type="dojox/form/Uploader" id="uploaderRapport" style="font-size: 1em;" 
+                   data-dojo-props='label:"<?php echo "add / change the logo";?>"'/>
+    </div>
+        </td>
+        <?php } else{?>
+        <img src='<?php echo "/".REPERTOIRE."/".$logocentrale;?>' width="<?php echo $width; ?>" height="<?php echo $height; ?>"/>
+            <input name="logorapport" id="uploaderRapport" type="file" data-dojo-type="dojox/form/Uploader"  style="font-size: 1em;width: 210px;" 
+                       data-dojo-props='label:"<?php echo "add / change the logo";?>"'/>
+            </td>
+        <?php }?>
+        </tr>
+    </table>
+    <hr>
+    <table>
+        <tr>
+            <td>
+                <label for="thematics" style="width: 150px;margin-bottom: 10px;float: left;margin-left: 20px;font-weight:bold"><?php echo 'BTR Thematics: ' ?></label>
+                <input id="thematics" value="<?php echo $thematics; ?>"  type="text" maxlength="600"   data-dojo-type="dijit/form/ValidationTextBox" name= "thematics" 
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	style="margin-left: 20px;float: right;width:270px" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
+                </td>
+                 <td>
+                    <a href="javascript:updateInput('thematics','thematic')"  title="<?php echo 'Update the Thematics from the project' ;?>">
+                        <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;"/>
+                    </a>
+                </td>
+                <td>
+                <label for="startingdate" style="width: 150px;margin-bottom: 10px;float: left;margin-left: 70px;font-weight:bold"><?php echo 'Starting date : ' ?></label>
+                <input id="startingdate" value="<?php echo $startingdate; ?>"  type="text"   data-dojo-type="dijit/form/DateTextBox" name= "startingdate" data-dojo-style="margin-left: 20px;float: right;width:270px;margin-bottom: 10px"  >
+            </td>
+            <td>
+                <a href="javascript:updateInput('startingdate','datedebutprojet')"  title="<?php echo 'Update the Starting date from the project' ;?>">
+                    <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+<table>
+    <tr>
+        <td><label for="contextObjectif" style="width: 160px;float: left;margin-left: 20px;font-weight:bold;padding: 10px"><?php echo 'Project objectives :' ?></label>
+        
+            <a href="javascript:updateInput('contextObjectif','contexte')"  title="<?php echo 'Update the Project objectives from the project' ;?>">
+            <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-top: 8px;"/>
+            </a>
+        </td>
+    </tr>
+    <tr>
+    <td>
+        <div id="contextObjectif" name="contextObjectif" style="width:1025px" ><p><?php echo $contexteobjectif;?></p></div></td>
+    </tr>
+    <tr><td><label id="cptcontexteobjectif" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
+        <tr style="display: none" id="msgerrcontextObjectif">
+            <td>
+                <fieldset class='msgerrcontexte' ><legend><?php echo TXT_INFO;?></legend>
+                    <?php 	echo 'The number of characters must be less than 1080 , the above values ​​are not saved'.'<br>';?>
+                </fieldset>
+            </td>
+        </tr>
+</table>
+<hr>
+<table>
+    <tr><td><label for="results" style="width: 990px;float: left;margin-left: 20px;font-weight:bold;"><?php echo 'Results :' ?></label></td></tr>
+    <tr><td><div id="results" name="results" style="width:1025px" ><?php if(!empty($results)){echo $results;} ?></div></td></tr>
+    <tr><td><label id="cptresultats" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
+        <tr style="display: none" id="msgerrresults">
+            <td>
+                <fieldset class='msgerrcontexte' ><legend><?php echo TXT_INFO;?></legend>
+                    <?php echo 'The number of characters must be less than 1055 , the above values ​​are not saved'.'<br>';?>
+                </fieldset>
+            </td>
+        </tr>
+</table>
+<?php 
+if(isset($figure) && $figure!=''){             
+    //CALCUL DES DIMENSIONS DE LA FIGURE
+    $arrayInfoImg =getimagesize('uploadlogo/'.$figure);
+    if($arrayInfoImg[1]>200){//si Height >200px
+        $facteur = 200/$arrayInfoImg[1];
+        $height = $facteur*$arrayInfoImg[1];                    
+    }else{
+        $height =$arrayInfoImg[1];
+    }
+    if($arrayInfoImg[0]>1500){//si Width >700px
+        $facteurW = 1500/$arrayInfoImg[0];
+        $width  =$facteurW*$arrayInfoImg[0];
+    }else{
+        $width = $arrayInfoImg[0];
+    }
+}    
+?>
+<table border="0" cellspacing="0" cellpadding="0" style="width: 100%">
+    <tr>
+        <td style="width: 25%">
+        <input name="figure" type="file" data-dojo-type="dojox/form/Uploader" id="figure" style="width: 228px;margin-bottom: 5px;margin-top:5px;" 
+        data-dojo-props='label:"<?php echo "add / change the the figure";?>"'>
+        </td>
+        <td style="background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 8px 6px;text-align: center; width: 625px;"><?php echo 'Max size width=1500px, height= 300px, weight = 200Ko, extensions = jpg,jpeg,png or gif';?></td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td>
+        <div id="fileResult" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploaderResult"' name='fileResult'  ></div>
+            <?php if(isset($figure)){?>
+            <img style="max-height: 200px;max-width:1035px" align="left"  src='<?php echo "/".REPERTOIRE."/uploadlogo/".$figure;?>'  height="<?php echo $height;?>" width="<?php echo $width;?>" id='fig'>
+            <?php }?>
+        </td>
+    </tr>
+</table>
+<hr>
+<table>
+    <tr><td><label for="valorization" style="width: 990px;float: left;margin-left: 20px;font-weight:bold;"><?php echo 'Valorization :' ?></label></td></tr>
+    <tr><td><div id="valorization" name="valorization"  ><?php if(!empty($valorisation)){echo $valorisation;} ?></div></td></tr>
+    <tr><td><label id="cptvalorisation" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
+        <tr style="display: none" id="msgerrvalorization">
+            <td>
+                <fieldset class='msgerrcontexte' ><legend><?php echo TXT_INFO;?></legend>
+                    <?php  echo 'The number of characters must be less than 340 , the above values ​​are not saved'.'<br>';?>
+                </fieldset>
+            </td>
+        </tr>   
+</table>
+<hr>
+<table>
+    <tr>
+        <td>
+            <label for="technicalwork" style="width: 420px;float: left;margin-left: 20px;font-weight:bold;"><?php echo 'Technical work conducted in the Renatech network:' ?></label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="technicalwork" value="<?php echo $technicalwork; ?>"  type="text"   data-dojo-type="dijit/form/ValidationTextBox" name= "technicalwork"  maxlength="110"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,;.-]+'"	style="margin-left: 20px;float: right;width:900px" 
+                           data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
+        </td>
+        <td>
+            <a href="javascript:updateInput('technicalwork','technicalworks')"  title="<?php echo 'Update the technicalwork from the project' ;?>">
+                    <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-left: 5px;margin-bottom: 5px"/>
+            </a>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>
+            <input type="button"  label="<?php echo 'Save the report' ;?>" data-dojo-type="dijit/form/Button" data-dojo-props="onClick:function(){dijit.byId('rapport').submit()}" style="margin-top:30px">            
+        </td>
+    </tr>
+</table>
+<script>
+    require(["dojo/parser", "dijit/Editor"]);    
+    require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
+        ready(function() {            
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "180px"
+            }, "contextObjectif");
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "180px"
+            }, "results");
+             new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "62px"
+            }, "valorization");
+        });
+        dojo.addOnLoad(function() {
+            var editor1 = dijit.byId("contextObjectif");
+            var editor2 = dijit.byId("results");
+            var editor3 = dijit.byId("valorization");
+            dojo.connect(editor1, "onChange", this, function(event) {
+                dojo.byId("contexteobjectif").value = editor1.get("value");
+            });
+            dojo.connect(editor2, "onChange", this, function(event) {
+                dojo.byId("resultats").value = editor2.get("value");
+            });
+            dojo.connect(editor3, "onChange", this, function(event) {
+                dojo.byId("valorisation").value = editor3.get("value");
+            });
+                //CAS POUR CHROME
+                dojo.byId("contexteobjectif").value = editor1.get("value");
+                document.getElementById('cptcontexteobjectif').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>"+ strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
+                dojo.byId("resultats").value = editor2.get("value");
+                document.getElementById('cptresultats').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("resultats").value),'').length;
+                dojo.byId("valorisation").value = editor3.get("value");
+                document.getElementById('cptvalorisation').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;
+                
+            /* --------------------------------------------------------------------------------------------------------------------
+                                                                                CONTEXTE
+             --------------------------------------------------------------------------------------------------------------------*/
+            dojo.connect(editor1, "onKeyPress", this, function(event) {
+                dojo.byId("contexteobjectif").value = editor1.get("value");
+                document.getElementById('cptcontexteobjectif').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
+                if (trim(strip_tags(editor1.get("value")),'').length > 1080) {    
+                    document.getElementById('msgerrcontextObjectif').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrcontextObjectif').style.display = 'none';
+                }                 
+            });
+            dojo.connect(editor1, "onSubmit", this, function(event) {
+                dojo.byId("contexteobjectif").value = editor1.get("value");
+                document.getElementById('cptcontexteobjectif').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
+                if (trim(strip_tags(editor1.get("value")),'').length > 1080) {    
+                    document.getElementById('msgerrcontextObjectif').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrcontextObjectif').style.display = 'none';
+                }                 
+            });
+            dojo.connect(editor1, "onBlur", this, function(event) {
+                dojo.byId("contexteobjectif").value = editor1.get("value");
+                document.getElementById('cptcontexteobjectif').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
+                if (trim(strip_tags(editor1.get("value")),'').length > 1080) {  
+                    document.getElementById('msgerrcontextObjectif').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrcontextObjectif').style.display = 'none';
+                }                
+            });
+            dojo.connect(editor1, "onClick", this, function(event) {
+                dojo.byId("contexteobjectif").value = editor1.get("value");
+                document.getElementById('cptcontexteobjectif').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
+                if (trim(strip_tags(editor1.get("value")),'').length > 1080) {  
+                    document.getElementById('msgerrcontextObjectif').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrcontextObjectif').style.display = 'none';
+                }            
+            });
+           dojo.connect(editor1, "onLoad", this, function(event) {
+                dojo.byId("contexteobjectif").value = editor1.get("value");
+                document.getElementById('cptcontexteobjectif').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;                
+            });	
+             /* --------------------------------------------------------------------------------------------------------------------
+                                                                                RESULTS
+             --------------------------------------------------------------------------------------------------------------------*/
+            dojo.connect(editor2, "onKeyPress", this, function(event) {
+                dojo.byId("resultats").value = editor2.get("value");
+                document.getElementById('cptresultats').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("resultats").value),'').length;
+                if (trim(strip_tags(editor2.get("value")),'').length > 1055) {
+                    document.getElementById('msgerrresults').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrresults').style.display = 'none';
+                }                 
+            });												
+            dojo.connect(editor2, "onBlur", this, function(event) {
+                dojo.byId("resultats").value = editor2.get("value");
+                document.getElementById('cptresultats').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("resultats").value),'').length;
+                if (trim(strip_tags(editor2.get("value")),'').length > 1055) {
+                    document.getElementById('msgerrresults').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrresults').style.display = 'none';
+                }                
+            });
+            dojo.connect(editor2, "onClick", this, function(event) {
+                dojo.byId("resultats").value = editor2.get("value");
+                document.getElementById('cptresultats').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>"+ strip_tags(trim(dojo.byId("resultats").value),'').length;
+                if (trim(strip_tags(editor2.get("value")),'').length > 1055) {
+                    document.getElementById('msgerrresults').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrresults').style.display = 'none';
+                }            
+            });
+           dojo.connect(editor2, "onLoad", this, function(event) {
+                dojo.byId("resultats").value = editor2.get("value");
+                document.getElementById('cptresultats').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("resultats").value),'').length;                
+            });	
+            /* --------------------------------------------------------------------------------------------------------------------
+                                                                                VALORIZATION
+             --------------------------------------------------------------------------------------------------------------------*/
+            dojo.connect(editor3, "onKeyPress", this, function(event) {
+                dojo.byId("valorisation").value = editor3.get("value");
+                document.getElementById('cptvalorisation').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;                
+                if (trim(strip_tags(editor3.get("value")),'').length > 340) {
+                    document.getElementById('msgerrvalorization').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrvalorization').style.display = 'none';
+                }                 
+            });												
+            dojo.connect(editor3, "onBlur", this, function(event) {
+                dojo.byId("valorisation").value = editor3.get("value");
+                document.getElementById('cptvalorisation').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;
+                if (trim(strip_tags(editor3.get("value")),'').length > 340) {
+                    document.getElementById('msgerrvalorization').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrvalorization').style.display = 'none';
+                }                
+            });
+            dojo.connect(editor3, "onClick", this, function(event) {
+                dojo.byId("valorisation").value = editor3.get("value");
+                document.getElementById('cptvalorisation').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;
+                if (trim(stripTags(editor3.get("value"))).length > 340) {
+                    document.getElementById('msgerrvalorization').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrvalorization').style.display = 'none';
+                }            
+            });
+           dojo.connect(editor3, "onLoad", this, function(event) {
+                dojo.byId("valorisation").value = editor3.get("value");
+                document.getElementById('cptvalorisation').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;                
+            });	
+        });
+    });
+</script>
+<?php BD::deconnecter();?>
+</div>

@@ -1,0 +1,404 @@
+<?php
+$db = BD::connecter();
+$manager = new Manager($db);
+?>
+<script>
+    function enablenemailcontact() {
+        dijit.byId("modifemailcontact").setAttribute('disabled', false);
+    }
+</script>
+<?php
+if(isset($_GET['msgupdateemailcontact'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msgsiteweb' >
+                <?php echo TXT_MSGUPDATELIBELLE; ?>
+            </fieldset>
+
+        </td>
+    </tr>
+</table>
+<?php }?>
+
+<form data-dojo-type="dijit/form/Form" method="post" name="emailcontact" id="emailcontact" 	
+      action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updateemailcontact.php?lang=<?php echo $lang; ?>">
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+    <fieldset id="gestionemailcontact" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">
+        <legend><?php echo TXT_DEMANDEUR; ?></legend>
+        <?php
+        $emailcontact0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MRSMR0');
+        $emailcontact1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MAILCONTACTMILIEU');
+        $emailcontact2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MAILCONTACTMILIEU1');
+        $emailcontact3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESEAURENATECH');
+        $emailcontact4 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_NB');
+        $emailcontact5 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_NB1');
+        $emailcontact6 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_DONOTREPLY');
+        ?>
+        <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
+            <span style="text-align: left;padding:10px;width: 945px;height:300px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+                <?php
+                if($lang=='fr'){
+                    echo  stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact0[0]['libellefrancais']))).'<br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact1[0]['libellefrancais']))).'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact2[0]['libellefrancais']))).'<br><br>'.
+                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact3[0]['libellefrancais']))).'<br><br>'.
+                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact4[0]['libellefrancais']))).'<br>'.
+                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact5[0]['libellefrancais']))).'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact6[0]['libellefrancais']))).'<br>';
+                }elseif($lang=='en'){
+                    echo  stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact0[0]['libelleanglais']))).'<br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact1[0]['libelleanglais']))).'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact2[0]['libelleanglais']))).'<br><br>'.
+                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact3[0]['libelleanglais']))).'<br><br>'.
+                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact4[0]['libelleanglais']))).'<br>'.
+                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact5[0]['libelleanglais']))).'<br><br>'.
+                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact6[0]['libelleanglais']))).'<br>';
+                }
+                ?>
+            </span>
+        </a>
+        <table>
+            <tr>
+                <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                        <?php echo TXT_FRANCAIS;?></div></td>
+                <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                        <?php echo TXT_ANGLAIS;?></div></td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px"> <input data-dojo-type="dijit/form/ValidationTextBox"
+                    value="<?php echo $emailcontact0[0]['libellefrancais']; ?>"				onfocus="enablenemailcontact()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontactfr" name="emailcontactfr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $emailcontact0[0]['libelleanglais']; ?>"				onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontacten" name="emailcontacten"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact1= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact1[0]['libellefrancais'])));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact1; ?>"			onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact1fr" name="emailcontact1fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php 
+                    $libellecontact1en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact1[0]['libelleanglais'])));
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value='<?php echo $libellecontact1en; ?>'	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact1en" name="emailcontact1en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact2fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact2[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact2fr; ?>"			onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact2fr" name="emailcontact2fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact2en= stripslashes(str_replace("''","'",str_replace('’’','"',$emailcontact2[0]['libelleanglais']))); ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value='<?php echo $libellecontact2en; ?>'		onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact2en" name="emailcontact2en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9!€$_\«\»\’’ ,\.\'\-\:\/]+'" >
+
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact3fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact3[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact3fr; ?>"			onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact3fr" name="emailcontact3fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact3en= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact3[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact3en; ?>"		onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact3en" name="emailcontact3en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact4fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact4[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact4fr; ?>"			onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact4fr" name="emailcontact4fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact4en= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact4[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact4en; ?>"		onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact4en" name="emailcontact4en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact5fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact5[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact5fr; ?>"			onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact5fr" name="emailcontact5fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact5en= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact5[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact5en; ?>"		onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact5en" name="emailcontact5en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact6fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact6[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact6fr; ?>"			onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact6fr" name="emailcontact6fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libellecontact6en= stripslashes(str_replace("''","'",str_replace("’’","'",$emailcontact6[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libellecontact6en; ?>"		onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailcontact6en" name="emailcontact6en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+
+        </table>
+    </fieldset>
+<?php
+			$emailresp0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESPONSABLESUJETEMAIL');
+			$emailresp1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MRSMR');
+			$emailresp2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESPONSABLEBODYTEMAIL1');
+			$emailresp3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESPONSABLEBODYTEMAIL2');
+			$emailresp4 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESPONSABLEBODYTEMAIL3');
+			$emailresp5 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESPONSABLEBODYTEMAIL4');
+			$emailresp6 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESPONSABLEBODYTEMAIL5');
+			$emailresp7 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESPONSABLEBODYTEMAIL6');
+			$emailresp8 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_INFOQUESTION');
+			$emailresp9 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_SINCERESALUTATION');
+			$emailresp10 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESPONSABLEBODYTEMAIL9');			
+
+?>
+    <fieldset id="gestionemaildemandeur" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">
+        <legend><?php echo TXT_RESPONSABLE; ?></legend>
+     <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
+            <span style="text-align: left;padding:10px;width: 845px;height:300px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+<?php
+if($lang=='fr'){
+				echo  stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp0[0]['libellefrancais']))).'xxxxxxxx<br><br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp1[0]['libellefrancais']))).'<br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp2[0]['libellefrancais']))).'&nbsp;&nbsp;&nbsp;xxxxxxxx'.
+				'&nbsp;&nbsp;'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp3[0]['libellefrancais']))).'<br>'.
+				'<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp4[0]['libellefrancais']))).
+				'&nbsp;'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp5[0]['libellefrancais']))).'<br><br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp6[0]['libellefrancais']))).'&nbsp;xxxxxxxx&nbsp;'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp7[0]['libellefrancais']))).'<br><br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp8[0]['libellefrancais']))).'<br><br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp9[0]['libellefrancais']))).'<br>';
+}elseif($lang=='en'){
+				echo  stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp0[0]['libelleanglais']))).'xxxxxxxx<br><br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp1[0]['libelleanglais']))).'<br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp2[0]['libelleanglais']))).'&nbsp;&nbsp;&nbsp;xxxxxxxx'.
+				'&nbsp;&nbsp;'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp3[0]['libelleanglais']))).'<br>'.
+				'<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp4[0]['libelleanglais']))).
+				'&nbsp;'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp5[0]['libelleanglais']))).'<br><br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp6[0]['libelleanglais']))).'&nbsp;xxxxxxxx&nbsp;'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp7[0]['libelleanglais']))).'<br><br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp8[0]['libelleanglais']))).'<br><br>'.
+				stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp9[0]['libelleanglais']))).'<br>';
+}
+?>
+            </span>
+        </a>
+        <table>
+            <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp0fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp0[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp0fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp0fr" name="emailresp0fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp0en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp0[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp0en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp0en" name="emailresp0en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												   <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp1fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp1[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp1fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp1fr" name="emailresp1fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp1en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp1[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp1en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp1en" name="emailresp1en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												   <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp2fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp2[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp2fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp2fr" name="emailresp2fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp2en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp2[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp2en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp2en" name="emailresp2en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												   <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp3fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp3[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp3fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp3fr" name="emailresp3fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp3en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp3[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp3en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp3en" name="emailresp3en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												   <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp4fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp4[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp4fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp4fr" name="emailresp4fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp4en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp4[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp4en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp4en" name="emailresp4en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												   <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp5fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp5[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp5fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp5fr" name="emailresp5fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp5en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp5[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp5en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp5en" name="emailresp5en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												   <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp6fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp6[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp6fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp6fr" name="emailresp6fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp6en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp6[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp6en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp6en" name="emailresp6en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												   <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp7fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp7[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp7fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp7fr" name="emailresp7fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																				<?php $libelleresp7en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp7[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp7en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp7en" name="emailresp7en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp8fr=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp8[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp8fr; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp8fr" name="emailresp8fr"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+																			<?php $libelleresp8en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailresp8[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $libelleresp8en; ?>"	onfocus="enablenemailcontact()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailresp8en" name="emailresp8en"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+        </table>    
+    </fieldset>
+    <table>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td>
+                <input style="text-align: left;margin-left: 10px"  type="submit" id ="modifemailcontact" name="modifemailcontact"
+                       label="<?php echo TXT_MODIFIER ;?>"   data-dojo-type="dijit/form/Button" disabled="disabled"				>
+            </td>
+        </tr>
+        <tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
+    </table>
+</form>
+<?php BD::deconnecter(); ?>

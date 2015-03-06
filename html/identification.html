@@ -1,0 +1,74 @@
+<?php
+$_SESSION['session']="Session ouverte";
+include_once 'decide-lang.php';
+?>
+<div id="divMajus"><?php echo TXT_TOUCHEMAJACTIV; ?></div>
+<br>
+<form data-dojo-type="dijit/form/Form" id="inscript" name="inscript"  method="post" action="<?php echo '/'.REPERTOIRE ;?>/controler/controlePasse.php?lang=<?php echo $lang;?>" >
+    <script type="dojo/method" data-dojo-event="onSubmit">
+        if(this.validate()){
+        return true;
+        }else{
+        alert("<?php echo TXT_MESSAGEERREURCONTACT;?>");
+        return false;exit();
+        }
+    </script>
+    <fieldset class="accueil" style=" padding:  2% 3% 0% 5%; margin-top: -10px;">
+        <div style=" font-size: 1.3em;margin-bottom: 12px;margin-top: 40px;padding-left: 25px;width: 946px;" class="loginlabel"><?php echo affiche('TXT_BIENVENUE');?></div>
+        <div style="width: 970px;;font-size:14px;margin-bottom:20px" class="loginlabel">
+            <?php if($lang=='fr'){ ?>
+                <div style="   font-size: 14px;margin-bottom: 20px;margin-left: 25px;margin-top: 25px;width: 970px;" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL1'),0,365)))); ?>
+                    <a href="#" id="acceuil1" style="text-decoration:none" onmouseover="document.getElementById('textecache1fr').style.display='block'" onmouseout="document.getElementById('textecache1fr').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
+                        <div style="display: none" id="textecache1fr">
+                            <p style="width:970px;font-size:14px;"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL1'),366,500)))); ?></p>
+                            <br style="clear:both;">
+                        </div>
+                </div>
+            <?php }elseif($lang=='en'){ ?>
+                <div style="   font-size: 14px;margin-bottom: 20px;margin-left: 25px;margin-top: 25px;width: 970px;" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL1'),0,312)))); ?>
+                    <a href="#" id="acceuil1" style="text-decoration:none" onmouseover="document.getElementById('textecache1en').style.display='block'" onmouseout="document.getElementById('textecache1en').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
+                        <div style="display: none" id="textecache1en">
+                            <p style="width:970px;font-size:14px;"><?php echo substr(affiche('TXT_ACCUEIL1'),313,500); ?></p>
+                            <br style="clear:both;">
+                        </div>
+                </div>
+            <?php } ?>
+            <p style="margin-left:25px"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",affiche('TXT_ACCUEIL2'))));?></p>
+             <?php if($lang=='fr'){ ?>
+            <div style="width: 980px;font-size:14px;margin-bottom:20px;margin-left:25px" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),0,25)))); ?>
+                    <a href="#" id="acceuil3" style="text-decoration:none" onmouseover="document.getElementById('textecache2fr').style.display='block'" onmouseout="document.getElementById('textecache2fr').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
+                        <div style="display: none" id="textecache2fr">
+                            <p style="width:980px;font-size:14px;"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),26,600)))); ?></p>
+                                <br style="clear:both;">
+                        </div>
+           </div>
+             <?php }elseif($lang=='en'){ ?>
+                <div style="width: 980px;font-size:14px;margin-bottom:20px;margin-left:25px" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),0,28)))); ?>
+                    <a href="#" id="acceuil3" style="text-decoration:none" onmouseover="document.getElementById('textecache2en').style.display='block'" onmouseout="document.getElementById('textecache2en').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
+                        <div style="display: none" id="textecache2en">
+                            <p style="width:980px;font-size:14px;"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),32,600)))); ?></p>
+                            <br style="clear:both;">
+                        </div>
+                </div>
+             <?php } ?>
+        </div>
+        <?php if(internetExplorer()!='incompatible'){?>
+        <div style="width: 820px;font-size:0.9em;margin-left:25px" class="loginlabel"><?php echo affiche('TXT_NONINSCRIT').' '. affiche('TXT_CLICK');?>
+            <button type="button" label="<?php echo strtolower(TXT_INSCRIPTION); ?>" data-dojo-Type="dijit/form/Button">
+                <script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
+                    require(["dojo/dom"], function(dom){
+                   window.location.replace("<?php echo '/'.REPERTOIRE;?>/login/<?php echo $lang;?>");
+                    })
+                </script></button>
+        </div>
+        <?php }?>
+        <?php include 'include/bandeaudefilant.html';?>
+    </fieldset>
+    <div style="margin-bottom:-10px;margin-top:-5px"><p style="font-size: x-small;"><?php echo TXT_CHAMPSOBLIGATOIRES; ?></p></div>
+</form>
+<!-- PERMET DE MASQUER UNE PARTIE D'UN TEXTE -->
+<script>
+        require(["dijit/Tooltip", "dojo/parser", "dojo/domReady!"], function(Tooltip, parser){
+                Tooltip.defaultPosition = ["after-centered","below"];
+        });
+</script>

@@ -1,0 +1,30 @@
+<?php
+if(!empty($_GET['idprojet'])){
+    $idprojet=$_GET['idprojet'];
+}elseif(!empty($_SESSION['idprojet'])){
+    $idprojet=$_SESSION['idprojet'];
+}
+if(!empty ($_GET['idcentrale'])){
+    $idcentrale=$_GET['idcentrale'];
+}elseif(!empty($_SESSION['idcentrale'])){
+    $idcentrale=$_SESSION['idcentrale'];
+}
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+$numero = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+?>
+<?php include 'indexchoix.html';?>
+<div style="height: 25px;">
+    <label style="color: #191970; display: block;font-size: 14px; text-align: left;width: 1050px;">
+        <?php
+        $libcentrale='';
+        for ($i=0;$i<count($_SESSION['libellecentrale']);$i++){
+            $libcentrale .=  $_SESSION['libellecentrale'][$i].', ';
+        }
+        $libellecentrale=$_SESSION['libellecentrale'][0];
+        echo TXT_RESULTDEMANDEPROJETVALIDE.' '.affiche("TXT_BOBYREF").' : '?>
+        <!--<a style="text-decoration: none" href='<?php echo "/".REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $_GET["lang"];?>&numProjet=<?php echo $numero;?>&centrale=<?php echo substr($libcentrale, 0, -2);?>'><?php echo $numero?></a>-->
+        <a style="text-decoration: none" href='<?php echo "/".REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $_GET["lang"];?>&numProjet=<?php echo $numero;?>&centrale=<?php echo $libellecentrale;?>'><?php echo $numero?></a>
+        <?php echo ', '.strtolower(TXT_CENTRALESELECTONNEE).': '.substr($libcentrale, 0, -2);?>
+    </label>
+</div>

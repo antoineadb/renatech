@@ -1,0 +1,125 @@
+<?php
+$db = BD::connecter();
+$manager = new Manager($db);
+if (isset($_GET['erreur'])){
+			echo $_GET['erreur'];
+}
+?>
+
+<script>
+    function enablemodifacceuil() {
+        dijit.byId("modifsiteweb").setAttribute('disabled', false);
+    }
+</script>
+<?php
+if(isset($_GET['msgupdatesiteweb'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msgsiteweb' >
+                <?php echo TXT_MSGUPDATESITEWEB; ?>
+            </fieldset>
+
+        </td>
+    </tr>
+</table>
+<?php }?>
+<form data-dojo-type="dijit/form/Form" method="post" name="siteweb" id="siteweb" 	action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updatesiteweb.php">
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+    <fieldset id="gestionsiteweb" style="margin-top: 25px">
+        <table>
+            <?php
+            $arrayfemto =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
+            'FEMTO-ST');
+            $femto = $arrayfemto[0]['adressesitewebcentrale'];
+            $logofemto=$arrayfemto[0]['adresselogcentrale'];
+            $arrayief =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
+            'IEF');
+
+            $ief = $arrayief[0]['adressesitewebcentrale'];
+            $logoief=$arrayief[0]['adresselogcentrale'];
+            $arrayiemn =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
+            'IEMN');
+
+            $iemn = $arrayiemn[0]['adressesitewebcentrale'];
+            $logoiemn=$arrayiemn[0]['adresselogcentrale'];
+            $arraylpn =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
+            'LPN');
+
+            $arraylaas =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
+            'LAAS');
+            $laas = $arraylaas[0]['adressesitewebcentrale'];
+            $logolaas=$arraylaas[0]['adresselogcentrale'];
+
+            $arraylpn =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
+            'LPN');
+            $lpn = $arraylpn[0]['adressesitewebcentrale'];
+            $logolpn=$arraylpn[0]['adresselogcentrale'];
+
+            $arrayltm =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
+            'LTM');
+            $ltm = $arrayltm[0]['adressesitewebcentrale'];
+            $logoltm=$arrayltm[0]['adresselogcentrale'];
+            ?>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $femto; ?>"				onfocus="enablemodifacceuil()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="sitefemto" name="sitefemto"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $ief; ?>"				onfocus="enablemodifacceuil()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="siteief" name="siteief"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
+
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $iemn; ?>"				onfocus="enablemodifacceuil()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="siteiemn" name="siteiemn"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $laas; ?>"				onfocus="enablemodifacceuil()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="sitelaas" name="sitelaas"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
+
+                </td>
+            </tr>
+
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $lpn; ?>"				onfocus="enablemodifacceuil()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="sitelpn" name="sitelpn"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                           value="<?php echo $ltm; ?>"				onfocus="enablemodifacceuil()"
+                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="siteltm" name="siteltm"
+                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
+
+                </td>
+            </tr>
+
+        </table>
+    </fieldset>
+				<table>
+							<tr><td>&nbsp;</td></tr>
+							<tr><td>
+													<input style="text-align: left;margin-left: 10px"  type="submit" id ="modifsiteweb" name="modifsiteweb"
+																				label="<?php echo TXT_MODIFIER ;?>"   data-dojo-type="dijit/form/Button" disabled="disabled"				>
+										</td>
+							</tr>
+							<tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
+				</table>
+</form>
+<?php BD::deconnecter(); ?>

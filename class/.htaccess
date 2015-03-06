@@ -1,0 +1,6 @@
+RewriteEngine on
+RewriteRule projet-dev projet-dev/index.php?action=logout
+AuthName "Protected page"
+AuthType Basic
+AuthUserFile "/var/www/rtb/html/formulaire/class/.htpasswd"
+Require valid-user

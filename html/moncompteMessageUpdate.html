@@ -1,0 +1,13 @@
+<?php include_once 'outils/affichelibelle.php'; ?>
+<div style="display: block;height: 35px;width:50px;" id="erreurUpload">
+<label style="color: #FF0000;display: block;font-size: small;padding-top: 35px;text-align: center;width: 1050px;">
+    <?php echo TXT_MESSAGEUPDATE; ?>
+</label>
+</div>      
+<?php 
+    include 'html/moncompte.html';
+    $_SESSION['nomConnect'] =$nom;
+    $_SESSION['prenomConnect'] =$prenom;
+    
+?>
+

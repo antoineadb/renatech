@@ -1,0 +1,53 @@
+<?php 
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+include_once 'outils/constantes.php';
+include_once 'decide-lang.php';
+?>
+<p id="footer" style="font-size: 11px; font-style: italic;width: 570px;">
+    <?php 
+    echo TXT_VERSION.'<br>';
+    //Récupération de l'idutilisateur avec le pseudo
+    if(!empty($_SESSION['pseudo'])){
+        $pseudo = $_SESSION['pseudo'];
+        $row=$manager->getListbyArray("SELECT idutilisateur,idtypeutilisateur_typeutilisateur,
+        idqualitedemandeuraca_qualitedemandeuraca,idqualitedemandeurindust_qualitedemandeurindust,libelletype FROM loginpassword,utilisateur,typeutilisateur
+        WHERE idlogin =idlogin_loginpassword AND idtypeutilisateur = idtypeutilisateur_typeutilisateur and pseudo = ?",array($pseudo));
+        if(!empty($row[0]['idqualitedemandeuraca_qualitedemandeuraca'])){
+            $qualite=$row[0]['idqualitedemandeuraca_qualitedemandeuraca'];
+        }
+        if(!empty($row[0]['idqualitedemandeurindust_qualitedemandeurindust'])){
+            $qualiteindust=$row[0]['idqualitedemandeurindust_qualitedemandeurindust'];
+        }
+        if(!empty($qualite)){
+        //ON EST UTILISATEUR ACADEMIC
+        $libellecentrale = $manager->getSingle2("SELECT   libellecentrale FROM  loginpassword, utilisateur, centrale  WHERE  idlogin = idlogin_loginpassword AND idcentrale = idcentrale_centrale and pseudo = ?",$pseudo);
+        switch ($row[0]['idtypeutilisateur_typeutilisateur']){
+            case ADMINNATIONNAL://ADMINISTRATEUR NATIONNAL
+            echo TXT_CONNECT.' '.$row[0]['libelletype'];
+            break;
+            case ADMINLOCAL://ADMINISTRATEUR LOCAL
+            echo TXT_CONNECT.' '.$row[0]['libelletype'].TXT_DELACENTRALE.$libellecentrale;
+            break;    
+            case UTILISATEUR://UTILISATEUR
+            if(!empty($libellecentrale)&& $libellecentrale!='Autres'){
+                echo TXT_CONNECTACADEM.TXT_DELACENTRALE.$libellecentrale;
+            }else{
+                echo TXT_CONNECTACADEM;
+            }
+            break;
+            default:
+            break;
+            }
+            }elseif(!empty($qualiteindust)){//ON EST UTILISATEUR INDUSTRIEL
+                echo TXT_CONNECTINDUST;
+            }
+    }
+
+    ?>
+    <br><a href="mailto:Antoine.DIBARTOLOMEA@cea.fr" style="text-decoration: none" title='<?php echo TXT_MECONTACTER; ?>'>
+        <?php echo TXT_WEBMASTER;?></a><?php
+    BD::deconnecter();   
+    ?>
+
+</p>

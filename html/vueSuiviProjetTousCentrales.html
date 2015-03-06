@@ -1,0 +1,94 @@
+<?php include_once 'outils/constantes.php'; ?>
+<div id="grid" ></div>
+<script>
+    var grid, dataStore, store;
+    require([
+        "dojox/grid/DataGrid",
+        "dojo/store/Memory",
+        "dojo/data/ObjectStore",
+        "dojo/request",
+        "dojo/date/stamp",
+        "dojo/date/locale",
+        "dojo/domReady!"
+    ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
+        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/projetTousCentrales.json", {
+            handleAs: "json"}).then(function(data) {
+            store = new Memory({data: data.items});
+            dataStore = new ObjectStore({objectStore: store});
+            
+            function hrefFormatterPDF(index, idx) {
+                var item = grid.getItem(idx);
+                var numero = item.numero;
+                return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/pdf_project/<?php echo $lang; ?>/" + numero + "\" target='_blank'>" +
+                        '<img title="<?php echo TXT_GENERERPDF; ?>" src="<?php echo '/'.REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
+            }
+           
+             function formatDate(datum) {
+                var d = stamp.fromISOString(datum);
+                var annee =  datum.substring(0,4);
+                if(annee>1970){
+                    return locale.format(d, {selector: 'date', formatLength: 'short'});
+                }
+            }
+            grid = new DataGrid({
+                store: dataStore,
+                query: {id: "*"},
+                structure: [
+                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px"},
+                    {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet", width: "130px", formatter: formatDate},
+                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "220px  "},
+                    {name: "<?php echo TXT_UPDATE; ?>", field: "datemaj", width: "85px", formatter: formatDate},
+                    {name: " ", field: "imprime", width: "25px", formatter: hrefFormatterPDF},      
+                    {name: "<?php echo TXT_STATUTPROJET?>", field: "libellestatutprojet", width: "110px"},
+                    {name: "<?php echo TXT_NOMDEMANDEUR?>", field: "nom", width: "110px"},
+                    {name: "<?php echo TXT_NOMLABORATOIRE?>", field: "entrepriselaboratoire", width: "110px"},
+                    {name: "<?php echo TXT_NOMENTREPRISE ?>", field: "nomentreprise", width: "110px"},
+                     {name: "<?php echo TXT_DATEFIN; ?>", field: "calcfinprojet", width: "120px", formatter: formatDate},
+                    {name: "<?php echo TXT_DATEFIN.' proche'; ?>", field: "calcfinproche", width: "120px", formatter: formatDate},
+                    {name: "<?php echo TXT_CENTRALE ?>", field: "libellecentrale", width: "50px"}
+                ]
+            }, "grid");
+            
+//----------------------------------------------------------------------------------------------------------------------
+//                                        TEST METHODE
+//----------------------------------------------------------------------------------------------------------------------
+                    dojo.connect(dijit.byId('grid'), 'onStyleRow', this, function(row) {
+                        var item = grid.getItem(row.index);
+                        if (item) {                           
+                            var datefin = grid.store.getValue(item, "calcfinprojet", null);
+                            var datefinProche = grid.store.getValue(item, "calcfinproche", null);
+                            if(!empty(datefin)){
+                                var now = new Date();
+                                var curr_month = now.getMonth();
+                                if(curr_month<10){
+                                    curr_month="0"+curr_month;
+                                }
+                                var maintenant = new Date (now.getFullYear() ,curr_month , now.getDate());
+                                var dateFin = new Date(datefin);
+                                var datefinproche = new Date(datefinProche);    
+                                var maint = maintenant;
+                                var fin = dateFin;
+                                var finp =datefinproche;
+
+                                if(maint>fin){
+                                    row.customStyles += "color:red";
+                                }else  if(maint >=finp){
+                                    row.customStyles += "color:darkgoldenrod";
+                                }else{
+                                    row.customStyles += "color:darkgreen";
+                                }
+                            }
+                        grid.focus.styleRow(row);
+                        grid.edit.styleRow(row);
+                    }
+                    });            
+            
+            
+            
+            grid.startup();
+            
+            
+            
+        });
+    });
+</script>

@@ -1,0 +1,220 @@
+ul.dropdown {
+ padding-bottom: 1px;
+ font: bold 13px/normal Arial, Helvetica, sans-serif;
+}
+
+	ul.dropdown li {
+	 padding: 4px 6px;
+	 color:#5D8BA2;
+	}
+
+	ul.dropdown li.divider {
+	 border-top: solid 1px #e5e5e5;
+	}
+
+	ul.dropdown li.hover,
+	ul.dropdown li:hover {
+	 color: #5D8BA2;
+	}
+
+	ul.dropdown a:link,
+	ul.dropdown a:visited	{ 
+            color:  #5D8BA2; text-decoration: none; 
+           font-size: 1.0em;
+        }
+	ul.dropdown a:hover		{ 
+            color:  #5D8BA2; text-decoration: none; 
+           font-size: 1.0em;
+        }
+	ul.dropdown a:active	{ 
+            color:  #5D8BA2; 
+           font-size: 1.0em;
+        }
+
+	/* -- level mark -- */
+
+	ul.dropdown ul {
+	 width: 190px;
+	 padding: 3px 6px;
+	 border-style: solid;
+	 border-width: 1px;
+	 border-color: #f0f0f0 #666 #666 #f0f0f0;
+	 background-color: #fff;
+	 font-weight: normal;
+	 font-size: 12px;
+	}
+
+
+/* -- Supporting class `dir` -- */
+
+ul.dropdown *.dir {
+ padding-right: 25px;
+ background-image: url(img/nav-arrow-down.png);
+ background-position: 95% 50%;
+ background-repeat: no-repeat;
+}
+
+
+/* -- Components override -- */
+
+ul.dropdown-vertical ul {
+ top: 0;
+ left: 100%;
+}
+
+ul.dropdown-vertical-rtl ul {
+ right: 100%;
+}
+
+ul.dropdown-horizontal,
+ul.dropdown-linear,
+ul.dropdown-upward {
+ 
+}
+
+ul.dropdown-horizontal ul *.dir {
+ padding-right: 25px;
+ background-image: url(img/nav-arrow-right.png);
+ background-position: 100% 50%;
+ background-repeat: no-repeat;
+}
+
+ul.dropdown-upward *.dir {
+ background-image: url(img/nav-arrow-up.png);
+}
+
+ul.dropdown-vertical *.dir {
+ background-image: url(img/nav-arrow-right.png);
+ background-position: 180px 50%;
+}
+
+ul.dropdown-vertical ul *.dir,
+ul.dropdown-upward ul *.dir {
+ background-image: url(img/nav-arrow-right.png);
+ background-position: 100% 50%;
+}
+
+ul.dropdown-vertical-rtl *.dir {
+ padding-right: 6px;
+ padding-left: 25px;
+ background-image: url(img/nav-arrow-left.png);
+ background-position: 5px 50%;
+}
+
+ul.dropdown-vertical-rtl ul *.dir {
+ padding-right: 0;
+ background-image: url(img/nav-arrow-left.png);
+ background-position: 0 50%;
+}
+/* -- Base style extension -- */
+ul.dropdown a,
+ul.dropdown span {
+ display: block;
+ padding: 4px 6px;
+}
+
+ul.dropdown ul a,
+ul.dropdown ul span {
+ padding: 4px 0;
+}
+
+
+/* -- Base style override -- */
+
+ul.dropdown li {
+ padding: 0;
+ border: none;
+}
+
+
+/* -- Custom styles -- */
+
+ul.dropdown li a,
+ul.dropdown *.dir {
+ border-style: solid;
+ border-width: 1px 1px 0;
+ border-color: #fff;
+}
+
+ul.dropdown ul li a,
+ul.dropdown ul *.dir {
+ border: none;
+}
+
+ul.dropdown-vertical li a,
+ul.dropdown-vertical *.dir {
+ border-width: 1px 0 1px 1px;
+}
+
+ul.dropdown-vertical-rtl li a,
+ul.dropdown-vertical-rtl *.dir {
+ border-width: 1px 1px 1px 0;
+}
+ul.dropdown li:hover > *.dir {
+ position: relative;
+ z-index: 600;
+ margin: -1px 0;
+ padding-top: 5px;
+ padding-bottom: 5px;
+ border-color: #f0f0f0 #666 #666 #f0f0f0;
+ background-color: #fff;
+ background-image: url(img/nav-arrow-down-open.png);
+ color: #191970;
+}
+
+ul.dropdown-horizontal li:hover > *.dir,
+ul.dropdown-upward li:hover > *.dir,
+ul.dropdown-linear li:hover > *.dir {
+ float: left;
+}
+
+ul.dropdown-vertical li:hover > *.dir {
+ margin: 0 -1px 0 0;
+ padding-top: 4px;
+ padding-bottom: 4px;
+ padding-right: 7px;
+ *position: static;
+}
+
+ul.dropdown-vertical-rtl li:hover > *.dir {
+ margin: 0 0 0 -1px;
+ padding-right: 6px;
+ padding-left: 7px;
+}
+
+ul.dropdown-vertical-rtl > li:hover > *.dir {
+ background-position: 6px 50%;
+}
+
+ul.dropdown-vertical ul li:hover > *.dir {
+ padding-right: 0;
+ padding-left: 0;
+}
+
+ul.dropdown ul li:hover > *.dir {
+ position: static;
+ z-index: 0;
+ float: none;
+ margin: 0;
+ padding-top: 4px;
+ padding-bottom: 4px;
+ border: none;
+}
+
+ul.dropdown ul li:hover > *.dir,
+ul.dropdown-vertical li:hover > *.dir {
+ background-image: url(img/nav-arrow-right-open.png);
+}
+
+ul.dropdown-vertical-rtl li:hover > *.dir,
+ul.dropdown-vertical-rtl ul li:hover > *.dir {
+ background-image: url(img/nav-arrow-left-open.png);
+}
+
+ul.dropdown-upward li:hover > *.dir {
+ background-image: url(img/nav-arrow-up-open.png);
+}
+
+ul.dropdown-upward ul li:hover > *.dir {
+ background-image: url(img/nav-arrow-right-open.png);
+}

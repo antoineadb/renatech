@@ -1,0 +1,172 @@
+<?php  
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+$nomrep=TXT_NOMRESPONSABLE;
+$respmail=TXT_RESPMAILMAIL;
+?>
+<script>
+    require(["dojo/html", "dojo/dom", "dojo/on", "dijit/form/ValidationTextBox", "dojo/domReady!"],
+            function(html, dom, on) {
+                on(dom.byId("setContentIndust"), "click", function() {
+                    dojo.create("div", {id: "nomresponsable"}, "divindust1");
+                    html.set(dom.byId("nomresponsable"), '<tbody>'
+                            + '<tr>'
+                            + '<td id="nomResp1"><label for="valeurNomResponsable1" style="width:317px"><?php echo addslashes(TXT_NOMRESPONSABLE);	?></label></td>'
+                            + '<td><input type="text"  id="valeurNomResponsable1" name="valeurNomResponsable1" data-dojo-type="dijit/form/ValidationTextBox" value="" placeholder="<?php echo addslashes($nomrep);?>"'
+                            + 'autocomplete="on" style="width:317px;margin-left: -12px;"'
+                            + 'data-dojo-props="regExp:\'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9-\\042\\\'\\’\\=\\0133\\0135\\+\\_\ \,\\.\\-]+\'"'
+                            + 'required= true'
+                            + 'data-dojo-invalidMessage="<?php	echo	TXT_ERRSTRING;	?>" />'
+                            + '</td>'
+                            + '</tr></tbody>', {
+                                parseContent: true
+                            }
+                    );
+                    dojo.create("div", {id: "emailresponsable"}, "divindust1");
+                    html.set(dom.byId("emailresponsable"), '<tbody>'
+                            + '<tr>'
+                            + '<td id="emailResp1"><label for="valeurEmailResponsable1" style="width:317px"><?php	echo	addslashes($respmail);	?></label></td>'
+                            + '<td><input type="text"  id="valeurEmailResponsable1" name="valeurEmailResponsable1" data-dojo-type="dijit/form/ValidationTextBox" value="" placeholder="<?php echo addslashes($respmail); ?>"'
+                            + 'autocomplete="on"  style="width:317px;margin-left: -12px;"'
+                            + 'data-dojo-props="regExp:\'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$\'"'
+                            + 'required= true'
+                            + 'data-dojo-invalidMessage="<?php	echo	TXT_ERRSTRING;	?>" />'
+                            + '</td>'
+                            + '</tr></tbody>', {
+                                parseContent: true
+                            }
+                    );
+                }
+                )
+            })
+</script>
+<script>
+    require(["dojo/dom", "dojo/on", "dijit/form/ValidationTextBox", "dojo/domReady!"],
+            function(dom, on) {
+                on(dom.byId("setContentIndust2"), "click", function() {
+                    if (dijit.byId("valeurEmailResponsable1")) {
+                        dijit.byId("valeurEmailResponsable1").destroy();
+                    }
+                    if (dijit.byId("valeurNomResponsable1")) {
+                        dijit.byId("valeurNomResponsable1").destroy();
+                    }
+                    if (document.getElementById('nomResp1')) {
+                        document.getElementById('nomResp1').style.display = 'none';
+                    }
+                    if (document.getElementById('emailResp1')) {
+                        document.getElementById('emailResp1').style.display = 'none';
+                    }
+                });
+            })
+</script>
+<button type="button" id="setContentIndust" style="display: none"></button>
+<button type="button" id="setContentIndust2" style="display: none"></button>
+<table>
+    <tr>
+        <td valign="top" style="width: 300px"><?php	echo TXT_QUALITEDEMANDEUR." *:";	?></td>
+        <td>
+            <?php
+            $rowQualite = $manager->getList2("SELECT  libellequalitedemandeurindust,libellequalitedemandeurindusten,idqualitedemandeurindust
+            FROM qualitedemandeurindust where idqualitedemandeurindust!=?",NAQAUALITEINDUST);
+            $nbrowqualite  = count($rowQualite);
+            $idnonpermanentindust ='qi'.NONPERMANENTINDUST;
+            $val='_';
+            ?>
+            <select name="qualiteDemandeurindust" id="qualiteDemandeurindust" data-dojo-type="dijit/form/Select"  style="width: 220px"
+                    onchange="if (this.value === '<?php if(!empty($idnonpermanentindust)){echo $idnonpermanentindust;}else{echo $val;} ?>') {
+                                        createcontact.setContentIndust.click();
+                                    } else {
+                                        createcontact.setContentIndust2.click();
+                                    }">
+                <?php
+                echo "<option value='qi0'>".TXT_SELECTQUALITE."</option>";
+                if($lang=='fr'){
+                for($i=0;$i<$nbrowqualite;$i++){
+                echo "<option value='".'qi'.$rowQualite[$i]['idqualitedemandeurindust']."'>".
+                ($rowQualite[$i]['libellequalitedemandeurindust'])."</option>";
+                }
+                }elseif($lang=='en'){
+                for($i=0;$i<$nbrowqualite;	$i++){
+                echo'<option value="'.'qi'.($rowQualite[$i]['idqualitedemandeurindust']).'">'.
+                $rowQualite[$i]['libellequalitedemandeurindusten'].'</option>';
+                }
+                }
+                ?>
+            </select>
+        </td>
+    </tr>				
+</table>
+<div id="divindust1" ></div>
+<table>
+    <tr>
+    <tr>
+        <td valign="top"><?php echo TXT_NOMENTREPRISE.' :*'; ?></td>
+        <td><script>
+            function effaceChamp(id) {
+                document.getElementById(id).value = '';
+                document.getElementById(id).style.color = 'black';
+            }
+            </script>
+            <?php
+            if($_SESSION['typeutilisateur']== 'industriel'){
+            echo '<input type="text" id="ind" required="required" class="textfield" style=" color:#808080;width:308px;" name="nomEntreprise"
+            value="'.TXT_NOMENTREPRISE.'" onclick= "effaceChamp(\'ind\')"
+            onmouseover="document.getElementById(this.id).style.backgroundColor=\'#DFEFFF\'"
+            onmouseout="document.getElementById(this.id).style.backgroundColor=\'white\'"/>';
+            }else{
+            echo '<input type="text" class="textfield"   required="required"  name="nomEntreprise" id="ind"
+            placeholder="n/a" onmouseover="document.getElementById(this.id).style.backgroundColor=\'#DFEFFF\'"
+            onmouseout="document.getElementById(this.id).style.backgroundColor=\'white\'"/>';
+            }
+            ?>
+
+
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 300px"><?php echo TXT_TYPEENTREPRISE.' :*'; ?></td>
+        <td>
+            <?php  $typeentreprise = $manager->getList("SELECT idtypeentreprise,libelletypeentreprise,libelletypeentrepriseen FROM typeentreprise where masquetypeentreprise!=TRUE");?>
+            <select data-dojo-type="dijit/form/Select" name="typeEntreprise" id="typeEntreprise" style="width: 220px" >
+                <?php
+                echo "<option value='te0'>".TXT_SELECTTYPEENTREPRISE."</option>";
+                if($lang=='fr'){
+                for ($i = 0;$i < count($typeentreprise);$i++) {
+                echo "<option value='".'te'.$typeentreprise[$i]['idtypeentreprise']."'>".str_replace("''","'",$typeentreprise[$i]['libelletypeentreprise'])."</option>";
+                }
+                }elseif($lang=='en'){
+                for ($i = 0;$i < count($typeentreprise);$i++) {
+                echo "<option value='".'te'.$typeentreprise[$i]['idtypeentreprise']."'>".str_replace("''","'",$typeentreprise[$i]['libelletypeentrepriseen'])."</option>";
+                }
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
+    <tr id="secteurActivite">
+        <td><?php echo TXT_SECTEURACTIVITE.' :*';?></td>
+        <td>
+            <?php
+            $secteuractivite = $manager->getList("SELECT  idsecteuractivite,libellesecteuractivite,libellesecteuractiviteen  FROM secteuractivite where masquesecteuractivite!=TRUE");
+            ?>
+            <select data-dojo-type="dijit/form/Select" name="secteurActivite" id="secteurActivite" style="width: 220px" >
+                <?php
+                echo "<option value='se0'>".TXT_SELECTSECTEURACTIVITE."</option>";
+                if($lang=='fr'){
+                for ($i = 0;$i < count($secteuractivite);$i++) {
+                echo "<option value='".'sa'.$secteuractivite[$i]['idsecteuractivite']."'>".str_replace("''","'",$secteuractivite[$i]['libellesecteuractivite'])."</option>";
+                }
+                }elseif($lang=='en'){
+                for ($i = 0;$i < count($secteuractivite);$i++) {
+                echo "<option value='".'sa'.$secteuractivite[$i]['idsecteuractivite']."'>".$secteuractivite[$i]['libellesecteuractiviteen']."</option>";
+                }
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
+
+</table>
+<?php 
+$db = BD::deconnecter();
+?>	

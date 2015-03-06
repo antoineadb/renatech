@@ -1,0 +1,37 @@
+<?php
+include 'outils/lang.php';
+include_once	'class/Manager.php';
+$db = BD::connecter();
+$manager = new Manager($db);
+?>
+<fieldset id="recherche" style="border-color: #5D8BA2;padding-left:10px">
+    <legend style="color: #5D8BA2;"><?php echo TXT_PROJETACCEPTE; ?></legend>
+<script>
+    require(['dojo/_base/array', 'dojo/_base/lang', 'dojo/_base/event', 'dojo/on', 'dojox/grid/DataGrid', 'dojo/data/ItemFileWriteStore', 'dijit/form/Button', 'dojo/dom', 'dojo/parser', 'dojo/domReady!'],
+            function(array, lang, event, on, DataGrid, ItemFileWriteStore, Button, dom, parser) {
+                var data = {
+                    identifier: 'id',
+                    items: []
+                };
+                var data_list = [ <?php include "tmp/toutprojetCentrale.json"; ?> ];
+                    for (var i = 0, l = data_list.length; i < data_list.length; i++) {
+                        data.items.push(lang.mixin({id: i + 1}, data_list[i % l]));
+                    }
+                var store = new ItemFileWriteStore({data: data});
+                var layout = [[
+                        {'name': "<?php echo TXT_NUMROPROJET; ?>", 'field': 'col2', 'width': "120px"},
+                        {'name': "<?php echo TXT_ACRONYME; ?>", 'field': 'col4', 'width': "100px"},
+                        {'name': "<?php echo TXT_TITREPROJET; ?>", 'field': 'col3', 'width': "auto"}
+                    ]];
+                grid = new DataGrid({
+                    id: 'grid',
+                    store: store,
+                    structure: layout,
+                    rowSelector: '0px'});
+                grid.placeAt('gridDiv');
+                grid.startup();
+            });
+
+</script>
+<div id="gridDiv" style="height: 400px"></div>
+</fieldset>

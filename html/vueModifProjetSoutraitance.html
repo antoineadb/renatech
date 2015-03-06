@@ -1,0 +1,149 @@
+<?php
+include_once 'class/Manager.php';
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+//récupération de l'idprojet et des valeurs à intégrer dans les champs input
+
+if(!empty($_GET['idprojet'])){
+    $idprojet=$_GET['idprojet'];
+    $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+}elseif(isset($_GET['numProjet'])){
+    $numProjet=$_GET['numProjet'];
+    $idprojet = $manager->getSingle2("select idprojet from projet where numero =?",$numProjet);//récupération de l'idprojet à l'aide de $numProjet
+}else{
+    $idprojet =$_GET['idprojet'];
+    $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+}
+$rowModif = $manager->getList2("SELECT description,titre,libellecentrale,contexte,acronyme FROM projet,concerne,centrale WHERE idprojet = idprojet_projet AND idcentrale_centrale = idcentrale and idprojet =?",$idprojet);
+$titre =stripslashes(str_replace("''","'",$rowModif[0]['titre']));
+$description =stripslashes(str_replace("''","'",$rowModif[0]['description']));
+$contexte =stripslashes(str_replace("''","'",$rowModif[0]['contexte']));
+$acronyme =stripslashes(str_replace("''","'",$rowModif[0]['acronyme']));
+$idcentrale= $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?",$idprojet);
+    $commentaire = $manager->getSinglebyArray("select commentaireprojet  from concerne where idprojet_projet =? and idcentrale_centrale=?",array($idprojet,$idcentrale));
+if(empty($commentaire)){
+    $commentaire ='';
+}
+
+?>
+<?php
+    $rowResult = $manager->getListbyArray("SELECT nom, prenom, entrepriselaboratoire FROM utilisateur, projet, creer WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=?",array($idprojet));
+    $demandeur =$rowResult[0]['nom'].' '.$rowResult[0]['prenom'];
+    $entrepriselaboratoireo=stripslashes(str_replace("''",	"'",$rowResult[0]['entrepriselaboratoire']));
+?>
+    <fieldset class='statut' ><b><?php echo  TXT_PROJETSOUSTRAITANCE;?></b></fieldset>
+    <table style="margin-top:20px">
+        <tr><td></td></tr>
+        <tr>
+            <td><label ><?php echo TXT_DEMANDEUR.' : '.$demandeur; ?></label></td>
+        </tr>
+        <tr>
+            <td><label  style="width: 500px"><?php echo stripslashes(str_replace("''",	"'",TXT_NOMENTELABO)).' : '.$entrepriselaboratoireo; ?></label></td>
+        </tr>
+    </table>
+    <table>       
+        <tr>
+            <td>
+                <label for="titreProjet" ><?php echo TXT_TITREPROJET.'* :'; ?></label>
+                <input id="titreProjet" type="text" name="titreProjet" value="<?php echo $titre ;?>" readonly="true" required="required" style="width: 550px;height:22px;background-color:#FCFAF2;"  data-dojo-type="dijit.form.ValidationTextBox"  />
+            </td>
+        </tr>
+        <tr> <td>&nbsp;</td></tr>
+        <tr><td>
+                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'.' :';?></label>
+                <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>" readonly="true" data-dojo-type="dijit.form.ValidationTextBox"  style="background-color:#FCFAF2;" />
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td>
+                <?php
+                $confid = $manager->getSingle2("SELECT confidentiel  FROM projet WHERE idprojet=?",$idprojet);
+                $_SESSION['confid']=$confid;
+                if ($confid== TRUE){
+                ?>
+                    <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.' *:';?></label>
+                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  checked="checked" value="TRUE" class="btRadio" readonly="true"> <?php echo TXT_OUI; ?>
+                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="FALSE" class="btRadio" readonly="true" >                     
+                    <?php echo TXT_NON; ?>                
+                <?php } else { ?>
+                    <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.' *:';?></label>
+                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE" class="btRadio" readonly="true">  <?php echo TXT_OUI; ?>                
+                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="FALSE" checked="checked" class="btRadio" readonly="true" >  <?php echo TXT_NON; ?>                
+                <?php }?>
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        </table>    
+    <table>
+        <tr>
+            <td style="width: 1020px">
+<!---------------------------------------------------------------------------------------------------------------------------------
+                CONTEXTE
+------------------------------------------------------------------------------------------------------------------------------------->
+                <label for="contexte" ><?php echo TXT_OBJECTIF.'/'.TXT_CONTEXTESCIENTIFIQUE.' :' ?></label>
+                <div id="contexte" name="contexte"  height="100px" ><?php echo $contexte;?></div>
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td>
+<!--------------------------------------------------------------------------------------------------------------------------------------
+                DESCRIPTIF
+-------------------------------------------------------------------------------------------------------------------------------------->
+                <label for="descriptif"  ><?php echo TXT_DESCRIPTIFTRAVAIL.' :'; ?></label>
+                <div id="descriptif" name="descriptif" height="100px"  width="55px" ><?php echo $description;?></div>
+        </tr>        
+        <tr><td>&nbsp;</td></tr>
+        <tr>          
+            <td>
+                <label style="margin-bottom: 5px;font-weight: bold" ><u><?php echo TXT_ATTACHEMENT;?></u></label>
+                    <?php
+                    $attachement  =str_replace("''","'",stripslashes($manager->getSingle2("select attachement from projet where idprojet = ?",$idprojet)));
+                    $monUrl = "http://".$_SERVER['HTTP_HOST'];
+                    $attachementdesc  = str_replace("''","'",stripslashes($manager->getSingle2("select attachementdesc from projet where idprojet =?",$idprojet)));
+                    $monUrl = "http://".$_SERVER['HTTP_HOST'];                    
+                    $attachement = addslashes($attachement);
+                    echo '<div id=\'pieceJointe\'><a href="'.$monUrl.dirname($_SERVER['PHP_SELF']).'/upload/'.$attachement.'" target="_blank" id="attachement">'.$attachement.'</a></div>';                    
+                    ?>
+                </td>
+        <tr><td>
+                <?php 
+                if(!empty($_GET['statut'])){
+                    $libellecentraleprojet = $manager->getList2("SELECT DISTINCT libellecentrale,idcentrale FROM  concerne,centrale WHERE idcentrale_centrale = idcentrale and  idprojet_projet =?",$idprojet);
+                    echo '<div style="margin-top:10px;margin-bottom:20px">'.TXT_CENTRALESELECTONNEE.' :  '.$libellecentraleprojet[0]['libellecentrale'].'</div>';
+                }
+                ?>
+            </td></tr>                       
+        <tr>
+            <td>
+<!-----------------------------------------------------------------------------------------------------------------------------------
+                COMMENTAIRE
+-------------------------------------------------------------------------------------------------------------------------------------->
+                <label for="commentaire" ><?php echo TXT_COMMENTAIREPROJET.' :'; ?>
+                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/></a>
+                </label>
+                <div  id="commentaire" name="commentaire"  height="100px" ><?php echo stripslashes(str_replace("''",	"'",	$commentaire)); ?>
+                </div>
+            </td>
+        </tr>        
+    </table>
+<?php BD::deconnecter();?>
+<script>
+    require(["dojo/parser", "dijit/Editor","dijit/_editor/plugins/ViewSource"]);
+    require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
+        ready(function() {
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "100px",width: "950px",disabled:"true"
+            }, "commentaire");
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "100px",width:"950px",disabled:"true"
+            }, "contexte");
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "100px",width: "950px",disabled:"true"
+            }, "descriptif");
+        });
+    });
+</script>           

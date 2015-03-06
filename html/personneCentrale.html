@@ -1,0 +1,90 @@
+<?php $nb=$_GET['nb']; $height=100*$nb; ?>
+<div style="width: 467px; margin-left:-91px;margin-top:15px;" >
+    <div data-dojo-type="dijit/layout/AccordionContainer" style="height:"<?php echo $height.'px' ;?>" " >
+         <?php for ($i=1;$i<=$nb;$i++){?>
+         <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo 'Personne '.$i; ?>" selected="true" >
+            <table>
+                <tr>
+                    <td>
+                        <label for="<?php echo 'nom'.$i;?>" class="perCentrale" ><?php echo TXT_NOM; ?></label>
+                        <input style="width: 210px" data-dojo-type="dijit/form/ValidationTextBox"  name="<?php echo 'nom'.$i;?>" autocomplete="on"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&\',.-]+'"
+data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
+                    </td>
+                </tr> 
+                <tr>
+                    <td>
+                        <label for="<?php echo 'prenom'.$i;?>" class="perCentrale" ><?php echo TXT_PRENOM; ?></label>
+                        <input style="width: 210px"  data-dojo-type="dijit/form/ValidationTextBox" name="<?php echo 'prenom'.$i;?>" autocomplete="on"
+                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&'_ ,.-]+'"
+data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="<?php echo 'qualite'.$i;?>" class="perCentrale" ><?php echo TXT_QUALITE; ?></label>
+                        <?php
+                            $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca FROM qualitedemandeuraca where libellequalitedemandeuraca !=?",array('n/a'));
+                        ?>
+                        <select name="<?php echo 'qualite'.$i;?>" id="<?php echo 'qualite'.$i;?>"        data-dojo-type="dijit/form/FilteringSelect" style="width: 210px"  data-dojo-props="  value: '', placeHolder: '<?php echo TXT_SELECTQUALITE ; ?>'" >
+                            <?php                                                        
+                            for($k=0;$k<count($row);$k++){ 
+                            echo "<option value='$row[$k]['idqualitedemandeuraca']'>".$row[$k]['libellequalitedemandeuraca']."</option>";                   
+                            }             
+                            ?>           
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 85%">
+                        <div style="float: left;width: 40%" id="<?php echo 'libelleResponsable'.$i;?>" ></div>
+                        <div style="float: right;width: 210px;margin-right:24px"  id="<?php echo 'valeurNomResponsable'.$i;?>"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 85%">
+                        <div  style="float: left;width: 40%" id="<?php echo 'emailResponsable'.$i;?>" ></div>
+                        <div style="float: right;width: 210px;margin-right:24px"  id="<?php echo 'valeurEmailResponsable'.$i;?>"></div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <label for="<?php echo 'mail'.$i;?>" class="perCentrale" ><?php echo TXT_MAIL; ?></label>
+                        <input data-dojo-type="dijit/form/ValidationTextBox" style="width: 210px"  name="<?php echo 'mail'.$i;?>"  regExpGen="dojox.validate.regexp.emailAddress" 
+                               invalidMessage="<?php echo TXT_EMAILNONVALIDE ;?>" autocomplete="on" placeHolder ='<?php echo TXT_EMAIL; ?>'/> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="<?php echo 'tel'.$i;?>" class="perCentrale" ><?php echo TXT_TELEPHONE; ?></label>
+                        <input type="text" name="<?php echo 'tel'.$i;?>"  data-dojo-type="dijit/form/ValidationTextBox"  style="width: 210px"
+                               data-dojo-props="regExp:'\\d{10}', invalidMessage:'<?php echo TXT_TELINVALIDE; ?> '" autocomplete="on" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="<?php echo 'connaissancetechnologique'.$i;?>" style="width: 450px;"><?php echo TXT_CONNAISSANCETECHNOLOGIQUE.' :'; ?>
+                        </label>      
+                        <textarea id="<?php echo 'connaissancetechnologique'.$i;?>"></textarea>
+                        <script>
+                            require(["dojo/ready", "dijit/form/SimpleTextarea"], function(ready, SimpleTextarea){
+                                ready(function(){
+                                    var textarea = new SimpleTextarea({
+                                        name: "<?php echo 'connaissancetechnologique'.$i;?>",
+                                        rows: "2",
+                                        cols: "51",        
+                                        style: "width:auto;margin-left: 0px;"
+                                    }, "<?php echo 'connaissancetechnologique'.$i;?>");    
+                                });
+                            });
+                        </script>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <?php
+        }
+        ?>
+    </div>
+</div>

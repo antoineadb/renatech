@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<?php 
+include_once 'outils/constantes.php';
+include_once 'outils/toolBox.php';
+?>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <?php if(internetExplorer()=='true'){        
+        ?>            
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0"/>
+        
+        <?php }?>
+        <?php if(isset($_GET['lang'])){
+        if($_GET['lang']=='fr'){
+        include_once('lang/fr-lang.php');
+        echo '<script>var dojoConfig = {locale: "fr-fr"};</script>';
+        }elseif( $_GET['lang']=='en'){
+        include_once('lang/en-lang.php');
+        echo '<script>var dojoConfig = {locale: "en-us"};</script>';
+        }
+        }else{
+        echo '<script>var dojoConfig = {locale: "fr-fr"};</script>';
+        }
+        ?>
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/js/dojo/resources/dojo.css" />
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/js/dojox/grid/resources/claroGrid.css" />
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/styles/style.css" media="screen" />
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/js/dijit/themes/claro/claro.css" media="screen">
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/js/dojox/form/resources/CheckedMultiSelect.css" />
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/js/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/js/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css" />
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/styles/dropdown.css" media="screen"  type="text/css" />
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/styles/default.css" media="screen"  type="text/css" />    
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/styles/menu.css" />
+        <link rel="stylesheet" href="<?php echo '/'.REPERTOIRE ?>/js/dojox/widget/Toaster/Toaster.css" />
+        <?php
+        $url = $_SERVER['PHP_SELF'];
+        $reg = '#^(.+[\\\/])*([^\\\/]+)$#';
+        define('PAGEENCOURS', preg_replace($reg, '$2', $url));
+        if(!isset($_SESSION['menu'])){
+        ?>
+        <script type='text/javascript' src='<?php echo "/".REPERTOIRE ?>/js/dojo/dojo.js' data-dojo-Config='parseOnLoad: true'></script>
+        <?php }else{ ?>
+        <script type='text/javascript' src='<?php echo "/".REPERTOIRE ?>/js/dojo/dojo.js' ></script>
+        <?php }?>
+
+        <script type="text/javascript">
+        dojo.require("dijit.form.ValidationTextBox");
+        dojo.require("dojox.validate.regexp");
+        dojo.require("dijit.form.Form");
+        dojo.require("dijit.form.Button");
+        dojo.require("dijit.layout.AccordionContainer");
+        dojo.require("dijit.layout.ContentPane");
+        dojo.require("dijit.Dialog");        
+        </script>
+        <script src="<?php echo '/'.REPERTOIRE.'/'; ?>js/controle.js"></script>
+    </head>
+    <body class="claro" onkeypress ="detectTouche(event, 'divMajus')" onkeyup ="detectTouche(event, 'divMajus')" >

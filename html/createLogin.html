@@ -1,0 +1,70 @@
+<?php 
+$_SESSION['session']="Session ouverte";		
+$_SESSION['nomConnect'] = '';
+$_SESSION['prenomConnect'] = '';
+include_once 'outils/constantes.php'; 
+?>
+
+<style type="text/css">
+    label { 
+        display: inline-block;
+        width: 240px; 
+    }
+</style>
+<br>
+
+<div id="messagemauvaisemotpasse" style="display: none;color: red;"><?php echo TXT_MAUVAISMOTPASSE;?></div>
+<br>
+<form data-dojo-type="dijit/form/Form" id="login" name="login"  method="post" action="<?php echo '/'.REPERTOIRE ?>/securite/<?php echo $lang; ?>"  >
+    <script type="dojo/method" data-dojo-event="onSubmit">
+    if(this.validate()){
+        return true;
+    }else{
+        alert("<?php echo TXT_MESSAGEERREURCONTACT;?>");
+    return false;exit();
+    }
+</script>
+<fieldset id="ident" style="border-color: #5D8BA2;width: 966px; padding: 40px;font-size:1.2em" >
+    <legend style="color: #5D8BA2"><b><?php echo html_entity_decode((TXT_CREATEADMIN)); ?></b></legend>
+<input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+    <div id="bulle" class="infobulle"></div>
+    <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 8.0') !== FALSE) {?>
+        <div style="padding-bottom: 10px;margin-top: 30px">
+<?php }else{ ?>
+<div style="padding-bottom: 10px">
+			<?php }?>
+            <label style="padding-right: 20px"><?php echo TXT_LOGIN.'* :'  ; ?></label>
+            <input id="pseudo" type="text" name="pseudo" data-dojo-type="dijit/form/ValidationTextBox"  required="required"
+        autocomplete="on"   promptMessage ="<?php echo TXT_MAUVAISPSEUDO;?>"
+        data-dojo-props="regExp:'^[a-zA-Z0-9.&-]{6,}',invalidMessage:'<?php echo TXT_MAUVAISPSEUDO; ?>'"
+        placeHolder ="<?php echo TXT_PSEUDO; ?>"/>
+           
+        </div>
+        <div style="padding-bottom: 10px">
+            <label style="padding-right: 20px"><?php echo TXT_EMAIL.'* :' ?></label>
+            <input id="email1" type="text" name="email1" class="long" data-dojo-type="dijit/form/ValidationTextBox"  
+                   regExpGen="dojox.validate.regexp.emailAddress" required="required"                    
+                   invalidMessage="<?php echo TXT_EMAILNONVALIDE ?>" autocomplete="on"  placeHolder ="<?php echo TXT_EMAIL; ?>"/>
+        </div>
+        <div style="padding-bottom: 10px">
+            <label style="padding-right: 20px"><?php echo TXT_MOTPASSE.'* :'; ?>
+                <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif'/><span><?php echo TXT_MAUVAISMOTPASSE;?></span></a>
+            </label>
+            <input type="password" required="required"  name="mot_de_passe_1" id="mot_de_passe_1" trim="true" 
+                   data-dojo-type="dijit/form/ValidationTextBox" 
+                   data-dojo-props="regExp:'^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$',invalidMessage:'<?php echo TXT_MAUVAISMOTPASSE; ?>'"
+                   promptMessage ="<?php echo TXT_MAUVAISMOTPASSE;?>"  placeHolder ="<?php echo TXT_VOTREMOTPASSE; ?>" />
+        </div>
+        <div  style="padding-bottom: 10px">
+            <label style="padding-right: 20px"><?php echo TXT_CONFIRMATION.'* :'; ?></label>
+            <input type="password" required="required" name="mot_de_passe_2" id="mot_de_passe_2"	
+                   data-dojo-type="dijit/form/ValidationTextBox" 
+                   validator="return this.getValue() == dijit.byId('mot_de_passe_1').getValue()"
+                   invalidMessage="<?php echo TXT_PASSEDIFF;?>"  placeHolder ="<?php echo TXT_CONFIRMATION; ?>"/>
+        </div>
+    <input type="submit" label="<?php echo TXT_INSCRIPTION;?>" id="Inscription"  data-dojo-type="dijit/form/Button"/>   
+</fieldset>		
+     </form>
+<p style="font-size: x-small">
+    <?php echo TXT_CHAMPSOBLIGATOIRES;?>
+</p>

@@ -1,0 +1,249 @@
+<?php  
+include_once  'outils/toolBox.php'; 
+include_once  'outils/createDijit.php'; 
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+
+?>
+<script src="<?php echo '/'.REPERTOIRE ?>/js/ajax.js"></script>
+<button type="button" id="setContent" style="display: none"></button>
+<button type="button" id="setContent2" style="display: none"></button>
+<button type="button" id="setContentne" style="display: none"></button>
+<button type="button" id="setContentne2" style="display: none"></button>
+<button type="button" id="setContenttu" style="display: none"></button>
+<button type="button" id="setContenttu2" style="display: none"></button>
+<button type="button" id="setContentdi" style="display: none"></button>
+<button type="button" id="setContentdi2" style="display: none"></button>
+<table >
+    <tr>
+        <td valign="top" style="width: 300px"><?php echo TXT_QUALITEDEMANDEUR.' *:';?> </td>
+        <td>
+            <?php
+            $rowQualite = $manager->getList2("SELECT  libellequalitedemandeuraca,libellequalitedemandeuracaen,idqualitedemandeuraca
+            FROM qualitedemandeuraca where idqualitedemandeuraca<>?",NAQAUALITEACA);
+            $idnonpermanent ='qa'.NONPERMANENT;
+            $valeur='_';
+            ?>
+            <select name="qualiteDemandeuraca" id="qualiteDemandeuraca" data-dojo-type="dijit/form/Select"  style="width: 220px"
+                    onchange="if (this.value === '<?php if(!empty($idnonpermanent)){echo $idnonpermanent;}else{echo $valeur;} ?>') {
+                                        createcontact.setContent.click();
+                                    } else {
+                                        createcontact.setContent2.click();
+                                    }">
+                <?php
+                echo "<option value='qa0'>" . TXT_SELECTQUALITE . "</option>";
+                if ($lang == 'fr') {
+                $nbrowQualite = count($rowQualite);
+                for ($i = 0; $i <$nbrowQualite; $i++) {
+                echo "<option value='" . 'qa' . $rowQualite[$i]['idqualitedemandeuraca'] . "'>" .
+                utf8_decode($rowQualite[$i]['libellequalitedemandeuraca']) . "</option>";
+                }
+                } elseif ($lang == 'en') {
+                $nbrowQualite = count($rowQualite);
+                for ($i = 0; $i < $nbrowQualite; $i++) {
+                echo "<option value='" . 'qa' . $rowQualite[$i]['idqualitedemandeuraca'] . "'>" .
+                utf8_decode($rowQualite[$i]['libellequalitedemandeuracaen']) . "</option>";
+                }
+                }
+                ?>
+            </select>
+        </td>
+    </tr></table>
+<div id="div1" >
+</div>
+
+<table>
+    <tr>
+        <td valign="top" style="width: 300px"><?php echo TXT_NOMEMPLOYEUR." *:";?></td>
+        <td>
+            <?php
+
+            $rowEmployeur = $manager->getList("SELECT  libelleemployeur,libelleemployeuren,idemployeur FROM nomemployeur order by idemployeur asc;");
+            $idautre	='ne'.IDAUTREEMPLOYEUR;
+            ?>
+            <select name="nomEmployeur" id="nomEmployeur" data-dojo-type="dijit/form/Select"  style="width: 220px"
+                    onchange="if (this.value === '<?php	echo	$idautre;	?>') {
+                                createcontact.setContentne.click();
+                            } else {
+                                createcontact.setContentne2.click();
+                            }">
+                <?php
+                echo "<option value='ne0'>".TXT_SELECTEMPLOYEUR."</option>";
+                $nbrowEmployeur = count($rowEmployeur);
+                if ($lang=='fr'){                    
+                    for($i=0;$i<$nbrowEmployeur;$i++)	{
+                        echo "<option value='".'ne'.$rowEmployeur[$i]['idemployeur']	."'>".str_replace("''","'",$rowEmployeur[$i]['libelleemployeur'])."</option>";
+                    }
+                }elseif($lang=='en'){
+                    for($i=0;$i<count($rowEmployeur);$i++) {
+                        echo '<option value="'.'ne'.($rowEmployeur[$i]['idemployeur']).'">'. str_replace("''","'",$rowEmployeur[$i]['libelleemployeuren']).'</option>';
+                    }
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
+</table>
+<div id="divne1" >
+</div>
+
+<table>
+    <tr>
+        <td valign="top" style="width: 300px"><?php echo TXT_TUTELLE." *:";	?></td>
+        <td>
+            <?php
+            $rowtutelle	= $manager->getList("SELECT  idtutelle,libelletutelle,libelletutelleen FROM tutelle where masquetutelle !=TRUE order by idtutelle asc;");
+            $idautre = 'tu'.$manager->getSingle2("select idtutelle from tutelle where libelletutelle =?",'Autres');
+            ?>
+            <select name="tutelle" id="tutelle" data-dojo-type="dijit/form/Select"  style="width: 220px"
+                    onchange="if (this.value === '<?php	echo	$idautre;	?>') {
+                                createcontact.setContenttu.click();
+                            } else {
+                                createcontact.setContenttu2.click();
+                            }">
+                <?php
+                echo "<option value='tu0'>".TXT_SELECTTUTELLE."</option>";
+                if($lang=='fr'){
+                for($i=0;$i<count($rowtutelle);	$i++){
+                echo "<option value='".'tu'.$rowtutelle[$i]['idtutelle']."'>".str_replace("''","'",$rowtutelle[$i]['libelletutelle'])."</option>";
+                }
+                }elseif($lang=='en'){
+                for($i=0;$i<count($rowtutelle);$i++){
+                echo '<option value="'.'tu'.($rowtutelle[$i]['idtutelle']).'">'.str_replace("''","'",$rowtutelle[$i]['libelletutelleen']).'</option>';
+                }
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
+
+</table>
+<div id="divtu1" ></div>
+<table>
+    <?php
+    $db = BD::connecter();
+    if(!empty($_SESSION['mail'])){
+        $mail = $_SESSION['mail'];
+    }elseif(!empty($_SESSION['email'])){
+        $mail = $_SESSION['email'];
+    }
+    $nbcentrale=$manager->getSingle("select count(idcentrale) from centrale");
+    $idcentrale1=$manager->getSingle2("select idcentrale from centrale where lower(email1)=?",strtolower($mail));
+    $idcentrale2=$manager->getSingle2("select idcentrale from centrale where lower(email2)=?",strtolower($mail));
+    $idcentrale3=$manager->getSingle2("select idcentrale from centrale where lower(email3)=?",strtolower($mail));
+    $idcentrale4=$manager->getSingle2("select idcentrale from centrale where lower(email4)=?",strtolower($mail));
+    $idcentrale5=$manager->getSingle2("select idcentrale from centrale where lower(email5)=?",strtolower($mail));
+    if(!empty($idcentrale1)){
+        $idcentrale=$idcentrale1;
+    }elseif(!empty($idcentrale2)){
+        $idcentrale=$idcentrale2;
+    }elseif(!empty($idcentrale3)){
+        $idcentrale=$idcentrale3;
+    }elseif(!empty($idcentrale4)){
+        $idcentrale=$idcentrale4;
+    }elseif(!empty($idcentrale5)){
+        $idcentrale=$idcentrale5;
+    }
+    if(!empty($idcentrale)){
+        $rowcodeunite= $manager->getList2("select codeunite,libellecentrale,villecentrale from centrale where idcentrale=?",$idcentrale);
+        $villecentrale =$rowcodeunite[0]['villecentrale'];
+        $codeunite =$rowcodeunite[0]['codeunite'];
+        $libellecentrale =$rowcodeunite[0]['libellecentrale'];
+        echo '<tr><td valign="top" style="width: 300px">'.TXT_CODEUNITE.' *'.'</td>';
+        echo " <td><input type ='text' name ='codeUnite' value =".$codeunite." disabled='disabled' class='textfieldhidden' /> </td></tr>";
+        echo "<tr><td>".TXT_NOMLABO."</td>";
+        echo '<td><input type="text" id="nomlabo" name="nomlabo" class="textfieldhidden" value="'.$libellecentrale.'" disabled="disabled" /></td></tr> ';
+        echo '<input type="text" name="nomLabo" id="nomLabo" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" value="'.$libellecentrale.'('.$villecentrale.')'.'"  >';
+    }else{
+        echo '<tr><td valign="top" style="width: 300px">'.TXT_CODEUNITE.' *'.'</td>';
+        echo " <td><div id='codeUnite' ></div></td></tr>";
+        $requete="SELECT codeunite,libellecentrale|| ' (' ||villecentrale || ') ' as libellecentrale FROM centrale";
+        $chemin ="tmp";
+        $nomselect ="selectCodeunite.json";
+        $libelleattribut1 = "codeunite";
+        $libelleattribut2 = "libellecentrale";
+        createJsonCentrale($requete,$chemin,$nomselect,$libelleattribut1,$libelleattribut2);
+        echo '<tr><td id="libelleAutre"></td><td valign="top" id="autre" name="autrecodeunite" ></td></tr> ';
+        echo "<tr><td>".TXT_NOMLABO."</td>";
+        echo '<td> <input type="text" name="nomlabo" id="nomlabo"  data-dojo-type="dijit/form/ValidationTextBox" style="width:317px"
+        data-dojo-props="maxLength:\'20\',regExp:\'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9() ,.-]+\', invalidMessage:\''.TXT_ERRSTRINGTEL.'\' "  /></td></tr> ';
+        echo '<input type="text" name="nomLabo" id="nomLabo"  data-dojo-type="dijit/form/ValidationTextBox" style="display:none;width:317px"  >';
+    }
+    ?>
+</table>
+<table>
+    <tr>
+        <td valign="top" style="width: 300px"><?php echo TXT_DISCIPLINESCIENTIFIQUE." *:";	?></td>
+        <td>
+            <?php
+            $discipline = $manager->getList("SELECT  iddiscipline,libellediscipline,libelledisciplineen FROM disciplinescientifique
+            where masquediscipline!=TRUE order by iddiscipline;");
+            $idautre	=	'di'	.	$manager->getSingle2("select iddiscipline from disciplinescientifique where libellediscipline =?",'Autres');
+            ?>
+            <select name="disciplineScientifique" id="disciplineScientifique" data-dojo-type="dijit/form/Select"  style="width: 220px"
+                    onchange="if (this.value === '<?php	echo $idautre;?>') {createcontact.setContentdi.click();} else {createcontact.setContentdi2.click();}">
+                <?php
+                echo"<option value='di0'>".TXT_SELECTDISCIPLINE."</option>";
+                if($lang=='fr'){
+                    for($i=0;$i<count($discipline);$i++){
+                        echo"<option value='".'di'.$discipline[$i]['iddiscipline']."'>".str_replace("''","'",$discipline[$i]['libellediscipline'])."</option>";
+                    }
+                }elseif($lang=='en'){
+                    for($i=	0;$i<count($discipline);$i++){
+                        echo'<option value="'.'di'.($discipline[$i]['iddiscipline']).'">'.str_replace("''","'",$discipline[$i]['libelledisciplineen']).'</option>';
+                    }
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
+</table>
+<div id="divdi1" ></div>
+<script>
+    function getselectedValue(selectId) {
+        if (selectId === "<?php echo TXT_AUTRES; ?>") {
+            document.getElementById('libelleAutre').innerHTML = "<?php echo TXT_AUTRES.' *:';?>";
+            document.getElementById('autre').innerHTML = "<input type='text' class='textfield' \n\
+        id='autres' style='width:307px;height:25px' name='autres' placeholder='<?php echo TXT_AUTRESCODE; ?>' required='required' \n\
+        onmouseover='document.getElementById(this.id).style.backgroundColor=\"#DFEFFF\"'\n\
+        onmouseout='document.getElementById(this.id).style.backgroundColor=\"white\"'/>";
+            document.getElementById('nomlabo').readOnly = false;
+        } else if (selectId === "<?php echo TXT_AUCUN; ?>") {
+            document.getElementById('autre').innerHTML = "";
+            document.getElementById('libelleAutre').innerHTML = "";
+            document.getElementById('nomlabo').readOnly = false;
+            document.getElementById('nomlabo').innerHTML = "  ";
+        } else {
+            document.getElementById('autre').innerHTML = "";
+            document.getElementById('libelleAutre').innerHTML = "";
+            document.getElementById('nomlabo').readOnly = true;
+        }
+    }
+</script>
+
+<script>
+    require(["dijit/form/Select", "dojo/data/ObjectStore", "dojo/store/Memory"],
+            function(Select, ObjectStore, Memory) {
+                var store = new Memory({
+                    <?php include "tmp/selectCodeunite.json"; ?>
+                });
+                var os = new ObjectStore({
+                    objectStore: store
+                });
+                var s = new Select({
+                    store: os
+                }, "codeUnite");
+                s.startup();
+                s.on("change", function() {
+                    var objinput = document.getElementById("nomlabo");
+                    var objinput1 = document.getElementById("nomLabo");
+                    objinput.value = this.get("value").substring(0, this.get("value").indexOf("("));
+                    getselectedValue(this.get("displayedValue"));
+                    objinput1.value = this.get("value");
+                    getselectedValue(this.get("displayedValue"));
+
+                });
+            });
+</script>
+
+<?php BD::deconnecter();?>
