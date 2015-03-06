@@ -58,7 +58,7 @@ if(isset($_GET['page'])&&$_GET['page']>0 && $_GET['page']<=$nbPage){
 }else{
     $cPage = 1;
 }
-$arrayprojet = $manager->getList("select * from tmptous order by idprojet desc limit ? offset ?");
+$arrayprojet = $manager->getList("select * from tmptous order by idprojet desc limit ".$perPage." offset ".(($cPage-1)*$perPage)."");
 $nbProjet = count($arrayprojet);
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                  FIN
@@ -75,75 +75,63 @@ SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.dat
 FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
 WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
 concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,null as demandeur,u.nom||' -  '|| u.prenom as porteur
 FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
 WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,u.nom||' -  '|| u.prenom as demandeur,null as porteur
 FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
 WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
 concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,null as demandeur,u.nom||' -  '|| u.prenom as porteur
 FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
 WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,u.nom||' -  '|| u.prenom as demandeur,null as porteur
 FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
 WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
 concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,null as demandeur,u.nom||' -  '|| u.prenom as porteur
 FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
 WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,u.nom||' -  '|| u.prenom as demandeur, null as porteur
 FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
 WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
 concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,null as demandeur,u.nom||' -  '|| u.prenom as porteur
 FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
 WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,u.nom||' -  '|| u.prenom as demandeur, null as porteur
 FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
 WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
 concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
 union
 SELECT p.titre,p.idprojet,p.datemaj,p.idperiodicite_periodicite,p.acronyme,p.datedebutprojet,p.numero,p.dureeprojet ,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,null as demandeur,u.nom||' -  '|| u.prenom as porteur
 FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
 WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? limit ? offset ?)", 
-array(
-    $libellecentrale,FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage,
-    $libellecentrale,FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage, 
-    $libellecentrale,FINI,REFUSE,CLOTURE, $perPage,($cPage-1)*$perPage,
-    $libellecentrale,FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage, 
-    $libellecentrale, FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage,
-    $libellecentrale,FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage,
-    $libellecentrale,FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage, 
-    $libellecentrale,FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage, 
-    $libellecentrale,FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage, 
-    $libellecentrale,FINI,REFUSE,CLOTURE,$perPage,($cPage-1)*$perPage
-    )
-);
-
+AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?
+)", array($libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale, FINI,REFUSE,CLOTURE,$libellecentrale,
+    FINI,REFUSE,CLOTURE,$libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE));
 $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN calcfinprojet date;");
 $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN finprojetproche date;");
 
@@ -185,11 +173,11 @@ for ($i = 0; $i < $nbProjet; $i++) {
 }
 $_SESSION['nbprojet']=$manager->getSingle("select count(idprojet) from tmptous");
 $porteur = '';
-$arrayporteur1 = $manager->getList("select distinct numero from tmptous order by idprojet desc ");
+$arrayporteur1 = $manager->getList("select distinct numero from tmptous order by idprojet desc limit ".$perPage." offset ".(($cPage-1)*$perPage)."");
 $arrayporteur = array();
 
 foreach ($arrayporteur1 as $key => $value) {
-    $arrayporteur = $manager->getList2("select distinct porteur from tmptous where  numero=? order by idprojet desc", $value[0]);
+    $arrayporteur = $manager->getList2("select distinct porteur from tmptous where  numero=? order by idprojet desc  limit ".$perPage." offset ".(($cPage-1)*$perPage)."", $value[0]);
     foreach ($arrayporteur as $key1 => $value1) {
         if (!empty($value1[0])) {
             $porteur.= $value1[0] . '  / ';
@@ -203,7 +191,7 @@ foreach ($arrayporteur1 as $key => $value) {
     }
     $porteur = '';
 }
-$row = $manager->getList("select * from (select distinct on(numero) *from tmptous where demandeur is not null)p order by idprojet desc ");
+$row = $manager->getList("select * from (select distinct on(numero) *from tmptous where demandeur is not null)p order by idprojet desc limit ".$perPage." offset ".(($cPage-1)*$perPage)."");
 $fprow = fopen('../tmp/projetCentrale.json', 'w');
 $datausercompte = "";
 fwrite($fprow, '{"items": [');

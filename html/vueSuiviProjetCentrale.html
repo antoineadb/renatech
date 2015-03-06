@@ -1,21 +1,3 @@
-<?php
-/*$perPage = 50;
-$nbTotalProjet = $manager->getSingle("select count(idprojet) from tmptous");
-$nbPage = ceil($nbTotalProjet/$perPage);
-if(isset($_GET['page']) && $_GET['page']>0 && $_GET['page']<=$nbPage){
-    $cPage = $_GET['page'] ;
-}else{
-    $cPage = 1;
-}
-echo '<div style="margin-bottom: 3px; margin-top: -4px; text-align: center; width: 1015px;">';
-for ($i = 1; $i <= $nbPage; $i++) {
-    if($i==$cPage){
-        echo " $i /";
-    }else{
-        echo "<a href=\"".'/' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang."&page=".$i."\">$i</a> /";
-    }
-}echo '</div>';*/
-?>
 <style type="text/css">//dev
     #grid {
         width: 65em;
@@ -44,10 +26,7 @@ dojo.ready(function(){
         {name: "<?php echo TXT_STATUTPROJETS; ?>", field: "libellestatutprojet"},
         {name: "<?php echo TXT_DEMANDEUR; ?>", field: "demandeur"},
         {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
-        {name: "<?php echo TXT_PORTEURS; ?>", field: "porteur"},
-        //{name: "<?php echo TXT_ACRONYME; ?>", field: "acronyme"},
-        //{name: "<?php echo TXT_DATEFIN; ?>", field: "calcfinprojet",width: "80px",formatter:formatDate},
-        //{name: "<?php echo TXT_DATEFIN.' proche'; ?>",width: "80px", field: "calcfinproche",formatter:formatDate}
+        {name: "<?php echo TXT_PORTEURS; ?>", field: "porteur"}
     ]];
     var grid = new dojox.grid.EnhancedGrid({
         id: 'grid',
