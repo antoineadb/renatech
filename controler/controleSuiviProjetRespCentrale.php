@@ -196,7 +196,6 @@ $fprow = fopen('../tmp/projetCentrale.json', 'w');
 $datausercompte = "";
 fwrite($fprow, '{"items": [');
 $nbrow = count($row);
-
 for ($i = 0; $i < $nbrow; $i++) {
     if (!empty($row[$i]['datemaj'])) {
             $datemaj = $row[$i]['datemaj'];
