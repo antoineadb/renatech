@@ -50,7 +50,8 @@ $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
                     $cPage = $_GET['page'];
                 } else {
                     $cPage = 1;
-                }?>
+                }
+                ?>
                 <link rel="stylesheet" href="<?php echo '/' . REPERTOIRE ?>/styles/pagination.css" media="screen" />                
                 <ul class="pagination style1 clearfix">
                     <li class="article">Page <?php echo $cPage; ?> de <?php echo $nbPage; ?></li>
