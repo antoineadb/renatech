@@ -280,7 +280,6 @@ RewriteRule   Err1_contexte/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?la
 RewriteRule   Err1_Descript/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&idprojet=$2&msgerrtailledescriptif=$3&statut=$4 [L]
 
 #PROJET
-RewriteRule   projet_centrale/([a-z]+)/([A-Z\-]+)/([0-9]+)        VueSuiviProjetCentrale.php?lang=$1&centrale=$2&page=$3      [L]
 RewriteRule   projet_centrale/([a-z]+)/([A-Z\-]+)                 VueSuiviProjetCentrale.php?lang=$1&centrale=$2              [L]
 RewriteRule   projet_centrale/([a-z]+)                          VueSuiviProjetTousCentrales.php?lang=$1                     [L]
 RewriteRule   new_request/([a-z]+)                              createProjet.php?lang=$1                                    [L]

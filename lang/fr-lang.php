@@ -666,7 +666,7 @@ define("TXT_UTILISATEURINDUSTRIEL","Utilisateur Industriel ");
 define("TXT_VALIDER","Valider");
 define("TXT_VERIFIER","Vérifier");
 define("TXT_VERROUIDENTIFIEE","Verrous identifiés");
-define("TXT_VERSION","Formulaire Renatech, version 3.4 du 6 mars 2015");
+define("TXT_VERSION","Formulaire Renatech, version 3.41 du 9 mars 2015");
 define("TXT_VILLE","Ville");
 define("TXT_VOSINFO","Vos Informations");
 define("TXT_VOSPSEUDOS","Vos pseudos");
