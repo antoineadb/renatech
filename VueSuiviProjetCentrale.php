@@ -40,24 +40,8 @@ $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
         ?><form action="#" method="POST" id="vueprojetcentrale">
             <div style='width:100px;margin-left:10px;margin-bottom: -20px'><a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/exportjson.php?lang=' . $lang ?>">&nbsp;
                     <img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/export.png' ><span style="width: 260px"><?php echo TXT_EXPORTPROJETCENTRALE; ?></span></a>
-            </div>
-            <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:25px;width: 1050px;font-size: 1.2em;" doLayout="false" selected="true" >
-                <?php
-                $perPage = 50;
-                $nbTotalProjet = $manager->getSingle("select count(idprojet) from tmptous");
-                $nbPage = ceil($nbTotalProjet / $perPage);
-                if (isset($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $nbPage) {
-                    $cPage = $_GET['page'];
-                } else {
-                    $cPage = 1;
-                }
-                ?>
-                <link rel="stylesheet" href="<?php echo '/' . REPERTOIRE ?>/styles/pagination.css" media="screen" />                
-                <ul class="pagination style1 clearfix">
-                    <li class="article">Page <?php echo $cPage; ?> de <?php echo $nbPage; ?></li>
-                    <?php for ($i = 1; $i <= $nbPage; $i++) { ?>  
-                        <li><a href="<?php echo '/' . REPERTOIRE . '/controler/controleSuiviProjetRespCentrale.php?lang=' . $lang . '&page=' . $i; ?>"><?php echo $i ?></a></li>
-                    <?php } ?></ul>
+            </div>            
+            <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:25px;width: 1050px;font-size: 1.2em;" doLayout="false" selected="true" >               
                 <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbprojet . "'>" . TXT_PROJETMACENTRALE . "</div>"; ?>" style="height:550px;white-space: normal" >
                     <?php include_once 'html/vueSuiviProjetCentrale.html'; ?>
                 </div>

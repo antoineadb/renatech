@@ -13,10 +13,11 @@
     dojo.require("dijit.MenuItem");
     dojo.require("dojo.domReady!");
     dojo.require("dojo.request");
+    dojo.require("dojox.grid.enhanced.plugins.Pagination");
 dojo.ready(function(){
     /*set up data store*/
     var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetCentrale.json"});
-    /*set up layout*/
+    /*set up layout*/    
     var layout = [[
         {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px", formatter: hrefFormatterNumero},
         {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet",width: "80px",formatter:formatDate},
@@ -34,7 +35,18 @@ dojo.ready(function(){
         structure: layout,
         autoHeight:true,
         rowSelector: '20px',
-        plugins: {menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}
+        plugins: {menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"},
+            pagination: {
+            pageSizes: ["5", "10", "50","100", "All"],
+            description: true,
+            sizeSwitch: true,
+            pageStepper: true,
+            gotoButton: true,
+                    /*page step to be displayed*/
+            maxPageStep: 5,
+                    /*position of the pagination bar*/
+            position: "top"
+        }}
     },
       document.createElement('div'));
 //----------------------------------------------------------------------------------------------------------------------

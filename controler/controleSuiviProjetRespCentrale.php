@@ -58,7 +58,7 @@ if(isset($_GET['page'])&&$_GET['page']>0 && $_GET['page']<=$nbPage){
 }else{
     $cPage = 1;
 }
-$arrayprojet = $manager->getList("select * from tmptous order by idprojet desc limit ".$perPage." offset ".(($cPage-1)*$perPage)."");
+$arrayprojet = $manager->getList("select * from tmptous order by idprojet desc");
 $nbProjet = count($arrayprojet);
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                  FIN
@@ -171,13 +171,13 @@ for ($i = 0; $i < $nbProjet; $i++) {
         }
     }
 }
-$_SESSION['nbprojet']=$manager->getSingle("select count(idprojet) from tmptous");
+$_SESSION['nbprojet']=$manager->getSingle("select count(distinct idprojet) from tmptous");
 $porteur = '';
-$arrayporteur1 = $manager->getList("select distinct numero from tmptous order by idprojet desc limit ".$perPage." offset ".(($cPage-1)*$perPage)."");
+$arrayporteur1 = $manager->getList("select distinct numero from tmptous order by idprojet desc");
 $arrayporteur = array();
 
 foreach ($arrayporteur1 as $key => $value) {
-    $arrayporteur = $manager->getList2("select distinct porteur from tmptous where  numero=? order by idprojet desc  limit ".$perPage." offset ".(($cPage-1)*$perPage)."", $value[0]);
+    $arrayporteur = $manager->getList2("select distinct porteur from tmptous where  numero=? order by idprojet desc");
     foreach ($arrayporteur as $key1 => $value1) {
         if (!empty($value1[0])) {
             $porteur.= $value1[0] . '  / ';
@@ -191,7 +191,7 @@ foreach ($arrayporteur1 as $key => $value) {
     }
     $porteur = '';
 }
-$row = $manager->getList("select * from (select distinct on(numero) *from tmptous where demandeur is not null)p order by idprojet desc limit ".$perPage." offset ".(($cPage-1)*$perPage)."");
+$row = $manager->getList("select * from (select distinct on(numero) *from tmptous where demandeur is not null)p order by idprojet desc");
 $fprow = fopen('../tmp/projetCentrale.json', 'w');
 $datausercompte = "";
 fwrite($fprow, '{"items": [');
@@ -661,5 +661,5 @@ chmod('../tmp/Projetsoustraitance.json', 0777);
 $_SESSION['nbProjetSoustraitance']=$nbrowProjetSoustraitance;
 $_SESSION['email'] = $mail;
 $_SESSION['pseudo'] = $pseudo;
-header('location:/'.REPERTOIRE.'/projet_centrale/' . $lang . '/' . $libellecentrale . '/'.$cPage);
+header('location:/'.REPERTOIRE.'/projet_centrale/' . $lang . '/' . $libellecentrale );
 BD::deconnecter();

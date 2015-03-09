@@ -664,18 +664,18 @@ if (isset($_POST['page_precedente'])) {
                 }
             }
             if (!empty($_POST['mailaccueilcentrale' . $i . ''])) {
-                $mailaccueilcentrale = Securite::BDD($_POST['mailaccueilcentrale' . $i . '']);
+                $mailaccueilcentrale = $_POST['mailaccueilcentrale' . $i . ''];
             } else {
                 $mailaccueilcentrale = TXT_UNDEFINEMAIL . $i;
             }
             if (!empty($_POST['telaccueilcentrale' . $i . ''])) {
-                $telaccueilcentrale = Securite::BDD($_POST['telaccueilcentrale' . $i . '']);
+                $telaccueilcentrale = $_POST['telaccueilcentrale' . $i . ''];
             } else {
                 $telaccueilcentrale = '';
             }
             if (!empty($_POST['connaissancetechnologiqueaccueil' . $i . ''])) {
                 $connaissancetechnologiqueAccueil = $_POST['connaissancetechnologiqueaccueil' . $i . ''];
-                $connaissancetechnologiqueaccueil = Securite::bdd($connaissancetechnologiqueAccueil);
+                $connaissancetechnologiqueaccueil = $connaissancetechnologiqueAccueil;
             } else {
                 $connaissancetechnologiqueaccueil = '';
             }
@@ -698,7 +698,7 @@ if (isset($_POST['page_precedente'])) {
                 } elseif ($lang == 'en') {
                     $libellequalite = $manager->getSingle2("select libellequalitedemandeuracaen from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
             }
-            $personnecentrale .=Securite::BDD($_POST['nomaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($_POST['prenomaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($_POST['mailaccueilcentrale' . $i . '']) .
+            $personnecentrale .=Securite::BDD($_POST['nomaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($_POST['prenomaccueilcentrale' . $i . '']) . ' - ' . $_POST['mailaccueilcentrale' . $i . ''] .
                         ' - ' . Securite::BDD($_POST['telaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($libellequalite). '-';
              
         }        
