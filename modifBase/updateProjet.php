@@ -120,7 +120,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'modifProje
             //MISE A JOUR DE LA TABLE CONCERNE
             $concerne = new Concerne($idCentrale, $idprojet, $idstatutprojet_statutprojet, $commentaireProjet);
             $manager->addConcerne($concerne);
-												checkConcerne($idprojet,	$idCentrale,	$idstatutprojet_statutprojet);
+            checkConcerne($idprojet, $idCentrale, $idstatutprojet_statutprojet);
             $_SESSION['nombre_de_centrale'] = $i;
         }
     }

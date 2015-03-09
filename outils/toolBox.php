@@ -556,3 +556,48 @@ function cleanForExportOther($string){
     $str6 = stripslashes(trim(utf8_decode(strip_tags($str5))));
     return $str6;
 }
+/**
+ * Cette fonction affecte le responsable du demandeur de projet comme porteur des projets du demandeur
+ * @param type $pseudo
+ * @param type $idprojet
+ */
+function responsablePorteur($pseudo,$idprojet){
+    if(is_file('../class/Manager.php')){
+        include_once '../class/Manager.php';
+    }else{
+        include_once 'class/Manager.php';
+    }
+     $db = BD::connecter();
+    $manager = new Manager($db);
+    
+    $arraytypeutilisateur = $manager->getList2("select idqualitedemandeuraca_qualitedemandeuraca,idqualitedemandeurindust_qualitedemandeurindust from utilisateur,loginpassword where idlogin_loginpassword = idlogin  "
+        . "and pseudo=?", $pseudo);
+$dateaffectation = date("m,d,Y");
+if(!empty($arraytypeutilisateur[0]['idqualitedemandeuraca_qualitedemandeuraca'])){   //CAS ACADEMIQUE
+    $typeutilisateur = $manager->getSingle2("SELECT idqualitedemandeuraca_qualitedemandeuraca FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?", $pseudo);
+    if($typeutilisateur==NONPERMANENT){//CAS NON PERMANENT
+        $mailresponsable = $manager->getSingle2("SELECT mailresponsable FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?",$pseudo);
+        $arrayidresponsable = $manager->getList2("SELECT  idutilisateur FROM utilisateur,loginpassword WHERE  idlogin = idlogin_loginpassword and mail=?", $mailresponsable);
+        $nbarrayidresponsable = count($arrayidresponsable);
+        if($nbarrayidresponsable>0){
+            for ($i = 0; $i < $nbarrayidresponsable; $i++) {
+                $porteur = new UtilisateurPorteurProjet($arrayidresponsable[$i]['idutilisateur'], $idprojet, $dateaffectation);
+                $manager->addUtilisateurPorteurProjet($porteur);
+            }
+        }
+    }
+}elseif(!empty($arraytypeutilisateur[0]['idqualitedemandeurindust_qualitedemandeurindust'])){//CAS INDUSTRIEL
+    $typeutilisateur = $manager->getSingle2("SELECT  idqualitedemandeurindust_qualitedemandeurindust FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?", $pseudo);
+    if($typeutilisateur==NONPERMANENTINDUST){
+        $mailresponsable = $manager->getSingle2("SELECT mailresponsable FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?",$pseudo);
+        $arrayidresponsable = $manager->getList2("SELECT  idutilisateur FROM utilisateur,loginpassword WHERE  idlogin = idlogin_loginpassword and mail=?", $mailresponsable);
+        $nbarrayidresponsable = count($arrayidresponsable);
+        if($nbarrayidresponsable>0){
+            for ($i = 0; $i < $nbarrayidresponsable; $i++) {
+                $porteur = new UtilisateurPorteurProjet($arrayidresponsable[$i]['idutilisateur'], $idprojet, $dateaffectation);
+                $manager->addUtilisateurPorteurProjet($porteur);
+            }
+        }
+    }
+}
+}
