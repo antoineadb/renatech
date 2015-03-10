@@ -43,8 +43,8 @@ if ($cas == 'mise a jour') {
 } elseif ($cas == 'mise a jourEmailAutreEmail') {
     include 'EmailProjephase2tMAJ.php';
     header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);    
-} elseif($cas=='creationprojetphase2etape' || $cas=='creerprojetphase2'){    
-    header('Location: /' . REPERTOIRE . '/EmailProjetphase2.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale'] . '&etautrecentrale=' . $etautrecentrale);
+} elseif($cas=='creationprojetphase2etape' || $cas=='creerprojetphase2'){
+    header('Location: /' . REPERTOIRE . '/EmailProjetphase2Session.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale'] . '&etautrecentrale=' . $etautrecentrale);
 }elseif ($cas == 'changement de statut') {
     if ($idstatutprojet == CLOTURE) {
         header('Location: /' . REPERTOIRE . '/closed_project/' . $lang . '/' . $idprojet . '/' . $idstatutprojet);

@@ -11,6 +11,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 include '../class/Securite.php';
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
+    $pseudo = $_SESSION['pseudo'];
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
@@ -91,13 +92,15 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $idcentrale = AUTRECENTRALE;
     }
     $projet = new Projetphase1($idprojet, $titreProjet, $numProjet, $confidentiel, $descriptif, $dateprojet, $contexte, $idtypeprojet_typeprojet, $attachement, $acronyme);
+    
     $manager->addProjetphase1($projet);
 //RECUPERATION DE L'ID DU PROJET CREE
     $idProjet = $manager->getSingle("SELECT max(idprojet)FROM projet;");
     $_SESSION['idprojet'] = $idProjet; //A GARDER
     //MISE A JOUR DE LA TABLE CREER
     $creer = new Creer($idutilisateur_utilisateur, $idProjet);
-    $manager->addCreer($creer);
+    $manager->addCreer($creer);    
+    responsablePorteur($pseudo,$idprojet);
     //MISE A JOUR DE LA TABLE CONCERNE    
     if ($_POST ['enregistre'] == 'oui') {
         $concerne = new Concerne($idcentrale, $idProjet, ENATTENTEPHASE2, '');

@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-
 include_once '../decide-lang.php';
 include '../class/Manager.php';
 include '../class/Securite.php';
@@ -1149,7 +1148,7 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateConcerne($concerne, $idprojet);
             $daterefus = new DateStatutRefusProjet($idprojet, $datejour);
             $manager->updateDateStatutRefuser($daterefus, $idprojet, $idcentrale);
-            include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
+            include '../EmailProjetphase2Session.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
             $_SESSION['idstatutprojet'] = $idstatutprojet; //NE PAS EFFACER ON A BESOIN DANS UPLOADPHASE2
         } elseif ($idstatutprojet == TRANSFERERCENTRALE) {
             $ancienStatut = $manager->getSinglebyArray("select idstatutprojet_statutprojet from concerne where idprojet_projet=? and idcentrale_centrale=?", array($idprojet, $IDCENTRALEUSER));

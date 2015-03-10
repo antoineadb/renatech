@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This function enabled the login at the application
  * @param type string $mail is the mail of the connected user
@@ -6,9 +7,9 @@
  */
 function nomEntete($mail, $pseudo) {
     //FERMETURE DE LA CONNEXION
-    if(is_file('../class/Manager.php')){
+    if (is_file('../class/Manager.php')) {
         include_once '../class/Manager.php';
-    }else{
+    } else {
         include_once 'class/Manager.php';
     }
     $db = BD::connecter();
@@ -20,6 +21,7 @@ function nomEntete($mail, $pseudo) {
     //FERMETURE DE LA CONNEXION
     BD::deconnecter();
 }
+
 /**
  * 
  * @param type string $requete define the request
@@ -61,6 +63,7 @@ function createJsonCentrale($requete, $chemin, $nomselect, $libelleattribut1, $l
     $data = file_get_contents($chemin . '/' . $nomselect);
     BD::deconnecter();
 }
+
 /**
  * this function return the current page
  * @param type string $url
@@ -72,6 +75,7 @@ function pageEncours($url) {
     $pageencours1 = str_replace("/", "", $pageencours);
     return $pageencours1;
 }
+
 /**
  * 
  * @param type string $mail
@@ -108,6 +112,7 @@ function modifDroit($mail, $passe, $idUser, $droit) {
         }
     }
 }
+
 /**
  * This function create a number for the project
  * @param type $n
@@ -149,6 +154,7 @@ function createNumProjet($n) {
     }
     return $numProjet;
 }
+
 /**
  * This function remove accent to a string
  * @param type $string
@@ -157,6 +163,7 @@ function createNumProjet($n) {
 function stripAccents($string) {
     return strtr($string, 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ', 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
 }
+
 /**
  * This function return the list of the file in a directory
  * @param type $directory
@@ -173,6 +180,7 @@ function getDirectoryList($directory) {// fonction qui permet de lister les fich
     closedir($handler);
     return $results;
 }
+
 /**
  * this function check if the login and password have access to the application.
  * @param type $pseudo
@@ -191,6 +199,7 @@ function check_authent($pseudo) {
     }
     BD::deconnecter();
 }
+
 /**
  * This function calculate the connextion time, if the connection time is above 30 minutes without any action, the session are closed
  * @param type $limitInactif
@@ -206,8 +215,9 @@ function checktimeconnect($limitInactif) {
         echo '<script>window.location.replace("/' . REPERTOIRE . '/Login_Timeout/' . $lang . '")</script>';
     }
     $_SESSION['lastLoad'] = time();
-    $_SESSION['creationencours']='non';
+    $_SESSION['creationencours'] = 'non';
 }
+
 /**
  * This function generate a password respecting the rules of the application
  * @param type $car
@@ -224,6 +234,7 @@ function genPasse($car) {
     }
     return $string;
 }
+
 /**
  * This function create a json file
  * @param type $requete
@@ -262,6 +273,7 @@ function creerJson($requete, $chemin, $nomselect, $libelleattribut1, $libelleatt
     fclose($fp);
     BD::deconnecter();
 }
+
 /**
  * This function replace '' by ' and " by ’’
  * @param type $param
@@ -271,6 +283,7 @@ function filtredonnee($param) {
     $string = trim(stripslashes(str_replace("''", "'", str_replace('"', '’’', $param))));
     return $string;
 }
+
 /**
  * this function show if the label is shown or hidden
  * @param type $masque
@@ -282,6 +295,7 @@ function infoLibelle($masque) {
         echo '<div style="color:midnight-blue;font-size:12px" >' . '<i>' . TXT_LIBELLESHOW . '</i>' . '</div>';
     }
 }
+
 /**
  * this function remove tags and replace ’ by \''
  * @param type $string
@@ -289,9 +303,10 @@ function infoLibelle($masque) {
  */
 function stripTaggsbr($string) {
     $str1 = strip_tags($string, '<br>');
-    $str2 = str_replace("’","\''",$str1);
+    $str2 = str_replace("’", "\''", $str1);
     return $str2;
 }
+
 /**
  * This function filter the editor by removing all the tag between <style and </style
  * @param type $string
@@ -305,20 +320,21 @@ function filterEditor2($string0) {
             $val0 = stripos($string, '<style');
             $val1 = stripos($string, '/style>');
             $string1 = (substr_replace($string, "", $val0 + 1, $val1 - $val0 + 2));
-            $string=  str_replace("&; ", "", $string1);
+            $string = str_replace("&; ", "", $string1);
         }
     }
-    
-    
+
+
     return $string;
 }
+
 /**
  * This function filter the editor by removing all the tag between <!-- and ->
  * @param type $string
  * @return type
  */
 function filterEditor($string0) {
-     $string = strip_tags($string0);
+    $string = strip_tags($string0);
     if (mb_substr_count($string, "<!--") > 0) {
         $nb = mb_substr_count($string, "<!--");
         //Compte le nombre d'occurrences de la sous-chaîne <!--
@@ -345,42 +361,43 @@ function filterEditor($string0) {
             $val1 = stripos($string, '--&gt;');
             $string1 = (substr_replace($string, "", $val0 + 1, $val1 - $val0 + 2));
             $string = str_replace("&; ", "", $string1);
-        }        
-            //return $string;
+        }
+        //return $string;
         if (substr($string, 0, 1) == "<") {
-            return substr(str_replace("&lt;", "", $string),1);
-        }else{
+            return substr(str_replace("&lt;", "", $string), 1);
+        } else {
             return str_replace("&lt;", "", $string);
         }
-    }else{       
-       //return $string;
-       if (substr($string, 0, 1) == "<") {
-            return substr(str_replace("&lt;", "", $string),1);
-        }else{
+    } else {
+        //return $string;
+        if (substr($string, 0, 1) == "<") {
+            return substr(str_replace("&lt;", "", $string), 1);
+        } else {
             return str_replace("&lt;", "", $string);
         }
     }
 }
+
 /**
  * clean all the tags of a string
  * @param type $string
  * @return type
  */
-function clean($string){
-    return strip_tags(filterEditor(filterEditor2(Securite::bdd(trim(ltrim(rtrim(str_replace(array(chr(13)),  '', removeDoubleQuote($string)))))))));
+function clean($string) {
+    return strip_tags(filterEditor(filterEditor2(Securite::bdd(trim(ltrim(rtrim(str_replace(array(chr(13)), '', removeDoubleQuote($string)))))))));
 }
 
-function cleanREPORTPDF($string){
-    $arrayCar = array('à','û','–','è');
-    $arrayCarcorrige = array('à','û','-','è');
+function cleanREPORTPDF($string) {
+    $arrayCar = array('à', 'û', '–', 'è');
+    $arrayCarcorrige = array('à', 'û', '-', 'è');
     $tabCar = array("\r");
-    $string0 = filterEditor(stripTaggsbr(str_replace("é", "é",$string)));
-    $string1 = str_replace("ç","ç",$string0);
+    $string0 = filterEditor(stripTaggsbr(str_replace("é", "é", $string)));
+    $string1 = str_replace("ç", "ç", $string0);
     $string2 = str_replace($tabCar, array(), $string1);
-    $string3 = ltrim(rtrim(str_replace(array(chr(13)),  '', $string2)));
+    $string3 = ltrim(rtrim(str_replace(array(chr(13)), '', $string2)));
     $string4 = str_replace($arrayCar, $arrayCarcorrige, $string3);
     $string5 = str_replace('€', utf8_encode(chr(128)), $string4);
-    $string6 =  (stripslashes(str_replace("''", "'",$string5)));    
+    $string6 = (stripslashes(str_replace("''", "'", $string5)));
     return strip_tags(filterEditor(Securite::bdd(trim($string6))));
 }
 
@@ -394,6 +411,7 @@ function noreturn($chaine) {
     $chaine = str_replace($search, '', $chaine);
     return $chaine;
 }
+
 /**
  * 
  * @param type $idprojet
@@ -412,6 +430,7 @@ function checkConcerne($idprojet, $idcentrale, $idstatutprojet) {
     }
     BD::deconnecter(); //CONNEXION A LA BASE DE DONNEE
 }
+
 /**
  * This function delete project from table project where idproject are in creer table 
  */
@@ -422,7 +441,7 @@ function supprDouble() {//SUPPRESSION DES DOUBLONS
     $nbarraydoublon = count($arraydoublon);
     for ($i = 0; $i < $nbarraydoublon; $i++) {
         $manager->deleteprojetcentraleproximite($arraydoublon[$i][0]);
-        $manager->deleterapport($arraydoublon[$i][0]);        
+        $manager->deleterapport($arraydoublon[$i][0]);
         $manager->deleteprojetautrecentrale($arraydoublon[$i][0]);
         $manager->deleteprojetsf($arraydoublon[$i][0]);
         $manager->deleteressourceprojet($arraydoublon[$i][0]);
@@ -434,6 +453,7 @@ function supprDouble() {//SUPPRESSION DES DOUBLONS
     }
     BD::deconnecter(); //CONNEXION A LA BASE DE DONNEE
 }
+
 /**
  * This function check if you are using internet explorer
  * @return string
@@ -451,12 +471,13 @@ function internetExplorer() {
     }
     for ($i = 5; $i < 9; $i++) {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE ' . $i . '.0') !== false) {
-            $ie='incompatible';
+            $ie = 'incompatible';
         }
     }
 
     return $ie;
 }
+
 /**
  * This function delete folder
  * @param type $dossier
@@ -471,6 +492,7 @@ function effaceRepertoire($dossier) {
     }
     closedir($repertoire);
 }
+
 /**
  * 
  * @param array $files
@@ -478,13 +500,13 @@ function effaceRepertoire($dossier) {
  * @throws Exception
  */
 function joinFiles(array $files, $result) {
-    if(!is_array($files)) {
-        throw new Exception(''.$files.' must be an array');
+    if (!is_array($files)) {
+        throw new Exception('' . $files . ' must be an array');
     }
     $wH = fopen($result, "w+");
-    foreach($files as $file) {
+    foreach ($files as $file) {
         $fh = fopen($file, "r");
-        while(!feof($fh)) {
+        while (!feof($fh)) {
             fwrite($wH, fgets($fh));
         }
         fclose($fh);
@@ -494,26 +516,29 @@ function joinFiles(array $files, $result) {
     fclose($wH);
     unset($wH);
 }
+
 /**
  * 
  * @param type $string
  * Remove the <br /> and change with ' - ' in a string used from the email, and remove also the tags
  */
-function removeBrEmail($string){
-    return strip_tags(str_replace('<br />',' - ',$string));
+function removeBrEmail($string) {
+    return strip_tags(str_replace('<br />', ' - ', $string));
 }
+
 /**
  * 
  * @param type $string
  * remove "''" by "'"
  */
-function removeDoubleQuote($string){
-    $str0 =str_replace("’", "'",$string);
+function removeDoubleQuote($string) {
+    $str0 = str_replace("’", "'", $string);
     $str1 = str_replace("'';", "'", $str0);
     $str2 = str_replace("&lt;", "", $str1);
-    $str =  str_replace("&gt;", "", $str1);    
+    $str = str_replace("&gt;", "", $str1);
     return $str;
 }
+
 /**
  * This function Show Error on dev and testonly
  * @param type $dir
@@ -545,8 +570,7 @@ function cleanForExport($string) {
     return $str6;
 }
 
-
-function cleanForExportOther($string){
+function cleanForExportOther($string) {
     $str0 = preg_replace("/(\r\n|\n|\r)/", " ", $string);
     $str1 = str_replace("’", "'", $str0);
     $str2 = str_replace("''", "'", $str1);
@@ -556,48 +580,49 @@ function cleanForExportOther($string){
     $str6 = stripslashes(trim(utf8_decode(strip_tags($str5))));
     return $str6;
 }
+
 /**
  * Cette fonction affecte le responsable du demandeur de projet comme porteur des projets du demandeur
  * @param type $pseudo
  * @param type $idprojet
  */
-function responsablePorteur($pseudo,$idprojet){
-    if(is_file('../class/Manager.php')){
+function responsablePorteur($pseudo, $idprojet) {
+    if (is_file('../class/Manager.php')) {
         include_once '../class/Manager.php';
-    }else{
+    } else {
         include_once 'class/Manager.php';
     }
-     $db = BD::connecter();
+    $db = BD::connecter();
     $manager = new Manager($db);
-    
     $arraytypeutilisateur = $manager->getList2("select idqualitedemandeuraca_qualitedemandeuraca,idqualitedemandeurindust_qualitedemandeurindust from utilisateur,loginpassword where idlogin_loginpassword = idlogin  "
-        . "and pseudo=?", $pseudo);
-$dateaffectation = date("m,d,Y");
-if(!empty($arraytypeutilisateur[0]['idqualitedemandeuraca_qualitedemandeuraca'])){   //CAS ACADEMIQUE
-    $typeutilisateur = $manager->getSingle2("SELECT idqualitedemandeuraca_qualitedemandeuraca FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?", $pseudo);
-    if($typeutilisateur==NONPERMANENT){//CAS NON PERMANENT
-        $mailresponsable = $manager->getSingle2("SELECT mailresponsable FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?",$pseudo);
-        $arrayidresponsable = $manager->getList2("SELECT  idutilisateur FROM utilisateur,loginpassword WHERE  idlogin = idlogin_loginpassword and mail=?", $mailresponsable);
-        $nbarrayidresponsable = count($arrayidresponsable);
-        if($nbarrayidresponsable>0){
-            for ($i = 0; $i < $nbarrayidresponsable; $i++) {
-                $porteur = new UtilisateurPorteurProjet($arrayidresponsable[$i]['idutilisateur'], $idprojet, $dateaffectation);
-                $manager->addUtilisateurPorteurProjet($porteur);
+            . "and pseudo=?", $pseudo);
+    $dateaffectation = date("m,d,Y");
+    if (!empty($arraytypeutilisateur[0]['idqualitedemandeuraca_qualitedemandeuraca'])) {   //CAS ACADEMIQUE
+        $typeutilisateur = $manager->getSingle2("SELECT idqualitedemandeuraca_qualitedemandeuraca FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?", $pseudo);
+        if ($typeutilisateur == NONPERMANENT) {//CAS NON PERMANENT
+            $mailresponsable = $manager->getSingle2("SELECT mailresponsable FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?", $pseudo);
+            $arrayidresponsable = $manager->getList2("SELECT  idutilisateur FROM utilisateur,loginpassword WHERE  idlogin = idlogin_loginpassword and mail=?", $mailresponsable);
+            $nbarrayidresponsable = count($arrayidresponsable);
+            if ($nbarrayidresponsable > 0) {
+                for ($i = 0; $i < $nbarrayidresponsable; $i++) {
+                    $porteur = new UtilisateurPorteurProjet($arrayidresponsable[$i]['idutilisateur'], $idprojet, $dateaffectation);
+                    $manager->addUtilisateurPorteurProjet($porteur);
+                }
+            }
+        }
+    } elseif (!empty($arraytypeutilisateur[0]['idqualitedemandeurindust_qualitedemandeurindust'])) {//CAS INDUSTRIEL
+        $typeutilisateur = $manager->getSingle2("SELECT  idqualitedemandeurindust_qualitedemandeurindust FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?", $pseudo);
+        if ($typeutilisateur == NONPERMANENTINDUST) {
+            $mailresponsable = $manager->getSingle2("SELECT mailresponsable FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?", $pseudo);
+            $arrayidresponsable = $manager->getList2("SELECT  idutilisateur FROM utilisateur,loginpassword WHERE  idlogin = idlogin_loginpassword and mail=?", $mailresponsable);
+            $nbarrayidresponsable = count($arrayidresponsable);
+            if ($nbarrayidresponsable > 0) {
+                for ($i = 0; $i < $nbarrayidresponsable; $i++) {
+                    $porteur = new UtilisateurPorteurProjet($arrayidresponsable[$i]['idutilisateur'], $idprojet, $dateaffectation);
+                    $manager->addUtilisateurPorteurProjet($porteur);
+                }
             }
         }
     }
-}elseif(!empty($arraytypeutilisateur[0]['idqualitedemandeurindust_qualitedemandeurindust'])){//CAS INDUSTRIEL
-    $typeutilisateur = $manager->getSingle2("SELECT  idqualitedemandeurindust_qualitedemandeurindust FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?", $pseudo);
-    if($typeutilisateur==NONPERMANENTINDUST){
-        $mailresponsable = $manager->getSingle2("SELECT mailresponsable FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and pseudo=?",$pseudo);
-        $arrayidresponsable = $manager->getList2("SELECT  idutilisateur FROM utilisateur,loginpassword WHERE  idlogin = idlogin_loginpassword and mail=?", $mailresponsable);
-        $nbarrayidresponsable = count($arrayidresponsable);
-        if($nbarrayidresponsable>0){
-            for ($i = 0; $i < $nbarrayidresponsable; $i++) {
-                $porteur = new UtilisateurPorteurProjet($arrayidresponsable[$i]['idutilisateur'], $idprojet, $dateaffectation);
-                $manager->addUtilisateurPorteurProjet($porteur);
-            }
-        }
-    }
-}
+    $db = BD::deconnecter();
 }

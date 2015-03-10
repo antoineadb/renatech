@@ -1,12 +1,10 @@
 <?php
-//session_start();
 include_once 'decide-lang.php';
 include 'class/email.php';
 include_once 'class/Manager.php';
 include_once 'outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-
 include_once 'outils/toolBox.php';
 if (!empty($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
@@ -49,12 +47,12 @@ if (!empty($_SESSION['idcentrale'])) {
         }
     }
 } else {
-    $centrale = $manager->getSingle2('SELECT libellecentrale FROM loginpassword,centrale,utilisateur WHERE idlogin_loginpassword = idlogin AND idcentrale_centrale = idcentrale and pseudo=?', $_SESSION['pseudo']);
-    if(!empty($centrale)){
-        $infocentrale = $manager->getList2("select libellecentrale,email1,email2,email3,email4,email5 from centrale where libellecentrale=?", $centrale);
+    $idcentrale = $manager->getSingle2('SELECT idcentrale FROM loginpassword,centrale,utilisateur WHERE idlogin_loginpassword = idlogin AND idcentrale_centrale = idcentrale and pseudo=?', $_SESSION['pseudo']);
+    if(!empty($idcentrale)){
+        $infocentrale = $manager->getList2("select libellecentrale,email1,email2,email3,email4,email5 from centrale where idcentrale=?", $idcentrale);
     }else{
-        $centrale = $manager->getSingle2('SELECT libellecentrale FROM concerne,centrale WHERE  idcentrale_centrale = idcentrale and idprojet_projet=?', $idprojet);
-        $infocentrale = $manager->getList2("select libellecentrale,email1,email2,email3,email4,email5 from centrale where libellecentrale=?", $centrale);
+        $centrale = $manager->getSingle2('SELECT idcentrale FROM concerne,centrale WHERE  idcentrale_centrale = idcentrale and idprojet_projet=?', $idprojet);
+        $infocentrale = $manager->getList2("select libellecentrale,email1,email2,email3,email4,email5 from centrale where idcentrale=?", $idcentrale);
     }
     $emailCentrale = '';
     for ($i = 0; $i < count($infocentrale); $i++) {

@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 include_once '../outils/toolBox.php';
 showError($_SERVER['PHP_SELF']);

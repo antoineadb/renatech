@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-
 include_once '../class/Manager.php';
 include_once '../outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
@@ -23,15 +22,12 @@ $idprojet = $_GET['idprojet'];
 $_SESSION['idprojet'] = $idprojet;
 $concernephase1 = new ConcernePhase1($idprojet, ENCOURSANALYSE);
 $manager->updateConcernePhase1($concernephase1, $idprojet);
-//IL FAUT VERIFIER SI L'UTILISATEUR EST ACADEMIQUE OU INDUSTRIEL SI IL EST PERMANANT OU NON PERMANENT, SI IL A UN RESPONSABLE ET SI CE RESPONSABLE EST BIEN INSCRIT DANS L'APPLICATION
 $pseudo = $_SESSION['pseudo'];
 responsablePorteur($pseudo,$idprojet);
-
 //création de la variable de session pour bloquer l'éventuel double soumission du  formulaire
 $_SESSION['soumission'] = 'soumis';
 // envoie de l'email
 include '../EmailProjet.php';
-//----------------------------------------
 BD::deconnecter();
 } else {
     include_once '../decide-lang.php';
