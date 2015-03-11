@@ -1,5 +1,4 @@
 <?php
-//session_start();
 
 include_once 'decide-lang.php';
 include_once 'class/email.php';
@@ -548,7 +547,10 @@ if (!empty($_GET['nbpersonne'])) {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                              ENVOIE DE L'EMAIL DES AUTRES CENTRALE
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-if($cas=='mise a jourEmailAutreEmail'){
+
+$etapeautrecentrale = $manager->getSingle2("select etapeautrecentrale from projet where idprojet=?", $idprojet);
+if($etapeautrecentrale==1){
     include 'outils/envoiEmailAutreCentrale.php';
 }
 header('Location: /' . REPERTOIRE . '/update_project3/' . $lang . '/' . $_GET['idprojet'] . '/' . $numero . '/' . $nbpersonne);
+

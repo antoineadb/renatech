@@ -109,8 +109,13 @@ $sujet =  utf8_decode(TXT_DEMANDEPROJET) . ' : ' . utf8_decode($titre) . ' ' . $
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              CAS DE LA CREATION D'UN PROJET EN PHASE2
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+if(isset($_POST['creerprojetphase2'])&&$_POST['creerprojetphase2']=='oui'){
+    $creeeprojetphase2=TRUE;
+}elseif (isset($_POST['save']) && $_POST['save']=='non' && isset($_POST['maj']) && $_POST['maj']=='non') {
+    $creeeprojetphase2=TRUE;
+}
 
-if(isset($_POST['creerprojetphase2'])&&$_POST['creerprojetphase2']=='oui'){//EMAILPROJETPHASE2
+if($creeeprojetphase2==TRUE){//EMAILPROJETPHASE2
 $bodyref = utf8_decode((affiche('TXT_BOBYREF')));
 $sujet = TXT_DEMANDEPROJET . ' : ' . $titre . ' ' . $txtbodyref . ' ' . $numprojet;
 $centraleaccueil = $manager->getSingle2("select libellecentrale from concerne,centrale where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
@@ -132,7 +137,8 @@ $body = affiche('TXT_BODYEMAILPROJET0') . '<br><br>' . htmlentities(stripslashes
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              TRAITEMENT DU STATUT ACCEPTE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-($idStatut === ACCEPTE && isset($_POST['creer_phase2'])) {//PROJET PROVENENANT DE LA CREATION D'UNE DEMANDE DE PROJET PHASE1+PHASE2
+
+    ($idStatut === ACCEPTE && isset($_POST['creer_phase2'])) {//PROJET PROVENENANT DE LA CREATION D'UNE DEMANDE DE PROJET PHASE1+PHASE2
     $body = htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . (htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE200'))), ENT_QUOTES, 'UTF-8')) . '<br>' . htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE221'))), ENT_QUOTES, 'UTF-8') . ' ' .
             "<a href='https://www.renatech.org/projet'>" . affiche('TXT_BODYEMAILPHASE220') . "</a>" . '<br><br>' . htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE230'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
             htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_RAPPELINSERTLOGO0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .

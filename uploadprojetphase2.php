@@ -30,6 +30,12 @@ if (isset($_POST['enregistre']) && $_POST['enregistre'] == 'oui') {
     } else {
         $cas = 'creationprojetphase2';
     }
+}elseif($_POST['save']=='non' && $_POST['maj']=='non'){
+     if (isset($_POST['etapeautrecentrale']) && $_POST['etapeautrecentrale'] == 'TRUE') {
+        $cas = 'creationprojetphase2etape';
+    } else {
+        $cas = 'creationprojetphase2';
+    }
 }
 $idautrecentrale = '';
 if (isset($_POST['autrecentrale']) && !empty($_POST['autrecentrale'])) {
@@ -56,7 +62,7 @@ if ($cas == 'mise a jour') {
     header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJautreemail1.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet . '&nbpersonne=' . $nbpersonnecentrale . '&etautrecentrale=' . $etautrecentrale);
 } elseif ($cas == 'enregistrement') {
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
-} elseif ($cas == 'creationprojetphase2' || $cas == 'creationprojetphase2etape') {    
+} elseif ($cas == 'creationprojetphase2' || $cas == 'creationprojetphase2etape') {  
     include 'EmailProjetphase2.php';
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
 } 

@@ -8,74 +8,32 @@ include_once '../outils/toolBox.php';
 include '../class/email.php';
 
 $arrayprojetphase2 = 
-  array(
-array("refinterneprojet" =>"13-171","email"=>"fabien.volpi@simap.grenoble-inp.fr"),
-array("refinterneprojet" =>"13-148","email"=>"nacer.aitmani@cea.fr"),
-array("refinterneprojet" =>"13-168","email"=>"christophe.vallee@ujf-grenoble.fr"),
-array("refinterneprojet" =>"13-079","email"=>"tony.maindron@cea.fr"),
-array("refinterneprojet" =>"13-145","email"=>"caroline.celle@cea.fr"),
-array("refinterneprojet" =>"13-116","email"=>"david.peyrade@cea.fr"),
-array("refinterneprojet" =>"13-101","email"=>"nicolas.pauc@cea.fr"),
-array("refinterneprojet" =>"13-054","email"=>"emmanuel.defay@cea.fr"),
-array("refinterneprojet" =>"13-051","email"=>"vincent.agache@cea.fr"),
-array("refinterneprojet" =>"13-134","email"=>"anne.bernand-mantel@grenoble.cnrs.fr"),
-array("refinterneprojet" =>"13-117","email"=>"david.peyrade@cea.fr"),
-array("refinterneprojet" =>"13-073","email"=>"laurent.montes@grenoble-inp.fr"),
-array("refinterneprojet" =>"13-163","email"=>"andrei.sabac@insa-lyon.fr"),
-array("refinterneprojet" =>"13-110","email"=>"simon.perraud@cea.fr"),
-array("refinterneprojet" =>"13-109","email"=>"delphine.boutry@cea.fr"),
-array("refinterneprojet" =>"13-007","email"=>"jean-herve.tortai@cea.fr"),
-array("refinterneprojet" =>"13-071","email"=>"laurent.vila@cea.fr"),
-array("refinterneprojet" =>"13-144","email"=>"christopher.bauerle@grenoble.cnrs.fr"),
-array("refinterneprojet" =>"13-126","email"=>"bano@minatec.inpg.fr"),
-array("refinterneprojet" =>"13-099","email"=>"nora.dempsey@grenoble.cnrs.fr"),
-array("refinterneprojet" =>"13-100","email"=>"nora.dempsey@grenoble.cnrs.fr"),
-array("refinterneprojet" =>"13-091","email"=>"roch.espiau-de-lamaestre@cea.fr"),
-array("refinterneprojet" =>"13-132","email"=>"thierry.chevolleau@cea.fr"),
-array("refinterneprojet" =>"13-133","email"=>"thierry.chevolleau@cea.fr"),
-array("refinterneprojet" =>"13-113","email"=>"bassem.salem@cea.fr"),
-array("refinterneprojet" =>"13-160","email"=>"thierry.baron@cea.fr"),
-array("refinterneprojet" =>"13-159","email"=>"manuel.medranomunoz@cea.fr"),
-array("refinterneprojet" =>"13-114","email"=>"gilles.gaudin@cea.fr"),
-array("refinterneprojet" =>"13-157","email"=>"emmanuelle.pauliac-vaujour@cea.fr"),
-array("refinterneprojet" =>"13-149","email"=>"bucci@minatec.grenoble-inp.fr"),
-array("refinterneprojet" =>"13-107","email"=>"frederic.revol-cavalier@cea.fr"),
-array("refinterneprojet" =>"13-106","email"=>"frederic.revol-cavalier@cea.fr"),
-array("refinterneprojet" =>"13-112","email"=>"laurent.montes@grenoble-inp.fr"),
-array("refinterneprojet" =>"13-151","email"=>"roberto.calemczuk@cea.fr"),
-array("refinterneprojet" =>"13-089","email"=>"thierry.baron@cea.fr"),
-array("refinterneprojet" =>"13-118","email"=>"david.peyrade@cea.fr"),
-array("refinterneprojet" =>"13-111","email"=>"ardilarg@minatec.inpg.fr"),
-array("refinterneprojet" =>"13-029","email"=>"pascale.maldivi@cea.fr"),
-array("refinterneprojet" =>"13-115","email"=>"estelle.lebaron@cea.fr"),
-array("refinterneprojet" =>"13-105","email"=>"guy.parat@cea.rf"),
-array("refinterneprojet" =>"13-086","email"=>"Etienne.Gheeraert@grenoble.cnrs.fr"),
-array("refinterneprojet" =>"13-062","email"=>"claude.chapelier@cea.fr"),
-array("refinterneprojet" =>"13-005","email"=>"gilles.gaudin@cea.fr"),
-array("refinterneprojet" =>"13-162","email"=>"christophe.poulain@cea.fr"),
-array("refinterneprojet" =>"13-082","email"=>"lamya.ghenim@cea.fr"),
-array("refinterneprojet" =>"13-166","email"=>"christophe.poulain@cea.fr"),
-array("refinterneprojet" =>"13-119","email"=>"tao.zhou@cea.fr"),
-array("refinterneprojet" =>"13-169","email"=>"rouger.nicolas@gmail.com"),
-array("refinterneprojet" =>"13-170","email"=>"cecile.gourgon@cea.fr")
-        );
-$body0 = "Chers porteurs de projet,<br><br>
- 
-Nous souhaitons mettre à jour la base de données des projets PTA sur le site renatech (www.renatech.org/projet). Votre projet ";
-$body1=" est en principe terminé.<br>
-Merci de modifier la date de fin si nécessaire en allant sur le site renatech (si vous avez oublié votre identifiant, vous devez contacter le web master à l’adresse suivante : Antoine.DIBARTOLOMEA@cea.fr).<br>
-Sans réponse de votre part d’ici une semaine, nous passerons votre projet en statut fini.<br><br>
- 
-Bien cordialement<br><br>
- 
-Thierry";
-$sujet="mise à jour projet LTM-PTA";
-$mailCC =array("thierry.chevolleau@cea.fr","thomas.charvolin@cea.fr");
+array(
+	array("idresponsable"=>721,"idprojet"=>969),
+	array("idresponsable"=>399,"idprojet"=>712),
+	array("idresponsable"=>288,"idprojet"=>1443),
+	array("idresponsable"=>584,"idprojet"=>742),
+	array("idresponsable"=>941,"idprojet"=>1207),
+	array("idresponsable"=>807,"idprojet"=>1230),
+	array("idresponsable"=>875,"idprojet"=>1121),
+	//array("idresponsable"=>796,"idprojet"=>471),
+	array("idresponsable"=>160,"idprojet"=>1151),
+	array("idresponsable"=>121,"idprojet"=>145),
+	array("idresponsable"=>847,"idprojet"=>1186),
+	array("idresponsable"=>608,"idprojet"=>760),
+	array("idresponsable"=>695,"idprojet"=>789),
+	array("idresponsable"=>1153,"idprojet"=>1450),
+	array("idresponsable"=>1002,"idprojet"=>954),
+	array("idresponsable"=>408,"idprojet"=>380),
+	array("idresponsable"=>120,"idprojet"=>1138),
+	array("idresponsable"=>380,"idprojet"=>1276),
+	array("idresponsable"=>117,"idprojet"=>182),
+	array("idresponsable"=>721,"idprojet"=>139),
+	array("idresponsable"=>955,"idprojet"=>1118)
+);
+$dateaffectation = date("m,d,Y");
 for ($i = 0; $i < count($arrayprojetphase2); $i++) {
-    envoieEmail($body0.' '.$manager->getSingle2("select titre from projet where refinterneprojet=?", $arrayprojetphase2[$i]['refinterneprojet']).'  ,réf. interne: '.$arrayprojetphase2[$i]['refinterneprojet'].' '.$body1
-            , $sujet, array($arrayprojetphase2[$i]['email']), $mailCC);    
-    
+    $porteur =new UtilisateurPorteurProjet($arrayprojetphase2[$i]['idresponsable'], $arrayprojetphase2[$i]['idprojet'], $dateaffectation);
+    $manager->addUtilisateurPorteurProjet($porteur);
 }
-
-
 BD::deconnecter();

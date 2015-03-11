@@ -1035,7 +1035,8 @@ if (isset($_POST['page_precedente'])) {
         } else {
             $cas = 'creerprojetphase2';
         }
-    }
+    }   
+    
     if ($cas == 'creerprojetphase2' || $cas == 'creationprojetphase2etape') {//CAS OU ON VALIDE UN PROJET EN ATTENTE PHASE2 idstatut = 9
         $idcentrale = $manager->getSingle2('select idcentrale_centrale from concerne where idprojet_projet=?', $idprojet);
         $manager->deleteConcerne($idprojet);
