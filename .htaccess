@@ -250,6 +250,7 @@ RewriteRule   exportutilisateur/([a-z]+)                        exportUtilisateu
 RewriteRule   exportprojet/([a-z]+)                             exportBilanProjet.php?lang=$1                           [L]
 RewriteRule   exportdonneebrute/([a-z]+)                        exportdesProjetsBrute.php?lang=$1                       [L]
 RewriteRule   exportSultan/([a-z]+)                             exportSultan.php?lang=$1                            [L]
+RewriteRule   enquete/([a-z]+)                                  exportEnquete.php?lang=$1                            [L]
 
 #ACCUEIL
 RewriteRule   home/([a-z]+)                                     indexchoix.php?lang=$1                                  [L]

@@ -11,6 +11,8 @@ $libelle = '/'.REPERTOIRE.'/libelle/'.$lang;
 $statistique = '/'.REPERTOIRE.'/graph/'.$lang.'/ok';
 $controleSuiviTousLesProjets = '/'.REPERTOIRE."/controler/controleSuiviTousLesProjets.php?lang=".$lang;
 $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
+$exportenquete ='/'.REPERTOIRE.'/enquete/'.$lang;
+
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:620px;margin-left:58px">
@@ -20,6 +22,7 @@ $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
        <ul style="z-index: 5;">            
             <li><a href="<?php echo $exportBilanProjet; ?>" class="messages" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORT;?></a></li>
             <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTUTILISATEUR;?></a></li>
+            <li><a href="<?php echo $exportenquete; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTENQUETE;?></a></li>
         </ul> 
     </li>
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_COMPTES.'</u>'; ?></a>

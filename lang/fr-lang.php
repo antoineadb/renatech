@@ -822,3 +822,5 @@ define('TXT_LASTACTION',"Dernière action");
 define ('TXT_PROJETSOUSTRAITANCE',"Projet en sous-traitance");
 define ('TXT_TOUSLESPROJETS',"Vue de tous les projets");
 define('TXT_LABODEMANDEUR','Nom du laboratoire demandeur');
+define('TXT_EXPORTENQUETE',"Export pour l'enquête annuelle");
+define('TXT_PASDEDONNEE',"Il n'y a pas de donnée");
