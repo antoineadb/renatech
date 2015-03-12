@@ -39,7 +39,7 @@ $idAutrecentrale = substr($idautrecentrale, 0, -1);
 if ($cas == 'mise a jour') {
     header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
 } elseif ($cas == 'mise a jourEmail') {
-    header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJSession.php?lang=' . $lang . '&idprojet=' . $idprojet . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale']);
+    header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJ.php?lang=' . $lang . '&idprojet=' . $idprojet . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale']);
 } elseif ($cas == 'mise a jourEmailAutreEmail') {
     include 'EmailProjephase2tMAJ.php';
     header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);    
