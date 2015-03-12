@@ -533,9 +533,9 @@ function removeBrEmail($string) {
  */
 function removeDoubleQuote($string) {
     $str0 = str_replace("’", "'", $string);
-    $str1 = str_replace("'';", "'", $str0);
+    $str1 = str_replace("''", "'", $str0);
     $str2 = str_replace("&lt;", "", $str1);
-    $str = str_replace("&gt;", "", $str1);
+    $str = str_replace("&gt;", "", $str2);
     return $str;
 }
 

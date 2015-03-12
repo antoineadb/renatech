@@ -821,3 +821,4 @@ define('TXT_UNDEFINEMAIL',"mail indéfini");
 define('TXT_LASTACTION',"Dernière action");
 define ('TXT_PROJETSOUSTRAITANCE',"Projet en sous-traitance");
 define ('TXT_TOUSLESPROJETS',"Vue de tous les projets");
+define('TXT_LABODEMANDEUR','Nom du laboratoire demandeur');

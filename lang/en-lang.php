@@ -822,3 +822,4 @@ define('TXT_UNDEFINEMAIL',"Undefined email");
 define('TXT_LASTACTION',"Last action");
 define ('TXT_PROJETSOUSTRAITANCE',"Project contracted");
 define ('TXT_TOUSLESPROJETS',"View of all the projects");
+define('TXT_LABODEMANDEUR','Name of the laboratory applicant');

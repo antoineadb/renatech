@@ -54,14 +54,17 @@ for ($i = 0; $i < count($arraylibelle); $i++) {
 
 $libelleStatut = removeDoubleQuote($manager->getSingle2("select libellestatutprojet from statutprojet,concerne where idstatutprojet_statutprojet =idstatutprojet and idprojet_projet=?", $idprojet));
 $arraylibellecentrale= $manager->getList2("SELECT libellecentrale from centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
-$rowdemandeur = $manager->getList2("SELECT nom, prenom,mail,telephone,adresse,codepostal,ville,nompays,nomresponsable,mailresponsable,acronymelaboratoire FROM utilisateur, projet, creer,loginpassword,pays WHERE idutilisateur_utilisateur = idutilisateur and idlogin=idlogin_loginpassword "
+$rowdemandeur = $manager->getList2("SELECT nom, prenom,mail,telephone,adresse,codepostal,ville,nompays,nomresponsable,mailresponsable,acronymelaboratoire,entrepriselaboratoire FROM utilisateur, projet, creer,loginpassword,pays WHERE idutilisateur_utilisateur = idutilisateur and idlogin=idlogin_loginpassword "
         . "AND idprojet_projet = idprojet and idprojet=? and idpays=idpays_pays", $idprojet);
 $demandeur = ($rowdemandeur[0]['nom']) . ' -  ' . ($rowdemandeur[0]['prenom']). ' -  ' .  removeDoubleQuote(($rowdemandeur[0]['adresse'])). ' -  ' . $rowdemandeur[0]['codepostal']. ' -  ' . ($rowdemandeur[0]['ville']). ' -  ' . $rowdemandeur[0]['nompays'];
 if(!empty($rowdemandeur[0]['nomresponsable'])){
     $sonresponsable = $rowdemandeur[0]['nomresponsable'] . ' -  ' . $rowdemandeur[0]['mailresponsable'];
 }
 if(!empty($rowdemandeur[0]['acronymelaboratoire'])){
-    $acronymelaboratoire = $rowdemandeur[0]['acronymelaboratoire'];
+    $acronymelaboratoire = trim($rowdemandeur[0]['acronymelaboratoire']);
+}
+if(!empty($rowdemandeur[0]['entrepriselaboratoire'])){
+    $entrepriselaboratoire = $rowdemandeur[0]['entrepriselaboratoire'];
 }
 $arrayporteur = $manager->getList2("SELECT nom,prenom,mail,telephone FROM utilisateurporteurprojet,utilisateur,loginpassword WHERE idutilisateur_utilisateur = idutilisateur and idlogin= idlogin_loginpassword
 and idprojet_projet=?", $idprojet);
@@ -243,7 +246,11 @@ ob_start();
                     <?php }
                     if(!empty($acronymelaboratoire)){?>
                         <tr><td><strong><?php echo  TXT_NOMLABO.': ';?></strong><?php echo $acronymelaboratoire; ?></td></tr><tr><td></td></tr>
-                    <?php }?>
+                    <?php }
+                        if(!empty($entrepriselaboratoire)){?>
+                            <tr><td><strong><?php echo  TXT_LABODEMANDEUR.': ';?></strong><?php echo $entrepriselaboratoire; ?></td></tr><tr><td></td></tr>
+                        <?php }
+                    ?>
     </table><br />
     <hr />
 <fieldset style="border: none">
