@@ -21,7 +21,7 @@ $idcentrale = $manager->getSingle2("SELECT idcentrale FROM centrale , utilisateu
 idcentrale_centrale = idcentrale AND idlogin_loginpassword = idlogin AND pseudo=?", $pseudo);
 
 
-$data = utf8_decode("Type de projet;thématique;source de financement;Titre du projet;numero;demandeur du projet;Administrateur du projet;");
+$data = utf8_decode("Type de projet;thématique;source de financement;Titre du projet;numero;demandeur du projet;Porteur(s) du projet;Administrateur(s) du projet;");
 $data .= "\n";
 //SUPPRESSION DE LA TABLE TEMPORAIRE SI ELLE EXISTE
 //CREATION DE LA TABLE TEMPORAIRE
@@ -44,8 +44,16 @@ if ($nbrow == 0) {
                 if(!empty($arrayadmin[$index]['nom'])){
                     $administrateur.=  $arrayadmin[$index]['nom'].'-';
                 }
-            }$admin=substr(trim($administrateur), 0, -1);
+            }$admin=  cleanForExport(substr(trim($administrateur), 0, -1));
             
+      $arrayporteur = $manager->getList2("SELECT u.nom  FROM utilisateurporteurprojet up,utilisateur u,projet p WHERE  up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur and p.idprojet=?", $row[$i]['idprojet']);
+            $porteur='';
+            for ($index = 0; $index < count($arrayporteur); $index++) {
+                if(!empty($arrayporteur[$index]['nom'])){
+                    $porteur.=  $arrayporteur[$index]['nom'].'-';
+                }
+            }$porteurs=cleanForExport(substr(trim($porteur), 0, -1));
+        $demandeur =  cleanForExportOther($row[$i]['demandeur']);
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              SOURCE DE FINANCEMENT
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -54,23 +62,24 @@ if ($nbrow == 0) {
         $nbarraysf = count($arraysourcefinancement);
         for ($k = 0; $k < $nbarraysf; $k++) {            
             if ($arraysourcefinancement[$k]['libellesourcefinancement'] != 'Autres') {
-                $s_Sourcefinancement .= stripslashes(str_replace("’", "'", str_replace("''", "'", $arraysourcefinancement[$k]['libellesourcefinancement']))) . ' / ';
+                $s_Sourcefinancement .= $arraysourcefinancement[$k]['libellesourcefinancement'] . ' / ';
             }
         }
         if ($nbarraysf > 0) {
-            $s_Sourcefinancement = substr(trim($s_Sourcefinancement), 0, -1);
+            $s_Sourcefinancement = cleanForExportOther(substr($s_Sourcefinancement, 0, -2));
         } else {
             $s_Sourcefinancement = '';
         }
         $originalDate = date('d-m-Y');
         $data .= "" .
-                str_replace("''", "'", stripslashes(utf8_decode(trim($row[$i]['libelletype'])))) . ";" .
-                str_replace("''", "'", stripslashes(utf8_decode(trim($row[$i]['libellethematique'])))) . ";" .
-                str_replace("''", "'", stripslashes(utf8_decode(trim($s_Sourcefinancement)))) . ";" .
-                str_replace("''", "'", stripslashes(utf8_decode(trim($row[$i]['titre'])))) . ";" .
+                cleanForExportOther($row[$i]['libelletype']) . ";" .
+                cleanForExportOther($row[$i]['libellethematique']). ";" .
+                $s_Sourcefinancement . ";" .
+                cleanForExportOther($row[$i]['titre']) . ";" .
                 $row[$i]['numero'] . ";" .
-                str_replace("''", "'", stripslashes(utf8_decode(trim($row[$i]['demandeur'])))) . ";" .
-                str_replace("''", "'", stripslashes(utf8_decode(trim($admin)))) . "\n";
+                $demandeur.";".
+                $porteur . ";" .
+                $admin . "\n";
 }
         $libcentrale = $manager->getSingle2("SELECT libellecentrale FROM loginpassword,centrale,utilisateur WHERE idlogin_loginpassword = idlogin AND idcentrale_centrale = idcentrale AND pseudo=?", $pseudo);        
 // Déclaration du type de contenu

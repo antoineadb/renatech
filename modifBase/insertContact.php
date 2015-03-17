@@ -158,8 +158,8 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
     //------------------------------------------------------------------------------------------------------------
     //                                       TRAITEMENT CODEUNITE
     //------------------------------------------------------------------------------------------------------------
-    if (!empty($_POST['nomLabo'])) {
-        $acronymelaboratoire = Securite::bdd($_POST['nomLabo']);
+    if (!empty($_POST['nomlabo'])) {
+        $acronymelaboratoire = Securite::bdd($_POST['nomlabo']);
         //RECUPERATION DU CODE UNITE PAR LE NOM DU LABO, VERIFICATION QUE LE NOM DU LABO <> LIBELLECENTRALE+'(+VILLECENTRALE+')
         $libelcentrale = strstr($acronymelaboratoire, '(', TRUE); //PARTIE GAUCHE DE "libellecentrale(villecentrale)"
         $Vilcentrale = strstr($acronymelaboratoire, '(', FALSE); // PARTIE DROITE

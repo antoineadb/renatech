@@ -48,7 +48,7 @@ $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
                 <li><a href="<?php echo $exportBilanProjet; ?>" class="messages" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORT; ?></a></li>
                 <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTUTILISATEURCENTRALE; ?></a></li>
                 <li><a href="<?php echo $exportUtilisateurcentrale; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTTOUSUTILISATEUR; ?></a></li>
-<!--                <li><a href="<?php //echo $exportSultan; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php //echo TXT_EXPORTAPPLISULTAN; ?></a></li>-->
+              <li><a href="<?php echo $exportSultan; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTAPPLISULTAN; ?></a></li>
             </ul>
 
         </li>
