@@ -327,6 +327,7 @@ for ($i = 0; $i < $nbrowProjetEncoursRealisation; $i++) {
                 . '"libellecentrale":' . '"' . $rowProjetEncoursRealisation[$i]['libellecentrale'] . '"' . ","
                 . '"datemaj":' . '"' . $datemaj . '"' . ","
                 . '"numero":' . '"' . $rowProjetEncoursRealisation[$i]['numero'] . '"' . ","
+                . '"idprojet":' . '"' . $rowProjetEncoursRealisation[$i]['idprojet'] . '"' . ","
                 . '"titre":' . '"' . filtredonnee($rowProjetEncoursRealisation[$i]['titre']) . '"' . ","
                 . '"libellestatutprojet":' . '"' . $rowProjetEncoursRealisation[$i]['libellestatutprojet'] . '"' . ","
                 . '"nom":' . '"' . filtredonnee($rowProjetEncoursRealisation[$i]['nom']) . '"' . ","
@@ -556,6 +557,7 @@ for ($i = 0; $i < $nbrowFini; $i++) {
     $dataFini = "" . '{"datedebutprojet":' . '"' . $rowFini[$i]['datedebutprojet'] . '"' . ","
             . '"datestatutfini":' . '"' . $rowFini[$i]['datestatutfini'] . '"' . ","
             . '"libellecentrale":' . '"' . $rowFini[$i]['libellecentrale'] . '"' . ","
+            . '"idprojet":' . '"' . $rowFini[$i]['idprojet'] . '"' . ","
             . '"idstatutprojet":' . '"' . $rowFini[$i]['idstatutprojet'] . '"' . ","
             . '"refinterneprojet":' . '"' . filtredonnee($rowFini[$i]['refinterneprojet']) . '"' . ","
             . '"numero":' . '"' . $rowFini[$i]['numero'] . '"' . "," . '"titre":' . '"' .

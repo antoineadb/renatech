@@ -825,3 +825,4 @@ define ('TXT_TOUSLESPROJETS',"View of all the projects");
 define('TXT_LABODEMANDEUR','Name of the laboratory applicant');
 define('TXT_EXPORTENQUETE',"Export pout for the annual survey");
 define('TXT_PASDEDONNEE',"There is no data");
+define('TXT_AIDEEXOORTENQUETE',"Value of the The current year if empty");

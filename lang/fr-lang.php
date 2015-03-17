@@ -824,3 +824,4 @@ define ('TXT_TOUSLESPROJETS',"Vue de tous les projets");
 define('TXT_LABODEMANDEUR','Nom du laboratoire demandeur');
 define('TXT_EXPORTENQUETE',"Export pour l'enquête annuelle");
 define('TXT_PASDEDONNEE',"Il n'y a pas de donnée");
+define('TXT_AIDEEXOORTENQUETE',"Valeur de l'année en cours si champs vide");

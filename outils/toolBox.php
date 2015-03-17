@@ -438,19 +438,25 @@ function supprDouble() {//SUPPRESSION DES DOUBLONS
     $db = BD::connecter();
     $manager = new Manager($db);
     $arraydoublon = $manager->getList("SELECT distinct(idprojet) FROM projet, creer where idprojet not in (select idprojet_projet from creer)");
-    $nbarraydoublon = count($arraydoublon);
+    $nbarraydoublon = count($arraydoublon);    
     for ($i = 0; $i < $nbarraydoublon; $i++) {
         $manager->deleteprojetcentraleproximite($arraydoublon[$i][0]);
         $manager->deleterapport($arraydoublon[$i][0]);
         $manager->deleteprojetautrecentrale($arraydoublon[$i][0]);
         $manager->deleteprojetsf($arraydoublon[$i][0]);
-        $manager->deleteressourceprojet($arraydoublon[$i][0]);
+        $manager->deleteressourceprojet($arraydoublon[$i][0]);       
         $manager->deleteprojetpersonneaccueilcentrale($arraydoublon[$i][0]);
-        $manager->deleteprojetpartenaire($arraydoublon[$i][0]);
+        $manager->deleteprojetpartenaire($arraydoublon[$i][0]);//ok
         $manager->deleteConcerne($arraydoublon[$i][0]);
+        $manager->deleteUtilisateurPorteur($arraydoublon[$i][0]);
         $manager->deleteUtilisateurAdministrateur($arraydoublon[$i][0]);
         $manager->deleteprojet($arraydoublon[$i][0]);
     }
+    //Suppression des personneaccueilcentrale orpheline
+    $manager->exeRequete("delete from personneaccueilcentrale WHERE  idpersonneaccueilcentrale not in (select idpersonneaccueilcentrale_personneaccueilcentrale from projetpersonneaccueilcentrale);");
+    //suppression des partenaireprojet orphelin
+    $manager->exeRequete("delete from partenaireprojet  WHERE  idpartenaire not in (select idpartenaire_partenaireprojet from projetpartenaire);");
+    
     BD::deconnecter(); //CONNEXION A LA BASE DE DONNEE
 }
 

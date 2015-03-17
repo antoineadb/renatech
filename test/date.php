@@ -1,5 +1,4 @@
-<script>
-var datejour  = new Date("01/01/2013");
-var year =datejour.getFullYear().toString();
-alert(year.substring(2,4));;
-</script>
+<?php
+echo date("Y", strtotime('2014-03-13'));
+
+?>
