@@ -61,7 +61,7 @@ if (isset($_POST['page_precedente'])) {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 //                       AFFECTATION DE LA  DATE DE MISE A JOUR DU PROJET DANS TOUS LES CAS
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-        $datemajprojet =date('Y-m-d');
+        $datemajprojet = date('Y-m-d');
         $datemaj = new DateMajProjet($idprojet, $datemajprojet);
         $manager->updateDatemajProjet($datemaj, $idprojet);
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ if (isset($_POST['page_precedente'])) {
         } else {
             $idperiodestimeBDD = null;
         }
-        
+
         //RECUPERATION DU NOMBRE DE "Personne susceptible de travailler en salle blanche sur ce projet"
         $arraypersonnecentraleBDD = $manager->getList2("SELECT nomaccueilcentrale,prenomaccueilcentrale,mailaccueilcentrale,telaccueilcentrale,connaissancetechnologiqueaccueil,libellequalitedemandeuraca,"
                 . "libellequalitedemandeuracaen FROM projetpersonneaccueilcentrale,personneaccueilcentrale,qualitedemandeuraca WHERE idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale AND idqualitedemandeuraca_qualitedemandeuraca = idqualitedemandeuraca AND idprojet_projet =?", $idprojet);
@@ -164,46 +164,46 @@ if (isset($_POST['page_precedente'])) {
         $personnecentraleBDD = '';
         if (!empty($nombrePersonnecentraleBDD)) {
             for ($i = 0; $i < $nombrePersonnecentraleBDD; $i++) {
-                if ($lang == 'fr') {                   
+                if ($lang == 'fr') {
                     $personnecentraleBDD .=$arraypersonnecentraleBDD[$i]['nomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['prenomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['mailaccueilcentrale'] .
-                            ' - ' . $arraypersonnecentraleBDD[$i]['telaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['libellequalitedemandeuraca'].'-';
-                }else{
+                            ' - ' . $arraypersonnecentraleBDD[$i]['telaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['libellequalitedemandeuraca'] . '-';
+                } else {
                     $personnecentraleBDD .=$arraypersonnecentraleBDD[$i]['nomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['prenomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['mailaccueilcentrale'] .
-                            ' - ' . $arraypersonnecentraleBDD[$i]['telaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['libellequalitedemandeuracaen'].'-';
+                            ' - ' . $arraypersonnecentraleBDD[$i]['telaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['libellequalitedemandeuracaen'] . '-';
                 }
             }
-            $personneCentraleBDD = TXT_PERSONNEACCUEILCENTRALE.': '.substr(trim($personnecentraleBDD), 0, -1);
+            $personneCentraleBDD = TXT_PERSONNEACCUEILCENTRALE . ': ' . substr(trim($personnecentraleBDD), 0, -1);
         } else {
             $personnecentraleBDD = '';
         }
 //------------------------------------------------------------------------------------------------------------
 //                          TRAITEMENT DES RESSOURCES        
 //------------------------------------------------------------------------------------------------------------
-        if($lang=='fr'){
-            $slibelleressource='libelleressource';
-        }else{
-            $slibelleressource='libelleressourceen';
+        if ($lang == 'fr') {
+            $slibelleressource = 'libelleressource';
+        } else {
+            $slibelleressource = 'libelleressourceen';
         }
         $arrayRESSOURCEBDD = $manager->getList2("SELECT $slibelleressource FROM ressource,ressourceprojet WHERE idressource_ressource = idressource AND idprojet_projet=? order by idressource_ressource asc", $idprojet);
         $arrayRessourceBDD = array();
         for ($i = 0; $i < count($arrayRESSOURCEBDD); $i++) {
-            array_push($arrayRessourceBDD, $arrayRESSOURCEBDD[$i][''.$slibelleressource.'']);
+            array_push($arrayRessourceBDD, $arrayRESSOURCEBDD[$i]['' . $slibelleressource . '']);
         }
 //------------------------------------------------------------------------------------------------------------
 //                          TRAITEMENT DU DESCRIPTIF TECHNOLOGIQUE        
 //------------------------------------------------------------------------------------------------------------
-     if (!empty($rowprojet[0]['descriptiftechnologique'])) {
+        if (!empty($rowprojet[0]['descriptiftechnologique'])) {
             $descriptiftechnologiqueBDD = $rowprojet[0]['descriptiftechnologique'];
         } else {
             $descriptiftechnologiqueBDD = null;
-        }   
-        
-    if(!empty($rowprojet[0]['attachementdesc'])){
-        $attachementdescBDD = $rowprojet[0]['attachementdesc'];
-    }else{
-        $attachementdescBDD = '';
-    }
-        
+        }
+
+        if (!empty($rowprojet[0]['attachementdesc'])) {
+            $attachementdescBDD = $rowprojet[0]['attachementdesc'];
+        } else {
+            $attachementdescBDD = '';
+        }
+
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DU CONTACT CENTRALE D'ACCUEIL
 //------------------------------------------------------------------------------------------------------------                
@@ -239,7 +239,7 @@ if (isset($_POST['page_precedente'])) {
                 if ($typeformationBDD != $idtypeformation) {
                     $_SESSION['typeFormationmodif'] = $idtypeformation;
                 } else {
-                    $_SESSION['typeFormationmodif'] = '';                    
+                    $_SESSION['typeFormationmodif'] = '';
                 }
                 if (empty($idtypeformation)) {
                     $idtypeformation = $manager->getSingle2("select idtypeformation from projettypeprojet where idprojet=?", $idprojet);
@@ -251,10 +251,10 @@ if (isset($_POST['page_precedente'])) {
                 $projettypeprojet = new Projettypeprojet($idtypeformation, $idprojet);
                 $manager->addprojettypeprojet($projettypeprojet, $idprojet);
                 if (!empty($_POST['nbHeure'])) {
-                    $nbHeure = Securite::bdd($_POST['nbHeure']); 
+                    $nbHeure = Securite::bdd($_POST['nbHeure']);
                     if ($nbHeureBDD != $nbHeure) {
                         $_SESSION['nbheuremodif'] = $nbHeure;
-                    }else{
+                    } else {
                         $_SESSION['nbheuremodif'] = '';
                     }
                 } else {
@@ -265,8 +265,8 @@ if (isset($_POST['page_precedente'])) {
                     $nbeleve = Securite::bdd($_POST['nbeleve']);
                     if ($nbeleveBDD != $nbeleve) {
                         $_SESSION['nbelevemodif'] = $nbeleve;
-                    }else{
-                        $_SESSION['nbelevemodif'] = '';                        
+                    } else {
+                        $_SESSION['nbelevemodif'] = '';
                     }
                 } else {
                     $nbeleve = 0;
@@ -276,7 +276,7 @@ if (isset($_POST['page_precedente'])) {
                     $nomformateur = Securite::bdd($_POST['nomformateur']);
                     if ($nomformateurBDD != $nomformateur) {
                         $_SESSION['nomformateurmodif'] = $nomformateur;
-                    }else{
+                    } else {
                         $_SESSION['nomformateurmodif'] = '';
                     }
                 } else {
@@ -402,7 +402,7 @@ if (isset($_POST['page_precedente'])) {
                 }
             }
         }
-        $arrayAccroSF = $manager->getList2("SELECT acronymesource,idsourcefinancement_sourcefinancement FROM projetsourcefinancement WHERE idprojet_projet=?", $idprojet);        
+        $arrayAccroSF = $manager->getList2("SELECT acronymesource,idsourcefinancement_sourcefinancement FROM projetsourcefinancement WHERE idprojet_projet=?", $idprojet);
         if (!empty($arrayAccroSF)) {
             foreach ($arrayAccroSF as $row) {
                 $arrayAccrosf[$row['idsourcefinancement_sourcefinancement']] = $row['acronymesource'];
@@ -513,9 +513,9 @@ if (isset($_POST['page_precedente'])) {
                 $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet);
                 $manager->addprojetpartenaire($newprojetpartenaire);
             }
-            $Spartenaires =substr(trim($partenaires), 0, -1);
+            $Spartenaires = substr(trim($partenaires), 0, -1);
             if ($Spartenaires != $sPartenairesBDD) {
-                $_SESSION['partenairesmodif'] = TXT_AUTRESPARTENAIRE.'  '. $Spartenaires;
+                $_SESSION['partenairesmodif'] = TXT_AUTRESPARTENAIRE . '  ' . $Spartenaires;
             } else {
                 $_SESSION['partenairesmodif'] = '';
             }
@@ -565,12 +565,12 @@ if (isset($_POST['page_precedente'])) {
             $idthematique_thematique = $manager->getSingle2("select idthematique_thematique from projet where idprojet=?", $idprojet);
             if (empty($idthematique_thematique)) {
                 $idthematique_thematique = null;
-                 $_SESSION['libelleautrethematiquemodif'] = '';
+                $_SESSION['libelleautrethematiquemodif'] = '';
             }
             $idautrethematique_autrethematique = $manager->getSingle2("select idautrethematique_autrethematique from projet where idprojet=?", $idprojet);
             if (empty($idautrethematique_autrethematique)) {
                 $idautrethematique_autrethematique = 1;
-                 $_SESSION['libelleautrethematiquemodif'] = '';
+                $_SESSION['libelleautrethematiquemodif'] = '';
             }
         }
 //------------------------------------------------------------------------------------------------------------
@@ -662,6 +662,28 @@ if (isset($_POST['page_precedente'])) {
                     $libellequalite = $manager->getSingle2("select libellequalitedemandeuracaen from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
                 }
             }
+            //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            //                          TRAITEMENT DES AUTRES QUALITE DOCTORANT,POSTDOC OU AUTRES SI AUTRES VALEUR DE AUTRES
+            //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            if (!empty($_POST['autreQualite' . $i . ''])) {
+                if ($_POST['autreQualite' . $i . ''] == 'qac' . IDAUTREQUALITE) {//cas autres
+                    if (!empty($_POST['autresqualite' . $i . ''])) {
+                        $libAutreQualite = clean($_POST['autresqualite' . $i . '']);
+                    } else {
+                        $libAutreQualite = TXT_AUTRES;
+                    }
+                    $libelleAutreQualite = TXT_AUTRES;
+                } else {
+                   $idpersonneQualite= (int)substr($_POST['autreQualite' . $i . ''],-1);
+                   $idautrequalite=IDNAAUTREQUALITE;
+                }
+            }
+           
+            
+            ;
+            //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            //
+            //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             if (!empty($_POST['mailaccueilcentrale' . $i . ''])) {
                 $mailaccueilcentrale = $_POST['mailaccueilcentrale' . $i . ''];
             } else {
@@ -680,46 +702,48 @@ if (isset($_POST['page_precedente'])) {
             }
             //TRAITEMENT AJOUT DANS LA TABLE PERSONNEACCUEILCENTRALE
             $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;
-            $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil));
+            $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil),$idpersonneQualite,$idautrequalite);            
             $manager->addPersonneaccueilcentrale($personne);
             //TRAITEMENT AJOUT DANS LA TABLE PROJETPERSONNEACCUEILCENTRALE
             $projetpersonneaccueilcentrale = new Projetpersonneaccueilcentrale($idprojet, $idpersonneaccueilcentrale);
             $manager->addprojetpersonneaccueilcentrale($projetpersonneaccueilcentrale);
+            //TRAITEMENT DES AUTRES QUALITE
+            
+            
         }
     }
-    $personnecentrale='';
+    $personnecentrale = '';
     if (!empty($nombrePersonneCentrale)) {
         for ($i = 0; $i < $nombrePersonneCentrale; $i++) {
             $idqualitedemandeurAca = $_POST['qualiteaccueilcentrale' . $i . ''];
             $idqualitedemandeuraca = substr($idqualitedemandeurAca, -1);
             if ($lang == 'fr') {
-                    $libellequalite = $manager->getSingle2("select libellequalitedemandeuraca from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
-                } elseif ($lang == 'en') {
-                    $libellequalite = $manager->getSingle2("select libellequalitedemandeuracaen from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
+                $libellequalite = $manager->getSingle2("select libellequalitedemandeuraca from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
+            } elseif ($lang == 'en') {
+                $libellequalite = $manager->getSingle2("select libellequalitedemandeuracaen from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
             }
             $personnecentrale .=Securite::BDD($_POST['nomaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($_POST['prenomaccueilcentrale' . $i . '']) . ' - ' . $_POST['mailaccueilcentrale' . $i . ''] .
-                        ' - ' . Securite::BDD($_POST['telaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($libellequalite). '-';
-             
-        }        
-        $personneCentrale     = TXT_PERSONNEACCUEILCENTRALE.': '.substr(trim($personnecentrale), 0, -1);
-    }   
-    if(htmlspecialchars($personnecentraleBDD)!=htmlspecialchars($personnecentrale)){
-        $_SESSION['personnecentralemodif']=$personnecentrale;
-    }else{
-           $_SESSION['personnecentralemodif']='';
+                    ' - ' . Securite::BDD($_POST['telaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($libellequalite) . '-';
+        }
+        $personneCentrale = TXT_PERSONNEACCUEILCENTRALE . ': ' . substr(trim($personnecentrale), 0, -1);
+    }
+    if (htmlspecialchars($personnecentraleBDD) != htmlspecialchars($personnecentrale)) {
+        $_SESSION['personnecentralemodif'] = $personnecentrale;
+    } else {
+        $_SESSION['personnecentralemodif'] = '';
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              AUTRE CENTRALE                
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    $arrayautrecentraleBDD = $manager->getList2("SELECT c.libellecentrale FROM  projetautrecentrale p,centrale c WHERE  p.idcentrale = c.idcentrale and p.idprojet=?",$idprojet);
+    $arrayautrecentraleBDD = $manager->getList2("SELECT c.libellecentrale FROM  projetautrecentrale p,centrale c WHERE  p.idcentrale = c.idcentrale and p.idprojet=?", $idprojet);
     $arrayAutreCentraleBDD = array();
     for ($i = 0; $i < count($arrayautrecentraleBDD); $i++) {
         array_push($arrayAutreCentraleBDD, $arrayautrecentraleBDD[$i]['libellecentrale']);
-    }    
-    if(!empty($rowprojet[0]['descriptionautrecentrale'])){
+    }
+    if (!empty($rowprojet[0]['descriptionautrecentrale'])) {
         $descriptionautrecentraleBDD = $rowprojet[0]['descriptionautrecentrale'];
-    }else{
-        $descriptionautrecentraleBDD="";
+    } else {
+        $descriptionautrecentraleBDD = "";
     }
     if ($_POST['etapeautrecentrale'] == 'TRUE') {//-->ON  SELECTIONNE AUTRE CENTRALE
         $etapeautrecentrale = 'TRUE';
@@ -731,11 +755,11 @@ if (isset($_POST['page_precedente'])) {
                 $manager->addprojetautrescentrale($projetautrecentrale);
             }
         }
-        if (!empty($_POST['etautrecentrale'])) {            
+        if (!empty($_POST['etautrecentrale'])) {
             $descriptionautrecentrale = clean($_POST['etautrecentrale']);
-            if($descriptionautrecentraleBDD != $descriptionautrecentrale){
+            if ($descriptionautrecentraleBDD != $descriptionautrecentrale) {
                 $_SESSION['descriptionautrecentralemodif'] = $descriptionautrecentrale;
-            }else{
+            } else {
                 $_SESSION['descriptionautrecentralemodif'] = '';
             }
         } else {
@@ -746,39 +770,37 @@ if (isset($_POST['page_precedente'])) {
                 $_SESSION['descriptionautrecentralemodif'] = '';
             }
         }
-        
-        
     } else {//-->ON A PAS SELECTIONNE AUTRE CENTRALE
         $etapeautrecentrale = 'FALSE';
         $manager->deleteprojetautrecentrale($idprojet);
         $descriptionautrecentrale = '';
     }
     $sautrecentrale = '';
-    if(!empty($_POST['autrecentrale'])){
-        if($arrayAutreCentraleBDD!=$_POST['autrecentrale']){
+    if (!empty($_POST['autrecentrale'])) {
+        if ($arrayAutreCentraleBDD != $_POST['autrecentrale']) {
             for ($i = 0; $i < count($_POST['autrecentrale']); $i++) {
-                $sautrecentrale.=$_POST['autrecentrale'][$i].' - ';
+                $sautrecentrale.=$_POST['autrecentrale'][$i] . ' - ';
             }
-            $_SESSION['autrecentralemodif'] = substr($sautrecentrale, 0,-2);
-        }else{
+            $_SESSION['autrecentralemodif'] = substr($sautrecentrale, 0, -2);
+        } else {
             $_SESSION['autrecentralemodif'] = '';
         }
-    }else{
-           $sautrecentrale=''; 
+    } else {
+        $sautrecentrale = '';
     }
-    
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              CENTRALE DE PROXIMITE
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
     $centrale_proximiteBDD = $manager->getList2("SELECT idcentrale_proximite FROM projet_centraleproximite where idprojet=?", $idprojet);
     $centraleProximiteBDD = array();
     for ($i = 0; $i < count($centrale_proximiteBDD); $i++) {
-        array_push($centraleProximiteBDD, 'cp'.$centrale_proximiteBDD[$i]['idcentrale_proximite']);
+        array_push($centraleProximiteBDD, 'cp' . $centrale_proximiteBDD[$i]['idcentrale_proximite']);
     }
     $centrale_proximite = stripslashes(Securite::bdd($_POST['centrale_proximite']));
- 
+
     $descriptioncentraleproximiteBDD = $rowprojet[0]['descriptioncentraleproximite'];
-    
+
     if ($_POST['centrale_proximite'] == TRUE) {
         if (!empty($_POST['centrale_Proximite'])) {
             if ($centraleProximiteBDD != $_POST['centrale_Proximite']) {
@@ -794,7 +816,7 @@ if (isset($_POST['page_precedente'])) {
             }
         } else {
             $_SESSION['centraleproximitemodif'] = '';
-        }        
+        }
         if (!empty($_POST['centraleproximitevaleur'])) {
             $descriptioncentraleproximite = clean($_POST['centraleproximitevaleur']);
             if ($descriptioncentraleproximiteBDD != $descriptioncentraleproximite) {
@@ -810,29 +832,29 @@ if (isset($_POST['page_precedente'])) {
     }
     if (!empty($_POST['desTechno'])) {
         $descriptifTechnologique = clean($_POST['desTechno']);
-        if($descriptiftechnologiqueBDD!=$descriptifTechnologique){
-            $_SESSION['descriptifTechnologiquemodif']=$descriptifTechnologique;
-        }else{
-            $_SESSION['descriptifTechnologiquemodif']='';
+        if ($descriptiftechnologiqueBDD != $descriptifTechnologique) {
+            $_SESSION['descriptifTechnologiquemodif'] = $descriptifTechnologique;
+        } else {
+            $_SESSION['descriptifTechnologiquemodif'] = '';
         }
     } else {
         $descriptifTechnologique = clean($manager->getSingle2("select descriptiftechnologique from projet where idprojet = ?", $idprojet));
-        $_SESSION['descriptifTechnologiquemodif']='';
+        $_SESSION['descriptifTechnologiquemodif'] = '';
         if (empty($descriptifTechnologique)) {
             $descriptifTechnologique = '';
-            $_SESSION['descriptifTechnologiquemodif']='';
+            $_SESSION['descriptifTechnologiquemodif'] = '';
         }
     }
-    if(!empty($rowprojet[0]['verrouidentifiee'])) {
+    if (!empty($rowprojet[0]['verrouidentifiee'])) {
         $verrouidentifieBDD = $rowprojet[0]['verrouidentifiee'];
     } else {
         $verrouidentifieBDD = '';
-    }    
+    }
     if (!empty($_POST['verrouide'])) {
         $verrouidentifie = clean(trim($_POST['verrouide']));
-        if($verrouidentifieBDD != $verrouidentifie){
+        if ($verrouidentifieBDD != $verrouidentifie) {
             $_SESSION['verrouidentifiemodif'] = $verrouidentifie;
-        }else{
+        } else {
             $_SESSION['verrouidentifiemodif'] = '';
         }
     } else {
@@ -846,9 +868,9 @@ if (isset($_POST['page_precedente'])) {
     $reussiteBDD = $rowprojet[0]['reussite'];
     if (!empty($_POST['reussit'])) {
         $reussite = clean($_POST['reussit']);
-        if($reussiteBDD != $reussite){
+        if ($reussiteBDD != $reussite) {
             $_SESSION['reussitemodif'] = $reussite;
-        }else{
+        } else {
             $_SESSION['reussitemodif'] = '';
         }
     } else {
@@ -858,14 +880,14 @@ if (isset($_POST['page_precedente'])) {
             $reussite = '';
             $_SESSION['reussitemodif'] = '';
         }
-    }    
+    }
     $nbPlaqueBDD = $rowprojet[0]['nbplaque'];
-    
+
     if (!empty($_POST['nbPlaque']) || $_POST['nbPlaque'] != 0) {
         $nbPlaque = Securite::bdd($_POST['nbPlaque']);
-        if($nbPlaqueBDD!=$nbPlaque){
+        if ($nbPlaqueBDD != $nbPlaque) {
             $_SESSION['nbplaquemodif'] = $nbPlaque;
-        }else{
+        } else {
             $_SESSION['nbplaquemodif'] = '';
         }
     } elseif (!empty($rowprojet[0]['nbplaque']) || $rowprojet[0]['nbplaque'] != 0) {
@@ -878,9 +900,9 @@ if (isset($_POST['page_precedente'])) {
     $nbrunBDD = $rowprojet[0]['nbrun'];
     if (!empty($_POST['nbRun']) || $_POST['nbRun'] != 0) {
         $nbRun = Securite::bdd($_POST['nbRun']);
-        if($nbrunBDD!=$nbRun){
+        if ($nbrunBDD != $nbRun) {
             $_SESSION['nbRunmodif'] = $nbRun;
-        }else{
+        } else {
             $_SESSION['nbRunmodif'] = '';
         }
     } elseif (!empty($rowprojet[0]['nbrun'])) {
@@ -890,7 +912,7 @@ if (isset($_POST['page_precedente'])) {
         $nbRun = 0;
         $_SESSION['nbRunmodif'] = '';
     }
-    
+
     if (!empty($_POST['devis'])) {
         $devis = Securite::bdd($_POST['devis']);
     } elseif (!empty($rowprojet[0]['envoidevis'])) {
@@ -899,28 +921,28 @@ if (isset($_POST['page_precedente'])) {
         $devis = '';
     }
     $emailrespdevisBDD = $rowprojet[0]['emailrespdevis'];
-    
-    if (!empty($_POST['mailresp'])) {        
+
+    if (!empty($_POST['mailresp'])) {
         $mailresp = Securite::bdd(($_POST['mailresp']));
-        if($emailrespdevisBDD != $mailresp ){
-            $_SESSION['emailrespdevismodif)']=$mailresp;
-        }else{
-            $_SESSION['emailrespdevismodif)']='';
+        if ($emailrespdevisBDD != $mailresp) {
+            $_SESSION['emailrespdevismodif)'] = $mailresp;
+        } else {
+            $_SESSION['emailrespdevismodif)'] = '';
         }
     } elseif (!empty($rowprojet[0]['emailrespdevis'])) {
         $mailresp = $rowprojet[0]['emailrespdevis'];
-        $_SESSION['emailrespdevismodif)']='';
+        $_SESSION['emailrespdevismodif)'] = '';
     } else {
         $mailresp = '';
-        $_SESSION['emailrespdevismodif)']='';
+        $_SESSION['emailrespdevismodif)'] = '';
     }
-    
+
     $refinterneBDD = $rowprojet[0]['refinterneprojet'];
     if (!empty($_POST['refinterne'])) {
         $refinterne = stripslashes(Securite::bdd(($_POST['refinterne'])));
-        if($refinterneBDD != $refinterne){
+        if ($refinterneBDD != $refinterne) {
             $_SESSION['refinternemodif'] = $refinterne;
-        }else{
+        } else {
             $_SESSION['refinternemodif'] = '';
         }
     } elseif (!empty($rowprojet[0]['refinterneprojet'])) {
@@ -929,7 +951,7 @@ if (isset($_POST['page_precedente'])) {
     } else {
         $refinterne = '';
         $_SESSION['refinternemodif'] = '';
-    }    
+    }
 //------------------------------------------------------------------------------------------------------------------------
 //			 MISE A JOUR DES FICHIERS UPLOADES ON VERIFIE L'ECART ENTRE LES NOMS INSCRIT DANS LA TABLE PROJET
 //			 ET LES FICHIERS PRESENTS SUR LE SERVEUR, ON EFFACE CEUX QUI NE SONT PAS REFERENCES DANS LA TABLE
@@ -980,16 +1002,16 @@ if (isset($_POST['page_precedente'])) {
             $_SESSION['attachementdescmodif'] = '';
         }
     }
-    $devtechnologique = $_POST['devTechnologique'];    
-    if ($devtechnologique ==  'FALSE') {
+    $devtechnologique = $_POST['devTechnologique'];
+    if ($devtechnologique == 'FALSE') {
         $verrouidentifie = '';
     }
-    
-    
+
+
     //------------------------------------------------------------------------------------------------------------
     //                              TRAITEMENT DU PROJETPHASE2
     //------------------------------------------------------------------------------------------------------------        
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite);    
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //------------------------------------------------------------------------------------------------------------------------
     //			 MISE A JOUR DE LA TABLE RESSOURCEPROJET  ON EFFACE TOUTES LES RESSOURCES SELECTIONNEES
@@ -1002,8 +1024,8 @@ if (isset($_POST['page_precedente'])) {
             $arrayressource = $manager->getListbyArray("SELECT idressource FROM ressource where libelleressource =?", array($chkbx));
             $ressources .=$chkbx . ',';
             $nbarrayressource = count($arrayressource);
-            for ($i = 0; $i < $nbarrayressource; $i++) {                
-                $idressource_ressource = $arrayressource[$i]['idressource'];                
+            for ($i = 0; $i < $nbarrayressource; $i++) {
+                $idressource_ressource = $arrayressource[$i]['idressource'];
                 //TRAITEMENT AJOUT DANS LA TABLE RESSOURCE PROJET
                 $ressourceprojet = new Ressourceprojet($idprojet, $idressource_ressource);
                 $manager->addressourceprojet($ressourceprojet);
@@ -1012,18 +1034,18 @@ if (isset($_POST['page_precedente'])) {
     } else {
         $manager->deleteressourceprojet($idprojet);
     }
-    if(!empty($_POST['ressource'])){
-        if($arrayRessourceBDD!=$_POST['ressource']){
-            $sressources ='';
+    if (!empty($_POST['ressource'])) {
+        if ($arrayRessourceBDD != $_POST['ressource']) {
+            $sressources = '';
             for ($i = 0; $i < count($_POST['ressource']); $i++) {
-                $sressources.=$_POST['ressource'][$i].' - ';
-            }        
-            $_SESSION['ressourcesmodif']=  substr($sressources,0,-2);
-        }else{
-            $_SESSION['ressourcesmodif']='';
+                $sressources.=$_POST['ressource'][$i] . ' - ';
+            }
+            $_SESSION['ressourcesmodif'] = substr($sressources, 0, -2);
+        } else {
+            $_SESSION['ressourcesmodif'] = '';
         }
-    }  else {
-        $sressources='';
+    } else {
+        $sressources = '';
     }
 //------------------------------------------------------------------------------------------------------------------------
 //			 FIN
@@ -1043,9 +1065,9 @@ if (isset($_POST['page_precedente'])) {
         $concerne = new Concerne($idcentrale, $idprojet, $idstatutprojet, "");
         $manager->addConcerne($concerne);
         $_SESSION['idstatutprojet'] = $idstatutprojet;
-        include '../uploadprojetphase2.php';        
+        include '../uploadprojetphase2.php';
     } elseif ($cas == 'enregistrement') {//CAS OU ON SAUVEGARDE UN PROJET                
-        $idstatutprojet = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);        
+        $idstatutprojet = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
         $_SESSION['idstatutprojet'] = $idstatutprojet;
     }
     if (!empty($_POST['statutProjet']) && $_POST['save'] == 'non' && $_POST['maj'] == 'non') {
@@ -1065,7 +1087,7 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateConcerne($concerne, $idprojet);
             include '../uploadphase2.php';
         } elseif ($idstatutprojet == ENCOURSREALISATION) {
- //PROJET EN COURS DE REALISATION             
+            //PROJET EN COURS DE REALISATION             
             $datedebutprojet = $datemodifstatut;
             $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword, utilisateur  WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
             $concerne = new Concerne($idcentrale, $idprojet, ENCOURSREALISATION, "");
@@ -1174,8 +1196,8 @@ if (isset($_POST['page_precedente'])) {
             include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
             $_SESSION['idstatutprojet'] = $idstatutprojet;
         }
-    } else    {
-        $_SESSION['idstatutprojet'] = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);       
+    } else {
+        $_SESSION['idstatutprojet'] = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
         include '../uploadphase2.php';
     }
 

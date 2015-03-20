@@ -35,6 +35,9 @@ define('IDAUTREEMPLOYEUR', $manager->getSingle2("select idemployeur from nomempl
 define('NAAUTREEMPLOYEUR', $manager->getSingle2("select idautrenomemployeur from autrenomemployeur where libelleautrenomemployeur = ?",'n/a'));
 define('NAAUTRETUTELLE', $manager->getSingle2("select idautrestutelle from autrestutelle where libelleautrestutelle =?",'n/a'));
 define('NAAUTREDISCIPLINE', $manager->getSingle2("select idautrediscipline from autredisciplinescientifique where libelleautrediscipline =?",'n/a'));
+define('IDAUTREQUALITE', $manager->getSingle2("select idpersonnequalite from personnecentralequalite where libellepersonnequalite =?",'Autres'));
+define('IDNAAUTRESQUALITE', $manager->getSingle2("select idpersonnequalite from personnecentralequalite where libellepersonnequalite =?",'n/a'));
+define('IDNAAUTREQUALITE', $manager->getSingle2("select idautresqualite from autresqualite where libelleautresqualite =?",'n/a'));
 define('NATYPEPROJET', $manager->getSingle2("select idtypeprojet from typeprojet where libelletype=?",'n/a'));
 define('TYPEFORMATION', $manager->getSingle2("select idtypeprojet from typeprojet where libelletype=?",'Formation'));
 define('PERMANENT', $manager->getSingle2("select idqualitedemandeuraca from qualitedemandeuraca where libellequalitedemandeuraca=? ",'Permanent'));

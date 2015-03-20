@@ -20,7 +20,8 @@ $nbidcentrale = count($arrayidcentrale);
 $z = 0;
 for ($i = 0; $i < $nbidcentrale; $i++) {
     $z++;
-    $donnee = array($arrayidcentrale[$i]['idcentrale'], $anneeExport, $arrayidcentrale[$i]['idcentrale'], $anneeExport, $anneeExport, $arrayidcentrale[$i]['idcentrale'], $anneeExport, $arrayidcentrale[$i]['idcentrale'], $anneeExport);
+    $donnee = array($arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, $anneeExport, REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE
+        , $arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE);
     $manager->exeRequete("drop table if exists tmpcentrale" . $z . "");
 //CREATION DE LA TABLE TEMPORAIRE
     $manager->getRequete("create table tmpcentrale" . $z . " as (SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
@@ -34,6 +35,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is null  AND  datestatutcloturer is null
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
 SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -46,6 +48,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutfini is not null AND  datestatutcloturer is null AND
 EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
 SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -58,6 +61,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutcloturer is not null
 AND EXTRACT(YEAR from datestatutcloturer)=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
 SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -69,7 +73,9 @@ p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtec
 FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutrefuser is not null
-AND EXTRACT(YEAR from datestatutrefuser)=? )", $donnee);
+AND EXTRACT(YEAR from datestatutrefuser)=? 
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
+)", $donnee);
 }
 $manager->exeRequete("drop table if exists tmpcentrale0");
 $manager->exeRequete("create table tmpcentrale0 as (SELECT * from tmpcentrale1 union SELECT * from tmpcentrale2 union SELECT * from tmpcentrale3 union  SELECT * from tmpcentrale4  "

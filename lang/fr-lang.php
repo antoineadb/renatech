@@ -537,6 +537,7 @@ define("TXT_PROJETTRANSFERT","Ce projet vous a été transféré par une autre c
 define("TXT_PSEUDO","Votre pseudo");
 define("TXT_PSEUDODOUBLON","Un utilisateur avec ce pseudo est déjà présent dans la base de donnée");
 define("TXT_QUALITE","Qualité");
+define("TXT_AUTRESQUALITE","Autres qualité");
 define("TXT_QUALITEDEMANDEUR","Qualité du demandeur");
 define("TXT_QUALITEDEMANDEURMAIL","Qualité du demandeur");
 define("TXT_QUESADDPROJET","Ajouter un projet");

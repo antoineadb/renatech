@@ -538,6 +538,7 @@ define("TXT_PSEUDO","Your login");
 define("TXT_PSEUDODOUBLON","A user with this login is already registred in the database, it is the email of a local manager of the central:");
 define("TXT_QUALITE","Quality");
 define("TXT_QUALITEDEMANDEUR","Quality");
+define("TXT_AUTRESQUALITE","Others quality");
 define("TXT_QUALITEDEMANDEURMAIL","Quality of the applicant");
 define("TXT_QUESADDPROJET","Add a project");
 define("TXT_QUESTION","What do you want to do?");

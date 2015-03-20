@@ -125,6 +125,9 @@ if (is_file('../outils/toolBox.php')) {
 } elseif (is_file('outils/toolBox.php')) {
     include_once 'outils/toolBox.php';
 }
+include_once 'PersonneCentraleQualite.php';
+
+
 showError($_SERVER['PHP_SELF']);
 
 
@@ -2605,7 +2608,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO personneaccueilcentrale (idpersonneaccueilcentrale,nomaccueilcentrale,prenomaccueilcentrale,idqualitedemandeuraca_qualitedemandeuraca,mailaccueilcentrale,
-    telaccueilcentrale,connaissancetechnologiqueaccueil)VALUES (?,?,?,?,?,?,?)  ');
+    telaccueilcentrale,connaissancetechnologiqueaccueil,idpersonnequalite,idautresqualite)VALUES (?,?,?,?,?,?,?,?,?)  ');
             $idpersonneaccueilcentrale = $personne->getIdpersonneaccueilcentrale();
             $nomaccueilcentrale =$personne->getNomaccueilcentrale();
             $prenomaccueilcentrale = $personne->getPrenomaccueilcentrale();
@@ -2613,6 +2616,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $mailaccueilcentrale =$personne->getMailaccueilcentrale();
             $telaccueilcentrale = $personne->getTelaccueilcentrale();
             $connaissancetechnologiqueaccueil = $personne->getConnaissancetechnologiqueaccueil();
+            $idpersonneQualite = $personne->getIdpersonneQualite();
+            $idautrequalite = $personne->getIdautresqualite();
             $requete->bindParam(1, $idpersonneaccueilcentrale, PDO::PARAM_INT);
             $requete->bindParam(2, $nomaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(3, $prenomaccueilcentrale, PDO::PARAM_STR);
@@ -2620,6 +2625,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete->bindParam(5, $mailaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(6, $telaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(7, $connaissancetechnologiqueaccueil, PDO::PARAM_STR);
+            $requete->bindParam(8, $idpersonneQualite, PDO::PARAM_INT);
+            $requete->bindParam(9, $idautrequalite, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {

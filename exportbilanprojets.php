@@ -12,7 +12,7 @@ if (!empty($_SESSION['pseudo'])) {
 }
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-$data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/ International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom labo1;Nom labo2;Nom labo3;Nom labo4;Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement");
+$data = utf8_decode("statut;Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/ International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom labo1;Nom labo2;Nom labo3;Nom labo4;Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement");
 $data .= "\n";
 //Récupération de l'idcentrale de l'utilisateur
 if (!empty($_SESSION['mail'])) {
@@ -58,6 +58,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is null  AND  datestatutcloturer is null
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
 SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -70,6 +71,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is null
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
 SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -82,6 +84,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is not null
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
 SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -94,6 +97,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutfini is not null AND  datestatutcloturer is null AND
 EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
 SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -106,6 +110,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutcloturer is not null
 AND EXTRACT(YEAR from datestatutcloturer)=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
 SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -117,12 +122,14 @@ p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtec
 FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutrefuser is not null
-AND EXTRACT(YEAR from datestatutrefuser)=? order by datecreation  asc";
+AND EXTRACT(YEAR from datestatutrefuser)=? 
+    AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? order by datecreation  asc";
 
 if ($idtypeuser == ADMINNATIONNAL) {//Administrateur national
 //RECUPERATION DU NOM ET DE L'ID DE LA CENTRALE DE L'IDUTILISATEUR EN FONCTION DE L'EMAIL
     $idcentrale = (int) ($_POST['centrale']);
-    $donnee = array($idcentrale, $anneeExport, $idcentrale, $anneeExport, $anneeExport, $idcentrale, $anneeExport,$anneeExport, $idcentrale, $anneeExport, $anneeExport, $idcentrale, $anneeExport, $idcentrale, $anneeExport);
+    $donnee = array($idcentrale, $anneeExport,REFUSE,ACCEPTE, $idcentrale, $anneeExport, $anneeExport,REFUSE,ACCEPTE, $idcentrale, $anneeExport,$anneeExport,REFUSE,ACCEPTE, $idcentrale, $anneeExport, $anneeExport,REFUSE,ACCEPTE,
+        $idcentrale, $anneeExport,REFUSE,ACCEPTE, $idcentrale, $anneeExport,REFUSE,ACCEPTE,);
     if ($idcentrale != 0) {        
         $row = $manager->getListbyArray($sql, $donnee);
     } else {       
@@ -130,7 +137,8 @@ if ($idtypeuser == ADMINNATIONNAL) {//Administrateur national
         exit();
     }
 } elseif ($idtypeuser == ADMINLOCAL) {
-    $donnee = array($idcentrale, $anneeExport, $idcentrale, $anneeExport, $anneeExport, $idcentrale, $anneeExport,$anneeExport, $idcentrale, $anneeExport, $anneeExport, $idcentrale, $anneeExport, $idcentrale, $anneeExport);
+    $donnee = array($idcentrale, $anneeExport, REFUSE,ACCEPTE,$idcentrale, $anneeExport, $anneeExport,REFUSE,ACCEPTE, $idcentrale, $anneeExport,$anneeExport,REFUSE,ACCEPTE, $idcentrale, $anneeExport, $anneeExport, REFUSE,ACCEPTE,
+        $idcentrale, $anneeExport,REFUSE,ACCEPTE, $idcentrale, $anneeExport,REFUSE,ACCEPTE);
     $row = $manager->getListbyArray($sql, $donnee);
 }
 $nbrow = count($row);
@@ -138,8 +146,8 @@ if ($nbrow != 0) {
 // ENREGISTREMENT DES RESULTATS LIGNE PAR LIGNE
     for ($i = 0; $i < count($row); $i++) {
         $idprojet = $row[$i]['idprojet'];
-        include 'outils/communExport.php';
-        $data .= "" .
+        include 'outils/communExport.php';       
+        $data .= "" .                
                 $titre . ";" .
                 $ref . ";" .
                 utf8_decode($devtechno) . ";" .
