@@ -168,7 +168,12 @@ if (!empty($idprojet)) {
     } else {
         $partenaire1 = '';
     }
-    $porteurprojet = $manager->getSingle2("select porteurprojet from projet where idprojet=?", $idprojet);
+    $porteurProjet = $manager->getSingle2("select porteurprojet from projet where idprojet=?", $idprojet);
+    if($porteurProjet==TRUE){
+        $porteurProjet='TRUE';
+    }else{
+        $porteurProjet='FALSE';
+    }
     if (!empty($_GET['statut'])) {
         $idstatutprojet = $_GET['statut'];
     } else {

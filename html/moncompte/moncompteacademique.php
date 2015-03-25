@@ -141,8 +141,8 @@ if($lang=='fr'){
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                 CODE UNITE
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->    
-                <?php
-if($_SESSION['idTypeUser']!=ADMINLOCAL){                
+                <?php   
+if(isset($_SESSION['idTypeUser']) &&$_SESSION['idTypeUser']!=ADMINLOCAL){                
                 $rowCodeunite=$manager->getList2("SELECT idcentrale,codeunite,libellecentrale,acronymelaboratoire,villecentrale,idautrecodeunite_autrecodeunite FROM centrale,utilisateur WHERE idcentrale = idcentrale_centrale AND idutilisateur=?", $idutilisateur);               
                 if(!empty($rowCodeunite[0]['idcentrale']) && $rowCodeunite[0]['idcentrale']!=IDAUTRECENTRALE){
                     $idcodeunite= $rowCodeunite[0]['idcentrale'];

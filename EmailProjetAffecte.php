@@ -27,9 +27,9 @@ if (!empty($_SESSION['idprojet'])) {
 $infoprojet = $manager->getList2("select numero,titre from projet where idprojet=?", $idprojet);
 
 $sujet = utf8_decode(TXT_AFFECTPROJET) . $infoprojet[0]['numero'];
-$body = htmlentities(stripslashes(str_replace("''","'",affiche('TXT_PROJETNUM'))), ENT_QUOTES, 'UTF-8') . $infoprojet[0]['numero'] . TXT_DELACENTRALE . $libellecentrale .' '. htmlentities(stripslashes(str_replace("''","'",affiche('TXT_AFFECTPROJET1'))), ENT_QUOTES, 'UTF-8') . '<br>' .
-        htmlentities(stripslashes(str_replace("''","'",affiche('TXT_BODYEMAILPHASE231'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''","'",affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''","'",affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . '<a href="https://www.renatech.org/projet">' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''","'",affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
+$body = htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_PROJETNUM'))), ENT_QUOTES, 'UTF-8') . $infoprojet[0]['numero'] . TXT_DELACENTRALE . $libellecentrale .' '. htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_AFFECTPROJET1'))), ENT_QUOTES, 'UTF-8') . '<br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_BODYEMAILPHASE231'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . '<a href="https://www.renatech.org/projet">' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 sendEmail($body, $sujet, $emailaffecte);

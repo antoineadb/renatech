@@ -423,15 +423,18 @@ if (isset($_POST['page_precedente'])) {
         if ($porteurprojetBDD != $porteurprojet) {
             if ($porteurprojet == 'TRUE') {
                 $_SESSION['porteurprojetmodif'] = TXT_OUI;
+                $porteurprojetBDD =TXT_OUI;
             } else {
                 $_SESSION['porteurprojetmodif'] = TXT_NON;
+                $porteurprojetBDD =TXT_NON;
             }
         } else {
             $_SESSION['porteurprojetmodif'] = '';
         }
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DES PARTENAIRES DU PROJET
-//------------------------------------------------------------------------------------------------------------          
+//------------------------------------------------------------------------------------------------------------
+     if (!empty($_POST['nombrePartenaire']) && $_POST['nombrePartenaire'] != 0) {   
         if (!empty($_POST['centralepartenaireprojet'])) {
             $centralepartenaireprojet = stripslashes(Securite::bdd($_POST['centralepartenaireprojet']));
             if ($centralepartenaireprojetBDD != $centralepartenaireprojet) {
@@ -457,6 +460,13 @@ if (isset($_POST['page_precedente'])) {
             $partenaire1 = null;
             $_SESSION['partenaire1modif'] = '';
         }
+     }else{
+        $nombrePartenaire = 0; 
+        $partenaire1 = null;
+        $centralepartenaireprojet=null;
+        $partenairefromprojet = new Partenairefromprojet($centralepartenaireprojet, $partenaire1);
+        $manager->updatepartenairefromprojet($partenairefromprojet, $idprojet);
+     }
 
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
@@ -1058,6 +1068,7 @@ if (isset($_POST['page_precedente'])) {
             $cas = 'creerprojetphase2';
         }
     }
+    
     if ($cas == 'creerprojetphase2' || $cas == 'creationprojetphase2etape') {//CAS OU ON VALIDE UN PROJET EN ATTENTE PHASE2 idstatut = 9
         $idcentrale = $manager->getSingle2('select idcentrale_centrale from concerne where idprojet_projet=?', $idprojet);
         $manager->deleteConcerne($idprojet);

@@ -353,7 +353,7 @@ if(isset($_GET['statut'])){
                     <label for="porteurProjet"  style="width: 350px;margin-left: 20px;margin-top:15px"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?></label>
                 </td>
                 <td>
-                    <?php if($porteurprojet==TRUE){?>
+                    <?php if($porteurProjet=='TRUE'){?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet"  value="TRUE"	checked="checked" class="btRadio" disabled="<?php echo $bool; ?>"
                            onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '')">
                     <?php echo TXT_OUI;?>

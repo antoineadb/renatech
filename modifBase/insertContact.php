@@ -10,6 +10,7 @@ include_once '../class/Manager.php';
 include '../class/Securite.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+
 //------------------------------------------------------------------------------------------------------------
 //                                       RECUPERATION DES PARAMETRES
 //------------------------------------------------------------------------------------------------------------
@@ -158,13 +159,13 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
     //------------------------------------------------------------------------------------------------------------
     //                                       TRAITEMENT CODEUNITE
     //------------------------------------------------------------------------------------------------------------
-    if (!empty($_POST['nomlabo'])) {
-        $acronymelaboratoire = Securite::bdd($_POST['nomlabo']);
+    if (!empty($_POST['nomLabo'])) {
+        $acronymelaboratoire = Securite::bdd($_POST['nomLabo']);
         //RECUPERATION DU CODE UNITE PAR LE NOM DU LABO, VERIFICATION QUE LE NOM DU LABO <> LIBELLECENTRALE+'(+VILLECENTRALE+')
         $libelcentrale = strstr($acronymelaboratoire, '(', TRUE); //PARTIE GAUCHE DE "libellecentrale(villecentrale)"
         $Vilcentrale = strstr($acronymelaboratoire, '(', FALSE); // PARTIE DROITE
         $param = array(trim($libelcentrale), trim($Vilcentrale));
-        $rescodeunite = $manager->getListbyArray("SELECT idcentrale,codeunite FROM centrale where libellecentrale=? or villecentrale=?", $param);
+        $rescodeunite = $manager->getListbyArray("SELECT idcentrale,codeunite FROM centrale where libellecentrale=? or villecentrale=?",$param);
         if (!empty($rescodeunite[0][0])) {//SI IL EXISTE ALORS ON AFFECTE L'IDAUTRECODE UNITE A 1
             $idcentrale_centrale = $rescodeunite[0][0];
             $codeunite = $rescodeunite[0][1];

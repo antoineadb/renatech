@@ -1,6 +1,9 @@
 <?php
 
 $arrayid = $manager->getList2("select idcentrale from projetautrecentrale where idprojet=?", $idprojet);
+if(empty($numprojet)){
+    $numprojet = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
+}
 $emailcentrales = array();
 $sEmailcentrale = '';
 for ($i = 0; $i < count($arrayid); $i++) {
@@ -26,24 +29,23 @@ for ($i = 0; $i < count($arrayid); $i++) {
     }
 }
 if(empty($descriptionautrecentrale)){
-    $descriptionAutrecentrale=  stripslashes(str_replace("''", "'", $manager->getSingle2("select descriptionautrecentrale from projet where idprojet=?",$idprojet))) ;
-    $descriptionautrecentrale = htmlentities(removeBrEmail($descriptionAutrecentrale), ENT_QUOTES, 'UTF-8').'<br>';
+    $descriptionautrecentrale=  removeDoubleQuote($manager->getSingle2("select descriptionautrecentrale from projet where idprojet=?",$idprojet));
 }
 $slibellecentrale = substr($sLibellecentrale, 0, -2);
 $centraleaccueil = $manager->getSingle2("select libellecentrale from concerne,centrale where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
-$body = utf8_decode(htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8')) . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILDEANDESOUTIENT'))), ENT_QUOTES, 'UTF-8') . ': ' . $numero . ' ' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILDEPOSECENTRALE'))), ENT_QUOTES, 'UTF-8') . ': ' .
+$body = utf8_decode(htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8')) . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_BODYEMAILDEANDESOUTIENT'))), ENT_QUOTES, 'UTF-8') . ': ' . $numprojet . ' ' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_BODYEMAILDEPOSECENTRALE'))), ENT_QUOTES, 'UTF-8') . ': ' .
         htmlentities($centraleaccueil, ENT_QUOTES, 'UTF-8') . ', ' .
-        htmlentities(stripslashes(str_replace("''", "'", strip_tags(affiche('TXT_ETAPE')))), ENT_QUOTES, 'UTF-8').'<br><br>'.
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILDESCENTRALPART'))), ENT_QUOTES, 'UTF-8') . '<br>' .
-        stripslashes(str_replace("''", "'", $descriptionautrecentrale)). '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_bodyEMAILCENTRALPART'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_ADRESSEEMAILPART'))), ENT_QUOTES, 'UTF-8') . ' ' . $slibellecentrale . '<br>' .
+        htmlentities(stripslashes(removeDoubleQuote(strip_tags(affiche('TXT_ETAPE')))), ENT_QUOTES, 'UTF-8').'<br><br>'.
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_BODYEMAILDESCENTRALPART'))), ENT_QUOTES, 'UTF-8') . '<br>' .
+        htmlentities(removeDoubleQuote($descriptionautrecentrale),ENT_QUOTES,'UTF-8'). '<br><br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_bodyEMAILCENTRALPART'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_ADRESSEEMAILPART'))), ENT_QUOTES, 'UTF-8') . ' ' . $slibellecentrale . '<br>' .
         $semailcentrale . '<br><br><br><br>' .
         "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
-$sujet = utf8_decode(TXT_PROJETNUM) . $numero;
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
+$sujet = utf8_decode(TXT_PROJETNUM) . $numprojet;
 envoieEmail($body, $sujet, $maildestinataire, $mailCC);

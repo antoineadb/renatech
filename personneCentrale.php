@@ -18,7 +18,9 @@ if (isset($_SESSION['pseudo'])) {
 function afficherAutreElement(id1, id2,id3,id4,id5,id6,id7,id8) {
     if (dijit.byId(id1).value === 'libqualdemaca'+'<?php echo NONPERMANENT ?>') {
         dijit.byId(id2).domNode.style.display = '';
-        document.getElementById(id3).style.display = '';        
+        document.getElementById(id3).style.display = '';
+        id7.style.display = '';
+        id8.style.display = '';
     } else {
         dijit.byId(id2).domNode.style.display = 'none';
         document.getElementById(id3).style.display = 'none';
@@ -27,13 +29,8 @@ function afficherAutreElement(id1, id2,id3,id4,id5,id6,id7,id8) {
         if(id6){
             id6.style.display = 'none';
         }
-        if(id7){
-            id7.style.display = 'none';
-        }
-        if(id8){
-            id8.style.display = 'none';
-        }
-        
+        id7.style.display = 'none';
+        id8.style.display = 'none';
     }
 }
 function afficherAutreQualite(id1,id2,id3){
@@ -204,7 +201,7 @@ idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?"
                         </tr>
                             <tr>
                                 <td><label for="<?php echo 'autresQualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresQualite' . $i; ?>" > <?php echo TXT_AUTRES; ?></label>   
-                                <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresqualite' . $i; ?>" 
+                                <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" 
                                 data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"  maxlength="100"
                                 style="width: 317px;" value="" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'">
                             </td>
@@ -212,7 +209,7 @@ idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?"
                         
                         <?php }?>
                         <tr>
-                            <td><label for="<?php echo 'autresqualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresqualite' . $i; ?>" style="display:none;" > <?php echo TXT_AUTRES; ?></label>   
+                            <td><label for="<?php echo 'autresqualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresqualite' . $i; ?>" style="display:none;" > <?php echo TXT_AUTRES.' toto'; ?></label>   
                                 <input id="<?php echo 'autresqualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresqualite' . $i; ?>" 
                                 data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"  maxlength="100"
                                 style="width: 317px;display:none" value="" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'">
