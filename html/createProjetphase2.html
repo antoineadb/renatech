@@ -462,7 +462,7 @@
             <td>
                 <label for="thematique" style="width: 350px;margin-left: 20px;margin-top: 20px;" ><?php echo TXT_NATUREPROJET.' :';?></label>
                 <select name="thematique" id="thematique"   style="margin-left: 20px;width: 320px;"
-                        onchange="afficherAutreElement(this.id, 'autreThematique')"  data-dojo-type="dijit/form/Select"			>
+                        onchange="afficherAutre(this.id, 'autreThematique')"  data-dojo-type="dijit/form/Select"			>
                     <?php
                     if($lang =='fr'){
                         echo '<option>'.TXT_SELECTNATURE.'</option>';
@@ -574,17 +574,18 @@
                         </td>
                     </tr>
                     <tr>
+                        <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 625px;margin-left:20px">
+                            <?php echo TXT_ERREURUPLOAD;?>
+                        </td>
+                        </tr>
+                        <tr>
                         <td>
                             <input name="fichierphase2" type="file" data-dojo-type="dojox/form/Uploader" id="uploaderPhase2"
-                                   style="margin-left: 20px;margin-bottom: 15px;margin-top: 15px" data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'/>
-                            <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ?>/styles/img/help.gif' height="13px" width="13px"/>
-                                <span style="text-align: left;padding:10px;width: 380px;border-radius:5px" >
-                                    <?php echo TXT_ERREURUPLOAD;?>
-                                </span></a>
+                                   style="margin-left: 20px;margin-bottom: 15px;margin-top: 5px" data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'/>                            
                             <div id="filePhase2" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploaderPhase2"'
                                  name='file' style="margin-left: 20px;"></div>                           
                             <div id='reponsedesc'></div>
-                        </td>
+                        </td>                        
                     </tr>
                     <tr>
                     <tr><td>

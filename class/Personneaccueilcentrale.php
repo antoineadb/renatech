@@ -9,12 +9,12 @@ class Personneaccueilcentrale {
     private $_mailaccueilcentrale;
     private $_telaccueilcentrale;
     private $_connaissancetechnologiqueaccueil;
-    private $_idpersonneQualite;
-    private $_idautresqualite;
+   /* private $_idpersonneQualite;
+    private $_idautresqualite;*/
 
     public function __construct($idpersonneaccueilcentrale, $nomAccueilcentrale, $prenomAccueilcentrale, $idqualitedemandeuraca_qualitedemandeuraca, $emailAccueilcentrale, $telAccueilcentrale, 
-            $connaissancetechnologiqueAccueil,$idpersonneQualite,$idautresqualite) {
-
+            $connaissancetechnologiqueAccueil){//,$idpersonneQualite,$idautresqualite) {
+   
         $this->setIdpersonneaccueilcentrale($idpersonneaccueilcentrale);
         $this->setNomaccueilcentrale($nomAccueilcentrale);
         $this->setPrenomaccueilcentrale($prenomAccueilcentrale);
@@ -22,11 +22,11 @@ class Personneaccueilcentrale {
         $this->setMailaccueilcentrale($emailAccueilcentrale);
         $this->setTelaccueilcentrale($telAccueilcentrale);
         $this->setConnaissancetechnologiqueaccueil($connaissancetechnologiqueAccueil);
-        $this->setIdpersonneQualite($idpersonneQualite);
-        $this->setIdautresqualite($idautresqualite);
+        /*$this->setIdpersonneQualite($idpersonneQualite);
+        $this->setIdautresqualite($idautresqualite);*/
     }
 
-    public function getIdautresqualite() {
+    /*public function getIdautresqualite() {
         return $this->_idautresqualite;
     }
 
@@ -39,7 +39,8 @@ class Personneaccueilcentrale {
 
     public function setIdpersonneQualite($id) {
         $this->_idpersonneQualite = (int) $id;
-    }
+    }*/
+    
     public function getIdpersonneaccueilcentrale() {
         return $this->_idpersonneaccueilcentrale;
     }

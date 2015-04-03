@@ -274,6 +274,8 @@ RewriteRule   errorrapportsize/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?l
 RewriteRule   errorrapportsizefig/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapportfig=$2&idprojet=$3 [L]
 RewriteRule   errorrapportextension/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsextension=$2&idprojet=$3 [L]
 RewriteRule   errorrapportsizelogfig/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapportfiglog=$2&idprojet=$3 [L]
+RewriteRule   delete_report/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)  	modifBase/deleteRapport.php?lang=$1&idrapport=$2&numProjet=$3&idstatut=$4 [L]
+
 
 #ONGLET PHASE1 DANS LA PHASE2
 RewriteRule   Err1_contDesc/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&idprojet=$2&msgerrtaillecontextedescriptif=$3&statut=$4 [L]
@@ -331,8 +333,10 @@ RewriteRule   msg_nolink/([a-z]+)                               motpasseoublie.p
 RewriteRule   comptedesactive/([a-z]+)                          indexCptdesactive.php?lang=$1                           [L]
 RewriteRule   indexmessage/([a-z]+)                             indexmessage.php?lang=fr                                [L]
 
+RewriteRule   Run_project/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)/([a-z]+)      phase2.php?lang=$1&numProjet=$2&statut=$3&report=$4&delete=$5	[L]
 RewriteRule   Run_project/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)      phase2.php?lang=$1&numProjet=$2&statut=$3&report=$4	[L]
 RewriteRule   Run_project/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)               phase2.php?lang=$1&numProjet=$2&statut=$3	[L]
+
 RewriteRule   Run_projectsoustraitance/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)  phase2_soutraitance.php?lang=$1&numProjet=$2&statut=$3	[L]
 RewriteRule   Refused_project/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)  phase2.php?lang=$1&idprojet=$2&numProjet=$3&idcentrale=$4	[L]
 RewriteRule   Analyse_project/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)	modifProjetRespCentrale.php?lang=$1&numProjet=$2&statut=$3&idcentrale=$4    [L]
@@ -344,7 +348,7 @@ RewriteRule   update_project/([a-z]+)/([0-9]+)                                  
 RewriteRule   update_Waiting_projectE/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)    modifProjet.php?lang=$1&idprojet=$2&numProjet=$3&statut=$4&t=$5  [L]
 RewriteRule   update_Waiting_projectI/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)/([0-9]+)    modifProjet.php?lang=$1&idprojet=$2&numProjet=$3&statut=$4&idcentrale=$5&t=$6   [L]
 RewriteRule   pdf_project/([a-z]+)/([A-Z\-0-9]+)                                                    genererPDF.php?lang=$1&numProjet=$2 [L]
-RewriteRule   pdf_report/([a-z]+)/([A-Z\-0-9]+)                                                    reportPDF.php?lang=$1&idprojet=$2 [L]
+RewriteRule   pdf_report/([a-z]+)/([A-Z\-0-9]+)                                                    rapport/reportPDF.php?lang=$1&idprojet=$2 [L]
 RewriteRule   RefusedProject/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)      modifProjetRespCentralevalide.php?lang=$1&idprojet=$2&numprojet=$3&idcentrale=$4&t=$5 [L]
 RewriteRule   accepted_project/([a-z]+)/([0-9]+)/([0-9]+)/([A-Z\-0-9]+)             modifProjetRespCentralevalide.php?lang=$1&idprojet=$2&statut=$3&numprojet=$4    [L]
 RewriteRule   closed_project/([a-z]+)/([0-9]+)                                      modifProjetCloturer.php?lang=$1&idprojet=$2   [L]

@@ -158,8 +158,20 @@ if (isset($_POST['page_precedente'])) {
         }
 
         //RECUPERATION DU NOMBRE DE "Personne susceptible de travailler en salle blanche sur ce projet"
-        $arraypersonnecentraleBDD = $manager->getList2("SELECT nomaccueilcentrale,prenomaccueilcentrale,mailaccueilcentrale,telaccueilcentrale,connaissancetechnologiqueaccueil,libellequalitedemandeuraca,"
-                . "libellequalitedemandeuracaen FROM projetpersonneaccueilcentrale,personneaccueilcentrale,qualitedemandeuraca WHERE idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale AND idqualitedemandeuraca_qualitedemandeuraca = idqualitedemandeuraca AND idprojet_projet =?", $idprojet);
+        $arraypersonnecentraleBDD = 
+        $manager->getList2(""
+                . "SELECT "
+                . "nomaccueilcentrale,"
+                . "prenomaccueilcentrale,"
+                . "mailaccueilcentrale,"
+                . "telaccueilcentrale,"
+                . "connaissancetechnologiqueaccueil,"
+                . "libellequalitedemandeuraca,"
+                . "libellequalitedemandeuracaen "
+                . "FROM projetpersonneaccueilcentrale,personneaccueilcentrale,qualitedemandeuraca "
+                . "WHERE idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale "
+                . "AND idqualitedemandeuraca_qualitedemandeuraca = idqualitedemandeuraca "
+                . "AND idprojet_projet =?", $idprojet);
         $nombrePersonnecentraleBDD = count($arraypersonnecentraleBDD);
         $personnecentraleBDD = '';
         if (!empty($nombrePersonnecentraleBDD)) {
@@ -675,22 +687,23 @@ if (isset($_POST['page_precedente'])) {
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             //                          TRAITEMENT DES AUTRES QUALITE DOCTORANT,POSTDOC OU AUTRES SI AUTRES VALEUR DE AUTRES
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            if (!empty($_POST['autreQualite' . $i . ''])) {
+           /* if (!empty($_POST['autreQualite' . $i . ''])) {
                 if ($_POST['autreQualite' . $i . ''] == 'qac' . IDAUTREQUALITE) {//cas autres
-                    if (!empty($_POST['autresqualite' . $i . ''])) {
-                        $libAutreQualite = clean($_POST['autresqualite' . $i . '']);
+                    if (!empty($_POST['autresQualite' . $i . ''])) {
+                        $libAutreQualite = clean($_POST['autresQualite' . $i . '']);
+                        $idautrequalite = $manager->getSingle("select max(idautresqualite) from autresqualite")+1;
+                        $autresqualite= new Autresqualite($idautrequalite, $libAutreQualite);//CREATION DE L'ENTREE DANS LA TABLE AUTRESQUALITE
+                        $manager->addAutreQualite($autresqualite);
+                        $idpersonneQualite= (int)substr($_POST['autreQualite' . $i . ''],-1);
                     } else {
                         $libAutreQualite = TXT_AUTRES;
-                    }
-                    $libelleAutreQualite = TXT_AUTRES;
+                    }                    
                 } else {
                    $idpersonneQualite= (int)substr($_POST['autreQualite' . $i . ''],-1);
                    $idautrequalite=IDNAAUTREQUALITE;
                 }
-            }
-           
+            }*/
             
-            ;
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             //
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -710,9 +723,11 @@ if (isset($_POST['page_precedente'])) {
             } else {
                 $connaissancetechnologiqueaccueil = '';
             }
-            //TRAITEMENT AJOUT DANS LA TABLE PERSONNEACCUEILCENTRALE
+                       
+            //TRAITEMENT AJOUT DANS LA TABLE PERSONNEACCUEILCENTRALE            
             $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;
-            $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil),$idpersonneQualite,$idautrequalite);            
+            $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil));
+            //$personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil),$idpersonneQualite,$idautrequalite);
             $manager->addPersonneaccueilcentrale($personne);
             //TRAITEMENT AJOUT DANS LA TABLE PROJETPERSONNEACCUEILCENTRALE
             $projetpersonneaccueilcentrale = new Projetpersonneaccueilcentrale($idprojet, $idpersonneaccueilcentrale);
@@ -732,7 +747,7 @@ if (isset($_POST['page_precedente'])) {
             } elseif ($lang == 'en') {
                 $libellequalite = $manager->getSingle2("select libellequalitedemandeuracaen from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
             }
-            $personnecentrale .=Securite::BDD($_POST['nomaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($_POST['prenomaccueilcentrale' . $i . '']) . ' - ' . $_POST['mailaccueilcentrale' . $i . ''] .
+            $personnecentrale .= Securite::BDD($_POST['nomaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($_POST['prenomaccueilcentrale' . $i . '']) . ' - ' . $_POST['mailaccueilcentrale' . $i . ''] .
                     ' - ' . Securite::BDD($_POST['telaccueilcentrale' . $i . '']) . ' - ' . Securite::BDD($libellequalite) . '-';
         }
         $personneCentrale = TXT_PERSONNEACCUEILCENTRALE . ': ' . substr(trim($personnecentrale), 0, -1);
@@ -993,11 +1008,11 @@ if (isset($_POST['page_precedente'])) {
         $extension = strrchr($_FILES['fichierphase2']['name'], '.');
         if (!in_array($extension, $extensions)) {//VERIFICATION DU FORMAT SI IL N'EST PAS BON ON SORT
             $erreur1 = TXT_ERREURUPLOAD;
-            header('Location: /' . REPERTOIRE . '/Upload_Errorphase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
+            header('Location: /' . REPERTOIRE . '/Upload_Errorphase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
             exit();
         } elseif ($taille > $taille_maxi) {//VERIFICATION DE LA TAILLE SI ELLE EST >1mo ON SORT
             $erreur1 = TXT_ERREURTAILLEFICHIER;
-            header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
+            header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
             exit();
         } elseif (!isset($erreur1)) {//S'il n'y a pas d'erreur, on upload
             if (move_uploaded_file($_FILES['fichierphase2']['tmp_name'], $dossier . $fichierPhase)) {
@@ -1021,7 +1036,19 @@ if (isset($_POST['page_precedente'])) {
     //------------------------------------------------------------------------------------------------------------
     //                              TRAITEMENT DU PROJETPHASE2
     //------------------------------------------------------------------------------------------------------------        
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite);
+    if($_SESSION['idTypeUser']==ADMINLOCAL){
+    if($_POST['interneExterne']=='ie0'){
+        $interneexterne = null;
+    }elseif($_POST['interneExterne']=='ie1'){
+        $interneexterne = 'I';
+    }else{
+        $interneexterne = 'E';
+    }
+    }else{
+        $interneexterne = $manager->getSingle2("select interneexterne from projet where idprojet=?", $idprojet);
+    }
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne);
+    
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //------------------------------------------------------------------------------------------------------------------------
     //			 MISE A JOUR DE LA TABLE RESSOURCEPROJET  ON EFFACE TOUTES LES RESSOURCES SELECTIONNEES

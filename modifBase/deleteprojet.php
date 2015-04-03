@@ -41,6 +41,7 @@ if (isset($_GET['idprojet']) && !empty($_GET['idprojet'])) {
             $manager->deletepartenaireprojets($arrayidprojetpartenaire[$i]['idpartenaire_partenaireprojet']);
         }
         //-----------------------------------
+        $manager->deleteprojetautrecentrale($idprojet);
         $manager->deleteressourceprojet($idprojet);
         $manager->deleteUtilisateurAdministrateur($idprojet);
         $manager->deleteUtilisateurPorteur($idprojet);

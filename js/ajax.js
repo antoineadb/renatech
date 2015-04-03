@@ -31,6 +31,7 @@ function disablednomlabo(cheminEtFichierPhp) {
     xhr2.open("GET", cheminEtFichierPhp, true);
     xhr2.send(null);
 }
+
 /**
  * 
  * @param {type} reponse
@@ -55,7 +56,6 @@ function callbacknomlabo(reponse) {
  * @param {type} cheminEtFichierPhp
  * @returns {undefined}
  */
-
 function disabledevis(cheminEtFichierPhp) {
     var xhr2 = getXMLHttpRequest();
     xhr2.onreadystatechange = function () {

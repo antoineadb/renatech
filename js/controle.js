@@ -122,9 +122,9 @@ function empty(mixed_var) {
     return false;
 }
 
-function afficherAutreElement(id1, id2) {
-    if (dijit.byId(id1).value === 'Autres' || dijit.byId(id1).get('displayedValue') === 'Autres' || dijit.byId(id1).value === 'Others' ||
-            dijit.byId(id1).get('displayedValue') === 'Others') {
+function afficherAutre(id1, id2) {
+    if (dijit.byId(id1).value === 'Autres' || dijit.byId(id1).get('displayedValue') === 'Autres' || dijit.byId(id1).value === 'Others' || dijit.byId(id1).get('displayedValue') === 'Others') {
+        console.log(dijit.byId(id2));
         dijit.byId(id2).domNode.style.display = 'block';
     } else {
         dijit.byId(id2).domNode.style.display = 'none';

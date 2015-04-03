@@ -126,7 +126,7 @@ if (is_file('../outils/toolBox.php')) {
     include_once 'outils/toolBox.php';
 }
 include_once 'PersonneCentraleQualite.php';
-
+include_once 'Autresqualite.php';
 
 showError($_SERVER['PHP_SELF']);
 
@@ -1044,7 +1044,6 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
-
 //------------------------------------------------------------------------------------------------------------
 //                                       PROJET PHASE 2
 //------------------------------------------------------------------------------------------------------------
@@ -1055,7 +1054,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $requete = $this->_db->prepare("update projet set contactscentraleaccueil=?, idtypeprojet_typeprojet=?,nbHeure=?,
 dateDebutTravaux=?,dureeprojet=?,idperiodicite_periodicite=?,centralepartenaireprojet=?,idthematique_thematique=?,idautrethematique_autrethematique=?,descriptifTechnologique=?,
 attachementdesc=?,verrouidentifiee=?,nbplaque=?,nbrun=?,envoidevis=?,emailrespdevis=?,reussite=?,refinterneprojet=?,devtechnologique=?,nbeleve=?,
-nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=? where idprojet=?");
+nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=?,interneexterne=? where idprojet=?");
             $contactscentralaccueil = $projet2->getContactscentralaccueil();
             $idtypeprojet = $projet2->getIdtypeprojet_typeprojet();
             $nbheure = $projet2->getNbHeure();
@@ -1084,7 +1083,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $descriptionautrecentrale = $projet2->getDescriptionautrecentrale();
             $etapeautrecentrale = $projet2->getEtapeautrecentrale();
             $centraleproximite = $projet2->getCentraleproximite();
-            $descriptioncentraleproximite = $projet2->getDescriptioncentraleproximite();
+            $descriptioncentraleproximite = $projet2->getDescriptioncentraleproximite();            
+            $interneexterne  = $projet2->getInterneExterne();            
             $requete->bindParam(1, $contactscentralaccueil, PDO::PARAM_STR);
             $requete->bindParam(2, $idtypeprojet, PDO::PARAM_INT);
             $requete->bindParam(3, $nbheure, PDO::PARAM_INT);
@@ -1114,7 +1114,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete->bindParam(27, $etapeautrecentrale, PDO::PARAM_BOOL);
             $requete->bindParam(28, $centraleproximite, PDO::PARAM_BOOL);
             $requete->bindParam(29, $descriptioncentraleproximite, PDO::PARAM_STR);
-            $requete->bindParam(30, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(30, $interneexterne, PDO::PARAM_STR);
+            $requete->bindParam(31, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -2607,8 +2608,12 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
+           /*$requete = $this->_db->prepare('INSERT INTO personneaccueilcentrale (idpersonneaccueilcentrale,nomaccueilcentrale,prenomaccueilcentrale,idqualitedemandeuraca_qualitedemandeuraca,mailaccueilcentrale,
+    telaccueilcentrale,connaissancetechnologiqueaccueil,idpersonnequalite,idautresqualite)VALUES (?,?,?,?,?,?,?,?,?)  ');*/
+            
             $requete = $this->_db->prepare('INSERT INTO personneaccueilcentrale (idpersonneaccueilcentrale,nomaccueilcentrale,prenomaccueilcentrale,idqualitedemandeuraca_qualitedemandeuraca,mailaccueilcentrale,
-    telaccueilcentrale,connaissancetechnologiqueaccueil,idpersonnequalite,idautresqualite)VALUES (?,?,?,?,?,?,?,?,?)  ');
+    telaccueilcentrale,connaissancetechnologiqueaccueil)VALUES (?,?,?,?,?,?,?)  ');
+           
             $idpersonneaccueilcentrale = $personne->getIdpersonneaccueilcentrale();
             $nomaccueilcentrale =$personne->getNomaccueilcentrale();
             $prenomaccueilcentrale = $personne->getPrenomaccueilcentrale();
@@ -2616,8 +2621,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $mailaccueilcentrale =$personne->getMailaccueilcentrale();
             $telaccueilcentrale = $personne->getTelaccueilcentrale();
             $connaissancetechnologiqueaccueil = $personne->getConnaissancetechnologiqueaccueil();
-            $idpersonneQualite = $personne->getIdpersonneQualite();
-            $idautrequalite = $personne->getIdautresqualite();
+            //$idpersonneQualite = $personne->getIdpersonneQualite();
+            //$idautrequalite = $personne->getIdautresqualite();
             $requete->bindParam(1, $idpersonneaccueilcentrale, PDO::PARAM_INT);
             $requete->bindParam(2, $nomaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(3, $prenomaccueilcentrale, PDO::PARAM_STR);
@@ -2625,8 +2630,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete->bindParam(5, $mailaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(6, $telaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(7, $connaissancetechnologiqueaccueil, PDO::PARAM_STR);
-            $requete->bindParam(8, $idpersonneQualite, PDO::PARAM_INT);
-            $requete->bindParam(9, $idautrequalite, PDO::PARAM_INT);
+            //$requete->bindParam(8, $idpersonneQualite, PDO::PARAM_INT);
+            //$requete->bindParam(9, $idautrequalite, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -2634,8 +2639,23 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
-
-    //------------------------------------------------------------------------------------------------------------
+public function addAutreQualite(Autresqualite $autresqualite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('insert into autresqualite (idautresqualite,libelleautresqualite) values (?,?)');
+            $idautresqualite =$autresqualite->getIdautresqualite();
+            $libelleautresqualite = $autresqualite->getLibelleautresqualite();
+            $requete->bindParam(1, $idautresqualite, PDO::PARAM_INT);
+            $requete->bindParam(2, $libelleautresqualite, PDO::PARAM_STR);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRDELETEPROJETPERSONNEACCUEILCENTRALE . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+//------------------------------------------------------------------------------------------------------------
 //                      METHODE PROJETPERSONEACCUEILCENTRALE
 //------------------------------------------------------------------------------------------------------------
     public function addprojetpersonneaccueilcentrale(Projetpersonneaccueilcentrale $projet) {
@@ -3115,7 +3135,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO rapport (idrapport,title,author,entity,villepays,instituteinterest,fundingsource,collaborator,thematics,startingdate,objectif,results,valorization,technologicalwc,logo,logocentrale,figure,idprojet) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+            $requete = $this->_db->prepare('INSERT INTO rapport (idrapport,title,author,entity,villepays,instituteinterest,fundingsource,collaborator,thematics,startingdate,objectif,results,valorization,technologicalwc,logo,logocentrale,figure,idprojet,legend) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
             $idrapport = $rapport->getIdrapport();
             $title = $rapport->getTitle();
             $author = $rapport->getAuthor();
@@ -3134,6 +3154,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $logocentrale = $rapport->getLogocentrale();
             $figure =$rapport->getFigure();
             $idprojet =$rapport->getIdprojet();
+            $legend =$rapport->getLegend();
             $requete->bindParam(1, $idrapport, PDO::PARAM_INT);
             $requete->bindParam(2, $title, PDO::PARAM_STR);
             $requete->bindParam(3, $author, PDO::PARAM_STR);
@@ -3152,6 +3173,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete->bindParam(16, $logocentrale, PDO::PARAM_STR);
             $requete->bindParam(17, $figure, PDO::PARAM_STR);
             $requete->bindParam(18, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(19, $legend, PDO::PARAM_STR);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3168,7 +3190,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('update rapport SET author = ?,title=?,entity=?,villepays=?,instituteinterest=?,fundingsource=?,collaborator=?,thematics=?,startingdate=?,objectif=?,results=?,valorization=?,technologicalwc=?,logo=?,logocentrale=?,figure=? WHERE idprojet = ?');
+            $requete = $this->_db->prepare('update rapport SET author = ?,title=?,entity=?,villepays=?,instituteinterest=?,fundingsource=?,collaborator=?,thematics=?,startingdate=?,objectif=?,results=?,valorization=?,technologicalwc=?,logo=?,logocentrale=?,figure=?,legend=? WHERE idprojet = ?');
             $author = $rapport->getAuthor();
             $title = $rapport->getTitle();
             $entity =$rapport->getEntity();
@@ -3184,7 +3206,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $technologicalwc =$rapport->getTechnologicalwc();
             $logo = $rapport->getLogo();
             $logocentrale = $rapport->getLogocentrale();
-            $figure =$rapport->getFigure();            
+            $figure =$rapport->getFigure();
+            $legend =$rapport->getLegend();
             $requete->bindParam(1, $author, PDO::PARAM_STR);
             $requete->bindParam(2, $title, PDO::PARAM_STR);
             $requete->bindParam(3, $entity, PDO::PARAM_STR);
@@ -3201,7 +3224,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete->bindParam(14, $logo, PDO::PARAM_STR);
             $requete->bindParam(15, $logocentrale, PDO::PARAM_STR);
             $requete->bindParam(16, $figure, PDO::PARAM_STR);
-            $requete->bindParam(17, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(17, $legend, PDO::PARAM_STR);
+            $requete->bindParam(18, $idprojet, PDO::PARAM_INT);            
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3239,6 +3263,23 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("delete from rapport where idprojet =?");
             $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRDELETEPROJETDATEDEBUT . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+    /**
+ * 
+ * @param type $idprojet
+ */
+    public function delRapport($idrapport) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("delete from rapport where idrapport =?");
+            $requete->bindParam(1, $idrapport, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {

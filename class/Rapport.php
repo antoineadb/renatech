@@ -20,8 +20,10 @@ class Rapport {
     private $_logocentrale;
     private $_figure;
     private $_idprojet;
+    private $_legend;
 
-    function __construct($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo,$logocentrale, $figure, $idprojet) {
+    function __construct($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo,$logocentrale, $figure, 
+            $idprojet,$legend) {
         $this->setIdrapport($idrapport);
         $this->setTitle($title);
         $this->setAuthor($author);
@@ -40,6 +42,7 @@ class Rapport {
         $this->setLogo($logo);
         $this->setLogocentrale($logocentrale);
         $this->setIdprojet($idprojet);
+        $this->setLegend($legend);
     }
 
     public function setIdrapport($idrapport) {
@@ -50,6 +53,13 @@ class Rapport {
         return $this->_idrapport;
     }
 
+    public function setLegend($legend) {
+        $this->_legend = $legend;
+    }
+
+    public function getLegend() {
+        return $this->_legend;
+    }
     public function setTitle($title) {
         $this->_title = $title;
     }

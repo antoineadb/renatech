@@ -47,7 +47,7 @@ if (empty($idcentrale)) {
 //RECUPERATION DE L'IDUTILISATEUR EN FONCTION DU PSEUDO
 
 $idtypeuser = $manager->getSingle2("select idtypeutilisateur_typeutilisateur from utilisateur where idutilisateur=?", $idutilisateur);
-$sql="SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
+$sql="SELECT  p.porteurprojet,p.interneexterne,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
 u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
@@ -60,7 +60,7 @@ AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfi
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=?
 AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
-SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
+SELECT  p.porteurprojet,p.interneexterne,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
 u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
@@ -73,7 +73,7 @@ AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfi
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
 AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
-SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
+SELECT  p.porteurprojet,p.interneexterne,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
 u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
@@ -86,7 +86,7 @@ AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfi
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
 AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
-SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
+SELECT  p.porteurprojet,p.interneexterne,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
 u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
@@ -99,7 +99,7 @@ AND co.idcentrale_centrale =? AND  datestatutfini is not null AND  datestatutclo
 EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
 AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
-SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
+SELECT  p.porteurprojet,p.interneexterne,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
 u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
@@ -112,7 +112,7 @@ AND co.idcentrale_centrale =? AND  datestatutcloturer is not null
 AND EXTRACT(YEAR from datestatutcloturer)=?
 AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
 UNION
-SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
+SELECT  p.porteurprojet,p.interneexterne,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
 u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
@@ -146,13 +146,13 @@ if ($nbrow != 0) {
 // ENREGISTREMENT DES RESULTATS LIGNE PAR LIGNE
     for ($i = 0; $i < count($row); $i++) {
         $idprojet = $row[$i]['idprojet'];
-        include 'outils/communExport.php';       
+        include 'outils/communExport.php';     
         $data .= "" .                
                 $titre . ";" .
                 $ref . ";" .
                 utf8_decode($devtechno) . ";" .
                 ucfirst(utf8_decode($libtypeuser)) . ";" .
-                utf8_decode($interne_externe) . ";" .
+                $interne_externe . ";" .
                 str_replace("''", "'", stripslashes(utf8_decode($secteuractivite))) . ";" .
                 str_replace("''", "'", stripslashes(utf8_decode($typeentreprise))) . ";" .
                 $sit . ";" .

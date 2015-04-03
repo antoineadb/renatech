@@ -462,7 +462,7 @@
             <td>
                 <label for="thematique" style="width: 350px;margin-left: 20px;margin-top: 20px;" ><?php echo TXT_NATUREPROJET.' :';?></label>
                 <select name="thematique" id="thematique"   style="margin-left: 20px;width: 320px;"
-                        onchange="afficherAutreElement(this.id, 'autreThematique')"  data-dojo-type="dijit/form/Select"			>
+                        onchange="afficherAutre(this.id, 'autreThematique')"  data-dojo-type="dijit/form/Select"			>
                     <?php
                     if($lang =='fr'){
                         echo '<option>'.TXT_SELECTNATURE.'</option>';

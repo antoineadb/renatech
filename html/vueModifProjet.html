@@ -15,6 +15,7 @@ if(!empty($_GET['idprojet'])){
     $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
 }
 $rowModif = $manager->getList2("SELECT description,titre,libellecentrale,contexte,acronyme FROM projet,concerne,centrale WHERE idprojet = idprojet_projet AND idcentrale_centrale = idcentrale and idprojet =?",$idprojet);
+
 $titre =stripslashes(str_replace("''","'",$rowModif[0]['titre']));
 $description =stripslashes(str_replace("''","'",$rowModif[0]['description']));
 $contexte =stripslashes(str_replace("''","'",$rowModif[0]['contexte']));
@@ -58,8 +59,8 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
         $arrayentity = $manager->getList2("select libellecentrale,codeunite from concerne,centrale where idcentrale_centrale = idcentrale and idprojet_projet=?",$idprojet); 
         $arrayvillepays=$manager->getList2("select ville,nompays from pays,utilisateur where idpays_pays=idpays and idutilisateur=?",$idutilisateur);
     ?>
-    <input  type="hidden" value="<?php echo $arrayentity[0]['libellecentrale'].' / '.$arrayentity[0]['codeunite']; ?>" id="entityCNRSCode">
-    <input  type="hidden" value="<?php echo $arrayvillepays[0]['ville'].' / '.$arrayvillepays[0]['nompays']; ?>" id="townCountry">
+    <input  type="hidden" value="<?php echo $arrayentity[0]['libellecentrale'].', '.$arrayentity[0]['codeunite']; ?>" id="entityCNRSCode">
+    <input  type="hidden" value="<?php echo $arrayvillepays[0]['ville'].', '.$arrayvillepays[0]['nompays']; ?>" id="townCountry">
     <table>
         <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
         <?php
@@ -232,13 +233,16 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
             </td>
         </tr>
         <tr><td>&nbsp;</td></tr>
-        <tr>          
+        <tr>
+            <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 625px;margin-top:2px;margin-left:5px">
+                    <?php echo TXT_ERREURUPLOAD;?>
+            </td>
+        </tr>
+        <tr>
             <td>
-                    <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader"
-                           data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'/>
-                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;width: 580px;border-radius: 5px">
-                            <?php echo TXT_ERREURUPLOAD;?></span></a>
-                    <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file' ></div>
+                <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader" 
+                           data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"' >               
+                <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file' ></div>
                     <?php
                     $attachement  =str_replace("''","'",stripslashes($manager->getSingle2("select attachement from projet where idprojet = ?",$idprojet)));
                     $monUrl = "http://".$_SERVER['HTTP_HOST'];
@@ -270,8 +274,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                     <?php }?>
 
                     <div id='reponse'></div>
-                </td>
-            
+            </td>           
         </tr><tr><td>&nbsp;</td></tr>
         <tr><td>
                 <?php 

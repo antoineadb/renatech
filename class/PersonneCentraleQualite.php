@@ -1,7 +1,7 @@
 <?php
 
 class PersonneCentraleQualite {
-
+    
     private $_idpersonneQualite;
     private $_libellepersonneQualite;
 

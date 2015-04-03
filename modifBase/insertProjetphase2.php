@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 include_once '../decide-lang.php';
 include_once '../outils/toolBox.php';
@@ -34,32 +33,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     } else {
         $acronyme = "";
     }
-    if (!empty($_FILES['fichierProjet']['name'])) {
-        $attachement = stripslashes(Securite::bdd($_FILES['fichierProjet']['name']));
-        $dossier1 = '../upload/';
-        $fichierPhase1 = basename($_FILES['fichierProjet']['name']);
-        $taille_maxi1 = 1048576;
-        $taille1 = filesize($_FILES['fichierProjet']['tmp_name']);
-        $extensions = array('.pdf', '.PDF');
-        $extension1 = strrchr($_FILES['fichierProjet']['name'], '.');
-        if (!empty($_FILES['fichierProjet']['name'])) {
-            if (!in_array($extension1, $extensions)) {//VERIFICATION DU FORMAT SI IL N'EST PAS BON ON SORT
-                $erreur1 = TXT_ERREURUPLOAD;
-                header('Location: /' . REPERTOIRE . '/Upload_Errorphase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-                exit();
-            } elseif ($taille1 > $taille_maxi1) {//VERIFICATION DE LA TAILLE SI ELLE EST >1mo ON SORT
-                $erreur1 = TXT_ERREURTAILLEFICHIER;
-                header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-                exit();
-            } elseif (!isset($erreur1)) {//S'il n'y a pas d'erreur, on upload
-                if (move_uploaded_file($_FILES['fichierProjet']['tmp_name'], $dossier1 . $fichierPhase1)) {
-                    chmod($dossier1 . $fichierPhase1, 0777);
-                }
-            }
-        }
-    } else {
-        $attachement = "";
-    }
+    
     if (empty($_POST['confid'])) {
         $confidentiel = "FALSE";
     } else {
@@ -90,6 +64,30 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $idcentrale = (int) substr($_POST['centrale'], -1);
     } else {
         $idcentrale = AUTRECENTRALE;
+    }
+    
+    if (!empty($_FILES['fichierProjet']['name'])) {
+        $attachement = stripslashes(Securite::bdd($_FILES['fichierProjet']['name']));
+        $dossier1 = '../upload/';
+        $fichierPhase1 = basename($_FILES['fichierProjet']['name']);
+        $taille_maxi1 = 1048576;
+        $taille1 = filesize($_FILES['fichierProjet']['tmp_name']);
+        $extensions = array('.pdf', '.PDF');
+        $extension1 = strrchr($_FILES['fichierProjet']['name'], '.');
+        if (!empty($_FILES['fichierProjet']['name'])) {
+            if (!in_array($extension1, $extensions)) {//VERIFICATION DU FORMAT SI IL N'EST PAS BON ON SORT                
+                    $erreur1 = TXT_ERREURUPLOAD;
+            } elseif ($taille1 > $taille_maxi1) {//VERIFICATION DE LA TAILLE SI ELLE EST >1mo ON SORT
+                    $erreur12 = TXT_ERREURTAILLEFICHIER;
+            } elseif (!isset($erreur1) && !isset($erreur12)) {//S'il n'y a pas d'erreur, on upload
+                if (move_uploaded_file($_FILES['fichierProjet']['tmp_name'], $dossier1 . $fichierPhase1)) {
+                    $erreur1 = '';
+                    chmod($dossier1 . $fichierPhase1, 0777);
+                }
+            }
+        }
+    } else {
+        $attachement = "";
     }
     $projet = new Projetphase1($idprojet, $titreProjet, $numProjet, $confidentiel, $descriptif, $dateprojet, $contexte, $idtypeprojet_typeprojet, $attachement, $acronyme);
     
@@ -221,34 +219,6 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     } else {
         $refinterne = '';
     }
-    if (!empty($_FILES['fichierphase2']['name'])) {
-        $attachementdesc = stripslashes(Securite::bdd($_FILES['fichierphase2']['name']));
-        $dossier = '../uploaddesc/';
-        $fichierPhase = basename($_FILES['fichierphase2']['name']);
-        $taille_maxi = 1048576;
-        $taille = filesize($_FILES['fichierphase2']['tmp_name']);
-        $extensions = array('.pdf', '.PDF');
-        $extension = strrchr($_FILES['fichierphase2']['name'], '.');
-        if (!in_array($extension, $extensions)) {//VERIFICATION DU FORMAT SI IL N'EST PAS BON ON SORT
-            $erreur1 = TXT_ERREURUPLOAD;
-            header('Location: /' . REPERTOIRE . '/Upload_Errorphase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-            exit();
-        } elseif ($taille > $taille_maxi) {//VERIFICATION DE LA TAILLE SI ELLE EST >1mo ON SORT
-            $erreur1 = TXT_ERREURTAILLEFICHIER;
-            header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-            exit();
-        } elseif (!isset($erreur1)) {//S'il n'y a pas d'erreur, on upload
-            if (move_uploaded_file($_FILES['fichierphase2']['tmp_name'], $dossier . $fichierPhase)) {
-                chmod($dossier . $fichierPhase, 0777);
-            }
-        }
-    } else {
-        $attachementdesc = $manager->getSingle2("select attachementdesc from projet where idprojet =?", $idprojet);
-        if (empty($attachementdesc)) {
-            $attachementdesc = '';
-        }
-    }
-
     $devtechnologique = stripslashes(Securite::bdd($_POST['devTechnologique']));
     if ($devtechnologique == FALSE) {
         $verrouidentifie = '';
@@ -365,11 +335,41 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
             $descriptioncentraleproximite = '';
         }
     }
-
+    
+    if (!empty($_FILES['fichierphase2']['name'])) {
+        $attachementdesc = stripslashes(Securite::bdd($_FILES['fichierphase2']['name']));
+        $dossier = '../uploaddesc/';
+        $fichierPhase = basename($_FILES['fichierphase2']['name']);
+        $taille_maxi = 1048576;
+        $taille = filesize($_FILES['fichierphase2']['tmp_name']);
+        $extensions = array('.pdf', '.PDF');
+        $extension = strrchr($_FILES['fichierphase2']['name'], '.');
+        if (!in_array($extension, $extensions)) {//VERIFICATION DU FORMAT SI IL N'EST PAS BON ON SORT
+            $erreur2 = TXT_ERREURUPLOAD;
+            //header('Location: /' . REPERTOIRE . '/Upload_Errorphase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
+            //exit();
+        } elseif ($taille > $taille_maxi) {//VERIFICATION DE LA TAILLE SI ELLE EST >1mo ON SORT
+            $erreur2 = TXT_ERREURTAILLEFICHIER;
+            //header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
+            //exit();
+        } elseif (!isset($erreur2)) {//S'il n'y a pas d'erreur, on upload
+            if (move_uploaded_file($_FILES['fichierphase2']['tmp_name'], $dossier . $fichierPhase)) {
+                $erreur2='';
+                chmod($dossier . $fichierPhase, 0777);
+            }
+        }
+    } else {
+        $attachementdesc = $manager->getSingle2("select attachementdesc from projet where idprojet =?", $idprojet);
+        if (empty($attachementdesc)) {
+            $attachementdesc = '';
+        }
+    }
+  
+    $interneexterne = null;
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DU PROJETPHASE2
 //------------------------------------------------------------------------------------------------------------    
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite);
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //MISE A JOUR DATE DEBUT DU PROJET
     $datedebutprojet = new DateDebutProjet($idprojet, date('Y-m-d'));
@@ -499,7 +499,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
             $connaissancetechnologiqueaccueil = '';
         }
         //TRAITEMENT AJOUT DANS LA TABLE PERSONNEACCUEILCENTRALE
-        $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;
+        $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;        
         $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil));
         $manager->addPersonneaccueilcentrale($personne);
         //TRAITEMENT AJOUT DANS LA TABLE PROJETPERSONNEACCUEILCENTRALE
@@ -529,9 +529,21 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     }
 //---------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------    
-
+    if(isset($erreur1)){
+        $concerne = new Concerne($idcentrale, $idProjet, ENATTENTEPHASE2, '');
+        $manager->updateConcerne($concerne, $idprojet);
+        header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase1/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);        
+        BD::deconnecter();
+        exit();
+    }elseif (isset($erreur2)) {
+         $concerne = new Concerne($idcentrale, $idProjet, ENATTENTEPHASE2, '');
+        $manager->updateConcerne($concerne, $idprojet);
+        header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
+        BD::deconnecter();
+    }else{
     include '../uploadprojetphase2.php';
-    BD::deconnecter();
+        BD::deconnecter();
+    }
 } else {
     include_once '../decide-lang.php';
     header('Location:/' . REPERTOIRE . '/Login_Error/' . $lang);

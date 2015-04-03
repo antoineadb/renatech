@@ -633,7 +633,7 @@ if(isset($_GET['statut'])){
                 <td>
                     <label for="thematique" style="margin-bottom: 5px;margin-left: 20px;margin-top: 20px;   width: 300px;" ><?php echo TXT_NATUREPROJET.' :';?></label>
                     <select name="thematique" id="thematique"  data-dojo-type="dijit/form/Select" style="margin-left: 20px;width: 320px;margin-bottom: 20px"
-                            onchange="afficherAutreElement(this.id, 'autreThematique')" disabled="<?php echo $bool; ?>" >
+                            onchange="afficherAutre(this.id, 'autreThematique')" disabled="<?php echo $bool; ?>" >
                         <?php
                         if($lang=='fr'){
                         $rowthematique = $manager->getList2("select idthematique,libellethematique from thematique where libellethematique !=?

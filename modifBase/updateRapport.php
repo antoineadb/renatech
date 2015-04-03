@@ -6,17 +6,18 @@ include_once '../outils/constantes.php';
 include_once '../outils/toolBox.php';
 include_once '../class/Securite.php';
 $dossier = '../uploadlogo/';
-$db = BD::connecter();
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+$db = BD::connecter();
 //Début des vérifications de sécurité...
 $fichierlogo = basename($_FILES['logorapport']['name']);
 $fichierlogocentrale = basename($_FILES['logorapportcentrale']['name']);
 $fichierfigure = basename($_FILES['figure']['name']);
 $taille_maxi = 204800; //200ko
+$taille_maxifigure= 819200; //800ko
 $taillelogo = filesize($_FILES['logorapport']['tmp_name']);
 $taillelogocentrale = filesize($_FILES['logorapportcentrale']['tmp_name']);
 $taillefigure = filesize($_FILES['figure']['tmp_name']);
-$extensions = array('.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG', '.GIF', '.gif');
+$extensions = array('.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG');
 $extensionlogo = strrchr($_FILES['logorapport']['name'], '.');
 $extensionlogocentrale = strrchr($_FILES['logorapportcentrale']['name'], '.');
 $extensionfigure = strrchr($_FILES['figure']['name'], '.');
@@ -73,19 +74,20 @@ if (!empty($_POST['startingdate'])) {
 }
 
 if (!empty($_POST['contexteobjectif'])) {    
-    $objectif = substr(clean(strip_tags($_POST['contexteobjectif'])),0,1097);
+    $objectif = substr(clean(strip_tags($_POST['contexteobjectif'])),0,1007);
 } else {
     $objectif = '';
 }
 $results=strip_tags($_POST['resultats']);
 if (!empty($results)) {
-    $results = substr(clean(strip_tags($_POST['resultats'])),0,1069);
+    $results = substr(clean(strip_tags($_POST['resultats'])),0,1009);
 } else {
     $results =""; 
 }
+
 $valorisation = strip_tags($_POST['valorisation']);
 if (!empty($valorisation)) {
-    $valorization = substr(clean(strip_tags($_POST['valorisation'])),0,346);
+    $valorization = substr(clean(strip_tags($_POST['valorisation'])),0,446);
 } else {
     $valorization = '';
 }
@@ -99,6 +101,12 @@ if (!empty($_POST['titre'])) {
 } else {
     $title = '';
 }
+if (!empty($_POST['legend'])) {
+    $legend = Securite::bdd($_POST['legend']);
+} else {
+    $legend = '';
+}
+
 $image = $manager->getSingle2("select logo from rapport where idprojet=?", $idprojet);
 if (!empty($_FILES['logorapport']['name'])) {
     $arraytaille = getimagesize($_FILES['logorapport']['tmp_name']);
@@ -129,14 +137,8 @@ if (!empty($_FILES['logorapportcentrale']['name'])) {
 }
 
 $imagefigure = $manager->getSingle2("select figure from rapport where idprojet=?", $idprojet);
-if (!empty($_FILES['figure']['name'])) {
-     $arraytaille = getimagesize($_FILES['figure']['tmp_name']);
-    if($arraytaille[0]>1500 || $arraytaille[1]>300){
-        header('Location: /' . REPERTOIRE . '/errorrapportsizefig/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    }else{
+if (!empty($_FILES['figure']['name'])) {    
         $figure = $_FILES['figure']['name'];
-    }
 } elseif (!empty($imagefigure)) {
     $figure = $imagefigure;
 } else {
@@ -158,14 +160,13 @@ if (empty($_FILES['logorapportcentrale']['name'])) {
     $_bLogocentrale = 'TRUE';
 }
 
-
-if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale=='FALSE') {//echo 'je suis la';exit();//aucun fichier downloadé
+if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale=='FALSE') {//aucun fichier downloadé
     $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);    
     if (!empty($ancienidrapport)) {
-        $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);                
+        $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);                        
         $manager->updateRapport($rapport, $idprojet);
     } else {
-        $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);        
+        $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);        
         $manager->addrapport($rapport);
     }
     header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
@@ -184,10 +185,10 @@ if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale=='FALSE') {//e
             $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
 
             if (!empty($ancienidrapport)) {
-                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->updateRapport($rapport, $idprojet);
             } else {
-                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->addrapport($rapport);
             }
         }
@@ -207,88 +208,58 @@ if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale=='FALSE') {//e
             chmod($dossier . $fichierlogocentrale, 0777);
             $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
             if (!empty($ancienidrapport)) {
-                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->updateRapport($rapport, $idprojet);
             } else {
-                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->addrapport($rapport);
             }
         }
         header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     }
 } elseif ($_bFigure == 'TRUE' && $_bLogo == 'FALSE'&& $_bLogocentrale == 'FALSE') {//Une image downloadé mais pas de logo
-    if (!in_array($extensionfigure, $extensions)) {//logo downloadé
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if ($taillefigure > $taille_maxi) {
-        $erreur = TXT_ERREURTAILLEFICHIER;
-        header('Location: /' . REPERTOIRE . '/errorrapportsizefig/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '');
-        exit();
-    } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['figure']['tmp_name'], $dossier . $fichierfigure)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
-            chmod($dossier . $fichierfigure, 0777);
-            $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
-            if (!empty($ancienidrapport)) {
-                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
-                $manager->updateRapport($rapport, $idprojet);
-            } else {
-                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
-                $manager->addrapport($rapport);
-            }
-        }
-        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-    }    
+    $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
+    if (!empty($ancienidrapport)) {
+        $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
+        $manager->updateRapport($rapport, $idprojet);
+    } else {
+        $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
+        $manager->addrapport($rapport);
+    }
+    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
+    
 } elseif ($_bFigure == 'TRUE' && $_bLogo == 'TRUE'&& $_bLogocentrale == 'FALSE') {//Une image et un logo downloadé
-    if (!in_array($extensionfigure, $extensions)) {//Vérif des extensions
+    if (!in_array($extensionlogo, $extensions)) {//Vérif des extensions
         $erreur = TXT_ERREURUPLOAD;
         header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    }else if (!in_array($extensionlogo, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if ($taillefigure > $taille_maxi || $taillelogo > $taille_maxi) {
-        $erreur = TXT_ERREURTAILLEFICHIER;
-        header('Location: /' . REPERTOIRE . '/errorrapportsizefig/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '');
-        exit();
+        exit();    
     } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['logorapport']['tmp_name'], $dossier . $fichierlogo) && (move_uploaded_file($_FILES['figure']['tmp_name'], $dossier . $fichierfigure))) {
-            chmod($dossier . $fichierlogo, 0777);
-            chmod($dossier . $fichierfigure, 0777);
+        if (move_uploaded_file($_FILES['logorapport']['tmp_name'], $dossier . $fichierlogo)) {
+            chmod($dossier . $fichierlogo, 0777);            
             $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
             if (!empty($ancienidrapport)) {
-                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->updateRapport($rapport, $idprojet);
             } else {
-                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->addrapport($rapport);
             }
         }
     }header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
 }elseif ($_bFigure == 'TRUE' && $_bLogo == 'FALSE'&& $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé
-    if (!in_array($extensionfigure, $extensions)) {//Vérif des extensions
+    if (!in_array( $extensionlogocentrale, $extensions)) {//Vérif des extensions
         $erreur = TXT_ERREURUPLOAD;
         header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
         exit();
-    }else if (!in_array( $extensionlogocentrale, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if ($taillefigure > $taille_maxi || $taillelogocentrale > $taille_maxi) {
-        $erreur = TXT_ERREURTAILLEFICHIER;
-        header('Location: /' . REPERTOIRE . '/errorrapportsizefig/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '');
-        exit();
-    } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['logorapportcentrale']['tmp_name'], $dossier . $fichierlogocentrale) && (move_uploaded_file($_FILES['figure']['tmp_name'], $dossier . $fichierfigure))) {
+    }else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
+        if (move_uploaded_file($_FILES['logorapportcentrale']['tmp_name'], $dossier . $fichierlogocentrale)) {
             chmod($dossier . $fichierlogocentrale, 0777);
-            chmod($dossier . $fichierfigure, 0777);
             $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
             if (!empty($ancienidrapport)) {
-                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->updateRapport($rapport, $idprojet);
             } else {
-                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->addrapport($rapport);
             }
         }
@@ -312,20 +283,16 @@ if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale=='FALSE') {//e
             chmod($dossier . $fichierlogo, 0777);
             $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
             if (!empty($ancienidrapport)) {
-                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->updateRapport($rapport, $idprojet);
             } else {
-                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->addrapport($rapport);
             }
         }
     }header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
 }elseif ($_bFigure == 'TRUE' && $_bLogo == 'TRUE'&& $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé
-    if (!in_array($extensionfigure, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    }else if (!in_array($extensionlogo, $extensions)) {//Vérif des extensions
+    if (!in_array($extensionlogo, $extensions)) {//Vérif des extensions
         $erreur = TXT_ERREURUPLOAD;
         header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
         exit();
@@ -333,7 +300,7 @@ if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale=='FALSE') {//e
         $erreur = TXT_ERREURUPLOAD;
         header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
         exit();
-    } else if ($taillefigure > $taille_maxi || $taillelogocentrale > $taille_maxi || $taillelogo > $taille_maxi) {
+    } else if ($taillelogocentrale > $taille_maxi || $taillelogo > $taille_maxi) {
         $erreur = TXT_ERREURTAILLEFICHIER;
         header('Location: /' . REPERTOIRE . '/errorrapportsizelogfig/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '');
         exit();
@@ -341,13 +308,12 @@ if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale=='FALSE') {//e
         if (move_uploaded_file($_FILES['logorapportcentrale']['tmp_name'], $dossier . $fichierlogocentrale) && move_uploaded_file($_FILES['logorapport']['tmp_name'], $dossier . $fichierlogo) && move_uploaded_file($_FILES['figure']['tmp_name'], $dossier . $fichierfigure)) {
             chmod($dossier . $fichierlogocentrale, 0777);
             chmod($dossier . $fichierlogo, 0777);
-            chmod($dossier . $fichierfigure, 0777);
             $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
             if (!empty($ancienidrapport)) {
-                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->updateRapport($rapport, $idprojet);
             } else {
-                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet);
+                $rapport = new Rapport($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet,$legend);
                 $manager->addrapport($rapport);
             }
         }

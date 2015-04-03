@@ -16,12 +16,10 @@ if (isset($_SESSION['pseudo'])) {
 }
 
 if (!empty($idprojet)) {
-    $idprojet = $manager->getSingle2("select idprojet from projet where numero=?", $numProjet);
     $row = $manager->getList2("SELECT acronyme,nbrun,nbplaque,nbheure,nbeleve,contactscentraleaccueil,typeformation,dureeprojet,datedebuttravaux,descriptionautrecentrale,descriptioncentraleproximite,etapeautrecentrale
     ,idperiodicite_periodicite,idthematique_thematique,dureeestime,periodestime
     ,idautrethematique_autrethematique,idtypeprojet_typeprojet,descriptiftechnologique,nomformateur,emailrespdevis,reussite
     ,verrouidentifiee,centralepartenaireprojet,acrosourcefinancement,partenaire1 FROM projet where idprojet =?", $idprojet);
-
     $idtypena = $manager->getSingle2("select idtypeprojet from typeprojet where libelletype=?", 'n/a');
     if (!empty($row[0]['idtypeprojet_typeprojet']) && $row[0]['idtypeprojet_typeprojet'] != $idtypena) {
         $libelletype = $manager->getSingle2("select libelletype from typeprojet where idtypeprojet=?", $row[0]['idtypeprojet_typeprojet']);

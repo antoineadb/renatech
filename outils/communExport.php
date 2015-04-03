@@ -55,9 +55,17 @@ if ($nbarraysf > 0) {
 //-------------------------------------------------------------------------------------------------------------------------------
 // INTERNE/EXTERNE
 //-------------------------------------------------------------------------------------------------------------------------------
-$interne_externe = $manager->getSingle2("SELECT idcentrale_centrale FROM  utilisateur,creer WHERE  idutilisateur_utilisateur = utilisateur.idutilisateur and idprojet_projet = ?", $idprojet);
+$interneExterne = $manager->getSingle2("SELECT idcentrale_centrale FROM  utilisateur,creer WHERE  idutilisateur_utilisateur = utilisateur.idutilisateur and idprojet_projet = ?", $idprojet);
 $porteur = $row[$i]['porteurprojet'];
-if (!empty($interne_externe) && $porteur == TRUE) {
+
+if(!empty($row[$i]['interneexterne'])){
+    if($row[$i]['interneexterne']=='I'){
+        $interne_externe= 'Interne';
+    }elseif ($row[$i]['interneexterne']=='E'){
+        $interne_externe= 'Externe';
+    }    
+    
+} elseif (!empty($interneExterne) && $porteur == TRUE) {
     $interne_externe = 'Interne';
 } else {
     $interne_externe = 'Externe';

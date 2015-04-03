@@ -32,8 +32,10 @@ class Projetphase2 {
     private $_etapeautrecentrale;
     private $_centraleproximite;
     private $_descriptioncentraleproximite;
+    private $_interneExterne;
 
-    public function __construct($contactscentral, $idtypeprojet, $nbHeure, $datedebut, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique, $idautrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifiee, $nbplaque, $nbrun, $envoidevis, $emailrespdevis, $reussite, $refinterneprojet, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centraleproximite, $descriptioncentraleproximite) {
+    public function __construct($contactscentral, $idtypeprojet, $nbHeure, $datedebut, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique, $idautrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifiee, $nbplaque, $nbrun, $envoidevis, $emailrespdevis, $reussite, $refinterneprojet, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centraleproximite, 
+            $descriptioncentraleproximite,$interneExterne) {
         $this->setContactscentralaccueil($contactscentral);
         $this->setIdtypeprojet_typeprojet($idtypeprojet);
         $this->setNbHeure($nbHeure);
@@ -63,8 +65,16 @@ class Projetphase2 {
         $this->setEtapeautrecentrale($etapeautrecentrale);
         $this->setCentraleproximite($centraleproximite);
         $this->setDescriptioncentraleproximite($descriptioncentraleproximite);
+        $this->setInterneExterne($interneExterne);
+    }
+    public function getInterneExterne() {
+        return $this->_interneExterne;
     }
 
+    public function setInterneExterne($interneExterne) {
+        $this->_interneExterne = $interneExterne;
+    }
+    
     public function getDescriptioncentraleproximite() {
         return $this->_descriptioncentraleproximite;
     }

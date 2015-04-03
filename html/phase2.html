@@ -174,7 +174,7 @@ if(isset($_GET['statut'])){
                         }
                         ?>
                     </select>
-                </td>
+                </td>                
                 <td style="display:none;margin-top: 15px;" id="grpTypeFormation">
                     <?php $typeformation = stripslashes(str_replace("''",	"'",	$typeformation))?>
                     <label for="typeFormation" style="width: 260px;margin-left: 20px;" ><?php echo TXT_TYPEFORMATION;?><?php echo ' :*';?></label>
@@ -212,7 +212,7 @@ if(isset($_GET['statut'])){
                         ?>
                     </select>
                 </td>
-            </tr>            
+            </tr>
         </table>
         <script>
             function afficheGrpFormation(id) {
@@ -378,6 +378,89 @@ if(isset($_GET['statut'])){
                 </td>
                 <?php }?>
             </tr>
+            <?php 
+            if($_SESSION['idTypeUser']==ADMINLOCAL){
+                    $interneexterne = $manager->getSingle2("select interneexterne from projet where idprojet=?",$idprojet);
+                    if(!empty($interneexterne)){
+                        if($interneexterne=='I'){?>
+                            <tr>
+                                <td>
+                                <label for="interneExterne" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo TXT_INTERNE.'/'.TXT_EXTERNE.' :';?>
+                                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                        <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEINTERNEEXTERNE');?></span>
+                                    </a>
+                                </label>
+                                    <select name="interneExterne" id="interneExterne" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" 
+                                            onchange="if(this.value!=='ie0'){document.getElementById('messageInfo').style.display='block'}else{document.getElementById('messageInfo').style.display='none';}" >
+                                    <option value="ie0" ><?php echo TXT_SELECTTYPE; ?></option>;
+                                    <option value="ie1" selected="selected" ><?php echo TXT_INTERNE ?></option>;
+                                    <option value="ie2" ><?php echo TXT_EXTERNE ?></option>;
+                                </select>                    
+                                </td>
+                                    <td>
+                                            <div id="messageInfo" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
+                                    </td>
+                            </tr>
+                    <?php }else if($interneexterne=='E'){?>
+                            <tr>
+                                <td>
+                                <label for="interneExterne" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo TXT_INTERNE.'/'.TXT_EXTERNE.' :';?>
+                                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                        <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEINTERNEEXTERNE');?></span>
+                                    </a>
+                                </label>
+                                    <select name="interneExterne" id="interneExterne" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" 
+                                            onchange="if(this.value!=='ie0'){document.getElementById('messageInfo').style.display='block'}else{document.getElementById('messageInfo').style.display='none';}" >
+                                    <option value="ie0" ><?php echo TXT_SELECTTYPE; ?></option>;
+                                    <option value="ie1"  ><?php echo TXT_INTERNE ?></option>;
+                                    <option value="ie2" selected="selected"><?php echo TXT_EXTERNE ?></option>;
+                                </select>                    
+                                </td>
+                                    <td>
+                                            <div id="messageInfo" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
+                                    </td>
+                            </tr>
+                        <?php }else{?>
+                             <tr>
+                                <td>
+                                <label for="interneExterne" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo TXT_INTERNE.'/'.TXT_EXTERNE.' :';?>
+                                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                        <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEINTERNEEXTERNE');?></span>
+                                    </a>
+                                </label>
+                                    <select name="interneExterne" id="interneExterne" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" 
+                                            onchange="if(this.value!=='ie0'){document.getElementById('messageInfo').style.display='block'}else{document.getElementById('messageInfo').style.display='none';}" >
+                                    <option value="ie0" selected="selected"><?php echo TXT_SELECTTYPE; ?></option>;
+                                    <option value="ie1" ><?php echo TXT_INTERNE ?></option>;
+                                    <option value="ie2" ><?php echo TXT_EXTERNE ?></option>;
+                                </select>                    
+                                </td>
+                                    <td>
+                                            <div id="messageInfo" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
+                                    </td>
+                            </tr>
+                            <?php }?>
+            <? }else{?>
+             <tr>
+                <td>
+                <label for="interneExterne" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo TXT_INTERNE.'/'.TXT_EXTERNE.' :';?>
+                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                        <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEINTERNEEXTERNE');?></span>
+                    </a>
+                </label>
+                    <select name="interneExterne" id="interneExterne" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" 
+                            onchange="if(this.value!=='ie0'){document.getElementById('messageInfo').style.display='block'}else{document.getElementById('messageInfo').style.display='none';}" >
+                    <option value="ie0" selected="selected"><?php echo TXT_SELECTTYPE; ?></option>;
+                    <option value="ie1" ><?php echo TXT_INTERNE ?></option>;
+                    <option value="ie2" ><?php echo TXT_EXTERNE ?></option>;
+                </select>                    
+                </td>
+                    <td>
+                            <div id="messageInfo" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
+                    </td>
+            </tr>
+        <?php }
+        }?>
         </table>
         <input id="reponsenomlabo" value='' style="display: none" >
         <fieldset id="dev" style="border-color: #5D8BA2;width:966px;padding-top: 0px;margin-top:20px;margin-left: 20px;padding-left:0px;">
@@ -668,7 +751,7 @@ if(isset($_GET['statut'])){
                 <td>
                     <label for="thematique" style="margin-bottom: 5px;margin-left: 20px;margin-top: 20px;   width: 300px;" ><?php echo TXT_NATUREPROJET.' :';?></label>
                     <select name="thematique" id="thematique"  data-dojo-type="dijit/form/Select" style="margin-left: 20px;width: 320px;margin-bottom: 20px"
-                            onchange="afficherAutreElement(this.id, 'autreThematique')" disabled="<?php echo $bool; ?>" >
+                            onchange="afficherAutre(this.id, 'autreThematique')" disabled="<?php echo $bool; ?>" >
                         <?php
                         if($lang=='fr'){
                             $rowthematique = $manager->getList2("select idthematique,libellethematique from thematique where libellethematique !=?
@@ -719,7 +802,14 @@ if(isset($_GET['statut'])){
                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'" maxlength="100"  >
                     <?php }?>
                 </td>
-                <input type="text" value='<?php if(!empty($libellethematiqueen)){ echo $libellethematiqueen;}elseif(!empty($autrethematique)){echo $autrethematique ;} ?>' style="display: none" id='thematic'>
+                <?php 
+                if(!empty($libellethematiqueen) && $libellethematiqueen!='Others'){
+                    $thematic= $libellethematiqueen;
+                }else{
+                    $thematic= $manager->getSingle2("SELECT libelleautrethematique FROM autrethematique,projet WHERE idautrethematique_autrethematique=idautrethematique and idprojet =?",$idprojet);
+                }
+                ?>
+                <input type="text" value='<?php echo $thematic; ?>' style="display: none" id='thematic'>
             </tr>
         </table>
         <?php $datedebut = $manager->getSingle2("SELECT datedebutprojet FROM projet WHERE idprojet =?",$idprojet);?>
@@ -849,12 +939,14 @@ if(isset($_GET['statut'])){
                             </td>
                         </tr>
                         <tr>
+                            <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 625px;margin-left:20px">
+                            <?php echo TXT_ERREURUPLOAD;?>
+                        </td>
+                        </tr>
+                        <tr>
                             <td>
                                 <input name="fichierphase2" type="file" data-dojo-type="dojox/form/Uploader" id="uploaderPhase2" 
-                                       style="margin-left: 20px;margin-top: 15px;margin-bottom: 15px" data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'/>
-                                <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                                    <span style="text-align: left;padding:10px;width: 380px;border-radius:5px" >
-                                        <?php echo TXT_ERREURUPLOAD;?></span></a>
+                                       style="margin-left: 20px;margin-top: 5px;margin-bottom: 15px" data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'/>                                
                                 <div id="filePhase2" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploaderPhase2"'
                                      name='file' style="margin-left: 20px;"></div>
                                 <?php
@@ -886,7 +978,7 @@ if(isset($_GET['statut'])){
                                 </script>
                                 <?php }?>
                                 <div id='reponsedesc'></div>
-                            </td>
+                            </td>                            
                         </tr>
                         <script>
                             function verrou(){

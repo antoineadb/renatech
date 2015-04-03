@@ -1,10 +1,4 @@
-</* global dijit */
-
-/* global dijit */
-
-/* global dijit */
-
-?php
+<?php
 include_once 'outils/constantes.php';
 include_once 'outils/toolBox.php';
 include_once 'decide-lang.php';
@@ -56,12 +50,24 @@ function afficherAutreQualite(id1,id2,id3){
             $numProjet = $_GET['numProjet'];
         } elseif (isset($_GET['idprojet'])) {
             $numProjet = $manager->getsingle2("select numero from projet where idprojet=?", $_GET['idprojet']);
-        }
+        }//rajouter //idpersonnequalite,//idautresqualite
         if (!empty($numProjet)) {
-            $arraypersonnecentrale = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen,nomaccueilcentrale,prenomaccueilcentrale,mailaccueilcentrale,
-                telaccueilcentrale,connaissancetechnologiqueaccueil,idpersonnequalite,idautresqualite
-FROM personneaccueilcentrale,projetpersonneaccueilcentrale,qualitedemandeuraca,projet WHERE idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale AND idprojet_projet = idprojet AND
-idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?", array($numProjet));
+            $arraypersonnecentrale = 
+                    $manager->getList2(
+                            "SELECT 
+                                idqualitedemandeuraca,
+                                libellequalitedemandeuraca,
+                                libellequalitedemandeuracaen,
+                                nomaccueilcentrale,
+                                prenomaccueilcentrale,
+                                mailaccueilcentrale,
+                                telaccueilcentrale,
+                                connaissancetechnologiqueaccueil
+                                FROM personneaccueilcentrale,projetpersonneaccueilcentrale,qualitedemandeuraca,projet 
+                                WHERE idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale 
+                                AND idprojet_projet = idprojet 
+                                AND idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca 
+                                AND numero =?", $numProjet);
         }        
         for ($i = 0; $i < 21; $i++) {
             $j = $i + 1;
@@ -102,9 +108,10 @@ idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?"
                         <tr>
                             <td><label for="<?php echo 'qualiteaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_QUALITE . " *"; ?></label>                                
                                     <select   id="<?php echo 'qualiteaccueilcentrale' . $i; ?>" data-dojo-type="dijit/form/Select" style="width:317px"  
-                                    onchange="afficherAutreElement(this.id,'<?php echo 'autreQualite' . $i; ?>','<?php echo 'labelqualite' . $i; ?>','<?php echo 'autresqualite' . $i; ?>',
-                                                '<?php echo 'libautresqualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>,<?php echo 'autresQualite' . $i; ?>,<?php echo 'libautresQualite' . $i; ?>)"
-                                              data-dojo-props="name: '<?php echo 'qualiteaccueilcentrale' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
+                                     data-dojo-props="name: '<?php echo 'qualiteaccueilcentrale' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'" >         
+                                   <!-- onchange="afficherAutreElement(this.id,'<?php /*echo 'autreQualite' . $i; ?>','<?php echo 'labelqualite' . $i; ?>','<?php echo 'autresqualite' . $i;  */ ?>',-->
+                                                <!--'<?php /*/*echo 'libautresqualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>,<?php echo 'autresQualite' . $i; ?>,<?php echo 'libautresQualite' . $i; */?>)"-->
+                                              
                             <?php 
                                         if (!empty($arraypersonnecentrale[$i]['idqualitedemandeuraca'])) {                                           
                                             if($lang=='fr'){
@@ -141,7 +148,7 @@ idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?"
                                     </select>
                             </td>
                         </tr>
-                        <?php if (isset($arraypersonnecentrale[$i]['idpersonnequalite'])&&$arraypersonnecentrale[$i]['idpersonnequalite']==IDNAAUTRESQUALITE) {
+                        <?php /* if (isset($arraypersonnecentrale[$i]['idpersonnequalite'])&& $arraypersonnecentrale[$i]['idpersonnequalite']==IDNAAUTRESQUALITE) {
                             //CAS DE LA MODIFICATION D'UNE PERSONNE PERMANENTE    ?>
                         <tr>
                             <td><label for="<?php echo 'autreQualite' . $i; ?>" class="perCentrale" id="<?php echo 'labelqualite' . $i; ?>" style="display:none;" > <?php echo TXT_AUTRESQUALITE; ?></label>                                
@@ -198,10 +205,10 @@ idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?"
                                         ?>
                                 </select>
                             </td>
-                        </tr>
+                        </tr><?php  $libelleautrequalite = $manager->getSingle2("select libelleautresqualite from personneaccueilcentrale p,autresqualite a,projetpersonneaccueilcentrale pa where p.idautresqualite = a.idautresqualite and pa.idpersonneaccueilcentrale_personneaccueilcentrale= p.idpersonneaccueilcentrale and pa.idprojet_projet=?",$idprojet);?>
                             <tr>
                                 <td><label for="<?php echo 'autresQualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresQualite' . $i; ?>" > <?php echo TXT_AUTRES; ?></label>   
-                                <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" 
+                                    <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" value="<?php echo $libelleautrequalite;?>"
                                 data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"  maxlength="100"
                                 style="width: 317px;" value="" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'">
                             </td>
@@ -215,7 +222,7 @@ idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?"
                                 style="width: 317px;display:none" value="" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'">
                             </td>
                         </tr>
-                        <tr>
+        <tr><?php  */ ?>
                             <td>
                                 <label for="<?php echo 'mailaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_MAIL . " *"; ?></label>
                                 <input data-dojo-type="dijit/form/ValidationTextBox" style="width: 317px"  name="<?php echo 'mailaccueilcentrale' . $i; ?>" id="<?php echo 'mailaccueilcentrale' . $i; ?>"  regExpGen="dojox.validate.regexp.emailAddress"
