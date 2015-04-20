@@ -21,7 +21,6 @@ function nomEntete($mail, $pseudo) {
     //FERMETURE DE LA CONNEXION
     BD::deconnecter();
 }
-
 /**
  * 
  * @param type string $requete define the request
@@ -631,4 +630,44 @@ function responsablePorteur($pseudo, $idprojet) {
         }
     }
     $db = BD::deconnecter();
+}
+/**
+ * Modifie le nom d'un chaine de caractère en mettant des _ a la place de blancs
+ * @param type $chaineNonValide
+ * @return type
+ */
+function nomFichierValide($chaineNonValide){
+  $chaineNonValide0 = preg_replace('`\s+`', '_', trim($chaineNonValide));
+  $chaineNonValide1 = str_replace("'", "_", $chaineNonValide0);
+  $chaineNonValide2 = preg_replace('`_+`', '_', trim($chaineNonValide1));
+  $chaineValide=strtr($chaineNonValide2,
+"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ",
+                        "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+  return ($chaineValide);
+}
+
+function supprLogoFigure(){
+    if (is_file('../class/Manager.php')) {
+        include_once '../class/Manager.php';
+    } else {
+        include_once 'class/Manager.php';
+    }
+    $db = BD::connecter();
+    $manager = new Manager($db);        
+    $dir    = '../uploadlogo/';
+    $arrayImages = scandir($dir);
+    //echo '<pre>';print_r($arrayImages);die;
+    $nbarrayImg = count($arrayImages);
+    for ($i = 0; $i < $nbarrayImg; $i++) {
+        $idrapportLogo = $manager->getSinglebyArray("select idrapport from rapport where logo = ? or logocentrale =? or figure=?", array($arrayImages[$i],$arrayImages[$i],$arrayImages[$i]));
+        if(empty($idrapportLogo) && $arrayImages[$i]!='.' && $arrayImages[$i]!='..'){
+            if(!empty($arrayImages[$i])){
+                unlink('../uploadlogo/' . $arrayImages[$i]); //EFFACE LE FICHIER SUR LE SERVEUR
+            }
+        }
+    }
+
+        
+    $db = BD::deconnecter();
+    
 }

@@ -21,9 +21,10 @@ class Rapport {
     private $_figure;
     private $_idprojet;
     private $_legend;
+    private $_dateCreation;
+    private $_dateMiseAjour;
 
-    function __construct($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo,$logocentrale, $figure, 
-            $idprojet,$legend) {
+    function __construct($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet, $legend, $datecreation, $datemiseajour) {
         $this->setIdrapport($idrapport);
         $this->setTitle($title);
         $this->setAuthor($author);
@@ -43,6 +44,24 @@ class Rapport {
         $this->setLogocentrale($logocentrale);
         $this->setIdprojet($idprojet);
         $this->setLegend($legend);
+        $this->setDatecreation($datecreation);
+        $this->setDatemiseajour($datemiseajour);
+    }
+
+    public function setDatemiseajour($datemiseajour) {
+        $this->_dateMiseAjour = $datemiseajour;
+    }
+
+    public function getDatemiseajour() {
+        return $this->_dateMiseAjour;
+    }
+
+    public function setDatecreation($datecreation) {
+        $this->_datecreation = $datecreation;
+    }
+
+    public function getDatecreation() {
+        return $this->_datecreation;
     }
 
     public function setIdrapport($idrapport) {
@@ -60,6 +79,7 @@ class Rapport {
     public function getLegend() {
         return $this->_legend;
     }
+
     public function setTitle($title) {
         $this->_title = $title;
     }
@@ -75,6 +95,7 @@ class Rapport {
     public function getLogo() {
         return $this->_logo;
     }
+
     public function setLogocentrale($logo) {
         $this->_logocentrale = $logo;
     }

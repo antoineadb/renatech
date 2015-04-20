@@ -1,6 +1,6 @@
-<div id="gridFini" ></div>
+<div id="gridRapport" ></div>
 <script>
-    var gridFini, dataStore, store;
+    var gridRapport, dataStore, store;
     require([
         "dojox/grid/DataGrid",
         "dojo/store/Memory",
@@ -10,33 +10,47 @@
         "dojo/date/locale",
         "dojo/domReady!"
     ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
-        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/projetFini.json", {
+        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/ProjetRapport.json", {
             handleAs: "json"
         }).then(function(data) {
             store = new Memory({data: data.items});
             dataStore = new ObjectStore({objectStore: store});
-            function hrefFormatter(numero, idx) {
-                var item = gridFini.getItem(idx);//idx = index
-                var centrale = item.libellecentrale;//libelle centrale
-                return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $lang;?>&numProjet=" + numero + "&centrale="
-                        + centrale + "\">" + numero + "</a>";
-            }
+            
+       
             function formatDate(datum) {
-                var d = stamp.fromISOString(datum);
-                return locale.format(d, {selector: 'date', formatLength: 'long'});
+            var annee =  datum.substring(0,4);
+            if(annee>1970){
+                var dateprojet= new Date(datum);
+                    var options = {year: "numeric", month: "numeric", day: "numeric"};
+                <?php if ($lang == 'en') { ?>
+                    return new Intl.DateTimeFormat("en-US",options).format(dateprojet);
+                <?php } else { ?>
+                    return new Intl.DateTimeFormat("fr-FR",options).format(dateprojet);
+                <?php } ?>
+                }
             }
-
-            gridFini = new DataGrid({
+            
+            function hrefFormatterPDF(index, idx) {
+            var item = gridRapport.getItem(idx);
+            var idprojet = item.idprojet;
+            return "<a  href=\"<?php echo '/'.REPERTOIRE;?>/pdf_report/<?php echo $lang; ?>/" + idprojet + "\" target='_blank'>" +
+                    '<img title="<?php echo TXT_REPORTPDF; ?>" src="<?php echo "/".REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
+            }
+            
+            gridRapport = new DataGrid({
                 store: dataStore,
                 query: {id: "*"},
                 structure: [
-                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "auto", formatter: hrefFormatter},
-                    {name: "<?php echo TXT_DATEDEBUTPROJET; ?>", field: "datedebutprojet", width: "auto", formatter: formatDate},
-                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "auto"},
-                    {name: "<?php echo TXT_ACRONYME; ?>", field: "acronyme", width: "auto"}
+                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px"},
+                    {name: "<?php echo TXT_DEMANDEUR; ?>", field: "identite", width: "120px"},
+                    {name: "<?php echo TXT_CREATEDATE; ?>", field: "datecreation", width: "90px", formatter: formatDate},
+                    {name: "<?php echo TXT_UPDATE; ?>", field: "datemiseajour", width: "90px", formatter: formatDate},
+                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "title", width: "auto"},                    
+                    {name: "<?php echo TXT_REFINTERNE; ?>", field: "refinterneprojet", width: "150px"},
+                    {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
                 ]
-            }, "gridFini");
-            gridFini.startup();
+            }, "gridRapport");
+            gridRapport.startup();
         });
     });
 </script>

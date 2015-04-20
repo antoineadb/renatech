@@ -76,7 +76,7 @@ if (!empty($resreport[0]['valorization'])) {
     $valorization = '';
 }
 if (!empty($resreport[0]['legend'])) {
-    $legend = $resreport[0]['legend'];
+    $legend = stripslashes($resreport[0]['legend']);
 }
 
 if (!empty($resreport[0]['logocentrale'])) {
@@ -103,13 +103,24 @@ ob_start();
     p{margin: 0;padding: 0;font-size: 18px;font-weight: bold;}
     hr{height:2px;background: #5D5D5E;border:none}
 </style>
-
+<?php
+$arrayinfoImg = getimagesize($logocentrale);
+if ($arrayinfoImg[0] > 150) {
+    $fWidth = 150 / $arrayinfoImg[0];
+    $fHeight = 75 / $arrayinfoImg[1];
+    $width = $fWidth * $arrayinfoImg[0];
+    $height = $fHeight * $arrayinfoImg[1];
+} else {
+    $width = 0.6 * $arrayinfoImg[0];
+    $height = 0.6 * $arrayinfoImg[1];
+}
+?>
 <page backtop="1mm" backleft="5mm" backright="2mm" backbottom="1mm" footer="date;heure">
     <table>
         <tr>
             <td style="width: 75%; "><img style="width: 100%;"  src="../styles/img/logo-renatech.jpg" ></td>
             <td style="width: 25%; ">            
-                <img style="width: 45%;max-height: 400px;max-width: 350px" align="right"  src="<?php echo $logocentrale; ?>"  >            
+                <img style="width: 75%" align="right"  src="<?php echo $logocentrale; ?>"  height="<?php echo $height; ?>" width="<?php echo $width; ?>" >            
             </td>
         </tr>
     </table>
@@ -148,8 +159,8 @@ ob_start();
                 ?>
                 <table>
                     <tr>
-                        <td>
-                            <img   height="<?php echo $height; ?>" width="<?php echo $width; ?>" src="<?php echo $logo; ?>">
+                        <td style="width: 5%; ">
+                            <img  style="width: 85%;max-height: 400px;max-width: 350px"  height="<?php echo $height; ?>" width="<?php echo $width; ?>" src="<?php echo $logo; ?>">
                         </td>
                     </tr>
                 </table>
@@ -173,28 +184,37 @@ ob_start();
     <table style="">
         <tr>
             <td style='width: 100%'><strong>Results : </strong><?php echo $results; ?></td></tr><tr><td>
-            <?php
-            if ($figure != '') {
-                //CALCUL DES DIMENSIONS DE LA FIGURE
-                $arrayInfoImg = getimagesize($figure);
-                if ($arrayInfoImg[1] > 240) {//si Width >700px
-                    $facteurW = 240 / $arrayInfoImg[1];
-                    $width = $facteurW * $arrayInfoImg[0];
-                    $height = $facteurW * $arrayInfoImg[1];                    
-                } elseif ($arrayInfoImg[0] > 390) {//si Width >700px
-                    $facteurW = 390 / $arrayInfoImg[0];
-                    $width = $facteurW * $arrayInfoImg[0];
-                    $height = $facteurW * $arrayInfoImg[1];
-                } else {
-                    $width = $arrayInfoImg[0];
-                    $height = $arrayInfoImg[1];
-                }              
-                ?>
+ <?php
+    if ($figure != '') {//CALCUL DES DIMENSIONS DE LA FIGURE
+        $figure = nomFichierValide($figure);
+        $arrayInfoImg = getimagesize($figure);
+        if ($arrayInfoImg[1] > 230) {//si Height >230px
+            $facteurW = 230 / $arrayInfoImg[1];
+            $width = $facteurW * $arrayInfoImg[0];
+            $height = $facteurW * $arrayInfoImg[1];
+        if ($width > 490) {
+            $facteurW = 490 / $width;
+            $height = $facteurW * $height;
+            $width = 490;
+        }
+    } elseif ($arrayInfoImg[0] > 490) {//si Width >700px
+        $facteurW = 490 / $arrayInfoImg[0];
+        $width = $facteurW * $arrayInfoImg[0];
+        $height = $facteurW * $arrayInfoImg[1];
+        if ($height > 230) {
+            $facteurW = 230 / $height;
+            $width = $facteurW * $width;
+            $height = 230;
+        }
+    } else {
+        $width = $arrayInfoImg[0];
+        $height = $arrayInfoImg[1];
+    }?>
                     <img   align="left"  src="<?php echo $figure; ?>"  height="<?php echo $height; ?>" width="<?php echo $width; ?>">
             <?php } ?>
             </td>
         </tr>
-        <tr><td><?php echo $legend; ?></td></tr>
+        <tr><td><i  style="font-size: 10px"><?php echo $legend; ?></i></td></tr>
     </table>
     <hr>
     <table>

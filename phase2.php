@@ -139,10 +139,10 @@ include 'html/header.html';
                             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" style="width: auto; height: auto;overflow:hidden;"  ><?php  include 'html/phase2.html'; ?></div>
                             <?php  if(isset($_GET['erreuruploadsizerapportfig'])|| isset($_GET['erreuruploadsizerapportfiglog'])|| isset($_GET['erreuruploadsizerapport']) || isset($_GET['erreuruploadsizerapportlog'])||isset($_GET['erreuruploadsizerapportcent'])||isset($_GET['erreuruploadsextension'])){?>
                             </form>
-                                <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2150px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
+                                <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2250px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
                             <?php  }else{ ?>
                             </form>
-                            <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2150px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
+                            <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2250px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
                             <?php }?>
                         </div>        
                 <?php }else{//-- DANS LE CAS NORMAL SANS UN RAPPORT OU UNE ERREUR SUR UN RAPPORT -- ?>

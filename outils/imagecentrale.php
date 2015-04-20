@@ -8,10 +8,22 @@ $logorapportcentrale = $manager->getSingle2("SELECT r.logocentrale FROM projet p
 if (is_array($_FILES)) {
     if (is_uploaded_file($_FILES['logorapportcentrale']['tmp_name'])) {
         $sourcePath = $_FILES['logorapportcentrale']['tmp_name'];
+        //echo filesize(nomFichierValide($_FILES['logorapportcentrale']['tmp_name']));die;
+        
         $targetPath = "../uploadlogo/" . $_FILES['logorapportcentrale']['name'];
         if (move_uploaded_file($sourcePath, $targetPath)) {
             //CALCUL DES DIMENSIONS DU LOGO                
             $arrayInfoImg = getimagesize($targetPath);
+            if ($arrayInfoImg[0] > 800){
+                echo 'Error! The width of the logo is > 800px';                
+                exit();
+            }elseif ($arrayInfoImg[1] > 630){
+                echo 'Error! The height of the logo is > 630px';
+                exit();
+            }elseif($arrayInfoImg[1] > 630){
+                echo 'Error! The height of the logo is > 630px';
+                exit();
+            }
             if ($arrayInfoImg[0] > 160) {
                 $f = 160 / $arrayInfoImg[0];
                 $width = $f * $arrayInfoImg[0];

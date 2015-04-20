@@ -25,6 +25,8 @@ $nbProjetRefusee = $_SESSION['nbProjetRefusee'];
 $nbProjetFini = $_SESSION['nbFini'];
 $nbProjetCloturer = $_SESSION['nbprojetCloturer'];
 $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
+$nbRapportProjet = $_SESSION['nbProjetRapport'];
+
 ?>
 
 
@@ -59,6 +61,9 @@ $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
                 </div>
                 <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetFini . "'>" . TXT_PROJETFINI . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetFiniCentrale.html'; ?>
+                </div>
+                <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbRapportProjet . "'>" . TXT_REPORT . "</div>"; ?>" style="height:500px;" >
+                    <?php include_once 'html/vueSuiviRapportProjet.html'; ?>
                 </div>
                 <?php if ($nbProjetSoustraitance > 0) { ?>
                     <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetSoustraitance . "'>" . TXT_PROJETSOUSTRAITANCE . "</div>"; ?>" style="height:500px;" >

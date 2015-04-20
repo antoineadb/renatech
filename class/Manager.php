@@ -3135,7 +3135,8 @@ public function addAutreQualite(Autresqualite $autresqualite) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO rapport (idrapport,title,author,entity,villepays,instituteinterest,fundingsource,collaborator,thematics,startingdate,objectif,results,valorization,technologicalwc,logo,logocentrale,figure,idprojet,legend) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+            $requete = $this->_db->prepare('INSERT INTO rapport (idrapport,title,author,entity,villepays,instituteinterest,fundingsource,collaborator,thematics,startingdate,objectif,results,valorization,technologicalwc,'
+                    . 'logo,logocentrale,figure,idprojet,legend,datecreation,datemiseajour) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
             $idrapport = $rapport->getIdrapport();
             $title = $rapport->getTitle();
             $author = $rapport->getAuthor();
@@ -3155,6 +3156,8 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $figure =$rapport->getFigure();
             $idprojet =$rapport->getIdprojet();
             $legend =$rapport->getLegend();
+            $datecreation = $rapport->getDatecreation();
+            $datemiseajour = $rapport->getDatemiseajour();
             $requete->bindParam(1, $idrapport, PDO::PARAM_INT);
             $requete->bindParam(2, $title, PDO::PARAM_STR);
             $requete->bindParam(3, $author, PDO::PARAM_STR);
@@ -3174,6 +3177,8 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $requete->bindParam(17, $figure, PDO::PARAM_STR);
             $requete->bindParam(18, $idprojet, PDO::PARAM_INT);
             $requete->bindParam(19, $legend, PDO::PARAM_STR);
+            $requete->bindParam(20, $datecreation, PDO::PARAM_STR);
+            $requete->bindParam(21, $datemiseajour, PDO::PARAM_STR);            
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3190,7 +3195,8 @@ public function addAutreQualite(Autresqualite $autresqualite) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('update rapport SET author = ?,title=?,entity=?,villepays=?,instituteinterest=?,fundingsource=?,collaborator=?,thematics=?,startingdate=?,objectif=?,results=?,valorization=?,technologicalwc=?,logo=?,logocentrale=?,figure=?,legend=? WHERE idprojet = ?');
+            $requete = $this->_db->prepare('update rapport SET author = ?,title=?,entity=?,villepays=?,instituteinterest=?,fundingsource=?,collaborator=?,thematics=?,startingdate=?,objectif=?,results=?,valorization=?,'
+                    . 'technologicalwc=?,logo=?,logocentrale=?,figure=?,legend=?,datecreation=?, datemiseajour=? WHERE idprojet = ?');
             $author = $rapport->getAuthor();
             $title = $rapport->getTitle();
             $entity =$rapport->getEntity();
@@ -3208,6 +3214,8 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $logocentrale = $rapport->getLogocentrale();
             $figure =$rapport->getFigure();
             $legend =$rapport->getLegend();
+            $datecreation = $rapport->getDatecreation();
+            $datemiseajour = $rapport->getDatemiseajour();
             $requete->bindParam(1, $author, PDO::PARAM_STR);
             $requete->bindParam(2, $title, PDO::PARAM_STR);
             $requete->bindParam(3, $entity, PDO::PARAM_STR);
@@ -3225,7 +3233,9 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $requete->bindParam(15, $logocentrale, PDO::PARAM_STR);
             $requete->bindParam(16, $figure, PDO::PARAM_STR);
             $requete->bindParam(17, $legend, PDO::PARAM_STR);
-            $requete->bindParam(18, $idprojet, PDO::PARAM_INT);            
+            $requete->bindParam(18, $datecreation, PDO::PARAM_STR);
+            $requete->bindParam(19, $datemiseajour, PDO::PARAM_STR);
+            $requete->bindParam(20, $idprojet, PDO::PARAM_INT);            
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {

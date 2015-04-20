@@ -403,7 +403,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", arr
                                 <th style="text-align: left"><?php echo TXT_NOMLABO; ?></th><td></td>
                                 <td>
                                     <input type="text" required="required" style="width: 318px;margin-left: 50px"  name="acronymelaboratoire" id="acronymelaboratoire"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" value="<?php echo stripslashes(str_replace("''", "'", $acronymelaboratoire)); ?>"
-                                           placeholder="<?php echo TXT_NOMLABO; ?>"   data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'"  />
+                                           placeholder="<?php echo TXT_NOMLABO; ?>"   data-dojo-props="regExp:'[a-zA-Z0-9àáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'"  />
                                 </td>
                             </tr>
                             <tr>

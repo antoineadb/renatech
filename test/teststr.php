@@ -1,4 +1,4 @@
 <?php
 
-
-echo substr("c2",1);  
+$string="Légende de la balène, tot_totoclmfkcmlfgkmlkfgmlkhmfglkmgflkmlfkhmlfkhmglkfmhkmfglklmfhklmfkmflgkfmghlkfmglhkfmglhkfmgl   ";
+echo strlen($string);

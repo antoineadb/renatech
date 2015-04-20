@@ -144,15 +144,18 @@ if(isset($_GET['statut'])){
     $idstatut = $_GET['statut'];
 }else{
     $idstatut = $manager->getSingle2("SELECT  idstatutprojet_statutprojet FROM concerne,projet WHERE idprojet_projet = idprojet and idprojet = ?",$idprojet);
-}?>
+} 
+?>
 <script src="<?php echo '/'.REPERTOIRE; ?>/js/jquery-1.8.0.min.js"></script>  
 <form name="rapport" data-dojo-type="dijit/form/Form" id="rapport"   method="post" 
       action="<?php echo '/'.REPERTOIRE; ?>/modifBase/updateRapport.php?lang=<?php echo $lang; ?>&idprojet=<?php echo $idprojet ;?>&idstatut=<?php echo $idstatut ;?>" enctype="multipart/form-data" >
     <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
     <script type="dojo/on" data-dojo-event="submit">
-                var nbcontexte= strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
-                var nbresults= strip_tags(trim(dijit.byId("results").value),'').length;
-                var nbvalorization =strip_tags(trim(dijit.byId("valorization").value),'').length;
+                var nbcontexte = strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
+                var nbresults = strip_tags(trim(dijit.byId("results").value),'').length;
+                var nbvalorization = strip_tags(trim(dijit.byId("valorization").value),'').length;
+                var nblegend = strip_tags(trim(dijit.byId("legend").value),'').length;
+                
                 if(dijit.byId('fileName')){
                     var nbFilename = (dijit.byId('fileName').value).length;
                 }else{
@@ -174,6 +177,10 @@ if(isset($_GET['statut'])){
                     exit();                
                 }else if(nbvalorization>440){
                     alert("<?php echo 'The number of characters for the Valorization must be less than 440, please correct'; ?>");
+                    return false;                    
+                    exit();                
+                }else if(nblegend>120){
+                    alert("<?php echo 'The number of characters for the Caption must be less than 110, please correct'; ?>");
                     return false;                    
                     exit();                
                 }else if(nbFilename>0 && !nbInputFigure){
@@ -217,6 +224,7 @@ if(isset($_GET['statut'])){
     <input type="hidden" id="contexteobjectif" name="contexteobjectif"  >
     <input type="hidden" id="resultats" name="resultats" >
     <input type="hidden" id="valorisation" name="valorisation" >
+    <input type="hidden" id="legende" name="legende" >
     
     <div data-dojo-type="dijit/Dialog" data-dojo-id="rep" id ='rep' title="" style="width: 380px;margin-left: 20px;"  >
         <table class="dijitDialogPaneContentArea">
@@ -539,7 +547,7 @@ if(isset($_GET['statut'])){
         <tr style="display: none" id="msgerrcontextObjectif">
             <td>
                 <fieldset class='msgerrcontexte' ><legend><?php echo TXT_INFO;?></legend>
-                    <?php 	echo 'The number of characters must be less than 1080 , the above values ​​are not saved'.'<br>';?>
+                    <?php 	echo 'The number of characters must be less than 1000 , the above values ​​are not saved'.'<br>';?>
                 </fieldset>
             </td>
         </tr>
@@ -572,29 +580,32 @@ if(isset($_GET['statut'])){
 
 if(isset($figure) && $figure!=''){             
     //CALCUL DES DIMENSIONS DE LA FIGURE
-    $arrayInfoImg =getimagesize('uploadlogo/'.$figure);    
-    if($arrayInfoImg[1]>225){//si Height >450px
-        $facteur = 225/$arrayInfoImg[1];
-        $height = $facteur*$arrayInfoImg[1]; 
-        $width  = $facteur*$arrayInfoImg[0]; 
-        if($arrayInfoImg[0]>420){//si width >920px
-            $facteur = 420/$arrayInfoImg[0];
-            $height = $facteur*$arrayInfoImg[1]; 
-            $width  = $facteur*$arrayInfoImg[0]; 
-        }        
-    }elseif($arrayInfoImg[0]>420){//si width >920px
-        $facteur = 420/$arrayInfoImg[0];
-        $height = $facteur*$arrayInfoImg[1]; 
-        $width  = $facteur*$arrayInfoImg[0]; 
-        if($arrayInfoImg[1]>225){//si Height >450px
-            $facteur = 225/$arrayInfoImg[1];
-            $height = $facteur*$arrayInfoImg[1]; 
-            $width  = $facteur*$arrayInfoImg[0]; 
+    $figure = nomFichierValide($figure);
+    $arrayInfoImg =getimagesize('uploadlogo/'.$figure);
+
+    if ($arrayInfoImg[1] > 230) {//si Height >230px
+        $facteurW = 230 / $arrayInfoImg[1];
+        $width = $facteurW * $arrayInfoImg[0];
+        $height = $facteurW * $arrayInfoImg[1]; 
+        if($width>490){
+            $facteurW = 490 / $width;
+            $height = $facteurW*$height;
+            $width = 490;                        
+        }
+
+    } elseif ($arrayInfoImg[0] > 490) {//si Width >700px
+        $facteurW = 490 / $arrayInfoImg[0];
+        $width = 490;
+        $height = $facteurW * $arrayInfoImg[1];
+        if($height>230){
+            $facteurW = 230 / $height;
+            $width = $facteurW*$width;
+            $height = 230; 
         }
         
-    }else{
-        $height =$arrayInfoImg[1];
+    } else {
         $width = $arrayInfoImg[0];
+        $height = $arrayInfoImg[1];
     }
 }
 ?>
@@ -615,8 +626,9 @@ if(isset($figure) && $figure!=''){
         </td>
         </tr>
         <tr>
-        <td style="float: left"><img src=" <?php echo  '/' . REPERTOIRE . '/uploadlogo/' . $figure ?>" width='<?php echo $width; ?>' height='<?php echo $height; ?>' style="margin-bottom: 40px;margin-top: 40px"></td>
-        </tr>
+        <td style="float: left"><img src=" <?php echo  '/' . REPERTOIRE . '/uploadlogo/' . nomFichierValide($figure) ?>" width='<?php echo $width; ?>' height='<?php echo $height; ?>' style="margin-bottom: 5px;margin-top: 15px"></td>
+        </tr><tr><td><div><?php echo 'ratio: 1 : '.round($height/$width,2); ?></div></td></tr>
+        
         <?php }else{?>
         <td>
             <input name='figure' type='file' id='file'  size='20' style="font-size:13pt;width:310px;display: none " onchange="dijit.byId('fileName').set('value',document.getElementById('file').files[0].name);">
@@ -632,14 +644,17 @@ if(isset($figure) && $figure!=''){
 </table><br>
 <?php $legend = $manager->getSingle2("select legend from rapport where idrapport=?",$idrapport);?>
 <table>
-    <tr>
-        <td>        
-            <label for="fundingsource" style="font-weight:bold"><?php echo 'Legend for the figure :' ?></label>
-            <input id="legend" value="<?php if(!empty($legend)){echo $legend;} ?>"  type="text" data-dojo-type="dijit/form/ValidationTextBox" name= "legend" maxlength="100"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	
-                           style="width:1008px" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
-        </td>
-    </tr>
+    <tr><td><label for="legend" style="font-weight:bold;width: 1012px"><?php echo 'Caption :' ?></label></td></tr>
+    <tr><td><div id="legend" name="legend"  ><?php if(!empty($legend)){echo stripslashes(removeDoubleQuote($legend));} ?></div></td></tr>    
+    <tr><td><label id="cptlegend" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
+        <tr style="display: none" id="msgerrlegend">
+            <td>
+                <fieldset class='msgerrcontexte' ><legend><?php echo TXT_INFO;?></legend>
+                    <?php  echo 'The number of characters must be less than 115 , the above values ​​are not saved'.'<br>';?>
+                </fieldset>
+            </td>
+        </tr>   
+    
 </table>
 <hr>
 <table>
@@ -686,22 +701,28 @@ if(isset($figure) && $figure!=''){
     require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
         ready(function() {            
             new Editor({
-                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                plugins: ["undo", "redo" ],
                 height: "180px"
             }, "contextObjectif");
             new Editor({
-                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                plugins: ["undo", "redo"],
                 height: "180px"
             }, "results");
              new Editor({
-                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                plugins: ["undo", "redo" ],
                 height: "62px"
             }, "valorization");
+             new Editor({
+                plugins: ["undo", "redo"],
+                height: "35px"
+            }, "legend");
         });
         dojo.addOnLoad(function() {
             var editor1 = dijit.byId("contextObjectif");
             var editor2 = dijit.byId("results");
             var editor3 = dijit.byId("valorization");
+            var editor4 = dijit.byId("legend");
+            
             dojo.connect(editor1, "onChange", this, function(event) {
                 dojo.byId("contexteobjectif").value = editor1.get("value");
             });
@@ -711,6 +732,9 @@ if(isset($figure) && $figure!=''){
             dojo.connect(editor3, "onChange", this, function(event) {
                 dojo.byId("valorisation").value = editor3.get("value");
             });
+            dojo.connect(editor4, "onChange", this, function(event) {
+                dojo.byId("legende").value = editor4.get("value");
+            });
                 //CAS POUR CHROME
                 dojo.byId("contexteobjectif").value = editor1.get("value");
                 document.getElementById('cptcontexteobjectif').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>"+ strip_tags(trim(dojo.byId("contexteobjectif").value),'').length;
@@ -718,7 +742,55 @@ if(isset($figure) && $figure!=''){
                 document.getElementById('cptresultats').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("resultats").value),'').length;
                 dojo.byId("valorisation").value = editor3.get("value");
                 document.getElementById('cptvalorisation').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;
-                
+                dojo.byId("legend").value = editor4.get("value");
+                document.getElementById('cptlegend').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legend").value),'').length;
+            /* --------------------------------------------------------------------------------------------------------------------
+                                                                                LEGEND
+             --------------------------------------------------------------------------------------------------------------------*/    
+            dojo.connect(editor4, "onKeyPress", this, function(event) {
+                dojo.byId("legende").value = editor4.get("value");
+                document.getElementById('cptlegend').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;
+                if (trim(strip_tags(editor4.get("value")),'').length > 115) {    
+                    document.getElementById('msgerrlegend').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrlegend').style.display = 'none';
+                }                 
+            });
+            dojo.connect(editor4, "onSubmit", this, function(event) {
+                dojo.byId("legende").value = editor4.get("value");
+                document.getElementById('cptlegend').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;
+                if (trim(strip_tags(editor4.get("value")),'').length > 115) {    
+                    document.getElementById('msgerrlegend').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrlegend').style.display = 'none';
+                }                 
+            });
+            dojo.connect(editor4, "onBlur", this, function(event) {
+                dojo.byId("legende").value = editor4.get("value");
+                document.getElementById('cptlegend').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;
+                if (trim(strip_tags(editor4.get("value")),'').length > 115) {  
+                    document.getElementById('msgerrlegend').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrlegend').style.display = 'none';
+                }                
+            });
+            dojo.connect(editor4, "onClick", this, function(event) {
+                dojo.byId("legende").value = editor4.get("value");
+                document.getElementById('cptlegend').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;
+                if (trim(strip_tags(editor4.get("value")),'').length > 115) {  
+                    document.getElementById('msgerrlegend').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrlegend').style.display = 'none';
+                }            
+            });
+           dojo.connect(editor4, "onLoad", this, function(event) {
+                dojo.byId("legende").value = editor4.get("value");
+                document.getElementById('cptlegend').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;                
+            });	
+            
+            
+            
+        
             /* --------------------------------------------------------------------------------------------------------------------
                                                                                 CONTEXTE
              --------------------------------------------------------------------------------------------------------------------*/
@@ -834,18 +906,18 @@ if(isset($figure) && $figure!=''){
     });
 </script>
         <script>            
-            function uploadFichier() {                
-                dojo.byId("reportDiv").style.height = '2400px';
-                var file = document.getElementById('file').files[0];                
-                var data = new FormData();                
+            function uploadFichier() {
+                dojo.byId("reportDiv").style.height = '2450px';
+                var file = document.getElementById('file').files[0];
+                var data = new FormData();
                 data.append('file', file);
                 var ajax = new XMLHttpRequest();
                 ajax.upload.addEventListener("progress", progressHandler, false);
                 ajax.addEventListener("load", completeHandler, false);
                 ajax.addEventListener("error", errorHandler, false);
                 ajax.addEventListener("abort", abortHandler, false);
-                ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/rapport/uploadFigure.php");
-                ajax.send(data);                
+                ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/rapport/uploadFigure.php?figure");
+                ajax.send(data);
             }
             function progressHandler(event) {
                 document.getElementById('progressBar').style.visibility='visible';
@@ -861,7 +933,7 @@ if(isset($figure) && $figure!=''){
                 document.getElementById('status_bytes').innerHTML ='';
             }
             function errorHandler() {
-                document.getElementById('status').innerHTML = "L'upload failed !";
+                document.getElementById('status').innerHTML = "The upload failed !";
             }
             function abortHandler() {
                 document.getElementById('status').innerHTML = "The upload was canceled !";

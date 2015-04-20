@@ -173,11 +173,12 @@ for ($i = 0; $i < $nbProjet; $i++) {
 }
 $_SESSION['nbprojet']=$manager->getSingle("select count(distinct idprojet) from tmptous");
 $porteur = '';
-$arrayporteur1 = $manager->getList("select distinct numero from tmptous order by idprojet desc");
+//$arrayporteur1 = $manager->getList("select distinct numero from tmptous order by idprojet desc");
+$arrayporteur1 = $manager->getList("select distinct numero from tmptous");
 $arrayporteur = array();
 
 foreach ($arrayporteur1 as $key => $value) {
-    $arrayporteur = $manager->getList2("select distinct porteur from tmptous where  numero=? order by idprojet desc");
+    $arrayporteur = $manager->getList2("select distinct porteur from tmptous where  numero=?", $value[0]);    
     foreach ($arrayporteur as $key1 => $value1) {
         if (!empty($value1[0])) {
             $porteur.= $value1[0] . '  / ';
@@ -661,6 +662,56 @@ file_put_contents($json_fileSoustraitance, $jsonSoustraitance1);
 fclose($fpProjetSoustraitance);
 chmod('../tmp/Projetsoustraitance.json', 0777);
 $_SESSION['nbProjetSoustraitance']=$nbrowProjetSoustraitance;
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                  RAPPORTS PROJETS
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+$rowProjetRapport= $manager->getList2("select r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet "
+        . "and c.idprojet_projet=r.idprojet and cr.idprojet_projet=r.idprojet and c.idcentrale_centrale=?", $idcentrale);
+$fpProjetRapport = fopen('../tmp/ProjetRapport.json', 'w');
+$dataProjetRapport = "";
+fwrite($fpProjetRapport, '{"items": [');
+$nbrowProjetRapport = count($rowProjetRapport);
+for ($i = 0; $i < $nbrowProjetRapport; $i++) {
+    $centrale=$manager->getSingle2("SELECT  c.libellecentrale FROM centrale c,concerne co WHERE  co.idcentrale_centrale = c.idcentrale and co.idprojet_projet=?", $rowProjetRapport[$i]['idprojet']);
+    $arraycreateur =$manager->getList2("select nom,prenom from utilisateur where idutilisateur=?", $rowProjetRapport[$i]['idutilisateur_utilisateur']);
+     $dataProjetRapport = ""
+            . '{"numero":' . '"' . $rowProjetRapport[$i]['numero'] . '"' . ","
+             . '"datecreation":' . '"' . $rowProjetRapport[$i]['datecreation'] . '"' . ","
+             . '"identite":' . '"' . $arraycreateur[0]['nom'].' - '. $arraycreateur[0]['prenom'] . '"' . ","
+             . '"datemiseajour":' . '"' . $rowProjetRapport[$i]['datemiseajour'] . '"' . ","
+            . '"title":' . '"' .filtredonnee($rowProjetRapport[$i]['title']) . '"' . ","
+            . '"idprojet":' . '"' .$rowProjetRapport[$i]['idprojet'] . '"' . ","
+             . '"refinterneprojet":' . '"' .filtredonnee($rowProjetRapport[$i]['refinterneprojet']) . '"' . ","
+              . '"imprime":' . '"' . TXT_PDF . '"' . "},";
+    fputs($fpProjetRapport, $dataProjetRapport);
+    fwrite($fpProjetRapport, '');
+}
+fwrite($fpProjetRapport, ']}');
+$json_fileRapport = "../tmp/ProjetRapport.json";
+$jsonRapport = file_get_contents($json_fileRapport);
+$jsonRapport1 = str_replace('},]}', '}]}', $jsonRapport);
+file_put_contents($json_fileRapport, $jsonRapport1);
+fclose($fpProjetRapport);
+chmod('../tmp/ProjetRapport.json', 0777);
+$_SESSION['nbProjetRapport']=$nbrowProjetRapport;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 $_SESSION['email'] = $mail;
 $_SESSION['pseudo'] = $pseudo;
 header('location:/'.REPERTOIRE.'/projet_centrale/' . $lang . '/' . $libellecentrale );
