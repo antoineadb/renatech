@@ -3182,7 +3182,8 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
-            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage().'<br> getFile'.$exc->getFile().'<br> getFile'.$exc->getTraceAsString();
+            
             $this->_db->rollBack();
         }
     }

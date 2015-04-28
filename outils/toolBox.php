@@ -665,9 +665,72 @@ function supprLogoFigure(){
                 unlink('../uploadlogo/' . $arrayImages[$i]); //EFFACE LE FICHIER SUR LE SERVEUR
             }
         }
-    }
+    }$db = BD::deconnecter();
+}
 
-        
-    $db = BD::deconnecter();
+/**
+ * 
+ * @param type $array
+ */
+function sizeLogo($array,$t) {
+    if ($array[0] > $t) {//si width>$t px
+        $f = $t / $array[0];
+        $w = $t;
+        $h = $f * $array[1];
+        if ($h > $t) {//si le height est >$t px
+            $f = $t / $h;
+            $w = $f * $w;
+            $h = $t;
+        }
+    } elseif ($array[1] > $t) {
+        $f = $t / $array[1];
+        $h = $t;
+        $w = $f * $array[1];
+        if ($w > $t) {
+            $f = $t / $w;
+            $w = $t;
+            $h = $f * $h;
+        }
+    } else {
+        $w = $array[0];
+        $h = $array[1];
+    }
     
+    if($h<$t){
+        $f= $t/$h;
+        $h= $f*$h;
+        $w= $f*$w;
+        if($w>560){
+            $f=560/$w;
+            $w=560;
+            $h=$f*$h;
+        }
+    }
+    
+    return array($w,$h);
+}
+
+/**
+ * Fonction qui enlève les accents dans une chaine de caratère
+ * @param type $str
+ * @param type $charset
+ * @return type
+ */
+function wd_remove_accents($str, $charset='utf-8'){
+    $str = htmlentities($str, ENT_NOQUOTES, $charset);    
+    $str = preg_replace('#&([A-za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $str);
+    $str = preg_replace('#&([A-za-z]{2})(?:lig);#', '\1', $str); // pour les ligatures e.g. '&oelig;'
+    $str = preg_replace('#&[^;]+;#', '', $str); // supprime les autres caractères    
+    return $str;
+}
+
+function nomFichierValidesansAccent($chaineNonValide){
+  $chaineNonValide0 = wd_remove_accents($chaineNonValide,$charset='utf-8');  
+  $chaineNonValide1 = preg_replace('`\s+`', '_', trim($chaineNonValide0));
+  $chaineNonValide2 = str_replace("'", "_", $chaineNonValide1);
+  $chaineNonValide3 = preg_replace('`_+`', '_', trim($chaineNonValide2));
+  $chaineValide=strtr($chaineNonValide3,
+"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ",
+                        "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+  return ($chaineValide);
 }

@@ -270,10 +270,10 @@ RewriteRule   Upload_Errorphase2/([a-z]+)/([0-9]+)/([0-9]+)     phase2.php?lang=
 RewriteRule   Upload_Errorsizephase2/([a-z]+)/([0-9]+)/([0-9]+) phase2.php?lang=$1&erreuruploadsize=$2&idprojet=$3      [L]
 RewriteRule   Upload_Errorphase1/([a-z]+)/([0-9]+)/([0-9]+)        phase2.php?lang=$1&erreuruploadphase1=$2&idprojet=$3    [L]
 RewriteRule   Upload_Errorsizephase1/([a-z]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&erreuruploadsizephase1=$2&idprojet=$3 [L]
-RewriteRule   errorrapportsize/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapport=$2&idprojet=$3 [L]
-RewriteRule   errorrapportsizefig/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapportfig=$2&idprojet=$3 [L]
-RewriteRule   errorrapportextension/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsextension=$2&idprojet=$3 [L]
-RewriteRule   errorrapportsizelogfig/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapportfiglog=$2&idprojet=$3 [L]
+#RewriteRule   errorrapportsize/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapport=$2&idprojet=$3 [L]
+#RewriteRule   errorrapportsizefig/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapportfig=$2&idprojet=$3 [L]
+#RewriteRule   errorrapportextension/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsextension=$2&idprojet=$3 [L]
+#RewriteRule   errorrapportsizelogfig/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapportfiglog=$2&idprojet=$3 [L]
 RewriteRule   delete_report/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)  	modifBase/deleteRapport.php?lang=$1&idrapport=$2&numProjet=$3&idstatut=$4 [L]
 
 

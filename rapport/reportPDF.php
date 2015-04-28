@@ -39,7 +39,7 @@ if (!empty($resreport[0]['objectif'])) {
     $objectif4 = str_replace($arrayCar, $arrayCarcorrige, $objectif3);
     $objectif5 = str_replace('€', utf8_encode(chr(128)), $objectif4);
     $objectif6 = (stripslashes(str_replace("''", "'", $objectif5)));
-    $objectif = substr($objectif6, 0, 1140);
+    $objectif = substr($objectif6, 0, 1500);
 } else {
     $objectif = '';
 }
@@ -55,7 +55,7 @@ if (!empty($resreport[0]['results'])) {
     $results4 = str_replace($arrayCar, $arrayCarcorrige, $results3);
     $results5 = str_replace('€', utf8_encode(chr(128)), $results4);
     $results6 = stripslashes(str_replace("''", "'", $results5));
-    $results = substr($results6, 0, 1010);
+    $results = substr($results6, 0, 1250);
 } else {
     $results = '';
 }
@@ -71,7 +71,7 @@ if (!empty($resreport[0]['valorization'])) {
     $valorization4 = str_replace($arrayCar, $arrayCarcorrige, $valorization3);
     $valorization5 = str_replace('€', utf8_encode(chr(128)), $valorization4);
     $valorization6 = (stripslashes(str_replace("''", "'", $valorization5)));
-    $valorization = substr($valorization6, 0, 440);
+    $valorization = substr($valorization6, 0, 800);
 } else {
     $valorization = '';
 }
@@ -80,7 +80,7 @@ if (!empty($resreport[0]['legend'])) {
 }
 
 if (!empty($resreport[0]['logocentrale'])) {
-    $logocentrale = '../uploadlogo/' . $resreport[0]['logocentrale'];
+    $logocentrale = '../uploadlogo/' .nomFichierValidesansAccent($resreport[0]['logocentrale']);
 } else {
     $logocentrale = '../' . $manager->getSingle2("select adresselogcentrale from sitewebapplication where refsiteweb = (SELECT libellecentrale from centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?)", $idprojet);
 }
@@ -98,22 +98,15 @@ ob_start();
 ?>
 <style type="text/css">
     *{color:#5D5D5E;}
-    table{ vertical-align: top;width:100%;font-size: 10pt;font-family: helvetica;line-height: 5mm;}
+    table{ vertical-align: top;width:100%;font-size: 9pt;font-family: helvetica;line-height: 5mm;}
     strong{color:#000;}
-    p{margin: 0;padding: 0;font-size: 18px;font-weight: bold;}
+    p{margin: 0;padding: 0;font-size: 15px;font-weight: bold;}
     hr{height:2px;background: #5D5D5E;border:none}
 </style>
 <?php
 $arrayinfoImg = getimagesize($logocentrale);
-if ($arrayinfoImg[0] > 150) {
-    $fWidth = 150 / $arrayinfoImg[0];
-    $fHeight = 75 / $arrayinfoImg[1];
-    $width = $fWidth * $arrayinfoImg[0];
-    $height = $fHeight * $arrayinfoImg[1];
-} else {
-    $width = 0.6 * $arrayinfoImg[0];
-    $height = 0.6 * $arrayinfoImg[1];
-}
+$width = sizeLogo($arrayinfoImg,60)[0];
+$height = sizeLogo($arrayinfoImg,60)[1];
 ?>
 <page backtop="1mm" backleft="5mm" backright="2mm" backbottom="1mm" footer="date;heure">
     <table>
@@ -125,9 +118,9 @@ if ($arrayinfoImg[0] > 150) {
         </tr>
     </table>
     <br><br>
-    <table  align="center" style="margin-top: -10px">
+    <table  align="center" style="margin-top: -30px">
         <tr>
-            <td><p><?php echo str_replace("''", "'", $title); ?></p></td>        
+            <td><?php echo removeDoubleQuote($title); ?></td>        
         </tr>
     </table>    
     <hr>
@@ -146,21 +139,14 @@ if ($arrayinfoImg[0] > 150) {
             <td style='width:25%;padding-left:-80px ' >
                 <?php
                 //CALCUL DES DIMENSIONS DU LOGO                
-                $arrayInfoImg = getimagesize($logo);
-                if ($arrayInfoImg[0] > 150) {
-                    $fWidth = 150 / $arrayInfoImg[0];
-                    $fHeight = 75 / $arrayInfoImg[1];
-                    $width = $fWidth * $arrayInfoImg[0];
-                    $height = $fHeight * $arrayInfoImg[1];
-                } else {
-                    $width = 0.6 * $arrayInfoImg[0];
-                    $height = 0.6 * $arrayInfoImg[1];
-                }
+                $arrayInfoImg = getimagesize($logo);               
+                $width1 = sizeLogo($arrayInfoImg,60)[0];
+                $height1 = sizeLogo($arrayInfoImg,60)[1];
                 ?>
                 <table>
                     <tr>
                         <td style="width: 5%; ">
-                            <img  style="width: 85%;max-height: 400px;max-width: 350px"  height="<?php echo $height; ?>" width="<?php echo $width; ?>" src="<?php echo $logo; ?>">
+                            <img  style="width: 85%;max-height: 400px;max-width: 350px"  height="<?php echo $height1; ?>" width="<?php echo $width1; ?>" src="<?php echo $logo; ?>">
                         </td>
                     </tr>
                 </table>
@@ -186,31 +172,13 @@ if ($arrayinfoImg[0] > 150) {
             <td style='width: 100%'><strong>Results : </strong><?php echo $results; ?></td></tr><tr><td>
  <?php
     if ($figure != '') {//CALCUL DES DIMENSIONS DE LA FIGURE
-        $figure = nomFichierValide($figure);
+        $figure = nomFichierValidesansAccent($figure);
         $arrayInfoImg = getimagesize($figure);
-        if ($arrayInfoImg[1] > 230) {//si Height >230px
-            $facteurW = 230 / $arrayInfoImg[1];
-            $width = $facteurW * $arrayInfoImg[0];
-            $height = $facteurW * $arrayInfoImg[1];
-        if ($width > 490) {
-            $facteurW = 490 / $width;
-            $height = $facteurW * $height;
-            $width = 490;
-        }
-    } elseif ($arrayInfoImg[0] > 490) {//si Width >700px
-        $facteurW = 490 / $arrayInfoImg[0];
-        $width = $facteurW * $arrayInfoImg[0];
-        $height = $facteurW * $arrayInfoImg[1];
-        if ($height > 230) {
-            $facteurW = 230 / $height;
-            $width = $facteurW * $width;
-            $height = 230;
-        }
-    } else {
-        $width = $arrayInfoImg[0];
-        $height = $arrayInfoImg[1];
-    }?>
-                    <img   align="left"  src="<?php echo $figure; ?>"  height="<?php echo $height; ?>" width="<?php echo $width; ?>">
+        $width2 = sizeLogo($arrayInfoImg,185)[0];
+        $height2 = sizeLogo($arrayInfoImg,185)[1];
+        //echo '$width2 ='.$width2.'<br>$height2 = '.$height2;
+    ?>
+                    <img   align="left"  src="<?php echo $figure; ?>"  height="<?php echo $height2; ?>" width="<?php echo $width2; ?>">
             <?php } ?>
             </td>
         </tr>

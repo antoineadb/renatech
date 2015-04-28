@@ -667,14 +667,13 @@ $_SESSION['nbProjetSoustraitance']=$nbrowProjetSoustraitance;
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  RAPPORTS PROJETS
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-$rowProjetRapport= $manager->getList2("select r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet "
+$rowProjetRapport= $manager->getList2("select c.idstatutprojet_statutprojet,r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet "
         . "and c.idprojet_projet=r.idprojet and cr.idprojet_projet=r.idprojet and c.idcentrale_centrale=?", $idcentrale);
 $fpProjetRapport = fopen('../tmp/ProjetRapport.json', 'w');
 $dataProjetRapport = "";
 fwrite($fpProjetRapport, '{"items": [');
 $nbrowProjetRapport = count($rowProjetRapport);
-for ($i = 0; $i < $nbrowProjetRapport; $i++) {
-    $centrale=$manager->getSingle2("SELECT  c.libellecentrale FROM centrale c,concerne co WHERE  co.idcentrale_centrale = c.idcentrale and co.idprojet_projet=?", $rowProjetRapport[$i]['idprojet']);
+for ($i = 0; $i < $nbrowProjetRapport; $i++) {    
     $arraycreateur =$manager->getList2("select nom,prenom from utilisateur where idutilisateur=?", $rowProjetRapport[$i]['idutilisateur_utilisateur']);
      $dataProjetRapport = ""
             . '{"numero":' . '"' . $rowProjetRapport[$i]['numero'] . '"' . ","
@@ -682,7 +681,8 @@ for ($i = 0; $i < $nbrowProjetRapport; $i++) {
              . '"identite":' . '"' . $arraycreateur[0]['nom'].' - '. $arraycreateur[0]['prenom'] . '"' . ","
              . '"datemiseajour":' . '"' . $rowProjetRapport[$i]['datemiseajour'] . '"' . ","
             . '"title":' . '"' .filtredonnee($rowProjetRapport[$i]['title']) . '"' . ","
-            . '"idprojet":' . '"' .$rowProjetRapport[$i]['idprojet'] . '"' . ","
+            . '"idprojet":' . '"' .$rowProjetRapport[$i]['idprojet'] . '"' . ","             
+             . '"idstatutprojet":' . '"' .$rowProjetRapport[$i]['idstatutprojet_statutprojet'] . '"' . ","
              . '"refinterneprojet":' . '"' .filtredonnee($rowProjetRapport[$i]['refinterneprojet']) . '"' . ","
               . '"imprime":' . '"' . TXT_PDF . '"' . "},";
     fputs($fpProjetRapport, $dataProjetRapport);
@@ -696,20 +696,6 @@ file_put_contents($json_fileRapport, $jsonRapport1);
 fclose($fpProjetRapport);
 chmod('../tmp/ProjetRapport.json', 0777);
 $_SESSION['nbProjetRapport']=$nbrowProjetRapport;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 $_SESSION['email'] = $mail;

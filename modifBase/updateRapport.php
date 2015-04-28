@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include_once '../class/Manager.php';
 include_once '../outils/constantes.php';
@@ -7,16 +8,9 @@ include_once '../class/Securite.php';
 $dossier = '../uploadlogo/';
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 $db = BD::connecter();
-//Début des vérifications de sécurité...
-$fichierlogo = basename($_FILES['logorapport']['name']);
-$fichierlogocentrale = basename($_FILES['logorapportcentrale']['name']);
+$fichierlogo = basename($_FILES['filelogo']['name']);
+$fichierlogocentrale = basename($_FILES['filelogocentrale']['name']);
 $fichierfigure = basename($_FILES['figure']['name']);
-$taille_maxi = 204800; //200ko
-$taillelogo = filesize($_FILES['logorapport']['tmp_name']);
-$taillelogocentrale = filesize($_FILES['logorapportcentrale']['tmp_name']);
-$extensions = array('.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG');
-$extensionlogo = strrchr($_FILES['logorapport']['name'], '.');
-$extensionlogocentrale = strrchr($_FILES['logorapportcentrale']['name'], '.');
 
 if (!empty($_GET['idprojet'])) {
     $idprojet = $_GET['idprojet'];
@@ -64,25 +58,25 @@ if (!empty($_POST['thematics'])) {
 }
 
 if (!empty($_POST['startingdate'])) {
-    $startingdate = Securite::bdd($_POST['startingdate']);
+    $startingdate = $_POST['startingdate'];
 } else {
-    $startingdate = '';
+    $startingdate = date('m,d,Y');
 }
 
 if (!empty($_POST['contexteobjectif'])) {
-    $objectif = substr(clean(strip_tags($_POST['contexteobjectif'])), 0, 1007);
+    $objectif = substr(clean(strip_tags($_POST['contexteobjectif'])), 0, 1250);
 } else {
     $objectif = '';
 }
 $results = strip_tags($_POST['resultats']);
 if (!empty($results)) {
-    $results = substr(clean(strip_tags($_POST['resultats'])), 0, 1009);
+    $results = substr(clean(strip_tags($_POST['resultats'])), 0, 1250);
 } else {
     $results = "";
 }
 $valorisation = strip_tags($_POST['valorisation']);
 if (!empty($valorisation)) {
-    $valorization = substr(clean(strip_tags($_POST['valorisation'])), 0, 446);
+    $valorization = substr(clean(strip_tags($_POST['valorisation'])), 0, 850);
 } else {
     $valorization = '';
 }
@@ -92,45 +86,34 @@ if (!empty($_POST['technicalwork'])) {
     $technologicalwc = '';
 }
 if (!empty($_POST['titre'])) {
-    $title = substr(Securite::bdd($_POST['titre']), 0, 300);
+    $title = substr(clean(strip_tags($_POST['titre'])), 0, 300);
 } else {
     $title = '';
 }
-if (!empty($_POST['legende'])) {    
+if (!empty($_POST['legende'])) {
     $legend = substr(clean(strip_tags($_POST['legende'])), 0, 115);
 } else {
     $legend = '';
 }
 
 $image = $manager->getSingle2("select logo from rapport where idprojet=?", $idprojet);
-if (!empty($_FILES['logorapport']['name'])) {
-    $arraytaille = getimagesize($_FILES['logorapport']['tmp_name']);
-    if ($arraytaille[0] > 400 || $arraytaille[1] > 350) {
-        header('Location: /' . REPERTOIRE . '/errorrapportsize/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else {
-        $logo = $_FILES['logorapport']['name'];
-    }
+if (!empty($_FILES['filelogo']['name'])) {
+    $arraytaille = getimagesize($_FILES['filelogo']['tmp_name']);
+    $logo = $_FILES['filelogo']['name'];
 } elseif (!empty($image)) {
     $logo = $image;
 } else {
     $logo = '';
 }
 $imagecentrale = $manager->getSingle2("select logocentrale from rapport where idprojet=?", $idprojet);
-if (!empty($_FILES['logorapportcentrale']['name'])) {
-    $arraytaille = getimagesize($_FILES['logorapportcentrale']['tmp_name']);
-    if ($arraytaille[0] > 400 || $arraytaille[1] > 350) {
-        header('Location: /' . REPERTOIRE . '/errorrapportsize/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else {
-        $logocentrale = $_FILES['logorapportcentrale']['name'];
-    }
+if (!empty($_FILES['filelogocentrale']['name'])) {
+    $arraytaille = getimagesize($_FILES['filelogocentrale']['tmp_name']);
+    $logocentrale = $_FILES['filelogocentrale']['name'];
 } elseif (!empty($imagecentrale)) {
     $logocentrale = $imagecentrale;
 } else {
     $logocentrale = '';
 }
-
 $imagefigure = $manager->getSingle2("select figure from rapport where idprojet=?", $idprojet);
 if (!empty($_FILES['figure']['name'])) {
     $figure = $_FILES['figure']['name'];
@@ -144,127 +127,84 @@ if (empty($_FILES['figure']['name'])) {
 } else {
     $_bFigure = 'TRUE';
 }
-if (empty($_FILES['logorapport']['name'])) {
+if (empty($_FILES['filelogo']['name'])) {
     $_bLogo = 'FALSE';
 } else {
     $_bLogo = 'TRUE';
 }
-if (empty($_FILES['logorapportcentrale']['name'])) {
+if (empty($_FILES['filelogocentrale']['name'])) {
     $_bLogocentrale = 'FALSE';
 } else {
     $_bLogocentrale = 'TRUE';
 }
+$image = $manager->getSingle2("select logo from rapport where idprojet=?", $idprojet);
+if (!empty($_FILES['filelogo']['name'])) {
+    $arraytaille = getimagesize($_FILES['filelogo']['tmp_name']);
+    include_once '../rapport/updateRapportCommun.php';
+    supprLogoFigure();
+    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
+    exit();
+} elseif (!empty($image)) {
+    $logo = $image;
+} else {
+    $logo = '';
+}
+$imagecentrale = $manager->getSingle2("select logocentrale from rapport where idprojet=?", $idprojet);
+if (!empty($_FILES['filelogocentrale']['name'])) {
+    $arraytaille = getimagesize($_FILES['filelogocentrale']['tmp_name']);
+    include_once '../rapport/updateRapportCommun.php';
+    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
+    exit();
+} elseif (!empty($imagecentrale)) {
+    $logocentrale = $imagecentrale;
+} else {
+    $logocentrale = '';
+}
+
 if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'FALSE') {//aucun fichier downloadé
     include_once '../rapport/updateRapportCommun.php';
-    supprLogoFigure();//SUPPRESSION DES IMAGES DU SERVEUR REPERTOIRE UPLOADLOGO QUI NE SONT PAS REFERENCE DANS UN PROJET SUR LA BASE DE DONNEE    
     header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-} elseif ($_bFigure == 'FALSE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'FALSE') {//Un logo mais pas d'image downloadé  ni de logocentrale
-    if (!in_array($extensionlogo, $extensions)) {//logo downloadé
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if ($taillelogo > $taille_maxi) {
-        $erreur = TXT_ERREURTAILLEFICHIER;
-        header('Location: /' . REPERTOIRE . '/errorrapportsize/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['logorapport']['tmp_name'], $dossier . $fichierlogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
-            chmod($dossier . $fichierlogo, 0777);
-            include_once '../rapport/updateRapportCommun.php';
-        }
-        supprLogoFigure();//SUPPRESSION DES IMAGES DU SERVEUR REPERTOIRE UPLOADLOGO QUI NE SONT PAS REFERENCE DANS UN PROJET SUR LA BASE DE DONNEE    
+} elseif ($_bFigure == 'FALSE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'FALSE') {//Un logo mais pas d'image downloadé  ni de logocentrale    
+    if (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
+        chmod($dossier . $fichierlogo, 0777);
+        include_once '../rapport/updateRapportCommun.php';
         header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     }
-} elseif ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'TRUE') {//Un logocentrale mais pas d'image ni de logo labo downloadé  
-    if (!in_array($extensionlogocentrale, $extensions)) {//logo downloadé
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if ($taillelogocentrale > $taille_maxi) {
-        $erreur = TXT_ERREURTAILLEFICHIER;
-        header('Location: /' . REPERTOIRE . '/errorrapportsize/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '');
-        exit();
-    } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['logorapportcentrale']['tmp_name'], $dossier . $fichierlogocentrale)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
-            chmod($dossier . $fichierlogocentrale, 0777);
-            include_once '../rapport/updateRapportCommun.php';
-        }
-        supprLogoFigure();//SUPPRESSION DES IMAGES DU SERVEUR REPERTOIRE UPLOADLOGO QUI NE SONT PAS REFERENCE DANS UN PROJET SUR LA BASE DE DONNEE    
+} elseif ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'TRUE') {//Un logocentrale mais pas d'image ni de logo labo downloadé      
+    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
+        chmod($dossier . $fichierlogocentrale, 0777);
+        include_once '../rapport/updateRapportCommun.php';
         header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     }
 } elseif ($_bFigure == 'TRUE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'FALSE') {//Une image downloadé mais pas de logo
     $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
     include_once '../rapport/updateRapportCommun.php';
-    supprLogoFigure();//SUPPRESSION DES IMAGES DU SERVEUR REPERTOIRE UPLOADLOGO QUI NE SONT PAS REFERENCE DANS UN PROJET SUR LA BASE DE DONNEE    
     header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-} elseif ($_bFigure == 'TRUE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'FALSE') {//Une image et un logo downloadé
-    if (!in_array($extensionlogo, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['logorapport']['tmp_name'], $dossier . $fichierlogo)) {
-            chmod($dossier . $fichierlogo, 0777);
-            include_once '../rapport/updateRapportCommun.php';
-        }
+} elseif ($_bFigure == 'TRUE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'FALSE') {//Une image et un logo downloadé    
+    if (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo)) {
+        chmod($dossier . $fichierlogo, 0777);
+        include_once '../rapport/updateRapportCommun.php';
+        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     }
-    supprLogoFigure();//SUPPRESSION DES IMAGES DU SERVEUR REPERTOIRE UPLOADLOGO QUI NE SONT PAS REFERENCE DANS UN PROJET SUR LA BASE DE DONNEE    
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-} elseif ($_bFigure == 'TRUE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé
-    if (!in_array($extensionlogocentrale, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['logorapportcentrale']['tmp_name'], $dossier . $fichierlogocentrale)) {
-            chmod($dossier . $fichierlogocentrale, 0777);
-            include_once '../rapport/updateRapportCommun.php';
-        }
+} elseif ($_bFigure == 'TRUE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé    
+    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale)) {
+        chmod($dossier . $fichierlogocentrale, 0777);
+        include_once '../rapport/updateRapportCommun.php';
+        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     }
-    supprLogoFigure();//SUPPRESSION DES IMAGES DU SERVEUR REPERTOIRE UPLOADLOGO QUI NE SONT PAS REFERENCE DANS UN PROJET SUR LA BASE DE DONNEE    
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-} elseif ($_bFigure == 'FALSE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé
-    if (!in_array($extensionlogo, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } elseif (!in_array($extensionlogocentrale, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if ($taillelogo > $taille_maxi || $taillelogocentrale > $taille_maxi) {
-        $erreur = TXT_ERREURTAILLEFICHIER;
-        header('Location: /' . REPERTOIRE . '/errorrapportsize/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '');
-        exit();
-    } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['logorapportcentrale']['tmp_name'], $dossier . $fichierlogocentrale) && (move_uploaded_file($_FILES['logorapport']['tmp_name'], $dossier . $fichierlogo))) {
-            chmod($dossier . $fichierlogocentrale, 0777);
-            chmod($dossier . $fichierlogo, 0777);
-            include_once '../rapport/updateRapportCommun.php';
-        }
+} elseif ($_bFigure == 'FALSE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé    
+    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale) && (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo))) {
+        chmod($dossier . $fichierlogocentrale, 0777);
+        chmod($dossier . $fichierlogo, 0777);
+        include_once '../rapport/updateRapportCommun.php';
+        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     }
-    supprLogoFigure();//SUPPRESSION DES IMAGES DU SERVEUR REPERTOIRE UPLOADLOGO QUI NE SONT PAS REFERENCE DANS UN PROJET SUR LA BASE DE DONNEE    
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-} elseif ($_bFigure == 'TRUE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé
-    if (!in_array($extensionlogo, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if (!in_array($extensionlogocentrale, $extensions)) {//Vérif des extensions
-        $erreur = TXT_ERREURUPLOAD;
-        header('Location: /' . REPERTOIRE . '/errorrapportextension/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
-        exit();
-    } else if ($taillelogocentrale > $taille_maxi || $taillelogo > $taille_maxi) {
-        $erreur = TXT_ERREURTAILLEFICHIER;
-        header('Location: /' . REPERTOIRE . '/errorrapportsizelogfig/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '');
-        exit();
-    } else if (!isset($erreur)) {//S'il n'y a pas d'erreur, on upload
-        if (move_uploaded_file($_FILES['logorapportcentrale']['tmp_name'], $dossier . $fichierlogocentrale) && move_uploaded_file($_FILES['logorapport']['tmp_name'], $dossier . $fichierlogo) && move_uploaded_file($_FILES['figure']['tmp_name'], $dossier . $fichierfigure)) {
-            chmod($dossier . $fichierlogocentrale, 0777);
-            chmod($dossier . $fichierlogo, 0777);
-            include_once '../rapport/updateRapportCommun.php';
-        }
+} elseif ($_bFigure == 'TRUE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé    
+    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale) && move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo) && move_uploaded_file($_FILES['figure']['tmp_name'], $dossier . $fichierfigure)) {
+        chmod($dossier . $fichierlogocentrale, 0777);
+        chmod($dossier . $fichierlogo, 0777);
+        include_once '../rapport/updateRapportCommun.php';
+        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     }
-    supprLogoFigure();//SUPPRESSION DES IMAGES DU SERVEUR REPERTOIRE UPLOADLOGO QUI NE SONT PAS REFERENCE DANS UN PROJET SUR LA BASE DE DONNEE    
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
 }
+

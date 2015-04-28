@@ -21,7 +21,7 @@ class Rapport {
     private $_figure;
     private $_idprojet;
     private $_legend;
-    private $_dateCreation;
+    private $_datecreation;
     private $_dateMiseAjour;
 
     function __construct($idrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, $logo, $logocentrale, $figure, $idprojet, $legend, $datecreation, $datemiseajour) {

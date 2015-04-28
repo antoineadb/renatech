@@ -37,11 +37,19 @@
                     '<img title="<?php echo TXT_REPORTPDF; ?>" src="<?php echo "/".REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
             }
             
+            
+            function hrefFormatterNumero(numero,idx) {
+                var item = gridRapport.getItem(idx);                
+                var statut = +item.idstatutprojet;
+                
+                return "<a  href=\"<?php echo '/'.REPERTOIRE;?>/controler/controlerapport.php?lang=<?php echo $lang; ?>&numProjet=" + numero + "&statut=" + statut + "\">"+ numero + "</a>";
+            }
+            
             gridRapport = new DataGrid({
                 store: dataStore,
                 query: {id: "*"},
                 structure: [
-                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px"},
+                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px", formatter: hrefFormatterNumero},
                     {name: "<?php echo TXT_DEMANDEUR; ?>", field: "identite", width: "120px"},
                     {name: "<?php echo TXT_CREATEDATE; ?>", field: "datecreation", width: "90px", formatter: formatDate},
                     {name: "<?php echo TXT_UPDATE; ?>", field: "datemiseajour", width: "90px", formatter: formatDate},

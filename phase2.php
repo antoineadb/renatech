@@ -132,26 +132,18 @@ include 'html/header.html';
             </div>         
              <div style="width: 1050px; height: auto">
                 <!-- SI ON A UN RAPPORT OU UNE ERREUR SUR UN RAPPORT-->
-                 <?php if(isset($_GET['report'])|| isset($_GET['erreuruploadsizerapportfiglog'])|| isset($_GET['erreuruploadsizerapportfig'])|| isset($_GET['erreuruploadsizerapport'])
-                        || isset($_GET['erreuruploadsizerapportlog'])||isset($_GET['erreuruploadsizerapportcent'])||isset($_GET['erreuruploadsextension'])){?>
+                 <?php if(isset($_GET['report'])){?>
                         <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:30px;width: 1050px;font-size: 1.2em;" doLayout="false" id="MyTabContainer" >
                             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" style="width: auto; height: auto;overflow: hidden" ><?php include 'html/vueModifProjet.html'; ?></div>
-                            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" style="width: auto; height: auto;overflow:hidden;"  ><?php  include 'html/phase2.html'; ?></div>
-                            <?php  if(isset($_GET['erreuruploadsizerapportfig'])|| isset($_GET['erreuruploadsizerapportfiglog'])|| isset($_GET['erreuruploadsizerapport']) || isset($_GET['erreuruploadsizerapportlog'])||isset($_GET['erreuruploadsizerapportcent'])||isset($_GET['erreuruploadsextension'])){?>
-                            </form>
-                                <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2250px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
-                            <?php  }else{ ?>
-                            </form>
-                            <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2250px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
-                            <?php }?>
-                        </div>        
+                            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" style="width: auto; height: auto;overflow:hidden;"  ><?php  include 'html/phase2.html'; ?></div>                        
+                            <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2600px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
                 <?php }else{//-- DANS LE CAS NORMAL SANS UN RAPPORT OU UNE ERREUR SUR UN RAPPORT -- ?>
                 <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:30px;width: 1050px;font-size: 1.2em;" doLayout="false" id="MyTabContainer" >
                     <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" style="width: auto; height: auto;overflow: hidden" ><?php include 'html/vueModifProjet.html'; ?></div>
                     <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" style="width: auto; height: auto;overflow:hidden;" selected="true" ><?php  include 'html/phase2.html'; ?></div>               
                 </div>
                 </div> <?php } ?>
-                <div><?php include 'html/footer.html'; ?></div>
+                <div style="margin-left: 20px"><?php include 'html/footer.html'; ?></div>
         </div>
         </div>
     </body>  
