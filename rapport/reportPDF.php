@@ -176,7 +176,6 @@ $height = sizeLogo($arrayinfoImg,60)[1];
         $arrayInfoImg = getimagesize($figure);
         $width2 = sizeLogo($arrayInfoImg,185)[0];
         $height2 = sizeLogo($arrayInfoImg,185)[1];
-        //echo '$width2 ='.$width2.'<br>$height2 = '.$height2;
     ?>
                     <img   align="left"  src="<?php echo $figure; ?>"  height="<?php echo $height2; ?>" width="<?php echo $width2; ?>">
             <?php } ?>

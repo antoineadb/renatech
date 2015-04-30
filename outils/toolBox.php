@@ -723,14 +723,27 @@ function wd_remove_accents($str, $charset='utf-8'){
     $str = preg_replace('#&[^;]+;#', '', $str); // supprime les autres caractères    
     return $str;
 }
-
-function nomFichierValidesansAccent($chaineNonValide){
-  $chaineNonValide0 = wd_remove_accents($chaineNonValide,$charset='utf-8');  
-  $chaineNonValide1 = preg_replace('`\s+`', '_', trim($chaineNonValide0));
-  $chaineNonValide2 = str_replace("'", "_", $chaineNonValide1);
-  $chaineNonValide3 = preg_replace('`_+`', '_', trim($chaineNonValide2));
-  $chaineValide=strtr($chaineNonValide3,
-"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ",
-                        "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
-  return ($chaineValide);
+/**
+ * Fonction qui remome tous les noms de fichier
+ * @param string $filemane
+ * @return type
+ */
+function renameFile($filename) {
+    $ext = strrchr($filename, '.');
+    return basename($filename, $ext) . time() . $ext;
+    
+    
+}
+/**
+ * Fonction qui enlève les accents dans une chaine de caratère et remplace les espaces par _
+ * @param type $chaineNonValide
+ * @return type
+ */
+function nomFichierValidesansAccent($chaineNonValide) {
+    $chaineNonValide0 = wd_remove_accents($chaineNonValide, $charset = 'utf-8');
+    $chaineNonValide1 = preg_replace('`\s+`', '_', trim($chaineNonValide0));
+    $chaineNonValide2 = str_replace("'", "_", $chaineNonValide1);
+    $chaineNonValide3 = preg_replace('`_+`', '_', trim($chaineNonValide2));
+    $chaineValide = strtr($chaineNonValide3, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+    return $chaineValide;
 }

@@ -3363,7 +3363,6 @@ public function addAutreQualite(Autresqualite $autresqualite) {
         $requete->execute();
         return $requete->fetchAll();
     }
-
     /**
      * This function return an array of an array of the request
      * @param type string $request is the request 

@@ -42,7 +42,7 @@ if (!empty($_GET['numProjet'])) {
                 header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numProjet . '/'.$idstatutprojet.'/'.rand(0,10000));
             break;
         default:
-            exit();
+            header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numProjet . '/'.$idstatutprojet);
     }
 }
 BD::deconnecter();

@@ -437,7 +437,7 @@ if(isset($_GET['statut'])){
 
 ?>
 <script>
-    document.getElementById('restaureLogoCentrale').value='';
+    document.getElementById('restaureLogoCentrale').value='';     
     function deleteSource(){
         if(document.getElementById("imagLogCentrale")){
             require(["dojo/dom-construct"], function(domConstruct){domConstruct.destroy("imagLogCentrale");});
@@ -482,7 +482,7 @@ if(isset($_GET['statut'])){
         document.getElementById('restaureLogo').value='ok';
         
     }
-</script>
+</script>    
     <!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
     <!--                                                                        BTR CENTRE LOGO                                                                                                         -->
     <!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -539,9 +539,9 @@ if(isset($_GET['statut'])){
     <!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
     <table border="0" cellspacing="0" cellpadding="0" style="" ><tr><td><label  style="font-weight:bold;margin-top:20px;margin-left:40px"><?php echo 'Entity logo : ' ?></label></td></tr>
     <tr>
-        <?php if(isset($logo)&&!empty($logo)){?>
+        <?php if(isset($logo)&&!empty($logo)){ ?>
         <td style="height: 49px;padding-left: 36px">
-            <input name='filelogo' type='file' id='filelogo'   size='20' style="display: none "  
+            <input name='filelogo' type='file' id='filelogo'   size='20' style="display: none "          
                    onchange="dijit.byId('fileNameLogo').set('value',document.getElementById('filelogo').files[0].name);">
             <button type="button" data-dojo-type="dijit/form/Button"   data-dojo-props="onClick:function(){document.getElementById('filelogo').click();}"><?php echo 'Browse..'; ?></button>
             <input type="text" data-dojo-type="dijit/form/ValidationTextBox" id='fileNameLogo' readonly="true">            

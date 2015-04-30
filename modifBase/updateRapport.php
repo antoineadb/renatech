@@ -8,9 +8,9 @@ include_once '../class/Securite.php';
 $dossier = '../uploadlogo/';
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 $db = BD::connecter();
-$fichierlogo = basename($_FILES['filelogo']['name']);
-$fichierlogocentrale = basename($_FILES['filelogocentrale']['name']);
-$fichierfigure = basename($_FILES['figure']['name']);
+$fichierlogo = nomFichierValidesansAccent(renameFile(basename($_FILES['filelogo']['name'])));
+$fichierlogocentrale = nomFichierValidesansAccent(renameFile(basename($_FILES['filelogocentrale']['name'])));
+$fichierfigure = nomFichierValidesansAccent(renameFile(basename($_FILES['figure']['name'])));
 
 if (!empty($_GET['idprojet'])) {
     $idprojet = $_GET['idprojet'];
@@ -96,19 +96,23 @@ if (!empty($_POST['legende'])) {
     $legend = '';
 }
 
-$image = $manager->getSingle2("select logo from rapport where idprojet=?", $idprojet);
+$imagelogo = $manager->getSingle2("select logo from rapport where idprojet=?", $idprojet);
 if (!empty($_FILES['filelogo']['name'])) {
-    $arraytaille = getimagesize($_FILES['filelogo']['tmp_name']);
-    $logo = $_FILES['filelogo']['name'];
-} elseif (!empty($image)) {
-    $logo = $image;
+    $logo = nomFichierValidesansAccent(renameFile($_FILES['filelogo']['name']));
+    if (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
+        chmod($dossier . $fichierlogo, 0777);        
+    }
+} elseif (!empty($imagelogo)) {
+    $logo = $imagelogo;
 } else {
     $logo = '';
 }
 $imagecentrale = $manager->getSingle2("select logocentrale from rapport where idprojet=?", $idprojet);
 if (!empty($_FILES['filelogocentrale']['name'])) {
-    $arraytaille = getimagesize($_FILES['filelogocentrale']['tmp_name']);
-    $logocentrale = $_FILES['filelogocentrale']['name'];
+    $logocentrale = nomFichierValidesansAccent(renameFile($_FILES['filelogocentrale']['name']));
+    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
+        chmod($dossier . $fichierlogocentrale, 0777);        
+    }
 } elseif (!empty($imagecentrale)) {
     $logocentrale = $imagecentrale;
 } else {
@@ -116,18 +120,26 @@ if (!empty($_FILES['filelogocentrale']['name'])) {
 }
 $imagefigure = $manager->getSingle2("select figure from rapport where idprojet=?", $idprojet);
 if (!empty($_FILES['figure']['name'])) {
-    $figure = $_FILES['figure']['name'];
+    $figure = nomFichierValidesansAccent(renameFile($_FILES['figure']['name']));
+    if (move_uploaded_file($_FILES['figure']['tmp_name'], $dossier . $fichierfigure)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
+        chmod($dossier . $fichierfigure, 0777);        
+    }
 } elseif (!empty($imagefigure)) {
     $figure = $imagefigure;
 } else {
     $figure = '';
 }
+include_once '../rapport/updateRapportCommun.php';
+supprLogoFigure();
+header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
+
+/*
 if (empty($_FILES['figure']['name'])) {
     $_bFigure = 'FALSE';
 } else {
     $_bFigure = 'TRUE';
 }
-if (empty($_FILES['filelogo']['name'])) {
+/*if (empty($_FILES['filelogo']['name'])) {
     $_bLogo = 'FALSE';
 } else {
     $_bLogo = 'TRUE';
@@ -139,7 +151,6 @@ if (empty($_FILES['filelogocentrale']['name'])) {
 }
 $image = $manager->getSingle2("select logo from rapport where idprojet=?", $idprojet);
 if (!empty($_FILES['filelogo']['name'])) {
-    $arraytaille = getimagesize($_FILES['filelogo']['tmp_name']);
     include_once '../rapport/updateRapportCommun.php';
     supprLogoFigure();
     header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
@@ -149,9 +160,9 @@ if (!empty($_FILES['filelogo']['name'])) {
 } else {
     $logo = '';
 }
-$imagecentrale = $manager->getSingle2("select logocentrale from rapport where idprojet=?", $idprojet);
+
 if (!empty($_FILES['filelogocentrale']['name'])) {
-    $arraytaille = getimagesize($_FILES['filelogocentrale']['tmp_name']);
+    $imagecentrale = $manager->getSingle2("select logocentrale from rapport where idprojet=?", $idprojet);
     include_once '../rapport/updateRapportCommun.php';
     header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     exit();
@@ -160,16 +171,18 @@ if (!empty($_FILES['filelogocentrale']['name'])) {
 } else {
     $logocentrale = '';
 }
+include_once '../rapport/updateRapportCommun.php';
+header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
 
 if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'FALSE') {//aucun fichier downloadé
     include_once '../rapport/updateRapportCommun.php';
     header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
 } elseif ($_bFigure == 'FALSE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'FALSE') {//Un logo mais pas d'image downloadé  ni de logocentrale    
-    if (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
-        chmod($dossier . $fichierlogo, 0777);
-        include_once '../rapport/updateRapportCommun.php';
-        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
+    /*if (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
+        chmod($dossier . $fichierlogo, 0777);        
     }
+    include_once '../rapport/updateRapportCommun.php';
+    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
 } elseif ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'TRUE') {//Un logocentrale mais pas d'image ni de logo labo downloadé      
     if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
         chmod($dossier . $fichierlogocentrale, 0777);
@@ -206,5 +219,5 @@ if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'FALSE') {/
         include_once '../rapport/updateRapportCommun.php';
         header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
     }
-}
+}*/
 

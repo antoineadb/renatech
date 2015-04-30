@@ -22,9 +22,11 @@ if (!empty($_FILES)) {
         exit();
     }
     if (!empty($_FILES['filelogocentrale']['tmp_name'])) {
-        $folderlogo = '../uploadlogo/' . nomFichierValidesansAccent($_FILES['filelogocentrale']['name']);
+        $nomLogocentrale  = nomFichierValidesansAccent($_FILES['filelogocentrale']['name']);
+        $folderlogo = '../uploadlogo/' . $nomLogocentrale;
     } else {
-        $folderlogo = '../uploadlogo/' . nomFichierValidesansAccent($_FILES['filelogo']['name']);
+        $nomLogo  = nomFichierValidesansAccent($_FILES['filelogo']['name']);
+        $folderlogo = '../uploadlogo/' .$nomLogo;
     }
 
     if (!empty($_FILES['filelogocentrale']['name'])) {
@@ -45,6 +47,7 @@ if (!empty($_FILES)) {
         $src_h = $size[1];
         $dossier = '../uploadlogo/';
         $filelogo = basename($my_img);
+        //$filelogo = basename($my_img).'_'.time();
         $dst_w = 2700;
         $dst_h = round(($dst_w / $src_w) * $src_h);
         $dst_im = imagecreatetruecolor($dst_w, $dst_h);
@@ -56,20 +59,23 @@ if (!empty($_FILES)) {
             imagedestroy($dst_im);
             imagedestroy($src_im);
         }
-        if (move_uploaded_file($my_img, $dossier . $filelogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné        
-            chmod($dossier . $filelogo, 0777);
-            unlink($dossier . basename($my_img));
+        if (move_uploaded_file($my_img, $folderlogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné            
+            chmod( $folderlogo, 0777);
+            //unlink($dossier . basename($my_img));
         }
+        
         include_once 'sizeLogo.php';
         exit();
     } elseif ($ext == '.png' || $ext == '.PNG') {
         if (!empty($_FILES['filelogocentrale']['tmp_name'])) {
-            $my_img = nomFichierValidesansAccent($_FILES['filelogocentrale']['tmp_name']);
+            $my_img =  nomFichierValidesansAccent($_FILES['filelogocentrale']['tmp_name']);
         } else {
             $my_img = nomFichierValidesansAccent($_FILES['filelogo']['tmp_name']);
         }
         $src_im = imagecreatefrompng($my_img);
         $size = GetImageSize($my_img);
+        $dossier = '../uploadlogo/';
+        $filelogo = basename($my_img);
         $src_w = $size[0];
         $src_h = $size[1];
         $dst_w = 440; //$dst_w = 629;
@@ -83,33 +89,14 @@ if (!empty($_FILES)) {
             imagedestroy($dst_im);
             imagedestroy($src_im);
         }
-    } else {
-        $dossier = '../uploadlogo/';
-        if (!empty($_FILES['filelogocentrale']['name'])) {
-            $fichierlogo = basename(nomFichierValidesansAccent($_FILES['filelogocentrale']['name']));
-        } else {
-            $fichierlogo = basename(nomFichierValidesansAccent($_FILES['filelogo']['name']));
-        }
-
-        if (!empty($_FILES['filelogocentrale']['name'])) {
-            if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogo)) {
-                chmod($dossier . $fichierlogo, 0777);
-            }
-        } else {
-            if (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo)) {
-                chmod($dossier . $fichierlogo, 0777);
-            }
+        if (move_uploaded_file($my_img, $dossier . $filelogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné            
+            chmod($dossier . $filelogo, 0777);
+            unlink($dossier . basename($my_img));
         }
         include_once 'sizeLogo.php';
         exit();
-    }
-    $dossier = '../uploadlogo/';
-    $filelogo = basename($my_img);
-    if (move_uploaded_file($my_img, $dossier . $filelogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné        
-        chmod($dossier . $filelogo, 0777);
-        unlink($dossier . basename($my_img));
-    }
-} elseif (empty($_FILES)) {
+    }     
+} else {
     $idprojet=$manager->getSingle2('select idprojet from projet where numero=?',$_SESSION['numProjet']);
     $folderlogo ='../'.$manager->getSingle2("select adresselogcentrale from sitewebapplication where refsiteweb = (SELECT libellecentrale from centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?)", $idprojet);
 }
