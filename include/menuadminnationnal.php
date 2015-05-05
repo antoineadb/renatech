@@ -12,17 +12,25 @@ $statistique = '/'.REPERTOIRE.'/graph/'.$lang.'/ok';
 $controleSuiviTousLesProjets = '/'.REPERTOIRE."/controler/controleSuiviTousLesProjets.php?lang=".$lang;
 $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
 $exportenquete ='/'.REPERTOIRE.'/enquete/'.$lang;
-
+$exportRapportWord='/' . REPERTOIRE . "/exportreport/" . $lang;
+$Refusedprojects ='/' . REPERTOIRE . "/viewRefusedProject/" . $lang;
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:620px;margin-left:58px">
     <li><a href="<?php echo $indexchoix; ?>" style="font-weight: bold" ><?php echo TXT_ACCUEIL; ?></a></li>    
-    <li><a href="<?php echo $controleSuiviTousLesProjets; ?>" style="font-weight: bold"><?php echo TXT_PROJET; ?></a></li>
+    
+    <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_PROJET.'</u>'; ?></a>
+       <ul style="z-index: 5;">
+            <li><a href="<?php echo $controleSuiviTousLesProjets; ?>" style="font-weight: bold"><?php echo TXT_VUEPROJET; ?></a></li>
+            <li><a href="<?php echo $Refusedprojects; ?>" style="font-weight: bold"><?php echo TXT_VUEPROJETREFUSE; ?></a></li>
+        </ul>
+    </li>    
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_EXPORTS.'</u>'; ?></a>
        <ul style="z-index: 5;">            
             <li><a href="<?php echo $exportBilanProjet; ?>" class="messages" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORT;?></a></li>
             <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTUTILISATEUR;?></a></li>
             <li><a href="<?php echo $exportenquete; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTENQUETE;?></a></li>
+            <li><a href="<?php echo $exportRapportWord; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTREPORT; ?></a></li>
         </ul> 
     </li>
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_COMPTES.'</u>'; ?></a>

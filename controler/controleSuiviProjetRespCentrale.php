@@ -667,8 +667,8 @@ $_SESSION['nbProjetSoustraitance']=$nbrowProjetSoustraitance;
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  RAPPORTS PROJETS
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-$rowProjetRapport= $manager->getListbyArray("select c.idstatutprojet_statutprojet,r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet "
-        . "and c.idprojet_projet=r.idprojet and cr.idprojet_projet=r.idprojet and c.idcentrale_centrale=? and c.idstatutprojet_statutprojet!=?", array($idcentrale,REFUSE));
+
+$rowProjetRapport= $manager->getListbyArray("select c.idstatutprojet_statutprojet,r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet and c.idprojet_projet=r.idprojet and cr.idprojet_projet=r.idprojet and c.idcentrale_centrale=? and c.idstatutprojet_statutprojet!=?", array($idcentrale,REFUSE));
 $fpProjetRapport = fopen('../tmp/ProjetRapport.json', 'w');
 $dataProjetRapport = "";
 fwrite($fpProjetRapport, '{"items": [');

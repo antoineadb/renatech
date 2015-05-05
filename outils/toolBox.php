@@ -556,6 +556,8 @@ function showError($dir) {
         error_reporting(E_ALL);
     } elseif ($repertoire[1] == 'projet') {
         error_reporting(0);
+    }elseif ($repertoire[1] == 'renatech') {
+        error_reporting(E_ALL);
     }
 }
 

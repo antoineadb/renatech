@@ -13,6 +13,8 @@ $exportBilanProjet = '/' . REPERTOIRE . "/exportprojet/" . $lang;
 $exportUtilisateur = '/' . REPERTOIRE . "/exportutilisateur/" . $lang;
 $exportUtilisateurcentrale = '/' . REPERTOIRE . "/exportTousutilisateur/" . $lang;
 $exportSultan='/' . REPERTOIRE . "/exportSultan/" . $lang;
+$exportRapportWord='/' . REPERTOIRE . "/exportreport/" . $lang;
+
 $moncompte = '/' . REPERTOIRE . '/moncompte/' . $lang;
 $gestioncompte = '/' . REPERTOIRE . "/compteadmin/" . $lang;
 $logout = '/' . REPERTOIRE . "/index/" . $lang . "/logout";
@@ -48,7 +50,8 @@ $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
                 <li><a href="<?php echo $exportBilanProjet; ?>" class="messages" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORT; ?></a></li>
                 <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTUTILISATEURCENTRALE; ?></a></li>
                 <li><a href="<?php echo $exportUtilisateurcentrale; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTTOUSUTILISATEUR; ?></a></li>
-              <li><a href="<?php echo $exportSultan; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTAPPLISULTAN; ?></a></li>
+                <li><a href="<?php echo $exportRapportWord; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTREPORT; ?></a></li>
+                <li><a href="<?php echo $exportSultan; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTAPPLISULTAN; ?></a></li>
             </ul>
 
         </li>

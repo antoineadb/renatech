@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="CONTENT-TYPE" content="text/html ; charset=utf8" >
-<title></title>
-</head>
-<body lang="fr-FR" dir="LTR" margin-top='-100px'>
 <style type="text/css">
     table{ vertical-align: top;width:100%;font-size: 9pt;font-family: helvetica;line-height: 2mm;};
     strong{color:#000;};
@@ -12,16 +5,17 @@
     hr{height:1px;background: #5D5D5E;border:none};
     
 </style>
-<style><!-- 
+<style>
 @page
 {
     size:21cm 29.7cm;  /* A4 */
     margin:1cm 1cm 1cm 1cm; /* Margins: 2.5 cm on each side */
-    mso-page-orientation: portrait;  
+    mso-page-orientation: portrait;   
+   
 }
 @page Section1 { }
 div.Section1 { page:Section1; }
---></style>
+</style>    
 <div class=Section1>
     <table>
         <tr>
@@ -68,19 +62,21 @@ div.Section1 { page:Section1; }
         </tr>
         <hr>
     </table>    
-    <table>
+    <table  cellpadding="0" cellspacing="0"> 
         <tr>
             <td style='width: 100%'><strong>Results: </strong>##Results##</td>
             </tr>
+            <br>
             <tr>
-                <td>
-                    <img style="max-height: 100px;max-width: 600px" align="left"  src=##FIGURES##  height=##heightfigure## width=##widthfigure## >
+                <td width="300"  align="center" valign="middle">                    
+                    <img style="max-height: 100px;max-width: 600px" align="center"  src=##FIGURES##  height=##heightfigure## width=##widthfigure## >
                 </td>
-            </tr>
+            </tr><br>
             <tr>
                 <td><i  style="font-size: 10px">##CAPTION##</i></td>
             </tr>
-    </table>    
+    </table>
+    <hr>
       <table>
         <tr>
         <td><strong>Valorization: </strong><br>##valorization##</td> 
@@ -92,7 +88,5 @@ div.Section1 { page:Section1; }
         <td><strong>Technological work conducted in the renatech network: </strong>##technologicalwc##</td> 
         </tr>
     </table>
-</div>    
-</body>
-</html>
- 
+</div>
+<h5 style="page-break-before:always;display: none">.</h5>

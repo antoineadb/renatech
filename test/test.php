@@ -1,6 +1,7 @@
 <?php
 include_once '../outils/toolBox.php';
 
-$str='Le nom des étoîles.jpg';
-echo $str.'<br>';
-echo nomFichierValidesansAccent($str);
+$arrayInfoImg =getimagesize("../uploadlogo/invivo.jpg");
+echo '<pre>';print_r($arrayInfoImg);
+$var = sizeLogo($arrayInfoImg, 80);
+echo $var[0].'<br>'.$var[1];

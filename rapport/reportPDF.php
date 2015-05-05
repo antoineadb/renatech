@@ -77,6 +77,8 @@ if (!empty($resreport[0]['valorization'])) {
 }
 if (!empty($resreport[0]['legend'])) {
     $legend = stripslashes($resreport[0]['legend']);
+}else{
+    $legend ='';
 }
 
 if (!empty($resreport[0]['logocentrale'])) {
@@ -167,18 +169,21 @@ $height = sizeLogo($arrayinfoImg,60)[1];
         </tr>
     </table>
     <hr>
-    <table style="">
+    <table  cellpadding="0" cellspacing="0"> 
         <tr>
-            <td style='width: 100%'><strong>Results : </strong><?php echo $results; ?></td></tr><tr><td>
- <?php
-    if ($figure != '') {//CALCUL DES DIMENSIONS DE LA FIGURE
-        $figure = nomFichierValidesansAccent($figure);
-        $arrayInfoImg = getimagesize($figure);
-        $width2 = sizeLogo($arrayInfoImg,185)[0];
-        $height2 = sizeLogo($arrayInfoImg,185)[1];
-    ?>
-                    <img   align="left"  src="<?php echo $figure; ?>"  height="<?php echo $height2; ?>" width="<?php echo $width2; ?>">
-            <?php } ?>
+            <td style='width: 100%'><strong>Results : </strong><?php echo $results; ?></td>
+        </tr>
+        <tr>
+             <td width="300"  align="center" valign="middle"> 
+                <?php
+                    if ($figure != '') {//CALCUL DES DIMENSIONS DE LA FIGURE
+                        $figure = nomFichierValidesansAccent($figure);
+                        $arrayInfoImg = getimagesize($figure);
+                        $width2 = sizeLogo($arrayInfoImg,185)[0];
+                        $height2 = sizeLogo($arrayInfoImg,185)[1];
+                ?>
+                 <img   align="left"  src="<?php echo $figure; ?>"  height="<?php echo $height2; ?>" width="<?php echo $width2; ?>">
+            <?php   } ?>
             </td>
         </tr>
         <tr><td><i  style="font-size: 10px"><?php echo $legend; ?></i></td></tr>
