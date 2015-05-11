@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 include_once '../decide-lang.php';
 include '../class/Manager.php';
@@ -1037,18 +1036,27 @@ if (isset($_POST['page_precedente'])) {
     //                              TRAITEMENT DU PROJETPHASE2
     //------------------------------------------------------------------------------------------------------------        
     if($_SESSION['idTypeUser']==ADMINLOCAL){
-    if($_POST['interneExterne']=='ie0'){
-        $interneexterne = null;
-    }elseif($_POST['interneExterne']=='ie1'){
-        $interneexterne = 'I';
-    }else{
-        $interneexterne = 'E';
-    }
+        if($_POST['interneExterne']=='ie0'){
+            $interneexterne = null;
+        }elseif($_POST['interneExterne']=='ie1'){
+            $interneexterne = 'I';
+        }else{
+            $interneexterne = 'E';
+        }
+        if($_POST['internationnalNationnal']=='in0'){
+            $internationalNational = null;
+        }elseif($_POST['internationnalNationnal']=='in1'){
+            $internationalNational = 'N';
+        }else{
+            $internationalNational = 'I';
+        }
+        
     }else{
         $interneexterne = $manager->getSingle2("select interneexterne from projet where idprojet=?", $idprojet);
+        $internationnalNationnal = $manager->getSingle2("select internationalnational from projet where idprojet=?", $idprojet);
     }
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne);
-    
+        
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne, $internationalNational);    
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //------------------------------------------------------------------------------------------------------------------------
     //			 MISE A JOUR DE LA TABLE RESSOURCEPROJET  ON EFFACE TOUTES LES RESSOURCES SELECTIONNEES
@@ -1095,7 +1103,6 @@ if (isset($_POST['page_precedente'])) {
             $cas = 'creerprojetphase2';
         }
     }
-    
     if ($cas == 'creerprojetphase2' || $cas == 'creationprojetphase2etape') {//CAS OU ON VALIDE UN PROJET EN ATTENTE PHASE2 idstatut = 9
         $idcentrale = $manager->getSingle2('select idcentrale_centrale from concerne where idprojet_projet=?', $idprojet);
         $manager->deleteConcerne($idprojet);

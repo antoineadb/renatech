@@ -366,10 +366,13 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     }
   
     $interneexterne = null;
+    $internationalNational = null;
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DU PROJETPHASE2
 //------------------------------------------------------------------------------------------------------------    
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne);
+
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne,$internationalNational);
+    
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //MISE A JOUR DATE DEBUT DU PROJET
     $datedebutprojet = new DateDebutProjet($idprojet, date('Y-m-d'));

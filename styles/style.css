@@ -446,6 +446,17 @@ a.infoBulle:hover span{
     width:580px;
 
 }
+#param{
+     border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 130px;
+    margin-top: 40px;
+    padding: 45px 20px 0 10px;
+    width: 1017px;
+
+}
 #stat{
     border: 1px solid #5D8BA2;
     border-radius: 5px 5px 5px 5px;
@@ -913,4 +924,14 @@ a.infoBulle:hover span{
 }
 .claro .dijitToasterContainer{
     width:22em;
+}
+.arrondi {
+background:url(img/edition.png);
+border:none;
+width: 20px; /* largeur à spécifier */
+height: 20px; /* longueur à spécifier */
+cursor: pointer;
+background-repeat: no-repeat;
+margin-left: 5px;
+usemap:"#carte1" ;
 }

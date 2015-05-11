@@ -13,7 +13,8 @@ $controleSuiviTousLesProjets = '/'.REPERTOIRE."/controler/controleSuiviTousLesPr
 $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
 $exportenquete ='/'.REPERTOIRE.'/enquete/'.$lang;
 $exportRapportWord='/' . REPERTOIRE . "/exportreport/" . $lang;
-$Refusedprojects ='/' . REPERTOIRE . "/viewRefusedProject/" . $lang;
+$Refusedprojects ='/'.REPERTOIRE."/controler/controleProjetRefuser.php?lang=".$lang;
+$parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:620px;margin-left:58px">
@@ -21,8 +22,8 @@ $Refusedprojects ='/' . REPERTOIRE . "/viewRefusedProject/" . $lang;
     
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_PROJET.'</u>'; ?></a>
        <ul style="z-index: 5;">
-            <li><a href="<?php echo $controleSuiviTousLesProjets; ?>" style="font-weight: bold"><?php echo TXT_VUEPROJET; ?></a></li>
-            <li><a href="<?php echo $Refusedprojects; ?>" style="font-weight: bold"><?php echo TXT_VUEPROJETREFUSE; ?></a></li>
+            <li><a href="<?php echo $controleSuiviTousLesProjets; ?>" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_VUEPROJET; ?></a></li>
+            <li><a href="<?php echo $Refusedprojects; ?>" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_VUEPROJETREFUSE; ?></a></li>
         </ul>
     </li>    
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_EXPORTS.'</u>'; ?></a>
@@ -45,6 +46,7 @@ $Refusedprojects ='/' . REPERTOIRE . "/viewRefusedProject/" . $lang;
             <li><a href="<?php echo $libelle;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONLIBELLE;?></a></li>
             <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_STATISTIQUE;?></a></li>
             <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>
+            <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
         </ul>
  
     </li>

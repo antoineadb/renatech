@@ -127,6 +127,7 @@ if (is_file('../outils/toolBox.php')) {
 }
 include_once 'PersonneCentraleQualite.php';
 include_once 'Autresqualite.php';
+include_once 'LoginParam.php';
 
 showError($_SERVER['PHP_SELF']);
 
@@ -146,15 +147,17 @@ class Manager {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO loginpassword (idlogin,mail,motdepasse,pseudo)VALUES(?,?,?,?)');
+            $requete = $this->_db->prepare('INSERT INTO loginpassword (idlogin,mail,motdepasse,pseudo,tmpcx)VALUES(?,?,?,?,?)');
             $idlogin = $login->getIdlogin();
             $mail = $login->getEmail();
             $motdepasse = $login->getMotpasse();
+            $tmpcx = $login->getTmpcx();
             $pseudo = $login->getPseudo();
             $requete->bindParam(1, $idlogin, PDO::PARAM_INT);
             $requete->bindParam(2, $mail, PDO::PARAM_STR);
             $requete->bindParam(3, $motdepasse, PDO::PARAM_STR);
             $requete->bindParam(4, $pseudo, PDO::PARAM_STR);
+            $requete->bindParam(5, $tmpcx, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -183,7 +186,22 @@ class Manager {
             $this->_db->rollBack();
         }
     }
-
+ public function updateloginParam(LoginParam $loginparam) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update loginpassword set tmpcx=? where pseudo=?');
+            $pseudo = $loginparam->getPseudo();
+            $tmpcx = $loginparam->getTmpcx();        
+            $requete->bindParam(1, $tmpcx, PDO::PARAM_INT);
+            $requete->bindParam(2, $pseudo, PDO::PARAM_STR);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_MANAERRLOGIN . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
 //------------------------------------------------------------------------------------------------------------
 //                                       LOGINACTIF
 //------------------------------------------------------------------------------------------------------------
@@ -1054,7 +1072,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $requete = $this->_db->prepare("update projet set contactscentraleaccueil=?, idtypeprojet_typeprojet=?,nbHeure=?,
 dateDebutTravaux=?,dureeprojet=?,idperiodicite_periodicite=?,centralepartenaireprojet=?,idthematique_thematique=?,idautrethematique_autrethematique=?,descriptifTechnologique=?,
 attachementdesc=?,verrouidentifiee=?,nbplaque=?,nbrun=?,envoidevis=?,emailrespdevis=?,reussite=?,refinterneprojet=?,devtechnologique=?,nbeleve=?,
-nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=?,interneexterne=? where idprojet=?");
+nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=?,interneexterne=?,internationalnational=? where idprojet=?");
             $contactscentralaccueil = $projet2->getContactscentralaccueil();
             $idtypeprojet = $projet2->getIdtypeprojet_typeprojet();
             $nbheure = $projet2->getNbHeure();
@@ -1084,7 +1102,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $etapeautrecentrale = $projet2->getEtapeautrecentrale();
             $centraleproximite = $projet2->getCentraleproximite();
             $descriptioncentraleproximite = $projet2->getDescriptioncentraleproximite();            
-            $interneexterne  = $projet2->getInterneExterne();            
+            $interneexterne  = $projet2->getInterneExterne();
+            $internationalnational = $projet2->getInternationalNational();
             $requete->bindParam(1, $contactscentralaccueil, PDO::PARAM_STR);
             $requete->bindParam(2, $idtypeprojet, PDO::PARAM_INT);
             $requete->bindParam(3, $nbheure, PDO::PARAM_INT);
@@ -1115,7 +1134,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete->bindParam(28, $centraleproximite, PDO::PARAM_BOOL);
             $requete->bindParam(29, $descriptioncentraleproximite, PDO::PARAM_STR);
             $requete->bindParam(30, $interneexterne, PDO::PARAM_STR);
-            $requete->bindParam(31, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(31, $internationalnational, PDO::PARAM_STR);
+            $requete->bindParam(32, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {

@@ -33,9 +33,9 @@ class Projetphase2 {
     private $_centraleproximite;
     private $_descriptioncentraleproximite;
     private $_interneExterne;
+    private $_internationalnational;
 
-    public function __construct($contactscentral, $idtypeprojet, $nbHeure, $datedebut, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique, $idautrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifiee, $nbplaque, $nbrun, $envoidevis, $emailrespdevis, $reussite, $refinterneprojet, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centraleproximite, 
-            $descriptioncentraleproximite,$interneExterne) {
+    public function __construct($contactscentral, $idtypeprojet, $nbHeure, $datedebut, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique, $idautrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifiee, $nbplaque, $nbrun, $envoidevis, $emailrespdevis, $reussite, $refinterneprojet, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centraleproximite, $descriptioncentraleproximite, $interneExterne, $internationalNational) {
         $this->setContactscentralaccueil($contactscentral);
         $this->setIdtypeprojet_typeprojet($idtypeprojet);
         $this->setNbHeure($nbHeure);
@@ -66,7 +66,17 @@ class Projetphase2 {
         $this->setCentraleproximite($centraleproximite);
         $this->setDescriptioncentraleproximite($descriptioncentraleproximite);
         $this->setInterneExterne($interneExterne);
+        $this->setInternationalNational($internationalNational);
     }
+
+    public function getInternationalNational() {
+        return $this->_internationalnational;
+    }
+
+    public function setInternationalNational($internationalNational) {
+        $this->_internationalnational = $internationalNational;
+    }
+
     public function getInterneExterne() {
         return $this->_interneExterne;
     }
@@ -74,7 +84,7 @@ class Projetphase2 {
     public function setInterneExterne($interneExterne) {
         $this->_interneExterne = $interneExterne;
     }
-    
+
     public function getDescriptioncentraleproximite() {
         return $this->_descriptioncentraleproximite;
     }

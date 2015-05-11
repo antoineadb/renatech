@@ -283,7 +283,7 @@ RewriteRule   Err1_contexte/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?la
 RewriteRule   Err1_Descript/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&idprojet=$2&msgerrtailledescriptif=$3&statut=$4 [L]
 
 #PROJET
-RewriteRule   projet_centrale/([a-z]+)/([A-Z\-]+)                 VueSuiviProjetCentrale.php?lang=$1&centrale=$2              [L]
+RewriteRule   projet_centrale/([a-z]+)/([A-Z\-]+)               VueSuiviProjetCentrale.php?lang=$1&centrale=$2              [L]
 RewriteRule   projet_centrale/([a-z]+)                          VueSuiviProjetTousCentrales.php?lang=$1                     [L]
 RewriteRule   new_request/([a-z]+)                              createProjet.php?lang=$1                                    [L]
 RewriteRule   new_project/([a-z]+)                              creerprojetphase2.php?lang=$1                               [L]
@@ -373,14 +373,16 @@ RewriteRule   statistiqueProjetType/([a-z]+)/([0-9]+)/([0-9]+)                  
 RewriteRule   statistiqueProjetType/([a-z]+)/([0-9]+)                               graph.php?lang=$1&anneeprojettypeprojet=$2 [L]
 RewriteRule   statistiqueProjetType/([a-z]+)/([a-z]+)/([0-9]+)                      graph.php?lang=$1&l=$2&centrale=$3 [L]
 RewriteRule   statistiqueProjetType/([a-z]+)/([0-9]+)/([0-9]+)                      graph.php?lang=$1&anneecentrale=$2&idcentrale=$3 [L]
-
-RewriteRule   statistiquenbProjet/([a-z]+)/([0-9]+)/([0-9]+)                      graph.php?lang=$1&anneecentrale=$2&idcentrale=$3 [L]
-
+RewriteRule   statistiquenbProjet/([a-z]+)/([0-9]+)/([0-9]+)                        graph.php?lang=$1&anneecentrale=$2&idcentrale=$3 [L]
 RewriteRule   chxStatistique/([a-z]+)/([0-9]+)                                      graph.php?lang=$1&statistique=$2 [L]
+
 RewriteRule   userPorteurProjet/([a-z]+)                                            userPorteurProjet.php?lang=$1 [L]
 RewriteRule   useradminprojet/([a-z]+)                                              useradminprojet.php?lang=$1 [L]
-
 RewriteRule   traceProjet/([a-z]+)/([0-9]+)                                         traceProjet.php?lang=$1&idprojet=$2 [L]
 RewriteRule   traceProjet/([a-z]+)                                                  traceProjet.php?lang=$1 [L]
 RewriteRule   trace/([a-z]+)                                                        ctrltrace.php?lang=$1   [L]
 RewriteRule   oldProject/([a-z]+)                                                   oldproject.php?lang=$1   [L]
+
+#PARAMETRAGE
+RewriteRule   param/([a-z]+)/([0-9]+)                                               param.php?lang=$1&update=$2 [L]
+RewriteRule   param/([a-z]+)                                                        param.php?lang=$1   [L]

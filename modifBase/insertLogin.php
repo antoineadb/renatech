@@ -18,10 +18,11 @@ if (isset($_SESSION['page_precedente']) && $_SESSION['page_precedente'] == 'crea
     }
     if (isset($_SESSION['pseudo'])) {
         $pseudo = $_SESSION['pseudo'];
-    }
+    }   
 //INSERSION EN BASE DE DONNEE
     $idlogin = $manager->getSingle("select max(idlogin) from loginpassword") + 1;
-    $login = new Login($idlogin, $mail, $passe, $pseudo);
+    $tmpx = 30; //secondes valeur par défaut du tmps de connexion 
+    $login = new Login($idlogin, $mail, $passe, $pseudo, $tmpx);
     $manager->addlogin($login);
     $_SESSION['mail'] = $mail;
     header('location:/'.REPERTOIRE.'/contact/' . $lang . '');

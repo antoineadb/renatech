@@ -8,27 +8,14 @@ include_once '../outils/toolBox.php';
 showError($_SERVER['PHP_SELF']);
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-if (empty($_POST['idcentralactuelnom'])) {
-    header('location:/'.REPERTOIRE.'/update_nom_centraleErr1/' . $lang . '/TXT_MESSAGEERREURCENTRALENONSELECT');
-    exit;
-} else {
-    $idcentralactuelnom = $_POST['idcentralactuelnom'];
-}
-
-if (empty($_POST['modifcentralenom'])) {
-    header('location:/'.REPERTOIRE.'/update_nom_centraleErr2/' . $lang . '/TXT_MESSAGEERREURCENTRALENONSAISIE');
-    exit;
-} else {
-    $modifcentralenom = stripslashes(Securite::bdd($_POST['modifcentralenom']));
-    $boolmasquecentrale = $manager->getSingle2("select masquecentrale from centrale where idcentrale=? ", $idcentralactuelnom);
-    if ($boolmasquecentrale == 1) {
-        $boolmasquecentrale = 'TRUE';
-    } else {
-        $boolmasquecentrale = 'FALSE';
-    }
-    $centraleName = new CentraleName($idcentralactuelnom, $modifcentralenom, $boolmasquecentrale);
-    $manager->updateNomCentrale($centraleName, $idcentralactuelnom);
-    header('location:/'.REPERTOIRE.'/update_nom_centrale/' . $lang . '/TXT_MESSAGESERVEURUPDATECENTRALE');
+if (!empty($_POST['valeur'])) {    
+    $valeur = $_POST['valeur'];
+    $pseudo = $_SESSION['pseudo'];
+    $loginParam = new LoginParam($pseudo, $valeur);
+    $manager->updateLoginParam($loginParam);
+    header('location:/' . REPERTOIRE . '/param/' . $lang.'/'.rand(0,10000));
     exit();
+} else {
+    header('location:/' . REPERTOIRE . '/param/' . $lang . '/erreur');
 }
 BD::deconnecter();

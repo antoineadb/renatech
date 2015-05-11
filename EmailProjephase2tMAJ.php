@@ -1,5 +1,7 @@
 <?php
-//session_start();
+if(!isset($cas)){
+    session_start();
+}
 
 include_once 'decide-lang.php';
 include_once 'class/email.php';
@@ -548,7 +550,7 @@ if (!empty($_GET['nbpersonne'])) {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                              ENVOIE DE L'EMAIL DES AUTRES CENTRALE
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-if($cas=='mise a jourEmailAutreEmail'){
+if(isset($cas) &&  $cas=='mise a jourEmailAutreEmail'){
     include 'outils/envoiEmailAutreCentrale.php';
 }
 header('Location: /' . REPERTOIRE . '/update_project3/' . $lang . '/' . $_GET['idprojet'] . '/' . $numero . '/' . $nbpersonne);

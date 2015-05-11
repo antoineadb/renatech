@@ -1,7 +1,7 @@
 <?php include_once 'outils/constantes.php'; ?>
-<div id="gridrefused" ></div>
+<div id="gridrefusedAll" ></div>
 <script>
-    var gridrefused, dataStore, store;
+    var gridrefusedAll, dataStore, store;
     require([
         "dojox/grid/DataGrid",
         "dojo/store/Memory",
@@ -11,7 +11,7 @@
         "dojo/date/locale",
         "dojo/domReady!"
     ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
-        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/projetRefuseCentrales.json", {
+        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/projectRefusedAll.json", {
             handleAs: "json"
         }).then(function(data) {
             store = new Memory({data: data.items});
@@ -20,18 +20,18 @@
                 var d = stamp.fromISOString(datum);
                 return locale.format(d, {selector: 'date', formatLength: 'short'});
             }
-            gridrefused = new DataGrid({
+            gridrefusedAll = new DataGrid({
                 store: dataStore,
                 query: {id: "*"},
                 structure: [                        
                         {"name": "<?php echo TXT_DATEPROJET; ?>", "field": "dateprojet", "width": "120px", formatter: formatDate},
-                        {"name": "<?php echo TXT_NUMROPROJET; ?>", "field":"numero", "width": "130px"},                        
-                        {"name": "<?php echo TXT_TITREPROJET; ?>", "field": "titre", "width": "100px"},
-                        {"name": "<?php echo TXT_CENTRALE; ?>", "field": "libellecentrale", "width": "100px"},
+                        {"name": "<?php echo TXT_NUMPROJECT; ?>", "field":"numero", "width": "100px"},                        
+                        {"name": "<?php echo TXT_TITREPROJET; ?>", "field": "titre", "width": "200px"},
+                        {"name": "<?php echo TXT_CENTRALE; ?>", "field": "libellecentrale", "width": "80px"},
                         {"name": "<?php echo TXT_COMMENTAIREPROJET; ?>", "field": "commentaireprojet", "width": "auto"}
                 ]
-            }, "gridrefused");
-            gridrefused.startup();
+            }, "gridrefusedAll");
+            gridrefusedAll.startup();
         });
     });
 </script>

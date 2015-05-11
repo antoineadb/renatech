@@ -74,7 +74,14 @@ $idpays = $row[$i]['idpays_pays'];
 $nompays = $manager->getSingle2("select nompays from pays where idpays=?", $idpays);
 // SI SOURCE DE FINANCEMENT = EUROPE ALORS INTERNATIONAL
 
-if (in_array('Europe', $arraySF)) {
+if(!empty($row[$i]['internationalnational'])){
+    if($row[$i]['internationalnational']=='I'){
+        $sit= 'International';
+    }elseif ($row[$i]['internationalnational']=='N'){
+        $sit= 'National';
+    }    
+    
+} elseif (in_array('Europe', $arraySF)) {
     $sit = 'International';
 } else {
     if ($nompays == 'France') {

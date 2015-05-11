@@ -24,6 +24,7 @@ $traceprojet  = '/' . REPERTOIRE . '/traceProjet/' . $lang;
 $projetperime = '/' . REPERTOIRE . '/oldProject/' . $lang;
 $useradminprojet= '/' . REPERTOIRE . '/useradminprojet/' . $lang;
 $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
+$parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 
 ?>
 <div style="z-index: 5;">
@@ -66,6 +67,7 @@ $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
         <ul style="z-index: 5;  ">
             <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_STATISTIQUE;?></a></li>
             <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>
+            <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
         </ul>
  
     </li>

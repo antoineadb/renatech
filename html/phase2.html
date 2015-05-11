@@ -108,6 +108,34 @@ if(isset($_GET['statut'])){
             <?php }?>
         </tr>
         </table>
+        <?php if($_SESSION['idTypeUser']==ADMINLOCAL){?>
+        <table style="border-collapse:collapse;width:210px;margin-top:10px;">
+            <tr>
+                <th style="border: 1px solid gray;padding-left:5px;background-color: #E4F0FC;text-align: center"><?php echo TXT_NOMLABO;?> <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                        <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEMODIFACRONYME');?></span>
+                                    </a></th>
+                <th style=""></th>
+            </tr>            
+            <tr><td>
+                    <?php 
+                        $acronymeLabo = $manager->getSingle2("SELECT acronymelaboratoire FROM projet,creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet = ?",$idprojet);
+                        $iddemandeur =  $manager->getSingle2("SELECT idutilisateur FROM projet,creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet = ?",$idprojet);
+                    ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"   id="acronymeLabo"                         
+                           style="text-align: center;width: 300px;border: 1px solid gray;" value='<?php echo $acronymeLabo; ?>'  />                   
+                </td>
+                <td>
+                    <div style="margin-top: -10px">
+                        <input type="button" class="arrondi" value="" 
+                               onclick="modifAcronymeLabo('/<?php echo REPERTOIRE; ?>/modifBase/modifAcronymeLabo.php?lang=<?php echo $lang; ?>&acronyme=' + dijit.byId('acronymeLabo').get('value') +
+                                           '&iddemandeur=<?php echo $iddemandeur;?>')"> 
+                        <span style="text-align: left;padding:10px;width: 310px;border-radius:5px;margin-left: 20px" id="idElement">&nbsp;</span>   
+                    </div>
+                </td>
+                <td><label style="display: none;color: red;margin-left:20px" id="afficheMessage" >L'acronyme à été modifié</label></div></td>
+            </tr>
+        </table>
+        <?php } ?>
         <?php if(!empty($_GET['msgerrdescontexte'])){?>
         <table>
             <tr>
@@ -378,10 +406,15 @@ if(isset($_GET['statut'])){
                 </td>
                 <?php }?>
             </tr>
+        </table>
             <?php 
-            if($_SESSION['idTypeUser']==ADMINLOCAL){
+            if($_SESSION['idTypeUser']==ADMINLOCAL){?>            
+            <fieldset id="identsf" style="border-color: #5D8BA2;width:952px; margin-left: 20px;padding-left: 10px;margin-top:20px;padding-top: 5px">                
+                <legend><?php echo "Pour l'export"; ?></legend>
+                <table>
+                <?php 
                     $interneexterne = $manager->getSingle2("select interneexterne from projet where idprojet=?",$idprojet);
-                    if(!empty($interneexterne)){
+                if(!empty($interneexterne)){
                         if($interneexterne=='I'){?>
                             <tr>
                                 <td>
@@ -459,9 +492,91 @@ if(isset($_GET['statut'])){
                             <div id="messageInfo" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
                     </td>
             </tr>
-        <?php }
-        }?>
-        </table>
+        <?php }?>
+                <?php 
+                    $internationalNational = $manager->getSingle2("select internationalnational from projet where idprojet=?",$idprojet);
+                if(!empty($internationalNational)){
+                        if($internationalNational=='N'){?>
+                            <tr>
+                               <td>
+                               <label for="internationnalNationnal" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo 'National/International :';?>
+                                   <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                       <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEINTERNEEXTERNE');?></span>
+                                   </a>
+                               </label>
+                                   <select name="internationnalNationnal" id="internationnalNationnal" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" 
+                                           onchange="if(this.value!=='in0'){document.getElementById('messageInfo2').style.display='block'}else{document.getElementById('messageInfo2').style.display='none';}" >
+                                   <option value="in0" ><?php echo TXT_SELECTTYPE; ?></option>;
+                                   <option value="in1" selected="selected" ><?php echo 'National'; ?></option>;
+                                   <option value="in2" ><?php  echo 'International'; ?></option>;
+                               </select>                    
+                               </td>
+                                   <td>
+                                           <div id="messageInfo2" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
+                                   </td>
+                           </tr>
+                <?php }elseif($internationalNational=='I'){?>
+                    <tr>
+                        <td>
+                        <label for="internationnalNationnal" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo 'National/International :';?>
+                            <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEINTERNEEXTERNE');?></span>
+                            </a>
+                        </label>
+                            <select name="internationnalNationnal" id="internationnalNationnal" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" 
+                                    onchange="if(this.value!=='in0'){document.getElementById('messageInfo2').style.display='block'}else{document.getElementById('messageInfo2').style.display='none';}" >
+                            <option value="in0" ><?php echo TXT_SELECTTYPE; ?></option>;
+                            <option value="in1" ><?php echo 'National'; ?></option>;
+                            <option value="in2"  selected="selected" ><?php  echo 'International'; ?></option>;
+                        </select>                    
+                        </td>
+                            <td>
+                                    <div id="messageInfo2" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
+                            </td>
+                    </tr>
+                <?php }else { ?>
+                    <tr>
+                    <td>
+                    <label for="internationnalNationnal" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo 'National/International :';?>
+                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                            <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEINTERNEEXTERNE');?></span>
+                        </a>
+                    </label>
+                        <select name="internationnalNationnal" id="internationnalNationnal" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" 
+                                onchange="if(this.value!=='in0'){document.getElementById('messageInfo2').style.display='block'}else{document.getElementById('messageInfo2').style.display='none';}" >
+                        <option value="in0" selected="selected" ><?php echo TXT_SELECTTYPE; ?></option>;
+                        <option value="in1" ><?php echo 'National'; ?></option>;
+                        <option value="in2"  ><?php  echo 'International'; ?></option>;
+                    </select>                    
+                    </td>
+                        <td>
+                                <div id="messageInfo2" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
+                        </td>
+                </tr>
+                <?php }
+                }else{?>
+                    <tr>
+                    <td>
+                    <label for="internationnalNationnal" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo 'National/International :';?>
+                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                            <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEINTERNEEXTERNE');?></span>
+                        </a>
+                    </label>
+                        <select name="internationnalNationnal" id="internationnalNationnal" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" 
+                                onchange="if(this.value!=='in0'){document.getElementById('messageInfo2').style.display='block'}else{document.getElementById('messageInfo2').style.display='none';}" >
+                        <option value="in0" selected="selected" ><?php echo TXT_SELECTTYPE; ?></option>;
+                        <option value="in1" ><?php echo 'National'; ?></option>;
+                        <option value="in2"  ><?php  echo 'International'; ?></option>;
+                    </select>                    
+                    </td>
+                        <td>
+                                <div id="messageInfo2" style="display: none;margin-top:33px"><?php echo '<b>'.affiche('TXT_AIDEINTERNEEXTERNE').'</b>';?></div>
+                        </td>
+                </tr>
+                <?php } }?>
+            
+        </table></fieldset>
+        
         <input id="reponsenomlabo" value='' style="display: none" >
         <fieldset id="dev" style="border-color: #5D8BA2;width:966px;padding-top: 0px;margin-top:20px;margin-left: 20px;padding-left:0px;">
             <legend style="margin-left: 20px;"><?php echo TXT_PARTENAIRE;?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>

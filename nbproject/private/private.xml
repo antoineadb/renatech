@@ -12,11 +12,11 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/projetRenatechNV/.htaccess</file>
-            <file>file:/G:/projetRenatechNV/exportDesRapports.php</file>
-            <file>file:/G:/projetRenatechNV/templates/template.html</file>
-            <file>file:/G:/projetRenatechNV/templates/exportWord.php</file>
-            <file>file:/G:/projetRenatechNV/rapport/reportPDF.php</file>
+            <file>file:/G:/projetRenatechNV/outils/communExport.php</file>
+            <file>file:/G:/projetRenatechNV/class/Projetphase2.php</file>
+            <file>file:/G:/projetRenatechNV/modifBase/updateProjetphase2.php</file>
+            <file>file:/G:/projetRenatechNV/html/phase2.html</file>
+            <file>file:/G:/projetRenatechNV/class/Manager.php</file>
         </group>
     </open-files>
 </project-private>

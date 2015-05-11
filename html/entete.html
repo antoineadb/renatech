@@ -30,7 +30,9 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
     }else{
     $url3="";
     }    
-    checktimeconnect(1800);//TEMPORISATION 30 MINUTE AVANT DECONNEXION SI PAS D'ACTIVITE    
+    if(isset($_SESSION['pseudo'])){
+        checktimeconnect($_SESSION['pseudo']);//TEMPORISATION  AVANT DECONNEXION SI PAS D'ACTIVITE
+    }
     ?>    
 </div>
 <div style="margin-left:10px;">

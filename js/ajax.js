@@ -178,3 +178,28 @@ function callbackemployeur(reponse) {
         document.getElementById('autre').innerHTML = '';
     }
 }
+/**
+ * 
+ * @param {type} cheminEtFichierPhp
+ * @returns {undefined}
+ */
+function modifAcronymeLabo(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function () {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            callbackmodifAcronyme(xhr2.responseText);
+        }
+    };
+
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+
+function callbackmodifAcronyme(reponse) {
+    document.getElementById('afficheMessage').value = reponse; //affiche dans le div de reponse
+    if (reponse === 'TRUE') {
+        document.getElementById('afficheMessage').style.display='block';
+    } else {
+      document.getElementById('afficheMessage').style.display='none';
+    }
+}

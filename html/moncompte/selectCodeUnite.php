@@ -15,7 +15,7 @@ $chemin ='/'.REPERTOIRE.'/js/ajax.js';
         
         ?>
         <select name="codeunite" id="codeunite" data-dojo-type="dijit/form/Select"  style="text-align: left;font-size: 1.2em;height:30px;width:340px;"  
-                onchange="afficheNomCentrale('/<?php echo REPERTOIRE; ?>/outils/affichecentrale.php?lang=<?php echo $lang; ?>&id=' + this.value + '')">
+                onchange="afficheNomCentrale('/<?php echo REPERTOIRE; ?>/outils/affichecentrale.php?lang=<?php echo $lang; ?>&id=' + this.value + '')" >
 
             <?php
                 if (!empty($idcodeunite)) {

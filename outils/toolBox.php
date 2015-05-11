@@ -203,7 +203,13 @@ function check_authent($pseudo) {
  * This function calculate the connextion time, if the connection time is above 30 minutes without any action, the session are closed
  * @param type $limitInactif
  */
-function checktimeconnect($limitInactif) {
+function checktimeconnect($pseudo) {
+    $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+    $manager = new Manager($db);
+    $limitInactif = (int) $manager->getSingle2("select tmpcx from loginpassword where pseudo=?", $pseudo)*60;
+    if($limitInactif==0){
+        $limitInactif = 30;
+    }
     if (isset($_GET['lang'])) {
         $lang = $_GET['lang'];
     } else {//Si aucune langue n'est déclarée on tente de reconnaitre la langue par défaut du navigateur
