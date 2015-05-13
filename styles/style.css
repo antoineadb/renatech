@@ -935,3 +935,17 @@ background-repeat: no-repeat;
 margin-left: 5px;
 usemap:"#carte1" ;
 }
+
+.datedebutprojet{
+    border: 1px solid #3380BE;
+    border-radius: 5px;
+    color: #3380BE;
+    margin-bottom: 20px; 
+    font-family: verdana;
+    margin-top: 13px;
+    margin-left:20px;
+    padding-bottom:5px;
+    padding-top:5px;
+    width: 600px;
+    text-align: center;
+}

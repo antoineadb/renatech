@@ -18,8 +18,8 @@ class Tmprecherche {
         return $this->_porteur;
     }
 
-    public function setNumero($param) {
-        $this->_numero = $param;
+    public function setNumero($numero) {
+        $this->_numero = $numero;
 }
 
     public function getNumero() {

@@ -2,12 +2,12 @@
 <form data-dojo-type="dijit/form/Form" id="connexion" name="connexion"  method="post" action="<?php echo '/'.REPERTOIRE;  ?>/controler/controlePasse.php?lang=<?php echo $lang;?>" >
     <fieldset class="login" >		
         <legend class='loginlegend'><b> </b></legend>   
-        <table width="50%" border='0px' style="margin-left:50px;">
+        <table width="50%" border='0px' style="margin-left:-7px;">
             <tr align="left">
                 <th></th>
                 <th></th>
-                <td><?php echo TXT_LOGIN.'* :'  ; ?></td>
-                <td><?php echo TXT_MOTPASSE.'* :';?><a href='<?php echo "/".REPERTOIRE; ?>/forgot_password/<?php echo $lang; ?>' ><div style="font-size: 10px"><?php echo TXT_MOTPASSEOUBLIE; ?></div></a></td>
+                <td><div style="margin-left: 10px"><?php echo TXT_LOGIN.'* :'  ; ?></div></td>
+                <td><div style="margin-left: 10px"><?php echo TXT_MOTPASSE.'* :';?></div><a href='<?php echo "/".REPERTOIRE; ?>/forgot_password/<?php echo $lang; ?>' ><div style="font-size:10px;width:200px;margin-left: 10px"><?php echo TXT_MOTPASSEOUBLIE; ?></div></a></td>
                 <td></td>
                 <td> </td>
                 <td></td>
@@ -17,13 +17,13 @@
                 <td></td>
                 <td><input class="pseudo" id="pseudo" type="text" name="pseudo"   data-dojo-type="dijit/form/ValidationTextBox"  required="required"  value="<?php if(isset($_GET['pseudo'])){echo $_GET['pseudo'];} ?>"
                            autocomplete="on" promptMessage ="<?php echo TXT_MAUVAISPSEUDO;?>"  data-dojo-props="regExp:'^[a-zA-Z0-9._&-]{6,}',invalidMessage:'<?php echo TXT_MAUVAISPSEUDO; ?>'"
-                           placeHolder ="<?php echo TXT_PSEUDO; ?>" style="width: 200px;border-radius: 3px"></td>
-                <td style='width:150px'><input type="password" required="required"  name="motPasse" id="motPasse"   trim="true" data-dojo-type="dijit/form/ValidationTextBox" style="border-radius: 3px;width: 170px;"
+                           placeHolder ="<?php echo TXT_PSEUDO; ?>" style="width: 200px;border-radius: 3px;margin-left: 10px"></td>
+                <td><input type="password" required="required"  name="motPasse" id="motPasse"   trim="true" data-dojo-type="dijit/form/ValidationTextBox" style="border-radius: 3px;width: 170px;;margin-left: 10px"
                            
                            data-dojo-props="regExp:'^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$',invalidMessage:'<?php echo TXT_MAUVAISMOTPASSE; ?>'"
                            promptMessage ="<?php echo TXT_MAUVAISMOTPASSE;?>"  placeHolder ="<?php echo TXT_VOTREMOTPASSE; ?>"  
                            ></td>
-                <td><input type="submit" label="<?php echo TXT_BOUTONLOG; ?>" data-dojo-Type="dijit.form.Button" ></td>
+                <td><input type="submit" label="<?php echo TXT_BOUTONLOG; ?>" data-dojo-Type="dijit.form.Button"  ></td>
             </tr>
         </table>
     </fieldset>

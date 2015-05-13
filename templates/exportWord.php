@@ -65,9 +65,9 @@ fclose($fp);
     } else {
         $arrayInfoImgLogoCentrale = getimagesize($_SERVER['DOCUMENT_ROOT'] . "/" . REPERTOIRE . "/" . $logocentrale);
     }
-
-    $widthLogoCentrale = sizeLogo($arrayInfoImgLogoCentrale, 60)[0];
-    $heightLogoCentrale = sizeLogo($arrayInfoImgLogoCentrale, 60)[1];
+    $w = sizeLogo($arrayInfoImgLogoCentrale, 60);
+    $widthLogoCentrale = $w[0];
+    $heightLogoCentrale = $w[1];
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //                  TRAITEMENT DES FIGURES
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -81,11 +81,12 @@ fclose($fp);
     } else {
         $caption = '';
     }
-    if (isset($arrayrapport[0]['figure']) && !empty(($arrayrapport[0]['figure']))) {
+    if (isset($arrayrapport[0]['figure']) && !empty($arrayrapport[0]['figure'])) {
         //CALCUL DES DIMENSIONS DE LA FIGURE
         $arrayInfoImg = getimagesize($_SERVER['DOCUMENT_ROOT'] . "/" . REPERTOIRE . "/uploadlogo/" . nomFichierValidesansAccent($arrayrapport[0]['figure'] . ""));
-        $widthfigure = sizeLogo($arrayInfoImg, 185)[0];
-        $heightfigure = sizeLogo($arrayInfoImg, 185)[1];
+        $x = sizeLogo($arrayInfoImg, 185);
+        $widthfigure = $x[0];
+        $heightfigure = $x[1];
     }else{
         $widthfigure =10;
         $heightfigure =10;
@@ -104,8 +105,9 @@ fclose($fp);
     } else {
         $arrayInfoImgLogoLabo = getimagesize($_SERVER['DOCUMENT_ROOT'] . "/" . REPERTOIRE . "/" . $logolabo);
     }
-    $widthLogoLab = sizeLogo($arrayInfoImgLogoLabo, 60)[0];
-    $heightLogoLab = sizeLogo($arrayInfoImgLogoLabo, 60)[1];
+    $y = sizeLogo($arrayInfoImgLogoLabo, 60);
+    $widthLogoLab = $y[0];
+    $heightLogoLab = $y[1];
     $logorenatech = 'https://' . $_SERVER['HTTP_HOST'] . '/' . REPERTOIRE . '/' . 'styles/img/logo-renatech.jpg';
     $logoCentrale = 'https://' . $_SERVER['HTTP_HOST'] . '/' . REPERTOIRE . $logocentrale . '';
     $figure = 'https://' . $_SERVER['HTTP_HOST'] . '/' . REPERTOIRE . $figure . '';

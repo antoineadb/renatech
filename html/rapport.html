@@ -426,14 +426,16 @@ if(isset($_GET['statut'])){
         }else{        
             $arrayInfoImg0 =getimagesize($logocentrale);
         }
-        $width0 = sizeLogo($arrayInfoImg0,80)[0];
-        $height0 = sizeLogo($arrayInfoImg0,80)[1];
+        $w=sizeLogo($arrayInfoImg0,80);        
+        $width0 = $w[0];        
+        $height0 = $w[1];
 
     $idprojet = $manager->getSingle2("select idprojet from projet where numero =?",$_SESSION['numProjet']);
     $src = $manager->getSingle2("select adresselogcentrale from sitewebapplication where refsiteweb = (SELECT libellecentrale from centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?)", $idprojet);
     $arrayInfoImg = getimagesize($src);    
-    $width = sizeLogo($arrayInfoImg,80)[0];
-    $height = sizeLogo($arrayInfoImg,80)[1];
+    $t =sizeLogo($arrayInfoImg,80);
+    $width = $t[0];
+    $height = $t[1];
 
 ?>
 <script>
@@ -554,8 +556,9 @@ if(isset($_GET['statut'])){
             <div id="cibleOriginal1"></div>
             <?php 
                 $arrayInfoImg = getimagesize('uploadlogo/'.$logo);    
-                $width = sizeLogo($arrayInfoImg,80)[0];
-                $height = sizeLogo($arrayInfoImg,80)[1];
+                $u =sizeLogo($arrayInfoImg,80); 
+                $width = $u[0];
+                $height = $u[1];
             ?>
             <img id="imagLog" src=" <?php echo  '/' . REPERTOIRE . '/uploadlogo/' . nomFichierValidesansAccent($logo) ?>" width='<?php echo $width; ?>' height='<?php echo $height; ?>' style="margin-bottom: 5px;margin-top: 15px"></td>
     </tr>
@@ -661,8 +664,9 @@ if(isset($figure) && $figure!=''){
     //CALCUL DES DIMENSIONS DE LA FIGURE
     $figure = nomFichierValidesansAccent($figure);
     $arrayInfoImg =getimagesize('uploadlogo/'.$figure);
-    $width = sizeLogo($arrayInfoImg,160)[0];
-    $height = sizeLogo($arrayInfoImg,160)[1];    
+    $v = sizeLogo($arrayInfoImg,160);
+    $width = $v[0];
+    $height = $v[1];    
 }
 ?>
 <script> 

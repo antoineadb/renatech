@@ -1053,7 +1053,13 @@ if (isset($_POST['page_precedente'])) {
         
     }else{
         $interneexterne = $manager->getSingle2("select interneexterne from projet where idprojet=?", $idprojet);
-        $internationnalNationnal = $manager->getSingle2("select internationalnational from projet where idprojet=?", $idprojet);
+        $internationalNational = $manager->getSingle2("select internationalnational from projet where idprojet=?", $idprojet);
+        if(empty($interneexterne)){
+            $interneexterne = null;
+        }
+        if(empty($internationalNational)){
+            $internationalNational = null;
+        }
     }
         
     $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne, $internationalNational);    

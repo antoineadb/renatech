@@ -107,8 +107,9 @@ ob_start();
 </style>
 <?php
 $arrayinfoImg = getimagesize($logocentrale);
-$width = sizeLogo($arrayinfoImg,60)[0];
-$height = sizeLogo($arrayinfoImg,60)[1];
+$w=  sizeLogo($arrayinfoImg,60);
+$width = $w[0];
+$height = $w[1];
 ?>
 <page backtop="1mm" backleft="5mm" backright="2mm" backbottom="1mm" footer="date;heure">
     <table>
@@ -141,9 +142,10 @@ $height = sizeLogo($arrayinfoImg,60)[1];
             <td style='width:25%;padding-left:-80px ' >
                 <?php
                 //CALCUL DES DIMENSIONS DU LOGO                
-                $arrayInfoImg = getimagesize($logo);               
-                $width1 = sizeLogo($arrayInfoImg,60)[0];
-                $height1 = sizeLogo($arrayInfoImg,60)[1];
+                $arrayInfoImg = getimagesize($logo);
+                $x = sizeLogo($arrayInfoImg,60);
+                $width1 = $x[0];
+                $height1 = $x[1];
                 ?>
                 <table>
                     <tr>
@@ -179,8 +181,9 @@ $height = sizeLogo($arrayinfoImg,60)[1];
                     if ($figure != '') {//CALCUL DES DIMENSIONS DE LA FIGURE
                         $figure = nomFichierValidesansAccent($figure);
                         $arrayInfoImg = getimagesize($figure);
-                        $width2 = sizeLogo($arrayInfoImg,185)[0];
-                        $height2 = sizeLogo($arrayInfoImg,185)[1];
+                        $y = sizeLogo($arrayInfoImg,185);
+                        $width2 = $y[0];
+                        $height2 = $y[1];
                 ?>
                  <img   align="left"  src="<?php echo $figure; ?>"  height="<?php echo $height2; ?>" width="<?php echo $width2; ?>">
             <?php   } ?>

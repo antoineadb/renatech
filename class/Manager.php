@@ -1281,7 +1281,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('update tmprecherche set porteur =? where numero=?');
-            $porteur= $tmprecherche->getPorteur().
+            $porteur= $tmprecherche->getPorteur();
             $requete->bindParam(1, $porteur, PDO::PARAM_STR);
             $requete->bindParam(2, $numero, PDO::PARAM_STR);
             $requete->execute();
