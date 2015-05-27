@@ -89,6 +89,7 @@ if($lang=='fr'){
         <td>
             <?php  
             $rowtypeentreprise = $manager->getList2("SELECT idtypeentreprise,libelletypeentreprise, libelletypeentrepriseen FROM utilisateur,typeentreprise,appartient WHERE idutilisateur_utilisateur = idutilisateur AND idtypeentreprise_typeentreprise = idtypeentreprise AND  idutilisateur=?",$idutilisateur);
+            
             if(!empty($rowtypeentreprise[0]['idtypeentreprise'])){
                 $idtypeentreprise=$rowtypeentreprise[0]['idtypeentreprise'];
             }

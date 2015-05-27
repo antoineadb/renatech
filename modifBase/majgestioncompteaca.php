@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include_once '../decide-lang.php';
 include_once '../outils/constantes.php';
@@ -12,32 +13,32 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
     $_SESSION['libelleautrediscipline'] = $_GET['libelleautrediscipline'];
     $idutilisateur = $_GET['iduser'];
     include_once '../html/moncompte/moncomptecommun.php';
-    
+
 //---------------------------------------------------------------------------------------------------------------------------------------
 //                                                             QUALITE DEMANDEUR
 ////---------------------------------------------------------------------------------------------------------------------------------------
     $ancienIdQualite = $manager->getSingle2("select idqualitedemandeuraca_qualitedemandeuraca from utilisateur where idutilisateur = ?", $idutilisateur);
-    if(!empty($_GET['qualitedemandeuraca'])&& $_GET['qualitedemandeuraca'] != $ancienIdQualite){
+    if (!empty($_GET['qualitedemandeuraca']) && $_GET['qualitedemandeuraca'] != $ancienIdQualite) {
         if (strlen($_GET['qualitedemandeuraca']) > 3) {
             $idqualitedemandeuraca = (int) substr($_GET['qualitedemandeuraca'], 2, 2);
         } else {
             $idqualitedemandeuraca = (int) substr($_GET['qualitedemandeuraca'], 2, 1);
-        }        
+        }
         //EFFACAGE DU NOM DU RESPONSABLE ET DE SON EMAIL
         $utilisateurnomresponsable = new UtilisateurNomresponsable($idutilisateur, null);
         $manager->updateUtilisateurNomresponsable($utilisateurnomresponsable, $idutilisateur);
-        
-        $utilisateurmailresponsable = new UtilisateurMailresponsable($idutilisateur, null);//echo '<pre>';print_r($utilisateurmailresponsable);die;
+
+        $utilisateurmailresponsable = new UtilisateurMailresponsable($idutilisateur, null); //echo '<pre>';print_r($utilisateurmailresponsable);die;
         $manager->updateUtilisateurMailResponsable($utilisateurmailresponsable, $idutilisateur);
-        
+
         $qualiteDemandeuraca = new UtilisateurQualiteaca($idqualitedemandeuraca, $idutilisateur);
         $manager->updateQualiteAcademique($qualiteDemandeuraca, $idutilisateur);
-    }    
+    }
 //---------------------------------------------------------------------------------------------------------------------------------------
 //                                                             EMAIL RESPONSABLE
 ////---------------------------------------------------------------------------------------------------------------------------------------
 //IL FAUT CONTROLER QUE L'EMAIL A BIEN CHANGE    
-    if ($_GET['qualitedemandeuraca'] == 'qa'.NONPERMANENT) {
+    if ($_GET['qualitedemandeuraca'] == 'qa' . NONPERMANENT) {
         $ancienEmailResponsable = $manager->getsingle2("SELECT  mailresponsable FROM utilisateur WHERE idutilisateur =?", $idutilisateur);
         if (!empty($_GET['mailresponsable']) && $_GET['mailresponsable'] != $ancienEmailResponsable) { //NOUVEL EMAIL
             $emailResponsable = stripslashes(Securite::bdd($_GET['mailresponsable']));
@@ -61,7 +62,7 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
     $anciendroit = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM utilisateur WHERE idutilisateur =?", $idutilisateur);
     if (!empty($_GET['role']) && $_GET['role'] != 'tu' . $anciendroit) {// ON VERIFIE QUE L'ON A SELECTIONNE UN DROIT
         $idtypeutilisateur = substr($_GET['role'], 2);
-        if ($idtypeutilisateur == UTILISATEUR || $idtypeutilisateur ==ADMINNATIONNAL ) {//CAS UTILISATEUR ou ADMINNATIONNAL
+        if ($idtypeutilisateur == UTILISATEUR || $idtypeutilisateur == ADMINNATIONNAL) {//CAS UTILISATEUR ou ADMINNATIONNAL
             $typeuser = new UtilisateurType($idutilisateur, $idtypeutilisateur);
             $manager->updateUtilisateurType($typeuser, $idutilisateur);
         } elseif ($idtypeutilisateur == ADMINLOCAL) {//ADMINISTRATEUR LOCAL
@@ -76,7 +77,7 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
             }
             if ($idcentrale == 0) {
                 if ($idcentrale == 0) {
-                    header('Location: /' . REPERTOIRE . '/gestionCompte/' . $lang . '/' . $_GET['iduser']  . '/msgerrcentrale=ok');
+                    header('Location: /' . REPERTOIRE . '/gestionCompte/' . $lang . '/' . $_GET['iduser'] . '/msgerrcentrale=ok');
                     exit();
                 }
             } else {
@@ -183,13 +184,41 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
 //-------------------------------------------------------------------------------------------------------------------------------------------
     $ancienacronymelaboratoire = $manager->getSingle2("SELECT acronymelaboratoire FROM utilisateur WHERE idutilisateur = ?", $idutilisateur);
     if (isset($_GET['acronymelaboratoire']) && $_GET['acronymelaboratoire'] != $ancienacronymelaboratoire) {
-        $acronymelaboratoire = new UtilisateurAcronymelabo(Securite::bdd($_GET['acronymelaboratoire']),$idutilisateur);        
+        $acronymelaboratoire = new UtilisateurAcronymelabo(Securite::bdd($_GET['acronymelaboratoire']), $idutilisateur);
         $manager->updateAcronymelaboratoire($acronymelaboratoire, $idutilisateur);
     }
     BD::deconnecter();
     $_SESSION['libelleautrenomemployeur'] = '';
     $_SESSION['libelleautretutelle'] = '';
     $_SESSION['libelleautrediscipline'] = '';
+
+//-------------------------------------------------------------------------------------------------------------------------------------------
+//						       ADMINISTRATEUR DE PROJET
+//-------------------------------------------------------------------------------------------------------------------------------------------    
+    if (isset($_GET['admin']) && $_GET['admin'] == 1) {
+        $administrateur = $_GET['admin'];
+        $useradminprojet = new UtilisateurAdministrateur($idutilisateur, $administrateur);
+        $manager->updateUtilisateurAdministrateur($useradminprojet, $idutilisateur);        
+        ajouteAdministrationProjet($idutilisateur);
+    } elseif (isset($_GET['admin']) && $_GET['admin'] == 0) {
+        $administrateur = $_GET['admin'];
+        $useradminprojet = new UtilisateurAdministrateur($idutilisateur, $administrateur);
+        $manager->updateUtilisateurAdministrateur($useradminprojet, $idutilisateur);
+        //AJOUT DE LA FONCTION ADMINISTRATEUR DE PROJET
+        retireAdministrationProjet($idutilisateur);      
+    }
+
+//-------------------------------------------------------------------------------------------------------------------------------------------
+//						       FIN
+//-------------------------------------------------------------------------------------------------------------------------------------------    
+
+
+
+
+
+
+
+
     header('Location: /' . REPERTOIRE . '/updatecompteaca/' . $lang . '/' . $idutilisateur . '/1/ok');
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);

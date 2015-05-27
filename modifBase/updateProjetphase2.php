@@ -1065,6 +1065,31 @@ if (isset($_POST['page_precedente'])) {
     $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne, $internationalNational);    
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //------------------------------------------------------------------------------------------------------------------------
+    //                  GESTION DES CAS OU LE DEMANDEUR EST ADMINISTRATEUR DE PROJET
+    //------------------------------------------------------------------------------------------------------------------------
+    if(isset($_SESSION['idutilisateur'])&&!empty($_SESSION['idutilisateur'])){
+        $idutilisateur = $_SESSION['idutilisateur'];
+    }elseif (isset($_GET['idprojet'])&&!empty($_GET['idprojet'])) {
+        $idprojet = $_GET['idprojet'];
+        $idutilisateur= $manager->getSingle2("select idutilisateur_utilisateur from creer where idprojet_projet=?", $idprojet);
+    }
+    
+    $admin = $manager->getSingle2("select administrateur from utilisateur where idutilisateur=?", $idutilisateur);    
+    if($admin==1){
+        ajouteAdministrationProjet($idutilisateur);
+    }
+    //------------------------------------------------------------------------------------------------------------------------
+    //                  GESTION DES CAS OU LE DEMANDEUR A UN RESPONSABLE DANS L'APPLICATION QUI EST ADMINISTRATEUR DE PROJET
+    //------------------------------------------------------------------------------------------------------------------------
+    $mailResponsable = $manager->getSingle2("select mailresponsable from utilisateur where idutilisateur=?", $idutilisateur);
+    if(!empty($mailResponsable)){
+        $idresponsable = $manager->getSingle2("select idutilisateur from utilisateur,loginpassword  where idlogin=idlogin_loginpassword and lower(mail) like lower(?) ", trim($mailResponsable));
+        if(!empty($idresponsable)){
+            ajouteResponsableAdministrationProjet($idutilisateur,$idresponsable);
+        }
+    }
+    
+    //------------------------------------------------------------------------------------------------------------------------
     //			 MISE A JOUR DE LA TABLE RESSOURCEPROJET  ON EFFACE TOUTES LES RESSOURCES SELECTIONNEES
     //------------------------------------------------------------------------------------------------------------------------
     $ressources = '';

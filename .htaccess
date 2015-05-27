@@ -386,3 +386,6 @@ RewriteRule   oldProject/([a-z]+)                                               
 #PARAMETRAGE
 RewriteRule   param/([a-z]+)/([0-9]+)                                               param.php?lang=$1&update=$2 [L]
 RewriteRule   param/([a-z]+)                                                        param.php?lang=$1   [L]
+
+#PROJETS SANS DEVELOPPMENT
+RewriteRule  noDevProject/([a-z]+)                                          projetSansDev.php?lang=$1 [L]

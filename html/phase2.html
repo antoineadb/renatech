@@ -9,7 +9,8 @@ if(isset($_GET['statut'])){
 }else{
        $statut=$manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
 }
-if(isset($_GET['statut']) && $_GET['statut']==ENCOURSREALISATION || $_GET['statut']==FINI|| $_GET['statut']==CLOTURE){    
+
+if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){    
     if(isset($_GET['numProjet'])){
         $numero  = $_GET['numProjet'];
     }elseif(isset($_GET['idprojet'])){
@@ -17,6 +18,7 @@ if(isset($_GET['statut']) && $_GET['statut']==ENCOURSREALISATION || $_GET['statu
     }
     $datedebutProjet = $manager->getSingle2("select datedebutprojet from projet where numero =? ",$numero);
 }
+
 ?>
 <fieldset>
     <legend style="width: 850px;padding-left: 20px">
@@ -368,24 +370,24 @@ $date  = $date->format('d-m-Y');
             <?php
             //collaborator
                 $s_Collaborator='';
-                $_acolaborator = $manager->getList2("select centralepartenaireprojet,partenaire1 from projet where idprojet=?",$idprojet);
-                $s_Collaborator=$_acolaborator[0]['centralepartenaireprojet'].' '.$_acolaborator[0]['partenaire1'].',';
+                $_acolaborator = $manager->getList2("select centralepartenaireprojet from projet where idprojet=?",$idprojet);
+                $s_Collaborator = $_acolaborator[0]['centralepartenaireprojet'].', ';
                 if(!empty($_acolaborator)){
-                    $arraycollaborator = $manager->getList2("select nompartenaire,nomlaboentreprise from partenaireprojet,projetpartenaire where idpartenaire_partenaireprojet= idpartenaire and idprojet_projet=?",$idprojet);
+                    $arraycollaborator = $manager->getList2("select nomlaboentreprise from partenaireprojet,projetpartenaire where idpartenaire_partenaireprojet= idpartenaire and idprojet_projet=?",$idprojet);
                     $nbarraycollaborator = count($arraycollaborator);
                     for($i=0;$i<$nbarraycollaborator;$i++){
-                        $s_Collaborator.=$arraycollaborator[$i]['nomlaboentreprise'].' - '.$arraycollaborator[$i]['nompartenaire'].',';
+                        $s_Collaborator.=$arraycollaborator[$i]['nomlaboentreprise'].', ';
                     }
                 }
-                $s_collaborator=substr($s_Collaborator,0,-1);
+                $s_collaborator=substr($s_Collaborator,0,-2);
                 
                 $ressources='';
                 $arrayressource = $manager->getList2("select libelleressourceen from ressourceprojet,ressource  where idressource=idressource_ressource  and idprojet_projet=?",$idprojet);                
                 $nbarrayressource = count($arrayressource);
                 for($i=0;$i<$nbarrayressource;$i++){
-                    $ressources.= $arrayressource[$i]['libelleressourceen'].',';                    
+                    $ressources.= $arrayressource[$i]['libelleressourceen'].', ';                    
                 }                
-                $stringRessource = substr($ressources,0,-1);
+                $stringRessource = substr($ressources,0,-2);
             ?>
             <input type="text" value='<?php if(!empty($s_collaborator)){ echo $s_collaborator;} ?>' style="display: none" id='collaborators'>
             <input type="text" value='<?php if(!empty($stringRessource)){ echo $stringRessource;} ?>' style="display: none" id='technicalworks'>            

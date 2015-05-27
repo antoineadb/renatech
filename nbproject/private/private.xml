@@ -5,18 +5,18 @@
             <url>html/phase2.html</url>
             <bookmark id="1">
                 <name/>
-                <line>15</line>
+                <line>25</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/projetRenatechNV/outils/communExport.php</file>
-            <file>file:/G:/projetRenatechNV/class/Projetphase2.php</file>
-            <file>file:/G:/projetRenatechNV/modifBase/updateProjetphase2.php</file>
-            <file>file:/G:/projetRenatechNV/html/phase2.html</file>
-            <file>file:/G:/projetRenatechNV/class/Manager.php</file>
+            <file>file:/G:/projetRenatechNV/EmailProjetphase2.php</file>
+            <file>file:/G:/projetRenatechNV/projetSansDev.php</file>
+            <file>file:/G:/projetRenatechNV/templates/exportWordNoDEv.php</file>
+            <file>file:/G:/projetRenatechNV/emailprojetphase2/emailAutrecentraleSeul.php</file>
+            <file>file:/G:/projetRenatechNV/exportCsvNoDev.php</file>
         </group>
     </open-files>
 </project-private>

@@ -1,4 +1,4 @@
-<?php
+<?php 
 include_once 'decide-lang.php';
 include_once 'class/email.php';
 include_once 'class/Manager.php';
@@ -43,13 +43,13 @@ $sujet =  utf8_decode(TXT_DEMANDEPROJET) . ' : ' . $titre . ' ' . $txtbodyref . 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              CAS DE LA CREATION D'UN PROJET EN PHASE2
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-if(isset($_POST['creerprojetphase2'])&&$_POST['creerprojetphase2']=='oui' || isset($cas)&&$cas=='creationprojetphase2etape'){//EMAILPROJETPHASE2;    
+if(isset($_POST['creerprojetphase2'])&&$_POST['creerprojetphase2']=='oui' || isset($cas)&&$cas=='creationprojetphase2etape'){//EMAILPROJETPHASE2;       
     include_once 'emailprojetphase2/creerphase2.php';
 }elseif
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              TRAITEMENT DU STATUT ACCEPTE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-($idStatut === ACCEPTE && isset($_POST['creer_phase2'])) {//PROJET PROVENENANT DE LA CREATION D'UNE DEMANDE DE PROJET PHASE1+PHASE2
+($idStatut === ACCEPTE && isset($_POST['creer_phase2'])) {//PROJET PROVENENANT DE LA CREATION D'UNE DEMANDE DE PROJET PHASE1+PHASE2    
     include_once 'emailprojetphase2/emailAccepte.php';   
     //test si autre centrale    
     if (!empty($_POST['etapeautrecentrale']) && $_POST['etapeautrecentrale'] == 'TRUE') {

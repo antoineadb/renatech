@@ -446,6 +446,19 @@ a.infoBulle:hover span{
     width:580px;
 
 }
+#projetNoDev{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;    
+    margin-top: 20px;
+    padding: 10px;
+    width: 1026px;
+    margin-top: 20px;
+    border-color: #5D8BA2;
+    height:44em;
+    
+}
 #param{
      border: 1px solid #5d8ba2;
     border-radius: 5px;

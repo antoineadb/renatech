@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-
 include '../decide-lang.php';
 include '../class/Manager.php';
 include_once '../class/Securite.php';

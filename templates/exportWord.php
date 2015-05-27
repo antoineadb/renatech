@@ -134,7 +134,7 @@ fclose($fp);
     $content = str_replace('##Results##', $arrayrapport[0]['results'], $content);
     $content = str_replace('##CAPTION##', $caption, $content);
     $content = str_replace('##FIGURES##', $figure, $content);
-    $content = str_replace('##valorization##', $arrayrapport[0]['valorization'], $content);
+    $content = str_replace('##valorization##', removeDoubleQuote($arrayrapport[0]['valorization']), $content);
     $content = str_replace('##technologicalwc##', $arrayrapport[0]['technologicalwc'], $content);
     $content = str_replace('##repertoire##', '/' . REPERTOIRE . '/', $content);
     

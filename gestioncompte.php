@@ -101,15 +101,15 @@ include 'html/header.html';
             }
             if (!empty($_GET['iduser']) && !empty($_GET['idqualiteaca']) && empty($_GET['idqualiteindust'])) {
                 $iduser = $_GET['iduser'];
-                $row = $manager->getListbyArray("
+                $row = $manager->getList2("
 SELECT u.nom,u.prenom,u.adresse,u.ville,u.codepostal,u.telephone,u.fax,u.idpays_pays,u.idqualitedemandeuraca_qualitedemandeuraca,l.pseudo,l.mail,l.actif,qa.libellequalitedemandeuraca,n.libelleemployeur,n.idemployeur,an.libelleautrenomemployeur,at.libelleautrestutelle,t.idtutelle,t.libelletutelle,d.libellediscipline,d.iddiscipline,ad.libelleautrediscipline,
-at.idautrestutelle,an.idautrenomemployeur,ad.idautrediscipline,u.nomresponsable,u.mailresponsable,u.idtypeutilisateur_typeutilisateur
+at.idautrestutelle,an.idautrenomemployeur,ad.idautrediscipline,u.nomresponsable,u.mailresponsable,u.idtypeutilisateur_typeutilisateur,administrateur
 FROM utilisateur u,loginpassword l,qualitedemandeuraca qa,nomemployeur n,autrenomemployeur an,autrestutelle at,tutelle t,autrecodeunite ac,disciplinescientifique d,autredisciplinescientifique ad
 WHERE l.idlogin = u.idlogin_loginpassword AND qa.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca AND
 n.idemployeur = u.idemployeur_nomemployeur AND an.idautrenomemployeur = u.idautrenomemployeur_autrenomemployeur AND 
 at.idautrestutelle = u.idautrestutelle_autrestutelle AND  ad.idautrediscipline = u.idautrediscipline_autredisciplinescientifique and
 t.idtutelle = u.idtutelle_tutelle AND ac.idautrecodeunite = u.idautrecodeunite_autrecodeunite and 
-d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", array($iduser));
+d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $iduser);
                 for ($i = 0; $i < count($iduser); $i++) {
                     $nom = $row[$i]['nom'];
                     $prenom = $row[$i]['prenom'];
@@ -134,6 +134,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", arr
                     $mailresponsable = $row[$i]['mailresponsable'];
                     $actif = $row[$i]['actif'];
                     $iddroit = $row[$i]['idtypeutilisateur_typeutilisateur'];
+                    $administrateur = $row[$i]['administrateur'];
                 }
                 if (empty($actif)) {
                     $valeuractif = TXT_NONACTIF;
@@ -422,6 +423,23 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", arr
                                     </select>
                                 </td>
                             </tr>
+                            <tr><th style="text-align: left"><?php echo TXT_ADMINDEPROJET; ?>
+                                <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                        <span style="text-align: left;padding:10px;width: 750px;border-radius:5px" ><?php echo affiche('TXT_AIDEADMINDEPROJET');?></span>
+                                    </a></th>
+                                <td></td>
+                                <td>
+                                    <div style="margin-left: 50px">
+                                        <?php if($administrateur==1){ ?>
+                                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="administrateur" id ="adminOui" checked="true"  class="btRadio" ><?php echo TXT_OUI; ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="administrateur" id="adminNon"  class="btRadio"> <?php echo TXT_NON; ?>
+                                        <?php }else{ ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="administrateur" id ="adminOui"   class="btRadio" ><?php echo TXT_OUI; ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="administrateur" id="adminNon" checked="true"  class="btRadio"> <?php echo TXT_NON; ?>
+                                        <?php } ?>
+                                    </div>
+                                </td>
+                            </tr>
                             <tr>
                                 <?php $libelledroit = $manager->getSingle2("select libelletype FROM typeutilisateur where idtypeutilisateur=?", $iddroit); ?>
                                 <th style="text-align: left"><?php echo TXT_DROITACTUEL; ?></th><td></td>
@@ -460,6 +478,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", arr
 
                             </td>
                         </tr>
+                        
                         <?php                        
                             $libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM utilisateur,centrale WHERE idcentrale = idcentrale_centrale and idutilisateur=?", $_GET['iduser']);
                             $idcentrale = $manager->getSingle2("select idcentrale from centrale where libellecentrale=?", $libellecentrale);
@@ -490,7 +509,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", arr
                                     </select>
                                 </td>
     <?php } ?>
-                        </tr>
+                        </tr>                        
                             <?php } ?>
                         </table>
                         <button id="progButtonNode" data-dojo-type="dijit/form/Button" type="submit" name="submitButtonThree" value="Submit"><?php echo TXT_MAJ; ?></button>
@@ -595,10 +614,18 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", arr
                                 } else {
                                     centrale = "";
                                 }
+                                if (dijit.byId('adminOui').checked) {
+                                    var admin = 1;
+                                } else {
+                                    admin = 0;
+                                }
+                                
+                                
+                                
                                 window.location.replace("<?php echo '/'.REPERTOIRE ?>/modifBase/majgestioncompteaca.php?pseudo="+pseudo+"&mail="+mail+"&nomuser="+nomuser+"&prenomuser="+prenomuser+"&pays="+nompays+"&teluser="+teluser+
                                         "&faxuser="+faxuser+"&adresseuser="+adresseuser+"&codepostal="+codepostal+"&ville="+ville+"&qualitedemandeuraca="+idqualitedemandeuraca+"&nomresponsable=" + nomresponsable +"&mailresponsable=" + mailresponsable + "&acronymelaboratoire=" + acronymelaboratoire + "&idemployeur=" + idemployeur + "&role=" + role + "&idtutelle=" + idtutelle 
                                 + "&libelleautretutelle=" + libelleautretutelle + "&libelleautrenomemployeur=" + libelleautrenomemployeur + "&iddiscipline=" + iddiscipline + "&centrale=" + centrale 
-                                + "&libelleautrediscipline=" + libelleautrediscipline + "&iduser=" +<?php echo $iduser; ?> + "&statutcompte=" + statutcompte + "&page_precedente=<?php echo basename(__FILE__); ?>");
+                                + "&libelleautrediscipline=" + libelleautrediscipline + "&iduser=" +<?php echo $iduser; ?> + "&statutcompte=" + statutcompte +"&admin="+admin+ "&page_precedente=<?php echo basename(__FILE__); ?>");
                             }
                         }, "progButtonNode");
                     });
@@ -665,7 +692,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", arr
                     } else {
                         $valeuractif = TXT_ACTIF;
                     }
-                }
+                }echo '<pre>';print_r($rowindust);die;
                 ?>
                 <fieldset id="compteuserindust" style="border-color: #5D8BA2;width: 1008px;padding-bottom:10px;padding-top:8px;font-size:1.2em" >
                     <legend><?php echo TXT_COMPTE; ?></legend>

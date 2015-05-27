@@ -371,9 +371,24 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //                              TRAITEMENT DU PROJETPHASE2
 //------------------------------------------------------------------------------------------------------------    
 
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne,$internationalNational);
-    
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne,$internationalNational);     
     $manager->updateProjetphase2($projetphase2, $idprojet);
+    $admin = $manager->getSingle2("select administrateur from utilisateur where idutilisateur=?", $idutilisateur_utilisateur);
+    //TRAITEMENT DU CAS OU L'UTLISATEUR QUI CREER LE PROJET EST DEJA ADMINISTRATEUR DE PROJET
+    if($admin==1){
+        ajouteAdministrationProjet($idutilisateur_utilisateur);
+    }
+    //TRAITEMENT DU CAS OU L'UTLISATEUR A UN RESPONSABLE QUI EST DANS L'APPLICATION DANS CE CAS LE RESPONSABLE EST ADMINISTRATEUR DE SES PROJETS
+    $mailResponsable = $manager->getSingle2("select mailresponsable from utilisateur where idutilisateur=?", $idutilisateur_utilisateur);
+    if(!empty($mailResponsable)){
+        $idresponsable = $manager->getSingle2("select idutilisateur from utilisateur,loginpassword  where idlogin=idlogin_loginpassword and mail=? ", trim($mailResponsable));
+        if(!empty($idresponsable)){
+            ajouteResponsableAdministrationProjet($idutilisateur_utilisateur,$idresponsable);
+        }
+    }
+    
+    
+    
     //MISE A JOUR DATE DEBUT DU PROJET
     $datedebutprojet = new DateDebutProjet($idprojet, date('Y-m-d'));
     $manager->updateDateDebutProjet($datedebutprojet, $idprojet);

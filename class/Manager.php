@@ -128,6 +128,7 @@ if (is_file('../outils/toolBox.php')) {
 include_once 'PersonneCentraleQualite.php';
 include_once 'Autresqualite.php';
 include_once 'LoginParam.php';
+include_once 'UtilisateurAdministrateur.php';
 
 showError($_SERVER['PHP_SELF']);
 
@@ -303,6 +304,22 @@ idautrecodeunite_autrecodeunite,acronymelaboratoire) VALUES (?,?,?,?,?,?,?,?,?,?
             $this->_db->commit();
         } catch (Exception $exc) {
             echo TXT_ERRINSERTUSER . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+    
+    public function updateUtilisateurAdministrateur(UtilisateurAdministrateur $userAdmin,$idutilisateur){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update utilisateur set administrateur = ? where idutilisateur =?');            
+            $administrateur = $userAdmin->getAdministrateur();
+            $requete->bindParam(1, $administrateur, PDO::PARAM_INT);
+            $requete->bindParam(2, $idutilisateur, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJET . '<br>' . $exc->getLine();
             $this->_db->rollBack();
         }
     }

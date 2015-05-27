@@ -25,7 +25,7 @@ $projetperime = '/' . REPERTOIRE . '/oldProject/' . $lang;
 $useradminprojet= '/' . REPERTOIRE . '/useradminprojet/' . $lang;
 $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
 $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
-
+$projetSansDev = '/'.REPERTOIRE.'/noDevProject/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:620px;margin-left:58px">
@@ -35,6 +35,7 @@ $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
                 <li><a href='<?php echo $createProjet; ?>' class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_CREERPROJET; ?></a></li>
                 <li><a href="<?php echo $creerprojetphase2; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_DEMANDEPROJET . '<br>'; ?></a></li>
                 <li><a href="<?php echo $controleSuiviProjetRespCentrale; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_LOGINPROJETCENTRALE; ?></a></li>
+                <li><a href="<?php echo $projetSansDev; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PROJETSANSDEV; ?></a></li>
                 <li><a href="<?php echo $controleSuiviProjet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_SUIVIPROJET; ?></a></li>
                 <li><a href="<?php echo $deleteprojets; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_DELETEPROJET; ?></a></li>                
                 <li><a href="<?php echo $porteurprojet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONPORTEUR; ?></a></li>

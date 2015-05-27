@@ -221,6 +221,8 @@ function checktimeconnect($pseudo) {
     }
     $_SESSION['lastLoad'] = time();
     $_SESSION['creationencours'] = 'non';
+    BD::deconnecter(); //CONNEXION A LA BASE DE DONNEE
+    
 }
 
 /**
@@ -673,7 +675,8 @@ function supprLogoFigure(){
                 unlink('../uploadlogo/' . $arrayImages[$i]); //EFFACE LE FICHIER SUR LE SERVEUR
             }
         }
-    }$db = BD::deconnecter();
+    }
+    BD::deconnecter();
 }
 
 /**
@@ -754,4 +757,95 @@ function nomFichierValidesansAccent($chaineNonValide) {
     $chaineNonValide3 = preg_replace('`_+`', '_', trim($chaineNonValide2));
     $chaineValide = strtr($chaineNonValide3, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
     return $chaineValide;
+}
+/**
+ * 
+ * @param type $idutilisateur
+ */
+function ajouteAdministrationProjet($idutilisateur) {
+    if (is_file('../class/Manager.php')) {
+        include_once '../class/Manager.php';
+    } else {
+        include_once 'class/Manager.php';
+    }
+    $db = BD::connecter();
+    $manager = new Manager($db);
+    //AJOUT DE LA FONCTION ADMINISTRATEUR DE PROJET
+    $arrayIdprojet = $manager->getList2("select idprojet_projet from creer where idutilisateur_utilisateur=?", $idutilisateur); //ON RECUPERE SES PROJETS DANS UN TABLEAU D'ID        
+    $arrayidprojet = array();
+    for ($i = 0; $i < count($arrayIdprojet); $i++) {
+        array_push($arrayidprojet, $arrayIdprojet[$i]['idprojet_projet']);
+    }
+    $arrayidprojetadmin = $manager->getList2("select idprojet from utilisateuradministrateur where idutilisateur=?", $idutilisateur);
+    $arrayIdProjetAdmin = array();
+    for ($i = 0; $i < count($arrayidprojetadmin); $i++) {
+        array_push($arrayIdProjetAdmin, $arrayidprojetadmin[$i]['idprojet']);
+    }    
+    //CONSTRUCTION D4UN TABLEAU DES ECARTS DES 2 TABLEAUX
+    $array = array_slice(array_diff($arrayidprojet, $arrayIdProjetAdmin),0);//REMISE DES INDEX A ZERO
+    if (!empty($array)) {
+        for ($i = 0; $i < count($array); $i++) {
+            $dateaffectation = date('Y-m-d');
+            if(!empty($array[$i])){
+                $utilisateurAdmin = new UtilisateurAdmin($idutilisateur, $array[$i], $dateaffectation);
+                $manager->addUtilisateurAdmin($utilisateurAdmin);
+            }
+        }
+    }
+    BD::deconnecter();
+}
+/**
+ * 
+ * @param type $idutilisateur
+ */
+function retireAdministrationProjet($idutilisateur) {
+    if (is_file('../class/Manager.php')) {
+        include_once '../class/Manager.php';
+    } else {
+        include_once 'class/Manager.php';
+    }
+    $db = BD::connecter();
+    $manager = new Manager($db);
+    //AJOUT DE LA FONCTION ADMINISTRATEUR DE PROJET
+    $arrayIdprojet = $manager->getList2("select idprojet_projet from creer where idutilisateur_utilisateur=?", $idutilisateur); //ON RECUPERE SES PROJETS DANS UN TABLEAU D'ID
+    for ($i = 0; $i < count($arrayIdprojet); $i++) {
+        $manager->deleteUtilisateurAdmin($arrayIdprojet[$i]['idprojet_projet'], $idutilisateur);
+    }
+
+    BD::deconnecter();
+}
+
+
+function ajouteResponsableAdministrationProjet($idutilisateur,$idresponsable) {
+    if (is_file('../class/Manager.php')) {
+        include_once '../class/Manager.php';
+    } else {
+        include_once 'class/Manager.php';
+    }
+    $db = BD::connecter();
+    $manager = new Manager($db);
+    $arrayIdprojet = $manager->getList2("select idprojet_projet from creer where idutilisateur_utilisateur=?", $idutilisateur); //ON RECUPERE SES PROJETS DANS UN TABLEAU D'ID        
+    $arrayidprojet = array();
+    for ($i = 0; $i < count($arrayIdprojet); $i++) {
+        array_push($arrayidprojet, $arrayIdprojet[$i]['idprojet_projet']);
+    }
+    
+    $arrayidprojetadmin = $manager->getList2("select idprojet from utilisateuradministrateur where idutilisateur=?", $idresponsable);
+    $arrayIdProjetAdmin = array();
+    for ($i = 0; $i < count($arrayidprojetadmin); $i++) {
+        array_push($arrayIdProjetAdmin, $arrayidprojetadmin[$i]['idprojet']);
+    }    
+    //CONSTRUCTION D'UN TABLEAU DES ECARTS DES 2 TABLEAUX
+    $array = array_slice(array_diff($arrayidprojet, $arrayIdProjetAdmin),0);//REMISE DES INDEX A ZERO
+    if (!empty($array)) {
+        for ($i = 0; $i < count($array); $i++) {
+            $dateaffectation = date('Y-m-d');
+            if(!empty($array[$i])){
+                $utilisateurAdmin = new UtilisateurAdmin($idresponsable, $array[$i], $dateaffectation);
+                $manager->addUtilisateurAdmin($utilisateurAdmin);
+            }
+        }
+    }
+    
+    BD::deconnecter();
 }

@@ -1,19 +1,6 @@
 <?php
 //TRAITEMENT DU LIBELLE DANS L'EMAIL
-if (!empty($_SESSION['idcentrale'])) {
-    $idcentrale = $_SESSION['idcentrale'];
-    $infocentrale = $manager->getList2("select libellecentrale,email1,email2,email3,email4,email5 from centrale where idcentrale=?", $_SESSION['idcentrale']);
-    $nbinfocentrale=count($infocentrale);				
-    $centrale = $infocentrale[0]['libellecentrale'];
-    $emailCentrale = '';
-    for ($i = 0; $i < count($infocentrale); $i++) {
-        for ($j = 0; $j < 4; $j++) {
-            if (!empty($infocentrale[$i]['email' . $j])) {
-                $emailCentrale .=$infocentrale[$i]['email' . $j] . '<br>';
-            }
-        }
-    }
-} elseif (!empty($_POST['centraletrs'])) {
+    if (!empty($_POST['centraletrs'])) {
     $idcentrale = (int) substr($_POST['centraletrs'], -1);
     $infocentrale = $manager->getList2("select libellecentrale,email1,email2,email3,email4,email5 from centrale where idcentrale=?", $idcentrale);
     $centrale = $infocentrale[0]['libellecentrale'];
@@ -26,15 +13,9 @@ if (!empty($_SESSION['idcentrale'])) {
         }
     }
 } else {
-    $idcentrale = $manager->getSingle2('SELECT idcentrale FROM loginpassword,centrale,utilisateur WHERE idlogin_loginpassword = idlogin AND idcentrale_centrale = idcentrale and pseudo=?', $_SESSION['pseudo']);
-    $centrale= $manager->getSingle2('SELECT libellecentrale FROM concerne,centrale WHERE  idcentrale_centrale = idcentrale and idprojet_projet=?', $idprojet);
-    if(!empty($idcentrale)){
-        $infocentrale = $manager->getList2("select libellecentrale,email1,email2,email3,email4,email5 from centrale where idcentrale=?", $idcentrale);
-    }else{
         $idcentrale = $manager->getSingle2('SELECT idcentrale FROM concerne,centrale WHERE  idcentrale_centrale = idcentrale and idprojet_projet=?', $idprojet);
         $centrale= $manager->getSingle2('SELECT libellecentrale FROM concerne,centrale WHERE  idcentrale_centrale = idcentrale and idprojet_projet=?', $idprojet);
         $infocentrale = $manager->getList2("select libellecentrale,email1,email2,email3,email4,email5 from centrale where idcentrale=?", $idcentrale);
-    }
     $emailCentrale = '';
     for ($i = 0; $i < count($infocentrale); $i++) {
         for ($j = 0; $j < 4; $j++) {

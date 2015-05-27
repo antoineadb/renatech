@@ -54,9 +54,10 @@ class Utilisateuracademique {
         $this->setIdautrediscipline_autredisciplinescientifique($idautrediscipline_autredisciplinescientifique);
         $this->setIdautrenomemployeur_autrenomemployeur($idautrenomemployeur_autrenomemployeur);
         $this->setIdautrecodeunite_autrecodeunite($idautrecodeunite_autrecodeunite);
-        $this->setAcronymelaboratoire($acronymelaboratoire);
+        $this->setAcronymelaboratoire($acronymelaboratoire);   
     }
 
+   
     public function getIdutilisateur() {
         return $this->_idutilisateur;
     }

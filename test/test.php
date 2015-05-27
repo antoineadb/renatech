@@ -1,7 +1,7 @@
 <?php
-include_once '../outils/toolBox.php';
+include '../class/Manager.php';
+$db = BD::connecter();
+$manager = new Manager($db);
 
-$arrayInfoImg =getimagesize("../uploadlogo/invivo.jpg");
-echo '<pre>';print_r($arrayInfoImg);
-$var = sizeLogo($arrayInfoImg, 80);
-echo $var[0].'<br>'.$var[1];
+$userAdmin = new UtilisateurAdministrateur(1, 1);
+$manager->updateUtilisateurAdministrateur($userAdmin, 1);
