@@ -457,10 +457,10 @@ a.infoBulle:hover span{
     margin-top: 20px;
     border-color: #5D8BA2;
     height:44em;
-    
+
 }
 #param{
-     border: 1px solid #5d8ba2;
+    border: 1px solid #5d8ba2;
     border-radius: 5px;
     color: midnightblue;
     font-family: verdana;
@@ -939,14 +939,14 @@ a.infoBulle:hover span{
     width:22em;
 }
 .arrondi {
-background:url(img/edition.png);
-border:none;
-width: 20px; /* largeur à spécifier */
-height: 20px; /* longueur à spécifier */
-cursor: pointer;
-background-repeat: no-repeat;
-margin-left: 5px;
-usemap:"#carte1" ;
+    background:url(img/edition.png);
+    border:none;
+    width: 20px; /* largeur à spécifier */
+    height: 20px; /* longueur à spécifier */
+    cursor: pointer;
+    background-repeat: no-repeat;
+    margin-left: 5px;
+    usemap:"#carte1" ;
 }
 
 .datedebutprojet{
@@ -961,4 +961,23 @@ usemap:"#carte1" ;
     padding-top:5px;
     width: 600px;
     text-align: center;
+}
+
+#emailExiste{
+    padding: 3px;
+    margin-top:10px;
+    color: midnightblue;
+}
+
+#createLoginemail{
+    border:solid 1px #5D8BA2;
+    border-color: #5D8BA2;
+    width: 966px; 
+    padding: 40px;
+    font-size:1.1em;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    margin-top:40px;
+    color: #5D8BA2;
 }

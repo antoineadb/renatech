@@ -35,18 +35,38 @@ if (isset($_POST['pseudo'])) {
     }
 }
 //1ER  VERIFICATION QUE L'EMAIL UTILISE N'EST PAS DEJA DANS LA TABLE LOGINPASSWORD ET DANS LE LE CHAMP EMAIL1 DE LA TABLE CENTRALE
-if (!empty($_POST['email1'])) {
-    for ($i = 1; $i < 6; $i++) {
-        $idrespcentrale = $manager->getSingle2("select idcentrale from centrale where email".$i."=?", $_POST['email1']);
-        if (!empty($idrespcentrale)) {//SIL IL N'EST OAS VIDE ON VERIFIE QU'IL N'EST PAS DEJA DANS CREEE
-            $emailloginpassword = $manager->getSingle2("select idlogin from loginpassword where mail=?", $_POST['email1']);
-        if (!empty($emailloginpassword)) {
-            header('Location: /' . REPERTOIRE . '/loginadmnErr/' . $lang . '/' . $idrespcentrale);
-            exit(); //FIN DE LA VERIFICATION
+if (empty($_SESSION['validEmail'])) {
+    if (!empty($_POST['email1'])) {
+        for ($i = 1; $i < 6; $i++) {
+            $idrespcentrale = $manager->getSingle2("select idcentrale from centrale where email" . $i . "=?", $_POST['email1']);
+            if (!empty($idrespcentrale)) {//SI IL N'EST PAS VIDE ON VERIFIE QU'IL N'EST PAS DEJA DANS CREEE
+                $emailloginpassword = $manager->getSingle2("select idlogin from loginpassword where mail=?", $_POST['email1']);
+                if (!empty($emailloginpassword)) {
+                    header('Location: /' . REPERTOIRE . '/loginadmnErr/' . $lang . '/' . $idrespcentrale);
+                    exit(); //FIN DE LA VERIFICATION
+                }
+            }
+        }
+        if (empty($idrespcentrale)) {
+            $_SESSION['logindoublon'] = '';
+            $arraylogin = $manager->getList2("select pseudo  from loginpassword where mail=?", $_POST['email1']);
+            if (count($arraylogin) > 0) {
+                if (count($arraylogin) == 1) {
+                    $_SESSION['logindoublon'] = $arraylogin[0]['pseudo'];
+                    header('Location: /' . REPERTOIRE . '/emailDblErr/' . $lang);
+                } else {
+                    $login = '';
+                    for ($i = 0; $i < count($arraylogin); $i++) {
+                        $login.=$arraylogin[$i]['pseudo'] . ', ';
+                    }
+                    $_SESSION['logindoublon'] = substr($login, 0, -2);
+                    header('Location: /' . REPERTOIRE . '/emailDblErr/' . $lang);
+                }
+            }
         }
     }
-    }  
 }
+
 include 'html/header.html';
 ?>
 <div id="global">
@@ -69,6 +89,7 @@ include 'html/header.html';
                             $code = strtoupper($_REQUEST['code']); // Cryptage et comparaison avec la valeur stockée dans $_SESSION['captcha']
                             if (md5($code) == $_SESSION['captcha']) {
                                 $class = 'correct';// Le code est bon
+                                 $_SESSION['validEmail']='';
                                 echo '<script>window.location.replace("/'.REPERTOIRE.'/modifBase/insertLogin.php?lang=' . $lang . '")</script>';
                             }else{
                                 $class = 'incorrect'; // Le code est erroné

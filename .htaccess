@@ -8,6 +8,7 @@ RewriteRule   contact/([a-z]+)                                  createContact.ph
 RewriteRule   loginDblErr/([a-z]+)                              createLoginDoublon.php?lang=$1                      [L]
 RewriteRule   loginadmnErr/([a-z]+)/([0-9]+)			createLoginAdminErreur.php?lang=$1&idcentrale=$2    [L]
 RewriteRule   contactadmnErr/([a-z]+)/([a-z]+)			createContact.php?lang=$1&msgerreuradmlocal=$2	    [L]
+RewriteRule   emailDblErr/([a-z]+)                               createloginemailexiste.php?lang=$1      	    [L]
 #ADMINNATIONNAL
 RewriteRule   liste/([a-z]+)                                    adminListe.php?lang=$1                              [L]
 RewriteRule   libelle/([a-z]+)                                  gestionlibelle.php?lang=$1                          [L]

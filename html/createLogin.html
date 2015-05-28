@@ -16,7 +16,7 @@ include_once 'outils/constantes.php';
 <div id="messagemauvaisemotpasse" style="display: none;color: red;"><?php echo TXT_MAUVAISMOTPASSE;?></div>
 <br>
 <form data-dojo-type="dijit/form/Form" id="login" name="login"  method="post" action="<?php echo '/'.REPERTOIRE ?>/securite/<?php echo $lang; ?>"  >
-    <script type="dojo/method" data-dojo-event="onSubmit">
+<script type="dojo/method" data-dojo-event="onSubmit">
     if(this.validate()){
         return true;
     }else{

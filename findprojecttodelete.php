@@ -12,10 +12,15 @@ $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 
 $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword,utilisateur WHERE  idlogin = idlogin_loginpassword and pseudo =?", $_SESSION['pseudo']);
-$row = $manager->getListbyArray("select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=?
-        union select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=?
-        union select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=?",
-        array($idcentrale, ENATTENTE,$idcentrale,ENCOURSANALYSE,$idcentrale,ACCEPTE));
+$row = $manager->getListbyArray("select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? 
+and co.idstatutprojet_statutprojet=?
+union select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? 
+and co.idstatutprojet_statutprojet=?
+union select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? 
+and co.idstatutprojet_statutprojet=?
+union select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? 
+and co.idstatutprojet_statutprojet=?",
+        array($idcentrale, ENATTENTE,$idcentrale,ENCOURSANALYSE,$idcentrale,ACCEPTE,$idcentrale,ENATTENTEPHASE2));
 $fprow = fopen('tmp/projetsEnattentecentrale.json', 'w');
 $datausercompte = "";
 fwrite($fprow, '{"items": [');
