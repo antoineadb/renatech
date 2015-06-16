@@ -7,7 +7,7 @@ class PersonneCentraleQualite {
 
     public function __construct($idpersonneQualite, $libellepersonneQualite) {
         $this->setIdpersonneQualite($idpersonneQualite);
-        $this->seLlibellepersonneQualite($libellepersonneQualite);
+        $this->setlibellepersonneQualite($libellepersonneQualite);
     }
 
     public function getIdpersonneQualite() {
@@ -18,11 +18,11 @@ class PersonneCentraleQualite {
         $this->_idpersonneQualite = (int) $id;
     }
 
-    public function getLibelleautrethematique() {
+    public function getlibellepersonneQualite() {
         return $this->_libellepersonneQualite;
     }
 
-    public function seLlibellepersonneQualite($libellepersonneQualite) {
+    public function setlibellepersonneQualite($libellepersonneQualite) {
         $this->_libellepersonneQualite = $libellepersonneQualite;
     }
 }

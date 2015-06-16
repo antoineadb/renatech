@@ -132,7 +132,6 @@ include_once 'UtilisateurAdministrateur.php';
 
 showError($_SERVER['PHP_SELF']);
 
-
 class Manager {
 
     private $_db; //instance de PDO
@@ -187,15 +186,16 @@ class Manager {
             $this->_db->rollBack();
         }
     }
- public function updateloginParam(LoginParam $loginparam) {
+
+    public function updateloginParam(LoginParam $loginparam) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('update loginpassword set tmpcx=? where pseudo=?');
             $pseudo = $loginparam->getPseudo();
-            $tmpcx = $loginparam->getTmpcx();        
+            $tmpcx = $loginparam->getTmpcx();
             $requete->bindParam(1, $tmpcx, PDO::PARAM_INT);
-            $requete->bindParam(2, $pseudo, PDO::PARAM_STR);            
+            $requete->bindParam(2, $pseudo, PDO::PARAM_STR);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -203,6 +203,7 @@ class Manager {
             $this->_db->rollBack();
         }
     }
+
 //------------------------------------------------------------------------------------------------------------
 //                                       LOGINACTIF
 //------------------------------------------------------------------------------------------------------------
@@ -307,12 +308,12 @@ idautrecodeunite_autrecodeunite,acronymelaboratoire) VALUES (?,?,?,?,?,?,?,?,?,?
             $this->_db->rollBack();
         }
     }
-    
-    public function updateUtilisateurAdministrateur(UtilisateurAdministrateur $userAdmin,$idutilisateur){
+
+    public function updateUtilisateurAdministrateur(UtilisateurAdministrateur $userAdmin, $idutilisateur) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('update utilisateur set administrateur = ? where idutilisateur =?');            
+            $requete = $this->_db->prepare('update utilisateur set administrateur = ? where idutilisateur =?');
             $administrateur = $userAdmin->getAdministrateur();
             $requete->bindParam(1, $administrateur, PDO::PARAM_INT);
             $requete->bindParam(2, $idutilisateur, PDO::PARAM_INT);
@@ -661,7 +662,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         }
     }
 
-     public function deleteUtilisateurPorteur($idprojet) {
+    public function deleteUtilisateurPorteur($idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
@@ -674,7 +675,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
-    
+
     //------------------------------------------------------------------------------------------------------------
 //                                       UTILISATEUR ADMINISTRATEUR
 //------------------------------------------------------------------------------------------------------------
@@ -712,6 +713,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
+
     public function deleteUtilisateurAdministrateur($idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -725,6 +727,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
+
 //------------------------------------------------------------------------------------------------------------
 //                                              NOMRESPONSABLE
 //------------------------------------------------------------------------------------------------------------
@@ -975,10 +978,11 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
-            echo TXT_ERR. '<br>' . $exc->getLine();
+            echo TXT_ERR . '<br>' . $exc->getLine();
             $this->_db->rollBack();
         }
     }
+
     public function updateQualiteIndustriel(UtilisateurQualiteindust $qualite, $idutilisateur) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -1079,6 +1083,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
+
 //------------------------------------------------------------------------------------------------------------
 //                                       PROJET PHASE 2
 //------------------------------------------------------------------------------------------------------------
@@ -1118,8 +1123,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $descriptionautrecentrale = $projet2->getDescriptionautrecentrale();
             $etapeautrecentrale = $projet2->getEtapeautrecentrale();
             $centraleproximite = $projet2->getCentraleproximite();
-            $descriptioncentraleproximite = $projet2->getDescriptioncentraleproximite();            
-            $interneexterne  = $projet2->getInterneExterne();
+            $descriptioncentraleproximite = $projet2->getDescriptioncentraleproximite();
+            $interneexterne = $projet2->getInterneExterne();
             $internationalnational = $projet2->getInternationalNational();
             $requete->bindParam(1, $contactscentralaccueil, PDO::PARAM_STR);
             $requete->bindParam(2, $idtypeprojet, PDO::PARAM_INT);
@@ -1298,7 +1303,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('update tmprecherche set porteur =? where numero=?');
-            $porteur= $tmprecherche->getPorteur();
+            $porteur = $tmprecherche->getPorteur();
             $requete->bindParam(1, $porteur, PDO::PARAM_STR);
             $requete->bindParam(2, $numero, PDO::PARAM_STR);
             $requete->execute();
@@ -1353,7 +1358,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("INSERT INTO centrale (idcentrale,libellecentrale,masquecentrale) VALUES (?,?,?)");
-            $idcentrale =$centrale->getIdcentrale();
+            $idcentrale = $centrale->getIdcentrale();
             $libellecentrale = $centrale->getLibellecentrale();
             $masquecentrale = $centrale->getMasquecentrale();
             $requete->bindParam(1, $idcentrale, PDO::PARAM_INT);
@@ -1416,7 +1421,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $libellesourcefinancementen = $source->getLibellesourcefinancementen();
             $requete->bindParam(1, $idsourcefinancement, PDO::PARAM_INT);
             $requete->bindParam(2, $libellesourcefinancement, PDO::PARAM_STR);
-            $requete->bindParam(3, $masquesource ,PDO::PARAM_BOOL);
+            $requete->bindParam(3, $masquesource, PDO::PARAM_BOOL);
             $requete->bindParam(4, $libellesourcefinancementen, PDO::PARAM_STR);
             $requete->execute();
             $this->_db->commit();
@@ -1451,7 +1456,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("UPDATE sourcefinancement SET masquesourcefinancement =? WHERE idsourcefinancement=?");
-            $masquesourcefinancement =$sourcefinancement->getMasquesourcefinancement();
+            $masquesourcefinancement = $sourcefinancement->getMasquesourcefinancement();
             $requete->bindParam(1, $masquesourcefinancement, PDO::PARAM_BOOL);
             $requete->bindParam(2, $idsourcefinancement, PDO::PARAM_INT);
             $requete->execute();
@@ -1486,9 +1491,9 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("INSERT INTO thematique(idthematique,libellethematique,masquethematique,libellethematiqueen)VALUES (?,?,?,?)");
             $idthematique = $thematique->getIdthematique();
-            $libellethematique =$thematique->getLibellethematique();
+            $libellethematique = $thematique->getLibellethematique();
             $masquethematique = $thematique->getMasquethematique();
-            $libellethematiqueen =$thematique->getLibellethematiqueen();
+            $libellethematiqueen = $thematique->getLibellethematiqueen();
             $requete->bindParam(1, $idthematique, PDO::PARAM_INT);
             $requete->bindParam(2, $libellethematique, PDO::PARAM_STR);
             $requete->bindParam(3, $masquethematique, PDO::PARAM_BOOL);
@@ -1506,9 +1511,9 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("UPDATE thematique SET libellethematique=?,masquethematique=?,libellethematiqueen=? WHERE idthematique=?");
-            $libellethematique =$thematique->getLibellethematique();
+            $libellethematique = $thematique->getLibellethematique();
             $masquethematique = $thematique->getMasquethematique();
-            $libellethematiqueen =$thematique->getLibellethematiqueen();
+            $libellethematiqueen = $thematique->getLibellethematiqueen();
             $requete->bindParam(1, $libellethematique, PDO::PARAM_STR);
             $requete->bindParam(2, $masquethematique, PDO::PARAM_BOOL);
             $requete->bindParam(3, $libellethematiqueen, PDO::PARAM_STR);
@@ -1572,7 +1577,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $nomPaysen = $pays->getNompaysen();
             $idsituation_situationgeographique = $pays->getIdsituation_situationgeographique();
             $masquepays = $pays->getMasquepays();
-            
+
             $requete->bindParam(1, $idpays(), PDO::PARAM_INT);
             $requete->bindParam(2, $nomPays, PDO::PARAM_STR);
             $requete->bindParam(3, $nomPaysen, PDO::PARAM_STR);
@@ -1593,7 +1598,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete = $this->_db->prepare("UPDATE pays  SET nompays=?,nompaysen=?,idsituation_situationgeographique=? WHERE idpays=?");
             $nompays = $pays->getNompays();
             $nompaysen = $pays->getNompaysen();
-            $idsituation_situationgeographique = $pays->getIdsituation_situationgeographique();            
+            $idsituation_situationgeographique = $pays->getIdsituation_situationgeographique();
             $requete->bindParam(1, $nompays, PDO::PARAM_STR);
             $requete->bindParam(2, $nompaysen, PDO::PARAM_STR);
             $requete->bindParam(3, $idsituation_situationgeographique, PDO::PARAM_INT);
@@ -1668,7 +1673,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete = $this->_db->prepare('INSERT INTO partenaireprojet (idpartenaire,nompartenaire,nomlaboentreprise)VALUES(?,?,?) ');
             $idpartenaire = $partenaireprojet->getIdpartenaire();
             $nompartenaire = $partenaireprojet->getNompartenaire();
-            $nomlaboentreprise =$partenaireprojet->getNomlaboentreprise();
+            $nomlaboentreprise = $partenaireprojet->getNomlaboentreprise();
             $requete->bindParam(1, $idpartenaire, PDO::PARAM_INT);
             $requete->bindParam(2, $nompartenaire, PDO::PARAM_STR);
             $requete->bindParam(3, $nomlaboentreprise, PDO::PARAM_STR);
@@ -1728,7 +1733,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete = $this->_db->prepare("UPDATE typeentreprise SET libelletypeentreprise=?,masquetypeentreprise=?,libelletypeentrepriseen=? WHERE idtypeentreprise=?");
             $libelletypeentreprise = $typeentreprise->getLibelletypeentreprise();
             $masquetypeentreprise = $typeentreprise->getMasquetypeentreprise();
-            $libelletypeentrepriseen = $typeentreprise->getLibelletypeentrepriseen();            
+            $libelletypeentrepriseen = $typeentreprise->getLibelletypeentrepriseen();
             $requete->bindParam(1, $libelletypeentreprise, PDO::PARAM_STR);
             $requete->bindParam(2, $masquetypeentreprise, PDO::PARAM_BOOL);
             $requete->bindParam(3, $libelletypeentrepriseen, PDO::PARAM_STR);
@@ -1863,9 +1868,9 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO disciplinescientifique (iddiscipline,libellediscipline,masquediscipline,libelledisciplineen)VALUES(?,?,?,?) ');
             $iddiscipline = $discipline->getIddiscipline();
-            $libellediscipline =$discipline->getLibellediscipline();
+            $libellediscipline = $discipline->getLibellediscipline();
             $masquediscipline = $discipline->getMasquediscipline();
-            $libelledisciplineen =$discipline->getLibelledisciplineen();
+            $libelledisciplineen = $discipline->getLibelledisciplineen();
             $requete->bindParam(1, $iddiscipline, PDO::PARAM_INT);
             $requete->bindParam(2, $libellediscipline, PDO::PARAM_STR);
             $requete->bindParam(3, $masquediscipline, PDO::PARAM_BOOL);
@@ -1883,9 +1888,9 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("UPDATE disciplinescientifique  SET libellediscipline=?,masquediscipline=?,libelledisciplineen=? WHERE iddiscipline=?");
-            $libellediscipline =$discipline->getLibellediscipline();
+            $libellediscipline = $discipline->getLibellediscipline();
             $masquediscipline = $discipline->getMasquediscipline();
-            $libelledisciplineen =$discipline->getLibelledisciplineen();
+            $libelledisciplineen = $discipline->getLibelledisciplineen();
             $requete->bindParam(1, $libellediscipline, PDO::PARAM_STR);
             $requete->bindParam(2, $masquediscipline, PDO::PARAM_BOOL);
             $requete->bindParam(3, $libelledisciplineen, PDO::PARAM_STR);
@@ -1923,10 +1928,10 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO secteuractivite (idsecteuractivite,libellesecteuractivite,libellesecteuractiviteen,masquesecteuractivite)VALUES(?,?,?,?) ');
-            $idsecteuractivite =$secteuractivite->getIdsecteuractivite();
-            $libellesecteuractivite =$secteuractivite->getLibellesecteuractivite();
+            $idsecteuractivite = $secteuractivite->getIdsecteuractivite();
+            $libellesecteuractivite = $secteuractivite->getLibellesecteuractivite();
             $libellesecteuractiviteen = $secteuractivite->getLibellesecteuractiviteen();
-            $masquesecteuractivite =$secteuractivite->getMasquesecteuractivite();
+            $masquesecteuractivite = $secteuractivite->getMasquesecteuractivite();
             $requete->bindParam(1, $idsecteuractivite, PDO::PARAM_INT);
             $requete->bindParam(2, $libellesecteuractivite, PDO::PARAM_STR);
             $requete->bindParam(3, $libellesecteuractiviteen, PDO::PARAM_STR);
@@ -1944,9 +1949,9 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("UPDATE secteuractivite  SET libellesecteuractivite=?,libellesecteuractiviteen=?,masquesecteuractivite=?  WHERE idsecteuractivite=?");
-            $libellesecteuractivite =$secteuractivite->getLibellesecteuractivite();
+            $libellesecteuractivite = $secteuractivite->getLibellesecteuractivite();
             $libellesecteuractiviteen = $secteuractivite->getLibellesecteuractiviteen();
-            $masquesecteuractivite =$secteuractivite->getMasquesecteuractivite();
+            $masquesecteuractivite = $secteuractivite->getMasquesecteuractivite();
             $requete->bindParam(1, $libellesecteuractivite, PDO::PARAM_STR);
             $requete->bindParam(2, $libellesecteuractiviteen, PDO::PARAM_STR);
             $requete->bindParam(3, $masquesecteuractivite, PDO::PARAM_BOOL);
@@ -1964,7 +1969,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("UPDATE secteuractivite SET masquesecteuractivite=? WHERE idsecteuractivite=?");
-            $masquesecteuractivite =$secteuractivite->getMasquesecteuractivite();
+            $masquesecteuractivite = $secteuractivite->getMasquesecteuractivite();
             $requete->bindParam(1, $masquesecteuractivite, PDO::PARAM_BOOL);
             $requete->bindParam(2, $idsecteuractivite, PDO::PARAM_INT);
             $requete->execute();
@@ -2005,7 +2010,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO nomemployeur (idemployeur,libelleemployeur,masquenomemployeur,libelleemployeuren)VALUES(?,?,?,?) ');
-            $idemployeur  =$nomemployeur->getIdemployeur();
+            $idemployeur = $nomemployeur->getIdemployeur();
             $libelleemployeur = $nomemployeur->getLibelleemployeur();
             $masquenomemployeur = $nomemployeur->getMasquenomemployeur();
             $libelleemployeuren = $nomemployeur->getLibelleemployeuren();
@@ -2098,15 +2103,15 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("update projet set description =?, contexte=?, confidentiel=?,titre=?, acronyme=? ,attachement =? where idprojet=?");
             $description = $projetcontextedescriptif->getDescription();
-            $contexte  = $projetcontextedescriptif->getContexte();
+            $contexte = $projetcontextedescriptif->getContexte();
             $confidentiel = $projetcontextedescriptif->getConfidentiel();
             $titre = $projetcontextedescriptif->getTitre();
             $acronyme = $projetcontextedescriptif->getAcronyme();
             $attachement = $projetcontextedescriptif->getAttachement();
-            $requete->bindParam(1, $description , PDO::PARAM_STR);
+            $requete->bindParam(1, $description, PDO::PARAM_STR);
             $requete->bindParam(2, $contexte, PDO::PARAM_STR);
             $requete->bindParam(3, $confidentiel, PDO::PARAM_BOOL);
-            $requete->bindParam(4, $titre , PDO::PARAM_STR);
+            $requete->bindParam(4, $titre, PDO::PARAM_STR);
             $requete->bindParam(5, $acronyme, PDO::PARAM_STR);
             $requete->bindParam(6, $attachement, PDO::PARAM_STR);
             $requete->bindParam(7, $idprojet, PDO::PARAM_INT);
@@ -2128,11 +2133,11 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO tutelle (idtutelle,libelletutelle,masquetutelle,libelletutelleen )VALUES(?,?,?,?) ');
             $idtutelle = $tutelle->getIdtutelle();
-            $libelletutelle =$tutelle->getLibelletutelle();
+            $libelletutelle = $tutelle->getLibelletutelle();
             $masquetutelle = $tutelle->getMasquetutelle();
             $libelletutelleen = $tutelle->getLibelletutelleen();
             $requete->bindParam(1, $idtutelle, PDO::PARAM_INT);
-            $requete->bindParam(2, $libelletutelle , PDO::PARAM_STR);
+            $requete->bindParam(2, $libelletutelle, PDO::PARAM_STR);
             $requete->bindParam(3, $masquetutelle, PDO::PARAM_BOOL);
             $requete->bindParam(4, $libelletutelleen, PDO::PARAM_STR);
             $requete->execute();
@@ -2148,7 +2153,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("update tutelle set libelletutelle =?,masquetutelle=?,libelletutelleen =? where idtutelle=?");
-            $libelletutelle =$tutelle->getLibelletutelle();
+            $libelletutelle = $tutelle->getLibelletutelle();
             $masquetutelle = $tutelle->getMasquetutelle();
             $libelletutelleen = $tutelle->getLibelletutelleen();
             $requete->bindParam(1, $libelletutelle, PDO::PARAM_STR);
@@ -2205,7 +2210,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('update autretutelle set libelleautrestutelle=? where idautrestutelle=?');
-            $libelleautrestutelle =$autrestutelle->getLibelleautrestutelle();
+            $libelleautrestutelle = $autrestutelle->getLibelleautrestutelle();
             $requete->bindParam(1, $libelleautrestutelle, PDO::PARAM_STR);
             $requete->bindParam(2, $idautretutelle, PDO::PARAM_INT);
             $requete->execute();
@@ -2225,8 +2230,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO autrenomemployeur (idautrenomemployeur,libelleautrenomemployeur)VALUES(?,?) ');
-            $idautrenomemployeur =$autrenomemployeur->getIdautrenomemployeur();
-            $libelleautrenomemployeur =$autrenomemployeur->getLibelleautrenomemployeur();
+            $idautrenomemployeur = $autrenomemployeur->getIdautrenomemployeur();
+            $libelleautrenomemployeur = $autrenomemployeur->getLibelleautrenomemployeur();
             $requete->bindParam(1, $idautrenomemployeur, PDO::PARAM_INT);
             $requete->bindParam(2, $libelleautrenomemployeur, PDO::PARAM_STR);
             $requete->execute();
@@ -2262,8 +2267,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO autrecodeunite (idautrecodeunite,libelleautrecodeunite)VALUES(?,?) ');
-            $idautrecodeunite= $autrecodeunite->getIdautrecodeunite();
-            $libelleautrecodeunite =$autrecodeunite->getLibelleautrecodeunite() ;
+            $idautrecodeunite = $autrecodeunite->getIdautrecodeunite();
+            $libelleautrecodeunite = $autrecodeunite->getLibelleautrecodeunite();
             $requete->bindParam(1, $idautrecodeunite, PDO::PARAM_INT);
             $requete->bindParam(2, $libelleautrecodeunite, PDO::PARAM_STR);
             $requete->execute();
@@ -2289,7 +2294,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
-    
+
     public function updateAutreCU(AutreCodeunite $autrecodeunite, $idautrecodeunite) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -2321,8 +2326,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
-    
-    
+
 //------------------------------------------------------------------------------------------------------------
 //                                       DISCIPLINE SCIENTIFIQUE
 //------------------------------------------------------------------------------------------------------------
@@ -2482,7 +2486,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete = $this->_db->prepare("update concerne set idstatutprojet_statutprojet=?,commentaireprojet=? where idcentrale_centrale=?   and idprojet_projet=?");
             $idstatutprojet = $concerne->getIdstatutprojet_statutprojet();
             $commentaireProjet = $concerne->getCommentaireProjet();
-            $idcentrale  =$concerne->getIdcentrale_centrale();
+            $idcentrale = $concerne->getIdcentrale_centrale();
             $requete->bindParam(1, $idstatutprojet, PDO::PARAM_INT);
             $requete->bindParam(2, $commentaireProjet, PDO::PARAM_STR);
             $requete->bindParam(3, $idcentrale, PDO::PARAM_INT);
@@ -2549,7 +2553,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('UPDATE projet SET  datedebutprojet =? WHERE idprojet =?');
             $dateDebut = $datedebut->getDatedebutprojet();
-            $requete->bindParam(1, $dateDebut, PDO::PARAM_STR); 
+            $requete->bindParam(1, $dateDebut, PDO::PARAM_STR);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
@@ -2587,7 +2591,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('UPDATE projet SET  datestatutcloturer =? WHERE idprojet =?');
-            $dateStatutCloturerProjet  =$datecloturer->getDateStatutCloturerProjet();
+            $dateStatutCloturerProjet = $datecloturer->getDateStatutCloturerProjet();
             $requete->bindParam(1, $dateStatutCloturerProjet, PDO::PARAM_STR);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
             $requete->execute();
@@ -2606,7 +2610,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('UPDATE concerne SET  datestatutrefuser =? WHERE idprojet_projet =? and idcentrale_centrale=?');
-            $daterefusprojet  =$daterefus->getDaterefusprojet();
+            $daterefusprojet = $daterefus->getDaterefusprojet();
             $requete->bindParam(1, $daterefusprojet, PDO::PARAM_STR);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
             $requete->bindParam(3, $idcentrale, PDO::PARAM_INT);
@@ -2626,7 +2630,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO CREER (idutilisateur_utilisateur,idprojet_projet)VALUES(?,?) ');
-            $idutilisateur= $creer->getIdutilisateur_utilisateur();
+            $idutilisateur = $creer->getIdutilisateur_utilisateur();
             $idprojet = $creer->getIdprojet_projet();
             $requete->bindParam(1, $idutilisateur, PDO::PARAM_INT);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
@@ -2645,21 +2649,17 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-           /*$requete = $this->_db->prepare('INSERT INTO personneaccueilcentrale (idpersonneaccueilcentrale,nomaccueilcentrale,prenomaccueilcentrale,idqualitedemandeuraca_qualitedemandeuraca,mailaccueilcentrale,
-    telaccueilcentrale,connaissancetechnologiqueaccueil,idpersonnequalite,idautresqualite)VALUES (?,?,?,?,?,?,?,?,?)  ');*/
-            
             $requete = $this->_db->prepare('INSERT INTO personneaccueilcentrale (idpersonneaccueilcentrale,nomaccueilcentrale,prenomaccueilcentrale,idqualitedemandeuraca_qualitedemandeuraca,mailaccueilcentrale,
-    telaccueilcentrale,connaissancetechnologiqueaccueil)VALUES (?,?,?,?,?,?,?)  ');
-           
+              telaccueilcentrale,connaissancetechnologiqueaccueil,idpersonnequalite,idautresqualite)VALUES (?,?,?,?,?,?,?,?,?)  ');
             $idpersonneaccueilcentrale = $personne->getIdpersonneaccueilcentrale();
-            $nomaccueilcentrale =$personne->getNomaccueilcentrale();
+            $nomaccueilcentrale = $personne->getNomaccueilcentrale();
             $prenomaccueilcentrale = $personne->getPrenomaccueilcentrale();
             $idqualitedemandeuraca = $personne->getIdqualitedemandeuraca_qualitedemandeuraca();
-            $mailaccueilcentrale =$personne->getMailaccueilcentrale();
+            $mailaccueilcentrale = $personne->getMailaccueilcentrale();
             $telaccueilcentrale = $personne->getTelaccueilcentrale();
             $connaissancetechnologiqueaccueil = $personne->getConnaissancetechnologiqueaccueil();
-            //$idpersonneQualite = $personne->getIdpersonneQualite();
-            //$idautrequalite = $personne->getIdautresqualite();
+            $idpersonneQualite = $personne->getIdpersonneQualite();
+            $idautrequalite = $personne->getIdautresqualite();
             $requete->bindParam(1, $idpersonneaccueilcentrale, PDO::PARAM_INT);
             $requete->bindParam(2, $nomaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(3, $prenomaccueilcentrale, PDO::PARAM_STR);
@@ -2667,31 +2667,16 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete->bindParam(5, $mailaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(6, $telaccueilcentrale, PDO::PARAM_STR);
             $requete->bindParam(7, $connaissancetechnologiqueaccueil, PDO::PARAM_STR);
-            //$requete->bindParam(8, $idpersonneQualite, PDO::PARAM_INT);
-            //$requete->bindParam(9, $idautrequalite, PDO::PARAM_INT);
+            $requete->bindParam(8, $idpersonneQualite, PDO::PARAM_INT);
+            $requete->bindParam(9, $idautrequalite, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
-            echo TXT_ERRDELETEPROJETPERSONNEACCUEILCENTRALE . '<br>' . $exc->getLine();
+            echo TXT_ERRPERSONNEACCUEILCENTRALE . '<br>' . $exc->getLine();
             $this->_db->rollBack();
         }
     }
-public function addAutreQualite(Autresqualite $autresqualite) {
-        try {
-            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('insert into autresqualite (idautresqualite,libelleautresqualite) values (?,?)');
-            $idautresqualite =$autresqualite->getIdautresqualite();
-            $libelleautresqualite = $autresqualite->getLibelleautresqualite();
-            $requete->bindParam(1, $idautresqualite, PDO::PARAM_INT);
-            $requete->bindParam(2, $libelleautresqualite, PDO::PARAM_STR);
-            $requete->execute();
-            $this->_db->commit();
-        } catch (Exception $exc) {
-            echo TXT_ERRDELETEPROJETPERSONNEACCUEILCENTRALE . '<br>' . $exc->getLine();
-            $this->_db->rollBack();
-        }
-    }
+
 //------------------------------------------------------------------------------------------------------------
 //                      METHODE PROJETPERSONEACCUEILCENTRALE
 //------------------------------------------------------------------------------------------------------------
@@ -2700,14 +2685,14 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO projetpersonneaccueilcentrale (idprojet_projet,idpersonneaccueilcentrale_personneaccueilcentrale)VALUES(?,?) ');
-            $idprojet_projet =$projet->getIdprojet_projet();
+            $idprojet_projet = $projet->getIdprojet_projet();
             $idpersonneaccueilcentrale = $projet->getIdpersonneaccueilcentrale_personneaccueilcentrale();
             $requete->bindParam(1, $idprojet_projet, PDO::PARAM_INT);
             $requete->bindParam(2, $idpersonneaccueilcentrale, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
-            echo TXT_ERRDELETEPROJETPERSONNEACCUEILCENTRALE . '<br>' . $exc->getLine();
+            echo TXT_ERRPERSONNEACCUEILCENTRALE . '<br>' . $exc->getLine();
             $this->_db->rollBack();
         }
     }
@@ -2725,7 +2710,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
-   
+
 //------------------------------------------------------------------------------------------------------------
 //                                       RESSOURCE
 //------------------------------------------------------------------------------------------------------------
@@ -2735,10 +2720,10 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO ressource(idressource, libelleressource,masqueressource,libelleressourceen)VALUES (?,?,?,?)');
-            $idressource =$ressource->getIdressource();
-            $libelleressource =$ressource->getLibelleressource();
+            $idressource = $ressource->getIdressource();
+            $libelleressource = $ressource->getLibelleressource();
             $masqueressource = $ressource->getMasqueressource();
-            $libelleressourceen =$ressource->getLibelleressourceen();
+            $libelleressourceen = $ressource->getLibelleressourceen();
             $requete->bindParam(1, $idressource, PDO::PARAM_INT);
             $requete->bindParam(2, $libelleressource, PDO::PARAM_STR);
             $requete->bindParam(3, $masqueressource, PDO::PARAM_BOOL);
@@ -2757,8 +2742,8 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('update ressource set libelleressource =?,masqueressource=?,libelleressourceen=? WHERE idressource =? ');
             $libelleressource = $ressource->getLibelleressource();
-            $masqueressource =$ressource->getMasqueressource();
-            $libelleressourceen  =$ressource->getLibelleressourceen();
+            $masqueressource = $ressource->getMasqueressource();
+            $libelleressourceen = $ressource->getLibelleressourceen();
             $requete->bindParam(1, $libelleressource, PDO::PARAM_STR);
             $requete->bindParam(2, $masqueressource, PDO::PARAM_BOOL);
             $requete->bindParam(3, $libelleressourceen, PDO::PARAM_STR);
@@ -2796,7 +2781,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('update libelleapplication set libellefrancais =?,libelleanglais=? WHERE reflibelle =? ');
-            $libellefrancais =$libelleapplication->getLibellefrancais();
+            $libellefrancais = $libelleapplication->getLibellefrancais();
             $libelleanglais = $libelleapplication->getLibelleanglais();
             $requete->bindParam(1, $libellefrancais, PDO::PARAM_STR);
             $requete->bindParam(2, $libelleanglais, PDO::PARAM_STR);
@@ -2838,7 +2823,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $idtypeformation = $typeformation->getIdtypeformation();
             $libelletypeformation = $typeformation->getLibelletypeformation();
             $masquetypeformation = $typeformation->getMasquetypeformation();
-            $libelletypeformationen =$typeformation->getLibelletypeformationen();
+            $libelletypeformationen = $typeformation->getLibelletypeformationen();
             $requete->bindParam(1, $idtypeformation, PDO::PARAM_INT);
             $requete->bindParam(2, $libelletypeformation, PDO::PARAM_STR);
             $requete->bindParam(3, $masquetypeformation, PDO::PARAM_BOOL);
@@ -2858,7 +2843,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $requete = $this->_db->prepare('update typeformation set libelletypeformation =?,libelletypeformationen=?, masquetypeformation=?  WHERE idtypeformation =? ');
             $libelletypeformation = $typeformation->getLibelletypeformation();
             $masquetypeformation = $typeformation->getMasquetypeformation();
-            $libelletypeformationen =$typeformation->getLibelletypeformationen();
+            $libelletypeformationen = $typeformation->getLibelletypeformationen();
             $requete->bindParam(1, $libelletypeformation, PDO::PARAM_INT);
             $requete->bindParam(2, $libelletypeformationen, PDO::PARAM_INT);
             $requete->bindParam(3, $masquetypeformation, PDO::PARAM_BOOL);
@@ -2908,7 +2893,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('update  projettypeprojet set idtypeformation=? where idprojet=?');
-            $idtypeformation =$projettypeprojet->getIdtypeformation();
+            $idtypeformation = $projettypeprojet->getIdtypeformation();
             $requete->bindParam(1, $idtypeformation, PDO::PARAM_INT);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
             $requete->execute();
@@ -2952,7 +2937,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
         }
     }
 
-     public function updateUserTypeentreprise(UserTypeEntreprise $utilisateur, $idutilisateur) {
+    public function updateUserTypeentreprise(UserTypeEntreprise $utilisateur, $idutilisateur) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
@@ -2967,7 +2952,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
-    
+
     public function updateUserSecteurActivite(UserSecteurActivite $utilisateur, $idutilisateur) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -2983,7 +2968,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
-    
+
 //-----------------------------------------------------------------------------------------------------------
 //              COMPTEUR
 //-----------------------------------------------------------------------------------------------------------
@@ -2992,8 +2977,8 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('UPDATE compteur SET c_total = ?,c_lastvisit=? WHERE c_login != ?');
-            $c_total =$compteur->getC_total();
-            $clastvisit=$compteur->getClastvisit();
+            $c_total = $compteur->getC_total();
+            $clastvisit = $compteur->getClastvisit();
             $requete->bindParam(1, $c_total, PDO::PARAM_INT);
             $requete->bindParam(2, $clastvisit, PDO::PARAM_STR);
             $requete->bindParam(3, $var, PDO::PARAM_STR);
@@ -3011,7 +2996,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('DELETE FROM compteur WHERE c_login != ? AND extract(epoch from(c_firstvisit)) < ?');
             $clogin = $compteur->getClogin();
-            $clastvisit =$compteur->getClastvisit();
+            $clastvisit = $compteur->getClastvisit();
             $requete->bindParam(1, $clogin, PDO::PARAM_INT);
             $requete->bindParam(2, $clastvisit, PDO::PARAM_STR);
             $requete->execute();
@@ -3028,7 +3013,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO compteur (c_firstvisit, c_lastvisit, c_total, c_login, c_time) VALUES (?,?,?,?,?)');
             $cfirstvisit = $compteur->getCfirstvisit();
-            $clastvisit =$compteur->getClastvisit();
+            $clastvisit = $compteur->getClastvisit();
             $c_total = $compteur->getC_total();
             $clogin = $compteur->getClogin();
             $ctime = $compteur->getCtime();
@@ -3054,7 +3039,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO Projetautrecentrale (idcentrale,idprojet) VALUES (?,?)');
-            $idcentrale =$projetautrecentrale->getIdcentrale();
+            $idcentrale = $projetautrecentrale->getIdcentrale();
             $idprojet = $projetautrecentrale->getIdprojet();
             $requete->bindParam(1, $idcentrale, PDO::PARAM_INT);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
@@ -3083,10 +3068,10 @@ public function addAutreQualite(Autresqualite $autresqualite) {
 //-----------------------------------------------------------------------------------------------------------
 //             PROJET CENTRALES DE PROXIMITE
 //-----------------------------------------------------------------------------------------------------------
-/**
- * 
- * @param Projet_centraleproximite $projetcentraleproximite
- */
+    /**
+     * 
+     * @param Projet_centraleproximite $projetcentraleproximite
+     */
     public function addprojetcentraleproximite(Projet_centraleproximite $projetcentraleproximite) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -3103,10 +3088,11 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
-/**
- * 
- * @param type $idprojet
- */
+
+    /**
+     * 
+     * @param type $idprojet
+     */
     public function deleteprojetcentraleproximite($idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -3120,17 +3106,18 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
-/**
- * 
- * @param Centrale_proximite $centraleproximite
- */
+
+    /**
+     * 
+     * @param Centrale_proximite $centraleproximite
+     */
     public function addcentraleproximite(Centrale_proximite $centraleproximite) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('INSERT INTO centrale_proximite (idcentrale_proximite,nom_centrale_proximite) VALUES (?,?)');
-            $idcentrale_proximite =$centraleproximite->getIdcentrale_proximite();
-            $nom_centrale_proximite =$centraleproximite->getNom_centrale_proximite();
+            $idcentrale_proximite = $centraleproximite->getIdcentrale_proximite();
+            $nom_centrale_proximite = $centraleproximite->getNom_centrale_proximite();
             $requete->bindParam(1, $idcentrale_proximite, PDO::PARAM_INT);
             $requete->bindParam(2, $nom_centrale_proximite, PDO::PARAM_STR);
             $requete->execute();
@@ -3140,17 +3127,18 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
-/**
- * 
- * @param Centrale_proximite $centraleproximite
- * @param type $idcentraleproximite
- */
+
+    /**
+     * 
+     * @param Centrale_proximite $centraleproximite
+     * @param type $idcentraleproximite
+     */
     public function updatecentraleproximite(Centrale_proximite $centraleproximite, $idcentraleproximite) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('Update centrale_pproximite set nom_centrale_proximite = ? where idcentrale_proximite=?');
-            $nom_centrale_proximite =$centraleproximite->getNom_centrale_proximite();
+            $nom_centrale_proximite = $centraleproximite->getNom_centrale_proximite();
             $requete->bindParam(1, $nom_centrale_proximite, PDO::PARAM_STR);
             $requete->bindParam(2, $idcentraleproximite, PDO::PARAM_INT);
             $requete->execute();
@@ -3161,6 +3149,106 @@ public function addAutreQualite(Autresqualite $autresqualite) {
         }
     }
 
+//-----------------------------------------------------------------------------------------------------------
+//                                                                              PERSONECENTRALEQUALITE
+//-----------------------------------------------------------------------------------------------------------
+    public function addPersonneCentraleQualite(PersonneCentraleQualite $personcentralequalite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO personneCentraleQualite (idpersonneQualite,libellepersonneQualite) VALUES (?,?)');
+            $idpersonneQualite = $personcentralequalite->getIdpersonneQualite();
+            $libellepersonneQualite = $personcentralequalite->getlibellepersonneQualite();
+            $requete->bindParam(1, $idpersonneQualite, PDO::PARAM_INT);
+            $requete->bindParam(2, $libellepersonneQualite, PDO::PARAM_STR);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+
+    public function updatePersonneCentraleQualite(PersonneCentraleQualite $personcentralequalite, $idpersonneQualite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update personneCentraleQualite set libellepersonneQualite=? where  idpersonneQualite=?');
+            $libellepersonneQualite = $personcentralequalite->getlibellepersonneQualite();
+            $requete->bindParam(1, $libellepersonneQualite, PDO::PARAM_STR);
+            $requete->bindParam(2, $idpersonneQualite, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+
+    public function deletePersonneCentraleQualite(PersonneCentraleQualite $personcentralequalite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('delete from personneCentraleQualite where idpersonneQualite=?');
+            $idpersonneQualite = $personcentralequalite->getIdpersonneQualite();
+            $requete->bindParam(1, $idpersonneQualite, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+
+//-----------------------------------------------------------------------------------------------------------
+//                                                                              AUTREQUALITE
+//-----------------------------------------------------------------------------------------------------------
+    public function addAutresQualite(Autresqualite $autreQualite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO AutresQualite (idautresQualite,libelleautresQualite) VALUES (?,?)');
+            $idautresQualite = $autreQualite->getIdautresqualite();
+            $libelleautresQualite = $autreQualite->getLibelleautresqualite();
+            $requete->bindParam(1, $idautresQualite, PDO::PARAM_INT);
+            $requete->bindParam(2, $libelleautresQualite, PDO::PARAM_STR);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+
+    public function updateAutresQualite(Autresqualite $autreQualite, $idautresQualite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update Autresqualite  set libelleautresQualite=? where  idautresQualite=?');
+            $libelleautresQualite = $autreQualite->getLibelleautresqualite();
+            $requete->bindParam(1, $libelleautresQualite, PDO::PARAM_STR);
+            $requete->bindParam(2, $idautresQualite, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    public function deleteAutresQualite(Autresqualite $autreQualite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('delete from Autresqualite where idautresQualite=?');
+            $idautreQualite = $autreQualite->getIdautresqualite();
+            $requete->bindParam(1, $idautreQualite, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
 //-----------------------------------------------------------------------------------------------------------
 //             RAPPORTS
 //-----------------------------------------------------------------------------------------------------------
@@ -3177,22 +3265,22 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $idrapport = $rapport->getIdrapport();
             $title = $rapport->getTitle();
             $author = $rapport->getAuthor();
-            $entity =$rapport->getEntity();
-            $villepays =$rapport->getVillepays();
+            $entity = $rapport->getEntity();
+            $villepays = $rapport->getVillepays();
             $instituteinterest = $rapport->getInstituteinterest();
-            $fundingsource =$rapport->getFundingsource();
-            $collaborator =$rapport->getCollaborator();
-            $thematics =$rapport->getThematics();
-            $startingdate =$rapport->getStartingdate();
-            $objectif =$rapport->getObjectif();
+            $fundingsource = $rapport->getFundingsource();
+            $collaborator = $rapport->getCollaborator();
+            $thematics = $rapport->getThematics();
+            $startingdate = $rapport->getStartingdate();
+            $objectif = $rapport->getObjectif();
             $results = $rapport->getResults();
             $valorisation = $rapport->getValorisation();
-            $technologicalwc =$rapport->getTechnologicalwc();
+            $technologicalwc = $rapport->getTechnologicalwc();
             $logo = $rapport->getLogo();
             $logocentrale = $rapport->getLogocentrale();
-            $figure =$rapport->getFigure();
-            $idprojet =$rapport->getIdprojet();
-            $legend =$rapport->getLegend();
+            $figure = $rapport->getFigure();
+            $idprojet = $rapport->getIdprojet();
+            $legend = $rapport->getLegend();
             $datecreation = $rapport->getDatecreation();
             $datemiseajour = $rapport->getDatemiseajour();
             $requete->bindParam(1, $idrapport, PDO::PARAM_INT);
@@ -3215,20 +3303,21 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $requete->bindParam(18, $idprojet, PDO::PARAM_INT);
             $requete->bindParam(19, $legend, PDO::PARAM_STR);
             $requete->bindParam(20, $datecreation, PDO::PARAM_STR);
-            $requete->bindParam(21, $datemiseajour, PDO::PARAM_STR);            
+            $requete->bindParam(21, $datemiseajour, PDO::PARAM_STR);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
-            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage().'<br> getFile'.$exc->getFile().'<br> getFile'.$exc->getTraceAsString();
-            
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage() . '<br> getFile' . $exc->getFile() . '<br> getFile' . $exc->getTraceAsString();
+
             $this->_db->rollBack();
         }
     }
-/**
- * 
- * @param Rapport $rapport
- * @param type $idprojet
- */
+
+    /**
+     * 
+     * @param Rapport $rapport
+     * @param type $idprojet
+     */
     public function updateRapport(Rapport $rapport, $idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -3237,21 +3326,21 @@ public function addAutreQualite(Autresqualite $autresqualite) {
                     . 'technologicalwc=?,logo=?,logocentrale=?,figure=?,legend=?,datecreation=?, datemiseajour=? WHERE idprojet = ?');
             $author = $rapport->getAuthor();
             $title = $rapport->getTitle();
-            $entity =$rapport->getEntity();
-            $villepays =$rapport->getVillepays();
+            $entity = $rapport->getEntity();
+            $villepays = $rapport->getVillepays();
             $instituteinterest = $rapport->getInstituteinterest();
-            $fundingsource =$rapport->getFundingsource();
-            $collaborator =$rapport->getCollaborator();
-            $thematics =$rapport->getThematics();
-            $startingdate =$rapport->getStartingdate();
-            $objectif =$rapport->getObjectif();
+            $fundingsource = $rapport->getFundingsource();
+            $collaborator = $rapport->getCollaborator();
+            $thematics = $rapport->getThematics();
+            $startingdate = $rapport->getStartingdate();
+            $objectif = $rapport->getObjectif();
             $results = $rapport->getResults();
             $valorisation = $rapport->getValorisation();
-            $technologicalwc =$rapport->getTechnologicalwc();
+            $technologicalwc = $rapport->getTechnologicalwc();
             $logo = $rapport->getLogo();
             $logocentrale = $rapport->getLogocentrale();
-            $figure =$rapport->getFigure();
-            $legend =$rapport->getLegend();
+            $figure = $rapport->getFigure();
+            $legend = $rapport->getLegend();
             $datecreation = $rapport->getDatecreation();
             $datemiseajour = $rapport->getDatemiseajour();
             $requete->bindParam(1, $author, PDO::PARAM_STR);
@@ -3273,7 +3362,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $requete->bindParam(17, $legend, PDO::PARAM_STR);
             $requete->bindParam(18, $datecreation, PDO::PARAM_STR);
             $requete->bindParam(19, $datemiseajour, PDO::PARAM_STR);
-            $requete->bindParam(20, $idprojet, PDO::PARAM_INT);            
+            $requete->bindParam(20, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3281,17 +3370,18 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
-/**
- * 
- * @param Rapportfigure $rapportfigure
- * @param type $idrapport
- */
+
+    /**
+     * 
+     * @param Rapportfigure $rapportfigure
+     * @param type $idrapport
+     */
     public function updateRapportfigure(Rapportfigure $rapportfigure, $idrapport) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('update rapport SET figure=? WHERE idrapport = ?');
-            $figure =$rapportfigure->getfigure();
+            $figure = $rapportfigure->getfigure();
             $requete->bindParam(1, $figure, PDO::PARAM_STR);
             $requete->bindParam(2, $idrapport, PDO::PARAM_INT);
             $requete->execute();
@@ -3301,10 +3391,11 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
-/**
- * 
- * @param type $idprojet
- */
+
+    /**
+     * 
+     * @param type $idprojet
+     */
     public function deleterapport($idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -3318,10 +3409,11 @@ public function addAutreQualite(Autresqualite $autresqualite) {
             $this->_db->rollBack();
         }
     }
+
     /**
- * 
- * @param type $idprojet
- */
+     * 
+     * @param type $idprojet
+     */
     public function delRapport($idrapport) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -3348,30 +3440,33 @@ public function addAutreQualite(Autresqualite $autresqualite) {
         $requete = $this->_db->prepare($request);
         $requete->execute($param);
     }
-/**
- * 
- * @param type $request
- */
+
+    /**
+     * 
+     * @param type $request
+     */
     public function exeRequete($request) {
         $requete = $this->_db->prepare($request);
         $requete->execute();
     }
-/**
- * 
- * @param type $request
- * @return type
- */
+
+    /**
+     * 
+     * @param type $request
+     * @return type
+     */
     public function getSingle($request) {
         $requete = $this->_db->prepare($request);
         $requete->execute();
         return $requete->fetch(PDO::FETCH_COLUMN);
     }
-/**
- * 
- * @param type $request
- * @param type $param
- * @return type
- */
+
+    /**
+     * 
+     * @param type $request
+     * @param type $param
+     * @return type
+     */
     public function getSingle2($request, $param) {
         $requete = $this->_db->prepare($request);
         $requete->execute(array($param));
@@ -3400,6 +3495,7 @@ public function addAutreQualite(Autresqualite $autresqualite) {
         $requete->execute();
         return $requete->fetchAll();
     }
+
     /**
      * This function return an array of an array of the request
      * @param type string $request is the request 

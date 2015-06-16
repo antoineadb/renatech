@@ -981,3 +981,15 @@ a.infoBulle:hover span{
     margin-top:40px;
     color: #5D8BA2;
 }
+
+#infoSave{
+    background: #529ab7 none no-repeat scroll 15px 50%;
+    color: white;
+    float: left;
+    font-size: 0.9em;
+    margin-left: 10px;
+    margin-top: 14px;
+    padding: 7px;
+    text-align: center;
+    width: 625px;
+}

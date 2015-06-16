@@ -5,7 +5,7 @@ include 'html/header.html'; ?>
     <?php include 'html/entete.html'; ?>
     <fieldset id="createLoginemail">
     <legend style="color: #5D8BA2"><b><?php echo html_entity_decode((TXT_CREATEADMIN)); ?></b></legend>
-    <div id="emailExiste">L'email que vous avez saisie est déja utilisé dans le (ou les) login(s) suivant:<br><br>
+    <div id="emailExiste"><?php echo TXT_EMAILEXISTE;?><br><br>
         <div>
             <?php 
             $arrayLogin = explode(",",$_SESSION['logindoublon']);
@@ -13,7 +13,7 @@ include 'html/header.html'; ?>
                 echo $arrayLogin[$i].'<br>';
             }?>
         </div>
-        <br>Merci de confirmez la création de ce compte en cliquant sur le bouton
+        <br><?php echo TXT_CONFIRMEMAILEXISTE ?>
         <button data-dojo-Type="dijit.form.Button" style="margin-left: 20px" label="<?php echo ucfirst(strtolower(TXT_VALIDER)); ?>">
                 <script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
                     <?php  $_SESSION['validEmail']='Ok'; ?>
@@ -23,7 +23,7 @@ include 'html/header.html'; ?>
                 </script>
             
         </button>
-        <br>ou de changer d'email en cliquant sur  
+        <br><?php echo TXT_CHANGEPSEUDO;?>  
         <button type="button" label="<?php echo ucfirst(strtolower(TXT_INSCRIPTION)); ?>" data-dojo-Type="dijit/form/Button">
                 <script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
                     require(["dojo/dom"], function(dom){

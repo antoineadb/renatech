@@ -27,7 +27,8 @@ if(isset($_POST['annee'])&& !empty($_POST['annee'])){
 $arrayIdProjet = $manager->getListbyArray("SELECT r.idprojet  FROM rapport r, projet p, concerne WHERE r.idprojet = p.idprojet and idstatutprojet_statutprojet!=? AND idprojet_projet = p.idprojet "
             . "and idcentrale_centrale=? and EXTRACT(YEAR from datecreation)>=? order by thematics asc",array(REFUSE,$centrale,$annee));
 if(isset($_POST['ext'])&& $_POST['ext']=='.doc'){
-    header("Content-Type:application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    header("Content-type: application/vnd.ms-word");
+    //header("Content-Type:application/vnd.openxmlformats-officedocument.wordprocessingml.document");
     header('Content-Disposition: attachment; filename=rapport_' . time() . '_' . $libellecentrale . '.doc');
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 }elseif(isset($_POST['ext'])&& $_POST['ext']=='.rtf'){

@@ -407,7 +407,6 @@ $date  = $date->format('d-m-Y');
                     <td>
                     <label id='msgporteurProjet' style="width: 350px;margin-left:20px;display: none;"  ><?php echo TXT_MSGPORTEURPROJET ?></label>
                 </td>
-                </td>
                 <?php }else{?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet"  value="TRUE" class="btRadio" disabled="<?php echo $bool; ?>"
                            onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '')">
@@ -761,16 +760,15 @@ $date  = $date->format('d-m-Y');
                            data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRETHEMATIQUE;?>"
                            style="margin-left: 20px;display:none"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"
                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'" maxlength="100"  >
-                    <?php }?>
+                    <?php }
+                        if(!empty($libellethematiqueen) && $libellethematiqueen!='Others'){
+                            $thematic= $libellethematiqueen;
+                        }else{
+                        $thematic= $manager->getSingle2("SELECT libelleautrethematique FROM autrethematique,projet WHERE idautrethematique_autrethematique=idautrethematique and idprojet =?",$idprojet);
+                        }
+                    ?>
+                    <input type="text" value='<?php echo $thematic; ?>' style="display: none" id='thematic'>
                 </td>
-                <?php 
-                if(!empty($libellethematiqueen) && $libellethematiqueen!='Others'){
-                    $thematic= $libellethematiqueen;
-                }else{
-                    $thematic= $manager->getSingle2("SELECT libelleautrethematique FROM autrethematique,projet WHERE idautrethematique_autrethematique=idautrethematique and idprojet =?",$idprojet);
-                }
-                ?>
-                <input type="text" value='<?php echo $thematic; ?>' style="display: none" id='thematic'>
             </tr>
         </table>
         <?php include_once 'outils/specifiqueExport.php'; ?>
@@ -874,7 +872,7 @@ $date  = $date->format('d-m-Y');
                                    style="width:60px;margin-left: 20px;" onchange="addnomCentrale(dijit.byId(this.value))"
                                    onclick="addnomCentrale(dijit.byId(this.value))" disabled="<?php echo $bool; ?>" />
                         </div>
-                    <div id="personCentrale" style="margin-left: 45px"><?php include 'personneCentrale.php';  ?></div><br>
+                    <div id="personCentrale" style="margin-left: 45px"><?php include 'personneCentrale/personneCentrale.php';  ?></div><br>
                         </fieldset>
             </td>
                         </tr>                                               
@@ -1183,12 +1181,8 @@ function masquecentraleproximite(){
                         <table>
                             <tr>
                                 <td><label for="centraleproximite" style="width:918px;margin-left: 20px;;margin-top: 10px"><?php echo TXT_QUESTIONCENTRALEPROXIMITE; ?></label>                                    
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"   value="TRUE" checked="checked" class="btRadio" style="margin-left: 20px;"
-                                           onclick="affichecentraleproximite()" >
-                                    <?php echo TXT_OUI; ?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" class="btRadio" style="margin-left: 20px;"
-                                           onclick="masquecentraleproximite()">
-                                    <?php echo TXT_NON; ?>
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"   value="TRUE" checked="checked" class="btRadio" style="margin-left: 20px;" onclick="affichecentraleproximite()" ><?php echo TXT_OUI; ?>
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" class="btRadio" style="margin-left: 20px;" onclick="masquecentraleproximite()"><?php echo TXT_NON; ?>
                                 </td>
                             </tr>
                         </table>
@@ -1198,7 +1192,7 @@ function masquecentraleproximite(){
                                 <td><label for="centraleproximite" style="width:918px;margin-left: 20px;;margin-top: 10px"><?php echo TXT_QUESTIONCENTRALEPROXIMITE; ?></label>                                    
                                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"   value="TRUE"  class="btRadio" style="margin-left: 20px;" onclick="affichecentraleproximite()">
                                     <?php echo TXT_OUI; ?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" checked="checked" class="btRadio" style="margin-left: 20px;"onclick="masquecentraleproximite()">
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" checked="checked" class="btRadio" style="margin-left: 20px;" onclick="masquecentraleproximite()">
                                     <?php echo TXT_NON; ?>
                                 </td>                                
                             </tr>
@@ -1454,44 +1448,41 @@ function masquecentraleproximite(){
                                 $etapeautrecentrale='TRUE';
                             }                            
                             ?>                            
-                 <table>                     
-                <tr>
-                    <td>
-                        <div style='float: left'>                   
-                            <?php  if($idstatut==ENATTENTEPHASE2){?>                            
-                            <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep.show()}else{dijit.byId('modifProjet').submit()}}" style="margin-top:15px">
-                            <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                                <span style="text-align: left;padding:7px;width: 430px;border-radius:5px" ><?php echo TXT_VALIDETRANSMISSION;?></span>
-                            </a>
-                             <?php  }else{?>
-                               <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep2.show()}}"  disabled="<?php echo $bool; ?>" 
-                                       style="margin-top:15px"  ><?php echo TXT_MAJENVOYER ;?></button>
-                             <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                                <span style="text-align: left;padding:10px;width: 300px;border-radius:5px"><?php echo TXT_MAJTRANSMISSION;?></span>
-                            </a>
-                            <?php }?>                        
-                        </div>                        
+                <table>                     
+                    <tr>
+                        <td>
+                            <div style='float: left'>                   
+                                <?php  if($idstatut==ENATTENTEPHASE2){?>                            
+                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep.show()}else{dijit.byId('modifProjet').submit()}}" style="margin-top:15px">
+                                <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                    <span style="text-align: left;padding:7px;width: 430px;border-radius:5px" ><?php echo TXT_VALIDETRANSMISSION;?></span>
+                                </a>
+                                 <?php  }else{?>
+                                   <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep2.show()}}"  disabled="<?php echo $bool; ?>" 
+                                           style="margin-top:15px"  ><?php echo TXT_MAJENVOYER ;?></button>
+                                 <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                    <span style="text-align: left;padding:10px;width: 300px;border-radius:5px"><?php echo TXT_MAJTRANSMISSION;?></span>
+                                </a>
+                                <?php }?>                        
+                            </div>                        
+                            </td>
+                    </tr>
+                </table>
+                <table>            
+                    <tr>
+                        <td id='btnSave'>
+                            <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){save()}}"  disabled="<?php echo $bool; ?>" 
+                                    style="margin-top:15px"><?php echo TXT_SAVEPROJECT ;?></button>
                         </td>
-                </tr>
-                <tr>
-                    <td id='btnSave'>
-                        <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){repsave.show()}}"  disabled="<?php echo $bool; ?>" style="margin-top:15px">
-                                <?php echo TXT_SAVEPROJECT ;?>
-                            </button>
-                        <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                        <span style="text-align: left;padding:7px;width: 680px;border-radius:5px" >
-                        <?php echo TXT_SAVEDATA;?></span></a>
-                    </td>
-                </tr>
-                <tr><td><div style="margin-top: 5px"></div></td></tr>
-            </table>
+                        <td id="infoSave"><?php echo TXT_SAVEDATA;?></td>                        
+                    </tr>
+                    <tr><td><div style="margin-top: 5px"></div></td></tr>
+                </table>
         <div data-dojo-type="dijit/Dialog" data-dojo-id="rep" title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;" execute="">
            <table class="dijitDialogPaneContentArea">
                <tr>
                    <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui"  data-dojo-props="onClick:function(){valide();}">
-                           <?php echo TXT_OUI ;?></button></td>
-                           <td><button type="button" data-dojo-type="dijit/form/Button"  id="non" data-dojo-props="onClick:function(){rep.hide();}" >
-                           <?php echo TXT_NON ;?></button></td>
+                           <?php echo TXT_OUI ;?></button></td>                           
                    <td><button data-dojo-type="dijit/form/Button" type="button" data-dojo-props="onClick:function(){rep.hide();}" id="submitcancel"><?php echo TXT_ANNULE;?></button></td>
                </tr>
            </table>
@@ -1501,24 +1492,11 @@ function masquecentraleproximite(){
                <tr>
                    <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui2" onclick="maj()">
                            <?php echo TXT_OUI ;?></button></td>
-                           <td><button type="submit" data-dojo-type="dijit/form/Button"  id="non2" onclick="rep2.hide()">
-                           <?php echo TXT_NON ;?></button></td>
+                           <td>
                    <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitcancel2"><?php echo TXT_ANNULE;?></button></td>
                </tr>
            </table>
-       </div>
-        <div data-dojo-type="dijit/Dialog" data-dojo-id="repsave" title="<?php echo TXT_RESULTMESSAGESAVEPHASE;?>" style="width: 500px;margin-left: 20px;   ">
-           <table class="dijitDialogPaneContentArea">
-               <tr>
-                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="ouisave" data-dojo-props="onClick:function(){save();}" >
-                           <?php echo TXT_OUI ;?></button></td>
-                           <td><button type="submit" data-dojo-type="dijit/form/Button"  id="nonsave"  data-dojo-props="onClick:function(){repsave.hide();}">
-                           <?php echo TXT_NON ;?></button></td>
-                   <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repsave.hide();}" id="submitcancelsave"><?php echo TXT_ANNULE;?></button></td>
-               </tr>
-           </table>
-       </div>                    
-                            
+       </div>                            
             <script>            
             function valide(){
                 document.getElementById('save').value='non';

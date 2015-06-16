@@ -11,6 +11,15 @@ if (isset($_GET['statut'])) {
     $idstatutprojet = $_GET['statut'];
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                              TRAITEMENT DES DONNEES NON AFFECTEES DANS LA TABLE AUTRESQUALITE
+//----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+$arrayAutresQualite = $manager->getList("select idautresqualite,libelleautresqualite from autresqualite where idautresqualite not in(select idautresqualite from personneaccueilcentrale)");
+for ($i = 0; $i < count($arrayAutresQualite); $i++) {
+    $autresQualite = new Autresqualite($arrayAutresQualite[$i]['idautresqualite'],$arrayAutresQualite[$i]['libelleautresqualite']);    
+    $manager->deleteAutresQualite($autresQualite);
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------
 //                          CHAMPS  SANS TRAITEMENT
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 if (isset($_POST['page_precedente'])) {
@@ -672,11 +681,11 @@ if (isset($_POST['page_precedente'])) {
                 $prenomaccueilcentrale = TXT_UNDEFINELASTNAME . $i;
             }
             if (!empty($_POST['qualiteaccueilcentrale' . $i . ''])) {
-                $idqualitedemandeurAca = $_POST['qualiteaccueilcentrale' . $i . ''];
+                $idqualitedemandeurAca = trim($_POST['qualiteaccueilcentrale' . $i . '']);
                 $idqualitedemandeuraca = substr($idqualitedemandeurAca, -1);
                 if (empty($idqualitedemandeuraca)) {
                     $idqualitedemandeuraca = 1;
-                }
+                }               
                 if ($lang == 'fr') {
                     $libellequalite = $manager->getSingle2("select libellequalitedemandeuraca from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
                 } elseif ($lang == 'en') {
@@ -686,23 +695,38 @@ if (isset($_POST['page_precedente'])) {
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             //                          TRAITEMENT DES AUTRES QUALITE DOCTORANT,POSTDOC OU AUTRES SI AUTRES VALEUR DE AUTRES
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-           /* if (!empty($_POST['autreQualite' . $i . ''])) {
-                if ($_POST['autreQualite' . $i . ''] == 'qac' . IDAUTREQUALITE) {//cas autres
-                    if (!empty($_POST['autresQualite' . $i . ''])) {
-                        $libAutreQualite = clean($_POST['autresQualite' . $i . '']);
-                        $idautrequalite = $manager->getSingle("select max(idautresqualite) from autresqualite")+1;
-                        $autresqualite= new Autresqualite($idautrequalite, $libAutreQualite);//CREATION DE L'ENTREE DANS LA TABLE AUTRESQUALITE
-                        $manager->addAutreQualite($autresqualite);
-                        $idpersonneQualite= (int)substr($_POST['autreQualite' . $i . ''],-1);
-                    } else {
-                        $libAutreQualite = TXT_AUTRES;
-                    }                    
-                } else {
-                   $idpersonneQualite= (int)substr($_POST['autreQualite' . $i . ''],-1);
-                   $idautrequalite=IDNAAUTREQUALITE;
-                }
-            }*/
             
+            if($idqualitedemandeuraca != PERMANENT ){
+                if (!empty($_POST['autreQualite' . $i . ''])) {
+                    if ($_POST['autreQualite' . $i . ''] == 'qac' . IDAUTREQUALITE) {//cas autres
+                        if (!empty($_POST['autresQualite' . $i . ''])) {
+                            $libAutreQualite = clean($_POST['autresQualite' . $i . '']);
+                            $idautrequalite = $manager->getSingle("select max(idautresqualite) from autresqualite") + 1;
+                            $autresqualite = new Autresqualite($idautrequalite, $libAutreQualite); //CREATION DE L'ENTREE DANS LA TABLE AUTRESQUALITE
+                            $manager->addAutresQualite($autresqualite);
+                            $idpersonneQualite = (int) substr(trim($_POST['autreQualite' . $i . '']), -1);
+                        } else {                            
+                            $idpersonneQualite = IDNAAUTRESQUALITE;
+                            $idautrequalite = IDNAAUTREQUALITE;
+                        }
+                    } else {
+                        if (!empty($_POST['autresQualite' . $i . ''])) {
+                            $libAutreQualite = clean($_POST['autresQualite' . $i . '']);
+                            $idautrequalite = $manager->getSingle("select max(idautresqualite) from autresqualite") + 1;
+                            $autresqualite = new Autresqualite($idautrequalite, $libAutreQualite); //CREATION DE L'ENTREE DANS LA TABLE AUTRESQUALITE
+                            $manager->addAutresQualite($autresqualite);
+                            $idpersonneQualite = IDNAAUTRESQUALITE;
+                        }else{
+                            $idpersonneQualite = (int) substr(trim($_POST['autreQualite' . $i . '']), -1);
+                            $idautrequalite = IDNAAUTREQUALITE;                            
+                        }
+                    }
+                }
+            }else{
+                $idautrequalite = IDNAAUTREQUALITE;
+                $idpersonneQualite = IDNAAUTRESQUALITE;
+            } 
+           //echo '<pre>';print_r($_POST);die;          
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             //
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -724,9 +748,9 @@ if (isset($_POST['page_precedente'])) {
             }
                        
             //TRAITEMENT AJOUT DANS LA TABLE PERSONNEACCUEILCENTRALE            
-            $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;
-            $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil));
-            //$personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil),$idpersonneQualite,$idautrequalite);
+            $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;            
+            $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil),$idpersonneQualite,$idautrequalite);
+            //echo '<pre>';print_r($personne);
             $manager->addPersonneaccueilcentrale($personne);
             //TRAITEMENT AJOUT DANS LA TABLE PROJETPERSONNEACCUEILCENTRALE
             $projetpersonneaccueilcentrale = new Projetpersonneaccueilcentrale($idprojet, $idpersonneaccueilcentrale);
@@ -739,7 +763,7 @@ if (isset($_POST['page_precedente'])) {
     $personnecentrale = '';
     if (!empty($nombrePersonneCentrale)) {
         for ($i = 0; $i < $nombrePersonneCentrale; $i++) {
-            $idqualitedemandeurAca = $_POST['qualiteaccueilcentrale' . $i . ''];
+            $idqualitedemandeurAca = trim($_POST['qualiteaccueilcentrale' . $i . '']);
             $idqualitedemandeuraca = substr($idqualitedemandeurAca, -1);
             if ($lang == 'fr') {
                 $libellequalite = $manager->getSingle2("select libellequalitedemandeuraca from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);

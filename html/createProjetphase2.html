@@ -548,7 +548,7 @@
                                style="width:60px;margin-left: 20px"	onchange="addnomCentrale(dijit.byId(this.value))"
                                onclick="addnomCentrale(dijit.byId(this.value))"  >
                     </p>
-                    <div id="personCentrale"><?php include 'personneCentrale.php';  ?></div><br>
+                    <div id="personCentrale"><?php include 'personneCentrale/personneCentrale.php';  ?></div><br>
                     </fieldset>
                     </td>
         </tr>
@@ -863,14 +863,16 @@ function masquecentraleproximite(){
                             </a>
                             </td>                            
                         </tr>
+                    </table>
+                    <table>
                         <tr>
-                            <td style='float: left;margin-top:15px'>
-                            <input data-dojo-type="dijit/form/Button"  type="button" label="<?php echo TXT_SAVEPROJECT ;?>" id="save"  data-dojo-props="onClick:function(){repsave.show()}" >                            
-                                <a class="infoBulle" href="#" style='margin-bottom: 20px'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                                    <span style="text-align: left;padding:7px;width: 680px;border-radius:5px" ><?php echo TXT_SAVEDATA;?></span>
-                                </a>
+                            <td id='btnSave'>
+                            <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){save()}"  disabled="<?php echo $bool; ?>" 
+                                    style="margin-top:15px"><?php echo TXT_SAVEPROJECT ;?></button>
                             </td>
+                            <td id="infoSave"><?php echo TXT_SAVEDATA;?></td>                        
                         </tr>
+                        
                     <tr><td><p class='champobligatoire'><?php echo TXT_CHAMPSOBLIGATOIRES; ?></p></td></tr>
                     </table>
                     <input type="text"  id="enregistre" name="enregistre" style='display: none' value='non' >
@@ -879,24 +881,12 @@ function masquecentraleproximite(){
                         <table class="dijitDialogPaneContentArea">
                             <tr>
                                 <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui"  data-dojo-props="onClick:function(){valide();}">
-                                        <?php echo TXT_OUI ;?></button></td>
-                                        <td><button type="button" data-dojo-type="dijit/form/Button"  id="non" data-dojo-props="onClick:function(){rep.hide();}" >
-                                        <?php echo TXT_NON ;?></button></td>
+                                        <?php echo TXT_OUI ;?></button></td>                                      
                                 <td><button data-dojo-type="dijit/form/Button" type="button" data-dojo-props="onClick:function(){rep.hide();}" id="submitcancel"><?php echo TXT_ANNULE;?></button></td>
                             </tr>
                         </table>
                     </div>
-                    <div data-dojo-type="dijit/Dialog" data-dojo-id="repsave" title="<?php echo TXT_RESULTMESSAGESAVEPHASE;?>" style="width: 500px;margin-left: 20px;   ">
-                        <table class="dijitDialogPaneContentArea">
-                            <tr>
-                                <td><button type="submit" data-dojo-type="dijit/form/Button"  id="ouisave" onclick="save()">
-                                        <?php echo TXT_OUI ;?></button></td>
-                                        <td><button type="submit" data-dojo-type="dijit/form/Button"  id="nonsave" onclick="repsave.hide()">
-                                        <?php echo TXT_NON ;?></button></td>
-                                <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repsave.hide();}" id="submitcancelsave"><?php echo TXT_ANNULE;?></button></td>
-                            </tr>
-                        </table>
-                    </div>    
+                    
                     <script>            
                         function valide(){
                             document.getElementById('creerprojetphase2').value='oui'

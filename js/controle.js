@@ -185,29 +185,49 @@ function utf8length(str) {
 function addnomCentrale(nb) {
     if (nb === 0) {
         document.getElementById('personCent').style.display = 'none';
-        for (i = 0; i < 21; i++) {
-            dijit.byId('nomaccueilcentrale' + i).set('required', '');
-            dijit.byId('prenomaccueilcentrale' + i).set('required', '');
-            dijit.byId('qualiteaccueilcentrale' + i).set('required', '');
-            dijit.byId('mailaccueilcentrale' + i).set('required', '');
+        for (i = 0; i < 21; i++) {            
+                dijit.byId('nomaccueilcentrale' + i).set('required', '');
+                dijit.byId('prenomaccueilcentrale' + i).set('required', '');
+                dijit.byId('qualiteaccueilcentrale' + i).set('required', '');
+                dijit.byId('mailaccueilcentrale' + i).set('required', '');
         }
     } else {
         switch (nb) {
             case nb:
                 document.getElementById('personCent').style.display = 'block';
                 for (i = 0;i <nb; i++) {
-                    document.getElementById('divpersonne' + i).style.display = 'block';
-                    dijit.byId('nomaccueilcentrale' + i).set('required', 'required');
-                    dijit.byId('prenomaccueilcentrale' + i).set('required', 'required');
-                    dijit.byId('qualiteaccueilcentrale' + i).set('required', 'required');
-                    dijit.byId('mailaccueilcentrale' + i).set('required', 'required');                   
+                    if(document.getElementById('divpersonne' + i)){
+                        document.getElementById('divpersonne' + i).style.display = 'block';
+                    }
+                    if(dijit.byId('nomaccueilcentrale' + i)){
+                        dijit.byId('nomaccueilcentrale' + i).set('required', 'required');
+                    }
+                    if(dijit.byId('prenomaccueilcentrale' + i)){
+                        dijit.byId('prenomaccueilcentrale' + i).set('required', 'required');
+                    }
+                    if(dijit.byId('qualiteaccueilcentrale' + i)){
+                        dijit.byId('qualiteaccueilcentrale' + i).set('required', 'required');
+                    }
+                    if(dijit.byId('mailaccueilcentrale' + i)){
+                        dijit.byId('mailaccueilcentrale' + i).set('required', 'required');
+                    }
                 }
             for (j = nb; j < 21; j++) {
-                    document.getElementById('divpersonne' + j).style.display = 'none';
-                    dijit.byId('nomaccueilcentrale' + j).set('required', '');
-                    dijit.byId('prenomaccueilcentrale' + j).set('required', '');
-                    dijit.byId('qualiteaccueilcentrale' + j).set('required', '');
-                    dijit.byId('mailaccueilcentrale' + j).set('required', '');
+                    if(document.getElementById('divpersonne' + j)){
+                        document.getElementById('divpersonne' + j).style.display = 'none';
+                    }
+                    if(dijit.byId('nomaccueilcentrale' + j)){
+                        dijit.byId('nomaccueilcentrale' + j).set('required', '');
+                    }
+                    if( dijit.byId('prenomaccueilcentrale' + j)){
+                        dijit.byId('prenomaccueilcentrale' + j).set('required', '');
+                    }
+                     if(dijit.byId('qualiteaccueilcentrale' + j)){
+                        dijit.byId('qualiteaccueilcentrale' + j).set('required', '');
+                    }
+                    if(dijit.byId('mailaccueilcentrale' + j)){
+                        dijit.byId('mailaccueilcentrale' + j).set('required', '');
+                    }
                 }
                 break;
         }
