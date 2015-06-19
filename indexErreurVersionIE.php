@@ -5,7 +5,7 @@ include 'html/header.html';?>
 <div id="contenu">
     <div style="margin-top:0px"><?php include_once './include/connexion.html';?></div>
 <?php
-include 'html/VersionIErreur.html';
+include 'html/versionIErreur.html';
 include 'html/footer.html';
 ?>
 </div>

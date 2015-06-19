@@ -51,19 +51,17 @@ if (isset($_SESSION['pseudo'])) {
             $arraypersonnecentrale = $manager->getList2("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen,nomaccueilcentrale,prenomaccueilcentrale,mailaccueilcentrale,telaccueilcentrale,
                 idpersonnequalite,idautresqualite,connaissancetechnologiqueaccueil FROM personneaccueilcentrale,projetpersonneaccueilcentrale,qualitedemandeuraca,projet 
                 WHERE idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale AND idprojet_projet = idprojet AND idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?", $numProjet);
+            $nbarraypersonnecentrale = count($arraypersonnecentrale);        
         }
-        $nbarraypersonnecentrale = count($arraypersonnecentrale);
-        /*$arrayQualite = $manager->getListbyArray("SELECT pcq.idpersonnequalite,pcq.libellepersonnequalite,pcq.libellepersonnequaliteen,pac.idpersonneaccueilcentrale  FROM personnecentralequalite pcq,personneaccueilcentrale pac,"
-                                        . "projetpersonneaccueilcentrale p WHERE pac.idpersonnequalite = pcq.idpersonnequalite AND  pac.idpersonneaccueilcentrale = p.idpersonneaccueilcentrale_personneaccueilcentrale AND "
-                                        . "p.idprojet_projet = ? and pcq.libellepersonnequalite !=?", array($idprojet, 'n/a'));*/
-        
-        $arrayQualite =$manager->getListbyArray("SELECT pcq.idpersonnequalite,pcq.libellepersonnequalite,q.idqualitedemandeuraca,pac.idpersonneaccueilcentrale FROM personnecentralequalite pcq,
+        if(isset($idprojet)){
+            $arrayQualite =$manager->getListbyArray("SELECT pcq.idpersonnequalite,pcq.libellepersonnequalite,q.idqualitedemandeuraca,pac.idpersonneaccueilcentrale FROM personnecentralequalite pcq,
             projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personneaccueilcentrale pac WHERE pac.idpersonneaccueilcentrale = ppac.idpersonneaccueilcentrale_personneaccueilcentrale 
             AND pac.idqualitedemandeuraca_qualitedemandeuraca = q.idqualitedemandeuraca AND pac.idpersonnequalite = pcq.idpersonnequalite and ppac.idprojet_projet=?", array($idprojet));
-        //echo '<pre>';print_r($arrayQualite);
+
         $arrayAutreQualite = $manager->getlistbyArray("SELECT a.libelleautresqualite FROM personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,autresqualite a "
                 . "WHERE pac.idpersonneaccueilcentrale = ppac.idpersonneaccueilcentrale_personneaccueilcentrale AND pac.idautresqualite = a.idautresqualite and ppac.idprojet_projet=? "
                 . "and a.libelleautresqualite !=?",array($idprojet,'n/a'));
+        }
         $z=-1;
         for ($i = 0; $i < 21; $i++) {?>
             <div style="display: none" id="<?php echo'divpersonne' . $i; ?>">

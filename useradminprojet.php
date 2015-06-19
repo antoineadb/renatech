@@ -15,7 +15,7 @@ if (isset($_SESSION['pseudo'])) {
 include 'html/header.html';
 $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo =?", $_SESSION['pseudo']);
 $arrayuserprojet = $manager->getList2("SELECT p.acronyme,u.idutilisateur,u.nom,u.prenom,p.titre,p.numero,p.refinterneprojet,ua.dateaffectation FROM utilisateur u,utilisateuradministrateur ua,projet p,concerne c
-WHERE ua.idprojet= p.idprojet AND ua.idutilisateur = u.idutilisateur AND c.idprojet_projet = p.idprojet and c.idcentrale_centrale=?", $idcentrale);
+WHERE ua.idprojet= p.idprojet AND ua.idutilisateur = u.idutilisateur AND c.idprojet_projet = p.idprojet and c.idcentrale_centrale=? AND trashed =FALSE", $idcentrale);
 $fprow = fopen('tmp/projetAdmin.json', 'w');
 $datauserprojet = "";
 $nbarrayuserprojet = count($arrayuserprojet);

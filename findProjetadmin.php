@@ -13,31 +13,31 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 $idcentrale = $manager->getSingle2("SELECT  idcentrale_centrale FROM  loginpassword,utilisateur WHERE  idlogin = idlogin_loginpassword AND pseudo = ?", $_SESSION['pseudo']);
 if (!empty($_POST['dateprojet'])) {
     $dateprojet = $_POST['dateprojet'];
-    $req = "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and idstatutprojet_statutprojet=? and dateprojet = ?"
+    $req = "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and idstatutprojet_statutprojet=? and dateprojet = ? AND trashed =FALSE"
             . " union "
-            . "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and idstatutprojet_statutprojet=? and dateprojet = ?";
+            . "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and idstatutprojet_statutprojet=? and dateprojet = ? AND trashed =FALSE";
     $param = array($idcentrale, ENCOURSREALISATION,$dateprojet,$idcentrale, ACCEPTE ,$dateprojet);
 }elseif (!empty($_POST['numprojet']) && $_POST['numprojet'] != '*') {
     if (!empty($_POST['numprojet'])) {
         $numprojet = $_POST['numprojet'];
-        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idcentrale_centrale=? and idstatutprojet_statutprojet=?"
+        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idcentrale_centrale=? and idstatutprojet_statutprojet=? AND trashed =FALSE"
                 . "union "
-                . "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idcentrale_centrale=? and idstatutprojet_statutprojet=?";
+                . "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idcentrale_centrale=? and idstatutprojet_statutprojet=? AND trashed =FALSE";
 
         $param = array('%' . $numprojet . '%', $idcentrale, ENCOURSREALISATION,'%' . $numprojet . '%', $idcentrale, ACCEPTE);
 
     }
 } else {
-    $req = "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and  idstatutprojet_statutprojet=? "
+    $req = "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and  idstatutprojet_statutprojet=? AND trashed =FALSE"
             . " union "
-            . "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and  idstatutprojet_statutprojet=?";
+            . "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and  idstatutprojet_statutprojet=? AND trashed =FALSE";
     $param = array($idcentrale, ENCOURSREALISATION,$idcentrale,ACCEPTE);
 }
 if (isset($_POST['numprojet']) && isset($_POST['dateprojet'])) {
     if (!empty($_POST['numprojet']) && !empty($_POST['dateprojet'])) {
-        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idstatutprojet_statutprojet=? and dateprojet=? and idcentrale_centrale=?"
+        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idstatutprojet_statutprojet=? and dateprojet=? and idcentrale_centrale=? AND trashed =FALSE"
              . "union"
-             . "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idstatutprojet_statutprojet=? and dateprojet=? and idcentrale_centrale=?";
+             . "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idstatutprojet_statutprojet=? and dateprojet=? and idcentrale_centrale=? AND trashed =FALSE";
         $param = array('%' . $numprojet . '%', ENCOURSREALISATION,$dateprojet, $idcentrale,'%' . $numprojet . '%', ACCEPTE,$dateprojet, $idcentrale);
     }
 }

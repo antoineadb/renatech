@@ -130,6 +130,7 @@ include_once 'Autresqualite.php';
 include_once 'LoginParam.php';
 include_once 'UtilisateurAdministrateur.php';
 
+
 showError($_SERVER['PHP_SELF']);
 
 class Manager {
@@ -3427,7 +3428,41 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+//-----------------------------------------------------------------------------------------------------------
+//              CORBEILLE PROJET
+//-----------------------------------------------------------------------------------------------------------
+     public function trashedProjet($idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("update projet set trashed = TRUE  where idprojet =?");            
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRDELETEPROJETDATEDEBUT . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+        public function restoreProject($idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("update projet set trashed = FALSE  where idprojet =?");            
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRDELETEPROJETDATEDEBUT . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+       
+    
+    
 
+    
+    
 //-----------------------------------------------------------------------------------------------------------
 //              SELECT
 //-----------------------------------------------------------------------------------------------------------
