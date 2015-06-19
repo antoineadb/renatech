@@ -1,35 +1,20 @@
 <?php
 
-$donneePorteur = $manager->getList2("SELECT nom,mail,mailresponsable,nomresponsable,dateaffectation FROM projet,utilisateurporteurprojet, utilisateur,loginpassword WHERE idprojet_projet = idprojet AND idutilisateur_utilisateur = idutilisateur AND idlogin = idlogin_loginpassword and idprojet=? order by dateaffectation  asc limit 1", $idprojet);
-if (!empty($donneePorteur[0]['nom'])) {
-    $nomdemandeur = str_replace("''", "''", utf8_decode($donneePorteur[0]['nom']));
-    $maildemandeur = $donneePorteur[0]['mail'];
-    if (!empty($donneePorteur[0]['nomresponsable'])) {
-        $nomresponsable = str_replace("''", "''", utf8_decode($donneePorteur[0]['nomresponsable']));
-    } else {
-        $nomresponsable = '';
-    }
-    if (!empty($donneePorteur[0]['mailresponsable'])) {
-        $mailresponsable = $donneePorteur[0]['mailresponsable'];
-    } else {
-        $mailresponsable = '';
-    }
+$arraydemandeur = $manager->getList2("SELECT nom,  mail, mailresponsable, nomresponsable FROM creer,utilisateur,loginpassword WHERE idutilisateur_utilisateur = idutilisateur
+            AND idlogin = idlogin_loginpassword and idprojet_projet=? ", $idprojet);
+$nomdemandeur = str_replace("''", "''", utf8_decode($arraydemandeur[0]['nom']));
+$maildemandeur = $arraydemandeur[0]['mail'];
+if (!empty($arraydemandeur[0]['nomresponsable'])) {
+    $nomresponsable = str_replace("''", "''", utf8_decode($arraydemandeur[0]['nomresponsable']));
 } else {
-    $arraydemandeur = $manager->getList2("SELECT nom,  mail, mailresponsable, nomresponsable FROM creer,utilisateur,loginpassword WHERE idutilisateur_utilisateur = idutilisateur
-                AND idlogin = idlogin_loginpassword and idprojet_projet=? ", $idprojet);
-    $nomdemandeur = str_replace("''", "''", utf8_decode($arraydemandeur[0]['nom']));
-    $maildemandeur = $arraydemandeur[0]['mail'];
-    if (!empty($arraydemandeur[0]['nomresponsable'])) {
-        $nomresponsable = str_replace("''", "''", utf8_decode($arraydemandeur[0]['nomresponsable']));
-    } else {
-        $nomresponsable = '';
-    }
-    if (!empty($arraydemandeur[0]['mailresponsable'])) {
-        $mailresponsable = $arraydemandeur[0]['mailresponsable'];
-    } else {
-        $mailresponsable = '';
-    }
+    $nomresponsable = '';
 }
+if (!empty($arraydemandeur[0]['mailresponsable'])) {
+    $mailresponsable = $arraydemandeur[0]['mailresponsable'];
+} else {
+    $mailresponsable = '';
+}
+//}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              SOURCE DE FINANCEMENT
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -58,13 +43,12 @@ if ($nbarraysf > 0) {
 $interneExterne = $manager->getSingle2("SELECT idcentrale_centrale FROM  utilisateur,creer WHERE  idutilisateur_utilisateur = utilisateur.idutilisateur and idprojet_projet = ?", $idprojet);
 $porteur = $row[$i]['porteurprojet'];
 
-if(!empty($row[$i]['interneexterne'])){
-    if($row[$i]['interneexterne']=='I'){
-        $interne_externe= 'Interne';
-    }elseif ($row[$i]['interneexterne']=='E'){
-        $interne_externe= 'Externe';
-    }    
-    
+if (!empty($row[$i]['interneexterne'])) {
+    if ($row[$i]['interneexterne'] == 'I') {
+        $interne_externe = 'Interne';
+    } elseif ($row[$i]['interneexterne'] == 'E') {
+        $interne_externe = 'Externe';
+    }
 } elseif (!empty($interneExterne) && $porteur == TRUE) {
     $interne_externe = 'Interne';
 } else {
@@ -74,13 +58,12 @@ $idpays = $row[$i]['idpays_pays'];
 $nompays = $manager->getSingle2("select nompays from pays where idpays=?", $idpays);
 // SI SOURCE DE FINANCEMENT = EUROPE ALORS INTERNATIONAL
 
-if(!empty($row[$i]['internationalnational'])){
-    if($row[$i]['internationalnational']=='I'){
-        $sit= 'International';
-    }elseif ($row[$i]['internationalnational']=='N'){
-        $sit= 'National';
-    }    
-    
+if (!empty($row[$i]['internationalnational'])) {
+    if ($row[$i]['internationalnational'] == 'I') {
+        $sit = 'International';
+    } elseif ($row[$i]['internationalnational'] == 'N') {
+        $sit = 'National';
+    }
 } elseif (in_array('Europe', $arraySF)) {
     $sit = 'International';
 } else {

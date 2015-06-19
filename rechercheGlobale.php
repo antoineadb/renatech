@@ -26,79 +26,79 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(p.numero) like lower(?)
+                        AND ce.idcentrale =? and lower(p.numero) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(p.numero) like lower(?)
+                        AND ce.idcentrale =? and lower(p.numero) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(p.titre) like lower(?)
+                        AND ce.idcentrale =? and lower(p.titre) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(p.titre) like lower(?)
+                        AND ce.idcentrale =? and lower(p.titre) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(p.description) like lower(?)
+                        AND ce.idcentrale =? and lower(p.description) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(p.description) like lower(?)
+                        AND ce.idcentrale =? and lower(p.description) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(u.nom) like lower(?)
+                        AND ce.idcentrale =? and lower(u.nom) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(u.prenom) like lower(?)
+                        AND ce.idcentrale =? and lower(u.prenom) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(u.nom) like lower(?)
+                        AND ce.idcentrale =? and lower(u.nom) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(p.refinterneprojet) like lower(?)
+                        AND ce.idcentrale =? and lower(p.refinterneprojet) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(p.refinterneprojet) like lower(?) 
+                        AND ce.idcentrale =? and lower(p.refinterneprojet) like lower(?)  AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =?  AND  lower(u.nom) like lower(?)
+                        AND ce.idcentrale =?  AND  lower(u.nom) like lower(?) AND trashed =FALSE
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =?  AND  lower(u.prenom) like lower(?) );
+                        AND ce.idcentrale =?  AND  lower(u.prenom) like lower(?) AND trashed =FALSE );
                     ", array(
                         $idcentrale, '%' . $_POST['rechercheglobale'] . '%', $idcentrale, '%' . $_POST['rechercheglobale'] . '%',$idcentrale, '%'. $_POST['rechercheglobale'] . '%', 
                         $idcentrale, '%' . $_POST['rechercheglobale'] . '%', $idcentrale, '%' . $_POST['rechercheglobale'] . '%',$idcentrale, '%'. $_POST['rechercheglobale'] . '%', 
@@ -113,72 +113,72 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(p.numero) like lower(?)
+                            AND lower(p.numero) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.numero) like lower(?)
+                            AND  lower(p.numero) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.titre) like lower(?)
+                            AND  lower(p.titre) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.titre) like lower(?)
+                            AND  lower(p.titre) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.description) like lower(?)
+                            AND  lower(p.description) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(p.description) like lower(?)
+                            AND lower(p.description) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(u.nom) like lower(?)
+                            AND lower(u.nom) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(u.prenom) like lower(?)
+                            AND lower(u.prenom) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(u.nom) like lower(?)
+                            AND lower(u.nom) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.refinterneprojet) like lower(?)
+                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.refinterneprojet) like lower(?)
+                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM utilisateurporteurprojet up,utilisateur u,projet p,concerne co,loginpassword l,centrale ce,statutprojet s 
                             WHERE up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet 
-                            AND l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale	AND  lower(u.nom) like lower(?)
+                            AND l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale	AND  lower(u.nom) like lower(?) AND trashed =FALSE
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM utilisateurporteurprojet up,utilisateur u,projet p,concerne co,loginpassword l,centrale ce,statutprojet s 
@@ -198,73 +198,73 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(p.numero) like lower(?) and l.pseudo=?
+                            AND lower(p.numero) like lower(?) AND trashed =FALSE and l.pseudo=?
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.numero) like lower(?) and l.pseudo=? 
+                            AND  lower(p.numero) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.titre) like lower(?) and l.pseudo=? 
+                            AND  lower(p.titre) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.titre) like lower(?) and l.pseudo=? 
+                            AND  lower(p.titre) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.description) like lower(?) and l.pseudo=? 
+                            AND  lower(p.description) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(p.description) like lower(?) and l.pseudo=? 
+                            AND lower(p.description) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(u.nom) like lower(?) and l.pseudo=? 
+                            AND lower(u.nom) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(u.prenom) like lower(?) and l.pseudo=? 
+                            AND lower(u.prenom) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(u.nom) like lower(?) and l.pseudo=? 
+                            AND lower(u.nom) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(u.prenom) like lower(?) and l.pseudo=? 
+                            AND lower(u.prenom) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.refinterneprojet) like lower(?) and l.pseudo=? 
+                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE and l.pseudo=? 
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.refinterneprojet) like lower(?) and l.pseudo=? 
+                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE and l.pseudo=? 
                         )", array(
                              '%' . $_POST['rechercheglobale'] . '%' , $pseudo,
                              '%' . $_POST['rechercheglobale'] . '%' , $pseudo,

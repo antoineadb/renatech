@@ -671,7 +671,7 @@ define("TXT_UTILISATEURINDUSTRIEL","Industrial user");
 define("TXT_VALIDER","validate");
 define("TXT_VERIFIER","Check");
 define("TXT_VERROUIDENTIFIEE","locks identified");
-define("TXT_VERSION","Renatech form,  Release 4.4 June 15, 2015");
+define("TXT_VERSION","Renatech form,  Release 4.5 June 19, 2015");
 define("TXT_VILLE","Town");
 define("TXT_VOSINFO","Your Informations");
 define("TXT_VOSPSEUDOS","Your logins");

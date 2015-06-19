@@ -58,7 +58,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is null  AND  datestatutcloturer is null
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=?
-AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
 UNION
 SELECT  p.porteurprojet,p.interneexterne,p.internationalnational,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -71,7 +71,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is null
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
-AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
 UNION
 SELECT  p.porteurprojet,p.interneexterne,p.internationalnational,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -84,7 +84,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is not null
 AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
-AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
 UNION
 SELECT  p.porteurprojet,p.interneexterne,p.internationalnational,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -97,7 +97,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutfini is not null AND  datestatutcloturer is null AND
 EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
-AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
 UNION
 SELECT  p.porteurprojet,p.interneexterne,p.internationalnational,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -110,7 +110,7 @@ FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutcloturer is not null
 AND EXTRACT(YEAR from datestatutcloturer)=?
-AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=?
+AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
 UNION
 SELECT  p.porteurprojet,p.interneexterne,p.internationalnational,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
@@ -122,7 +122,7 @@ p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtec
 FROM projet p,creer c,utilisateur u,concerne co
 WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
 AND co.idcentrale_centrale =? AND  datestatutrefuser is not null
-AND EXTRACT(YEAR from datestatutrefuser)=? 
+AND EXTRACT(YEAR from datestatutrefuser)=? AND trashed =FALSE
     AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? order by datecreation  asc";
 
 if ($idtypeuser == ADMINNATIONNAL) {//Administrateur national
