@@ -43,7 +43,8 @@ for ($c = 2; $c <= 10; $c++) {
 }
 $s_personnesalleblanche = "";
 for ($d = 1; $d <= 21; $d++) {
-$s_personnesalleblanche .= "Nom de la personne accueil".$d.";Prénom de la personne accueil".$d.";mail de la personne accueil".$d.";Téléphone de la personne accueil".$d.";Connaissance technologique de la personne accueil".$d.";Qualité de la personne accueil".$d.";";    
+$s_personnesalleblanche .= "Nom de la personne accueil".$d.";Prénom de la personne accueil".$d.";mail de la personne accueil".$d.";Téléphone de la personne accueil".$d.";Connaissance technologique de la personne accueil".$d.
+        ";Qualité de la personne accueil".$d.";"."Qualité non permanent".$d.";"."Autre Qualité".$d.";";    
 }
 $s_ressource='';
 for ($q = 1; $q <=NBRESSOURCE; $q++) {
@@ -617,9 +618,10 @@ if ($nbrow != 0) {
 //      RECUPERATION DES INFOS DES PERSONNES ACCUEILS CENTRALES
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
         for ($e = 1; $e <= 21; $e++) {                           
-                ${'rowpersonne'.$e} = $manager->getListbyArray("SELECT nomaccueilcentrale,prenomaccueilcentrale,mailaccueilcentrale,telaccueilcentrale,connaissancetechnologiqueaccueil,idqualitedemandeuraca_qualitedemandeuraca,"
-                        . "idprojet FROM personneaccueilcentrale,projetpersonneaccueilcentrale,projet  WHERE idprojet_projet = idprojet AND idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale "
-                        . "AND idprojet =? order by idpersonneaccueilcentrale asc limit 1 offset ?", array($idprojet,$e-1));
+                ${'rowpersonne'.$e} = $manager->getListbyArray("SELECT nomaccueilcentrale,prenomaccueilcentrale,mailaccueilcentrale,telaccueilcentrale,connaissancetechnologiqueaccueil,"
+                        . "idqualitedemandeuraca_qualitedemandeuraca,idpersonnequalite,idautresqualite,idprojet FROM personneaccueilcentrale,projetpersonneaccueilcentrale,projet "
+                        . "WHERE idprojet_projet = idprojet AND idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale AND idprojet =? order by idpersonneaccueilcentrale asc limit 1 offset ?", 
+                        array($idprojet,$e-1));
             if(!empty(${'rowpersonne'.$e})){     
                 ${'nomPersonne'.$e} = cleanForExportOther(${'rowpersonne'.$e}[0]['nomaccueilcentrale']);
                 ${'prenomPersonne'.$e} = cleanForExportOther(${'rowpersonne'.$e}[0]['prenomaccueilcentrale']);
@@ -639,13 +641,30 @@ if ($nbrow != 0) {
                 }else{
                     ${'connaissancePersonne'.$e}='';
                 }
+                if(!empty(${'rowpersonne'.$e}[0]['idpersonnequalite'])&&${'rowpersonne'.$e}[0]['idpersonnequalite']!=IDNAAUTRESQUALITE){
+                    if($lang=='fr'){
+                        ${'QualiteNonPermanent'.$e} = $manager->getSingle2("select libellepersonnequalite from personnecentralequalite where idpersonnequalite = ?",${'rowpersonne'.$e}[0]['idpersonnequalite']);
+                    }else{
+                        ${'QualiteNonPermanent'.$e} = $manager->getSingle2("select libellepersonnequaliteen from personnecentralequalite where idpersonnequalite = ?",${'rowpersonne'.$e}[0]['idpersonnequalite']);
+                    }
+                }else{
+                    ${'QualiteNonPermanent'.$e} = '';
+                }
+                if(!empty(${'rowpersonne'.$e}[0]['idautresqualite'])&&${'rowpersonne'.$e}[0]['idautresqualite']!=IDNAAUTREQUALITE){
+                    ${'AutreQualite'.$e} = cleanForExportOther($manager->getSingle2("select libelleautresqualite from autresqualite where idautresqualite = ?",${'rowpersonne'.$e}[0]['idautresqualite']));
+                }else{
+                    ${'AutreQualite'.$e} = '';
+                }
+                
             }else{
                 ${'nomPersonne'.$e} = '';
                 ${'prenomPersonne'.$e} = '';
                 ${'mailPersonne'.$e} = '';
                 ${'telPersonne'.$e} = '';
                 ${'connaissancePersonne'.$e} = '';
-                ${'qualite'.$e} = '';               
+                ${'qualite'.$e} = '';
+                ${'QualiteNonPermanent'.$e} = '';
+                ${'AutreQualite'.$e} = '';
             }
         }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -684,7 +703,7 @@ if ($nbrow != 0) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
         $salleBlanche='';
         for ($z = 1; $z <=21; $z++) {
-            $salleBlanche .= ${'nomPersonne'.$z} . ";" .${'prenomPersonne'.$z}. ";" .${'mailPersonne'.$z} . ";" .${'telPersonne'.$z}. ";" .${'connaissancePersonne'.$z} . ";" .${'qualite'.$z}. ";" ;
+            $salleBlanche .= ${'nomPersonne'.$z} . ";" .${'prenomPersonne'.$z}. ";" .${'mailPersonne'.$z} . ";" .${'telPersonne'.$z}. ";" .${'connaissancePersonne'.$z} . ";" .${'qualite'.$z}. ";".${'QualiteNonPermanent'.$z}.";".${'AutreQualite'.$z} .";";
         }
         $varpartenaires='';
         for ($w = 2; $w <= 10; $w++) {
@@ -776,7 +795,7 @@ if ($nbrow != 0) {
                 $descriptioncentraleproximite.";".
                 $emailrespdevis . ";" .
                 stripslashes(utf8_decode($reussite)) .";".
-                 $salleBlanche . "\n";
+                $salleBlanche . "\n";
     }
     $libcentrale = $manager->getSingle2("SELECT libellecentrale FROM loginpassword,centrale,utilisateur WHERE idlogin_loginpassword = idlogin AND idcentrale_centrale = idcentrale AND pseudo=?", $_SESSION['pseudo']);
 // Déclaration du type de contenu

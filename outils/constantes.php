@@ -70,6 +70,8 @@ define('IDAUTREDISCIPLINE', $manager->getSingle2("select iddiscipline  from disc
 define('IDAUTRESOURCEFINANCEMENT', $manager->getSingle2("select idsourcefinancement from sourcefinancement where libellesourcefinancement=? ", 'Autres'));
 define('NBSOURCEDEFINACEMENT',$manager->getSingle("select count(idsourcefinancement) from sourcefinancement"));
 define('NBRESSOURCE',$manager->getSingle("select count(idressource) from ressource"));
+define ('TXT_REGEXPASS',"regExp:'^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$");
+
 if(isset($_SESSION['pseudo'])){
     define('IDCENTRALEUSER', $manager->getSingle2("select idcentrale_centrale from utilisateur, loginpassword where idlogin_loginpassword=idlogin and pseudo=? ", $_SESSION['pseudo']));
 }

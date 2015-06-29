@@ -22,7 +22,6 @@ if (empty($_SESSION['nomConnect'])) {
     if (!empty($idlogin)) {// LE LOGIN EXISTE
         $_SESSION['pseudo'] = $pseudo;
         $passe = $manager->getSingle2("select motdepasse from loginpassword where pseudo=?", $pseudo); //RECUPERATION DU MOT DE PASSE
-
         if (sha1($_POST['motPasse']) == $passe) {//CONTROLE QUE LE MOT DE PASSE EST IDENTIQUE
             //VERIFICATION SI LE COMPTE N'EST PAS DESACTIVE
             $actif = $manager->getSingle2("select actif from loginpassword where pseudo=?", $pseudo);

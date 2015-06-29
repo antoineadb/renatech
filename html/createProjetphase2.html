@@ -592,16 +592,16 @@
                             <label for="devTechnologique" style="width:695px;margin-left: 20px;"><?php echo TXT_QUESTIONETAPE.'* :';?>
                                 <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 330px;border-radius:5px" >
                                         <?php echo affiche('TXT_AIDEDESCRIPTIFTECHNO');?></span></a></label>                            
-                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="devTechnologique"   value="TRUE"  class="btRadio"
+                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="devTechnologique"   value="TRUE"  class="btRadio" checked="checked"
                                    onclick="document.getElementById('verrou').style.display = 'block'" style="margin-left: 20px;"> 
                             <?php echo TXT_OUI; ?>
-                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="devTechnologique"  value="FALSE" checked="checked"
+                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="devTechnologique"  value="FALSE" 
                                    class="btRadio" onclick="document.getElementById('verrou').style.display = 'none'" style="margin-left: 20px;">
                             <?php echo TXT_NON; ?>
                         </td>
                     </tr>
                     <tr>
-                        <td  id="verrou" style="display:none">
+                        <td  id="verrou" style="display:block">
                             <label for="verrouidentifie" style="width: auto;margin-left: 20px"><?php echo TXT_VERROUIDENTIFIEE.' :'; ?>
                                 <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 250">
                                         <?php echo affiche('TXT_AIDEVERROUIDENTIFIEE');?></span></a>
