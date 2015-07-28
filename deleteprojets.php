@@ -69,7 +69,6 @@ include 'html/header.html';
                     pMenu.addChild(new MenuItem({
                         label: "<?php echo TXT_EMPTYTRASH; ?>",
                         onClick: function(){
-                            //javascript:menuConfirmationEmptyTrash('repEmptyTrash');
                             dijit.byId(repEmptyTrash).set('title', '<?php echo TXT_CONFIRMEMPTYTRASH ;?>');
                             repEmptyTrash.show();
                         }

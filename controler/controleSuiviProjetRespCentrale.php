@@ -1,11 +1,23 @@
 <?php
 
 session_start();
+
 include_once '../class/Chiffrement.php';
 include '../class/Manager.php';
 include_once '../decide-lang.php';
 include_once '../outils/constantes.php';
 include_once '../outils/toolBox.php';
+include_once '../class/Cache.php';
+$cacheRapport = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheSoustraitance = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheTous = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheEncoursRealisation = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheAccepte = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheEnAttente = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheFinis = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheEncoursAnalyse = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheCloture = new Cache(REP_ROOT . '/cache', 60); //1 heure
+$cacheRefuse = new Cache(REP_ROOT . '/cache', 60); //1 heure
 showError($_SERVER['PHP_SELF']);
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
@@ -36,37 +48,31 @@ if (isset($_POST['pseudo'])) {
     $pseudo = $_SESSION['pseudo'];
 }
 //------------------------------------------------------
-//-----AFFICHAGE DU NOM EN HAUT A DROITE DE LA PAGE-----
+//-----AFFICHAGE DU NOM EN HAUT A DROITE DE LA PAGE ---
 //------------------------------------------------------
-
 nomEntete($mail, $pseudo);
+
 //------------------------------------------------------------------------
 //-----RECUPERATION DU LIBELLE DE LA CENTRALE DU RESPONSABLE CENTRALE-----
 //------------------------------------------------------------------------
-$libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM centrale , utilisateur ,loginpassword  WHERE
-idcentrale_centrale = idcentrale AND idlogin_loginpassword = idlogin AND pseudo=?", $pseudo);
-$idcentrale = $manager->getSingle2("SELECT idcentrale FROM centrale , utilisateur ,loginpassword  WHERE
-idcentrale_centrale = idcentrale AND idlogin_loginpassword = idlogin AND pseudo=?", $pseudo);
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//                  GESTION DE LA PAGINATION
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-$nbTotalProjet = $manager->getSingle("select count(idprojet) from tmptous");
-$perPage = 50;
-$nbPage = ceil($nbTotalProjet/$perPage);
-if(isset($_GET['page'])&&$_GET['page']>0 && $_GET['page']<=$nbPage){
-    $cPage=$_GET['page'] ;
-}else{
-    $cPage = 1;
+
+$idtypeuser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo =?", $pseudo);
+if ($idtypeuser == ADMINLOCAL) {
+    $libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM centrale , utilisateur ,loginpassword  WHERE idcentrale_centrale = idcentrale AND idlogin_loginpassword = idlogin AND pseudo=?", $pseudo);
+    $idcentrale = $manager->getSingle2("SELECT idcentrale FROM centrale , utilisateur ,loginpassword  WHERE idcentrale_centrale = idcentrale AND idlogin_loginpassword = idlogin AND pseudo=?", $pseudo);
+} elseif ($idtypeuser == ADMINNATIONNAL) {
+    if (!empty($_POST['centrale'])) {
+        $idcentrale = (int) $_POST['centrale'];
+        $libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale =?", $idcentrale);
+    }
 }
-$arrayprojet = $manager->getList("select * from tmptous order by idprojet desc");
-$nbProjet = count($arrayprojet);
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//                  FIN
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET CENTRALE TOUS
 //-----------------------------------------------------------------------------------------------------------------------------------------------
+if ($cacheTous->read('tous')) {
+    $tous = $cacheTous->read('tous');
+} else {
 //SUPPRESSION DE LA TABLE TEMPORAIRE SI ELLE EXISTE
 $manager->exeRequete("drop table if exists tmptous;");
 //CREATION DE LA TABLE TEMPORAIRE
@@ -130,62 +136,61 @@ FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutproje
 WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
 AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? AND trashed =FALSE
-)", array($libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale, FINI,REFUSE,CLOTURE,$libellecentrale,
-    FINI,REFUSE,CLOTURE,$libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE, $libellecentrale,FINI,REFUSE,CLOTURE));
+)", array($libellecentrale, FINI, REFUSE, CLOTURE, $libellecentrale, FINI, REFUSE, CLOTURE, $libellecentrale, FINI, REFUSE, CLOTURE, $libellecentrale, FINI, REFUSE, CLOTURE, $libellecentrale, FINI, REFUSE, CLOTURE, $libellecentrale,
+    FINI, REFUSE, CLOTURE, $libellecentrale, FINI, REFUSE, CLOTURE, $libellecentrale, FINI, REFUSE, CLOTURE, $libellecentrale, FINI, REFUSE, CLOTURE, $libellecentrale, FINI, REFUSE, CLOTURE));
+$arrayprojet = $manager->getList("select * from tmptous order by idprojet desc");
+$nbProjet = count($arrayprojet);
 $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN calcfinprojet date;");
 $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN finprojetproche date;");
-
 for ($i = 0; $i < $nbProjet; $i++) {
-    if($arrayprojet[$i]['idstatutprojet']!=ENATTENTE && $arrayprojet[$i]['idstatutprojet']!=ENCOURSANALYSE&& $arrayprojet[$i]['idstatutprojet']!=REFUSE&& $arrayprojet[$i]['idstatutprojet']!=FINI
-            && $arrayprojet[$i]['idstatutprojet']!=CLOTURE&& $arrayprojet[$i]['idstatutprojet']!=ACCEPTE&& $arrayprojet[$i]['idstatutprojet']!=ENATTENTEPHASE2){
+    if ($arrayprojet[$i]['idstatutprojet'] != ENATTENTE && $arrayprojet[$i]['idstatutprojet'] != ENCOURSANALYSE && $arrayprojet[$i]['idstatutprojet'] != REFUSE && $arrayprojet[$i]['idstatutprojet'] != FINI && $arrayprojet[$i]['idstatutprojet'] != CLOTURE && $arrayprojet[$i]['idstatutprojet'] != ACCEPTE && $arrayprojet[$i]['idstatutprojet'] != ENATTENTEPHASE2) {
         if ($arrayprojet[$i]['idperiodicite_periodicite'] == JOUR) {
             $datedepart = strtotime($arrayprojet[$i]['datedebutprojet']);
             $duree = ($arrayprojet[$i]['dureeprojet']);
             $dateFin = date('Y-m-d', strtotime('+' . $duree . 'day', $datedepart));
-            $dureeproche =$duree-15;
+            $dureeproche = $duree - 15;
             $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-            $annee =(int) date('Y',  strtotime($dateFinproche));
-            if($annee>1970){
-                $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin,$dateFinproche, $arrayprojet[$i]['idprojet']));
+            $annee = (int) date('Y', strtotime($dateFinproche));
+            if ($annee > 1970) {
+                $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojet[$i]['idprojet']));
             }
         } elseif ($arrayprojet[$i]['idperiodicite_periodicite'] == MOIS) {
             $datedepart = strtotime($arrayprojet[$i]['datedebutprojet']);
             $duree = ($arrayprojet[$i]['dureeprojet']);
             $dateFin = date('Y-m-d', strtotime('+' . $duree . 'month', $datedepart));
-            $dureeproche =($duree*30)-15;
+            $dureeproche = ($duree * 30) - 15;
             $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-            $annee =(int) date('Y',  strtotime($dateFinproche));
-            if($annee>1970){
-                $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin,$dateFinproche, $arrayprojet[$i]['idprojet']));
+            $annee = (int) date('Y', strtotime($dateFinproche));
+            if ($annee > 1970) {
+                $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojet[$i]['idprojet']));
             }
         } elseif ($arrayprojet[$i]['idperiodicite_periodicite'] == ANNEE) {
             $datedepart = strtotime($arrayprojet[$i]['datedebutprojet']);
             $duree = ($arrayprojet[$i]['dureeprojet']);
             $dateFin = date('Y-m-d', strtotime('+' . $duree . 'year', $datedepart));
-            $dureeproche =($duree*365)-15;
+            $dureeproche = ($duree * 365) - 15;
             $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-            $annee =(int) date('Y',  strtotime($dateFinproche));
-            if($annee>1970){
-                $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin,$dateFinproche, $arrayprojet[$i]['idprojet']));
+            $annee = (int) date('Y', strtotime($dateFinproche));
+            if ($annee > 1970) {
+                $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojet[$i]['idprojet']));
             }
         }
     }
 }
-$_SESSION['nbprojet']=$manager->getSingle("select count(distinct idprojet) from tmptous");
+$_SESSION['nbprojet'] = $manager->getSingle("select count(distinct idprojet) from tmptous");
 $porteur = '';
-//$arrayporteur1 = $manager->getList("select distinct numero from tmptous order by idprojet desc");
 $arrayporteur1 = $manager->getList("select distinct numero from tmptous");
 $arrayporteur = array();
 
 foreach ($arrayporteur1 as $key => $value) {
-    $arrayporteur = $manager->getList2("select distinct porteur from tmptous where  numero=?", $value[0]);    
+    $arrayporteur = $manager->getList2("select distinct porteur from tmptous where  numero=?", $value[0]);
     foreach ($arrayporteur as $key1 => $value1) {
         if (!empty($value1[0])) {
             $porteur.= $value1[0] . '  / ';
         }
         $valeur = $value[0];
-        $porteur=substr(trim($porteur), 0, -1);
-        if(!empty($porteur)){
+        $porteur = substr(trim($porteur), 0, -1);
+        if (!empty($porteur)) {
             $tmptous = new Tmprecherche($porteur, $valeur);
             $manager->updateProjetcentrale($tmptous, $value[0]);
         }
@@ -200,17 +205,17 @@ $nbrow = count($row);
 
 for ($i = 0; $i < $nbrow; $i++) {
     if (!empty($row[$i]['datemaj'])) {
-            $datemaj = $row[$i]['datemaj'];
-        }else{
-            $datemaj = '';
-        }
+        $datemaj = $row[$i]['datemaj'];
+    } else {
+        $datemaj = '';
+    }
     if ($lang == 'fr') {
         $datausercompte = "" . '{"numero":' . '"' . $row[$i]['numero'] . '"' . "," .
                 '"dateprojet":' . '"' . $row[$i]['dateprojet'] . '"' . ","
                 . '"idprojet":' . '"' . $row[$i]['idprojet'] . '"' . ","
                 . '"datemaj":' . '"' . $datemaj . '"' . ","
                 . '"titre":' . '"' . filtredonnee($row[$i]['titre']) . '"' . ","
-                . '"refinterneprojet":' . '"' . filtredonnee($row[$i]['refinterneprojet']) .' - '.filtredonnee($row[$i]['acronyme']). '"' . ","
+                . '"refinterneprojet":' . '"' . filtredonnee($row[$i]['refinterneprojet']) . ' - ' . filtredonnee($row[$i]['acronyme']) . '"' . ","
                 . '"libellestatutprojet":' . '"' . str_replace("''", "'", $row[$i]['libellestatutprojet']) . '"' . ","
                 . '"idstatutprojet":' . '"' . str_replace("''", "'", $row[$i]['idstatutprojet']) . '"' . ","
                 . '"idutilisateur":' . '"' . $row[$i]['idutilisateur'] . '"' . ","
@@ -229,7 +234,7 @@ for ($i = 0; $i < $nbrow; $i++) {
                 . '"idprojet":' . '"' . $row[$i]['idprojet'] . '"' . ","
                 . '"datemaj":' . '"' . $datemaj . '"' . ","
                 . '"titre":' . '"' . filtredonnee($row[$i]['titre']) . '"' . ","
-                . '"refinterneprojet":' . '"' . filtredonnee($row[$i]['refinterneprojet']) .' - '.filtredonnee($row[$i]['acronyme']). '"' . ","
+                . '"refinterneprojet":' . '"' . filtredonnee($row[$i]['refinterneprojet']) . ' - ' . filtredonnee($row[$i]['acronyme']) . '"' . ","
                 . '"libellestatutprojet":' . '"' . str_replace("''", "'", $row[$i]['libellestatutprojeten']) . '"' . ","
                 . '"idstatutprojet":' . '"' . str_replace("''", "'", $row[$i]['idstatutprojet']) . '"' . ","
                 . '"idutilisateur":' . '"' . $row[$i]['idutilisateur'] . '"' . ","
@@ -249,13 +254,20 @@ $json_fileprojet = "../tmp/projetCentrale.json";
 $json_fileRecherche1 = file_get_contents($json_fileprojet);
 $json_fileRecherche = str_replace('},]}', '}]}', $json_fileRecherche1);
 file_put_contents($json_fileprojet, $json_fileRecherche);
+$cacheTous->write('tous', $json_fileRecherche);
+
 fclose($fprow);
 chmod('../tmp/projetCentrale.json', 0777);
+}
 $_SESSION['email'] = $mail;
 $_SESSION['pseudo'] = $pseudo;
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET CENTRALE EN COURS DE REALISATION
 //-----------------------------------------------------------------------------------------------------------------------------------------------
+
+if ($cacheEncoursRealisation->read('realisation')) {
+    $realisation = $cacheEncoursRealisation->read('realisation');
+} else {
 //SUPPRESSION DE LA TABLE TEMPORAIRE SI ELLE EXISTE
 $manager->exeRequete("drop table if exists tmpencoursrealisation;");
 //CREATION DE LA TABLE TEMPORAIRE
@@ -283,26 +295,26 @@ for ($i = 0; $i < $nbProjetreal; $i++) {
         $datedepart = strtotime($arrayprojetrealisation[$i]['datedebutprojet']);
         $duree = ($arrayprojetrealisation[$i]['dureeprojet']);
         $dateFin = date('Y-m-d', strtotime('+' . $duree . 'day', $datedepart));
-        $dureeproche =$duree-15;
+        $dureeproche = $duree - 15;
         $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-        $annee =(int) date('Y',  strtotime($dateFinproche));
-        $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin,$dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
+        $annee = (int) date('Y', strtotime($dateFinproche));
+        $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
     } elseif ($arrayprojetrealisation[$i]['idperiodicite_periodicite'] == MOIS) {
         $datedepart = strtotime($arrayprojetrealisation[$i]['datedebutprojet']);
         $duree = ($arrayprojetrealisation[$i]['dureeprojet']);
         $dateFin = date('Y-m-d', strtotime('+' . $duree . 'month', $datedepart));
-        $dureeproche =($duree*30)-15;
+        $dureeproche = ($duree * 30) - 15;
         $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-        $annee =(int) date('Y',  strtotime($dateFinproche));
-        $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin,$dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
+        $annee = (int) date('Y', strtotime($dateFinproche));
+        $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
     } elseif ($arrayprojetrealisation[$i]['idperiodicite_periodicite'] == ANNEE) {
         $datedepart = strtotime($arrayprojetrealisation[$i]['datedebutprojet']);
         $duree = ($arrayprojetrealisation[$i]['dureeprojet']);
         $dateFin = date('Y-m-d', strtotime('+' . $duree . 'year', $datedepart));
-        $dureeproche =($duree*365)-15;
+        $dureeproche = ($duree * 365) - 15;
         $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-        $annee =(int) date('Y',  strtotime($dateFinproche));
-        $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin,$dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
+        $annee = (int) date('Y', strtotime($dateFinproche));
+        $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
     }
 }
 $rowProjetEncoursRealisation = $manager->getList("
@@ -360,14 +372,21 @@ for ($i = 0; $i < $nbrowProjetEncoursRealisation; $i++) {
         }
     }
 }
-    fwrite($fpProjetEncoursRealisation, ']}');
+fwrite($fpProjetEncoursRealisation, ']}');
 $json_fileEncoursRealisation = "../tmp/ProjetEncoursRealisationcentrale.json";
 $jsonEncoursRealisation = file_get_contents($json_fileEncoursRealisation);
 $jsonEncoursRealisation1 = str_replace('},]}', '}]}', $jsonEncoursRealisation);
+$cacheEncoursRealisation->write('realisation', $jsonEncoursRealisation1);
 file_put_contents($json_fileEncoursRealisation, $jsonEncoursRealisation1);
 fclose($fpProjetEncoursRealisation);
 chmod("../tmp/ProjetEncoursRealisationcentrale.json", 0777);
-$_SESSION['nbprojetencoursrealisation']=$nbProjetreal;
+$_SESSION['nbprojetencoursrealisation'] = $nbProjetreal;
+}
+
+
+if ($cacheAccepte->read('accepte')) {
+    $accepte = $cacheAccepte->read('accepte');
+} else {
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET CENTRALE ACCEPTE
 //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -404,7 +423,7 @@ for ($i = 0; $i < $nbrowProjetAcceptee; $i++) {
             . '"libellestatutProjet":' . '"' . str_replace("''", "'", $rowProjetAcceptee[$i]['libellestatutprojet']) . '"' . ","
             . '"idstatutprojet":' . '"' . $rowProjetAcceptee[$i]['idstatutprojet'] . '"' . ","
             . '"libellecentrale":' . '"' . $rowProjetAcceptee[$i]['libellecentrale'] . '"' . ","
-             . '"refinterneprojet":' . '"' . filtredonnee($rowProjetAcceptee[$i]['refinterneprojet']) . '"' . ","
+            . '"refinterneprojet":' . '"' . filtredonnee($rowProjetAcceptee[$i]['refinterneprojet']) . '"' . ","
             . '"nom":' . '"' . filtredonnee($rowProjetAcceptee[$i]['nom']) . '"' . ","
             . '"nomentreprise":' . '"' . filtredonnee($rowProjetAcceptee[$i]['nomentreprise']) . '"' . "," . '"entrepriselaboratoire":' . '"' . filtredonnee($rowProjetAcceptee[$i]['entrepriselaboratoire']) . '"'
             . "," . '"acronyme":' . '"' . filtredonnee($rowProjetAcceptee[$i]['acronyme']) . '"' . "},";
@@ -416,9 +435,17 @@ $json_fileAccepteeCentrale = "../tmp/ProjetAccepteecentrale.json";
 $jsonAccepteeCentrale = file_get_contents($json_fileAccepteeCentrale);
 $jsonAccepteeCentrale1 = str_replace('},]}', '}]}', $jsonAccepteeCentrale);
 file_put_contents($json_fileAccepteeCentrale, $jsonAccepteeCentrale1);
+$cacheAccepte->write('accepte', $jsonAccepteeCentrale1);
 fclose($fpProjetAcceptee);
 chmod('../tmp/ProjetAccepteecentrale.json', 0777);
-$_SESSION['nbprojetaccepte']=$nbrowProjetAcceptee;
+$_SESSION['nbprojetaccepte'] = $nbrowProjetAcceptee;
+}
+
+
+
+if ($cacheEnAttente->read('attente')) {
+    $attente = $cacheEnAttente->read('attente');
+} else {
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET CENTRALE EN ATTENTE
 //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -432,7 +459,7 @@ SELECT p.numero,p.acronyme,p.titre,p.dateprojet,ce.libellecentrale,s.libellestat
 FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s
 WHERE cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND
   co.idprojet_projet = p.idprojet AND  t.idtypeprojet = p.idtypeprojet_typeprojet AND s.idstatutprojet=? AND trashed =FALSE
-  AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.libellecentrale =?", array(ENATTENTE, $libellecentrale,ENATTENTEPHASE2,$libellecentrale));
+  AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.libellecentrale =?", array(ENATTENTE, $libellecentrale, ENATTENTEPHASE2, $libellecentrale));
 $fpProjetAttente = fopen('../tmp/ProjetAttentecentrale.json', 'w');
 $dataProjetAttente = "";
 fwrite($fpProjetAttente, '{"items": [');
@@ -453,11 +480,17 @@ fwrite($fpProjetAttente, ']}');
 $json_fileAttenteCentrale = "../tmp/ProjetAttentecentrale.json";
 $jsonAttenteCentrale = file_get_contents($json_fileAttenteCentrale);
 $jsonAttenteCentrale1 = str_replace('},]}', '}]}', $jsonAttenteCentrale);
+$cacheEnAttente->write('attente', $jsonAttenteCentrale1);
 file_put_contents($json_fileAttenteCentrale, $jsonAttenteCentrale1);
 fclose($fpProjetAttente);
 chmod('../tmp/ProjetAttentecentrale.json', 0777);
 chmod("../tmp/ProjetEncoursRealisationcentrale.json", 0777);
-$_SESSION['nbprojetattente']=$nbrowProjetAttente;
+$_SESSION['nbprojetattente'] = $nbrowProjetAttente;
+}
+
+if ($cacheEncoursAnalyse->read('analyse')) {
+    $analyse = $cacheEncoursAnalyse->read('analyse');
+} else {
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET CENTRALE EN COURS D'ANALYSE
 //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -486,10 +519,17 @@ fwrite($fpProjetEncours, ']}');
 $json_fileEncoursCentrale = "../tmp/ProjetEncourscentrale.json";
 $jsonEncoursCentrale = file_get_contents($json_fileEncoursCentrale);
 $jsonEncoursCentrale1 = str_replace('},]}', '}]}', $jsonEncoursCentrale);
+$cacheEncoursAnalyse->write('analyse', $jsonEncoursCentrale1);
 file_put_contents($json_fileEncoursCentrale, $jsonEncoursCentrale1);
 fclose($fpProjetEncours);
 chmod('../tmp/ProjetEncourscentrale.json', 0777);
-$_SESSION['nbprojetencours']=$nbrowProjetEncours;
+$_SESSION['nbprojetencours'] = $nbrowProjetEncours;
+}
+
+
+if ($cacheRefuse->read('refuse')) {
+    $refuse = $cacheRefuse->read('refuse');
+} else {
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET CENTRALE REFUSEE
 //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -521,11 +561,18 @@ fwrite($fpProjetRefusee, ']}');
 $json_fileRefuseeCentrale = "../tmp/ProjetRefuseecentrale.json";
 $jsonRefuseeCentrale = file_get_contents($json_fileRefuseeCentrale);
 $jsonRefuseeCentrale1 = str_replace('},]}', '}]}', $jsonRefuseeCentrale);
+$cacheRefuse->write('refuse', $jsonRefuseeCentrale1);
 file_put_contents($json_fileRefuseeCentrale, $jsonRefuseeCentrale1);
 fclose($fpProjetRefusee);
 chmod("../tmp/ProjetRefuseecentrale.json", 0777);
-$_SESSION['nbProjetRefusee']=$nbrowProjetRefusee;
-//---------------------------------------------------------------------------------------------------------------------------------------------------
+$_SESSION['nbProjetRefusee'] = $nbrowProjetRefusee;
+}
+
+
+if ($cacheFinis->read('finis')) {
+    $finis = $cacheFinis->read('finis');
+} else {
+////---------------------------------------------------------------------------------------------------------------------------------------------------
 //                              CREATION DU PROJET JSON FINI
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 $manager->exeRequete("drop table if exists tmpfini;");
@@ -571,10 +618,16 @@ fwrite($fpFini, ']}');
 $json_fileFini = "../tmp/projetFiniCentrale.json";
 $jsonfini = file_get_contents($json_fileFini);
 $jsonFini = str_replace('},]}', '}]}', $jsonfini);
+$cacheFinis->write('finis', $jsonFini);
 file_put_contents($json_fileFini, $jsonFini);
 fclose($fpFini);
 chmod('../tmp/projetFiniCentrale.json', 0777);
-$_SESSION['nbFini']=$nbrowFini;
+$_SESSION['nbFini'] = $nbrowFini;
+}
+
+if ($cacheCloture->read('cloture')) {
+    $cloture = $cacheCloture->read('cloture');
+} else {
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 //										CREATION DU PROJET JSON CLOTURE
 //---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -611,7 +664,7 @@ for ($i = 0; $i < $nbrowCloturer; $i++) {
             . '"numero":' . '"' . $rowCloturer[$i]['numero'] . '"' . ","
             . '"refinterneprojet":' . '"' . filtredonnee($rowCloturer[$i]['refinterneprojet']) . '"' . ","
             . '"titre":' . '"' . filtredonnee($rowCloturer[$i]['titre']) . '"' . ","
-            . '"libellestatutprojet":' . '"' . $rowCloturer[$i]['libellestatutprojet'] . '"'. ","
+            . '"libellestatutprojet":' . '"' . $rowCloturer[$i]['libellestatutprojet'] . '"' . ","
             . '"acronyme":' . '"' . $rowCloturer[$i]['acronyme'] . '"' . "},";
     fputs($fpCloturer, $dataCloturer);
     fwrite($fpCloturer, '');
@@ -620,17 +673,19 @@ fwrite($fpCloturer, ']}');
 $json_fileCloturer = "../tmp/projetCloturerCentrale.json";
 $jsoncloturer = file_get_contents($json_fileCloturer);
 $jsonCloturer = str_replace('},]}', '}]}', $jsoncloturer);
+$cacheCloture->write('cloture', $jsonCloturer);
 file_put_contents($json_fileCloturer, $jsonCloturer);
 fclose($fpCloturer);
 chmod('../tmp/projetCloturerCentrale.json', 0777);
-$_SESSION['nbprojetCloturer']=$nbrowCloturer;
+$_SESSION['nbprojetCloturer'] = $nbrowCloturer;
+}
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET EN SOUS-TRAITANCE
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-//SUPPRESSION DE LA TABLE TEMPORAIRE SI ELLE EXISTE
-$manager->exeRequete("drop table if exists tmpsoustraince;");
-//CREATION DE LA TABLE TEMPORAIRE
-$rowProjetsoustraitance= $manager->getList2("SELECT p.idprojet,s.idstatutprojet,p.titre,p.acronyme,p.refinterneprojet,s.libellestatutprojet,s.libellestatutprojeten,u.nom,u.prenom,p.numero,p.dateprojet FROM projet p,projetautrecentrale pa,statutprojet s,concerne co,creer cr,utilisateur u
+if ($cacheSoustraitance->read('soustraitance')) {
+    $soustraitance = $cacheSoustraitance->read('soustraitance');
+} else {
+$rowProjetsoustraitance = $manager->getList2("SELECT p.idprojet,s.idstatutprojet,p.titre,p.acronyme,p.refinterneprojet,s.libellestatutprojet,s.libellestatutprojeten,u.nom,u.prenom,p.numero,p.dateprojet FROM projet p,projetautrecentrale pa,statutprojet s,concerne co,creer cr,utilisateur u
 WHERE p.idprojet = pa.idprojet AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet AND cr.idprojet_projet = p.idprojet AND  cr.idutilisateur_utilisateur = u.idutilisateur
 and  pa.idcentrale=? AND trashed =FALSE", $idcentrale);
 $fpProjetSoustraitance = fopen('../tmp/Projetsoustraitance.json', 'w');
@@ -638,15 +693,15 @@ $dataProjetSoustraitance = "";
 fwrite($fpProjetSoustraitance, '{"items": [');
 $nbrowProjetSoustraitance = count($rowProjetsoustraitance);
 for ($i = 0; $i < $nbrowProjetSoustraitance; $i++) {
-    $centrale=$manager->getSingle2("SELECT  c.libellecentrale FROM centrale c,concerne co WHERE  co.idcentrale_centrale = c.idcentrale and co.idprojet_projet=?", $rowProjetsoustraitance[$i]['idprojet']);
-     $dataProjetSoustraitance = ""
+    $centrale = $manager->getSingle2("SELECT  c.libellecentrale FROM centrale c,concerne co WHERE  co.idcentrale_centrale = c.idcentrale and co.idprojet_projet=?", $rowProjetsoustraitance[$i]['idprojet']);
+    $dataProjetSoustraitance = ""
             . '{"dateProjet":' . '"' . $rowProjetsoustraitance[$i]['dateprojet'] . '"' . ","
             . '"numero":' . '"' . $rowProjetsoustraitance[$i]['numero'] . '"' . ","
-            . '"titre":' . '"' .filtredonnee($rowProjetsoustraitance[$i]['titre']) . '"' . ","
-            . '"idprojet":' . '"' .$rowProjetsoustraitance[$i]['idprojet'] . '"' . ","
+            . '"titre":' . '"' . filtredonnee($rowProjetsoustraitance[$i]['titre']) . '"' . ","
+            . '"idprojet":' . '"' . $rowProjetsoustraitance[$i]['idprojet'] . '"' . ","
             . '"libellestatutProjet":' . '"' . str_replace("''", "'", $rowProjetsoustraitance[$i]['libellestatutprojet']) . '"' . ","
             . '"idstatutprojet":' . '"' . $rowProjetsoustraitance[$i]['idstatutprojet'] . '"' . ","
-             . '"refinterneprojet":' . '"' . filtredonnee($rowProjetsoustraitance[$i]['refinterneprojet']) . '"' . ","
+            . '"refinterneprojet":' . '"' . filtredonnee($rowProjetsoustraitance[$i]['refinterneprojet']) . '"' . ","
             . '"nom":' . '"' . filtredonnee($rowProjetsoustraitance[$i]['nom']) . '"' . ","
             . '"centrale":' . '"' . $centrale . '"' . ","
             . '"prenom":' . '"' . filtredonnee($rowProjetsoustraitance[$i]['prenom']) . '"' . ","
@@ -659,46 +714,58 @@ $json_fileSoustraitance = "../tmp/Projetsoustraitance.json";
 $jsonSoustraitance = file_get_contents($json_fileSoustraitance);
 $jsonSoustraitance1 = str_replace('},]}', '}]}', $jsonSoustraitance);
 file_put_contents($json_fileSoustraitance, $jsonSoustraitance1);
+$cacheSoustraitance->write('soustraitance', $jsonSoustraitance1);
 fclose($fpProjetSoustraitance);
 chmod('../tmp/Projetsoustraitance.json', 0777);
-$_SESSION['nbProjetSoustraitance']=$nbrowProjetSoustraitance;
 
 
+$_SESSION['nbProjetSoustraitance'] = $nbrowProjetSoustraitance;
+}
+if ($cacheRapport->read('rapport')) {
+    $rapport = $cacheRapport->read('rapport');
+} else {
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  RAPPORTS PROJETS
 //-----------------------------------------------------------------------------------------------------------------------------------------------
+    $rowProjetRapport = $manager->getListbyArray("select c.idstatutprojet_statutprojet,r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet and c.idprojet_projet=r.idprojet and cr.idprojet_projet=r.idprojet and c.idcentrale_centrale=? and c.idstatutprojet_statutprojet!=?", array($idcentrale, REFUSE));
+    $fpProjetRapport = fopen('../tmp/ProjetRapport.json', 'w');
+    $dataProjetRapport = "";
+    fwrite($fpProjetRapport, '{"items": [');
 
-$rowProjetRapport= $manager->getListbyArray("select c.idstatutprojet_statutprojet,r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet and c.idprojet_projet=r.idprojet and cr.idprojet_projet=r.idprojet and c.idcentrale_centrale=? and c.idstatutprojet_statutprojet!=?", array($idcentrale,REFUSE));
-$fpProjetRapport = fopen('../tmp/ProjetRapport.json', 'w');
-$dataProjetRapport = "";
-fwrite($fpProjetRapport, '{"items": [');
-$nbrowProjetRapport = count($rowProjetRapport);
-for ($i = 0; $i < $nbrowProjetRapport; $i++) {    
-    $arraycreateur =$manager->getList2("select nom,prenom from utilisateur where idutilisateur=?", $rowProjetRapport[$i]['idutilisateur_utilisateur']);
-     $dataProjetRapport = ""
-            . '{"numero":' . '"' . $rowProjetRapport[$i]['numero'] . '"' . ","
-             . '"datecreation":' . '"' . $rowProjetRapport[$i]['datecreation'] . '"' . ","
-             . '"identite":' . '"' . $arraycreateur[0]['nom'].' - '. $arraycreateur[0]['prenom'] . '"' . ","
-             . '"datemiseajour":' . '"' . $rowProjetRapport[$i]['datemiseajour'] . '"' . ","
-            . '"title":' . '"' .filtredonnee($rowProjetRapport[$i]['title']) . '"' . ","
-            . '"idprojet":' . '"' .$rowProjetRapport[$i]['idprojet'] . '"' . ","             
-             . '"idstatutprojet":' . '"' .$rowProjetRapport[$i]['idstatutprojet_statutprojet'] . '"' . ","
-             . '"refinterneprojet":' . '"' .filtredonnee($rowProjetRapport[$i]['refinterneprojet']) . '"' . ","
-              . '"imprime":' . '"' . TXT_PDF . '"' . "},";
-    fputs($fpProjetRapport, $dataProjetRapport);
-    fwrite($fpProjetRapport, '');
+    $nbrowProjetRapport = count($rowProjetRapport);
+    for ($i = 0; $i < $nbrowProjetRapport; $i++) {
+        $idutilisateur = $rowProjetRapport[$i]['idutilisateur_utilisateur'];
+        $arraycreateur = $manager->getList2("select nom,prenom from utilisateur where idutilisateur=?", $idutilisateur);
+        $dataProjetRapport = ""
+                . '{"numero":' . '"' . $rowProjetRapport[$i]['numero'] . '"' . ","
+                . '"datecreation":' . '"' . $rowProjetRapport[$i]['datecreation'] . '"' . ","
+                . '"identite":' . '"' . $arraycreateur[0]['nom'] . ' - ' . $arraycreateur[0]['prenom'] . '"' . ","
+                . '"datemiseajour":' . '"' . $rowProjetRapport[$i]['datemiseajour'] . '"' . ","
+                . '"title":' . '"' . filtredonnee($rowProjetRapport[$i]['title']) . '"' . ","
+                . '"idprojet":' . '"' . $rowProjetRapport[$i]['idprojet'] . '"' . ","
+                . '"idstatutprojet":' . '"' . $rowProjetRapport[$i]['idstatutprojet_statutprojet'] . '"' . ","
+                . '"refinterneprojet":' . '"' . filtredonnee($rowProjetRapport[$i]['refinterneprojet']) . '"' . ","
+                . '"imprime":' . '"' . TXT_PDF . '"' . "},";
+        fputs($fpProjetRapport, $dataProjetRapport);
+        fwrite($fpProjetRapport, '');
+    }
+
+    fwrite($fpProjetRapport, ']}');
+    $json_fileRapport = "../tmp/ProjetRapport.json";
+
+    $jsonRapport = file_get_contents($json_fileRapport);
+
+
+    $jsonRapport1 = str_replace('},]}', '}]}', $jsonRapport);
+    file_put_contents($json_fileRapport, $jsonRapport1); // temps d'execution  environ 1.9 sec 
+    $cacheRapport->write('rapport', $jsonRapport1);
+    fclose($fpProjetRapport);   
+    chmod('../tmp/ProjetRapport.json', 0777);   
+    $_SESSION['nbProjetRapport'] = $nbrowProjetRapport;
 }
-fwrite($fpProjetRapport, ']}');
-$json_fileRapport = "../tmp/ProjetRapport.json";
-$jsonRapport = file_get_contents($json_fileRapport);
-$jsonRapport1 = str_replace('},]}', '}]}', $jsonRapport);
-file_put_contents($json_fileRapport, $jsonRapport1);
-fclose($fpProjetRapport);
-chmod('../tmp/ProjetRapport.json', 0777);
-$_SESSION['nbProjetRapport']=$nbrowProjetRapport;
-
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 $_SESSION['email'] = $mail;
 $_SESSION['pseudo'] = $pseudo;
-header('location:/'.REPERTOIRE.'/projet_centrale/' . $lang . '/' . $libellecentrale );
+
+header('location:/' . REPERTOIRE . '/projet_centrale/' . $lang . '/' . $libellecentrale);
 BD::deconnecter();

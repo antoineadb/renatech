@@ -1,23 +1,70 @@
 <?php include_once 'outils/constantes.php'; ?>
-<div id="gridencours" ></div>
+<style type="text/css">
+    #grid {
+        width: 65em;
+        height: 350em;
+    }
+</style>
 <script>
-    var gridencours, dataStore, store;
-    require([
-        "dojox/grid/DataGrid",
-        "dojo/store/Memory",
-        "dojo/data/ObjectStore",
-        "dojo/request",
-        "dojo/date/stamp",
-        "dojo/date/locale",
-        "dojo/domReady!"
-    ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
-        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/projetEncours.json", {
-            handleAs: "json"
-        }).then(function(data) {
-            store = new Memory({data: data.items});
-            dataStore = new ObjectStore({objectStore: store});
-            function hrefFormatter(numero, idx) {
-                var item = gridencours.getItem(idx);//idx = index
+    dojo.require("dojox.grid.EnhancedGrid");
+    dojo.require("dojox.data.CsvStore");
+    dojo.require("dojox.grid.enhanced.plugins.Menu");
+    dojo.require("dojo.data.ItemFileWriteStore");
+    dojo.require("dijit.Menu");
+    dojo.require("dijit.MenuItem");
+    dojo.require("dojo.domReady!");
+    dojo.require("dojo.request");
+    dojo.require("dojox.grid.enhanced.plugins.Pagination");
+dojo.ready(function(){
+    /*set up data store*/
+    var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetEncours.json"});
+    /*set up layout*/    
+    var layout = [[
+       {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "auto", formatter: hrefFormatter},
+        {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet", width: "auto", formatter: formatDate},
+        {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "auto"},
+        {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
+        {name: "<?php echo TXT_ACRONYME; ?>", field: "acronyme", width: "auto"},
+        {name: "<?php echo TXT_STATUTPROJET;?>", field: "libellestatutprojet", width: "auto"},
+        {name: "<?php echo TXT_CENTRALS; ?>", field: "", width: "auto", formatter: formatterLibelle}
+                    
+    ]];
+    var grid = new dojox.grid.EnhancedGrid({
+        id: 'gridencours',
+        store: store,
+        structure: layout,
+        autoHeight:true,
+        rowSelector: '20px',
+        plugins: {menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"},
+            pagination: {
+            pageSizes: ["5", "10", "50","100", "All"],
+            description: true,
+            sizeSwitch: true,
+            pageStepper: true,
+            gotoButton: true,
+            /*page step to be displayed*/
+            maxPageStep: 5,
+            /*position of the pagination bar*/
+            position: "top"
+        }}
+    },
+      document.createElement('div'));
+//----------------------------------------------------------------------------------------------------------------------
+//                                              FONCTIONS DE FORMATAGE
+//----------------------------------------------------------------------------------------------------------------------
+        function hrefFormatter(numero, idx) {
+            var item = grid.getItem(idx);//idx = index
+            var centrale = item.nomcentrale;//libelle centrale
+            var statut=+ item.idstatutprojet;//id statut
+            if (statut ===+ '<?php echo REFUSE; ?>' || statut ===+'<?php echo CLOTURE; ?>') {
+                return numero;
+            }else{
+                return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $lang;?>&statut="+statut+"&numProjet=" + numero + "&centrale=" + centrale+ "\">" + numero + "</a>";
+            }                        
+        }
+        
+        function hrefFormatter(numero, idx) {
+                var item = grid.getItem(idx);//idx = index
                 var centrale = item.nomcentrale;//libelle centrale
                 var statut=+ item.idstatutprojet;//id statut
                 if (statut ===+ '<?php echo REFUSE; ?>' || statut ===+'<?php echo CLOTURE; ?>') {
@@ -27,17 +74,14 @@
                 }                        
             }
             function hrefFormatterPDF(index, idx) {
-                var item = gridencours.getItem(idx);
+                var item = grid.getItem(idx);
                 var numero = item.numero;
                  var idprojet=item.idprojet;
                 return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/pdf_project/<?php echo $lang; ?>/" + numero + "\" target='_blank'>" + '<img title="<?php echo TXT_GENERERPDF; ?>" src="<?php echo '/'.REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
             }            
-            function formatDate(datum) {
-                var d = stamp.fromISOString(datum);
-                return locale.format(d, {selector: 'date', formatLength: 'long'});
-            }
+            
               function formatterLibelle(index, idx) {
-                var item = gridencours.getItem(idx);
+                var item = grid.getItem(idx);
                 var statut = item.idstatutprojet;
                 var academiqueinterne = item.academiqueinterne;
                 if(academiqueinterne==='FALSE'){                    
@@ -76,22 +120,80 @@
                      return encoursrealisation;
                  }
             }
-            
-            gridencours = new DataGrid({
-                store: dataStore,
-                query: {id: "*"},
-                structure: [
-                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "auto", formatter: hrefFormatter},
-                    {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet", width: "auto", formatter: formatDate},
-                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "auto"},
-                    {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
-                    {name: "<?php echo TXT_ACRONYME; ?>", field: "acronyme", width: "auto"},
-                    {name: "<?php echo TXT_STATUTPROJET;?>", field: "libellestatutprojet", width: "auto"},
-                    {name: "<?php echo TXT_CENTRALS; ?>", field: "", width: "auto", formatter: formatterLibelle}
-                    
-                ]
-            }, "gridencours");
-            gridencours.startup();
-        });
-    });
+           
+        dojo.connect(grid, 'onRowContextMenu', function(e){//GESTION DU MENU CONTEXTUELLE
+            var rowIndex = e.rowIndex;
+            var item = grid.getItem(rowIndex);
+            var idprojet = item.idprojet;
+            document.getElementById('idprojet').value=idprojet;            
+        })
+        function formatDate(datum) {
+            var annee =  datum.substring(0,4);
+            if(annee>1970){
+                var dateprojet= new Date(datum);
+                    var options = {year: "numeric", month: "numeric", day: "numeric"};
+                <?php if ($lang == 'en') { ?>
+                    return new Intl.DateTimeFormat("en-US",options).format(dateprojet);
+                <?php } else { ?>
+                    return new Intl.DateTimeFormat("fr-FR",options).format(dateprojet);
+                <?php } ?>
+                }
+        }
+
+    /* append the new grid to the div */
+    dojo.byId("gridDiv").appendChild(grid.domNode);
+    grid.startup();
+});
 </script>
+<div id="gridDiv">
+    <div data-dojo-type="dijit.Menu" id="cellMenu"  style="display: none;">        
+        <div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick:function(){dupliquerProjet()}"><?php echo TXT_DUPLIQUERPROJET;?></div>
+    </div>
+</div>
+<input type="text" id="idprojet" value="" style="display: none">
+<script>    
+    function dupliquerProjet(){       
+        document.getElementById('duplicate_project').value='oui';
+        reponseDuplicate.show();
+    }
+</script>
+<input type="text" id="duplicate_project" style="display: none" value="non">
+<input type="text" id="idprojet" style="display: none" value="non">
+<script>
+//---------------------------------------------------------------------------------------------------------------------------------------
+//                    SELECTION DE L'AFFECTATION D'UN PORTEUR OU D'UN ADMINISTRATEUR
+//                    Gestion de l'éveneùent click sur le menu
+//---------------------------------------------------------------------------------------------------------------------------------------
+        dojo.connect(grid, 'onRowClick', function(e){
+            var rowIndex = e.rowIndex;
+            var item = grid.getItem(rowIndex);            
+            var idprojet =document.getElementById('idprojet').value;            
+            document.getElementById('iduser').value=idutilisateur;
+            document.getElementById('idprojet').value=idprojet;
+            var idstatutprojet = item.idstatutprojet;
+            if(document.getElementById('duplicate_project').value=='oui'){                
+                duplicateProject.show();
+            }
+        })
+      
+        
+</script>
+<script>
+    dojo.require("dijit.Dialog");
+    function hideDialog() {
+        dijit.byId("myDialog").hide();
+    }
+</script>
+<div data-dojo-type="dijit/Dialog" data-dojo-id="reponseDuplicate" id ='reponseDuplicate'
+     style="width: 410px;margin-left: 20px;display:none"  title="<?php echo TXT_CONFIRMDUPLICATEPROJECT;?>  ">
+    <table class="dijitDialogPaneContentArea">
+        <tr>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitOuiDuplicate"
+                        data-dojo-props="onClick:function(){window.location.replace('<?php echo '/'.REPERTOIRE.'/';?>modifBase/duplicateProject.php?lang=<?php echo $lang ?>&idprojet='+document.getElementById('idprojet').value+'');}" >
+                    <?php echo TXT_OUI; ?></button></td>
+            <td>
+                <button type="submit" data-dojo-type="dijit/form/Button"  id="submitNonDuplicate" data-dojo-props="onClick:function(){reponseDuplicate.hide();}"><?php echo TXT_NON; ?></button>
+            </td>            
+        </tr>
+    </table>
+</div>

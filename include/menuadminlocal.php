@@ -3,7 +3,7 @@ include_once 'decide-lang.php';
 $indexchoix = '/' . REPERTOIRE . "/home/" . $lang;
 $createProjet = '/' . REPERTOIRE . "/new_request/" . $lang;
 $creerprojetphase2 = '/' . REPERTOIRE . "/new_project/" . $lang;
-$controleSuiviProjetRespCentrale = '/' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang."&page=1";
+$controleSuiviProjetRespCentrale = '/' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang;
 $controleSuiviProjet = '/' . REPERTOIRE . "/controler/controleSuiviProjet.php?lang=" . $lang;
 $deleteprojets = '/' . REPERTOIRE . "/delete_projet/" . $lang;
 $porteurprojet = '/' . REPERTOIRE . "/recherche_projet/" . $lang;
@@ -26,6 +26,7 @@ $useradminprojet= '/' . REPERTOIRE . '/useradminprojet/' . $lang;
 $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
 $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 $projetSansDev = '/'.REPERTOIRE.'/noDevProject/'.$lang;
+$viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:620px;margin-left:58px">
@@ -69,6 +70,7 @@ $projetSansDev = '/'.REPERTOIRE.'/noDevProject/'.$lang;
             <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_STATISTIQUE;?></a></li>
             <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>
             <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
+            <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
         </ul>
  
     </li>

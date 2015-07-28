@@ -3,17 +3,21 @@ unset($_SESSION['numProjet']);
 if(isset($_SESSION['idTypeUser'])){
     $typeuser=$_SESSION['idTypeUser'];
 }else{
+    include_once 'class/Manager.php';
+    $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+    $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
     $typeuser=$manager->getSingle2("select idtypeutilisateur_typeutilisateur from utilisateur,loginpassword where idlogin = idlogin_loginpassword and pseudo=?",$_SESSION['pseudo']);
+    $db = BD::deconnecter();
 }
 ?>
 <fieldset id="ident" style="border-color: #5D8BA2;width:100%;padding: 20px 40px 33px;">
     <legend style="color: #5D8BA2;font-size: 1.1em">
         <?php if($typeuser==ADMINLOCAL){?>
-            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviProjetRespCentrale.php?lang='.$lang ?>&page=1" style="text-decoration:none;" title="<?php echo TXT_LOGINPROJETCENTRALE; ?>" > <?php echo TXT_PROJET; ?></a>
+            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviProjetRespCentrale.php?lang='.$_GET['lang'] ?>" style="text-decoration:none;" title="<?php echo TXT_LOGINPROJETCENTRALE; ?>" > <?php echo TXT_PROJET; ?></a>
         <?php }elseif($typeuser==UTILISATEUR){?>
-            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviProjet.php?lang='.$lang ?>" style="text-decoration:none;" title="<?php echo TXT_SUIVIPROJET; ?>" > <?php echo TXT_PROJET; ?></a>
+            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviProjet.php?lang='.$_GET['lang'] ?>" style="text-decoration:none;" title="<?php echo TXT_SUIVIPROJET; ?>" > <?php echo TXT_PROJET; ?></a>
         <?php }else{?>
-            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviTousLesProjets.php?lang='.$lang ?>" style="text-decoration:none;" title="<?php echo TXT_TOUSLESPROJETS; ?>" > <?php echo TXT_PROJET; ?></a>
+            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviTousLesProjets.php?lang='.$_GET['lang'] ?>" style="text-decoration:none;" title="<?php echo TXT_TOUSLESPROJETS; ?>" > <?php echo TXT_PROJET; ?></a>
         <?php }?>
     </legend>
     <div style="font-size: 1.2em">
@@ -39,7 +43,7 @@ if(isset($_SESSION['idTypeUser'])){
             if($_SESSION['responsableCentrale']=='true'){
                 echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETUSER0'))).' '
                 .stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETUSER1'))).
-                '<a href="/'.REPERTOIRE.'/controler/controleSuiviProjetRespCentrale.php?lang='.$lang.'&page=1"
+                '<a href="/'.REPERTOIRE.'/controler/controleSuiviProjetRespCentrale.php?lang='.$_GET['lang'].'"
                 style="text-decoration: none">'." ".stripslashes(str_replace("''","'",strtolower(TXT_VUESUIVIPROJETCENTRALE))).'</a>';
             }
         }
@@ -50,8 +54,7 @@ if(isset($_SESSION['idTypeUser'])){
                 <?php echo strtolower(stripslashes(str_replace("''","'",TXT_MONCOMPTE))); ?></a>
         </p>
         <?php }elseif($typeuser==ADMINNATIONNAL){ ?> 
-        <p><?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETADMIN'))).', '.
-											stripslashes(str_replace("''","'",affiche('TXT_PROJETADMIN')));?></p>
+        <p><?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETADMIN'))).', '. stripslashes(str_replace("''","'",affiche('TXT_PROJETADMIN')));?></p>
         <p>
             <?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETADMIN0'))) ;?>
             <a href="liste/<?php echo $lang;?>" style="text-decoration: none">

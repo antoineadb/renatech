@@ -11,24 +11,24 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 <div style='margin-top: -40px;'>
     <?php
     if (isset($_GET['numProjet'])){
-    $url='&numProjet='.$_GET['numProjet'];
+        $url='&numProjet='.$_GET['numProjet'];
     }else{
-    $url="";
+        $url="";
     }
     if (isset($_GET['idprojet'])){
-    $url2='&idprojet='.$_GET['idprojet'];
+        $url2='&idprojet='.$_GET['idprojet'];
     }else{
-    $url2="";
+        $url2="";
     }
     if(isset($_GET['numProjet'])&& isset($_GET['statut'])){
-    $url2='&numProjet='.$_GET['numProjet'].'&statut='.$_GET['statut'];
+        $url2='&numProjet='.$_GET['numProjet'].'&statut='.$_GET['statut'];
     }else{
-    $url2="";
+        $url2="";
     }
     if (isset($_GET['centrale'])){
-    $url3='&centrale='.$_GET['centrale'];
+        $url3='&centrale='.$_GET['centrale'];
     }else{
-    $url3="";
+        $url3="";
     }    
     if(isset($_SESSION['pseudo'])){
         checktimeconnect($_SESSION['pseudo']);//TEMPORISATION  AVANT DECONNEXION SI PAS D'ACTIVITE
@@ -39,61 +39,56 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
     <?php
     $pagephp = explode('/', $_SERVER['PHP_SELF']);
     if($pagephp[2]=="index.php"){
-    $chemin = 'index/';
+        $chemin = 'index/';
     }elseif($pagephp[2]=="indexErreurMotdepasse.php"){
-    $chemin = 'index/';
+        $chemin = 'index/';
     }elseif($pagephp[2]=="indexchoix.php"){
-    $chemin = 'home/';
+        $chemin = 'home/';
     }
     if($pagephp[2]=="index.php" || $pagephp[2]=="indexchoix.php" || $pagephp[2]=="indexErreurMotdepasse.php"){
-    ?>
-    <?php if(isset($Cache)){?>
-    <a href="<?php echo '/'.REPERTOIRE.'/'.$chemin;?>en<?php echo $url.$url2.$url3;?>" ><img width="25px" height="17px" src="<?php echo '/'.REPERTOIRE ?>/styles/img/en.jpg" onclick="<?php $Cache-> clear(); ?>"></a>
-    <a href="<?php echo '/'.REPERTOIRE.'/'.$chemin;?>fr<?php echo $url.$url2.$url3;?>"><img width="25px" height="17px" src="<?php echo '/'.REPERTOIRE ?>/styles/img/fr.jpg" onclick="<?php $Cache-> clear(); ?>"></a>
-    <?php }else{ ?>
+    ?>        
     <a href="<?php echo '/'.REPERTOIRE.'/'.$chemin;?>en<?php echo $url.$url2.$url3;?>" ><img width="25px" height="17px" src="<?php echo '/'.REPERTOIRE ?>/styles/img/en.jpg"></a>
     <a href="<?php echo '/'.REPERTOIRE.'/'.$chemin;?>fr<?php echo $url.$url2.$url3;?>"><img width="25px" height="17px" src="<?php echo '/'.REPERTOIRE ?>/styles/img/fr.jpg" ></a>
-    <?php }?>
-    <?php }else{ ?>
-    <img  src="<?php echo '/'.REPERTOIRE ?>/styles/img/en_disabled.jpg" width="25px" height="17px" >
-    <img src="<?php echo '/'.REPERTOIRE ?>/styles/img/fr_disabled.jpg" width="25px" height="17px">
-    <?php }?>
+        
+<?php }else{ ?>
+<img  src="<?php echo '/'.REPERTOIRE ?>/styles/img/en_disabled.jpg" width="25px" height="17px" >
+<img src="<?php echo '/'.REPERTOIRE ?>/styles/img/fr_disabled.jpg" width="25px" height="17px">
+<?php }?>
 </div>
 <table style="width: 850px; margin-top: 15px;">
     <tr>
         <td style="width:400px">
             <?php
             if(!empty($_SESSION['mail'])){
-            $mail = $_SESSION['mail'];
+                $mail = $_SESSION['mail'];
             }elseif(!empty($_SESSION['email'])){
-            $mail = $_SESSION['email'];
+                $mail = $_SESSION['email'];
             }else{
-            $mail='';
+                $mail='';
             }
             if(!empty($_SESSION['pseudo'])){
-            $pseudo =$_SESSION['pseudo'];
+                $pseudo =$_SESSION['pseudo'];
             }
             if(!empty($pseudo)){
-            $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?",$pseudo);
-            if(!empty($idlogin)){
-            $idTypeUser=$manager->getSingle2("select idtypeutilisateur_typeutilisateur from utilisateur where idlogin_loginpassword =?",$idlogin);
-            if(!empty($_SESSION['nomConnect'])&& !empty($_SESSION['prenomConnect'])){
-            echo "<a href='/".REPERTOIRE."/moncompte/".$lang."' style='text-decoration:none;font-size: 1.1em;'
-            title='".TXT_MONCOMPTE."' >".$_SESSION['nomConnect']." ".$_SESSION['prenomConnect']."</a>";
-            }
-            }
+                $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?",$pseudo);
+                if(!empty($idlogin)){
+                    $idTypeUser=$manager->getSingle2("select idtypeutilisateur_typeutilisateur from utilisateur where idlogin_loginpassword =?",$idlogin);
+                    if(!empty($_SESSION['nomConnect'])&& !empty($_SESSION['prenomConnect'])){
+                        echo "<a href='/".REPERTOIRE."/moncompte/".$lang."' style='text-decoration:none;font-size: 1.1em;'
+                        title='".TXT_MONCOMPTE."' >".$_SESSION['nomConnect']." ".$_SESSION['prenomConnect']."</a>";
+                    }
+                }
             }
             ?>
         </td>
         <?php
         if(!empty($pseudo)){
-        $droit  =  $manager->getSingle2("SELECT t.idtypeutilisateur FROM  typeutilisateur t, utilisateur u,loginpassword l WHERE
-        t.idtypeutilisateur = u.idtypeutilisateur_typeutilisateur AND l.idlogin = u.idlogin_loginpassword AND l.pseudo=?",$pseudo);
-        if(!empty($droit)){
-        if($droit==ADMINLOCAL) {?>
-        <td style="width:100px"></td>
+            $droit  =  $manager->getSingle2("SELECT t.idtypeutilisateur FROM  typeutilisateur t, utilisateur u,loginpassword l WHERE t.idtypeutilisateur = u.idtypeutilisateur_typeutilisateur AND l.idlogin = u.idlogin_loginpassword AND l.pseudo=?",$pseudo);
+            if(!empty($droit)){
+                if($droit==ADMINLOCAL) {?>
+                    <td style="width:100px"></td>
         <?php }elseif($droit==ADMINNATIONNAL) { ?>
-        <td style="width:50px"></td>
+                <td style="width:50px"></td>
         <?php }elseif($droit==UTILISATEUR) {?>
         <?php }
         }

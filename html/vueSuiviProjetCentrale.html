@@ -1,3 +1,7 @@
+<?php 
+include_once 'class/Cache.php';
+$cacheTous = new Cache(REP_ROOT . '/cache', 60); //1 heure
+?>
 <style type="text/css">
     #grid {
         width: 65em;
@@ -35,16 +39,16 @@ dojo.ready(function(){
         structure: layout,
         autoHeight:true,
         rowSelector: '20px',
-        plugins: {menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"},
+        plugins: { <?php if($_SESSION['idTypeUser']==ADMINLOCAL){;?>menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}, <?php }?>  
             pagination: {
             pageSizes: ["5", "10", "50","100", "All"],
             description: true,
             sizeSwitch: true,
             pageStepper: true,
             gotoButton: true,
-                    /*page step to be displayed*/
+            /*page step to be displayed*/
             maxPageStep: 5,
-                    /*position of the pagination bar*/
+            /*position of the pagination bar*/
             position: "top"
         }}
     },
@@ -64,16 +68,12 @@ dojo.ready(function(){
             return "<a  href=\"<?php echo '/'.REPERTOIRE;?>/pdf_project/<?php echo $lang; ?>/" + numero + "\" target='_blank'>" +
                     '<img title="<?php echo TXT_GENERERPDF; ?>" src="<?php echo "/".REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
         }
-       dojo.connect(grid, 'onRowContextMenu', function(e){
+       dojo.connect(grid, 'onRowContextMenu', function(e){//GESTION DU MENU CONTEXTUELLE
             var rowIndex = e.rowIndex;
             var item = grid.getItem(rowIndex);
             var idprojet = item.idprojet;
-            document.getElementById('idprojet').value=idprojet;
+            document.getElementById('idprojet').value=idprojet;            
         })
-        dojo.connect(grid, 'onRowMouseOver', function(e){
-
-        })
-
         function formatDate(datum) {
             var annee =  datum.substring(0,4);
             if(annee>1970){
@@ -126,26 +126,34 @@ dojo.ready(function(){
 });
 </script>
 <div id="gridDiv">
-    <div data-dojo-type="dijit.Menu" id="cellMenu"  style="display: none;">
+   
+        <div data-dojo-type="dijit.Menu" id="cellMenu"  style="display: none;">
         <div data-dojo-type="dijit.MenuItem"  data-dojo-props="onClick:function(){affecterporteur()}"><?php echo TXT_AFFECTERPORTEUR;?></div>
         <div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick:function(){affecterAdmin()}"><?php echo TXT_AFFECTERADMINISTRATEUR;?></div>
+        <div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick:function(){dupliquerProjet()}"><?php echo TXT_DUPLIQUERPROJET;?></div>
+    
     </div>
 </div>
+
 <input type="text" id="idprojet" value="" style="display: none">
 <script>
-    var rowIndex;
-    function rowContextMenuEvent (e) {
-        rowIndex = e.rowIndex;
-    }
     function affecterAdmin(){
         document.getElementById('input_affecte_admin').value='oui';
         document.getElementById('input_affecte_porteur').value='non';
+        document.getElementById('duplicate_project').value='non';
         affecterProjet();
     }
     function affecterporteur(){
         document.getElementById('input_affecte_admin').value='non';
         document.getElementById('input_affecte_porteur').value='oui';
+        document.getElementById('duplicate_project').value='non';
         affecterProjet();
+    }
+    function dupliquerProjet(){
+        document.getElementById('input_affecte_porteur').value='non';
+        document.getElementById('input_affecte_admin').value='non';
+        document.getElementById('duplicate_project').value='oui';
+        reponseDuplicate.show();
     }
 </script>
 <?php //CREATION DU FICHIER compteUtilisateur.json QUE L'ON VA UTILISER PAR LA SUITE?>
@@ -171,6 +179,8 @@ chmod('tmp/compteUtilisateur.json', 0777);
 ?>
 <input type="text" id="input_affecte_porteur" style="display: none" value="non">
 <input type="text" id="input_affecte_admin" style="display: none" value="non">
+<input type="text" id="duplicate_project" style="display: none" value="non">
+
 <input type="text" id="iduser" style="display: none" value="non">
 <input type="text" id="idprojet" style="display: none" value="non">
 <script>
@@ -216,18 +226,23 @@ chmod('tmp/compteUtilisateur.json', 0777);
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 //                    SELECTION DE L'AFFECTATION D'UN PORTEUR OU D'UN ADMINISTRATEUR
+//                    Gestion de l'éveneùent click sur le menu
 //---------------------------------------------------------------------------------------------------------------------------------------
          dojo.connect(myGrid, 'onRowClick', function(e){
             var rowIndex = e.rowIndex;
             var item = myGrid.getItem(rowIndex);
             var idutilisateur = item.idutilisateur;
-            var idprojet =document.getElementById('idprojet').value;
+            var idprojet =document.getElementById('idprojet').value;            
             document.getElementById('iduser').value=idutilisateur;
             document.getElementById('idprojet').value=idprojet;
+            var idstatutprojet = item.idstatutprojet;
+            
             if(document.getElementById('input_affecte_porteur').value=='oui'){
                 reponseporteur.show();
             }else if(document.getElementById('input_affecte_admin').value=='oui'){
                 reponseadmin.show();
+            }else if(document.getElementById('duplicate_project').value=='oui'){                
+                duplicateProject.show();
             }
         })
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -252,7 +267,8 @@ chmod('tmp/compteUtilisateur.json', 0777);
             document.getElementById('filtreNom').value='non';
         }
         function filtrenom(grid,param,id){
-            dijit.byId('prenom').set('value','');
+            console.log('grid = '+grid);console.log('param = '+param);console.log('id = '+id);
+            dijit.byId('prenom').set('value','');            
             dijit.byId(grid).filter({param: ''+id.value+''+'*'});
             document.getElementById('filtreNom').value='oui';
             document.getElementById('filtrePrenom').value='non';
@@ -260,6 +276,7 @@ chmod('tmp/compteUtilisateur.json', 0777);
     </script>
     <input type="text" style="display: none" id="filtreNom" value="non">
     <input type="text" style="display: none" id="filtrePrenom" value="non">
+
     <table>
         <tr>
             <td><input data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:150px;margin-left:5px" onfocus="dijit.byId('prenom').set('value','');" onchange="filtrenom('myGrid','nom','nom')" placeholder="<?php echo TXT_NOM; ?>"></td>
@@ -275,7 +292,7 @@ chmod('tmp/compteUtilisateur.json', 0777);
                         dijit.byId('nom').set('value','');
                         dijit.byId('myGrid').filter({prenom: ''+dijit.byId('prenom').value+''+'*'});
                     }
-                </script>
+                </script>           
                 </div>
             </td>
             <td>
@@ -380,6 +397,19 @@ $nomutilisateur=$manager->getSingle2("select nom from utilisateur where idutilis
             <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitNon1" data-dojo-props="onClick:function(){reponseadmin.hide();}">
                     <?php echo TXT_NON; ?></button></td>
             <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){reponseadmin.hide();}" id="cancel1"><?php echo TXT_ANNULE; ?></button></td>
+        </tr>
+    </table>
+</div>
+<div data-dojo-type="dijit/Dialog" data-dojo-id="reponseDuplicate" id ='reponseDuplicate'
+     style="width: 410px;margin-left: 20px;display:none"  title="<?php echo TXT_CONFIRMDUPLICATEPROJECT;?>  ">
+    <table class="dijitDialogPaneContentArea">
+        <tr>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitOuiDuplicate"
+                        data-dojo-props="onClick:function(){window.location.replace('<?php echo '/'.REPERTOIRE.'/';?>modifBase/duplicateProject.php?lang=<?php echo $lang ?>&idprojet='+document.getElementById('idprojet').value+'');}" >
+                    <?php echo TXT_OUI; ?></button></td>
+            <td>
+                <button type="submit" data-dojo-type="dijit/form/Button"  id="submitNonDuplicate" data-dojo-props="onClick:function(){reponseDuplicate.hide();}"><?php echo TXT_NON; ?></button>
+            </td>            
         </tr>
     </table>
 </div>

@@ -18,11 +18,10 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
     }
     $datedebutProjet = $manager->getSingle2("select datedebutprojet from projet where numero =? ",$numero);
 }
-
 ?>
 <fieldset>
     <legend style="width: 850px;padding-left: 20px">
-        <b><?php echo TXT_NUMPROJET.' : '.$numProjet;?></b> - <b><?php echo TXT_ACRONYME.' : '.stripslashes(str_replace("''","'",$acronyme));  ?></b>        
+        <b><?php echo TXT_NUMPROJET.' : '.$numProjet;?></b> - <b><?php echo TXT_ACRONYMEPROJET.' : '.stripslashes(str_replace("''","'",$acronyme));  ?></b>        
     </legend>
     <?php switch ($idstatutprojet) {
         case "":
@@ -1447,7 +1446,8 @@ function masquecentraleproximite(){
                             if(!empty($etapeautrecentrale)){
                                 $etapeautrecentrale='TRUE';
                             }                            
-                            ?>                            
+                            ?>     
+<?php if ($_SESSION['idTypeUser']==ADMINLOCAL){;?>
                 <table>                     
                     <tr>
                         <td>
@@ -1496,6 +1496,7 @@ function masquecentraleproximite(){
                    <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitcancel2"><?php echo TXT_ANNULE;?></button></td>
                </tr>
            </table>
+         
        </div>                            
             <script>            
             function valide(){
@@ -1643,6 +1644,7 @@ if($idstatut!=ENATTENTEPHASE2){
         </td>
     </tr>
     </table>
+<?php } ?>                                   
 <?php }?>
 <!-----------------------------------------------------------------------------------------------------------------------------------
                 COMMENTAIRE

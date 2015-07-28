@@ -182,7 +182,7 @@ $pseudo=$_SESSION['pseudo'];
                 <tr>
                     <td valign="top"><?php echo TXT_TELEPHONE.'*'; ?>
                         <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' >
-                            <span style="width: 320px"><?php echo TXT_TELINVALIDE;?></span>
+                            <span style="width: 450px"><?php echo TXT_TELINVALIDE;?></span>
                         </a>
                     </td>
                     <td><input type="text" name="tel" id="tel"  required="required" data-dojo-type="dijit/form/ValidationTextBox" style="width: 317px"
@@ -195,7 +195,7 @@ $pseudo=$_SESSION['pseudo'];
                 <tr>
                     <td valign="top"><?php echo TXT_FAX;?>
                         <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' >
-                            <span style="width: 320px"><?php echo TXT_FAXINVALIDE;?></span>
+                            <span style="width: 450px"><?php echo TXT_FAXINVALIDE;?></span>
                         </a>
                     </td>
                     <td><input type="text" name="fax" id="fax" value="<?php if(!empty($_SESSION['fax'])){echo $_SESSION['fax'];};?>" style="width: 317px"

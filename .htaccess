@@ -284,6 +284,7 @@ RewriteRule   Err1_contexte/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?la
 RewriteRule   Err1_Descript/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&idprojet=$2&msgerrtailledescriptif=$3&statut=$4 [L]
 
 #PROJET
+RewriteRule   projet_centrale/([a-z]+)/([A-Z\-]+)/([a-z]+)      VueSuiviProjetCentrale.php?lang=$1&centrale=$2&err=$3       [L]
 RewriteRule   projet_centrale/([a-z]+)/([A-Z\-]+)               VueSuiviProjetCentrale.php?lang=$1&centrale=$2              [L]
 RewriteRule   projet_centrale/([a-z]+)                          VueSuiviProjetTousCentrales.php?lang=$1                     [L]
 RewriteRule   new_request/([a-z]+)                              createProjet.php?lang=$1                                    [L]
@@ -307,7 +308,8 @@ RewriteRule   delete_projet/([a-z]+)                            deleteprojets.ph
 RewriteRule   recherche_projet/([a-z]+)                         porteurprojet.php?lang=$1                               [L]
 RewriteRule   projet_porteur/([a-z]+)                           ctrlporteur.php?lang=$1                                 [L]
 RewriteRule   projet_admin/([a-z]+)                             ctrladminuser.php?lang=$1                               [L]
-RewriteRule   recherche_projet_admin/([a-z]+)/([0-9]+)           administrateurprojet.php?lang=$1&idprojet=$2            [L]
+RewriteRule   recherche_projetadmin/([a-z]+)/([0-9]+)           administrateurprojet.php?lang=$1&idprojet=$2            [L]
+RewriteRule   recherche_projet_admin/([a-z]+)                   administrateurprojet.php?lang=$1            [L]
 RewriteRule   affecte_AdminProjet/([a-z]+)/([0-9]+)             ctrladminuser.php?lang=$1&idutilisateur=$2              [L]
 RewriteRule   projet_adminaffecte/([a-z]+)/([0-9]+)/([a-z]+)    administrateurprojet.php?lang=$1&idutilisateur=$2&messagedejaaffecte=$3    [L]
 
@@ -316,7 +318,7 @@ RewriteRule   recherche_porteur/([a-z]+)/([0-9]+)               porteurprojet.ph
 RewriteRule   projet_affecte/([a-z]+)/([0-9]+)/([a-z]+)         porteurprojet.php?lang=$1&idutilisateur=$2&messagedejaaffecte=$3    [L]
 RewriteRule   projet_deja_affecte/([a-z]+)/([0-9]+)/([a-z]+)    VueSuiviProjetCentrale.php?lang=$1&idutilisateur=$2&messageprojetdejaaffecte=$3    [L]
 RewriteRule   projet_deja_admin/([a-z]+)/([0-9]+)/([a-z]+)      VueSuiviProjetCentrale.php?lang=$1&idutilisateur=$2&messageadmindejaaffecte=$3    [L]
-RewriteRule   projet_affecteerreur/([0-9]+)                     porteurprojet.php?lang=$1&messageerreur                             [L]
+RewriteRule   projet_affecteerreur/([a-z]+)/([a-z]+)            porteurprojet.php?lang=$1&messageerreur                             [L]
 RewriteRule   affecte_projet/([a-z]+)/([0-9]+)                  ctrlporteur.php?lang=$1&idutilisateur=$2                            [L]
 RewriteRule   porteur_projet/([a-z]+)/([0-9]+)			porteurprojet.php?lang=$1&idutilisateur=$2                          [L]
 RewriteRule   porteur_Projet/([a-z]+)                           porteurprojet.php?lang=$1                         [L]
@@ -393,3 +395,7 @@ RewriteRule   param/([a-z]+)                                                    
 RewriteRule  noDevProject/([a-z]+)                                                  projetSansDev.php?lang=$1 [L]
 RewriteRule  view_trash_project/([a-z]+)                                            viewTrashProjet.php?lang=$1 [L]
 RewriteRule  empty_trash/([a-z]+)                                                   modifBase/videcorbeille.php?lang=$1 [L]
+
+RewriteRule   vueCentraleAN/([a-z]+)                                                vueCentraleAdminNational.php?lang=$1 [L]
+RewriteRule   videCache/([a-z]+)/([a-z]+)                                           videCache.php?lang=$1&t=$2 [L]
+RewriteRule   videCache/([a-z]+)                                                    videCache.php?lang=$1 [L]

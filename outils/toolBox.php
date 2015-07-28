@@ -846,6 +846,5 @@ function ajouteResponsableAdministrationProjet($idutilisateur,$idresponsable) {
             }
         }
     }
-    
     BD::deconnecter();
 }

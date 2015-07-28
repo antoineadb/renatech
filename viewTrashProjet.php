@@ -81,7 +81,8 @@ chmod('tmp/projetefface.json', 0777);
     </div>
     <input type="text" id="idprojet" value="" style="display: none">
     <input type="text" id="numero" value="" style="display: none">
-        <fieldset id="ident" style="margin-top: 30px;border-color: #5D8BA2;width:1025px;padding: 10px;height:460px;">
+    <?php $height = count($rowEfface) * 38; ?>
+        <fieldset id="ident" style="margin-top: 30px;border-color: #5D8BA2;width:1025px;padding: 10px;height:<?php echo $height.'px' ?>">
             <legend style="font-size:1.2em;font-weight: 500;margin-left: 20px"><?php echo TXT_DELETEDPROJECT; ?></legend>  
             <div id="menuCorbeille">
                 <div style="margin-left: 420px"><?php echo TXT_NOMBREPROJET . ' : ' . count($rowEfface); ?></div>
@@ -129,13 +130,6 @@ dojo.ready(function(){
             document.getElementById('idprojet').value=idprojet;
             document.getElementById('numero').value=numero;
         })
-        
-        grid.on("RowClick", function(evt){
-        var idx = evt.rowIndex,
-        rowData = grid.getItem(idx);
-        var numero = rowData.numero;
-        alert("You have clicked on  idprojet n° "+numero);
-        }, true);        
     dojo.byId("gridDiv").appendChild(grid.domNode);
     grid.startup();
 });

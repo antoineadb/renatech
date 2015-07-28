@@ -27,7 +27,7 @@ if(isset($_GET['msgupdateemailcontact'])){?>
     <fieldset id="gestionemailcontact" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">
         <legend><?php echo TXT_DEMANDEUR; ?></legend>
         <?php
-        $emailcontact0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MRSMR0');
+        $emailcontact0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MRSMR');
         $emailcontact1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MAILCONTACTMILIEU');
         $emailcontact2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MAILCONTACTMILIEU1');
         $emailcontact3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESEAURENATECH');

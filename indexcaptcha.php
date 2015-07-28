@@ -73,7 +73,7 @@ include 'html/header.html';
     <?php include 'html/entete.html'; ?>
     <fieldset id="ident" style="border-color: #5D8BA2;width:1006px;padding-left: 20px;font-size:1.2em; margin-top: 50px;">
         <legend style="color: #5D8BA2;"><?php echo TXT_CAPTCHASECU; ?>
-            <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE ?>/styles/img/help.gif'/><span style="width: 180px;text-align: center;border-radius:5px"><?php echo affiche('TXT_AIDECAPTCHA'); ?></span></a></legend>
+            <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE ?>/styles/img/help.gif'/><span style="width: 280px;text-align: center;border-radius:5px"><?php echo affiche('TXT_AIDECAPTCHA'); ?></span></a></legend>
         <div>
             <form method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?lang=' . $lang; ?>">
                 <p style="text-align: center"><!-- Image dynamique -->

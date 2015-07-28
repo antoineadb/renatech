@@ -41,7 +41,7 @@ class Cache {
         }
     }
 
-    public function inc($file, $cachename = null) {
+    public function inc($file, $cachename = null) {        
         if (!$cachename) {
             $cachename = basename($file);
         }

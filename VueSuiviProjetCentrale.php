@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include('decide-lang.php');
 include_once 'class/Cache.php';
 include_once 'outils/constantes.php';
@@ -26,20 +27,20 @@ $nbProjetFini = $_SESSION['nbFini'];
 $nbProjetCloturer = $_SESSION['nbprojetCloturer'];
 $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
 $nbRapportProjet = $_SESSION['nbProjetRapport'];
-
 ?>
-
-
 <div id="global" >
-    <?php include 'html/entete.html'; ?>
-    <div style="padding-top: 75px;">
+    <?php include 'html/entete.html'; ?>        
+    <div style="padding-top: 75px;">        
         <?php
         if (internetExplorer() == 'false') {
             $Cache->inc(ROOT . '/outils/bandeaucentrale.php'); //RECUPERATION DU BANDEAU DEFILANT DANS LE CACHE CACHE
         } else {
             include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
-        }
-        ?><form action="#" method="POST" id="vueprojetcentrale">
+        }?>
+        <?php if(isset($_GET['err'])&&!empty($_GET['err'])){?><div style="padding-top: 15px;margin-bottom: -33px;text-align: center;font-size: 1.1em;color: #007A99; font-weight: bold;">
+            <?php echo "Ce projet ne peux pas être dupliqué, il n'est pas \"En cours d'expertise\",\"En cours de réalisation\" ou \"Fini\" ";}?></div>
+        <form action="#" method="POST" id="vueprojetcentrale">
+         
             <div style='width:100px;margin-left:10px;margin-bottom: -20px'><a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/exportjson.php?lang=' . $lang ?>">&nbsp;
                     <img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/export.png' ><span style="width: 260px"><?php echo TXT_EXPORTPROJETCENTRALE; ?></span></a>
             </div>            
@@ -79,7 +80,7 @@ $nbRapportProjet = $_SESSION['nbProjetRapport'];
             </div>
             <input type="button" id="surprise" value="<?php echo TXT_LASTACTION; ?>" style="display: none"/>
         </form>
-    </div>
+    
     <table>
         <tr>
             <td><div style="background-color: darkgreen;height: 10px;width: 25px;border: 1px solid black; "></div></td>
@@ -99,6 +100,7 @@ $nbRapportProjet = $_SESSION['nbProjetRapport'];
         </tr>
     </table>
     <?php include 'html/footer.html'; ?>
-</div>
+</div></div>
+
 </body>
 </html>

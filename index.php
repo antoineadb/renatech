@@ -1,6 +1,8 @@
 <?php
 
 session_start();
+
+
 if (!empty($_GET['action']) && ($_GET['action'] == 'logout')) {
     $_SESSION = array();
     session_destroy();
@@ -8,6 +10,10 @@ if (!empty($_GET['action']) && ($_GET['action'] == 'logout')) {
 }
 include_once 'outils/constantes.php';
 include_once 'decide-lang.php';
+include_once 'class/Cache.php';
+$videCache = new Cache(REP_ROOT.'/cache', 1);
+$videCache->clear();//VIDAGE DU CACHE
+effaceRepertoire(REP_ROOT.'/tmp');//VIDAGE DU REPERTOIRE tmp
 if (!empty($_SESSION['pseudo'])) {
     header('Location: /' . REPERTOIRE . '/Session_Error/' . $lang);
 }

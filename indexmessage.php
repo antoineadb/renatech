@@ -11,8 +11,7 @@ include_once 'decide-lang.php';
     <?php include 'html/entete.html'; 
 include_once 'include/connexion.html';
 ?>
-    <div id="messageupdatemotpasse" style="display: block;color: red;"><?php echo TXT_MISEAJOURMOTPASSE; ?></div>
-    <br>
+    <div id="messageupdatemotpasse" style="display: block;color: red;margin-top: 10px;text-align: center;"><?php echo TXT_MISEAJOURMOTPASSE; ?></div>    
     <?php
     if (!empty($_SESSION['admin'])) {
         unset($_SESSION['admin']);
