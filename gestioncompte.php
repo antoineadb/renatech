@@ -692,7 +692,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                     } else {
                         $valeuractif = TXT_ACTIF;
                     }
-                }echo '<pre>';print_r($rowindust);die;
+                }
                 ?>
                 <fieldset id="compteuserindust" style="border-color: #5D8BA2;width: 1008px;padding-bottom:10px;padding-top:8px;font-size:1.2em" >
                     <legend><?php echo TXT_COMPTE; ?></legend>

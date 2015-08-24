@@ -9,6 +9,8 @@ $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 if (isset($_GET['statut'])) {
     $idstatutprojet = $_GET['statut'];
+}elseif (isset($_POST['idstatut'])) {
+    $idstatutprojet = $_POST['idstatut'];
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              TRAITEMENT DES DONNEES NON AFFECTEES DANS LA TABLE AUTRESQUALITE
@@ -1031,11 +1033,11 @@ if (isset($_POST['page_precedente'])) {
         $extension = strrchr($_FILES['fichierphase2']['name'], '.');
         if (!in_array($extension, $extensions)) {//VERIFICATION DU FORMAT SI IL N'EST PAS BON ON SORT
             $erreur1 = TXT_ERREURUPLOAD;
-            header('Location: /' . REPERTOIRE . '/Upload_Errorphase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
+            header('Location: /' . REPERTOIRE . '/Upload_Errorphase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet.'/'.$idstatutprojet);
             exit();
         } elseif ($taille > $taille_maxi) {//VERIFICATION DE LA TAILLE SI ELLE EST >1mo ON SORT
             $erreur1 = TXT_ERREURTAILLEFICHIER;
-            header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet);
+            header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet.'/'.$idstatutprojet);
             exit();
         } elseif (!isset($erreur1)) {//S'il n'y a pas d'erreur, on upload
             if (move_uploaded_file($_FILES['fichierphase2']['tmp_name'], $dossier . $fichierPhase)) {

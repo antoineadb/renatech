@@ -51,7 +51,7 @@ if (isset($_SESSION['pseudo'])) {
             $arraypersonnecentrale = $manager->getList2("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen,nomaccueilcentrale,prenomaccueilcentrale,mailaccueilcentrale,telaccueilcentrale,
                 idpersonnequalite,idautresqualite,connaissancetechnologiqueaccueil FROM personneaccueilcentrale,projetpersonneaccueilcentrale,qualitedemandeuraca,projet 
                 WHERE idpersonneaccueilcentrale_personneaccueilcentrale = idpersonneaccueilcentrale AND idprojet_projet = idprojet AND idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca AND numero =?", $numProjet);
-            $nbarraypersonnecentrale = count($arraypersonnecentrale);        
+            $nbarraypersonnecentrale = count($arraypersonnecentrale);
         }
         if(isset($idprojet)){
             $arrayQualite =$manager->getListbyArray("SELECT pcq.idpersonnequalite,pcq.libellepersonnequalite,q.idqualitedemandeuraca,pac.idpersonneaccueilcentrale FROM personnecentralequalite pcq,
@@ -78,7 +78,7 @@ if (isset($_SESSION['pseudo'])) {
                                 ?>
                                 <label for="<?php echo 'nomaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_NOM . '*'; ?></label>
                                 <input style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox"  name="<?php echo 'nomaccueilcentrale' . $i; ?>" id="<?php echo 'nomaccueilcentrale' . $i; ?>"  autocomplete="on"
-                                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"
+                                       data-dojo-props="<?php echo REGEX_TYPE; ?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"
                                        value="<?php echo $nomaccueilcentrale; ?>" disabled="<?php echo $bool; ?>" >
                             </td>
                         </tr>
@@ -93,7 +93,8 @@ if (isset($_SESSION['pseudo'])) {
                                 }
                                 ?>
                                 <input style="width: 317px"  data-dojo-type="dijit/form/ValidationTextBox" name="<?php echo 'prenomaccueilcentrale' . $i; ?>" id="<?php echo 'prenomaccueilcentrale' . $i; ?>" autocomplete="on"
-                                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"
+                                       data-dojo-props="<?php echo REGEX_TYPE; ?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"
+                                                        
                                        value="<?php echo $prenomaccueilcentrale ?>" disabled="<?php echo $bool; ?>" >
                             </td>
                         </tr>                        
@@ -102,45 +103,41 @@ if (isset($_SESSION['pseudo'])) {
 //                                                                              QUALITE ACCUEIL CENTRALE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                         //CONTROLE QU'IL EXISTE UNE PERSONNE CENTRALE DANS LA BASE DE DONNEE
-                        if (isset($arraypersonnecentrale[$i]['libellequalitedemandeuraca']) && !empty($arraypersonnecentrale[$i]['libellequalitedemandeuraca'])) {?>
+                        if (isset($arraypersonnecentrale[$i]['libellequalitedemandeuraca']) && !empty($arraypersonnecentrale[$i]['libellequalitedemandeuraca'])) { ?>
                             <tr>
                                 <td><label for="<?php echo 'qualiteaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_QUALITE . " *"; ?></label>                       
-                                    <select   id="<?php echo 'qualiteaccueilcentrale' . $i; ?>" data-dojo-type="dijit/form/Select" 
-                                              style="width:317px" data-dojo-props="name: '<?php echo 'qualiteaccueilcentrale' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'" 
+                                    <select   id="<?php echo 'qualiteaccueilcentrale' . $i; ?>" data-dojo-type="dijit/form/FilteringSelect" name="<?php echo 'qualiteaccueilcentrale' . $i; ?>"
+                                              style="width:317px" data-dojo-props="name: '<?php echo 'qualiteaccueilcentrale' . $i; ?>', placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'" 
                                               onchange="afficherAutreElement(this.id, '<?php echo 'autreQualite' . $i; ?>', '<?php echo 'labelqualite' . $i; ?>',<?php echo 'autresQualite' . $i; ?>, '<?php echo 'libautresQualite' . $i; ?>')" >
-                                        <?php if (isset($arraypersonnecentrale[$i]['idqualitedemandeuraca'])) { 
-                                                $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where "
+                                        <?php $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where "
                                                         . "libellequalitedemandeuraca !=? and libellequalitedemandeuraca != ?", array('n/a', $arraypersonnecentrale[$i]['libellequalitedemandeuraca']));
-                                            ?>   
-                                            <option value="<?php echo 'libqualdemaca'.$arraypersonnecentrale[$i]['idqualitedemandeuraca']; ?> " selected='selected' > <?php echo $arraypersonnecentrale[$i]['libellequalitedemandeuraca'] ?> </option>
-                                        <?php } else { 
-                                                $row = $manager->getList2("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where libellequalitedemandeuraca !=?",'n/a');
+                                            $nbrow = count($row);
                                             ?>
-                                            <option value='libqualdemaca0' selected='selected'> <?php echo TXT_SELECTQUALITE; ?> </option>
-                                        <?php }  
-
-                                        $nbrow = count($row);
-                                        for ($k = 0; $k < $nbrow; $k++) {
-                                            if (isset($row[$k]['idqualitedemandeuraca'])) {
-                                                if ($lang == 'fr') {
-                                                    echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuraca'] . "</option>";
-                                                } else {
-                                                    echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuracaen'] . "</option>";
+                                        <option value="<?php echo 'libqualdemaca'.$arraypersonnecentrale[$i]['idqualitedemandeuraca']; ?> " selected> <?php echo $arraypersonnecentrale[$i]['libellequalitedemandeuraca'] ?> </option><?php
+                                            for ($k = 0; $k < $nbrow; $k++) {
+                                                if (isset($row[$k]['idqualitedemandeuraca'])) {
+                                                    if ($lang == 'fr') {?>
+                                                            <option value='<?php echo 'libqualdemaca'.$row[$k]['idqualitedemandeuraca'];?>' > <?php echo $row[$k]['libellequalitedemandeuraca']; ?> </option>;
+                                                    <?php } else {?>                                                        
+                                                            <option value='<?php echo 'libqualdemaca'.$row[$k]['idqualitedemandeuraca'];?>' > <?php echo $row[$k]['libellequalitedemandeuracadn']; ?> </option>;
+                                                    <?php }
                                                 }
                                             }
-                                        }
+                                        
                                         ?>
-                                    </select>                            
+                                    </select>
+                                <td>
+                            </tr>
                         <?php 
                             if ($arrayQualite[$i]['idqualitedemandeuraca'] == PERMANENT) {?>
                               <tr>
                                 <td>
                                     <label for="<?php echo 'autreQualite' . $i; ?>" class="perCentrale" id="<?php echo 'labelqualite' . $i; ?>" style=";display: none" > <?php echo TXT_AUTRESQUALITE; ?></label>
-                                    <select  style='width:317px;display: none' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/Select' onchange="afficherAutreQualite(this.id, '<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)"
-                                             data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
+                                    <select  style='width:317px;display: none' id='<?php echo 'autreQualite' . $i; ?>' 
+                                             data-dojo-type='dijit/form/FilteringSelect' onchange="afficherAutreQualite(this.id, '<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)"
+                                             data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
                                                  <?php
-                                                 $row = $manager->getList2("SELECT idpersonnequalite,libellepersonnequalite FROM personnecentralequalite where idpersonnequalite!=? ", IDNAAUTRESQUALITE);
-                                                 echo "<option value='qac0'  selected='selected'>" . TXT_SELECTVALUE . '</option>';
+                                                 $row = $manager->getList2("SELECT idpersonnequalite,libellepersonnequalite FROM personnecentralequalite where idpersonnequalite!=? ", IDNAAUTRESQUALITE);                                                 
                                                  $nbrow = count($row);
                                                  for ($k = 0; $k < $nbrow; $k++) {
                                                      echo "<option value='" . 'qac' . $row[$k]['idpersonnequalite'] . "'>" . $row[$k]['libellepersonnequalite'] . "</option>";
@@ -154,7 +151,7 @@ if (isset($_SESSION['pseudo'])) {
                                     <label for="<?php echo 'autresQualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresQualite' . $i; ?>" style="display: none"> <?php echo TXT_AUTRES; ?></label>
                                     <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES; ?>" 
                                            data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"  maxlength="100" style="width: 317px;display: none"  
-                                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'" >
+                                           data-dojo-props="<?php echo REGEX_TYPE; ?>" >
                                 </td>
                             </tr>  
                             <?php    //IL EXISTE UNE PERSONNE CENTRALE DANS LA BASE DE DONNEE IL EST NON PERMANENT
@@ -164,14 +161,14 @@ if (isset($_SESSION['pseudo'])) {
                                         <tr>
                                             <td>
                                                 <label for="<?php echo 'autreQualite' . $i; ?>" class="perCentrale" id="<?php echo 'labelqualite' . $i; ?>" > <?php echo TXT_AUTRESQUALITE; ?></label>
-                                                <select  style='width:317px' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/Select' 
+                                                <select  style='width:317px' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/FilteringSelect' 
                                                          onchange="afficherAutreQualite(this.id, '<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)"
-                                                         data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
+                                                         data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
                                                              <?php
                                                             $row0 = $manager->getListbyArray("SELECT idpersonnequalite,libellepersonnequalite,libellepersonnequaliteen FROM  personnecentralequalite "
                                                                     . "where idpersonnequalite!=? and idpersonnequalite!=?",array(IDNAAUTREQUALITE,$arrayQualite[$i]['idpersonnequalite'])); 
                                                             $nbrow0 = count($row0);
-                                                             echo "<option value='" . 'qac' . IDAUTREQUALITE . "'  selected='selected'>" . TXT_AUTRES . '</option>';
+                                                             echo "<option value='" . 'qac' . IDAUTREQUALITE . "'  selected>" . TXT_AUTRES . '</option>';
                                                              for ($k = 0; $k < $nbrow0; $k++) {
                                                                  echo "<option value='" . 'qac' . $row0[$k]['idpersonnequalite'] . "'>" . $row0[$k]['libellepersonnequalite'] . "</option>";
                                                              }
@@ -184,7 +181,7 @@ if (isset($_SESSION['pseudo'])) {
                                                 <label for="<?php echo 'autresQualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresQualite' . $i; ?>" > <?php echo TXT_AUTRES; ?></label>
                                                 <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" 
                                                        data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES; ?>"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"  maxlength="100" 
-                                                       style="width: 317px;"  data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'" 
+                                                       style="width: 317px;"  data-dojo-props="<?php echo REGEX_TYPE; ?>" 
                                                        value="<?php if(isset($arrayAutreQualite[$z]['libelleautresqualite'])){echo $arrayAutreQualite[$z]['libelleautresqualite'];} ?>" >
                                             </td>
                                         </tr>
@@ -202,9 +199,9 @@ if (isset($_SESSION['pseudo'])) {
                                             <tr>
                                                 <td>
                                                     <label for="<?php echo 'autreQualite' . $i; ?>" class="perCentrale" id="<?php echo 'labelqualite' . $i; ?>" > <?php echo TXT_AUTRESQUALITE; ?></label>
-                                                    <select  style='width:317px' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/Select' 
+                                                    <select  style='width:317px' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/FilteringSelect' name="<?php echo 'autreQualite' . $i; ?>"
                                                              onchange="afficherAutreQualite(this.id, '<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)"
-                                                             data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
+                                                             data-dojo-props="placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
                                                                  <?php
                                                                     $row1 =$manager->getListbyArray("SELECT idpersonnequalite,libellepersonnequalite,libellepersonnequaliteen FROM personnecentralequalite "
                                                                             . "where idpersonnequalite!=? and idpersonnequalite!=?",array($idpersonnequalite, IDNAAUTREQUALITE));
@@ -226,18 +223,17 @@ if (isset($_SESSION['pseudo'])) {
                                                     <label for="<?php echo 'autresQualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresQualite' . $i; ?>" style="display: none"> <?php echo TXT_AUTRES; ?></label>
                                                     <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES; ?>" 
                                                            data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"  maxlength="100" style="width: 317px;display: none"  
-                                                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'" >
+                                                           data-dojo-props="<?php echo REGEX_TYPE; ?>" >
                                                 </td>
                                             </tr>
-                                        <?php }else{ echo '3';?>
+                                        <?php }else{ ?>
                                              <tr>
                                                 <td>
                                                     <label for="<?php echo 'autreQualite' . $i; ?>" class="perCentrale" id="<?php echo 'labelqualite' . $i; ?>" style=";display: none" > <?php echo TXT_AUTRESQUALITE; ?></label>
-                                                    <select  style='width:317px;display: none' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/Select' onchange="afficherAutreQualite(this.id, '<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)"
-                                                             data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
+                                                    <select  style='width:317px;display: none' id='<?php echo 'autreQualite' . $i; ?>' name="<?php echo 'autreQualite' . $i; ?>" data-dojo-type='dijit/form/Select' onchange="afficherAutreQualite(this.id, '<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)"
+                                                             data-dojo-props="placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
                                                                  <?php
-                                                                 $row = $manager->getList2("SELECT idpersonnequalite,libellepersonnequalite FROM personnecentralequalite where idpersonnequalite!=? ", IDNAAUTRESQUALITE);
-                                                                 echo "<option value='qac0'  selected='selected'>" . TXT_SELECTVALUE . '</option>';
+                                                                 $row = $manager->getList2("SELECT idpersonnequalite,libellepersonnequalite FROM personnecentralequalite where idpersonnequalite!=? ", IDNAAUTRESQUALITE);                                                                 
                                                                  $nbrow = count($row);
                                                                  for ($k = 0; $k < $nbrow; $k++) {
                                                                      echo "<option value='" . 'qac' . $row[$k]['idpersonnequalite'] . "'>" . $row[$k]['libellepersonnequalite'] . "</option>";
@@ -251,7 +247,7 @@ if (isset($_SESSION['pseudo'])) {
                                                     <label for="<?php echo 'autresQualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresQualite' . $i; ?>" style="display: none"> <?php echo TXT_AUTRES; ?></label>
                                                     <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES; ?>" 
                                                            data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"  maxlength="100" style="width: 317px;display: none"  
-                                                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'" >
+                                                           data-dojo-props="<?php echo REGEX_TYPE; ?>" >
                                                 </td>
                                             </tr>
                                         <?php }?>
@@ -260,22 +256,12 @@ if (isset($_SESSION['pseudo'])) {
                         } else {?>
                              <tr>
                                 <td><label for="<?php echo 'qualiteaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_QUALITE . " *"; ?></label>                       
-                                    <select   id="<?php echo 'qualiteaccueilcentrale' . $i; ?>" data-dojo-type="dijit/form/Select" 
-                                              style="width:317px" data-dojo-props="name: '<?php echo 'qualiteaccueilcentrale' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'" 
+                                    <select   id="<?php echo 'qualiteaccueilcentrale' . $i; ?>" data-dojo-type="dijit/form/FilteringSelect" name='<?php echo 'qualiteaccueilcentrale' . $i; ?>'
+                                              style="width:317px" data-dojo-props="value:'',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'"                                               
                                               onchange="afficherAutreElement(this.id, '<?php echo 'autreQualite' . $i; ?>', '<?php echo 'labelqualite' . $i; ?>',<?php echo 'autresQualite' . $i; ?>, '<?php echo 'libautresQualite' . $i; ?>')" >
-                                        <?php if (isset($arraypersonnecentrale[$i]['idqualitedemandeuraca'])) { 
-                                                $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where "
-                                                        . "libellequalitedemandeuraca !=? and libellequalitedemandeuraca != ?", array('n/a', $arraypersonnecentrale[$i]['libellequalitedemandeuraca']));
-                                            ?>   
-                                                <option value='libqualdemaca' <?php echo $arraypersonnecentrale[$i]['idqualitedemandeuraca']; ?> > <?php echo $arraypersonnecentrale[$i]['libellequalitedemandeuraca'] ?> </option>
-                                        <?php } else { 
-                                                $row = $manager->getList2("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where libellequalitedemandeuraca !=?",'n/a');
-                                            ?>
-                                                <option value='libqualdemaca0'> <?php echo TXT_SELECTQUALITE; ?> </option>
-                                        <?php }  
-
-                                        $nbrow = count($row);
-                                        for ($k = 0; $k < $nbrow; $k++) {
+                                        <?php $row = $manager->getList2("SELECT idqualitedemandeuraca,libellequalitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where libellequalitedemandeuraca !=? ", 'n/a');
+                                        $nbRow = count($row);
+                                        for ($k = 0; $k < $nbRow; $k++) {
                                             if (isset($row[$k]['idqualitedemandeuraca'])) {
                                                 if ($lang == 'fr') {
                                                     echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuraca'] . "</option>";
@@ -290,12 +276,13 @@ if (isset($_SESSION['pseudo'])) {
                             <tr>
                                 <td>
                                     <label for="<?php echo 'autreQualite' . $i; ?>" class="perCentrale" id="<?php echo 'labelqualite' . $i; ?>" style=";display: none" > <?php echo TXT_AUTRESQUALITE; ?></label>
-                                    <select  style='width:317px;display: none' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/Select' onchange="afficherAutreQualite(this.id, '<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)"
-                                             data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
+                                    <select  id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/FilteringSelect'  name='<?php echo 'autreQualite' . $i; ?>' style='width:317px;display: none'                                               
+                                             onchange="afficherAutreQualite(this.id, '<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)" 
+                                             >
                                                  <?php
-                                                 $row = $manager->getList2("SELECT idpersonnequalite,libellepersonnequalite FROM personnecentralequalite where idpersonnequalite!=? ", IDNAAUTRESQUALITE);
-                                                 echo "<option value='qac0'  selected='selected'>" . TXT_SELECTVALUE . '</option>';
+                                                 $row = $manager->getList2("SELECT idpersonnequalite,libellepersonnequalite FROM personnecentralequalite where idpersonnequalite!=? ", IDNAAUTRESQUALITE);                                                 
                                                  $nbrow = count($row);
+                                                     
                                                  for ($k = 0; $k < $nbrow; $k++) {
                                                      echo "<option value='" . 'qac' . $row[$k]['idpersonnequalite'] . "'>" . $row[$k]['libellepersonnequalite'] . "</option>";
                                                  }
@@ -308,7 +295,7 @@ if (isset($_SESSION['pseudo'])) {
                                     <label for="<?php echo 'autresQualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresQualite' . $i; ?>" style="display: none"> <?php echo TXT_AUTRES; ?></label>
                                     <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES; ?>" 
                                            data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"  maxlength="100" style="width: 317px;display: none"  
-                                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'" >
+                                           data-dojo-props="<?php echo REGEX_TYPE; ?>" >
                                 </td>
                             </tr>
                         <?php
@@ -319,7 +306,8 @@ if (isset($_SESSION['pseudo'])) {
                         <tr>
                             <td>
                                 <label for="<?php echo 'mailaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_MAIL . " *"; ?></label>
-                                <input data-dojo-type="dijit/form/ValidationTextBox" style="width: 317px;"  name="<?php echo 'mailaccueilcentrale' . $i; ?>" id="<?php echo 'mailaccueilcentrale' . $i; ?>"  regExpGen="dojox.validate.regexp.emailAddress"
+                                <input data-dojo-type="dijit/form/ValidationTextBox" style="width: 317px;"  name="<?php echo 'mailaccueilcentrale' . $i; ?>" id="<?php echo 'mailaccueilcentrale' . $i; ?>"  
+                                       regExpGen="dojox.validate.regexp.emailAddress"
                                        invalidMessage="<?php echo TXT_EMAILNONVALIDE; ?>" autocomplete="on"  placeHolder ='<?php echo TXT_EMAIL; ?>'    disabled="<?php echo $bool; ?>"
                                        value="<?php
                                        if (isset($arraypersonnecentrale[$i]['mailaccueilcentrale']) && !empty($arraypersonnecentrale[$i]['mailaccueilcentrale'])) {
@@ -332,9 +320,8 @@ if (isset($_SESSION['pseudo'])) {
                         <tr>
                             <td>
                                 <label for="<?php echo 'telaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_TELEPHONE; ?></label>
-                                <input type="text" name="<?php echo 'telaccueilcentrale' . $i; ?>"  data-dojo-type="dijit/form/ValidationTextBox"  style="width: 317px"
-                                       data-dojo-props="maxLength:'20',regExp:'[a-zA-Z0-9$\\054\\073\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+',
-                                       invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?>'"  autocomplete="on" disabled="<?php echo $bool; ?>"
+                                <input type="text" name="<?php echo 'telaccueilcentrale' . $i; ?>"  data-dojo-type="dijit/form/ValidationTextBox"  style="width: 317px" maxlength="20"
+                                       data-dojo-props="<?php echo REGEX_TEL;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?>'"  autocomplete="on" disabled="<?php echo $bool; ?>"
                                        value="<?php
                                        if (isset($arraypersonnecentrale[$i]['telaccueilcentrale']) && !empty($arraypersonnecentrale[$i]['telaccueilcentrale'])) {
                                            echo $arraypersonnecentrale[$i]['telaccueilcentrale'];

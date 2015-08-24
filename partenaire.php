@@ -28,7 +28,8 @@ for ($i = 0; $i < 11; $i++) {
                        if (!empty($arrayPartenaire[$i]['nomlaboentreprise'])) {
                            echo stripslashes(str_replace("''", "'", $arrayPartenaire[$i]['nomlaboentreprise']));
                        }
-                       ?>" maxlength="100" disabled="<?php echo $bool; ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()*\0133\0135\+_ ,.-]+'">
+                       ?>" maxlength="100" disabled="<?php echo $bool; ?>" data-dojo-props="<?php echo REGEX_TYPE ?>">
+                                                                                            
             </td>
         </tr>
         <tr>
@@ -43,7 +44,7 @@ for ($i = 0; $i < 11; $i++) {
                            echo str_replace("''", "'", $arrayPartenaire[$i]['nompartenaire']);
                        }
                        ?>" maxlength="100"
-                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()*+_ ,.-]+'">
+                      data-dojo-props="<?php echo REGEX_TYPE ?>">
             </td>
         </tr>
     </table>

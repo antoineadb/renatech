@@ -24,7 +24,7 @@ include 'html/header.html';
             ?>
             <div name="modifProjet" data-dojo-type="dijit/form/Form" id="modifProjet" data-dojo-id="modifProjet"  method="post" action="<?php echo '/'.REPERTOIRE; ?>/modifBase/updateProjetphase2.php?lang=<?php echo $lang; ?>&idprojet=<?php echo $idprojet ;?>&numProjet=<?php echo $numProjet;?>" enctype="multipart/form-data" >
                 <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
-                <script type="dojo/on" data-dojo-event="submit">                
+                <script type="dojo/on" data-dojo-event="submit">                    
                 var nbdescript=stripTags(trim(dojo.byId("descriptifValeur").value)).length;
                 var nbcontexte=stripTags(trim(dojo.byId("contextValeur").value)).length;
                 var nbtitre=stripTags(trim(dijit.byId("titreProjet").value)).length;                
@@ -40,9 +40,30 @@ include 'html/header.html';
                 var nbreussite=stripTags(trim(dojo.byId("reussit").value)).length;
                 var typeProjet = dijit.byId("typeProjet").value;
                 var nbdureeestimeprojet = dojo.byId("dureeestimeprojet").value.length;
-                
-                if(document.getElementById('save').value=='oui'){//DANS LE CAS D'UNE SAUVEGARDE ON NE CONTROLE PAS LES CHAMPS                    
-                    return true;
+                if(document.getElementById('save').value=='oui'){//DANS LE CAS D'UNE SAUVEGARDE ON NE CONTROLE PAS LES CHAMPS                      
+                    if(nbdescript>800){
+                        alert("<?php echo TXT_LIMITEDITEURDESCRIPTION; ?>");
+                        return false;    
+                        exit();                        
+                    }else if(nbcontexte>5000){
+                        alert("<?php echo TXT_LIMITEDITEURCONTEXTE; ?>");
+                        return false;    
+                        exit();                        
+                    }else if(nbdescriptTechno>3000){
+                        alert("<?php echo TXT_LIMITEDITEURDESCTECHNO; ?>");
+                        return false;    
+                        exit();                        
+                    }else if(nbverrou>3000){
+                        alert("<?php echo TXT_LIMITEDITEURVERROU; ?>");
+                        return false;    
+                        exit();                        
+                    }else if(nbreussite>3000){
+                        alert("<?php echo TXT_LIMITEDITEURREUSSITE; ?>");
+                        return false;    
+                        exit();                        
+                    }else{
+                        return true;
+                    }
                 }else if(nbtitre==0){
                     alert("<?php echo TXT_ERRTITREVIDE; ?>");
                     return false;
@@ -120,13 +141,13 @@ include 'html/header.html';
             <div style="margin-top: 100px;color:red;font-size: 1.2em;width:1030px;text-align: center" >
                 <?php 
                   if(isset($_GET['erreuruploadphase1'])){
-                      echo TXT_ERREURUPLOADSUCCINCTE.TXT_ERREURUPLOAD.'<br>'.TXT_PROJETNONSOUMIS;
+                      echo TXT_ERREURUPLOADSUCCINCTE.TXT_ERREURUPLOAD;
                   } elseif(isset($_GET['erreuruploadsizephase1'])){
-                      echo TXT_ERREURUPLOADSUCCINCTE.TXT_ERREURTAILLEFICHIER.'<br>'.TXT_PROJETNONSOUMIS;
+                      echo TXT_ERREURUPLOADSUCCINCTE.TXT_ERREURTAILLEFICHIER;
                   }elseif(isset($_GET['erreurupload'])){
-                      echo TXT_ERREURUPLOADDETAILLE.TXT_ERREURUPLOAD.'<br>'.TXT_PROJETNONSOUMIS;
+                      echo TXT_ERREURUPLOADDETAILLE.TXT_ERREURUPLOAD;
                   } elseif(isset($_GET['erreuruploadsize'])){
-                      echo TXT_ERREURUPLOADDETAILLE.TXT_ERREURTAILLEFICHIER.'<br>'.TXT_PROJETNONSOUMIS;
+                      echo TXT_ERREURUPLOADDETAILLE.TXT_ERREURTAILLEFICHIER;
                   }
                 ?>
             </div>         

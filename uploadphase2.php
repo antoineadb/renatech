@@ -1,5 +1,5 @@
 <?php
-//session_start();
+
 include_once 'outils/constantes.php';
 include_once 'decide-lang.php';
 include_once 'outils/toolBox.php';
@@ -22,7 +22,11 @@ if ($_POST['save'] == 'non') {//SAUVEGARDE ON NE TIENT PAS COMPTE DU STATUT
         $idstatutprojet = (int) $_SESSION['idstatutprojet'];
     }
 }elseif($_POST['save'] == 'oui'){
-    $idstatutprojet =$manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
+    if(!empty($_POST['idstatut'])){
+        $idstatutprojet =$_POST['idstatut'];
+    }else{
+        $idstatutprojet =$_SESSION['idstatutprojet'];
+    }
 }
 if (isset($_POST['etautrecentrale']) && !empty($_POST['etautrecentrale'])) {
     $etautrecentrale = Securite::bdd(trim($_POST['etautrecentrale']));

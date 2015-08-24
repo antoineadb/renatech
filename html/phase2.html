@@ -163,18 +163,18 @@ $date  = $date->format('d-m-Y');
             </tr>
         </table>    
         <?php } ?>
-        <fieldset id="identre" style="background-color:#F9FCFC;border-color: #5D8BA2;width:1015px;padding-top: 0px;margin-top:20px;padding-left:0px;border-width:2px;margin-left: -3px">
+        <fieldset id="identre" >
             <legend style="margin-left: 20px;font-weight: bold"><?php echo TXT_CADREPROJETSCIENTIFIQUE;?></legend>
         <table>            
             <tr>
                 <td><?php $contactscentraleaccueil = stripslashes(str_replace("''","'",$contactscentraleaccueil)); ?>
-                    <label for="contactCentralAccueil" style="width: 320px;margin-left: 20px;margin-top: 20px" ><?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
+                    <label for="contactCentralAccueil" id='lblContactCentraleAccueil' ><?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
                     <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
-                    <input id="contactCentralAccueil" value="<?php echo $contactscentraleaccueil ;?>"  type="text"  maxlength="100" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on" data-dojo-props="regExp:'[a-zA-ZÃ Ã¡Ã¢Ã¤Ã£Ã¥Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã²Ã³Ã´Ã¶ÃµÃ¸Ã¹ÃºÃ»Ã¼Ã¿Ã½Ã±Ã§Ä�Å¡Å¾Ã€Ã�Ã‚Ã„ÃƒÃ…ÃˆÃ‰ÃŠÃ‹ÃŒÃ�ÃŽÃ�Ã’Ã“Ã”Ã–Ã•Ã˜Ã™ÃšÃ›ÃœÅ¸Ã�Ã‘ÃŸÃ‡Å’Ã†ÄŒÅ Å½âˆ‚Ã°%&:0-9\042\'()+/_ ,.-]+'"	style="margin-left: 20px;"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" <?php echo $disabled ?> >
+                    <input  value="<?php echo $contactscentraleaccueil ;?>"  type="text"  maxlength="100" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  
+                           autocomplete="on" data-dojo-props="<?php echo REGEX_TYPE; ?>"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" <?php echo $disabled ?> >
                            <?php }else{?>
-                           <input id="contactCentralAccueil" value="<?php echo $contactscentraleaccueil ;?>"  type="text" maxlength="100"   data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on"
-                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-\/\-]+'" style="margin-left: 20px;"
-                           disabled="<?php echo $bool; ?>"		data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
+                           <input style="margin-left:20px" value="<?php echo $contactscentraleaccueil ;?>"  type="text" maxlength="100"   data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on"
+                            data-dojo-props="<?php echo REGEX_TYPE; ?>"  disabled="<?php echo $bool; ?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
                     <?php }?>
                 </td>
             </tr>
@@ -480,7 +480,7 @@ $date  = $date->format('d-m-Y');
             <table>                
                 <tr id="trcentralepartenaireprojet" style="display: none" >
                     <td>
-                        <label style="margin-left: 22px;width:320px" for="<?php	echo	'nomLaboEntreprise'	.	$i;	?>">
+                        <label style="margin-left: 22px;width:305px" for="<?php	echo	'nomLaboEntreprise'	.	$i;	?>">
                             <?php	echo	TXT_NOMLABOENTREPRISE	.	' 1 *';?>
                         </label>
                         <?php $rowCentrale =$manager->getListbyArray("select idcentrale,libellecentrale from centrale where libellecentrale !=?
@@ -495,7 +495,7 @@ $date  = $date->format('d-m-Y');
                 </tr>
                 <tr id='trnomPartenaire01'>
                     <td>
-                        <label style="margin-left: 22px;width:320px" for="nomPartenaire01">
+                        <label style="margin-left: 22px;width:305px" for="nomPartenaire01">
                             <?php	echo	TXT_NOMPARTENAIRE	.	' 1 '	;	?>
                         </label>
                     </td>
@@ -752,13 +752,13 @@ $date  = $date->format('d-m-Y');
                     <input id="autreThematique" type="text" autocomplete="on" name="autreThematique"
                            data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRETHEMATIQUE;?>"
                            style="margin-left: 20px;display:block" value="<?php echo $autrethematique;?>" disabled="<?php echo $bool; ?>"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"
+                           data-dojo-props="<?php echo REGEX_TYPE;?>"                                            
                            data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"  maxlength="100"  >
                     <?php }else{ ?>
                     <input id="autreThematique" type="text" autocomplete="on" name="autreThematique" disabled="<?php echo $bool; ?>"
                            data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRETHEMATIQUE;?>"
                            style="margin-left: 20px;display:none"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'" maxlength="100"  >
+                           ddata-dojo-props="<?php echo REGEX_TYPE;?>" maxlength="100"  >
                     <?php }
                         if(!empty($libellethematiqueen) && $libellethematiqueen!='Others'){
                             $thematic= $libellethematiqueen;
@@ -780,7 +780,8 @@ $date  = $date->format('d-m-Y');
             <tr>
                 <td>
                     <label for="dateDebutTravaux" style="width: 350px;margin-left: 20px;margin-top:20px;margin-bottom: 5px"><?php echo TXT_DATEDEBUTTRAVAUX.' * :'; ?></label>
-                    <input type="text" name="dateDebutTravaux" id="dateDebutTravaux" value="<?php echo $datedebuttravaux ;?>" data-dojo-type="dijit/form/DateTextBox" required="true" style="width: 320px;margin-left: 20px;margin-bottom: 5px" autocomplete="on"
+                    <input type="text" name="dateDebutTravaux" id="dateDebutTravaux" value="<?php echo $datedebuttravaux ;?>" data-dojo-type="dijit/form/DateTextBox" 
+                           required="true" style="width: 320px;margin-left: 20px;margin-bottom: 5px" autocomplete="on"
                             disabled="<?php echo $bool; ?>" />
                 </td>
             </tr>            
@@ -1427,7 +1428,7 @@ function masquecentraleproximite(){
                                     <input id="refinterne" type="text" name="refinterne"	value="<?php echo $refinterneprojet; ?>"
                                            data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"   style="margin-left: 20px;margin-bottom: 15px"
                                            disabled="<?php echo $bool; ?>" 	data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"
-                                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-\/-]+'" maxlength="100" >
+                                           data-dojo-props="<?php echo REGEX_TYPE; ?>" maxlength="100" >
                                 </td>                                
                                 <?php }else{?>
                                 <td>
@@ -1447,7 +1448,6 @@ function masquecentraleproximite(){
                                 $etapeautrecentrale='TRUE';
                             }                            
                             ?>     
-<?php if ($_SESSION['idTypeUser']==ADMINLOCAL){;?>
                 <table>                     
                     <tr>
                         <td>
@@ -1471,7 +1471,7 @@ function masquecentraleproximite(){
                 <table>            
                     <tr>
                         <td id='btnSave'>
-                            <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){save()}}"  disabled="<?php echo $bool; ?>" 
+                            <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){save();}}"  disabled="<?php echo $bool; ?>" 
                                     style="margin-top:15px"><?php echo TXT_SAVEPROJECT ;?></button>
                         </td>
                         <td id="infoSave"><?php echo TXT_SAVEDATA;?></td>                        
@@ -1517,7 +1517,7 @@ function masquecentraleproximite(){
 
         </script>
      <input type='text' value='non' name='save' id='save' style='display:none'>
-     
+ <?php if ($_SESSION['idTypeUser']==ADMINLOCAL){;?>    
 <?php
 if(!empty($_GET['statut'])){
     $idstatutencours=$_GET['statut'];
@@ -1544,7 +1544,7 @@ if($idstatut!=ENATTENTEPHASE2){
     $value='st'.$idstatutencours;
 
     ?>
-    <input type='text' name='chgstatut' id='chgstatut' value='non' style='display:none'>
+    <input type='text' name='chgstatut' id='chgstatut' value='non' style='display:none'>    
     <script>    
     function choice(value){        
     if(value ==='st<?php echo ENCOURSREALISATION; ?>'|| value ==='st<?php echo FINI; ?>'||value ==='st<?php echo CLOTURE ?>' ){
@@ -1671,7 +1671,6 @@ if($idstatut!=ENATTENTEPHASE2){
 <input type="hidden" id="centraleproximitevaleur" name="centraleproximitevaleur" >
 <input type="hidden" id="commentairephase2Valeur" name="commentairephase2Valeur" >
 
-
 <input type="hidden" id="rb_oui" name="rb_oui" >
 
 <p class='champobligatoire'><?php echo TXT_CHAMPSOBLIGATOIRES; ?></p>
@@ -1685,26 +1684,26 @@ if($idstatut!=ENATTENTEPHASE2){
                             require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
                                 ready(function() {
                                     new Editor({
-                                        plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull"],height: "100px",disabled: "", display: 'none'
+                                        plugins: ["undo", "redo"],height: "100px",disabled: "", display: 'none'
                                     }, "commentairephase2");
                                     new Editor({
-                                        plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull"],
+                                        plugins: ["undo", "redo"],
                                         height: "150px", disabled: '<?php echo $bool1;?>'
                                     }, "descriptifTechnologique");
                                     new Editor({
-                                        plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull"],
+                                        plugins: ["undo", "redo"],
                                         height: "150px", disabled: '<?php echo $bool1;?>'
                                     }, "verrouidentifie");
                                     new Editor({
-                                        plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull"],
+                                        plugins: ["undo", "redo"],
                                         height: "150px", disabled: '<?php echo $bool1;?>'
                                     }, "reussite");
                                     new Editor({
-                                        plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull"],
+                                        plugins: ["undo", "redo", "|"],
                                         height: "150px", disabled: '<?php echo $bool1;?>'
                                     }, "descriptionautrecentrale");
                                     new Editor({
-                                        plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull"],
+                                        plugins: ["undo", "redo", "|"],
                                         height: "150px", disabled: '<?php echo $bool1;?>'
                                     },"descriptioncentraleproximite");
                                 });

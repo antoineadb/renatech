@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 class Cache {
 
     public $dirname;
@@ -12,6 +12,7 @@ class Cache {
     }
 
     public function write($filename, $content) {
+        error_reporting(0);        
         return file_put_contents($this->dirname . '/' . $filename, $content);
     }
 
@@ -35,10 +36,11 @@ class Cache {
     }
 
     public function clear() {
-        $files = glob($this ->dirname . '/*');
-        foreach ($files as $file) {
-            unlink($file);
-        }
+        $files = glob($this ->dirname . '/*');        
+            foreach ($files as $file) {
+                    unlink($file);
+            }
+        
     }
 
     public function inc($file, $cachename = null) {        

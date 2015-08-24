@@ -17,10 +17,10 @@ include 'html/header.html';
     </div>
     <fieldset id="ident" style="border-color: #5D8BA2;margin-top: 25px;"  >        
         <legend style="font-size: 1.2em"><?php echo TXT_DELETEPROJET.' ' ;?><a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                                        <span style="text-align: left;padding:10px;width: 230px;border-radius:5px" >
+                                        <span style="text-align: left;padding:10px;width: 240px;border-radius:5px" >
                                             <?php echo TXT_SUPPRESSIONPROJET;?></span></a> </legend>
         
-        <div style="   height: 30px;margin-top: -5px;text-align: center;width: auto;" ><?php echo TXT_PROJETSENATTENTE. ' - '.TXT_PROJETSACCEPTE.' - '.TXT_CONSULTPROJET ;?></div>
+        <div style="   height: 30px;margin-top: -5px;text-align: center;width: auto;" ><?php echo TXT_PROJETSENATTENTE.' - '.TXT_PROJETSENATTENTEPHASE2. ' - '.TXT_PROJETSACCEPTE.' - '.TXT_CONSULTPROJET ;?></div>
     <?php 
             if(isset($_GET['idprojet'])){
                 $numero = $manager->getSingle2("select numero from projet where idprojet=?",$_GET['idprojet']);?><div style="margin-left:350px;"><?php echo TXT_PROJETNUM.' '.$numero.' '.TXT_RESTORED ;?></div> 

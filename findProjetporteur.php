@@ -11,29 +11,26 @@ if (isset($_SESSION['pseudo'])) {
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 $idcentrale = $manager->getSingle2("SELECT  idcentrale_centrale FROM  loginpassword,utilisateur WHERE  idlogin = idlogin_loginpassword AND pseudo = ?", $_SESSION['pseudo']);
-if (!empty($_POST['dateprojet'])) {
+if (isset($_POST['numprojet']) && isset($_POST['dateprojet'])&& !empty($_POST['numprojet']) && !empty($_POST['dateprojet'])) {
+        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and lower(numero) like lower(?) and idstatutprojet_statutprojet=? and dateprojet=? "
+                . "and idcentrale_centrale=? AND trashed =FALSE";
+        $param = array('%' . $numprojet . '%', ENCOURSREALISATION, $dateprojet, $idcentrale);
+}elseif (!empty($_POST['dateprojet'])&& empty($_POST['numprojet'])) {
     $dateprojet = $_POST['dateprojet'];
     $req = "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and idstatutprojet_statutprojet=? and dateprojet = ? AND trashed =FALSE";
     $param = array($idcentrale, ENCOURSREALISATION, $dateprojet);
-}
-if (!empty($_POST['numprojet']) && $_POST['numprojet'] != '*') {
-    if (!empty($_POST['numprojet'])) {
+}elseif (!empty($_POST['numprojet']) && $_POST['numprojet'] != '*' && empty($_POST['dateprojet'])) {
         $numprojet = $_POST['numprojet'];
-        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idcentrale_centrale=? and idstatutprojet_statutprojet=? "
+        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and lower(numero) like lower(?) and idcentrale_centrale=? and idstatutprojet_statutprojet=? "
                 . "AND trashed =FALSE";
-
         $param = array('%' . $numprojet . '%', $idcentrale, ENCOURSREALISATION);
-    }
-} else {
-    $req = "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and idstatutprojet_statutprojet=? AND trashed =FALSE";
-    $param = array($idcentrale, ENCOURSREALISATION);
-}
-if (isset($_POST['numprojet']) && isset($_POST['dateprojet'])) {
-    if (!empty($_POST['numprojet']) && !empty($_POST['dateprojet'])) {
-        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and numero like ? and idstatutprojet_statutprojet=? and dateprojet=? "
+}elseif (isset($_POST['numprojet']) && isset($_POST['dateprojet'])&& !empty($_POST['numprojet']) && !empty($_POST['dateprojet'])) {
+        $req = "SELECT idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and lower(numero) like lower(?) and idstatutprojet_statutprojet=? and dateprojet=? "
                 . "and idcentrale_centrale=? AND trashed =FALSE";
         $param = array('%' . $numprojet . '%', ENCOURSREALISATION, $dateprojet, $idcentrale);
-    }
+}else {
+    $req = "SELECT distinct idprojet, titre, datedebutprojet, numero, dateprojet FROM concerne, projet WHERE idprojet_projet = idprojet and idcentrale_centrale=? and idstatutprojet_statutprojet=? AND trashed =FALSE";
+    $param = array($idcentrale, ENCOURSREALISATION);
 }
 $row = $manager->getListbyArray($req, $param);
 $fprow = fopen('tmp/projetPorteur.json', 'w');

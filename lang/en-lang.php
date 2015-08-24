@@ -538,6 +538,7 @@ define("TXT_PROJETREFUSE","Refused projects but accepted in a Central");
 define("TXT_PROJETS","Projects");
 define("TXT_PROJETSCENTRALES","Centrals project");
 define("TXT_PROJETSENATTENTE","Pending project(s)");
+define("TXT_PROJETSENATTENTEPHASE2","Pending project(s) step 2 ");
 define("TXT_PROJETTRANSFERT","The project was transferred to you by another central");
 define("TXT_PSEUDO","Your login");
 define("TXT_PSEUDODOUBLON","A user with this login is already registred in the database, it is the email of a local manager of the central:");

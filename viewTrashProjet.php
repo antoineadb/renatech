@@ -81,7 +81,15 @@ chmod('tmp/projetefface.json', 0777);
     </div>
     <input type="text" id="idprojet" value="" style="display: none">
     <input type="text" id="numero" value="" style="display: none">
-    <?php $height = count($rowEfface) * 38; ?>
+    <?php 
+        $nb = count($rowEfface);
+        if($nb==1){
+            $height = 120;
+        }else{
+            $height = count($rowEfface) * 38+120; 
+        }
+    
+    ?>
         <fieldset id="ident" style="margin-top: 30px;border-color: #5D8BA2;width:1025px;padding: 10px;height:<?php echo $height.'px' ?>">
             <legend style="font-size:1.2em;font-weight: 500;margin-left: 20px"><?php echo TXT_DELETEDPROJECT; ?></legend>  
             <div id="menuCorbeille">

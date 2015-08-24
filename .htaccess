@@ -267,9 +267,9 @@ RewriteRule   VersionIE_Error/([a-z]+)                          indexErreurVersi
 
 RewriteRule   Upload_Error/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)  modifProjet.php?lang=$1&erreurupload=$2&idprojet=$3&statut=$4   [L]
 RewriteRule   Upload_Error_Size/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)  modifProjet.php?lang=$1&erreurtaille=$2&idprojet=$3&statut=$4   [L]
-RewriteRule   Upload_Errorphase2/([a-z]+)/([0-9]+)/([0-9]+)     phase2.php?lang=$1&erreurupload=$2&idprojet=$3          [L]
-RewriteRule   Upload_Errorsizephase2/([a-z]+)/([0-9]+)/([0-9]+) phase2.php?lang=$1&erreuruploadsize=$2&idprojet=$3      [L]
-RewriteRule   Upload_Errorphase1/([a-z]+)/([0-9]+)/([0-9]+)        phase2.php?lang=$1&erreuruploadphase1=$2&idprojet=$3    [L]
+RewriteRule   Upload_Errorphase2/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)            phase2.php?lang=$1&erreurupload=$2&idprojet=$3&statut=$4   [L]
+RewriteRule   Upload_Errorsizephase2/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)        phase2.php?lang=$1&erreuruploadsize=$2&idprojet=$3&statut=$4   [L]
+RewriteRule   Upload_Errorphase1/([a-z]+)/([0-9]+)/([0-9]+)                     phase2.php?lang=$1&erreuruploadphase1=$2&idprojet=$3    [L]
 RewriteRule   Upload_Errorsizephase1/([a-z]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&erreuruploadsizephase1=$2&idprojet=$3 [L]
 #RewriteRule   errorrapportsize/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapport=$2&idprojet=$3 [L]
 #RewriteRule   errorrapportsizefig/([a-z]+)/([0-9]+)/([0-9]+)           phase2.php?lang=$1&erreuruploadsizerapportfig=$2&idprojet=$3 [L]

@@ -149,13 +149,13 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
         $villecentrale =$rowcodeunite[0]['villecentrale'];
         $codeunite =$rowcodeunite[0]['codeunite'];
         $libellecentrale =$rowcodeunite[0]['libellecentrale'];
-        echo '<tr><td valign="top" style="width: 300px">'.TXT_CODEUNITE.' *'.'</td>';
+        echo '<tr><td valign="top" style="width: 300px">'.TXT_CODEUNITE.' *:'.'</td>';
         echo " <td><input type ='text' name ='codeUnite' value =".$codeunite." disabled='disabled' class='textfieldhidden' /> </td></tr>";
-        echo "<tr><td>".TXT_NOMLABO."</td>";
+        echo "<tr><td>".TXT_NOMLABO.'*:'."</td>";
         echo '<td><input type="text" id="nomlabo" name="nomlabo" class="textfieldhidden" value="'.$libellecentrale.'" disabled="disabled" /></td></tr> ';
         echo '<input type="text" name="nomLabo" id="nomLabo" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" value="'.$libellecentrale.'('.$villecentrale.')'.'"  >';
     }else{
-        echo '<tr><td valign="top" style="width: 300px">'.TXT_CODEUNITE.' *'.'</td>';
+        echo '<tr><td valign="top" style="width: 300px">'.TXT_CODEUNITE.' *:'.'</td>';
         echo " <td><div id='codeUnite' ></div></td></tr>";
         $requete="SELECT codeunite,libellecentrale|| ' (' ||villecentrale || ') ' as libellecentrale FROM centrale";
         $chemin ="tmp";
@@ -164,7 +164,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
         $libelleattribut2 = "libellecentrale";
         createJsonCentrale($requete,$chemin,$nomselect,$libelleattribut1,$libelleattribut2);
         echo '<tr><td id="libelleAutre"></td><td valign="top" id="autre" name="autrecodeunite" ></td></tr> ';
-        echo "<tr><td>".TXT_NOMLABO."</td>";
+        echo "<tr><td>".TXT_NOMLABO.'*:'."</td>";
         echo '<td> <input type="text" name="nomlabo" id="nomlabo"  data-dojo-type="dijit/form/ValidationTextBox" style="width:317px"
         data-dojo-props="maxLength:\'20\',regExp:\'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9() ,.-]+\', invalidMessage:\''.TXT_ERRSTRINGTEL.'\' "  /></td></tr> ';
         echo '<input type="text" name="nomLabo" id="nomLabo"  data-dojo-type="dijit/form/ValidationTextBox" style="display:none;width:317px"  >';

@@ -21,7 +21,7 @@ if($idcentrale_centrale>0){
     }
 }
 ?>
-<div style="margin-top: 70px;">
+<div class='bdeCentrale'>
         <?php 
         if(internetExplorer()=='false'){
             $Cache->inc(ROOT.'/outils/bandeaucentrale.php'); //RECUPERATION DU BANDEAU DEFILANT DANS LE CACHE CACHE
@@ -87,10 +87,10 @@ if($idcentrale_centrale>0){
                                     <?php echo affiche('TXT_AIDETITREPROJET');?></span>
                             </a>
                         </label>
-                        <input id="titreProjet" type="text" name="titreProjet"  required="required"   autocomplete="on" style="width: 550px;height:25px;"
+                        <input id="titreProjet" type="text" name="titreProjet"  required="required"   autocomplete="on" style="width: 550px;height:25px;" maxlength="295" 
                                value="<?php if(isset($_SESSION['titreProjet'])){echo trim($_SESSION['titreProjet']);}else{echo '';}?>"
                                data-dojo-invalidMessage="<?php echo TXT_ERRTITRE ;?>"   data-dojo-type="dijit.form.ValidationTextBox"
-                                data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()_ ,.-]+'" />
+                               data-dojo-props="<?php echo REGEX_TYPE;?>" />                                
                     </td>
                 </tr>
                 <tr>
@@ -98,10 +98,10 @@ if($idcentrale_centrale>0){
                         <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?>
                             <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 600px;border-radius:5px" ><?php echo affiche('TXT_AIDEACRONYME');?></span></a>
                         </label>
-                        <input id="acronyme" type="text" name="acronyme" style="width: 550px;height:25px;"
+                        <input id="acronyme" type="text" name="acronyme" style="width: 550px;height:25px;" maxlength="100"
                                value="<?php if(isset($_SESSION['acronyme'])){echo $_SESSION['acronyme'];}?> "  autocomplete="on"
                                data-dojo-invalidMessage="<?php echo TXT_ERRACRONYME ;?>"   data-dojo-type="dijit.form.ValidationTextBox"
-                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()_ ,.-]+'" />
+                               data-dojo-props="<?php echo REGEX_TYPE;?>" />
                     </td>
                 </tr>
                 <tr><td>&nbsp;</td></tr>
@@ -195,7 +195,7 @@ if($idcentrale_centrale>0){
                     <td>
                         <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader"   data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'>
                         <a class="infoBulle" href="#">
-                            <img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 600px;border-radius:5px" ><?php echo TXT_ERREURUPLOAD;?></span>
+                            <img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 370px;border-radius:5px" ><?php echo TXT_ERREURUPLOAD;?></span>
                         </a>
                         <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file'></div>
                         <div>
@@ -246,11 +246,11 @@ if($idcentrale_centrale>0){
     require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
         ready(function() {
             new Editor({
-                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                plugins: ["undo", "redo", ],
                 height: "100px"
             }, "contexte");
             new Editor({
-                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                plugins: ["undo", "redo", ],
                 height: "100px"
             }, "descriptif");
         });

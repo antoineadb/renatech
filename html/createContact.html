@@ -96,7 +96,7 @@ $pseudo=$_SESSION['pseudo'];
             <table>
                 <?php }?>
                 <tr>
-                    <td valign="top" style="width: 300px"><?php echo TXT_NOM.'*'; ?> </td>
+                    <td valign="top" style="width: 300px"><?php echo TXT_NOM.' *:'; ?> </td>
                     <?php	if(!empty($_SESSION['nom'])){$nom = str_replace("''",	"'",	stripslashes($_SESSION['nom']));} ?>
                     <td><input type="text" required="required" name="nom" id="nom" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
                                style="width: 317px"  value="<?php if(!empty($_SESSION['nom'])){echo $nom;};?>"
@@ -104,21 +104,21 @@ $pseudo=$_SESSION['pseudo'];
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top"><?php echo TXT_PRENOM.'*';  ?></td>
+                    <td valign="top"><?php echo TXT_PRENOM.' *:';  ?></td>
                     <?php	if(!empty($_SESSION['prenom'])){$prenom = str_replace("''",	"'",	stripslashes($_SESSION['prenom']));} ?>
                     <td><input type="text" required="required" name="prenom" id="prenom" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"  value="<?php if(!empty($_SESSION['prenom'])){echo $prenom;};?>"
                                data-dojo-props="regExp:'[a-zA-Z$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
                     </td>                  
                 </tr>
                 <tr>
-                    <td valign="top"><?php echo TXT_NOMENTELABO.'*';  ?></td>
+                    <td valign="top"><?php echo TXT_NOMENTELABO. ' *:';  ?></td>
                     <?php	if(!empty($_SESSION['entrepriselaboratoire'])){$entrepriselaboratoire = str_replace("''",	"'",	stripslashes($_SESSION['entrepriselaboratoire']));} ?>
                     <td><input type="text" name="entrepriselaboratoire" id="entrepriselaboratoire" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"   value="<?php if(!empty($_SESSION['entrepriselaboratoire'])){echo $entrepriselaboratoire;};?>"
                                required="required" data-dojo-props="regExp:'[a-zA-Z$0-9\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
                     </td>                  
                 </tr>	
                 <tr>	
-                    <td valign="top"><?php echo TXT_ADRESSE.'*';  ?></td>
+                    <td valign="top"><?php echo TXT_ADRESSE.' *:';  ?></td>
                     <?php	if(!empty($_SESSION['adresse'])){$adresse = str_replace("''",	"'",	stripslashes($_SESSION['adresse']));} ?>
                     <td><input type="text" required="required" name="adresse" id="adresse" style="width: 317px" autocomplete="on"  maxlength="100"
                                data-dojo-type="dijit/form/ValidationTextBox"  value="<?php if(!empty($_SESSION['adresse'])){echo $adresse;};?>"
@@ -126,21 +126,21 @@ $pseudo=$_SESSION['pseudo'];
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top"><?php echo TXT_CP.'*';  ?></td>
+                    <td valign="top"><?php echo TXT_CP.' *:'; ?></td>
                     <td><input type="text" required="required" name="cp" id="cp" placeholder="" style="width: 317px"
                                value="<?php if(!empty($_SESSION['cp'])){echo $_SESSION['cp'];};?>"
                                data-dojo-type="dijit/form/ValidationTextBox"  autocomplete="on" />
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top"><?php echo TXT_VILLE.'*'; ?></td>
+                    <td valign="top"><?php echo TXT_VILLE.' *:'; ?></td>
                     <?php	if(!empty($_SESSION['ville'])){$ville = str_replace("''",	"'",	stripslashes($_SESSION['ville']));} ?>
                     <td><input type="text" required="required" name="ville" id="ville"  style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" value="<?php if(!empty($_SESSION['ville'])){echo $ville;};?>"
                                maxlength="30" data-dojo-props="regExp:'[a-zA-Z0-9$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
                     </td>
                 </tr>
                 <tr>
-                    <th style="text-align: left"><?php echo TXT_PAYS.'*'; ?></th>
+                    <th style="text-align: left"><?php echo TXT_PAYS.' *:'; ?></th>
                     <td>	
                         <?php   
                         if($lang=='fr'){
@@ -180,7 +180,7 @@ $pseudo=$_SESSION['pseudo'];
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top"><?php echo TXT_TELEPHONE.'*'; ?>
+                    <td valign="top"><?php echo TXT_TELEPHONE.' *:'; ?>
                         <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' >
                             <span style="width: 450px"><?php echo TXT_TELINVALIDE;?></span>
                         </a>
@@ -193,7 +193,7 @@ $pseudo=$_SESSION['pseudo'];
                     </td>			
                 </tr>
                 <tr>
-                    <td valign="top"><?php echo TXT_FAX;?>
+                    <td valign="top"><?php echo TXT_FAX.' :';?>
                         <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' >
                             <span style="width: 450px"><?php echo TXT_FAXINVALIDE;?></span>
                         </a>
@@ -206,7 +206,7 @@ $pseudo=$_SESSION['pseudo'];
                     </td>		
                 </tr>
                 <tr>
-                    <td><label for="typeuser" ><?php echo TXT_TYPEUTILISATEUR .'*'; ?></label></td>
+                    <td><label for="typeuser" ><?php echo TXT_TYPEUTILISATEUR .' *:'; ?></label></td>
                     <td>
                         <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="typeuser" id ="academ" value="academique"  class="btRadio"
                                onclick="unhide('academic', 'industriel')" > <?php echo TXT_ACADEMIQUE; ?>

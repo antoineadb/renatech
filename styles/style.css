@@ -379,7 +379,7 @@ a.infoBulle:hover span{
     text-decoration: none;
 }
 #new, #ident, #droit, #compte, #compteuser, #compteuserindust, #msg, #dev, #identpays, #identsa, #identte, #identds, #identne, #identtu, #identtp,#identtf,
-#identth, #identsf, #identac, #identvc, #identce, #identco, #identre {
+#identth, #identsf, #identac, #identvc, #identce, #identco{
     padding:20px 20px 20px 20px;
     border:solid 1px #5D8BA2;
     color:midnightblue;
@@ -389,6 +389,24 @@ a.infoBulle:hover span{
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
 }
+#identre {     
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    background-color:#F9FCFC;
+    border: 2px solid #5d8ba2;
+    width:1033px;
+    padding-top: 0px;
+    margin-top:20px;
+    padding-left:0px;    
+    margin-left: -3px;
+    padding-bottom: 20px;
+}
+
+
 #gestionlibelle, #gestionlibelleautres,#gestionlibellecommun,#gestionhome,#gestionemailcontact,#gestionemailprojetphase1cloture,#gestionemailprojetphase1fini,#gestionemailprojetrealisation,#gestionemaildemandeur,
 #gestionemailprojetphase1,#gestionemailprojetphase2,#gestionemailprojetphase21,#gestionemailprojetphase1enattente,#gestionemailprojetphase1refuse,#gestionemailprojetphase1transfert, #gestionemailprojetphase1expertise {
     padding:8px;
@@ -992,4 +1010,85 @@ a.infoBulle:hover span{
     padding: 7px;
     text-align: center;
     width: 625px;
+}
+.bdeCentrale{
+    margin-top: 70px;
+}
+.demandeur{
+    margin-left:15px;
+}
+#tbProjetphase1{
+    margin-left:15px;
+    padding-top: 25px;
+}
+#titreProjet #acronyme{
+    width: 550px;
+    height:22px;
+}
+#aideTitre{
+    text-align: left;
+    padding:10px;
+    width: 250px;
+    border-radius:5px;
+}
+#aideAcronyme{
+    text-align: left;
+    padding:10px;
+    width: 690px;
+    border-radius:5px;
+}
+#aideconfidentiel{
+    text-align: left;
+    padding:10px;
+    width: 650px;
+    border-radius:5px;
+}
+#donneeConfid{
+    width: 450px;
+}
+#nda{
+    width: 400px;
+    display: none;
+}
+
+#aideCtx, #aideDescriptif{
+    width: 580px;border-radius: 5px;
+}
+#cptcontext, #cptdescript{
+    width:450px;
+    color:#B71701;
+}
+#aideUpload{
+    text-align: left;width: 370px;border-radius: 5px
+}
+#lblErrUpload{
+    color: red;display:block;font-size: small; width: auto;
+}
+#msgerrcentrale{
+    width: 350px;display: none;color: #c00;
+}
+#lblcommentaire{
+    width:360px;
+}
+#aidecomment{
+    text-align: left;padding:10px;width: 470px;border-radius:5px;
+}
+#downloadProgress{
+    width:300px; visibility:hidden;
+}
+#succinct{
+    width: auto;height:901px 
+}
+#detail{
+    width: auto; 
+}
+#tabcontainer{
+    margin-top:15px;
+    width: 1050px;
+    font-size: 1.2em;
+}
+
+#lblContactCentraleAccueil{
+    margin-left: 20px;
+    margin-top: 20px;
 }

@@ -50,17 +50,17 @@ include 'html/header.html';
     <div style="margin-top: 100px;"></div>
     <form name="modifProjet" data-dojo-type="dijit/form/Form" id="modifProjet"  method="post" action="<?php echo '/' . REPERTOIRE; ?>/modifBase/insertProjetphase2.php?lang=<?php echo $lang; ?>" enctype="multipart/form-data" >
         <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">							
-        <script type="dojo/method" data-dojo-event="onSubmit">
+        <script type="dojo/method" data-dojo-event="onSubmit">            
             var nbdescript=stripTags(trim(dojo.byId("descriptifValeur").value)).length;
             var nbcontexte=stripTags(trim(dojo.byId("contextValeur").value)).length;
             var nbtitre=stripTags(trim(dijit.byId("titreProjet").value)).length;
-            var centrale=dijit.byId("centrale").value;
+            var centrale=dijit.byId("centrale").value;alert(centrale);
             var nbdureeprojet=dojo.byId("dureeprojet").value.length;
             var nbdescriptTechno=stripTags(trim(dojo.byId("desTechno").value)).length;
             var nbverrou=stripTags(trim(dojo.byId("verrouide").value)).length;
             var nbreussite=stripTags(trim(dojo.byId("reussit").value)).length;
             var typeProjet = dijit.byId("typeProjet").value;
-            var nbdureeestimeprojet = dojo.byId("dureeestimeprojet").value.length;
+            var nbdureeestimeprojet = dojo.byId("dureeestimeprojet").value.length;            
             if(nbtitre==0){
                 alert("<?php echo TXT_ERRTITREVIDE; ?>");
                 return false;
@@ -132,13 +132,13 @@ include 'html/header.html';
             }else{
                 alert("<?php echo TXT_ERR; ?>");
                 return false;
-            }           
+            }               
         </script>
-        <div data-dojo-type="dijit/layout/TabContainer" id="tabcontainer" style="margin-top:15px;width: 1050px;font-size: 1.2em;" doLayout="false">
-            <div data-dojo-type="dijit/layout/ContentPane" id="succinct"  title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" style="width: auto;height:878px ">
+        <div data-dojo-type="dijit/layout/TabContainer" id="tabcontainer" doLayout="false">
+            <div data-dojo-type="dijit/layout/ContentPane" id="succinct"  title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" >
                 <?php include 'html/createProjetphase1.html'; ?>
             </div>
-            <div data-dojo-type="dijit/layout/ContentPane"  id="detail" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" style="width: auto; " >
+            <div data-dojo-type="dijit/layout/ContentPane"  id="detail" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" >
                 <?php include 'html/createProjetphase2.html'; ?>
             </div>
         </div>

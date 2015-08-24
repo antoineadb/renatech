@@ -10,8 +10,9 @@ $arrayPeriode = $manager->getList("select distinct c_firstvisit from compteur or
 $nbperiode = count($arrayPeriode);
 $Valeur = '';
 $arrayValeur = array();
+$interv =  round($nbperiode/10,0);
 foreach ($arrayPeriode as $key => $value) {
-    $nbTraffic = $manager->getSingle2("select count(c_id) from compteur where c_firstvisit=?", $value[0]);
+    $nbTraffic = $manager->getSingle2("select count(c_id) from compteur where c_firstvisit=?", $value[0]);    
     $string0.='"' . $value[0] . '",';
     $Valeur.=$nbTraffic . ',';
     $arrayvaleur = array_push($arrayValeur, $nbTraffic);
@@ -48,7 +49,7 @@ $minvaleur = min($arrayValeur);
                     categories: [<?php echo $string; ?>],
                     labels: {
                         enabled: true,
-                        step: 10,
+                        step: <?php echo $interv;?>,
                         staggerLines: 1,
                         style: {
                             color: 'black'

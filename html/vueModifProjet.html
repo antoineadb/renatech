@@ -98,7 +98,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
             <td>
                 <label for="titreProjet" ><?php echo TXT_TITREPROJET.'* :'; ?>
                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                        <span style="text-align: left;padding:10px;width: 250px;border-radius:5px" >
+                        <span id="aideTitre" >
                         <?php //MISE EN CACHE DES AIDES
                             if(!$aidetitreprojet=$Cache->read('aidetitreprojet')){
                                 $aidetitreprojet=affiche('TXT_AIDETITREPROJET') ;
@@ -108,14 +108,14 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                     </a>
                 </label>
                 <input id="titreProjet" type="text" name="titreProjet" value="<?php echo $titre ;?>"  required="required"   data-dojo-type="dijit.form.ValidationTextBox"  
-                       onclick="this.focus = true" data-dojo-invalidMessage="Titre non valide." style="width: 550px;height:22px;"  disabled="<?php echo $bool; ?>" />
+                       onclick="this.focus = true" data-dojo-invalidMessage="Titre non valide."  disabled="<?php echo $bool; ?>" />
             </td>
         </tr>
         <tr> <td>&nbsp;</td></tr>
         <tr><td>
                 <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'.' :';?>
                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                        <span style="text-align: left;padding:10px;width: 650px;border-radius:5px" >
+                        <span id="aideAcronyme" >
                             <?php //MISE EN CACHE DES AIDES
                             if(!$aideacronyme=$Cache->read('aideacronyme')){
                                 $aideacronyme=affiche('TXT_AIDEACRONYME') ;
@@ -258,8 +258,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                         echo '<label style="color: red;display:block;font-size: small; width: auto;">'.TXT_ERREURTAILLEFICHIER.'</label>';
                     }else{
                         $attachement = addslashes($attachement);
-                        echo '<div id=\'pieceJointe\'><a href="'.$monUrl.dirname($_SERVER['PHP_SELF']).'/upload/'.$attachement.'" target="_blank"
-                        id="attachement">'.$attachement.'</a></div><div id=\'btnsuppr\'></div>';
+                        echo '<div id=\'pieceJointe\'><a href="'.$monUrl.dirname($_SERVER['PHP_SELF']).'/upload/'.$attachement.'" target="_blank" id="attachement">'.$attachement.'</a></div><div id=\'btnsuppr\'></div>';
                     }
                     if(!empty($attachement)&&!isset($_GET['erreur'])){
                     ?>
@@ -336,13 +335,13 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                 ?>
             </td></tr>                       
         <tr><td><br></td></tr>
-        <tr><td>
+        <tr><td><input type="text" style='display: none' id='idstatut' name='idstatut' value="<?php if(isset($_GET['statut'])){echo $_GET['statut'];} ?>" >
 <!-----------------------------------------------------------------------------------------------------------------------------------
                 COMMENTAIRE
 -------------------------------------------------------------------------------------------------------------------------------------->
                 <label for="commentaire" ><?php echo TXT_COMMENTAIREPROJET.' :'; ?>
                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                        <span style="text-align: left;padding:10px;width: 470px;border-radius:5px" >
+                        <span id='aidecomment' >
                              <?php //MISE EN CACHE DES AIDES
                             if(!$aidecommentaire=$Cache->read('aidecommentaire')){
                                 $aidecommentaire=affiche('TXT_AIDECOMMENTAIREPROJET') ;

@@ -21,6 +21,7 @@ if (!empty($_POST['centrale'])) {
 } else {
     $idCentrale = AUTRECENTRALE;
 }
+
 if (isset($_POST['enregistre']) && $_POST['enregistre'] == 'oui') {
     $cas = 'enregistrement';
 }elseif (isset($_POST['creerprojetphase2']) && $_POST['creerprojetphase2'] == 'oui' && $_POST['enregistre'] == 'non') {
@@ -49,6 +50,7 @@ if (isset($_POST['integerspinner']) && !empty($_POST['integerspinner'])) {
 } else {
     $nbpersonnecentrale = 0;
 }
+
 if ($cas == 'mise a jour') {
     header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $nbpersonnecentrale);
 } elseif ($cas == 'mise a jourEmail') {

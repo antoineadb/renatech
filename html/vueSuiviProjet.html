@@ -164,7 +164,7 @@ dojo.ready(function(){
 //                    SELECTION DE L'AFFECTATION D'UN PORTEUR OU D'UN ADMINISTRATEUR
 //                    Gestion de l'éveneùent click sur le menu
 //---------------------------------------------------------------------------------------------------------------------------------------
-        dojo.connect(grid, 'onRowClick', function(e){
+        dojo.connect(gridDiv, 'onRowClick', function(e){
             var rowIndex = e.rowIndex;
             var item = grid.getItem(rowIndex);            
             var idprojet =document.getElementById('idprojet').value;            

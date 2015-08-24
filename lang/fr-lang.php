@@ -538,6 +538,7 @@ define("TXT_PROJETREFUSE","Projets refusés mais acceptés dans une centrale");
 define("TXT_PROJETS","Projets");
 define("TXT_PROJETSCENTRALES","Projets des centrales");
 define("TXT_PROJETSENATTENTE","Projet(s) en attente ");
+define("TXT_PROJETSENATTENTEPHASE2","Projet(s) en attente phase2");
 define("TXT_PROJETTRANSFERT","Ce projet vous a été transféré par une autre centrale ");
 define("TXT_PSEUDO","Votre pseudo");
 define("TXT_PSEUDODOUBLON","Un utilisateur avec ce pseudo est déjà présent dans la base de donnée");

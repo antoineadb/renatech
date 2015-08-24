@@ -267,11 +267,13 @@ chmod('tmp/compteUtilisateur.json', 0777);
             document.getElementById('filtreNom').value='non';
         }
         function filtrenom(grid,param,id){
-            console.log('grid = '+grid);console.log('param = '+param);console.log('id = '+id);
-            dijit.byId('prenom').set('value','');            
+            dijit.byId('prenom').set('value','');
             dijit.byId(grid).filter({param: ''+id.value+''+'*'});
             document.getElementById('filtreNom').value='oui';
             document.getElementById('filtrePrenom').value='non';
+        }
+        function capitalize(s) {
+            return s[0].toUpperCase() + s.slice(1);
         }
     </script>
     <input type="text" style="display: none" id="filtreNom" value="non">
@@ -287,7 +289,7 @@ chmod('tmp/compteUtilisateur.json', 0777);
                 <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
                     if(document.getElementById('filtreNom').value=='oui'){
                         dijit.byId('prenom').set('value','');
-                        dijit.byId('myGrid').filter({nom: ''+dijit.byId('nom').value+''+'*'});
+                        dijit.byId('myGrid').filter({nom: ''+(dijit.byId('nom').value)+''+'*'});
                     }else if(document.getElementById('filtrePrenom').value=='oui'){
                         dijit.byId('nom').set('value','');
                         dijit.byId('myGrid').filter({prenom: ''+dijit.byId('prenom').value+''+'*'});

@@ -45,7 +45,7 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
 }
 ?>
 <script src="<?php echo '/'.REPERTOIRE; ?>/js/ajaxefface.js"></script>
-<div style="margin-top: 70px;">
+<div class='bdeCentrale'>
     <?php include_once 'outils/bandeaucentrale.php'; ?>
 </div>
 <fieldset id="identcreateprojet">
@@ -118,40 +118,36 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                 </td>
             </tr>
             <tr>
-                <td><label style="margin-left:15px" ><?php echo TXT_DEMANDEUR.' : '.$demandeur; ?></label></td>
+                <td><label class='demandeur' ><?php echo TXT_DEMANDEUR.' : '.$demandeur; ?></label></td>
                 <td id="pdfmodifprojet">
                     <a href="<?php echo '/'.REPERTOIRE; ?>/pdf_project/<?php echo $lang;?>/<?php echo $numProjet?>" target="_blank" >
                         <img src='<?php echo "/".REPERTOIRE ;?>/styles/img/pdf_icon.png'  /></a>
                 </td>
             </tr>
             <tr>
-                <td><label style="margin-left:15px"><?php echo $entrepriselaboratoireo; ?></label></td>
+                <td><label class='demandeur'><?php echo $entrepriselaboratoireo; ?></label></td>
             </tr>
         </table>
-        <table style="margin-left:15px;padding-top: 25px ">
+        <table id='tbProjetphase1'>
             <tr>
                 <td>
                     <label for="titreProjet"><?php echo TXT_TITREPROJET.'* :'; ?>
-                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 250px;border-radius:5px" >
+                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/>
+                            <span id="aideTitre" >
                                 <?php echo affiche('TXT_AIDETITREPROJET');?></span>
                         </a>
                     </label>
                     <?php $titre =stripslashes(str_replace("''","'",$titre));
                     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 8.0') !== FALSE) {?>
                     <input id="titreProjet" type="text" name="titreProjet" required="required"   value="<?php echo $titre ;?>" 
-                           style="width: 550px;height:22px"
-                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="Titre non valide."
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()_ ,.-]+'" />
+                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="Titre non valide." data-dojo-props="<?php echo REGEX_TYPE;?>"/>                          
                     <?php }else{?>
                     <?php if($porteur=='vrai'){?>
                     <input id="titreProjet" type="text" name="titreProjet" required="required"   value="<?php echo $titre ;?>" 
-                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="Titre non valide."	style="width: 550px;height:22px"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()_ ,.-]+'" />
+                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="Titre non valide." data-dojo-props="<?php echo REGEX_TYPE;?>"/>                           
                     <?php }else{ ?>
                     <input id="titreProjet" type="text" name="titreProjet" required="required"   value="<?php echo $titre ;?>"
-                           disabled="<?php echo $bool; ?>"		style="width: 550px;height:22px"
-                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="Titre non valide."
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()_ ,.-]+'" />
+                           disabled="<?php echo $bool; ?>" data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="Titre non valide." data-dojo-props="<?php echo REGEX_TYPE;?>"/>                           
                     <?php }?>
                     <?php }?>
                 </td>
@@ -159,22 +155,20 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
             <tr>
                 <td><?php $acronyme =stripslashes(str_replace("''",	"'",	$acronyme))?>
                     <label for="acronyme"  ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?>
-                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 690px;border-radius:5px" >
+                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/>
+                            <span <span id="aideAcronyme" >
                                 <?php echo affiche('TXT_AIDEACRONYME');?></span></a>
                     </label>
                     <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 8.0') !== FALSE) {?>
-                    <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>"	style="width: 550px;height:22px"
-                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide."
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()_ ,.-]+'" />
+                    <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>"	
+                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide." data-dojo-props="<?php echo REGEX_TYPE;?>"/>
                     <?php }else{?>
                     <?php if($porteur=='vrai'){?>
-                    <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>"	style="width: 550px;height:22px"
-                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide."
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()_ ,.-]+'" />
+                    <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>"	
+                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide." data-dojo-props="<?php echo REGEX_TYPE;?>"/>
                     <?php }else{ ?>
                     <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>" disabled="<?php echo $bool; ?>"
-                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide." style="width: 550px;height:22px"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()_ ,.-]+'" />
+                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide." data-dojo-props="<?php echo REGEX_TYPE;?>"/>
                     <?php }?>
                     <?php }?>
                 </td>
@@ -184,21 +178,22 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                 <td>
                     <label for="confid" style="width:220px;"><?php echo TXT_PROJETCONFIDENTIEL.' *:';?>
                         <a class="infoBulle" href="#" style='border-radius:5px'>
-                            &nbsp;<img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 650px;border-radius:5px" ><?php echo affiche('TXT_AIDECONFIDENTIEL');?></span></a></label>
+                            &nbsp;<img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/>
+                            <span id="aideconfidentiel"><?php echo affiche('TXT_AIDECONFIDENTIEL');?></span></a></label>
                     <?php if (isset($_GET['confid'])&& $_GET['confid']== 'TRUE'){ ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE" checked="checked" class="btRadio" 
                            onclick="start();" disabled="<?php echo $bool; ?>" > <?php echo TXT_OUI; ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE"  class="btRadio" onclick="non()" 
                            disabled="<?php echo $bool; ?>" > <?php echo TXT_NON; ?>
                     <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
-                    <label id='donneeConfid' style="width: 450px;display: block;"  ><?php echo TXT_DONNECONFID;?></label>
+                    <label id='donneeConfid' style="display: block;"  ><?php echo TXT_DONNECONFID;?></label>
                     <?php }elseif (isset($_GET['confid'])&& $_GET['confid']== 'FALSE'){ ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE" class="btRadio" onclick="start();" 
                            disabled="<?php echo $bool; ?>"  > <?php echo TXT_OUI; ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE" checked="checked" class="btRadio" 
                            onclick="non()" disabled="<?php echo $bool; ?>"  > <?php echo TXT_NON; ?>
                     <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
-                    <label id='donneeConfid' style="width: 450px;display: none;"  ><?php echo TXT_DONNECONFID;?></label>
+                    <label id='donneeConfid' style="display: none;"  ><?php echo TXT_DONNECONFID;?></label>
                     <?php }else{
                     //récupération de la valeur confidentiel
                     $confid = $manager->getSingle2("SELECT confidentiel  FROM projet WHERE idprojet=?",$idprojet);
@@ -209,15 +204,15 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                            onclick="start();" disabled="<?php echo $bool; ?>" > <?php echo TXT_OUI; ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE"  class="btRadio" onclick="non()" 
                            disabled="<?php echo $bool; ?>" > <?php echo TXT_NON; ?>
-                    <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
-                    <label id='donneeConfid' style="width: 450px;display: block;"  ><?php echo TXT_DONNECONFID;?></label>
+                    <label id='nda' ><?php echo TXT_NDA; ?></label>
+                    <label id='donneeConfid' style="display: block;"  ><?php echo TXT_DONNECONFID;?></label>
                     <?php } else { ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE" class="btRadio" onclick="start();" 
                            disabled="<?php echo $bool; ?>"  > <?php echo TXT_OUI; ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE" checked="checked" class="btRadio" 
                            onclick="non()" disabled="<?php echo $bool; ?>"  > <?php echo TXT_NON; ?>
-                    <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
-                    <label id='donneeConfid' style="width: 450px;display: none;"  ><?php echo TXT_DONNECONFID;?></label>
+                    <label id='nda' ><?php echo TXT_NDA; ?></label>
+                    <label id='donneeConfid' style="display: none;"  ><?php echo TXT_DONNECONFID;?></label>
                     <?php }?>
                     <?php }?>
                 </td>
@@ -225,15 +220,10 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
             <tr><td>&nbsp;</td></tr>
             <tr>
                 <td>
-                    <label for="contexte" style="width: 270px"><?php echo TXT_OBJECTIF.'/'.TXT_CONTEXTESCIENTIFIQUE;?><?echo ':' ?>
-                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/>
-                            <span style="width: 580px;border-radius: 5px">
-                                <?php echo affiche('TXT_AIDECONTEXTE');?></span></a>
+                    <label for="contexte" ><?php echo TXT_OBJECTIF.'/'.TXT_CONTEXTESCIENTIFIQUE;?><?echo ':' ?>
+                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/><span id="aideCtx"><?php echo affiche('TXT_AIDECONTEXTE');?></span></a>
                     </label>
-                    <?php
-
-                    ?>
-                    <div id="contexte" name="contexte"  height="100px" style="width:960px">
+                    <div id="contexte" name="contexte"  height="100px" >
                         <?php
                         if(!empty($contexte)){
                         echo stripslashes(str_replace("''","'",$contexte));
@@ -246,7 +236,7 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                     </div>
                 </td>
             </tr>
-            <tr><td><label id="cptcontext" style="width:450px;color:#B71701"></label></td></tr>
+            <tr><td><label id="cptcontext" ></label></td></tr>
             <tr style="display: none" id="msgerrcontexte">
                 <td>
                     <fieldset class='msgerrcontexte' >
@@ -258,9 +248,9 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
             </tr>
             <tr><td>&nbsp;</td></tr>
             <tr><td><?php $description =stripslashes(str_replace("''",	"'",	$description));?>
-                    <label for="descriptif" style="width: 350px"><?php echo TXT_DESCRIPTIFTRAVAIL.' :'; ?>
+                    <label for="descriptif" ><?php echo TXT_DESCRIPTIFTRAVAIL.' :'; ?>
                         <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/>
-                            <span style="width: 580px;border-radius: 5px">
+                            <span id="aideDescriptif">
                                 <?php echo affiche('TXT_AIDEDESCRIPTIF');?></span></a>
                     </label>                    
                     <div id="descriptif" name="descriptif" height="100px"  >
@@ -275,7 +265,7 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                         ?>
                     </div>
             </tr>
-            <tr><td><label id="cptdescript" style="width:450px;color:#B71701"></label></td></tr>
+            <tr><td><label id="cptdescript"></label></td></tr>
             <tr><td>&nbsp;</td></tr>
             <tr style="display: none" id="msgerrdescription">
                 <td>
@@ -325,9 +315,9 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                 // Load the editor resource
                 require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
                     ready(function() {
-                        new Editor({plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                        new Editor({plugins: ["undo", "redo",  ],
                             height: "100px", disabled: "<?php echo $bool1;?>"}, "contexte");
-                        new Editor({plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                        new Editor({plugins: ["undo", "redo",  ],
                             height: "100px", disabled: "<?php echo $bool1;?>"}, "descriptif");
                     });
 
@@ -365,9 +355,9 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                 // Load the editor resource
                 require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
                     ready(function() {
-                        new Editor({plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                        new Editor({plugins: ["undo", "redo", ],
                             height: "100px"}, "contexte");
-                        new Editor({plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                        new Editor({plugins: ["undo", "redo", ],
                             height: "100px"}, "descriptif");
                     });
                     function modifProjetOnSubmit() {
@@ -490,38 +480,43 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                 <td>
                     <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader"
                            data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'/>
-                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE;  ?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;width: 580px;border-radius: 5px">
+                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE;  ?>/styles/img/help.gif' height="13px" width="13px"/><span id="aideUpload">
                             <?php echo TXT_ERREURUPLOAD;?></span></a>
                     <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file' ></div>
                     <?php
                     $attachement  =str_replace("''","'",stripslashes($manager->getSingle2("select attachement from projet where idprojet = ?",$idprojet)));
                     $monUrl = "http://".$_SERVER['HTTP_HOST'];
-                    if(!empty($_GET['erreur'])){//SI ERREUR SUR L'ATTACHEMENT ON L'EFFACE
-                    $projetattachement = new Projetattachement($idprojet, '');
-                    $manager->updateProjetattachement($projetattachement,$idprojet);
-                    echo '<label style="color: red;display:block;font-size: small; width: 500px">'.$_GET['erreur'].'</label>';
-                    }else{
-                    $attachement = addslashes($attachement);
-                    echo '<div id=\'pieceJointe\'><a href="'.$monUrl.dirname($_SERVER['PHP_SELF']).'/upload/'.$attachement.'" target="_blank"
-                    id="attachement">'.$attachement.'</a></div><div id=\'btnsuppr\'></div>';
-                    }
-                    if(!empty($attachement)&&!isset($_GET['erreur'])){
+                    
+                    if(isset($_GET['erreurupload'])){//SI ERREUR SUR L'ATTACHEMENT ON L'EFFACE
+                        $projetattachement = new Projetattachement($idprojet, '');
+                        $manager->updateProjetattachement($projetattachement,$idprojet);
+                        echo '<label id="lblErrUpload">'.TXT_ERREURUPLOAD.'</label>';
+                    }elseif(isset($_GET['erreurtaille'])){//SI ERREUR SUR L'ATTACHEMENT ON L'EFFACE
+                        $projetattachement = new Projetattachement($idprojet, '');
+                        $manager->updateProjetattachement($projetattachement,$idprojet);
+                        echo '<label id="lblErrUpload">'.TXT_ERREURTAILLEFICHIER.'</label>';
+                    }else{                        
+                        $attachement = addslashes($attachement);
+                        echo '<div id=\'pieceJointe\'><a href="'.$monUrl.dirname($_SERVER['PHP_SELF']).'/upload/'.$attachement.'" target="_blank" id="attachement">'.$attachement.'</a></div><div id=\'btnsuppr\'></div>';
+                    }                    
                     ?>
+                    <?php if(!empty($attachement)&&!isset($_GET['erreurupload'])&&!isset($_GET['erreurtaille'])){?>
                     <script>
-                        if (dojo.byId('attachement') !== '') {
-                            document.getElementById('btnsuppr').innerHTML =
-                                    "<br><button class='admin' onClick='effaceAttachement(\"<?php echo '/'.REPERTOIRE;?>/outils/effaceAttachement.php?idprojet=<?php echo $idprojet; ?>\");' type='button' ><?php echo TXT_SUPPRPIECE?> </button>";
-                        } else {
-                            document.getElementById('btnsuppr').innerHTML = '';
-                        }
+                            if (dojo.byId('attachement') !== '') {
+                                document.getElementById('btnsuppr').innerHTML =
+                                    "<br><button class='admin' onClick='effaceAttachement(\"<?php echo '/'.REPERTOIRE;?>/outils/effaceAttachement.php?idprojet=<?php echo $idprojet; ?>\");' type='button' >\n\
+                                    <?php echo TXT_SUPPRPIECE?> </button>";
+                            } else {
+                                document.getElementById('btnsuppr').innerHTML = '';
+                            }
+                        
                     </script>
-                    <?php }?>
-
+                    <?php } ?>
                     <div id='reponse'></div>
                 </td>
 
             <tr>
-                <td><p><label id='msgerrcentrale' style="width: 350px;display: none;color: #c00" ><?php echo TXT_CHECKCENTRALE; ?></label></p>
+                <td><p><label id='msgerrcentrale' ><?php echo TXT_CHECKCENTRALE; ?></label></p>
                     <?php include 'outils/centraleCheck.php' ?></td>
             </tr>
             <tr><td><br></td></tr>
@@ -531,9 +526,9 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
             ?>
             <tr>
                 <td>
-                    <label for="commentaire" style="width: 360px"><?php echo TXT_COMMENTAIREPROJET.' :'; ?>
+                    <label for="commentaire" id="lblcommentaire"><?php echo TXT_COMMENTAIREPROJET.' :'; ?>
                         <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                            <span style="text-align: left;padding:10px;width: 470px;border-radius:5px" ><?php echo affiche('TXT_AIDECOMMENTAIREPROJET');?></span></a>
+                            <span id="aidecomment" ><?php echo affiche('TXT_AIDECOMMENTAIREPROJET');?></span></a>
                     </label>
                     <?php $commentaire = $manager->getListbyArray("select commentaireprojet from concerne where idprojet_projet =? and idcentrale_centrale=?",array($idprojet,$idcentraleselectionne)); 
 
@@ -570,7 +565,7 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
             <tr><td>&nbsp;</td></tr>
             <tr>
                 <td>
-                    <div data-dojo-type="dijit/ProgressBar" style="width:300px; visibility:hidden " data-dojo-id="myProgressBar"
+                    <div data-dojo-type="dijit/ProgressBar"  data-dojo-id="myProgressBar"
                          id="downloadProgress" data-dojo-props="maximum:10">
                     </div>
                     <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 8.0') !== FALSE) {?>
@@ -586,7 +581,7 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                            data-dojo-type="dijit/form/Button" data-dojo-props="showLabel:true,onClick:function(){ download(); }" />
                     <?php }?>
                     <?php }?>
-                    <p style="font-size: x-small;"><?php echo TXT_CHAMPSOBLIGATOIRES; ?></p>
+                    <p class="champobligatoire"><?php echo TXT_CHAMPSOBLIGATOIRES; ?></p>
                 </td>
             </tr>
         </table>

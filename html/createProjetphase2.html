@@ -6,20 +6,20 @@
         document.getElementById(id).style.display = "none";
     }
 </script>
-    <fieldset id="identre" style="background-color:#F9FCFC;border-color: #5D8BA2;width:1015px;padding-top: 0px;margin-top:20px;padding-left:0px;border-width:2px;margin-left: -3px">
+    <fieldset id="identre">
             <legend style="margin-left: 20px;font-weight: bold"><?php echo TXT_CADREPROJETSCIENTIFIQUE;?></legend>
     <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
     <table style='width:1010px'>
     <tr>
         <td style='float: left;'>
-                <label for="contactCentralAccueil" style="width: 320px;margin-left: 20px;" >
+                <label for="contactCentralAccueil" id='lblContactCentraleAccueil'  >
                     <?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
                 <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
-                <input id="contactCentralAccueil"    
-                       data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on"  data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	style="margin-left: 20px;" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
+                <input data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  id="contactCentralAccueil" autocomplete="on"  maxlength="100" style="margin-left:20px"
+                       data-dojo-props="<?php echo REGEX_TYPE; ?>"	 data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
                 <?php }else{?>
-                <input id="contactCentralAccueil"  data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on"
-                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'"	style="margin-left: 20px;" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
+                <input style="margin-left:20px" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on" maxlength="100" 
+                       data-dojo-props="<?php echo REGEX_TYPE; ?>"	data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
                 <?php }?>
             </td>
         </tr>
@@ -498,7 +498,6 @@
         </script>
     </table>
     </fieldset>
-    </fieldset>
 <fieldset id="identsa" style="background-color:#F9FCFC;border-color: #5D8BA2;width:960px;padding-top: 0px;margin-top:5px;padding-left:0px;border-width:2px;padding-right: 0px;margin-left:-3px ">        
             <legend style="margin-left: 20px;font-weight: bold"><?php echo TXT_DEROULPROJETSALLE ;?></legend>
     <table>
@@ -546,7 +545,7 @@
                                value="<?php echo 0; ?>"
                                data-dojo-props="smallDelta:1, constraints:{min:0,max:9,places:0}" name="nombrePersonneCentrale"
                                style="width:60px;margin-left: 20px"	onchange="addnomCentrale(dijit.byId(this.value))"
-                               onclick="addnomCentrale(dijit.byId(this.value))"  >
+                               onclick="addnomCentrale(dijit.byId(this.value))" >
                     </p>
                     <div id="personCentrale"><?php include 'personneCentrale/personneCentrale.php';  ?></div><br>
                     </fieldset>
@@ -664,8 +663,9 @@
                                         <td style="float: left;display:none" id="etapeautre1">
                                             <fieldset style="font-size: 1.1em;font-style: italic;width: 520px">
                                                 <legend><?php echo TXT_SELECTCENTRALES; ?></legend>
+                                                <input type="text" style="display: block" value="" id="nomCentrale">
                                             <div id='chckautrecentrale' style="float: left;margin-bottom: 15px">
-                                                 <?php                                                
+                                                 <?php
                                                 $row = $manager->getList("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE order by libelleCentrale asc");
                                                 for ($i = 0; $i < count($row); $i++) {
                                                     $libellecentrale = $row[$i][0];
@@ -857,7 +857,8 @@ function masquecentraleproximite(){
                     <table style='margin-top:35px;width:1030px'>
                         <tr>
                             <td style='margin-right: 20px;float: left;margin-top:15px'>
-                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep.show()}else{dijit.byId('modifProjet').submit()}}">
+                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" 
+                                       data-dojo-props="onClick:function(){afficheMenu();}">
                                 <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                 <span style="text-align: left;padding:7px;width: 430px;border-radius:5px" ><?php echo TXT_VALIDETRANSMISSION;?></span>
                             </a>
@@ -887,10 +888,14 @@ function masquecentraleproximite(){
                         </table>
                     </div>
                     
-                    <script>            
+                    <script>
+                        function afficheMenu(){
+                            addnomCentrale(dijit.byId('integerspinner').value);
+                            if(dijit.byId('modifProjet').validate()){rep.show();}
+                        }                                                    
                         function valide(){
                             document.getElementById('creerprojetphase2').value='oui'
-                             document.getElementById('enregistre').value='non';
+                            document.getElementById('enregistre').value='non';
                             modifProjet.submit();
                         }
                         function save() {
@@ -918,23 +923,23 @@ function masquecentraleproximite(){
                 require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
                     ready(function() {
                         new Editor({
-                            plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                            plugins: ["undo", "redo"],
                             height: "150px"
                         }, "descriptifTechnologique");
                         new Editor({
-                            plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                            plugins: ["undo", "redo"],
                             height: "150px"
                         }, "verrouidentifie");
                         new Editor({
-                            plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                            plugins: ["undo", "redo"],
                             height: "150px"
                         }, "reussite");
                         new Editor({
-                            plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                            plugins: ["undo", "redo"],
                             height: "150px"
                         }, "descriptionautrecentrale");
                         new Editor({
-                            plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "insertOrderedList", "insertUnorderedList", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull", ],
+                            plugins: ["undo", "redo" ],
                             height: "150px"
                         },"descriptioncentraleproximite");
                     });

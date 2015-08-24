@@ -11,8 +11,8 @@ $respmail=TXT_RESPMAILMAIL;
                     dojo.create("div", {id: "nomresponsable"}, "divindust1");
                     html.set(dom.byId("nomresponsable"), '<tbody>'
                             + '<tr>'
-                            + '<td id="nomResp1"><label for="valeurNomResponsable1" style="width:317px"><?php echo addslashes(TXT_NOMRESPONSABLE);	?></label></td>'
-                            + '<td><input type="text"  id="valeurNomResponsable1" name="valeurNomResponsable1" data-dojo-type="dijit/form/ValidationTextBox" value="" placeholder="<?php echo addslashes($nomrep);?>"'
+                            + '<td id="nomResp1"><label for="valeurNomResponsable1" style="width:317px"><?php echo TXT_NOMRESPONSABLE." *:";	?></label></td>'
+                            + '<td><input type="text"  id="valeurNomResponsable1" name="valeurNomResponsable1" data-dojo-type="dijit/form/ValidationTextBox" value="" placeholder="<?php echo $nomrep;?>"'
                             + 'autocomplete="on" style="width:317px;margin-left: -12px;"'
                             + 'data-dojo-props="regExp:\'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9-\\042\\\'\\’\\=\\0133\\0135\\+\\_\ \,\\.\\-]+\'"'
                             + 'required= true'
@@ -25,8 +25,8 @@ $respmail=TXT_RESPMAILMAIL;
                     dojo.create("div", {id: "emailresponsable"}, "divindust1");
                     html.set(dom.byId("emailresponsable"), '<tbody>'
                             + '<tr>'
-                            + '<td id="emailResp1"><label for="valeurEmailResponsable1" style="width:317px"><?php	echo	addslashes($respmail);	?></label></td>'
-                            + '<td><input type="text"  id="valeurEmailResponsable1" name="valeurEmailResponsable1" data-dojo-type="dijit/form/ValidationTextBox" value="" placeholder="<?php echo addslashes($respmail); ?>"'
+                            + '<td id="emailResp1"><label for="valeurEmailResponsable1" style="width:317px"><?php	echo	$respmail." *:";	?></label></td>'
+                            + '<td><input type="text"  id="valeurEmailResponsable1" name="valeurEmailResponsable1" data-dojo-type="dijit/form/ValidationTextBox" value="" placeholder="<?php echo $respmail; ?>"'
                             + 'autocomplete="on"  style="width:317px;margin-left: -12px;"'
                             + 'data-dojo-props="regExp:\'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$\'"'
                             + 'required= true'

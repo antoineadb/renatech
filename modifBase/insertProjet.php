@@ -24,11 +24,39 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     } else {
         $acronyme = "";
     }
-    if (!empty($_FILES['fichierProjet']['name'])) {
+    /*if (!empty($_FILES['fichierProjet']['name'])) {
         $attachement = stripslashes(Securite::bdd($_FILES['fichierProjet']['name']));
     } else {
         $attachement = "";
+    }*/
+    
+    if (!empty($_FILES['fichierProjet']['name'])) {
+        $attachement = stripslashes(Securite::bdd($_FILES['fichierProjet']['name']));
+        $dossier1 = '../upload/';
+        $fichierPhase1 = basename($_FILES['fichierProjet']['name']);
+        $taille_maxi1 = 1048576;
+        $taille1 = filesize($_FILES['fichierProjet']['tmp_name']);
+        $extensions = array('.pdf', '.PDF');
+        $extension1 = strrchr($_FILES['fichierProjet']['name'], '.');
+        if (!empty($_FILES['fichierProjet']['name'])) {
+            if (!in_array($extension1, $extensions)) {//VERIFICATION DU FORMAT SI IL N'EST PAS BON ON SORT                
+                    $erreur = TXT_ERREURUPLOAD;
+                    $attachement = "";
+            } elseif ($taille1 > $taille_maxi1) {//VERIFICATION DE LA TAILLE SI ELLE EST >1mo ON SORT
+                    $erreur1 = TXT_ERREURTAILLEFICHIER;
+                    $attachement = "";
+            } elseif (!isset($erreur)&&!isset($erreur1)) {//S'il n'y a pas d'erreur, on upload
+                if (move_uploaded_file($_FILES['fichierProjet']['tmp_name'], $dossier1 . $fichierPhase1)) {
+                    $erreur = '';
+                    $erreur1 = '';
+                    chmod($dossier1 . $fichierPhase1, 0777);
+                }
+            }
+        }
+    } else {
+        $attachement = "";
     }
+    
     $confidentiel = $_POST['confid'];
     $_SESSION['confid'] = $confidentiel;
     if (!empty($_POST['contextValeur'])) {
@@ -62,7 +90,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $numProjet = 'P-' . date("y") . '-' . '00001'; //CAS DU 1ER PROJET
     }
     $_SESSION['numprojet'] = $numProjet;
-
+    
     if (!empty($_POST['centrale'])) {
         $centrale = $_POST['centrale'];
         $idprojet = $manager->getSingle("SELECT max(idprojet)FROM projet;") + 1;
@@ -92,7 +120,20 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
             }
         }
     }
-    include '../upload.php';
+    if(isset($erreur)&&!empty($erreur) || isset($erreur1)&&!empty($erreur1)){
+        $concerne = new Concerne($centrale, $idprojet, ENATTENTEPHASE2, '');
+        $manager->updateConcerne($concerne, $idprojet);
+        if(!empty($erreur1)){
+            header('Location: /' . REPERTOIRE . '/Upload_Error_Size/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet.'/'.ENATTENTE);
+        }elseif(!empty ($erreur)){
+            header('Location: /' . REPERTOIRE . '/Upload_Error/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet.'/'.ENATTENTE);
+        }
+        //modifProjet.php?lang=$1&erreurtaille=$2&idprojet=$3&statut=$4
+        BD::deconnecter();
+        exit();
+    }
+    header('location: /' . REPERTOIRE . '/waitingproject/' . $lang . '/' . $idprojet);
+    //include '../upload.php';
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }

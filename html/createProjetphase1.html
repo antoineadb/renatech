@@ -25,19 +25,16 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                 </a>
             </label>
 
-            <input id="titreProjet" type="text" name="titreProjet"  required="required"            
-                   data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="Titre non valide."
-                   style="width: 550px;height:24px;" >
+            <input id="titreProjet" type="text" name="titreProjet"  required="required" data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="Titre non valide.">
         </td>
     </tr>
     <tr> <td>&nbsp;</td></tr>
     <tr><td>
             <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?>
                 <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-                    <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" ><?php echo affiche('TXT_AIDEACRONYME');?></span></a>
+                    <span id="aideAcronyme" ><?php echo affiche('TXT_AIDEACRONYME');?></span></a>
             </label>          
-            <input id="acronyme" type="text" name="acronyme"  data-dojo-type="dijit.form.ValidationTextBox"
-                   data-dojo-invalidMessage="acronyme non valide.">
+            <input id="acronyme" type="text" name="acronyme"  data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide.">
         </td>
     </tr>
     <tr><td>&nbsp;</td></tr>
@@ -109,12 +106,10 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
             ready(function() {
                 new Editor({
-                    plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight",
-                        "justifyLeft", "justifyCenter", "justifyFull"], height: "100px"
+                    plugins: ["undo", "redo"], height: "100px"
                 }, "contexte");
                  new Editor({
-                    plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight",
-                        "justifyLeft", "justifyCenter", "justifyFull"], height: "100px"
+                    plugins: ["undo", "redo"], height: "100px"
                 }, "descriptif");
             });
             
@@ -229,7 +224,8 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                 ?>
             </select>
             <?php }else{?>
-            <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select" style="margin-left: 20px;" required="required">
+            <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select" style="margin-left: 20px;" required="required" >
+                 <!--   onchange="modifAutresCentrale('/<?php echo REPERTOIRE; ?>/modifBase/modifAutrecentrale.php?lang=<?php echo $lang; ?>&idcentrale=' + this.get('value'))">-->
                 <?php
                 $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=?
                 and masquecentrale!=TRUE order by idcentrale asc",'Autres');

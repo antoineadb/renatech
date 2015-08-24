@@ -123,8 +123,7 @@ function empty(mixed_var) {
 }
 
 function afficherAutre(id1, id2) {
-    if (dijit.byId(id1).value === 'Autres' || dijit.byId(id1).get('displayedValue') === 'Autres' || dijit.byId(id1).value === 'Others' || dijit.byId(id1).get('displayedValue') === 'Others') {
-        console.log(dijit.byId(id2));
+    if (dijit.byId(id1).value === 'Autres' || dijit.byId(id1).get('displayedValue') === 'Autres' || dijit.byId(id1).value === 'Others' || dijit.byId(id1).get('displayedValue') === 'Others') {        
         dijit.byId(id2).domNode.style.display = 'block';
     } else {
         dijit.byId(id2).domNode.style.display = 'none';
@@ -194,13 +193,13 @@ function addnomCentrale(nb) {
     } else {
         switch (nb) {
             case nb:
-                document.getElementById('personCent').style.display = 'block';
+                document.getElementById('personCent').style.display = 'block';                
                 for (i = 0;i <nb; i++) {
                     if(document.getElementById('divpersonne' + i)){
                         document.getElementById('divpersonne' + i).style.display = 'block';
                     }
                     if(dijit.byId('nomaccueilcentrale' + i)){
-                        dijit.byId('nomaccueilcentrale' + i).set('required', 'required');
+                        dijit.byId('nomaccueilcentrale' + i).set('required', 'required');                        
                     }
                     if(dijit.byId('prenomaccueilcentrale' + i)){
                         dijit.byId('prenomaccueilcentrale' + i).set('required', 'required');
