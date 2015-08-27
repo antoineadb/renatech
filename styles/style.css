@@ -379,7 +379,7 @@ a.infoBulle:hover span{
     text-decoration: none;
 }
 #new, #ident, #droit, #compte, #compteuser, #compteuserindust, #msg, #dev, #identpays, #identsa, #identte, #identds, #identne, #identtu, #identtp,#identtf,
-#identth, #identsf, #identac, #identvc, #identce, #identco{
+#identth, #identsf, #identac, #identvc, #identce, #identco,#identres{
     padding:20px 20px 20px 20px;
     border:solid 1px #5D8BA2;
     color:midnightblue;

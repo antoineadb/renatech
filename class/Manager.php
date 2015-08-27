@@ -1578,8 +1578,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $nomPaysen = $pays->getNompaysen();
             $idsituation_situationgeographique = $pays->getIdsituation_situationgeographique();
             $masquepays = $pays->getMasquepays();
-
-            $requete->bindParam(1, $idpays(), PDO::PARAM_INT);
+            $requete->bindParam(1, $idpays, PDO::PARAM_INT);
             $requete->bindParam(2, $nomPays, PDO::PARAM_STR);
             $requete->bindParam(3, $nomPaysen, PDO::PARAM_STR);
             $requete->bindParam(4, $idsituation_situationgeographique, PDO::PARAM_INT);

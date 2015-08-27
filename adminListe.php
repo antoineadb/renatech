@@ -296,9 +296,9 @@ if (isset($_SESSION['pseudo'])) {
                             <th>
                                 <?php
                                 if ($lang == 'fr') {
-                                    $rowpays = $manager->getList("SELECT nompays,idpays from pays  order by idpays asc;");
+                                    $rowpays = $manager->getList("SELECT nompays,idpays from pays  order by nompays asc;");
                                 } elseif ($lang == 'en') {
-                                    $rowpays = $manager->getList("SELECT nompaysen,idpays from pays  order by idpays asc;");
+                                    $rowpays = $manager->getList("SELECT nompaysen,idpays from pays  order by nompaysen asc;");
                                 }
                                 ?>
                                 <select  id="libellepays" data-dojo-type="dijit/form/FilteringSelect"  data-dojo-props="name: 'libellepays',value: '',required:false,placeHolder: '<?php echo TXT_SELECTEDPAYS; ?>'"
@@ -1332,7 +1332,7 @@ if (isset($_SESSION['pseudo'])) {
                         </table>
                     </fieldset>
                     <br>
-                    <fieldset id="identco" style="border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px">
+                    <fieldset id="identco" style="width:990px">
                         <legend><?php echo TXT_CODEUNITE . ' - ' . TXT_CENTRALE; ?></legend>
                         <table>
                             <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1396,7 +1396,7 @@ if (isset($_SESSION['pseudo'])) {
                     <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------
                     RESSOURCE
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------      -->
-                    <fieldset id="identre" style="border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px">
+                    <fieldset id="identre" style="width:990px">
                         <legend><?php echo TXT_RESSOURCE; ?></legend>
                         <table>
                             <tr>

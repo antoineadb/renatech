@@ -728,7 +728,7 @@ if (isset($_POST['page_precedente'])) {
                 $idautrequalite = IDNAAUTREQUALITE;
                 $idpersonneQualite = IDNAAUTRESQUALITE;
             } 
-           //echo '<pre>';print_r($_POST);die;          
+                 
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             //
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -752,7 +752,7 @@ if (isset($_POST['page_precedente'])) {
             //TRAITEMENT AJOUT DANS LA TABLE PERSONNEACCUEILCENTRALE            
             $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;            
             $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil),$idpersonneQualite,$idautrequalite);
-            //echo '<pre>';print_r($personne);
+            
             $manager->addPersonneaccueilcentrale($personne);
             //TRAITEMENT AJOUT DANS LA TABLE PROJETPERSONNEACCUEILCENTRALE
             $projetpersonneaccueilcentrale = new Projetpersonneaccueilcentrale($idprojet, $idpersonneaccueilcentrale);
@@ -1272,7 +1272,7 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateConcerne($concerne, $idprojet);
             $daterefus = new DateStatutRefusProjet($idprojet, $datejour);
             $manager->updateDateStatutRefuser($daterefus, $idprojet, $idcentrale);
-            include '../EmailProjetphase2Session.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
+            include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
             $_SESSION['idstatutprojet'] = $idstatutprojet; //NE PAS EFFACER ON A BESOIN DANS UPLOADPHASE2
         } elseif ($idstatutprojet == TRANSFERERCENTRALE) {
             $ancienStatut = $manager->getSinglebyArray("select idstatutprojet_statutprojet from concerne where idprojet_projet=? and idcentrale_centrale=?", array($idprojet, $IDCENTRALEUSER));

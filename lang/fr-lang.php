@@ -871,3 +871,4 @@ define ('TXT_VIDETOUSCACHE',"Videz tous le cache");
 define ("TXT_VIDECACHEDONNEE","Videz uniquement le cache des données");
 define ("TXT_VIDECACHE","Videz le cache");
 define("TXT_DUPLIQUERPROJET","Dupliquer un projet");
+define("TXT_ACRONYMEMODIFIER","L'acronyme est  modifié");

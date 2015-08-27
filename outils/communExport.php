@@ -49,7 +49,7 @@ if (!empty($row[$i]['interneexterne'])) {
     } elseif ($row[$i]['interneexterne'] == 'E') {
         $interne_externe = 'Externe';
     }
-} elseif (!empty($interneExterne) && $porteur == TRUE) {
+} elseif (!empty($interneExterne) && $porteur == TRUE) {//Si l'utilisateur est académique interne et si il est porteur
     $interne_externe = 'Interne';
 } else {
     $interne_externe = 'Externe';

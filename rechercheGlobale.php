@@ -281,8 +281,6 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                             )
                         );
             }
-            //$req =$manager->getList("select * from tmprecherche");echo '<pre>';print_r($req);die;
-            
             $porteur = '';
             $arrayporteur1 = $manager->getList("select distinct numero from tmprecherche");
             $arrayporteur = array();
@@ -295,7 +293,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                     if(!empty($porteur)){
                         $porteur=substr($porteur, 0,-1);
                         $numero = $value[0];                        
-                        $tmprecherche = new Tmprecherche($porteur, $numero);//echo '<pre>';print_r($tmprecherche);die;
+                        $tmprecherche = new Tmprecherche($porteur, $numero);
                         $manager->updateRecherche1($tmprecherche, $numero);
                     }
                 }

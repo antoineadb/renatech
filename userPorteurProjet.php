@@ -22,8 +22,6 @@ $nbarrayuserprojet = count($arrayuserprojet);
 fwrite($fprow, '{"items": [');
 for ($i = 0; $i < $nbarrayuserprojet; $i++) {
    $centraleuser= $manager->getList2("select libellecentrale,idcentrale from utilisateur,centrale where idcentrale_centrale=idcentrale and idutilisateur=?",$arrayuserprojet[$i]['idutilisateur']);
-    //echo '<pre>';print_r($centraleuser);echo '</pre>';exit();
-    
     if(empty($centraleuser[0]['idcentrale'])){
         $idcentraleuser='';
         $libellecentraleuser='';

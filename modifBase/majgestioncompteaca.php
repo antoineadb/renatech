@@ -28,7 +28,7 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
         $utilisateurnomresponsable = new UtilisateurNomresponsable($idutilisateur, null);
         $manager->updateUtilisateurNomresponsable($utilisateurnomresponsable, $idutilisateur);
 
-        $utilisateurmailresponsable = new UtilisateurMailresponsable($idutilisateur, null); //echo '<pre>';print_r($utilisateurmailresponsable);die;
+        $utilisateurmailresponsable = new UtilisateurMailresponsable($idutilisateur, null); 
         $manager->updateUtilisateurMailResponsable($utilisateurmailresponsable, $idutilisateur);
 
         $qualiteDemandeuraca = new UtilisateurQualiteaca($idqualitedemandeuraca, $idutilisateur);

@@ -455,7 +455,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                         <tr>
                             <th style="text-align: left;"><?php echo TXT_NOUVEAUDROIT; ?></th><td></td>
                             <td>
-                                <select name="libelledroit" id="libelledroit" data-dojo-type="dijit/form/Select" style="width: 220px;"
+                                <select name="libelledroit" id="libelledroit" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 50px;"
                                         data-dojo-props="  value: '' ,onChange:
                                         function(value){
                                             if(value=='tu4'){

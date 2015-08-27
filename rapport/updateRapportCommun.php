@@ -9,8 +9,7 @@ if (!empty($ancienidrapport)) {
     }elseif(isset($_POST['restaureLogo'])&& $_POST['restaureLogo']=='ok'){
         $logo = '';
     }
-    $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, nomFichierValidesansAccent($logo), nomFichierValidesansAccent($logocentrale), nomFichierValidesansAccent($figure), $idprojet, $legend, $datecreation, $datemisajour);        
-    //echo '<pre>';print_r($rapport);die;
+    $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, nomFichierValidesansAccent($logo), nomFichierValidesansAccent($logocentrale), nomFichierValidesansAccent($figure), $idprojet, $legend, $datecreation, $datemisajour);            
     $manager->updateRapport($rapport, $idprojet);
 } else {
     $datemisajour = NULL;

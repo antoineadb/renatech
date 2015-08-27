@@ -666,7 +666,6 @@ function supprLogoFigure(){
     $manager = new Manager($db);        
     $dir    = '../uploadlogo/';
     $arrayImages = scandir($dir);
-    //echo '<pre>';print_r($arrayImages);die;
     $nbarrayImg = count($arrayImages);
     for ($i = 0; $i < $nbarrayImg; $i++) {
         $idrapportLogo = $manager->getSinglebyArray("select idrapport from rapport where logo = ? or logocentrale =? or figure=?", array($arrayImages[$i],$arrayImages[$i],$arrayImages[$i]));

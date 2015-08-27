@@ -178,10 +178,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'moncompte.
         }
         $secteuractivite = new UserSecteurActivite($idsecteuractivite,$iduser);
         $manager->updateUserSecteurActivite($secteuractivite, $iduser);
-    }
-    
-    //echo '<pre>';print_r($_POST);die;
-    
+    }    
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
 //                                                                              TRAITEMENT CAS ACADEMIQUE
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -231,7 +228,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'moncompte.
             $nomEmployeur = new UtilisateurNomemployeur($iduser, IDAUTREEMPLOYEUR, $idautrenomemployeur);
             $manager->updateUtilisateurNomemployeur($nomEmployeur, $iduser);
         } else {
-            $nomemployeur = new UtilisateurNomemployeur($iduser, $idemployeur_nomemployeur, NAAUTREEMPLOYEUR); //echo '<pre>';print_r($nomemployeur);die;
+            $nomemployeur = new UtilisateurNomemployeur($iduser, $idemployeur_nomemployeur, NAAUTREEMPLOYEUR);
             $manager->updateUtilisateurNomemployeur($nomemployeur, $iduser);
         }
     }
@@ -342,8 +339,8 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'moncompte.
     $idautreDiscipline = $manager->getSingle("select max(idautrediscipline) from autredisciplinescientifique");
     if (isset($_POST['discipline'])) {
         if ($idautreDiscipline != IDAUTREDISCIPLINE && $_POST['discipline'] == 'di' . IDAUTREDISCIPLINE) {
-            if ($autrediscipline != $ancienAutreDiscipline) { //echo '$idautreDiscipline = '.$idautreDiscipline;die;
-                $autreDiscipline = new Autredisciplinescientifique($idautreDiscipline, $autrediscipline); //echo '<pre>';print_r($autreDiscipline);die;
+            if ($autrediscipline != $ancienAutreDiscipline) {
+                $autreDiscipline = new Autredisciplinescientifique($idautreDiscipline, $autrediscipline);
                 $manager->updateAutreDiscipline($autreDiscipline, $idautreDiscipline);
             }
         }
@@ -352,7 +349,6 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'moncompte.
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------   
 //                 CODE UNITE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------      
-    // echo '<pre>';print_r($_POST);die;
     $ancienCodeunite = 'cu' . $manager->getSingle2("SELECT idcentrale FROM  utilisateur,centrale WHERE idcentrale = idcentrale_centrale AND idutilisateur =?", $iduser);
     if (isset($_POST['codeunite']) && $_POST['codeunite'] != $ancienCodeunite) {
         if (strlen($_POST['codeunite']) > 3) {

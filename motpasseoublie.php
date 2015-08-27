@@ -6,8 +6,6 @@ include_once 'class/Manager.php';
 include_once 'outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-/*echo '<pre>';print_r($_SESSION);echo '</pre>';
-echo '<pre>';print_r($_GET);echo '</pre>';*/
 ?>
 <div id="global">
     <?php include 'html/entete.html'; ?>
