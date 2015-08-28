@@ -16,6 +16,7 @@ $exportRapportWord='/' . REPERTOIRE . "/exportreport/" . $lang;
 $Refusedprojects ='/'.REPERTOIRE."/controler/controleProjetRefuser.php?lang=".$lang;
 $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 $vueCentraleAN = '/'.REPERTOIRE.'/vueCentraleAN/'.$lang;
+$manual= '/'.REPERTOIRE.'/manuel/'.$lang;
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:620px;margin-left:58px">
@@ -34,6 +35,7 @@ $vueCentraleAN = '/'.REPERTOIRE.'/vueCentraleAN/'.$lang;
             <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTUTILISATEUR;?></a></li>
             <li><a href="<?php echo $exportenquete; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTENQUETE;?></a></li>
             <li><a href="<?php echo $exportRapportWord; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTREPORT; ?></a></li>
+            <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
         </ul> 
     </li>
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_COMPTES.'</u>'; ?></a>

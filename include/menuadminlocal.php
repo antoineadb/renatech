@@ -27,6 +27,7 @@ $traffic= '/'.REPERTOIRE.'/traffic/'.$lang;
 $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 $projetSansDev = '/'.REPERTOIRE.'/noDevProject/'.$lang;
 $viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
+$manual= '/'.REPERTOIRE.'/manuel/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:620px;margin-left:58px">
@@ -71,6 +72,7 @@ $viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
             <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>
             <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
             <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
+            <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
         </ul>
  
     </li>

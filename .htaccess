@@ -399,3 +399,4 @@ RewriteRule  empty_trash/([a-z]+)                                               
 RewriteRule   vueCentraleAN/([a-z]+)                                                vueCentraleAdminNational.php?lang=$1 [L]
 RewriteRule   videCache/([a-z]+)/([a-z]+)                                           videCache.php?lang=$1&t=$2 [L]
 RewriteRule   videCache/([a-z]+)                                                    videCache.php?lang=$1 [L]
+RewriteRule   manuel/([a-z]+)                                                       manuel.php?lang=$1 [L]

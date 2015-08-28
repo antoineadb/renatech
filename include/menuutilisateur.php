@@ -15,6 +15,7 @@ $rowprojetadmin = $manager->getList2("select idprojet from utilisateurAdministra
 $nbrowprojetadmin = count($rowprojetadmin);
 $controleSuiviProjetadmin = '/'.REPERTOIRE.'/mes_projets_admin/'.$lang;
 $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
+$manual= '/'.REPERTOIRE.'/manuel/'.$lang;
 ?>
 <div style="z-index: 5;  margin-left: -178px;" >
         
@@ -34,9 +35,11 @@ $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
      <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_DIVERS.'</u>'; ?></a>
         <ul style="z-index: 5;  ">            
             <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
+            <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
         </ul>
      <li><a href="<?php echo $moncompte;?>" style="font-weight: bold"><?php echo TXT_COMPTES; ?></a> </li>
-    <li><a href="<?php echo $logout; ?>" style="font-weight: bold"><?php echo TXT_DECONNECTER;?></a></li> 
+    <li><a href="<?php echo $logout; ?>" style="font-weight: bold"><?php echo TXT_DECONNECTER;?></a></li>
+    
 </ul>
 </div>
 <?php BD::deconnecter(); ?>
