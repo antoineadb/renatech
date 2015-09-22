@@ -200,7 +200,30 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
     </td>
     </tr>
 </tr> <tr><td>&nbsp;</td></tr>
-
+<script>
+    function disableCheckBoxAutrecentrale(id){
+        enableCheckBoxAutrecentrale(id);
+        var selectObject = dijit.byId(id);
+        var selectedCentrale =dijit.byId(id).get('displayedValue').replace('-','');
+        var libellecentrale = 'lbl'+selectedCentrale;
+        for (var i = 0; i < selectObject.options.length; i++) {
+            if (selectObject.options[i].selected) {
+                dijit.byId(selectedCentrale).set('disabled',true);
+                document.getElementById(libellecentrale).style.textDecoration  ='line-through';
+            }
+        }
+    }
+    function enableCheckBoxAutrecentrale(id){
+        var selectObject = dijit.byId(id);
+        for (var i = 1; i < selectObject.options.length; i++) {
+            var select = dijit.byId(id);
+            var idallcentrale =  select.options[i].label.replace('-','');
+            document.getElementById('lbl'+idallcentrale).style.textDecoration ='none';
+            dijit.byId(idallcentrale).set('disabled',false);
+            dijit.byId(idallcentrale).set('checked',false);
+        }
+    }
+</script>
 <tr><td>
         <fieldset id="ident">
             <legend>
@@ -213,8 +236,8 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
             <label for="centrale" style="width: 260px;margin-left: 20px;" ><?php echo TXT_CENTRALE.'*';?><?php echo ' :';?></label>
             <?php
             $arraycentrale=$manager->getList2("select idcentrale_centrale,libellecentrale from utilisateur,centrale where idcentrale = idcentrale_centrale and idlogin_loginpassword=?",$idlogin);                    
-            if(!empty($arraycentrale[0]['idcentrale_centrale'])){?>
-            <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select" style="margin-left: 20px;">
+            if(!empty($arraycentrale[0]['idcentrale_centrale'])){?>            
+            <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select" style="margin-left: 20px;" onchange="disableCheckBoxAutrecentrale(this.id)">
                 <?php
                 $rowcentrale = $manager->getListbyArray("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and masquecentrale!=TRUE and idcentrale != ? order by idcentrale asc",array('Autres',$arraycentrale[0]['idcentrale_centrale']));
                 echo "<option value='".'ce'.$arraycentrale[0]['idcentrale_centrale']."' selected='selected' >".$arraycentrale[0]['libellecentrale']."</option>";
@@ -224,8 +247,8 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                 ?>
             </select>
             <?php }else{?>
-            <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select" style="margin-left: 20px;" required="required" >
-                 <!--   onchange="modifAutresCentrale('/<?php echo REPERTOIRE; ?>/modifBase/modifAutrecentrale.php?lang=<?php echo $lang; ?>&idcentrale=' + this.get('value'))">-->
+                 
+            <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select" style="margin-left: 20px;" required="required"  onchange="disableCheckBoxAutrecentrale(this.id)">
                 <?php
                 $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=?
                 and masquecentrale!=TRUE order by idcentrale asc",'Autres');

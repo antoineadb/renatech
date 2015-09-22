@@ -12,7 +12,7 @@
     <table style='width:1010px'>
     <tr>
         <td style='float: left;'>
-                <label for="contactCentralAccueil" id='lblContactCentraleAccueil'  >
+            <label for="contactCentralAccueil" id='lblContactCentraleAccueil'  style="margin-left: 20px">
                     <?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
                 <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
                 <input data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  id="contactCentralAccueil" autocomplete="on"  maxlength="100" style="margin-left:20px"
@@ -551,7 +551,7 @@
                     </fieldset>
                     </td>
         </tr>
-        <tr><td><div style="margin-top: 15px"><?php include 'outils/ressourceCheck.php';?></div></td></tr>
+        <tr><td><div style="margin-top: 15px" class='check' ><?php include 'outils/ressourceCheck.php';?></div></td></tr>
                     <tr>
                         <td>
                             <label for="descriptifTechnologique" style="width: auto;margin-left: 20px;margin-top:15px">
@@ -662,26 +662,26 @@
                                     </tr><tr>    
                                         <td style="float: left;display:none" id="etapeautre1">
                                             <fieldset style="font-size: 1.1em;font-style: italic;width: 520px">
-                                                <legend><?php echo TXT_SELECTCENTRALES; ?></legend>
-                                                <input type="text" style="display: block" value="" id="nomCentrale">
-                                            <div id='chckautrecentrale' style="float: left;margin-bottom: 15px">
-                                                 <?php
+                                                <legend><?php echo TXT_SELECTCENTRALES; ?></legend>                                              
+                                                <div id='chckautrecentrale' style="float: left;margin-bottom: 15px"></div>                                                
+                                                  <?php                                                  
                                                 $row = $manager->getList("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE order by libelleCentrale asc");
-                                                for ($i = 0; $i < count($row); $i++) {
+                                                for ($i = 0; $i < count($row); $i++) {                                                
                                                     $libellecentrale = $row[$i][0];
-                                                    $villecentrale = $row[$i][1];
-                                                    echo
-                                                    "<input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" . str_replace('-', '', $libellecentrale) . "' "
-                                                    . "name='autrecentrale[]' value='" . $libellecentrale . "'  >
-                                                    <label for = '" . $libellecentrale . "' class='opt' > " . ($libellecentrale) . ' (<i>' . str_replace("''", "'", $villecentrale) . '</i>)' . "</label>";
-                                                    echo '<br>';
-                                                }                
+                                                    $villecentrale = $row[$i][1];?>
+                                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' data-dojo-id="<?php echo str_replace('-', '', $libellecentrale) ?>" 
+                                                        id="<?php  echo str_replace('-', '', $libellecentrale); ?>" name='autrecentrale[]'
+                                                        value='<?php echo $libellecentrale ?>'  >
+                                                        <label for = "<?php  echo str_replace('-', '', $libellecentrale); ?>" class='opt' id="<?php  echo 'lbl'.str_replace('-', '', $libellecentrale); ?>">
+                                                            <?php echo ($libellecentrale).' (<i>' . removeDoubleQuote($villecentrale) . '</i>)'?>
+                                                        </label>
+                                                <br>
+                                                <?php }
                                                 ?>
                                             </div>
                                             </fieldset>
                                         </td> 
-                                    </tr>
-                        <tr>                           
+                                    </tr>              
                         <tr>
                             <td><label id="cptetapeautrecentrale" style="width:450px;color:#B71701;margin-bottom: 10px;display: none "></label></td>
                         </tr>
@@ -714,7 +714,7 @@ function masquecentraleproximite(){
     document.getElementById('descriptioncentraleproximite').style.display = 'none';
     document.getElementById('affiche_centrale_proximite').value = 'non';
 }                            
-</script>                    
+</script>
 <input type='text' id='affiche_centrale_proximite' style='display: none' value='non'>
 <fieldset style="  padding:10px 15px 15px; border:solid 1px #5D8BA2; margin-right: 20px;margin-top: 15px;width:958px;
                   margin-bottom: 15px;margin-left: 20px;color:midnightblue;font-family:verdana;border-radius: 5px;border-radius: 5px 5px 5px 5px;border-color: #5D8BA2;" >
@@ -724,10 +724,8 @@ function masquecentraleproximite(){
 <table>
     <tr>
         <td><label for="centraleproximite" style="width:918px;margin-left: 20px;;margin-top: 10px"><?php echo TXT_QUESTIONCENTRALEPROXIMITE; ?></label>                                    
-            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"   value="TRUE"  class="btRadio" style="margin-left: 20px;" onclick="affichecentraleproximite()">
-            <?php echo TXT_OUI; ?>
-            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" checked="checked" class="btRadio" style="margin-left: 20px;"onclick="masquecentraleproximite()">
-            <?php echo TXT_NON; ?>
+            <input type="radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"   value="TRUE"  class="btRadio" style="margin-left: 20px;" onclick="affichecentraleproximite()"><?php echo TXT_OUI; ?>
+            <input type="radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" checked="checked" class="btRadio" style="margin-left: 20px;" onclick="masquecentraleproximite()"><?php echo TXT_NON; ?>
         </td>    
     </tr>
 </table>

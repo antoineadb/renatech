@@ -39,27 +39,25 @@ if (isset($_POST['autrecentrale']) && !empty($_POST['autrecentrale'])) {
         $idautrecentrale.=$manager->getSingle2("select idcentrale from centrale where libellecentrale=?", $_POST['autrecentrale'][$i]) . ',';
     }
 }
+
 $idAutrecentrale = substr($idautrecentrale, 0, -1);
-if ($cas == 'mise a jour') {
-    header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
-} elseif ($cas == 'mise a jourEmail') {
+if ($cas == 'miseAJourEmail') {
     header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJ.php?lang=' . $lang . '&idprojet=' . $idprojet . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale']);
-} elseif ($cas == 'mise a jourEmailAutreEmail') {
-    include 'EmailProjephase2tMAJ.php';
-    header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);    
-} elseif($cas=='creationprojetphase2etape' || $cas=='creerprojetphase2'){
-    header('Location: /' . REPERTOIRE . '/EmailProjetphase2Session.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale'] . '&etautrecentrale=' . $etautrecentrale);
-}elseif ($cas == 'changement de statut') {
-    if ($idstatutprojet == CLOTURE) {
-        header('Location: /' . REPERTOIRE . '/closed_project/' . $lang . '/' . $idprojet . '/' . $idstatutprojet);
-        exit();
-    } elseif ($idstatutprojet != REFUSE) {
+    exit();
+}elseif($cas=='creationprojetphase2etape' || $cas=='creerprojetphase2'){
+    header('Location: /' . REPERTOIRE . '/EmailProjetphase2Session.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet . '&nbpersonne=' 
+            . $_POST['nombrePersonneCentrale'] . '&etautrecentrale=' . $etautrecentrale);
+}elseif ($cas == 'chgstatut'|| $cas == 'chgstatutAutCentraleEmailJammaisEnvoye'|| $cas == 'chgstatutAutCentraleEmailDejaEnvoye' ) {
+    if ($idstatutprojet != REFUSE) {//email?
         header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
         exit();
-    } else {
-        header('Location: /' . REPERTOIRE . '/RefusedProject/' . $lang . '/' . $idprojet . '/' . $numero . '/' . $idcentrale . '/' . rand(0, 100000));
-        exit();
     }
+}elseif($cas=='miseAJourEmailAutreCentrale'){
+    header('Location: /' . REPERTOIRE . '/EmailProjetphase2Session.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet 
+            . '&nbpersonne=' . $_POST['nombrePersonneCentrale'] . '&etautrecentrale=' . $etautrecentrale.'&majcentrale=oui');
+}elseif($cas=='miseAJourEmailautreEmailpremierefois'){
+     include 'outils/envoiEmailAutreCentrale.php';
+    header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJ.php?lang=' . $lang . '&idprojet=' . $idprojet . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale']);
 }else {
     header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
 }

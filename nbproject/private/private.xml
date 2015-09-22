@@ -12,10 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/projetRenatechNV/include/menuutilisateur.php</file>
-            <file>file:/G:/projetRenatechNV/manuel.php</file>
-            <file>file:/G:/projetRenatechNV/include/menuadminnationnal.php</file>
-            <file>file:/G:/projetRenatechNV/include/menuadminlocal.php</file>
+            <file>file:/G:/projetRenatechNV/EmailProjetphase2.php</file>
+            <file>file:/G:/projetRenatechNV/modifBase/updateProjetphase2.php</file>
+            <file>file:/G:/projetRenatechNV/EmailProjetphase2Session.php</file>
+            <file>file:/G:/projetRenatechNV/uploadphase2.php</file>
         </group>
     </open-files>
 </project-private>

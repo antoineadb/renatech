@@ -11,7 +11,6 @@ if (is_file('../outils/toolBox.php')) {
 } elseif (is_file('outils/toolBox.php')) {
     include_once 'outils/toolBox.php';
 }
-
 if (!is_file('PHPMailer_5.2.4/class.phpmailer.php')) {
     include_once '../PHPMailer_5.2.4/class.phpmailer.php';
 } else {
@@ -27,7 +26,13 @@ define('SMTPSECURE', 'ssl');
 define('PORT', Chiffrement::decrypt('p9T+WHQqGP9FmcWWGqGyWw=='));
 define('USERNAME', Chiffrement::decrypt('kvwqIXYTEkx5pEROS9i5Rw=='));
 define('PASSWORD', Chiffrement::decrypt('rGGUOsDRwshC2hbkKYuowA=='));
-
+/**
+ * 
+ * @param type $body  string
+ * @param type $sujet string
+ * @param type $email array
+ * @param type $cc array
+ */
 function envoieEmail($body, $sujet, $email, $cc) {
 
     $mail = new PHPMailer(true); // the true param means it will throw exceptions on errors, which we need to catch

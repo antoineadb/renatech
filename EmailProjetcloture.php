@@ -56,7 +56,7 @@ if (isset($_SESSION['numprojet'])) {
 }
 
 $titreProjet = $manager->getSingle("select titre from projet where numero='" . $numprojet . "'");
-$titre = str_replace("''", "'", utf8_decode($titreProjet));
+$titre = removeDoubleQuote(utf8_decode($titreProjet));
 $txtbodyref = html_entity_decode((utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_BOBYREF'))))));
 $sujet = html_entity_decode(TXT_MAJPROJET,ENT_QUOTES, 'UTF-8').' : '  . $titre . ' ' . $txtbodyref . ' ' . $numprojet;
 $body = utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_MRSMR')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_BODYEMAILCLOTURE')))) .'<br><br>'.

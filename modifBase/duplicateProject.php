@@ -17,33 +17,32 @@ if (isset($_SESSION['pseudo'])) {
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
-if(isset($_GET['idprojet'])&& !empty($_GET['idprojet'])){
+if (isset($_GET['idprojet']) && !empty($_GET['idprojet'])) {
     $idprojet = $_GET['idprojet'];
     $arrayProjet = $manager->getList2("select * from projet where idprojet=?", $idprojet);
-    $newIdProjet= $manager->getSingle("select max(idprojet) from projet")+1;    
+    $newIdProjet = $manager->getSingle("select max(idprojet) from projet") + 1;
     $numero = createNumProjet($manager->getSingle("select max(numero) from projet"));
-    
-    $projetPhase1 = new Projetphase1($newIdProjet, '--copy--'.$arrayProjet[0]['titre'], $numero, $arrayProjet[0]['confidentiel'], $arrayProjet[0]['description'], $arrayProjet[0]['dateprojet'], $arrayProjet[0]['contexte'], 
-            $arrayProjet[0]['idtypeprojet_typeprojet'], $arrayProjet[0]['attachement'], $arrayProjet[0]['acronyme']);
+
+    $projetPhase1 = new Projetphase1($newIdProjet, '--copy--' . $arrayProjet[0]['titre'], $numero, $arrayProjet[0]['confidentiel'], $arrayProjet[0]['description'], $arrayProjet[0]['dateprojet'], $arrayProjet[0]['contexte'], $arrayProjet[0]['idtypeprojet_typeprojet'], $arrayProjet[0]['attachement'], $arrayProjet[0]['acronyme']);
     $manager->addProjetphase1($projetPhase1);
-    
-    
+
+
     $idutilisateur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur,loginpassword WHERE idlogin = idlogin_loginpassword AND pseudo =?", $_SESSION['pseudo']);
     $creer = new Creer($idutilisateur, $newIdProjet);
     $manager->addCreer($creer);
-    
+
     $idcentrale = $manager->getList2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
-    if(count($idcentrale)==1){
+    if (count($idcentrale) == 1) {
         $concerne = new Concerne($idcentrale[0]['idcentrale_centrale'], $newIdProjet, ENATTENTEPHASE2, "");
-    }else{
-        if($_SESSION['idTypeUser']==ADMINLOCAL){
+    } else {
+        if ($_SESSION['idTypeUser'] == ADMINLOCAL) {
             $libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM loginpassword,utilisateur,centrale WHERE idlogin = idlogin_loginpassword AND idcentrale_centrale = idcentrale and pseudo=?", $_SESSION['pseudo']);
-            header('Location: /' . REPERTOIRE . "/projet_centrale/" . $lang."/".$libellecentrale.'/err');
-        }else{
-            header('Location: /' . REPERTOIRE . "/mes_projets/" . $lang."/err");
+            header('Location: /' . REPERTOIRE . "/projet_centrale/" . $lang . "/" . $libellecentrale . '/err');
+        } else {
+            header('Location: /' . REPERTOIRE . "/mes_projets/" . $lang . "/err");
         }
     }
-    $manager->addConcerne($concerne);    
+    $manager->addConcerne($concerne);
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              SourceFinancement
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------            
@@ -79,7 +78,7 @@ if(isset($_GET['idprojet'])&& !empty($_GET['idprojet'])){
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
     $arrayautrecentrale = $manager->getList2("SELECT idcentrale FROM  projetautrecentrale WHERE idprojet=?", $idprojet);
     for ($i = 0; $i < count($arrayautrecentrale); $i++) {
-        $projetAutreCentrale = new Projetautrecentrale($arrayautrecentrale[$i]['idcentrale'], $newIdProjet);
+        $projetAutreCentrale = new Projetautrecentrale($arrayautrecentrale[$i]['idcentrale'], $newIdProjet, FALSE);
         $manager->addprojetautrescentrale($projetAutreCentrale);
     }
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -94,31 +93,21 @@ if(isset($_GET['idprojet'])&& !empty($_GET['idprojet'])){
 //                                                                              Rappport
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------         
     $arrayRapport = $manager->getList2("select * from rapport where idprojet=?", $idprojet);
-    if(!empty($arrayRapport)){
-    $idrapport = $manager->getSingle("select max(idrapport) from rapport")+1;
-    $rapport = new Rapport($idrapport, $arrayRapport[0]['title'], $arrayRapport[0]['author'], $arrayRapport[0]['entity'], $arrayRapport[0]['villepays'], $arrayRapport[0]['instituteinterest'], $arrayRapport[0]['fundingsource'], $arrayRapport[0]['collaborator'],
-            $arrayRapport[0]['thematics'], $arrayRapport[0]['startingdate'], $arrayRapport[0]['objectif'],$arrayRapport[0]['results'], $arrayRapport[0]['valorization'], $arrayRapport[0]['technologicalwc'], $arrayRapport[0]['logo'],$arrayRapport[0]['logocentrale'],
-            $arrayRapport[0]['figure'], $newIdProjet, $arrayRapport[0]['legend'], $arrayRapport[0]['datecreation'], $arrayRapport[0]['datemiseajour']);
-    $manager->addrapport($rapport);
+    if (!empty($arrayRapport)) {
+        $idrapport = $manager->getSingle("select max(idrapport) from rapport") + 1;
+        $rapport = new Rapport($idrapport, $arrayRapport[0]['title'], $arrayRapport[0]['author'], $arrayRapport[0]['entity'], $arrayRapport[0]['villepays'], $arrayRapport[0]['instituteinterest'], $arrayRapport[0]['fundingsource'], $arrayRapport[0]['collaborator'], $arrayRapport[0]['thematics'], $arrayRapport[0]['startingdate'], $arrayRapport[0]['objectif'], $arrayRapport[0]['results'], $arrayRapport[0]['valorization'], $arrayRapport[0]['technologicalwc'], $arrayRapport[0]['logo'], $arrayRapport[0]['logocentrale'], $arrayRapport[0]['figure'], $newIdProjet, $arrayRapport[0]['legend'], $arrayRapport[0]['datecreation'], $arrayRapport[0]['datemiseajour']);
+        $manager->addrapport($rapport);
     }
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              Rappport
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------         
-    
-    
-    $projetPhase2 = new Projetphase2($arrayProjet[0]['contactscentraleaccueil'], $arrayProjet[0]['idtypeprojet_typeprojet'], $arrayProjet[0]['nbheure'], $arrayProjet[0]['datedebutprojet'],$arrayProjet[0]['dureeprojet'], 
-            $arrayProjet[0]['idperiodicite_periodicite'], $arrayProjet[0]['centralepartenaireprojet'], $arrayProjet[0]['idthematique_thematique'], $arrayProjet[0]['idautrethematique_autrethematique'], $arrayProjet[0]['descriptiftechnologique'],
-            $arrayProjet[0]['attachementdesc'],$arrayProjet[0]['verrouidentifiee'], $arrayProjet[0]['nbplaque'], $arrayProjet[0]['nbrun'], $arrayProjet[0]['envoidevis'], $arrayProjet[0]['emailrespdevis'], $arrayProjet[0]['reussite'],
-            $arrayProjet[0]['refinterneprojet'], $arrayProjet[0]['devtechnologique'], $arrayProjet[0]['nbeleve'], $arrayProjet[0]['nomformateur'], $arrayProjet[0]['partenaire1'], $arrayProjet[0]['porteurprojet'], $arrayProjet[0]['dureeestime'], 
-            $arrayProjet[0]['periodestime'], $arrayProjet[0]['descriptionautrecentrale'], $arrayProjet[0]['etapeautrecentrale'], $arrayProjet[0]['centraleproximite'], $arrayProjet[0]['descriptioncentraleproximite'],
-            $arrayProjet[0]['interneexterne'],$arrayProjet[0]['internationalnational']);
-    $manager->updateProjetphase2($projetPhase2, $newIdProjet);            
-    
+    $projetPhase2 = new Projetphase2($arrayProjet[0]['contactscentraleaccueil'], $arrayProjet[0]['idtypeprojet_typeprojet'], $arrayProjet[0]['nbheure'], $arrayProjet[0]['datedebutprojet'], $arrayProjet[0]['dureeprojet'], $arrayProjet[0]['idperiodicite_periodicite'], $arrayProjet[0]['centralepartenaireprojet'], $arrayProjet[0]['idthematique_thematique'], $arrayProjet[0]['idautrethematique_autrethematique'], $arrayProjet[0]['descriptiftechnologique'], $arrayProjet[0]['attachementdesc'], $arrayProjet[0]['verrouidentifiee'], $arrayProjet[0]['nbplaque'], $arrayProjet[0]['nbrun'], $arrayProjet[0]['envoidevis'], $arrayProjet[0]['emailrespdevis'], $arrayProjet[0]['reussite'], $arrayProjet[0]['refinterneprojet'], $arrayProjet[0]['devtechnologique'], $arrayProjet[0]['nbeleve'], $arrayProjet[0]['nomformateur'], $arrayProjet[0]['partenaire1'], $arrayProjet[0]['porteurprojet'], $arrayProjet[0]['dureeestime'], $arrayProjet[0]['periodestime'], $arrayProjet[0]['descriptionautrecentrale'], $arrayProjet[0]['etapeautrecentrale'], $arrayProjet[0]['centraleproximite'], $arrayProjet[0]['descriptioncentraleproximite'], $arrayProjet[0]['interneexterne'], $arrayProjet[0]['internationalnational']);
+    $manager->updateProjetphase2($projetPhase2, $newIdProjet);
 }
 $videCache->clear();
-if($_SESSION['idTypeUser']==ADMINLOCAL){
+if ($_SESSION['idTypeUser'] == ADMINLOCAL) {
     header('Location: /' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang);
-}else{
+} else {
     header('Location: /' . REPERTOIRE . "/controler/controleSuiviProjet.php?lang=" . $lang);
 }
 BD::deconnecter();

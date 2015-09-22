@@ -14,7 +14,7 @@ if (isset($_SESSION['pseudo'])) {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
 include_once '../class/Cache.php';
-$videCache = new Cache(REP_ROOT . '/cache', 1);
+$videCache = new Cache(REP_ROOT . '/cache/'.LIBELLECENTRALEUSER.'/', 1);
         
 
 

@@ -42,7 +42,6 @@ $body = htmlentities(str_replace("''","'",stripslashes(affiche('TXT_PROJETNUM1')
         htmlentities(str_replace("''","'",stripslashes(affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(str_replace("''","'",stripslashes(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>'
         . '<a href="https://www.renatech.org/projet">' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>' .
         htmlentities(str_replace("''","'",stripslashes(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
-
 envoieEmail($body, $sujet, $arrayEmail, '');
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //		ENVOI DE L'INFORMATION DE L'ACCEPTATION DU PROJET PAR LA CENTRALE AU DEMANDEUR
@@ -82,6 +81,7 @@ $body1 = htmlentities(str_replace("''","'",stripslashes(affiche('TXT_MRSMR'))), 
         '<br><br>' . htmlentities(str_replace("''","'",stripslashes(affiche('TXT_EMAILADDRESSCENTRAL'))), ENT_QUOTES, 'UTF-8') . ' ' . htmlentities($centrale, ENT_QUOTES, 'UTF-8') . ' <br> ' . $emailCentrale . '<br>' .
         htmlentities(str_replace("''","'",stripslashes(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br>' .
         htmlentities(str_replace("''","'",stripslashes(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
+
 envoieEmail($body1, $sujet1, $maildemandeur, $mailCC); //envoie de l'email au responsable centrale et au copiste
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //			FIN

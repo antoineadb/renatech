@@ -1,8 +1,8 @@
 <?php 
-include_once '../class/Manager.php';
+include_once 'class/Manager.php';
 $db = BD::connecter();
 $manager = new Manager($db);
-include_once '../class/email.php';
+include_once 'class/email.php';
 $arrayid = $manager->getList2("select idcentrale from projetautrecentrale where idprojet=?", $idprojet);
 if(empty($numprojet)){
     $numprojet = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
@@ -50,20 +50,18 @@ if(empty($descriptionautrecentrale)){
 }
 $slibellecentrale = substr($sLibellecentrale, 0, -2);
 $centraleaccueil = $manager->getSingle2("select libellecentrale from concerne,centrale where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
-$body = (htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8')) . '<br><br>' .
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_BODYEMAILDEANDESOUTIENT'))), ENT_QUOTES, 'UTF-8') . ': ' . $numprojet . ' ' .
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_BODYEMAILDEPOSECENTRALE'))), ENT_QUOTES, 'UTF-8') . ': ' .
-        htmlentities($centraleaccueil, ENT_QUOTES, 'UTF-8') . ', ' .
-        htmlentities(stripslashes(removeDoubleQuote((affiche('TXT_ETAPE')))), ENT_QUOTES, 'UTF-8').'<br><br>'.
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_BODYEMAILDESCENTRALPART'))), ENT_QUOTES, 'UTF-8') . '<br>' .
-        htmlentities(removeDoubleQuote($descriptionautrecentrale),ENT_QUOTES,'UTF-8'). '<br><br><br>' .
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_bodyEMAILCENTRALPART'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_ADRESSEEMAILPART'))), ENT_QUOTES, 'UTF-8') . ' ' . $slibellecentrale . '<br>' .
-        $semailcentrale . '<br><br><br><br>' .
+$body = utf8_decode(htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8')) . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILDEANDESOUTIENT'))), ENT_QUOTES, 'UTF-8') . ': ' . $numprojet . ' ' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILDEPOSECENTRALE'))), ENT_QUOTES, 'UTF-8') . ': ' .
+        htmlentities($slibellecentrale, ENT_QUOTES, 'UTF-8') .' '.htmlentities(stripslashes(removeDoubleQuote( strip_tags(affiche('TXT_ETAPEAUTREMAJ')))), ENT_QUOTES, 'UTF-8') .'<br><br>' .
+        
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_bodyEMAILCENTRALPART'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_ADRESSEEMAILPART'))), ENT_QUOTES, 'UTF-8') .$semailcentrale . '<br><br><br><br>' .
         "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br><br>' .
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 $sujet = utf8_decode(TXT_PROJETNUM) . $numprojet;
 envoieEmail($body, $sujet, $maildestinataire, $mailCC);
 $db = BD::deconnecter();

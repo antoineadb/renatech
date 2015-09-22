@@ -203,24 +203,3 @@ function callbackmodifAcronyme(reponse) {
       document.getElementById('afficheMessage').style.display='none';
     }
 }
-
-/**
- * 
- * @param {type} cheminEtFichierPhp
- * @returns {undefined}
- */
-function modifAutresCentrale(cheminEtFichierPhp) {
-    var xhr2 = getXMLHttpRequest();
-    xhr2.onreadystatechange = function () {
-        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
-            callbackmodifAutrecentrale(xhr2.responseText);
-        }
-    };
-
-    xhr2.open("GET", cheminEtFichierPhp, true);
-    xhr2.send(null);
-}
-
-function callbackmodifAutrecentrale(reponse) {
-    document.getElementById('nomCentrale').value = reponse; //affiche dans le div de reponse
-}

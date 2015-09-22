@@ -321,7 +321,7 @@ if (isset($_SESSION['pseudo'])) {
                             <td>
                                 <label for="<?php echo 'telaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_TELEPHONE; ?></label>
                                 <input type="text" name="<?php echo 'telaccueilcentrale' . $i; ?>"  data-dojo-type="dijit/form/ValidationTextBox"  style="width: 317px" maxlength="20"
-                                       data-dojo-props="<?php echo REGEX_TEL;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?>'"  autocomplete="on" disabled="<?php echo $bool; ?>"
+                                       data-dojo-props="<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?>'"  autocomplete="on" disabled="<?php echo $bool; ?>"
                                        value="<?php
                                        if (isset($arraypersonnecentrale[$i]['telaccueilcentrale']) && !empty($arraypersonnecentrale[$i]['telaccueilcentrale'])) {
                                            echo $arraypersonnecentrale[$i]['telaccueilcentrale'];

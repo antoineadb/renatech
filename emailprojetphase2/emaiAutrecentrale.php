@@ -27,7 +27,7 @@ for ($i = 0; $i < count($arrayid); $i++) {
 $maildestinataire = $emailcentrales;
 $mailDemandeur = array_merge($maildemandeur, $mailCC);
 $semailcentrale = '<br>' . substr($sEmailcentrale, 0, -1);
-
+$descriptionautrecentrale = $manager->getSingle2("select descriptionautrecentrale from projet where idprojet=?",$idprojet);
 $body = utf8_decode(htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8')) . '<br><br>' .
         htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILDEANDESOUTIENT'))), ENT_QUOTES, 'UTF-8') . ': ' . $numprojet . ' ' .
         htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILDEPOSECENTRALE'))), ENT_QUOTES, 'UTF-8') . ': ' .

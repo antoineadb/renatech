@@ -59,22 +59,24 @@ include 'html/header.html';
                     <tr><td>
                             <?php if (isset($_POST['academiqueinterne'])) { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueinterne' name='academiqueinterne' value="true" checked />
-                                <label for='test' class='opt' ><?php echo TXT_ACADEMIQUEINTERNE; ?></label>
+                                <label for='academiqueinterne' class='opt' ><?php echo TXT_ACADEMIQUEINTERNE; ?></label>
                             <?php } else { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueinterne' name='academiqueinterne' value="true"  checked />
-                                <label for='test' class='opt' ><?php echo TXT_ACADEMIQUEINTERNE; ?></label>
-                            <?php }if (isset($_POST['academiqueexterne'])) { ?>
+                                <label for='academiqueinterne' class='opt' ><?php echo TXT_ACADEMIQUEINTERNE; ?></label>
+                            <?php }
+                            if (isset($_POST['academiqueexterne'])) { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne' value="true"  checked />
-                                <label for='test' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
+                                <label for='academiqueexterne' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
                             <?php } else { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne' value="true"   checked />
-                                <label for='test' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
-                            <?php }if (isset($_POST['industriel'])) { ?>
+                                <label for='academiqueexterne' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
+                            <?php }
+                            if (isset($_POST['industriel'])) { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true"  checked checked />
-                                <label for='test' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
+                                <label for='industriel' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
                             <?php } else { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true"   checked />
-                                <label for='test' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
+                                <label for='industriel' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
                             <?php } ?>
                         </td></tr>
                 </table>
@@ -103,7 +105,7 @@ include 'html/header.html';
                 $iduser = $_GET['iduser'];
                 $row = $manager->getList2("
 SELECT u.nom,u.prenom,u.adresse,u.ville,u.codepostal,u.telephone,u.fax,u.idpays_pays,u.idqualitedemandeuraca_qualitedemandeuraca,l.pseudo,l.mail,l.actif,qa.libellequalitedemandeuraca,n.libelleemployeur,n.idemployeur,an.libelleautrenomemployeur,at.libelleautrestutelle,t.idtutelle,t.libelletutelle,d.libellediscipline,d.iddiscipline,ad.libelleautrediscipline,
-at.idautrestutelle,an.idautrenomemployeur,ad.idautrediscipline,u.nomresponsable,u.mailresponsable,u.idtypeutilisateur_typeutilisateur,administrateur
+at.idautrestutelle,an.idautrenomemployeur,ad.idautrediscipline,u.nomresponsable,u.mailresponsable,u.idtypeutilisateur_typeutilisateur,u.administrateur,u.entrepriselaboratoire,u.acronymelaboratoire
 FROM utilisateur u,loginpassword l,qualitedemandeuraca qa,nomemployeur n,autrenomemployeur an,autrestutelle at,tutelle t,autrecodeunite ac,disciplinescientifique d,autredisciplinescientifique ad
 WHERE l.idlogin = u.idlogin_loginpassword AND qa.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca AND
 n.idemployeur = u.idemployeur_nomemployeur AND an.idautrenomemployeur = u.idautrenomemployeur_autrenomemployeur AND 
@@ -135,6 +137,8 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                     $actif = $row[$i]['actif'];
                     $iddroit = $row[$i]['idtypeutilisateur_typeutilisateur'];
                     $administrateur = $row[$i]['administrateur'];
+                    $acronymelaboratoire = $row[$i]['acronymelaboratoire'];
+                    $entrepriselaboratoire = $row[$i]['entrepriselaboratoire'];
                 }
                 if (empty($actif)) {
                     $valeuractif = TXT_NONACTIF;
@@ -274,7 +278,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                         <td valign="top"><?php echo TXT_NOMRESPONSABLE; ?> </td><td></td>
                                         <td>
                                             <input type="text" required="required" style="width: 318px;margin-left: 50px"  name="nomresponsable" id="nomresponsable"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" value="<?php echo $nomResponsable; ?>"
-                                                   data-dojo-props="regExp:'[a-zA-Z0-9$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
+                                                   data-dojo-props="<?php echo REGEX_TYPE;?>" />
                                         </td>
                                     </tr>
                                 <tr   id="trmailresponsable">
@@ -289,7 +293,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                     <td valign="top"><?php echo TXT_NOMRESPONSABLE; ?> </td><td></td>
                                     <td>
                                         <input type="text" required="required" style="width: 318px;margin-left: 50px"  name="nomresponsable" id="nomresponsable"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
-                                               data-dojo-props="regExp:'[a-zA-Z0-9$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
+                                               data-dojo-props="<?php echo REGEX_TYPE;?>" />
                                     </td>
                                 </tr>
                                 <tr   id="trmailresponsable" style="display: none">
@@ -361,7 +365,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                 <td>
                                     <input type="text"  style="width: 318px;margin-left: 50px"  id="autreTutelle"  name="autreTutelle" data-dojo-type="dijit/form/ValidationTextBox" value="<?php
                                     if ($libelleautrestutelle != 'n/a') {
-                                        echo stripslashes(str_replace("''", "'", $libelleautrestutelle));
+                                        echo stripslashes(removeDoubleQuote($libelleautrestutelle));
                                     }
                                     ?>"/>
                                 </td>                           
@@ -391,20 +395,27 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                 <td>
                                     <input type="text" id="autreDiscipline" style="width: 318px;margin-left: 50px"  name="autreDiscipline" data-dojo-type="dijit/form/ValidationTextBox" value="<?php
                                     if ($libelleautrediscipline != 'n/a') {
-                                        echo stripslashes(str_replace("''", "'", ($libelleautrediscipline)));
+                                        echo stripslashes(removeDoubleQuote($libelleautrediscipline));
                                     } 
                                     ?>" required="required" />
                                 </td>
                             </tr>
                             <!--  ACRONYME DU LABORATOIRE -->
-                            <?php
-                            $acronymelaboratoire = $manager->getSingle2("select acronymelaboratoire from utilisateur where idutilisateur =?", $_GET['iduser']);
-                            ?>
                             <tr>
                                 <th style="text-align: left"><?php echo TXT_NOMLABO; ?></th><td></td>
                                 <td>
-                                    <input type="text" required="required" style="width: 318px;margin-left: 50px"  name="acronymelaboratoire" id="acronymelaboratoire"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" value="<?php echo stripslashes(str_replace("''", "'", $acronymelaboratoire)); ?>"
-                                           placeholder="<?php echo TXT_NOMLABO; ?>"   data-dojo-props="regExp:'[a-zA-Z0-9àáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'"  />
+                                    <input type="text"  style="width: 318px;margin-left: 50px"  name="acronymelaboratoire" id="acronymelaboratoire"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
+                                           value="<?php echo removeDoubleQuote(stripslashes($acronymelaboratoire)); ?>"
+                                           placeholder="<?php echo TXT_NOMLABO; ?>"   data-dojo-props="<?php echo REGEX_TYPE;?>"  />
+                                </td>
+                            </tr>
+                            <!--  ENTREPRISE  LABORATOIRE -->
+                            <tr>
+                                <th style="text-align: left"><?php echo TXT_NOMLABOENTREPRISE; ?></th><td></td>
+                                <td>
+                                    <input type="text"  style="width: 318px;margin-left: 50px"  name="entrepriselaboratoire" id="entrepriselaboratoire"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
+                                           value="<?php echo removeDoubleQuote(stripslashes($entrepriselaboratoire))?>"
+                                           placeholder="<?php echo TXT_NOMLABOENTREPRISE; ?>"   data-dojo-props="<?php echo REGEX_TYPE;?>"  />
                                 </td>
                             </tr>
                             <tr>
@@ -609,6 +620,13 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                 } else {
                                     acronymelaboratoire = "";
                                 }
+                                
+                                 if (!empty(dijit.byId('entrepriselaboratoire'))) {
+                                    var entrepriselaboratoire = dijit.byId('entrepriselaboratoire').value;
+                                } else {
+                                    entrepriselaboratoire = "";
+                                }
+                                
                                 if (!empty(dijit.byId('centrale'))) {
                                     var centrale = dijit.byId('centrale').value;
                                 } else {
@@ -623,7 +641,8 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                 
                                 
                                 window.location.replace("<?php echo '/'.REPERTOIRE ?>/modifBase/majgestioncompteaca.php?pseudo="+pseudo+"&mail="+mail+"&nomuser="+nomuser+"&prenomuser="+prenomuser+"&pays="+nompays+"&teluser="+teluser+
-                                        "&faxuser="+faxuser+"&adresseuser="+adresseuser+"&codepostal="+codepostal+"&ville="+ville+"&qualitedemandeuraca="+idqualitedemandeuraca+"&nomresponsable=" + nomresponsable +"&mailresponsable=" + mailresponsable + "&acronymelaboratoire=" + acronymelaboratoire + "&idemployeur=" + idemployeur + "&role=" + role + "&idtutelle=" + idtutelle 
+                                        "&faxuser="+faxuser+"&adresseuser="+adresseuser+"&codepostal="+codepostal+"&ville="+ville+"&qualitedemandeuraca="+idqualitedemandeuraca+"&nomresponsable=" + nomresponsable +"&mailresponsable=" + mailresponsable 
+                                        + "&acronymelaboratoire=" + acronymelaboratoire + "&entrepriselaboratoire=" + entrepriselaboratoire + "&idemployeur=" + idemployeur + "&role=" + role + "&idtutelle=" + idtutelle 
                                 + "&libelleautretutelle=" + libelleautretutelle + "&libelleautrenomemployeur=" + libelleautrenomemployeur + "&iddiscipline=" + iddiscipline + "&centrale=" + centrale 
                                 + "&libelleautrediscipline=" + libelleautrediscipline + "&iduser=" +<?php echo $iduser; ?> + "&statutcompte=" + statutcompte +"&admin="+admin+ "&page_precedente=<?php echo basename(__FILE__); ?>");
                             }
@@ -662,7 +681,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                 $iduser = $_GET['iduser'];
                 $rowindust = $manager->getListbyArray(
                         "SELECT l.pseudo,u.nom,u.prenom,l.mail,u.adresse,u.ville,u.codepostal,u.telephone,u.fax,u.idpays_pays,l.actif,t.idtypeentreprise, t.libelletypeentreprise, s.idsecteuractivite, s.libellesecteuractivite,
-                            q.libellequalitedemandeurindust,u.idqualitedemandeurindust_qualitedemandeurindust,u.idtypeutilisateur_typeutilisateur,u.nomresponsable,u.mailresponsable
+                            q.libellequalitedemandeurindust,u.idqualitedemandeurindust_qualitedemandeurindust,u.idtypeutilisateur_typeutilisateur,u.nomresponsable,u.mailresponsable,u.entrepriselaboratoire
         FROM utilisateur u,loginpassword l,qualitedemandeurindust q,intervient i,appartient a,secteuractivite s,typeentreprise t
         WHERE l.idlogin = u.idlogin_loginpassword AND q.idqualitedemandeurindust = u.idqualitedemandeurindust_qualitedemandeurindust AND
         i.idutilisateur_utilisateur = u.idutilisateur AND a.idutilisateur_utilisateur = u.idutilisateur AND s.idsecteuractivite = i.idsecteuractivite_secteuractivite
@@ -687,6 +706,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                     $actif = $rowindust[$i]['actif'];
                     $nomresponsable = $rowindust[$i]['nomresponsable'];
                     $mailresponsable = $rowindust[$i]['mailresponsable'];
+                    $entrepriselaboratoire  = $rowindust[$i]['entrepriselaboratoire'];
                     if (empty($actif)) {
                         $valeuractif = TXT_NONACTIF;
                     } else {
@@ -784,7 +804,15 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                            value="<?php echo removeDoubleQuote($fax); ?>"   />
                                 </td>
                             </tr>
-                            
+                            <!--  ENTREPRISE  LABORATOIRE -->
+                            <tr>
+                                <th style="text-align: left"><?php echo TXT_NOMLABOENT; ?></th><td></td>
+                                <td>
+                                    <input type="text"  style="width: 318px;margin-left: 50px"  name="entrepriselaboratoire" id="entrepriselaboratoire"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
+                                           value="<?php echo removeDoubleQuote(stripslashes($entrepriselaboratoire))?>"
+                                           placeholder="<?php echo TXT_NOMLABOENTREPRISE; ?>"   data-dojo-props="<?php echo REGEX_TYPE;?>"  />
+                                </td>
+                            </tr>
                             
                             <tr>
                                 <th style="text-align: left"><?php echo TXT_QUALITEDEMANDEUR; ?></th><td></td>
@@ -833,7 +861,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                         <td valign="top"><?php echo TXT_NOMRESPONSABLE; ?> </td><td></td>
                                         <td>
                                             <input type="text" required="required" style="width: 318px;margin-left: 50px"  name="nomresponsable" id="nomresponsable"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" value="<?php echo $nomResponsable; ?>"
-                                                   data-dojo-props="regExp:'[a-zA-Z0-9$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
+                                                   data-dojo-props="<?php echo REGEX_TYPE;?>" />
                                         </td>
                                     </tr>
                                 <tr   id="trmailresponsableindust">
@@ -848,7 +876,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                     <td valign="top"><?php echo TXT_NOMRESPONSABLE; ?> </td><td></td>
                                     <td>
                                         <input type="text" required="required" style="width: 318px;margin-left: 50px"  name="nomresponsable" id="nomresponsable"  data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
-                                               data-dojo-props="regExp:'[a-zA-Z0-9$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
+                                               data-dojo-props="<?php echo REGEX_TYPE;?>" />
                                     </td>
                                 </tr>
                                 <tr   id="trmailresponsableindust" style="display: none">
@@ -983,7 +1011,11 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                     } else {
                         faxuser = "";
                     }
-                    
+                    if (!empty(dijit.byId('entrepriselaboratoire'))) {
+                        var entrepriselaboratoire = dijit.byId('entrepriselaboratoire').value;
+                    } else {
+                        entrepriselaboratoire = "";
+                    }
                     if (!empty(dijit.byId('qualitedemandeurindust'))){
                         var idqualitedemandeurindust = dijit.byId('qualitedemandeurindust').value;
                     }
@@ -1019,9 +1051,9 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                         mailresponsable = "";
                     }
                     window.location.replace("<?php echo '/'.REPERTOIRE; ?>/modifBase/majgestioncompteindust.php?iduser=" +<?php echo $iduser; ?> +"&pseudo="+pseudoindust+"&mail="+mail+"&nomuser="
-                            +nomuserindust+"&prenomuser="+prenomuserindust+"&adresseuser="+adresseuser+"&pays="+pays+"&teluser="+teluser+"&faxuser="+faxuser+"&codepostal="+codepostal+"&ville="+ville+
-                            "&idqualitedemandeurindust="+idqualitedemandeurindust+"&nomresponsable=" + nomresponsable + "&mailresponsable=" + mailresponsable + "&role=" + role + "&idtypeentreprise=" 
-                            + idtypeentreprise + "&idsecteuractivite=" + idsecteuractivite + "&statutcompte=" + statutcompte + "&page_precedente=<?php echo basename(__FILE__); ?>");
+                            +nomuserindust+"&prenomuser="+prenomuserindust+"&adresseuser="+adresseuser+"&pays="+pays+"&teluser="+teluser+"&faxuser="+faxuser+"&entrepriselaboratoire="+entrepriselaboratoire+
+                            "&codepostal="+codepostal+"&ville="+ville+"&idqualitedemandeurindust="+idqualitedemandeurindust+"&nomresponsable=" + nomresponsable + "&mailresponsable=" + mailresponsable + "&role=" +
+                            role + "&idtypeentreprise=" + idtypeentreprise + "&idsecteuractivite=" + idsecteuractivite + "&statutcompte=" + statutcompte + "&page_precedente=<?php echo basename(__FILE__); ?>");
                 }
             }, "progButtonNodeindust");
         });

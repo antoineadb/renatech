@@ -13,7 +13,15 @@ if (isset($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncompt
     $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
     $idutilisateur = $_GET['iduser'];
     
-    include_once '../html/moncompte/moncomptecommun.php';
+    include_once '../html/moncompte/moncomptecommun.php';   
+//-------------------------------------------------------------------------------------------------------------------------------------------
+//						       ENTREPRISE LABORATOIRE
+//-------------------------------------------------------------------------------------------------------------------------------------------
+    $ancienEntrepriseLaboratoire = $manager->getSingle2("SELECT entrepriselaboratoire FROM utilisateur WHERE idutilisateur = ?", $idutilisateur);
+    if (isset($_GET['entrepriselaboratoire']) && $_GET['entrepriselaboratoire'] != $ancienEntrepriseLaboratoire) {
+        $entrepriselaboratoire = new UtilisateurNomlabo($idutilisateur, $_GET['entrepriselaboratoire']);
+        $manager->updateUtilisateurNomlabo($entrepriselaboratoire, $idutilisateur);
+    }        
 //---------------------------------------------------------------------------------------------------------------------------------------
 //                                                             QUALITE DEMANDEUR
 ////---------------------------------------------------------------------------------------------------------------------------------------

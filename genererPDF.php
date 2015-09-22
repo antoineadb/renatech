@@ -198,7 +198,7 @@ $scentraleproximite ='';
 for ($i = 0; $i < count($arraycentraleproximite); $i++) {
     $scentraleproximite .=$arraycentraleproximite[$i]['nom_centrale_proximite'].', ';
 }
-$scentraleProximite =  substr($scentraleproximite, 0.,-2);//var_dump($confidentiel);die;
+$scentraleProximite =  substr($scentraleproximite, 0.,-2);
 if($confidentiel != ucfirst(TXT_OUI)){
    $confidentiel=  ucfirst(TXT_NON); 
 }

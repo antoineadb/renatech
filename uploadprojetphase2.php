@@ -30,8 +30,6 @@ if (isset($_POST['enregistre']) && $_POST['enregistre'] == 'oui') {
     } else {
         $cas = 'creationprojetphase2';
     }
-}elseif(isset($cas) && $cas =='creerprojetphase2'){
- include_once 'emailprojetphase2/creerphase2.php';
 }
 $idautrecentrale = '';
 if (isset($_POST['autrecentrale']) && !empty($_POST['autrecentrale'])) {
@@ -50,18 +48,15 @@ if (isset($_POST['integerspinner']) && !empty($_POST['integerspinner'])) {
 } else {
     $nbpersonnecentrale = 0;
 }
-
-if ($cas == 'mise a jour') {
-    header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $nbpersonnecentrale);
-} elseif ($cas == 'mise a jourEmail') {
-    header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJ.php?lang=' . $lang . '&idprojet=' . $idprojet . '&statut=' . $idstatutprojet . '&nbpersonne=' . $nbpersonnecentrale);
-}elseif ($cas == 'mise a jourEmailAutreEmail') {
-    header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJautreemail1.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet . '&nbpersonne=' . $nbpersonnecentrale . '&etautrecentrale=' . $etautrecentrale);
-} elseif ($cas == 'enregistrement') {
+if ($cas == 'enregistrement') {//OK VALIDE
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
 } elseif ($cas == 'creationprojetphase2' || $cas == 'creationprojetphase2etape') {
     include 'EmailProjetphase2.php';
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
+}elseif($cas =='creerprojetphase2'){
+    include 'emailprojetphase2/creerphase2.php';
+    header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
+    exit();
 }else{
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
 } 

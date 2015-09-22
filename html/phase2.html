@@ -78,7 +78,7 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
             $bool1 = '';
             $disabled = "'disabled'";
             break;
-        default:
+            default:
     }?>
 <?php 
 if(isset($_GET['statut'])){
@@ -168,7 +168,7 @@ $date  = $date->format('d-m-Y');
         <table>            
             <tr>
                 <td><?php $contactscentraleaccueil = stripslashes(str_replace("''","'",$contactscentraleaccueil)); ?>
-                    <label for="contactCentralAccueil" id='lblContactCentraleAccueil' ><?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
+                    <label for="contactCentralAccueil" id='lblContactCentraleAccueil' style="margin-left:20px"><?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
                     <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
                     <input  value="<?php echo $contactscentraleaccueil ;?>"  type="text"  maxlength="100" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  
                            autocomplete="on" data-dojo-props="<?php echo REGEX_TYPE; ?>"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" <?php echo $disabled ?> >
@@ -1028,7 +1028,7 @@ function masqueetapeautrecentrale(){
 </script>
 <input type='text' id='affichautrecentrale' style='display: none' value='non'>
 <!-- RECUPEREATION DES DONNEES DE LA BASE DE DONNEE-->
-                        <fieldset style="padding:10px 15px 15px; border:solid 1px #5D8BA2; margin-right: 20px;margin-top: 15px;width:958px;
+                        <fieldset style="padding:10px 15px 15px; border:solid 1px #5D8BA2; margin-right: 20px;margin-top: 15px;width:958px; 
                                           margin-bottom: 15px;margin-left: 20px;color:midnightblue;font-family:verdana;border-radius: 5px;border-radius: 5px 5px 5px 5px;border-color: #5D8BA2;" >
                                 <legend><?php echo TXT_AUTRESCENTRALES; ?></legend>
                                 <table>
@@ -1071,41 +1071,25 @@ function masqueetapeautrecentrale(){
                                             <label for = '" . $libellecentrale . "' class='opt' > " . ($libellecentrale) . ' (<i>' . str_replace("''", "'", $villecentrale) . '</i>)' . "</label>";
                                             echo '<br>';
                                         }                
-                                        ?>
+                                        ?>                                        
+                                        
                                     </div>
                                     </fieldset>
                                 </td> 
                                 <td  id="etapeautre" style="display:block;float: left">
-                                    <?php $descriptionautrecentrale = stripslashes(str_replace("''","'",$descriptionautrecentrale)) ?>
+                                    <?php $descriptionautrecentrale = stripslashes(removeDoubleQuote($descriptionautrecentrale)) ?>
                                     <label for="descriptionautrecentrale" style="width: auto;margin-top:15px">
                                         <?php echo TXT_DESCRIPTETAPE; ?>
                                     </label>
                                     <div id="descriptionautrecentrale"  name="descriptionautrecentrale" disabled="<?php echo $bool; ?>" 
                                          style="margin-right: 0px;color:midnightblue;font-family:verdana;margin-left:0px;width:960px;;margin-bottom: 20px" >
-                                    <?php echo $descriptionautrecentrale;?></div>
+                                    <?php echo $descriptionautrecentrale;?>
+                                    </div>
                                 </td><!--ON AFFICHE LE CHOIX DES CENTRALES DE L'ETAPE  -->
                                 
                         </tr> 
 <!-- FIN RECUPERATION DES DONNEES DE LA BASE DE DONNEE-->                                               
-                                    <tr>
-                                        <td>
-                                            <div data-dojo-type="dijit/Dialog" data-dojo-id="repautrecentrale" title="<?php echo TXT_VALIDAUTRESCENTRALE;?>"
-                                                     style="width: 380px;margin-left: 20px;   ">
-                                                    <table class="dijitDialogPaneContentArea">
-                                                        <tr>
-                                                            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitoui"  data-dojo-props='onClick:function(){repautrecentrale.show();}' >
-                                                                    <?php echo TXT_OUI ;?></button></td>
-                                                            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitnon"
-                                                                        data-dojo-props="onClick:function(){repautrecentrale.hide();}" >
-                                                                    <?php echo TXT_NON ;?></button></td>
-                                                            <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repautrecentrale.hide();}"
-                                                                        id="Cancel"><?php echo TXT_ANNULE;?></button></td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                        </td>
-                                    </tr>            
-                            <?php }else{ ?><!--     $etapeautrecentrale=='FALSE'    -->
+                            <?php }else{ ?>
                         <tr> 
                              <td style="float: left;display:none" id="etapeautre1">
                                 <fieldset style="font-size: 1.1em;font-style: italic;width: 520px">
@@ -1442,6 +1426,7 @@ function masquecentraleproximite(){
                             </tr>                            
                         </table>
         </fieldset><input type='text' name='maj' id='maj' style='display:none' value='non'>
+                   <input type='text' name='majcentrale' id='majcentrale' style='display:none' value='non'>
                         <?php 
                             $etapeautrecentrale = $manager->getSingle2("select etapeautrecentrale from projet where idprojet=?",$idprojet); 
                             if(!empty($etapeautrecentrale)){
@@ -1453,17 +1438,40 @@ function masquecentraleproximite(){
                         <td>
                             <div style='float: left'>                   
                                 <?php  if($idstatut==ENATTENTEPHASE2){?>                            
-                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep.show()}else{dijit.byId('modifProjet').submit()}}" style="margin-top:15px">
+                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" 
+                                       data-dojo-props="
+                                        onClick:function(){
+                                            if(dijit.byId('modifProjet').validate()){
+                                                rep.show();
+                                            }
+                                        }" style="margin-top:15px">
                                 <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                     <span style="text-align: left;padding:7px;width: 430px;border-radius:5px" ><?php echo TXT_VALIDETRANSMISSION;?></span>
                                 </a>
-                                 <?php  }else{?>
-                                   <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep2.show()}}"  disabled="<?php echo $bool; ?>" 
+                                 <?php  }else{
+                                        $etapeautrecentrale= $manager->getSingle2("select etapeautrecentrale from projet where idprojet =?",$idprojet);
+                                        $sendmail = $manager->getSingle2("select sendmail from projetautrecentrale where idprojet =?",$idprojet);                                        
+                                        if ($etapeautrecentrale==TRUE && $sendmail==TRUE){?>
+                                        <button data-dojo-type="dijit/form/Button" type="button" disabled="<?php echo $bool; ?>" style="margin-top:15px" id='btnMajEnvoye' 
+                                        data-dojo-props="
+                                            onClick:function(){
+                                                if(dijit.byId('modifProjet').validate()){
+                                                    repautrecentrale.show();
+                                                }
+                                            }"><?php echo TXT_MAJENVOYER ;?>
+                                        </button>
+                                 <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                    <span style="text-align: left;padding:10px;width: 300px;border-radius:5px"><?php echo TXT_MAJTRANSMISSION;?></span>
+                                </a>
+                                        
+                                        <?php }else{?>
+                                <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep2.show();}}" id='btnMajEnvoye' disabled="<?php echo $bool; ?>" 
                                            style="margin-top:15px"  ><?php echo TXT_MAJENVOYER ;?></button>
                                  <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                     <span style="text-align: left;padding:10px;width: 300px;border-radius:5px"><?php echo TXT_MAJTRANSMISSION;?></span>
                                 </a>
-                                <?php }?>                        
+                                <?php }?>
+                                  <?php }?>
                             </div>                        
                             </td>
                     </tr>
@@ -1471,14 +1479,14 @@ function masquecentraleproximite(){
                 <table>            
                     <tr>
                         <td id='btnSave'>
-                            <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){save();}}"  disabled="<?php echo $bool; ?>" 
+                            <button data-dojo-type="dijit/form/Button" id='btnsave' type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){save();}}"  disabled="<?php echo $bool; ?>" 
                                     style="margin-top:15px"><?php echo TXT_SAVEPROJECT ;?></button>
                         </td>
                         <td id="infoSave"><?php echo TXT_SAVEDATA;?></td>                        
                     </tr>
                     <tr><td><div style="margin-top: 5px"></div></td></tr>
                 </table>
-        <div data-dojo-type="dijit/Dialog" data-dojo-id="rep" title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;" execute="">
+        <div data-dojo-type="dijit/Dialog" data-dojo-id='rep' title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;" execute="">
            <table class="dijitDialogPaneContentArea">
                <tr>
                    <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui"  data-dojo-props="onClick:function(){valide();}">
@@ -1490,28 +1498,45 @@ function masquecentraleproximite(){
         <div data-dojo-type="dijit/Dialog" data-dojo-id="rep2" title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;   ">
            <table class="dijitDialogPaneContentArea">
                <tr>
-                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui2" onclick="maj()">
+                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui2"  data-dojo-props="onClick:function(){maj();}">
                            <?php echo TXT_OUI ;?></button></td>
                            <td>
-                   <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitcancel2"><?php echo TXT_ANNULE;?></button></td>
+                   <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitCancel2"><?php echo TXT_ANNULE;?></button></td>
                </tr>
-           </table>
-         
-       </div>                            
+           </table>         
+        </div>                                                                       <!---  Vous avez déja envoyer un email aux autres centrales, est ce que vous souhaiter les informer des modifications du projet?-->
+        <div data-dojo-type="dijit/Dialog" data-dojo-id="repautrecentrale" title="<?php echo TXT_RESULTMESSAGECONFIRMAUTRECENTRALE;?>" style="width: 500px;margin-left: 20px;   ">
+          <table class="dijitDialogPaneContentArea">
+              <tr>
+                  <td><button type="submit" data-dojo-type="dijit/form/Button"  id="yes2" onclick="majcentrale()"><?php echo TXT_OUI ;?></button></td><td>
+                  <td><button type="submit" data-dojo-type="dijit/form/Button"  id="no2"  data-dojo-props="onClick:function(){maj();}"><?php echo TXT_NON ;?></button></td>                               
+                  <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitCancel3"><?php echo TXT_ANNULE;?></button></td>
+              </tr>
+          </table>
+      </div>                
             <script>            
-            function valide(){
+          function valide(){
                 document.getElementById('save').value='non';
                 document.getElementById('maj').value = 'non';
                 modifProjet.submit();
             }
+        
             function maj(){
                 document.getElementById('save').value='non';
                 document.getElementById('maj').value = 'oui';
+                document.getElementById('majcentrale').value = 'non';
+                modifProjet.submit();
+            }
+            function majcentrale(){
+                document.getElementById('save').value='non';
+                document.getElementById('maj').value = 'oui';
+                document.getElementById('majcentrale').value = 'oui';
                 modifProjet.submit();
             }
             function save() {
                 document.getElementById('save').value='oui';
                 document.getElementById('maj').value = 'non';
+                document.getElementById('majcentrale').value = 'non';
                 modifProjet.submit();
             }
 
@@ -1552,12 +1577,16 @@ if($idstatut!=ENATTENTEPHASE2){
             document.getElementById('validestatut').style.display='none';
             document.getElementById('chgstatut').value='oui';
             document.getElementById('central').style.display='none';
+            dijit.byId("btnMajEnvoye").setAttribute('disabled', true);
+            dijit.byId("btnsave").setAttribute('disabled', true);
             
         }else if(value ==='st<?php echo ACCEPTE; ?>'){
             document.getElementById('modifdatestatut').style.display='none';
             document.getElementById('validestatut').style.display='block';
             document.getElementById('central').style.display='none';
             document.getElementById('chgstatut').value='oui';
+            dijit.byId("btnMajEnvoye").setAttribute('disabled', false);
+            dijit.byId("btnsave").setAttribute('disabled', false);
             
         }else if(value ==='st<?php echo REFUSE; ?>'){
             document.getElementById('modifdatestatut').style.display='none';
@@ -1565,47 +1594,52 @@ if($idstatut!=ENATTENTEPHASE2){
             document.getElementById('commentphase2').style.display='block';
             document.getElementById('central').style.display='none';
             document.getElementById('chgstatut').value='oui';
+            dijit.byId("btnMajEnvoye").setAttribute('disabled', false);
+            dijit.byId("btnsave").setAttribute('disabled', false);
             
         }else if(value ==='st<?php echo TRANSFERERCENTRALE; ?>'){
             document.getElementById('modifdatestatut').style.display='none';
             document.getElementById('validestatut').style.display='block';
             document.getElementById('commentphase2').style.display='none';
             document.getElementById('central').style.display='block';
-            document.getElementById('chgstatut').value='oui';
+            document.getElementById('chgstatut').value='oui';            
+            dijit.byId("btnMajEnvoye").setAttribute('disabled', false);
+            dijit.byId("btnsave").setAttribute('disabled', false);
             
         }else{
             document.getElementById('modifdatestatut').style.display='none';
             document.getElementById('commentphase2').style.display='none';
             document.getElementById('validestatut').style.display='none';
             document.getElementById('central').style.display='none';
-            
+            dijit.byId("btnMajEnvoye").setAttribute('disabled', false);
+            dijit.byId("btnsave").setAttribute('disabled', false);            
         }
     }
     
     </script>
-    <select name="statutProjet" id="statutProjet" data-dojo-type="dijit/form/FilteringSelect" style="width: 220px;margin-left: 5px"
-    disabled="<?php echo $bool; ?>"
-    data-dojo-props="  value: '<?php echo $value; ?>',onChange: function(value){choice(value);}" >
+    <select name="statutProjet" id="statutProjet" data-dojo-type="dijit/form/FilteringSelect" style="width: 220px;margin-left: 5px" 
+            disabled="<?php echo $bool; ?>" data-dojo-props="value:'<?php echo $value; ?>',onChange: function(value){choice(value);}" >
     <?php       
         if($idstatutencours>0){
             $arraystatutencours = $manager->getList2("select libellestatutprojet,libellestatutprojeten from statutprojet where idstatutprojet =?",$idstatutencours);
-            if($lang=='fr'){
-               echo "<option value='".'st'.$idstatutencours."'>".str_replace("''","'",$arraystatutencours[0]['libellestatutprojet'])."</option>";
-            }elseif($lang=='en'){
-               echo "<option value='".'st'.$idstatutencours."'>".str_replace("''","'",$arraystatutencours[0]['libellestatutprojeten'])."</option>";
-            }
+            if($lang=='fr'){?>
+               <option value="<?php echo 'st'.$idstatutencours;?>" ><?php echo removeDoubleQuote($arraystatutencours[0]['libellestatutprojet']) ?></option>
+            <?php }elseif($lang=='en'){?>
+               <option value="<?php echo 'st'.$idstatutencours;?>" ><?php echo removeDoubleQuote($arraystatutencours[0]['libellestatutprojeten']) ?></option>
+            <?php
+                }
         }else{
             echo TXT_CHOIXSTATUTPROJET;
         }
         $nbrowstatut =count($rowstatut);
         if($lang=='fr'){
-            for ($i = 0;$i < $nbrowstatut;$i++) {
-                echo "<option value='".'st'.$rowstatut[$i]['idstatutprojet']."'>".str_replace("''","'",($rowstatut[$i]['libellestatutprojet']))."</option>";
-            }
+            for ($i = 0;$i < $nbrowstatut;$i++) {?>                
+                <option value="<?php echo 'st'.$rowstatut[$i]['idstatutprojet'];?>" ><?php echo removeDoubleQuote($rowstatut[$i]['libellestatutprojet']) ?></option>
+    <?php   }
         }elseif($lang=='en'){
-            for ($i = 0;$i < $nbrowstatut;$i++) {
-                echo "<option value='".'st'.$rowstatut[$i]['idstatutprojet']."'>".str_replace("''","'",($rowstatut[$i]['libellestatutprojeten']))."</option>";
-            }
+            for ($i = 0;$i < $nbrowstatut;$i++) {?>
+                <option value="<?php echo 'st'.$rowstatut[$i]['idstatutprojet'];?>" ><?php echo removeDoubleQuote($rowstatut[$i]['libellestatutprojeten']) ?></option>
+      <?php }
         }
     ?>
     </select>
@@ -1635,15 +1669,50 @@ if($idstatut!=ENATTENTEPHASE2){
         <td id="modifdatestatut" style="display: none;">
             <label for="datemodifstatut" style="width: 260px;margin-top: 16px">
                 <?php echo TXT_DATECANGEMENTSTATUT; ?></label>
-            <input type="text" name="datemodifstatut" id="datemodifstatut" value="<?php echo date('Y-m-d');?>" data-dojo-type="dijit/form/DateTextBox"  autocomplete="on" >         
-            <input type="submit"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" >
+            <input type="text" name="datemodifstatut" id="datemodifstatut" value="<?php echo date('Y-m-d');?>" data-dojo-type="dijit/form/DateTextBox"  autocomplete="on" >
+<?php 
+       $etapeautrecentrale= $manager->getSingle2("select etapeautrecentrale from projet where idprojet =?",$idprojet);
+        $sendmail = $manager->getSingle2("select sendmail from projetautrecentrale where idprojet =?",$idprojet);        
+            if ($etapeautrecentrale==TRUE && $sendmail==TRUE){?>
+                <input data-dojo-type="dijit/form/Button"  type="button"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" 
+                       data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){repstatut.show();}}" >
+<?php }else{?>
+                     <input data-dojo-type="dijit/form/Button"  type="button"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" 
+                       data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){modifProjet.submit();}}" >
+<?php }?>
         </td>
-    </tr><tr>   
+    </tr>
+    <!--CE MODULE EST PRESENT POUR LE CAS IL N'Y A PAS DE DATE A MODIFIER, PASSGE ENCOURS DE REALISATION VERS EN COURS D'EXPERTISE  -->
+    <tr>
         <td id="validestatut" style="display: none;margin-top: 32px;">
             <input type="submit"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" >
         </td>
     </tr>
     </table>
+     <div data-dojo-type="dijit/Dialog" data-dojo-id="repstatut" title="<?php echo TXT_RESULTMESSAGECONFIRMAUTRECENTRALE;?>" style="width: 500px;margin-left: 20px;   ">
+          <table class="dijitDialogPaneContentArea">
+              <tr>
+                  <td><button type="submit" data-dojo-type="dijit/form/Button"  id="yes3" data-dojo-props="onClick:function(){repStatut();}"><?php echo TXT_OUI ;?></button></td><td>
+                  <td><button type="submit" data-dojo-type="dijit/form/Button"  id="no3"  data-dojo-props="onClick:function(){repStatutNon();}"><?php echo TXT_NON ;?></button></td>                               
+                  <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repstatut.hide();}" id="submitCancel4"><?php echo TXT_ANNULE;?></button></td>
+              </tr>
+          </table>
+      </div> 
+    <script>
+        function repStatut(){
+            document.getElementById('save').value='non';
+            document.getElementById('maj').value = 'non';   
+            document.getElementById('majcentrale').value = 'oui';
+            modifProjet.submit();
+        }
+        function repStatutNon(){
+            document.getElementById('save').value='non';
+            document.getElementById('maj').value = 'non';   
+            document.getElementById('majcentrale').value = 'non';
+            modifProjet.submit();
+        }
+    </script>
+                                
 <?php } ?>                                   
 <?php }?>
 <!-----------------------------------------------------------------------------------------------------------------------------------

@@ -2,7 +2,6 @@
 if(!isset($cas)){
     session_start();
 }
-
 include_once 'decide-lang.php';
 include_once 'class/email.php';
 include_once 'class/Manager.php';
@@ -72,7 +71,7 @@ if (!empty($_SESSION['contactcentralaccueilmodif'])) {
 if (!empty($_SESSION['idtypeprojetmodif'])) {
     $libelletype = $manager->getSingle2("select libelletype from typeprojet where idtypeprojet=? ", $_SESSION['idtypeprojetmodif']);
     $typeProjet = TXT_TYPEPROJET . ': ' . $libelletype;
-    $typeprojet = htmlspecialchars(str_replace("''", "'", $typeProjet)) ;
+    $typeprojet = htmlspecialchars(removeDoubleQuote( $typeProjet)) ;
 }else{
     $typeProjet ='';
 }
@@ -83,12 +82,12 @@ if (!empty($_SESSION['typeFormationmodif'])) {
     $typeFormation='';
 }
 if (!empty($_SESSION['nbheuremodif'])) {
-    $nbHeure = htmlspecialchars(str_replace("''", "'", TXT_NBHEURE)) . ': ' . $_SESSION['nbheuremodif'] ;
+    $nbHeure = htmlspecialchars(removeDoubleQuote( TXT_NBHEURE)) . ': ' . $_SESSION['nbheuremodif'] ;
 }else{
     $nbHeure ='';
 }
 if (!empty($_SESSION['nbelevemodif'])) {
-    $nbEleve = htmlspecialchars(str_replace("''", "'", TXT_NBELEVE)) . ': ' . $_SESSION['nbelevemodif'] ;
+    $nbEleve = htmlspecialchars(removeDoubleQuote( TXT_NBELEVE)) . ': ' . $_SESSION['nbelevemodif'] ;
 }else{
     $nbEleve = '';
 }
@@ -131,11 +130,11 @@ $arraysourcefinancement = $_SESSION['arraysfmodif'];
 if (!empty($arraysourcefinancement)|| $arraysourcefinancement!='') {    
     for ($k = 0; $k < count($arraysourcefinancement); $k++) {
         if (!empty($arraysourcefinancement[$k])) {
-            $s_sourcefinancement .= htmlentities(str_replace("''", "'", $arraysourcefinancement[$k]), ENT_QUOTES, 'UTF-8') . ' - ';
+            $s_sourcefinancement .= htmlentities(removeDoubleQuote( $arraysourcefinancement[$k]), ENT_QUOTES, 'UTF-8') . ' - ';
         }  
     }
     $S_SourceFinancement = htmlentities($s_sourcefinancement, ENT_QUOTES, 'UTF-8') ;
-    $s_SourceFinancement = str_replace("''", "'",$S_SourceFinancement) ;
+    $s_SourceFinancement = removeDoubleQuote($S_SourceFinancement) ;
     $s_Sourcefinancement = substr($s_SourceFinancement, 0, -2) ;
     $s_sourcefinancement = TXT_SOURCEFINANCEMENT . ': ' . $s_Sourcefinancement;
     
@@ -159,27 +158,27 @@ if (!empty($_SESSION['porteurprojetmodif'])) {
     $sporteurprojet ='';
 }
 if (!empty($_SESSION['centralepartenaireprojetmodif'])) {
-    $scentralepartenaireprojet = TXT_NOMLABOENTREPRISE . '1' . ': ' . str_replace("''", "'", $_SESSION['centralepartenaireprojetmodif']) ;
+    $scentralepartenaireprojet = TXT_NOMLABOENTREPRISE . '1' . ': ' . removeDoubleQuote( $_SESSION['centralepartenaireprojetmodif']) ;
 } else{
     $scentralepartenaireprojet='';
 }
 if (!empty($_SESSION['partenaire1modif'])) {
-    $spartenaire1 = TXT_NOMPARTENAIRE . '1' . ': ' . str_replace("''", "'", $_SESSION['partenaire1modif']) ;
+    $spartenaire1 = TXT_NOMPARTENAIRE . '1' . ': ' . removeDoubleQuote( $_SESSION['partenaire1modif']) ;
 }else{
     $spartenaire1='';
 }
 if (!empty($_SESSION['partenairesmodif'])) {
-    $spartenaires = str_replace("''", "'", $_SESSION['partenairesmodif']);
+    $spartenaires = removeDoubleQuote( $_SESSION['partenairesmodif']);
 }else{
     $spartenaires = '';
 }
 if (!empty($_SESSION['libellethematiquemodif'])) {
-    $thematique = TXT_THEMATIQUE . ': ' .str_replace("''", "'", $_SESSION['libellethematiquemodif']) ;
+    $thematique = TXT_THEMATIQUE . ': ' .removeDoubleQuote( $_SESSION['libellethematiquemodif']) ;
 }else{
     $thematique = '';
 }
 if (!empty($_SESSION['libelleautrethematiquemodif'])) {
-    $autrethematique = TXT_AUTRETHEMATIQUE . ': ' .str_replace("''", "'", $_SESSION['libelleautrethematiquemodif']);
+    $autrethematique = TXT_AUTRETHEMATIQUE . ': ' .removeDoubleQuote( $_SESSION['libelleautrethematiquemodif']);
 }else{
     $autrethematique='';
 }
@@ -239,15 +238,20 @@ if(!empty($_SESSION['verrouidentifiemodif'])){
 }else{
     $verrouIdentifiee='';
 }
-if(!empty($_SESSION['autrecentralemodif'])){
+
+//ON VERIFE AU PREALABLE QUE LES AUTRES CENTRALES SONT BIEN SELECTIONNEES
+$Booletape = $manager->getSingle2("select etapeautrecentrale from projet where idprojet=?", $idprojet);
+
+if($Booletape==FALSE){
+    $_SESSION['descriptionautrecentralemodif']='';
+    $_SESSION['autrecentralemodif'] ='';
+}elseif(!empty($_SESSION['descriptionautrecentralemodif'])){
+    $descriptionautrecentrale =   TXT_DESCRIPTETAPE .' '.str_replace("''","'", $_SESSION['descriptionautrecentralemodif']); 
+}if(!empty($_SESSION['autrecentralemodif'])){
     $autrecentrale = TXT_AUTRESCENTRALES.': '. $_SESSION['autrecentralemodif'];
 }else{
     $autrecentrale='';
-}
-if(!empty($_SESSION['descriptionautrecentralemodif'])){
-    $descriptionautrecentrale =   TXT_DESCRIPTETAPE .' '.str_replace("''","'", $_SESSION['descriptionautrecentralemodif']); 
-}else{
-    $descriptionautrecentrale = '';
+    $descriptionautrecentrale='';
 }
 if(!empty($_SESSION['centraleproximitemodif'])){
     $sCentraleProximite = '';
@@ -496,23 +500,23 @@ $arrayresult=array();
         }
        $nbarrayresult =  count($arrayresult);
 if($nbarrayresult>0){        
-$body = htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_MRSMR0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILMODIF0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILMODIF1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .        
+$body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .        
         $titreProjet.$acronyme.$confidentiel .$contexte.$descriptif.$attachement. $contactscentraleaccueil .$typeprojet.$typeFormation.$nbHeure .$nbEleve.$nomFormateur.$dureeProjet .$s_Sourcefinancement.$s_acronymesf.
         $sporteurprojet.$scentralepartenaireprojet.$spartenaire1.$spartenaires.$thematique.$autrethematique.$dateDebutTravaux .$dureeEstime.$personnecentrale.$ressources.$descriptifTechno.$attachementdesc.
         $verrouIdentifiee.$autrecentrale.$descriptionautrecentrale.$scentraleProximite.$descriptioncentraleproximite.$nbplaque.$nbRun.$emailrespdevis.$reussite.$refinterne.
-        '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') .
-        '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') .
+        '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') .
+        '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') .
         "<a href='https://www.renatech.org/projet' ><br><br>" . TXT_RETOUR . '</a><br>    ' .
-        '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
+        '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 }else{
-    $body = htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_MRSMR0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILMODIF0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILMODIF1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .  utf8_decode(TXT_MESSAGEERREURENODATA).'<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') .
-        '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') .
+    $body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .  utf8_decode(TXT_MESSAGEERREURENODATA).'<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') .
+        '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') .
         "<a href='https://www.renatech.org/projet' ><br><br>" . TXT_RETOUR . '</a><br>    ' .
-        '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
+        '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 }
 $sujet = utf8_decode(TXT_MODIFPROJETNUM) . $numero;
 $emailcentrales = array();
@@ -540,17 +544,10 @@ if (!empty($mailresponsable)) {
 $emailcc = array_merge($emailcentrales, $CC);
 $mailCC = array_unique($emailcc);
 envoieEmail($body, $sujet, $maildemandeur, $mailCC); //envoie de l'email au responsable centrale et au copiste
-
-
 if (!empty($_GET['nbpersonne'])) {
     $nbpersonne = $_GET['nbpersonne'];
 } else {
     $nbpersonne = 0;
 }
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-//                              ENVOIE DE L'EMAIL DES AUTRES CENTRALE
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-if(isset($cas) &&  $cas=='mise a jourEmailAutreEmail'){
-    include 'outils/envoiEmailAutreCentrale.php';
-}
 header('Location: /' . REPERTOIRE . '/update_project3/' . $lang . '/' . $_GET['idprojet'] . '/' . $numero . '/' . $nbpersonne);
+

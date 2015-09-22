@@ -29,7 +29,7 @@ if (!empty($_POST['page_precedente']) && $_POST['page_precedente'] == 'modifProj
     checkConcerne($idprojet,	$idcentrale,	$idstatutprojet);//On efface l'affectation de toutes les centrales pour le projet en cours    
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 //			ACCEPTE
-//------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------    
     if ($idstatutprojet == ACCEPTE) {
         $manager->updateConcerne($concerne, $idprojet); //mise à jour du statut du projet
         checkConcerne($idprojet,	$idcentrale,	ACCEPTE);//PROJET ACCEPTE POUR EXPERTISE DANS LA CENTRALE        

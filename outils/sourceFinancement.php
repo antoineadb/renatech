@@ -46,7 +46,7 @@ $autres = 'sf' . IDAUTRESOURCEFINANCEMENT;
                         }                        
                         dijit.byId('acronymesourcesf<?php echo $idsourcefinancement; ?>').set('placeHolder', dijit.byId('<?php echo 'sf' . $idsourcefinancement; ?>').class);
                     </script>
-                </div>
+                </div>                
                 <?php if ($lang == 'fr') {echo removeDoubleQuote($row[$i]['libellesourcefinancement']);} elseif ($lang == 'en') {echo removeDoubleQuote($row[$i]['libellesourcefinancementen']);}?>
                 <?php if (!empty($idprojet)) {$acronSF = stripslashes(removeDoubleQuote($manager->getSinglebyArray("select acronymesource from projetsourcefinancement where idprojet_projet =? and idsourcefinancement_sourcefinancement =?", array($idprojet, $idsourcefinancement))));}?>
                 <input id="acronymesourcesf<?php echo $idsourcefinancement; ?>" type="text" name="acronymesourcesf<?php echo $idsourcefinancement; ?>" autocomplete="on" data-dojo-type="dijit/form/ValidationTextBox"

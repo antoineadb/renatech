@@ -49,7 +49,7 @@ include 'html/header.html';
     <script src="<?php echo '/' . REPERTOIRE; ?>/js/ajaxefface.js"></script>
     <div style="margin-top: 100px;"></div>
     <form name="modifProjet" data-dojo-type="dijit/form/Form" id="modifProjet"  method="post" action="<?php echo '/' . REPERTOIRE; ?>/modifBase/insertProjetphase2.php?lang=<?php echo $lang; ?>" enctype="multipart/form-data" >
-        <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">							
+        <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">	
         <script type="dojo/method" data-dojo-event="onSubmit">            
             var nbdescript=stripTags(trim(dojo.byId("descriptifValeur").value)).length;
             var nbcontexte=stripTags(trim(dojo.byId("contextValeur").value)).length;
@@ -132,7 +132,19 @@ include 'html/header.html';
             }else{
                 alert("<?php echo TXT_ERR; ?>");
                 return false;
-            }               
+            }            
+        <?php 
+            if(isset($_SESSION['idTypeUser'])&& $_SESSION['idTypeUser']==ADMINLOCAL){
+                $idcentrale=$manager->getIdCentraleFromLogin($_SESSION['pseudo']);
+                $libellecentrale = str_replace("-","",$manager->getSingle2("select libellecentrale from centrale where idcentrale=?",$idcentrale));
+         ?>
+    
+        var selectedCentrale = "<?php echo $libellecentrale; ?>";
+        var libellecentrale = "<?php echo 'lbl'.$libellecentrale;?>";
+        dijit.byId(selectedCentrale).set('disabled',true);
+        document.getElementById(libellecentrale).style.textDecoration  ='line-through';
+        <?php } ?>
+            
         </script>
         <div data-dojo-type="dijit/layout/TabContainer" id="tabcontainer" doLayout="false">
             <div data-dojo-type="dijit/layout/ContentPane" id="succinct"  title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" >

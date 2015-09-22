@@ -90,6 +90,7 @@ $bool ='true';
           action="<?php echo '/'.REPERTOIRE; ?>/modifBase/updateStatutProjetphase2.php?lang=<?php echo $lang;?>&idprojet=<?php echo $idprojet;?>" enctype="multipart/form-data" >
         <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
         <script type="dojo/method" data-dojo-event="onSubmit">
+          var nbcomment=stripTags(trim(dojo.byId("commentaire").value)).length;  
           if(nbcomment>200){
                 alert("<?php echo TXT_LIMITEDITEURCOMMENT;?>");
                 return false;

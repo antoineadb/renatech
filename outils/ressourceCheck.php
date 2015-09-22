@@ -8,7 +8,7 @@
                                 $aiderp=affiche('TXT_AIDERESSOURCES') ;
                                 $Cache->write('aiderp',$aiderp);
                             }?><?= $aiderp; ?>
-                </span></a>
+                </span></a>       
         <?php echo ':'; ?>
     </legend>
     <div id='chck'>
@@ -61,13 +61,13 @@
                 }
                 if ($bool == 'true') {
                     echo "<input  class='opt' type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" . 're' . $row[$i]['idressource'] . "' name='ressource[]' value='" . $row[$i]['libelleressource'] . "' disabled='" . $bool . "'/>
-                <label for ='" . $row[$i]['libelleressource'] . "' class='opt' > " . str_replace("''", "'", $row[$i]['libelleressource']) . "
+                <label for ='" .'re'. $row[$i]['idressource'] . "' class='opt' > " . removeDoubleQuote($row[$i]['libelleressource']) . "
                 <a class='infoBulle' href='#'>&nbsp;<img src='/".REPERTOIRE."/styles/img/help.gif' height='13px' width='13px' /><span style='width: 250px;border-radius:5px;padding:10px;'>" . $aide . "</span></a></label><br>";
                 } else {
                     echo "<input  class='opt' type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" . 're' . $row[$i]['idressource'] . "' name='ressource[]' value='" . $row[$i]['libelleressource'] . "' />
-                <label for= '" . $row[$i]['libelleressource'] . "' class='opt'  > " . str_replace("''", "'", $row[$i]['libelleressource']) . "
+                <label for= '" . 're'.$row[$i]['idressource'] . "' class='opt'  > " . removeDoubleQuote($row[$i]['libelleressource']) . "
                 <a class='infoBulle' href='#'>&nbsp;<img src='/".REPERTOIRE."/styles/img/help.gif' height='13px' width='13px'/><span style='width: 250px;border-radius:5px;padding:10px;'>" . $aide . "</span></a></label><br>";
-                }
+            }
             }
         } elseif ($lang == 'en') {
             $row = $manager->getList("SELECT idressource,libelleressourceen FROM ressource where  masqueressource!=TRUE order by idressource asc");
@@ -92,14 +92,14 @@
 
                 if ($bool == 'true') {
                     echo "<input  class='opt' type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" . 're' . $row[$i]['idressource'] . "' name='ressource[]' value='" . $row[$i]['libelleressourceen'] . "' disabled='" . $bool . "' />
-                <label for " . $row[$i]['libelleressourceen'] . " class='opt' > " . str_replace("''", "'", $row[$i]['libelleressourceen']) . "
+                <label for " .'re'. $row[$i]['idressourceen'] . " class='opt' > " . removeDoubleQuote($row[$i]['libelleressourceen']) . "
                 <a class='infoBulle' href='#'>&nbsp;<img src='/".REPERTOIRE."/styles/img/help.gif' height='13px' width='13px'/><span style='width: 250px;border-radius:5px;padding:10px;'>" . $aide . "</span></a></label><br>";
                 } else {
                     echo "<input  class='opt' type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" . 're' . $row[$i]['idressource'] . "' name='ressource[]' value='" . $row[$i]['libelleressourceen'] . "' />
-                <label for " . $row[$i]['libelleressourceen'] . " class='opt' style='font-weight:normal' > " . str_replace("''", "'", $row[$i]['libelleressourceen']) . "
+                <label for " . 're'.$row[$i]['idressourceen'] . " class='opt' style='font-weight:normal' > " . removeDoubleQuote($row[$i]['libelleressourceen']) . "
                 <a class='infoBulle' href='#'>&nbsp;<img src='/".REPERTOIRE."/styles/img/help.gif' height='13px' width='13px'/><span style='width: 250px;border-radius:5px;padding:10px;'>" . $aide . "</span></a></label><br>";
-                }
             }
+        }
         }
         ?>
     </div>

@@ -110,6 +110,10 @@ $sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentr
 
 $row = $manager->getListbyArray($sql, $donnee);
 $nbrow = count($row);
+if($nbrow>300){
+    echo ' <script>alert("' . TXT_INTERVALEDATE . '");window.location.replace("/' . REPERTOIRE . '/exportdesProjetsBrute.php?lang=' . $lang . '")</script>';
+    exit();
+}
 if ($nbrow != 0) {
 // ENREGISTREMENT DES RESULTATS LIGNE PAR LIGNE
     for ($i = 0; $i < $nbrow; $i++) {

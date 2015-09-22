@@ -23,6 +23,11 @@ for ($i = 0; $i < count($arrayid); $i++) {
         }
     }
 }
+if(isset($_GET['etautrecentrale'])){
+    $descriptionautrecentrale = $_GET['etautrecentrale'];
+}else{
+    $descriptionautrecentrale = '';
+}
 //DESTINATAIRE
 $maildestinataire = $emailcentrales;
 $semailcentrale = '<br>' . substr($sEmailcentrale, 0, -1);

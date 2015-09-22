@@ -41,7 +41,7 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
     if ($_GET['qualitedemandeuraca'] == 'qa' . NONPERMANENT) {
         $ancienEmailResponsable = $manager->getsingle2("SELECT  mailresponsable FROM utilisateur WHERE idutilisateur =?", $idutilisateur);
         if (!empty($_GET['mailresponsable']) && $_GET['mailresponsable'] != $ancienEmailResponsable) { //NOUVEL EMAIL
-            $emailResponsable = stripslashes(Securite::bdd($_GET['mailresponsable']));
+            $emailResponsable = $_GET['mailresponsable'];
             $utilisateurMailresponsable = new UtilisateurMailresponsable($idutilisateur, $emailResponsable);
             $manager->updateUtilisateurMailResponsable($utilisateurMailresponsable, $idutilisateur);
         }
@@ -51,7 +51,7 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
 //IDEM POUR LES AUTRES PARAMETRES
         $ancienNomresponsable = $manager->getsingle2("SELECT  nomresponsable FROM utilisateur WHERE idutilisateur =?", $idutilisateur);
         if (!empty($_GET['nomresponsable']) && $_GET['nomresponsable'] != $ancienNomresponsable) {
-            $nomresponsable = stripslashes(pg_escape_string($_GET['nomresponsable']));
+            $nomresponsable = stripslashes(Securite::bdd($_GET['nomresponsable']));
             $utilisateurnomresponsable = new UtilisateurNomresponsable($idutilisateur, $nomresponsable);
             $manager->updateUtilisateurNomresponsable($utilisateurnomresponsable, $idutilisateur);
         }
@@ -150,7 +150,7 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
 //---------------------------------------------------------------------------------------------------------------------------------------
     $ancienLibelleautrediscipline = Securite::bdd($manager->getsingle2("SELECT libelleautrediscipline FROM utilisateur,autredisciplinescientifique WHERE  idautrediscipline =idautrediscipline_autredisciplinescientifique
   and idutilisateur =?", $idutilisateur)); //LIBELLE DANS LA BASE DE DONNEE
-    $nouveauLibelleautrediscipline = Securite::bdd($_GET['libelleautrediscipline']);
+    $nouveauLibelleautrediscipline = stripslashes(Securite::bdd($_GET['libelleautrediscipline']));
     if (!empty($nouveauLibelleautrediscipline) && $ancienLibelleautrediscipline != $nouveauLibelleautrediscipline) {
         $idautrediscipline = $manager->getSingle("select max(idautrediscipline)from autredisciplinescientifique") + 1;
         $idautre = $manager->getSingle("select iddiscipline from disciplinescientifique where libellediscipline= 'Autres'");
@@ -184,9 +184,20 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
 //-------------------------------------------------------------------------------------------------------------------------------------------
     $ancienacronymelaboratoire = $manager->getSingle2("SELECT acronymelaboratoire FROM utilisateur WHERE idutilisateur = ?", $idutilisateur);
     if (isset($_GET['acronymelaboratoire']) && $_GET['acronymelaboratoire'] != $ancienacronymelaboratoire) {
-        $acronymelaboratoire = new UtilisateurAcronymelabo(Securite::bdd($_GET['acronymelaboratoire']), $idutilisateur);
+        $acronymelaboratoire = new UtilisateurAcronymelabo(stripslashes(Securite::bdd($_GET['acronymelaboratoire'])), $idutilisateur);
         $manager->updateAcronymelaboratoire($acronymelaboratoire, $idutilisateur);
     }
+//-------------------------------------------------------------------------------------------------------------------------------------------
+//						       ENTREPRISE LABORATOIRE
+//-------------------------------------------------------------------------------------------------------------------------------------------
+    $ancienentreoriselaboratoire = $manager->getSingle2("SELECT entrepriselaboratoire FROM utilisateur WHERE idutilisateur = ?", $idutilisateur);
+    if (isset($_GET['entrepriselaboratoire']) && $_GET['entrepriselaboratoire'] != $ancienentreoriselaboratoire) {
+        $entrepriselaboratoire = new UtilisateurNomlabo($idutilisateur, stripslashes(Securite::bdd($_GET['entrepriselaboratoire'])));
+        $manager->updateUtilisateurNomlabo($entrepriselaboratoire, $idutilisateur);
+    }    
+//-------------------------------------------------------------------------------------------------------------------------------------------
+//						       SESSION
+//-------------------------------------------------------------------------------------------------------------------------------------------        
     BD::deconnecter();
     $_SESSION['libelleautrenomemployeur'] = '';
     $_SESSION['libelleautretutelle'] = '';
@@ -211,12 +222,6 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
 //-------------------------------------------------------------------------------------------------------------------------------------------
 //						       FIN
 //-------------------------------------------------------------------------------------------------------------------------------------------    
-
-
-
-
-
-
 
 
     header('Location: /' . REPERTOIRE . '/updatecompteaca/' . $lang . '/' . $idutilisateur . '/1/ok');

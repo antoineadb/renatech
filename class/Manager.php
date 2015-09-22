@@ -3038,11 +3038,30 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO Projetautrecentrale (idcentrale,idprojet) VALUES (?,?)');
+            $requete = $this->_db->prepare('INSERT INTO Projetautrecentrale (idcentrale,idprojet,sendmail) VALUES (?,?,?)');
             $idcentrale = $projetautrecentrale->getIdcentrale();
             $idprojet = $projetautrecentrale->getIdprojet();
+            $sendmail = $projetautrecentrale->getSendmail();
             $requete->bindParam(1, $idcentrale, PDO::PARAM_INT);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(3, $sendmail, PDO::PARAM_BOOL);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    
+    public function updateProjetAutresCentraleEmail(Projetautrecentrale $projetautrecentrale, $idprojet,$idcentrale) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update Projetautrecentrale set sendmail=? where idprojet=? and idcentrale=?');            
+            $sendmail = $projetautrecentrale->getSendmail();
+            $requete->bindParam(1, $sendmail, PDO::PARAM_BOOL);
+            $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(3, $idcentrale, PDO::PARAM_INT);            
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3235,6 +3254,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+
     public function deleteAutresQualite(Autresqualite $autreQualite) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -3249,6 +3269,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+
 //-----------------------------------------------------------------------------------------------------------
 //             RAPPORTS
 //-----------------------------------------------------------------------------------------------------------
@@ -3427,14 +3448,15 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+
 //-----------------------------------------------------------------------------------------------------------
 //              CORBEILLE PROJET
 //-----------------------------------------------------------------------------------------------------------
-     public function trashedProjet($idprojet) {
+    public function trashedProjet($idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare("update projet set trashed = TRUE  where idprojet =?");            
+            $requete = $this->_db->prepare("update projet set trashed = TRUE  where idprojet =?");
             $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
@@ -3443,25 +3465,21 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
-        public function restoreProject($idprojet) {
-        try {
-            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->_db->beginTransaction();
-            $requete = $this->_db->prepare("update projet set trashed = FALSE  where idprojet =?");            
-            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
-            $requete->execute();
-            $this->_db->commit();
-        } catch (Exception $exc) {
-            echo TXT_ERRDELETEPROJETDATEDEBUT . '<br>' . $exc->getLine();
-            $this->_db->rollBack();
-        }
-    }
-       
-    
-    
 
-    
-    
+    public function restoreProject($idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("update projet set trashed = FALSE  where idprojet =?");
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRDELETEPROJETDATEDEBUT . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+
 //-----------------------------------------------------------------------------------------------------------
 //              SELECT
 //-----------------------------------------------------------------------------------------------------------
@@ -3563,8 +3581,23 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         return $attachement;
     }
 
+    public function getIdCentraleFromLogin($login) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('SELECT idcentrale_centrale FROM loginpassword,utilisateur WHERE idlogin_loginpassword = idlogin and pseudo=?');
+            $requete->bindParam(1, $login, PDO::PARAM_STR);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+        return $requete->fetch(PDO::FETCH_COLUMN);
+        ;
+    }
+
     public function setDb(PDO $db) {
         $this->_db = $db;
     }
-
 }

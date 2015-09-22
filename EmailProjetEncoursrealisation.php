@@ -1,4 +1,5 @@
 <?php
+
 include_once 'decide-lang.php';
 include 'class/email.php';
 include_once 'class/Manager.php';
@@ -50,15 +51,15 @@ if (!empty($_GET['numProjet'])) {
     $numprojet = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
 }
 $titreProjet = $manager->getSingle("select titre from projet where numero='" . $numprojet . "'");
-$titre = str_replace("''", "'", utf8_decode($titreProjet));
+$titre = removeDoubleQuote(utf8_decode($titreProjet));
 $txtbodyref = utf8_decode(affiche('TXT_BOBYREF'));
 $sujet = TXT_DEMANDEPROJET . ' : ' . $titre . ' ' . $txtbodyref . ' ' . $numprojet;
-$body = htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILREALISATION4'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILREALISATION1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILREALISATION2'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_RAPPEL'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        '<br><br>' . htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_EMAILADDRESSCENTRAL'))), ENT_QUOTES, 'UTF-8') . ' ' . htmlentities($centrale, ENT_QUOTES, 'UTF-8') . ' <br> ' . $emailCentrale . '<br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>'."<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br>' .
-        htmlentities(stripslashes(str_replace("''", "'", affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
+$body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILREALISATION4'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILREALISATION1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILREALISATION2'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RAPPEL'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+        '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_EMAILADDRESSCENTRAL'))), ENT_QUOTES, 'UTF-8') . ' ' . htmlentities($centrale, ENT_QUOTES, 'UTF-8') . ' <br> ' . $emailCentrale . '<br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>'."<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 $infodemandeur = array($manager->getList2('SELECT mail, mailresponsable FROM creer,loginpassword,utilisateur WHERE idutilisateur_utilisateur = idutilisateur
             AND idlogin_loginpassword = idlogin and idprojet_projet=?', $idprojet));
 $maildemandeur = array($infodemandeur[0][0]['mail']); //EMAIL DU DEMANDEUR NE PEUT PAS NE PAS EXISTER
@@ -88,8 +89,5 @@ if (!empty($infodemandeur[0][0]['mailresponsable'])) {
 }
 $emailcc = array_merge($emailcentrales, $CC);
 $mailCC = array_unique($emailcc);
-envoieEmail($body, $sujet, $maildemandeur, $mailCC);
 
-if (isset($_POST['etapeautrecentrale']) && $_POST['etapeautrecentrale'] == 'TRUE') {
-    include_once 'outils/envoiEmailAutreCentrale.php';    
-}
+envoieEmail($body, $sujet, $maildemandeur, $mailCC);
