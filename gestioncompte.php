@@ -101,6 +101,10 @@ include 'html/header.html';
                 </fieldset><?php
                 include 'html/footer.html';
             }
+/**------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ *          CAS ACADEMIQUE
+ * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+ */            
             if (!empty($_GET['iduser']) && !empty($_GET['idqualiteaca']) && empty($_GET['idqualiteindust'])) {
                 $iduser = $_GET['iduser'];
                 $row = $manager->getList2("
@@ -150,7 +154,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                     <legend><?php echo TXT_COMPTE; ?></legend>
                     <?php
                     if (isset($_GET['update']) && $_GET['update'] == 'ok') {
-                        echo '<table style="width:500px" align:center><tr><td  align=center><div  style="height:20px "><b>Compte mis à jour</b></div></td><tr></table>';
+                        echo '<table style="width:500px" align:center><tr><td  align=center><div  style="height:20px "><b>'.TXT_COMPTEMAJ.'</b></div></td><tr></table>';
                     }
                     ?>
                     <div id="compteutilisateuraca" >
@@ -434,7 +438,8 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                     </select>
                                 </td>
                             </tr>
-                            <tr><th style="text-align: left"><?php echo TXT_ADMINDEPROJET; ?>
+                            <tr>
+                                <th style="text-align: left"><?php echo TXT_ADMINDEPROJET; ?>
                                 <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                         <span style="text-align: left;padding:10px;width: 750px;border-radius:5px" ><?php echo affiche('TXT_AIDEADMINDEPROJET');?></span>
                                     </a></th>
@@ -460,6 +465,8 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                             </tr>
                             <?php
                             $idtypeutilisateur = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword, utilisateur WHERE  idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
+                            $libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM utilisateur,centrale WHERE idcentrale = idcentrale_centrale and idutilisateur=?", $_GET['iduser']);
+                            $idcentrale = $manager->getSingle2("select idcentrale from centrale where libellecentrale=?", $libellecentrale);
                             if($idtypeutilisateur==ADMINNATIONNAL){
                                 $rowdroit = $manager->getList("SELECT libelletype,idtypeutilisateur	 FROM typeutilisateur");                        
                             ?>
@@ -491,14 +498,14 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                         </tr>
                         
                         <?php                        
-                            $libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM utilisateur,centrale WHERE idcentrale = idcentrale_centrale and idutilisateur=?", $_GET['iduser']);
-                            $idcentrale = $manager->getSingle2("select idcentrale from centrale where libellecentrale=?", $libellecentrale);
+                            
                             $rowcentrale = $manager->getList2("select libellecentrale,idcentrale from centrale where libellecentrale!='Autres' and idcentrale!=?", $idcentrale);
                             $rowcentrale2 = $manager->getList("select libellecentrale,idcentrale from centrale where libellecentrale!='Autres'");
+                           
                         ?>
                         <tr id='central' style="display: none" >
-                            <th style="text-align: left;"><?php echo TXT_CENTRALE; ?></th><td></td>
-    <?php if (!empty($libellecentrale)) { ?>
+                            <th style="text-align: left;"><?php echo TXT_CENTRALE; ?></th><td></td>                            
+<?php if (!empty($libellecentrale)) {?>
                                 <td>
                                     <select name="centrale" id="centrale"   data-dojo-type="dijit/form/Select" style="width: 318px;margin-left: 50px" data-dojo-props="value:'<?php echo $libellecentrale; ?>',placeHolder:'<?php echo TXT_SELECTCENTRALE; ?>'"  >
                                         <option ><?php echo $libellecentrale; ?></option>
@@ -522,6 +529,32 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
     <?php } ?>
                         </tr>                        
                             <?php } ?>
+                        
+<?php
+/**------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ *          CAS ACADEMIQUE INTERNE
+ * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+ */?>
+                        <?php if (!empty($libellecentrale)) {
+                            $vueprojetcentrale = $manager->getSingle2("select vueprojetcentrale from utilisateur where idutilisateur=?", $_GET['iduser']);
+                            ?>
+                            <tr>
+                                <th style="text-align: left"><?php echo TXT_VUEPROJETDELACENTRALE; ?><a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                        <span style="text-align: left;padding:10px;width: 420px;border-radius:5px" ><?php echo affiche('TXT_AIDEVUEPROJETCENTRALE');?></span>
+                                    </a></th></th><td></td>                                
+                                <td>
+                                    <div style="margin-left: 50px">
+                                        <?php if($vueprojetcentrale==TRUE){ ?>
+                                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id ="vueOui" checked="true"  class="btRadio" ><?php echo TXT_OUI; ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id="vueNon"  class="btRadio"> <?php echo TXT_NON; ?>
+                                        <?php }else{ ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id ="vueOui"   class="btRadio" ><?php echo TXT_OUI; ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentralevueprojetcentrale" id="vueNon" checked="true"  class="btRadio"> <?php echo TXT_NON; ?>
+                                        <?php } ?>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php }?>
                         </table>
                         <button id="progButtonNode" data-dojo-type="dijit/form/Button" type="submit" name="submitButtonThree" value="Submit"><?php echo TXT_MAJ; ?></button>
                     </div>
@@ -637,6 +670,11 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                 } else {
                                     admin = 0;
                                 }
+                                 if (dijit.byId('vueOui').checked) {
+                                    var vue = 'TRUE';
+                                } else {
+                                    vue = 'FALSE';
+                                }
                                 
                                 
                                 
@@ -644,7 +682,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                         "&faxuser="+faxuser+"&adresseuser="+adresseuser+"&codepostal="+codepostal+"&ville="+ville+"&qualitedemandeuraca="+idqualitedemandeuraca+"&nomresponsable=" + nomresponsable +"&mailresponsable=" + mailresponsable 
                                         + "&acronymelaboratoire=" + acronymelaboratoire + "&entrepriselaboratoire=" + entrepriselaboratoire + "&idemployeur=" + idemployeur + "&role=" + role + "&idtutelle=" + idtutelle 
                                 + "&libelleautretutelle=" + libelleautretutelle + "&libelleautrenomemployeur=" + libelleautrenomemployeur + "&iddiscipline=" + iddiscipline + "&centrale=" + centrale 
-                                + "&libelleautrediscipline=" + libelleautrediscipline + "&iduser=" +<?php echo $iduser; ?> + "&statutcompte=" + statutcompte +"&admin="+admin+ "&page_precedente=<?php echo basename(__FILE__); ?>");
+                                + "&libelleautrediscipline=" + libelleautrediscipline + "&iduser=" +<?php echo $iduser; ?> + "&statutcompte=" + statutcompte +"&admin="+admin+"&vue="+vue+ "&page_precedente=<?php echo basename(__FILE__); ?>");
                             }
                         }, "progButtonNode");
                     });

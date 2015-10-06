@@ -220,6 +220,23 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
     }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
+//						       VUE DES PROJETS DE LA CENTRALE
+//-------------------------------------------------------------------------------------------------------------------------------------------    
+    if (isset($_GET['vue']) && $_GET['vue'] == 'TRUE') {
+        $vuedesprojet = $_GET['vue'];
+        $vueprojet = new UtilisateurVueProjets($idutilisateur, $vuedesprojet);
+        $manager->updateUtilisateurVueProjet($vueprojet, $idutilisateur);
+    }  elseif (isset($_GET['vue']) && $_GET['vue'] == 'FALSE') {
+        $vuedesprojet = $_GET['vue'];
+        $vueprojet = new UtilisateurVueProjets($idutilisateur, $vuedesprojet);
+        $manager->updateUtilisateurVueProjet($vueprojet, $idutilisateur);
+        
+    }    
+
+    
+    
+    
+//-------------------------------------------------------------------------------------------------------------------------------------------
 //						       FIN
 //-------------------------------------------------------------------------------------------------------------------------------------------    
 

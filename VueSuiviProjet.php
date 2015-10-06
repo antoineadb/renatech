@@ -32,6 +32,14 @@ include 'html/header.html';
          <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_SUIVIPROJET; ?>" style="width: auto; height:500px;" >
             <?php require_once 'html/vueSuiviProjet.html'; ?>
         </div>
+        <?php 
+            $vueCentrale = $manager->getSingle2("select vueprojetcentrale from utilisateur,loginpassword where idlogin_loginpassword=idlogin and pseudo=?", $_SESSION['pseudo']);
+            if($vueCentrale==TRUE){
+        ?>
+        <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_VUESUIVIPROJETCENTRALE ?>" style="width: auto; height:500px;" >
+            <?php require_once 'html/vueSuiviProjetCentraleUser.html'; ?>
+        </div>
+            <?php }?>
         <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_CONSULTPROJET ?>" style="width: auto; height:500px;" >
             <?php require_once 'html/vueSuiviProjetEnCours.html'; ?>
         </div>

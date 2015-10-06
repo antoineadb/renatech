@@ -483,8 +483,7 @@ $date  = $date->format('d-m-Y');
                         <label style="margin-left: 22px;width:305px" for="<?php	echo	'nomLaboEntreprise'	.	$i;	?>">
                             <?php	echo	TXT_NOMLABOENTREPRISE	.	' 1 *';?>
                         </label>
-                        <?php $rowCentrale =$manager->getListbyArray("select idcentrale,libellecentrale from centrale where libellecentrale !=?
-                        order by idcentrale asc",array($centralepartenaireprojet)); ?>
+                        <?php $rowCentrale =$manager->getListbyArray("select idcentrale,libellecentrale from centrale where libellecentrale !=? order by idcentrale asc",array($centralepartenaireprojet)); ?>
                     </td>
                     <td><div id="centralelaboentreprise"></div>
                         <input type="text" id="centralepartenaireprojet" autocomplete="on" name="centralepartenaireprojet" maxlength="100"
@@ -1431,8 +1430,17 @@ function masquecentraleproximite(){
                             $etapeautrecentrale = $manager->getSingle2("select etapeautrecentrale from projet where idprojet=?",$idprojet); 
                             if(!empty($etapeautrecentrale)){
                                 $etapeautrecentrale='TRUE';
-                            }                            
+                            }
+                            $idtypeutilisateur = $manager->getSingle2('select idtypeutilisateur_typeutilisateur from utilisateur,loginpassword where idlogin_loginpassword=idlogin and pseudo=?',$_SESSION['pseudo']);
+                            $pseudo =  $manager->getSingle2('SELECT pseudo FROM loginpassword,projet,creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet 
+                            AND idlogin_loginpassword = idlogin AND idprojet=?',$idprojet);
+                            $pseudoAdministrateur =$manager->getSingle2('SELECT l.pseudo FROM loginpassword l,projet p,utilisateur u,utilisateuradministrateur ua WHERE u.idlogin_loginpassword = l.idlogin 
+                            AND ua.idprojet = p.idprojet AND ua.idutilisateur = u.idutilisateur AND  p.idprojet=?',$idprojet);
+                            $pseudoPorteur = $manager->getSingle2('SELECT pseudo FROM loginpassword,projet,utilisateur,utilisateurporteurprojet WHERE idlogin_loginpassword = idlogin 
+                            AND idutilisateur = idutilisateur_utilisateur AND idprojet_projet = idprojet AND idprojet=?',$idprojet);
                             ?>     
+                            
+                <?php if($_SESSION['pseudo'] == $pseudo || $_SESSION['pseudo'] == $pseudoAdministrateur ||$_SESSION['pseudo'] == $pseudoPorteur ||  $idtypeutilisateur == ADMINLOCAL) {?>            
                 <table>                     
                     <tr>
                         <td>
@@ -1486,6 +1494,7 @@ function masquecentraleproximite(){
                     </tr>
                     <tr><td><div style="margin-top: 5px"></div></td></tr>
                 </table>
+                <?php }?>
         <div data-dojo-type="dijit/Dialog" data-dojo-id='rep' title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;" execute="">
            <table class="dijitDialogPaneContentArea">
                <tr>
