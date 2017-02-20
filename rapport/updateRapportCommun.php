@@ -1,6 +1,5 @@
 <?php
 
-$ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
 if (!empty($ancienidrapport)) {
     $datemisajour = date("m,d,Y");
     $datecreation = $manager->getSingle2("select datecreation from rapport where idprojet=? ", $idprojet);
@@ -12,6 +11,7 @@ if (!empty($ancienidrapport)) {
     $rapport = new Rapport($ancienidrapport, $title, $author, $entity, $villepays, $instituteinterest, $fundingsource, $collaborator, $thematics, $startingdate, $objectif, $results, $valorization, $technologicalwc, nomFichierValidesansAccent($logo), nomFichierValidesansAccent($logocentrale), nomFichierValidesansAccent($figure), $idprojet, $legend, $datecreation, $datemisajour);            
     $manager->updateRapport($rapport, $idprojet);
 } else {
+    $idrapport = $manager->getSingle("select max(idrapport) from rapport") + 1;
     $datemisajour = NULL;
     $datecreation = date("m,d,Y");
     if(isset($_POST['restaureLogoCentrale'])&& $_POST['restaureLogoCentrale']=='ok'){

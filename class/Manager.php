@@ -130,39 +130,118 @@ include_once 'Autresqualite.php';
 include_once 'LoginParam.php';
 include_once 'UtilisateurAdministrateur.php';
 include_once 'UtilisateurVueProjets.php';
-
+include_once 'UtilisateurNomEquipe.php';
+include_once 'Logs.php';
+include_once 'ClotureProjet.php';
+include_once 'ProjetDateEnvoiEmail.php';
+include_once 'EmailRenatech.php';
+include_once 'Region.php';
+include_once 'CentraleRegion.php';
+include_once 'CentraleProximite.php';
+include_once 'CentraleProximiteProjet.php';
 showError($_SERVER['PHP_SELF']);
 
 class Manager {
 
     private $_db; //instance de PDO
 
-    public function __construct($db) {
+    public function __construct($db) {            
         $this->setDb($db);
     }
 
 //------------------------------------------------------------------------------------------------------------
 //                                       LOGIN
 //------------------------------------------------------------------------------------------------------------
+    /**
+     * 
+     * @param Login $login
+     */
     public function addlogin(Login $login) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO loginpassword (idlogin,mail,motdepasse,pseudo,tmpcx)VALUES(?,?,?,?,?)');
+            $requete = $this->_db->prepare('INSERT INTO loginpassword (idlogin,mail,motdepasse,pseudo,tmpcx,nomequipe)VALUES(?,?,?,?,?,?)');
             $idlogin = $login->getIdlogin();
             $mail = $login->getEmail();
             $motdepasse = $login->getMotpasse();
             $tmpcx = $login->getTmpcx();
             $pseudo = $login->getPseudo();
+            $nomEquipe = $login->getNomEquipe();
             $requete->bindParam(1, $idlogin, PDO::PARAM_INT);
             $requete->bindParam(2, $mail, PDO::PARAM_STR);
             $requete->bindParam(3, $motdepasse, PDO::PARAM_STR);
             $requete->bindParam(4, $pseudo, PDO::PARAM_STR);
             $requete->bindParam(5, $tmpcx, PDO::PARAM_INT);
+            $requete->bindParam(6, $nomEquipe, PDO::PARAM_STR);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
             echo TXT_MANAERRLOGIN . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+//------------------------------------------------------------------------------------------------------------
+//                                       LOGS
+//------------------------------------------------------------------------------------------------------------
+    /**
+     * 
+     * @param Logs $logs
+     */
+    public function addlogs(Logs $logs) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO logs (id,dateHeure,infos,nomPrenom,statutProjet,idcentrale)VALUES(?,?,?,?,?,?)');
+            $id=$logs->getId();
+            $dateHeure = $logs->getDateHeure();
+            $infos = $logs->getInfos();
+            $nomPrenom = $logs->getNomPrenom();            
+            $statutProjet = $logs->getStatutProjet();
+            $idcentrale=  $logs->getIdcentrale();
+            $requete->bindParam(1, $id, PDO::PARAM_INT);
+            $requete->bindParam(2, $dateHeure, PDO::PARAM_STR);
+            $requete->bindParam(3, $infos, PDO::PARAM_STR);
+            $requete->bindParam(4, $nomPrenom, PDO::PARAM_STR);
+            $requete->bindParam(5, $statutProjet, PDO::PARAM_STR);
+            $requete->bindParam(6, $idcentrale, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo "Problème d'insertion dans la table LOGS" . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+        /**
+         * 
+         * @param Logs $logs
+         */
+    public function delLogs() {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('delete  FROM logs where id NOT IN (select id from logs order by id desc limit 500);');            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo "Problème de suppression dans la table LOGS" . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }    
+//------------------------------------------------------------------------------------------------------------
+//                                       MISE A JOUR CREATION ENREGISTREMENT DANS TABEL CLOTUREPROJET
+//------------------------------------------------------------------------------------------------------------
+    public function updateClotureProjet(ClotureProjet $clotureprojet,$idcentrale){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update clotureprojet set datecloture = ? where idcentrale=?');
+            $datecloture = $clotureprojet->getDateCloture();            
+            $requete->bindParam(1, $datecloture, PDO::PARAM_STR);
+            $requete->bindParam(2, $idcentrale, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJET . '<br>' . $exc->getLine();
             $this->_db->rollBack();
         }
     }
@@ -1030,6 +1109,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
+
 
 //------------------------------------------------------------------------------------------------------------
 //                                       PROJET PHASE 0 ET 1
@@ -2341,6 +2421,22 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+    
+    public function updateLoginNomEquipe(UtilisateurNomEquipe $utilisateurnomequipe, $idlogin) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("UPDATE loginpassword SET nomequipe = ? where idlogin = ?");
+            $nomEquipe = $utilisateurnomequipe->getnomEquipe();
+            $requete->bindParam(1, $nomEquipe, PDO::PARAM_STR);
+            $requete->bindParam(2, $idlogin, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $ex) {
+            echo TXT_ERR . '<br>' . $ex->getLine();
+            $this->_db->rollBack();
+        }
+    }
 
 //------------------------------------------------------------------------------------------------------------
 //                                       DISCIPLINE SCIENTIFIQUE
@@ -2350,7 +2446,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO autredisciplinescientifique (idautrediscipline,libelleautrediscipline)VALUES(?,?) ');
+            $requete = $this->_db->prepare('INSERT INTO autredisciplinescientifique (idautrediscipline,libelleautrediscipline)VALUES(?,?)');
             $idautrediscipline = $autredisciplinescientifique->getIdautrediscipline();
             $libelleautrediscipline = $autredisciplinescientifique->getLibelleautrediscipline();
             $requete->bindParam(1, $idautrediscipline, PDO::PARAM_INT);
@@ -2813,10 +2909,31 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('update sitewebapplication set adressesitewebcentrale =? WHERE refsiteweb =? ');
+            $requete = $this->_db->prepare('update sitewebapplication set adressesitewebcentrale =?,adresselogcentrale=? WHERE refsiteweb =? ');
             $adressesitewebcentrale = $sitewebapplication->getAdressesitewebcentrale();
-            $requete->bindParam(1, $adressesitewebcentrale(), PDO::PARAM_STR);
-            $requete->bindParam(2, $refsiteweb, PDO::PARAM_STR);
+            $nomLogo = $sitewebapplication->getNomLogo();
+            $requete->bindParam(1, $adressesitewebcentrale, PDO::PARAM_STR);
+            $requete->bindParam(2, $nomLogo, PDO::PARAM_STR);
+            $requete->bindParam(3, $refsiteweb, PDO::PARAM_STR);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATESITEWEB . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+
+    public function addSiteWebApplication(Sitewebapplication $sitewebapplication) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('insert into sitewebapplication(refsiteweb,adressesitewebcentrale,adresselogcentrale)  values (?,?,?)');
+            $adressesitewebcentrale = $sitewebapplication->getAdressesitewebcentrale();
+            $nomLogo = $sitewebapplication->getNomLogo();
+            $refsiteweb= $sitewebapplication->getRefsiteweb();
+            $requete->bindParam(1, $refsiteweb, PDO::PARAM_STR);
+            $requete->bindParam(2, $adressesitewebcentrale, PDO::PARAM_STR);
+            $requete->bindParam(3, $nomLogo, PDO::PARAM_STR);            
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3100,10 +3217,10 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
     }
 
 //-----------------------------------------------------------------------------------------------------------
-//             PROJET CENTRALES DE PROXIMITE
+//             PROJET CENTRALES DE PROXIMITE ANCIENNE VERSION
 //-----------------------------------------------------------------------------------------------------------
     /**
-     * 
+     * ancienne version
      * @param Projet_centraleproximite $projetcentraleproximite
      */
     public function addprojetcentraleproximite(Projet_centraleproximite $projetcentraleproximite) {
@@ -3122,10 +3239,13 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+    
+    
 
     /**
      * 
      * @param type $idprojet
+     * ancienne version
      */
     public function deleteprojetcentraleproximite($idprojet) {
         try {
@@ -3144,6 +3264,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
     /**
      * 
      * @param Centrale_proximite $centraleproximite
+     * ancienne version
      */
     public function addcentraleproximite(Centrale_proximite $centraleproximite) {
         try {
@@ -3166,6 +3287,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
      * 
      * @param Centrale_proximite $centraleproximite
      * @param type $idcentraleproximite
+     * ancienne version
      */
     public function updatecentraleproximite(Centrale_proximite $centraleproximite, $idcentraleproximite) {
         try {
@@ -3182,6 +3304,188 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+//-----------------------------------------------------------------------------------------------------------
+//             PROJET CENTRALES DE PROXIMITE NOUVELLE VERSION
+//-----------------------------------------------------------------------------------------------------------
+
+    /**
+     * Fonction qui permet de créer une centrale de proximité
+     * @param CentraleProximite $centraleProximite
+     */
+    public function addCentralProximite(CentraleProximite $centraleProximite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO centraleproximite (idcentraleproximite,libellecentraleproximite,masquecentraleproximite,idregion) VALUES (?,?,?,?)');
+            $idcentraleproximite = $centraleProximite->getIdCentraleProximite();
+            $libellecentraleproximite = $centraleProximite->getLibelleCentraleProximite();
+            $masquecentraleproximite  = $centraleProximite->getMasqueCentraleProximite();
+            $idregion  = $centraleProximite->getIdRegion();
+            $requete->bindParam(1, $idcentraleproximite, PDO::PARAM_INT);
+            $requete->bindParam(2, $libellecentraleproximite, PDO::PARAM_STR);
+            $requete->bindParam(3, $masquecentraleproximite, PDO::PARAM_BOOL);
+            $requete->bindParam(4, $idregion, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    
+    /**
+     * Fonction qui permet de masquer une centrale de proximité
+     * @param CentraleProximite $centraleProximite
+     * @param type $idcentraleproximite
+     */
+    public function hideCentraleProximite(CentraleProximite $centraleProximite, $idcentraleproximite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update centraleproximite set masquecentraleproximite=? where idcentraleproximite=?');
+            $masquecentraleproximite = $centraleProximite->getMasqueCentraleProximite();            
+            $requete->bindParam(1, $masquecentraleproximite, PDO::PARAM_BOOL);
+            $requete->bindParam(2, $idcentraleproximite, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    
+    /**
+     * Fonction qui permet de modifier une centrale de proximité
+     * @param CentraleProximite $centraleProximite
+     * @param type $idcentraleproximite
+     */
+     public function updateCentraleProximit(CentraleProximite $centraleProximite, $idcentraleproximite) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update centraleproximite set libellecentraleproximite=? where idcentraleproximite=?');
+            $libellecentraleproximite = $centraleProximite->getLibelleCentraleProximite();
+            $requete->bindParam(1, $libellecentraleproximite, PDO::PARAM_BOOL);
+            $requete->bindParam(2, $idcentraleproximite, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+//-----------------------------------------------------------------------------------------------------------
+//             PROJET CENTRALES DE PROXIMITE REGION
+//-----------------------------------------------------------------------------------------------------------    
+    /**
+     * 
+     * @param Region $region
+     */
+    public function addRegion(Region $region){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO region (idregion,libelleregion,masqueregion) VALUES (?,?,?)');
+            $idregion = $region->getIdRegion();
+            $libelleregion = $region->getLibelleRegion();
+            $masqueregion = $region->getMasqueRegion();
+            $requete->bindParam(1, $idregion, PDO::PARAM_INT);
+            $requete->bindParam(2, $libelleregion, PDO::PARAM_STR);
+            $requete->bindParam(3, $masqueregion, PDO::PARAM_BOOL);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    
+    /**
+     * 
+     * @param Region $region
+     * @param type $idregion
+     */
+    public function hideRegion(Region $region, $idregion){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update region set masqueregion=? where idregion=?');
+            $masqueRegion = $region->getMasqueRegion();
+            $requete->bindParam(1, $masqueRegion, PDO::PARAM_BOOL);
+            $requete->bindParam(2, $idregion, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    
+    /**
+     * 
+     * @param Region $region
+     * @param type $idregion
+     */
+    public function updateRegion(Region $region, $idregion){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update region set libelleregion=? where idregion=?');
+            $libelleRegion = $region->getLibelleRegion();
+            $requete->bindParam(1, $libelleRegion, PDO::PARAM_STR);
+            $requete->bindParam(2, $idregion, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+
+//-----------------------------------------------------------------------------------------------------------
+//             CENTRALES DE PROXIMITE AFFECTER UNE CENTRALE DE PROXIMITE A UNE REGION
+//-----------------------------------------------------------------------------------------------------------        
+    
+    public function addCentraleRegion(CentraleRegion $centraleRegion){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO centraleregion (idcentrale,idregion) VALUES (?,?)');
+            $idcentrale = $centraleRegion->getIdCentrale();
+            $idregion = $centraleRegion->getIdRegion();            
+            $requete->bindParam(1, $idcentrale, PDO::PARAM_INT);
+            $requete->bindParam(2, $idregion, PDO::PARAM_INT);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+        
+    }
+    
+//-----------------------------------------------------------------------------------------------------------
+//             CENTRALES DE PROXIMITE AFFECTER UNE CENTRALE DE PROXIMITE A UN PROJET
+//-----------------------------------------------------------------------------------------------------------            
+    public function addCentraleProximiteProjet(CentraleProximiteProjet $centrale){
+         try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO CentraleProximiteProjet (idprojet,idcentraleproximite) VALUES (?,?)');
+            $idprojet = $centrale->getIdProjet();
+            $idcentraleproximite = $centrale->getIdCentraleProximite();
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(2, $idcentraleproximite, PDO::PARAM_INT);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+
+
+
 
 //-----------------------------------------------------------------------------------------------------------
 //                                                                              PERSONECENTRALEQUALITE
@@ -3226,6 +3530,20 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete = $this->_db->prepare('delete from personneCentraleQualite where idpersonneQualite=?');
             $idpersonneQualite = $personcentralequalite->getIdpersonneQualite();
             $requete->bindParam(1, $idpersonneQualite, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    
+      public function deletecentraleproximiteprojet($idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('DELETE from centraleproximiteprojet WHERE idprojet = ?');
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3284,7 +3602,30 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+//-----------------------------------------------------------------------------------------------------------
+//             Envoi Email pour relance de mise à jour
+//-----------------------------------------------------------------------------------------------------------
 
+    public function updateDateenvoiemail(ProjetDateEnvoiEmail $projetdate,$idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE Projet set dateenvoiemail =? where idprojet=?');
+            $dateenvoiemail = $projetdate->getDateEnvoiMail();            
+            $requete->bindParam(1, $dateenvoiemail, PDO::PARAM_INT);
+            $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    
+       
+    
+    
+    
 //-----------------------------------------------------------------------------------------------------------
 //             RAPPORTS
 //-----------------------------------------------------------------------------------------------------------
@@ -3463,6 +3804,28 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+//-----------------------------------------------------------------------------------------------------------
+//              EMAIL RENATECH POUR DEMANDE DE FAISABILITE
+//-----------------------------------------------------------------------------------------------------------
+
+    public function updateEmailRenatech(EmailRenatech $email, $idemail){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE emailrenatech set email =? where idemail=?');
+            $s_email = $email->getEmail();
+            $requete->bindParam(1, $s_email, PDO::PARAM_INT);
+            $requete->bindParam(2, $idemail, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+            
+
+
 
 //-----------------------------------------------------------------------------------------------------------
 //              CORBEILLE PROJET

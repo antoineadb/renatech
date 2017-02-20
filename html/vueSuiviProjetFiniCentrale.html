@@ -1,4 +1,4 @@
-<style type="text/css">//dev
+<style type="text/css">
     #grid {
         width: 65em;
         height: 350em;
@@ -16,7 +16,7 @@
     dojo.require("dojox.grid.enhanced.plugins.Pagination");
 dojo.ready(function(){
     /*set up data store*/
-    var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetFiniCentrale.json"});
+    var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetFiniCentrale<?php echo IDCENTRALEUSER; ?>.json"});
     /*set up layout*/    
     var layout = [[{
                     name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "110px", formatter: hrefFormatterNumero},

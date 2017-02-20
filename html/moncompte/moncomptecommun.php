@@ -25,11 +25,14 @@ if (isset($_GET['adresseuser']) && $_GET['adresseuser'] != $ancienneAdresse) {
     $manager->updateAdresseMoncompte($adresseUser, $idutilisateur);
 }
 $ancienCp = $manager->getSingle2("select codepostal from utilisateur where idutilisateur = ?", $idutilisateur);
-if (isset($_GET['codepostal']) && $_GET['codepostal'] != $ancienCp) {
-    $cp = stripslashes(Securite::bdd($_GET['codepostal']));
-    $cpUser = new CodepostalUser($cp);
-    $manager->updateCodepostalMoncompte($cpUser, $idutilisateur);
+if (isset($_GET['codepostal']) && !empty($_GET['codepostal'])) {
+    if ($_GET['codepostal'] != $ancienCp || strlen($_GET['codepostal']) != strlen($ancienCp)) {
+        $cp = stripslashes($_GET['codepostal']);
+        $cpUser = new CodepostalUser($cp);
+        $manager->updateCodepostalMoncompte($cpUser, $idutilisateur);
+    }
 }
+
 $ancienneVille = stripslashes($manager->getSingle2("select ville from utilisateur where idutilisateur = ?", $idutilisateur));
 if (isset($_GET['ville']) && $_GET['ville'] != $ancienneVille) {
     $ville = stripslashes(Securite::bdd(($_GET['ville'])));
@@ -38,15 +41,19 @@ if (isset($_GET['ville']) && $_GET['ville'] != $ancienneVille) {
 }
 
 $ancienTel = $manager->getSingle2("select telephone  from utilisateur where idutilisateur = ?", $idutilisateur);
-if (!empty($_GET['teluser']) && $_GET['teluser'] != $ancienTel) {    
-    $teluser = new TelephoneUser(stripslashes(Securite::bdd($_GET['teluser'])));
-    $manager->updatetelephoneMoncompte($teluser, $idutilisateur);
+if (isset($_GET['teluser'])&&!empty($_GET['teluser'])){    
+    if($_GET['teluser'] != $ancienTel || strlen($_GET['teluser']) != strlen($ancienTel) ) {    
+        $teluser = new TelephoneUser(stripslashes($_GET['teluser']));
+        $manager->updatetelephoneMoncompte($teluser, $idutilisateur);
+    }
 }
 $ancienFax = $manager->getSingle2("select fax  from utilisateur where idutilisateur = ?", $idutilisateur);
-if (isset($_GET['faxuser']) && $_GET['faxuser'] != $ancienFax) {
-    $fax = $_GET['faxuser'];
-    $faxUser = new FaxUser(stripslashes(Securite::BDD($fax)));
-    $manager->updateFaxMoncompte($faxUser, $idutilisateur);
+if (isset($_GET['faxuser'])&&!empty($_GET['faxuser'])){    
+    if($_GET['faxuser'] != $ancienTel || strlen($_GET['faxuser']) != strlen($ancienFax) ) {    
+        $fax = $_GET['faxuser'];
+        $faxUser = new FaxUser(stripslashes(Securite::BDD($fax)));
+        $manager->updateFaxMoncompte($faxUser, $idutilisateur);
+    }
 } else {
     $fax = '';
 }

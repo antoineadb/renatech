@@ -7,7 +7,6 @@ body {
     font-family: Lucida Sans, Lucida Grande, Arial !important;
     font-size: 13px !important;
     background: white;
-    //padding: 1px 50px 30px 1px;
     width:100%;
     margin:auto;
     min-width:400px;
@@ -346,8 +345,7 @@ a.infoBulle:hover span{
 .but{
     width:80px;
 }
-#entete {
-    //padding: 20px;
+#entete {    
     padding: 0px 20px 20px 0;
 }
 #entete h1 {
@@ -366,7 +364,6 @@ a.infoBulle:hover span{
 }
 #navigation ul,#navigationmodifprojet ul, #navigationcreateprojet ul {
     margin: 0;
-    // padding: 20px 10px;
     padding: 30px 0;
     list-style: none;
 }
@@ -726,7 +723,6 @@ a.infoBulle:hover span{
 }
 
 .msgerrpersoncentrale{ 
-    //border-color: #FF0000;
     width:952px;
     margin-top:20px;
     margin-left: 20px;
@@ -742,7 +738,6 @@ a.infoBulle:hover span{
 
 }
 .msgerrdescription,.msgerrcontexte{ 
-    //border-color: #FF0000;
     width:950px;
     margin-top:20px;
     padding: 15px;
@@ -757,7 +752,6 @@ a.infoBulle:hover span{
 
 }
 .msgerrContexte{
-    //border-color: #FF0000;
     width:950px;
     padding-bottom:  15px;
     padding-right: 15px;
@@ -774,7 +768,6 @@ a.infoBulle:hover span{
 
 }
 .msgerrcontexteph1, .msgerrdescriptionph1{
-    //border-color: #FF0000;
     width:927px;
     padding-bottom:  15px;
     padding-right: 15px;

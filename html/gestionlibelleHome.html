@@ -32,20 +32,21 @@ if(isset($_GET['msgupdateaccueil'])){?>
         $acceuil1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL1');
         $acceuil2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL2');
         $acceuil3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL3');
+        $aidecentraleproximite= $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_AIDECENTRALEPROXIMITE');
         ?>
         <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
             <span style="text-align: left;padding:10px;width: 945px;height:240px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
                 <?php
                 if($lang=='fr'){
-                echo  stripslashes(str_replace("''","'",str_replace("’’","'",$bienvenue[0]['libellefrancais']))).'<br>'.
-                stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil1[0]['libellefrancais']))).'<br>'.
-                stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil2[0]['libellefrancais']))).
-                '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil3[0]['libellefrancais'])));
+                echo  stripslashes(removeDoubleQuote(str_replace("’’","'",$bienvenue[0]['libellefrancais']))).'<br>'.
+                stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil1[0]['libellefrancais']))).'<br>'.
+                stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil2[0]['libellefrancais']))).
+                '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil3[0]['libellefrancais'])));
                 }elseif($lang=='en'){
-                echo  stripslashes(str_replace("''","'",str_replace("’’","'",$bienvenue[0]['libelleanglais']))).'<br>'.
-                stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil1[0]['libelleanglais']))).'<br>'.
-                stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil2[0]['libelleanglais']))).
-                '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil3[0]['libelleanglais'])));
+                echo  stripslashes(removeDoubleQuote(str_replace("’’","'",$bienvenue[0]['libelleanglais']))).'<br>'.
+                stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil1[0]['libelleanglais']))).'<br>'.
+                stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil2[0]['libelleanglais']))).
+                '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil3[0]['libelleanglais'])));
                 }
                 ?>
             </span>
@@ -61,75 +62,102 @@ if(isset($_GET['msgupdateaccueil'])){?>
                 <td valign="middle" style="width:450px"> <input data-dojo-type="dijit/form/ValidationTextBox"
                     value="<?php echo strip_tags($bienvenue[0]['libellefrancais']); ?>"				onfocus="enablemodifhome()"
                     style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenuefr" name="bienvenuefr"
-                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
+                    data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
 
                 </td>
                 <td valign="middle" style="width:450px">
                     <input data-dojo-type="dijit/form/ValidationTextBox"
                            value="<?php echo strip_tags($bienvenue[0]['libelleanglais']); ?>"				onfocus="enablemodifhome()"
                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenueen" name="bienvenueen"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
+                           data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
 
                 </td>
             </tr>
             <tr>
                 <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil1= stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil1[0]['libellefrancais'])));
+                    <?php $libelleacceuil1= stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil1[0]['libellefrancais'])));
                     ?>
                     <input data-dojo-type="dijit/form/ValidationTextBox"
                            value="<?php echo strip_tags($libelleacceuil1); ?>"			onfocus="enablemodifhome()"
                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil1fr" name="acceuil1fr"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$_\«\»\’’ ,\.\'\-\:\/]+'" >
+                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
 
                 </td>
                 <td valign="middle" style="width:450px">
                     <?php 
-                    $libelleacceuil1en=stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil1[0]['libelleanglais'])));
+                    $libelleacceuil1en=stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil1[0]['libelleanglais'])));
                     ?>
                     <input data-dojo-type="dijit/form/ValidationTextBox"
                            value='<?php echo strip_tags($libelleacceuil1en); ?>'	onfocus="enablemodifhome()"
                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil1en" name="acceuil1en"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$_\«\»\’’ ,\.\'\-\:\/]+'" >
-
+                            data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
+                                           
                 </td>
             </tr>
             <tr>
                 <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil2= stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil2[0]['libellefrancais'])));?>
+                    <?php $libelleacceuil2= stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil2[0]['libellefrancais'])));?>
                     <input data-dojo-type="dijit/form/ValidationTextBox"
                            value="<?php echo strip_tags($libelleacceuil2); ?>"			onfocus="enablemodifhome()"
                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil2fr" name="acceuil2fr"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$_\«\»\’’ ,\.\'\-\:\/]+'" >
+                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
 
                 </td>
                 <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil2= stripslashes(str_replace("''","'",str_replace('’’','"',$acceuil2[0]['libelleanglais']))); ?>
+                    <?php $libelleacceuil2= stripslashes(removeDoubleQuote(str_replace('’’','"',$acceuil2[0]['libelleanglais']))); ?>
                     <input data-dojo-type="dijit/form/ValidationTextBox"
                            value='<?php echo strip_tags($libelleacceuil2); ?>'		onfocus="enablemodifhome()"
                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil2en" name="acceuil2en"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$_\«\»\’’ ,\.\'\-\:\/]+'" >
+                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
 
                 </td>
             </tr>
             <tr>
                 <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil3= stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil3[0]['libellefrancais'])));?>
+                    <?php $libelleacceuil3= stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil3[0]['libellefrancais'])));?>
                     <input data-dojo-type="dijit/form/ValidationTextBox"
                            value="<?php echo strip_tags($libelleacceuil3); ?>"			onfocus="enablemodifhome()"
                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil3fr" name="acceuil3fr"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$_\«\»\’’ ,\.\'\-\:\/]+'" >
+                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
 
                 </td>
                 <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil3en= stripslashes(str_replace("''","'",str_replace("’’","'",$acceuil3[0]['libelleanglais'])));?>
+                    <?php $libelleacceuil3en= stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil3[0]['libelleanglais'])));?>
                     <input data-dojo-type="dijit/form/ValidationTextBox"
                            value="<?php echo strip_tags($libelleacceuil3en); ?>"		onfocus="enablemodifhome()"
                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil3en" name="acceuil3en"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$_\«\»\’’ ,\.\'\-\:\/]+'" >
+                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
                 </td>
             </tr>
 
         </table>
+    </fieldset>    
+    <fieldset id="gestionhome1" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;">
+        <legend><?php echo TXT_HELPCENTRALEPROXIMITE;  ;?></legend>
+        <table>           
+            <tr>
+                <td valign="middle">
+                    <label><div style="color: #5D8BA2;height:30px;font-weight: bold">
+                        <?php echo TXT_FRANCAIS;?></div></label>
+                    <?php $aidecentraleproximitefr= stripslashes(removeDoubleQuote(str_replace("’’","'",$aidecentraleproximite[0]['libellefrancais'])));?>
+                    <div id="aideCentralePfr" style="width: 1000px" >
+                        <?php echo removeDoubleQuote($aidecentraleproximitefr); ?>
+                    </div>
+                    
+                </td>
+                </tr>
+            <tr>
+                <td valign="middle">
+                    <?php $aidecentraleproximiteen= stripslashes(removeDoubleQuote(str_replace("’’","'",$aidecentraleproximite[0]['libelleanglais'])));?>
+                <label><div style="color: #5D8BA2;height:30px;font-weight: bold"> <?php echo TXT_ANGLAIS;?></div></label>                        
+                        <div id="aideCentralePen" style="width: 1000px" >
+                        <?php echo removeDoubleQuote($aidecentraleproximiteen); ?>
+                    </div>
+                    
+                </td>
+            </tr>
+        </table>
+        
     </fieldset>
     <table>
         <tr><td>&nbsp;</td></tr>
@@ -140,5 +168,45 @@ if(isset($_GET['msgupdateaccueil'])){?>
         </tr>
         <tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
     </table>
+    <input type="hidden" id="aideCentralePfrValeur" name="aideCentralePfrValeur" >
+    <input type="hidden" id="aideCentralePenValeur" name="aideCentralePenValeur" >     
 </form>
+
+ <script>
+        require(["dojo/parser", "dijit/Editor"]);
+        require(["dojo"], function(dojo) {
+        });
+        require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
+            ready(function() {
+                new Editor({
+                    plugins: ['bold','italic','underline','|','insertOrderedList', 'insertUnorderedList','justifyLeft', 'justifyCenter', 'justifyRight'] , height: "200px"
+                }, "aideCentralePfr");
+                new Editor({
+                    plugins: ['bold','italic','underline','|','insertOrderedList', 'insertUnorderedList','justifyLeft', 'justifyCenter', 'justifyRight'] , height: "200px"
+                }, "aideCentralePen");
+
+            });
+            
+            dojo.addOnLoad(function() {
+                var editor1 = dijit.byId("aideCentralePfr");
+                var editor2 = dijit.byId("aideCentralePen");
+                dojo.connect(editor1, "onChange", this, function(event) {
+                    dojo.byId("aideCentralePfrValeur").value = editor1.get("value");
+                });
+                dojo.connect(editor2, "onChange", this, function(event) {
+                    dojo.byId("aideCentralePenValeur").value = editor2.get("value");
+                });
+                
+                dojo.connect(editor2, "onFocus", this, function(event) {                    
+                    enablemodifhome();
+                });
+                dojo.connect(editor1, "onFocus", this, function(event) {                    
+                    enablemodifhome();
+                });
+                
+                
+            });
+        });
+                
+</script>
 <?php BD::deconnecter(); ?>

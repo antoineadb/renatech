@@ -32,7 +32,7 @@ if (isset($_SESSION['pseudo'])) {
             }
         }
     } else {
-        $infocentrale =$manager->getList2("SELECT email1,email2,email3,email4,email5,libellecentrale FROM centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
+        $infocentrale = $manager->getList2("SELECT email1,email2,email3,email4,email5,libellecentrale FROM centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
         if (!empty($infocentrale)) {
             $centrale = $infocentrale[0]['libellecentrale'];
             $emailCentrale = '';
@@ -57,13 +57,13 @@ if (isset($_SESSION['numprojet'])) {
 
 $titreProjet = $manager->getSingle("select titre from projet where numero='" . $numprojet . "'");
 $titre = removeDoubleQuote(utf8_decode($titreProjet));
-$txtbodyref = html_entity_decode((utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_BOBYREF'))))));
-$sujet = html_entity_decode(TXT_MAJPROJET,ENT_QUOTES, 'UTF-8').' : '  . $titre . ' ' . $txtbodyref . ' ' . $numprojet;
-$body = utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_MRSMR')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_BODYEMAILCLOTURE')))) .'<br><br>'.
-        utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_REMERCIEMENT')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_SINCERESALUTATION')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_RESEAURENATECH')))) .
-        '<br><br>' . utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_EMAILADDRESSCENTRAL'))))  .' '. utf8_decode($centrale) . ' <br> ' . $emailCentrale . '<br>' .
-         "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br>' .
-        utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_DONOTREPLY'))));
+$txtbodyref = html_entity_decode((utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_BOBYREF'))))));
+$sujet = html_entity_decode(TXT_MAJPROJET, ENT_QUOTES, 'UTF-8') . ' : ' . $titre . ' ' . $txtbodyref . ' ' . $numprojet;
+$body = utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_MRSMR')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILCLOTURE')))) . '<br><br>' .
+        utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_REMERCIEMENT')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_SINCERESALUTATION')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_RESEAURENATECH')))) .
+        '<br><br>' . utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_EMAILADDRESSCENTRAL')))) . ' ' . utf8_decode($centrale) . ' <br> ' . $emailCentrale . '<br>' .
+        "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br>' .
+        utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_DONOTREPLY'))));
 $infodemandeur = array($manager->getList2('SELECT mail, mailresponsable FROM creer,loginpassword,utilisateur WHERE idutilisateur_utilisateur = idutilisateur
             AND idlogin_loginpassword = idlogin and idprojet_projet=?', $idprojet));
 $maildemandeur = array($infodemandeur[0][0]['mail']); //EMAIL DU DEMANDEUR NE PEUT PAS NE PAS EXISTER
@@ -76,7 +76,7 @@ if (!empty($mailcentrales)) {
             array_push($emailcentrales, $mailcentrales[0][$i]); //construction d'un tableau d'email des responsable de la centrale
         }
     }
-}else{
+} else {
     $mailcentrales = $manager->getList2("SELECT email1,email2,email3,email4,email5 FROM centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
     for ($i = 0; $i <= 5; $i++) {
         if (!empty($mailcentrales[0][$i])) {
@@ -96,4 +96,14 @@ if (!empty($infodemandeur[0][0]['mailresponsable'])) {
 }
 $emailcc = array_merge($emailcentrales, $CC);
 $mailCC = array_unique($emailcc);
+
+$sMailCc = '';
+for ($i = 0; $i < count($mailCC); $i++) {
+    $sMailCc.=$mailCC[$i] . ',';
+}
+$sMailCC = substr($sMailCc, 0, -1);
+$idcentrale = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+$nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+createLogInfo(NOW, 'Projet passé au statut clôturé par la centrale ' . $centrale . ' : E-mail demandeur: ' . $infodemandeur[0][0]['mail'] . ' : ' . ' copie E-mail à  : ' . $sMailCC . ' : n°: ' . $numprojet, 'Demandeur: ' . $nomPrenomDemandeur[0]['nom'] .
+        ' ' . $nomPrenomDemandeur[0]['prenom'], TXT_CLOTURE, $manager, $idcentrale);
 envoieEmail($body, $sujet, $maildemandeur, $mailCC);

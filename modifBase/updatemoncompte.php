@@ -48,12 +48,17 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'moncompte.
         $_SESSION['adresse'] = $adresse;
     }
     $ancienCp = $manager->getSingle2("select codepostal from utilisateur where idutilisateur = ?", $iduser);
-    if (isset($_POST['cp']) && $_POST['cp'] != $ancienCp) {
-        $cp = Securite::bdd($_POST['cp']);
-        $cpUser = new CodepostalUser($cp);
-        $manager->updateCodepostalMoncompte($cpUser, $iduser);
-        $_SESSION['cp'] = $cp;
+    if (isset($_POST['cp']) && !empty($_POST['cp'])) {
+        if ($_POST['cp'] != $ancienCp || strlen($_POST['cp']) != strlen($ancienCp)) {
+            $cp = $_POST['cp'];
+            $cpUser = new CodepostalUser($cp);
+            $manager->updateCodepostalMoncompte($cpUser, $iduser);
+            $_SESSION['cp'] = $cp;
+        }
     }
+    
+    
+    
     $ancienneVille = stripslashes($manager->getSingle2("select ville from utilisateur where idutilisateur = ?", $iduser));
     if (isset($_POST['ville']) && $_POST['ville'] != $ancienneVille) {
         $ville = stripslashes(Securite::bdd(($_POST['ville'])));
@@ -71,17 +76,22 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'moncompte.
         $_SESSION['pays'] = $pays;
     }
     $ancienTel = $manager->getSingle2("select telephone  from utilisateur where idutilisateur = ?", $iduser);
-    if (!empty($_POST['tel']) && $_POST['tel'] != $ancienTel) {
-        $telUser = new TelephoneUser($_POST['tel']);
-        $manager->updatetelephoneMoncompte($telUser, $iduser);
-        $_SESSION['tel'] = $_POST['tel'];
+    if (isset($_POST['tel']) && !empty($_POST['tel'])) {
+        if ($_POST['tel'] != $ancienTel || strlen($_POST['tel']) != strlen($ancienTel)) {
+            $telUser = new TelephoneUser($_POST['tel']);
+            $manager->updatetelephoneMoncompte($telUser, $iduser);
+            $_SESSION['tel'] = $_POST['tel'];
+        }
     }
+    
     $ancienFax = $manager->getSingle2("select fax  from utilisateur where idutilisateur = ?", $iduser);
-    if (isset($_POST['fax']) && $_POST['fax'] != $ancienFax) {
-        $fax = $_POST['fax'];
-        $faxUser = new FaxUser($fax);
-        $manager->updateFaxMoncompte($faxUser, $iduser);
-        $_SESSION['fax'] = $fax;
+    if (isset($_POST['fax']) && !empty($_POST['fax'])) {
+        if ($_POST['fax'] != $ancienTel || strlen($_POST['fax']) != strlen($ancienFax)) {
+            $fax = $_POST['fax'];
+            $faxUser = new FaxUser($fax);
+            $manager->updateFaxMoncompte($faxUser, $iduser);
+            $_SESSION['fax'] = $fax;
+        }
     } else {
         $fax = '';
     }
@@ -131,6 +141,19 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'moncompte.
         $_SESSION['mailresponsable'] = $mailresponsable;
     } else {
         $mailresponsable = '';
+    }
+    
+    $idlogin = $manager->getSingle2("select idlogin from loginpassword,utilisateur where idlogin_loginpassword=idlogin and idutilisateur=?",$iduser);
+    $ancienNomEquipe = $manager->getSingle2("select nomequipe  from loginpassword where idlogin = ?", $idlogin);
+    
+    if (isset($_POST['nomequipe']) && $_POST['nomequipe'] != $ancienNomEquipe) {
+        $nomEquipe = Securite::bdd($_POST['nomequipe']);
+        $loginNomEquipe = new UtilisateurNomEquipe($nomEquipe, $idlogin);
+        //echo '<pre>';print_r($loginNomEquipe);die;
+        $manager->updateLoginNomEquipe($loginNomEquipe, $idlogin);
+        $_SESSION['nomequipe'] = $nomEquipe;
+
+        
     }
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
 //                                                                              TRAITEMENT CAS INDUSTRIEL

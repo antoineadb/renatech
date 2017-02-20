@@ -1,4 +1,5 @@
 <?php
+
 include_once 'decide-lang.php';
 include_once 'outils/constantes.php';
 if (!empty($_SESSION['page_precedente']) && $_SESSION['page_precedente'] == 'gestioncompte.php') {
@@ -16,67 +17,55 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 
 if (!empty($_SESSION['pseudo'])) {
     $pseudo = $_SESSION['pseudo'];
-    $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword,utilisateur WHERE  idlogin = idlogin_loginpassword and pseudo=?", $pseudo);
+    $typeUser = IDTYPEUSER;
     if ($typeUser == ADMINLOCAL) {
-        $idcentrale_centrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $pseudo);
-
+        $idcentrale_centrale = IDCENTRALEUSER;
         $localinterne = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif FROM loginpassword l,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword and idtypeutilisateur_typeutilisateur <> ? and u.idqualitedemandeuraca_qualitedemandeuraca is not null
 and u.idcentrale_centrale is not null and idtypeutilisateur_typeutilisateur <>? and idcentrale_centrale=? ";
-
         $localexterne = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword and idtypeutilisateur_typeutilisateur <> ? and idcentrale_centrale is null
 and u.idqualitedemandeurindust_qualitedemandeurindust is null  and idtypeutilisateur_typeutilisateur <>?";
-
         $localindustriel = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL";
-
         $localinternenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif FROM loginpassword l,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword and idtypeutilisateur_typeutilisateur <> ? and u.idqualitedemandeuraca_qualitedemandeuraca is not null
 and u.idcentrale_centrale is not null and lower(nom) like lower(?) and idtypeutilisateur_typeutilisateur <>? and idcentrale_centrale=? ";
-
         $localexternenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword and idtypeutilisateur_typeutilisateur <> ? and idcentrale_centrale is null
 and u.idqualitedemandeurindust_qualitedemandeurindust is null and lower(nom) like lower(?) and idtypeutilisateur_typeutilisateur <>?";
-
         $localindustrielnom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL
 and lower(nom) like lower(?) ";
-
         $localinterneprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif FROM loginpassword l,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword and idtypeutilisateur_typeutilisateur <> ? and u.idqualitedemandeuraca_qualitedemandeuraca is not null
 and u.idcentrale_centrale is not null and lower(prenom) like lower(?) and idtypeutilisateur_typeutilisateur <>? and idcentrale_centrale=? ";
-
         $localexterneprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword and idtypeutilisateur_typeutilisateur <> ? and idcentrale_centrale is null
 and u.idqualitedemandeurindust_qualitedemandeurindust is null and lower(prenom) like lower(?) and idtypeutilisateur_typeutilisateur <>?";
-
         $localindustrielprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL
 and lower(prenom) like lower(?) ";
-
         $localinternenomprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif FROM loginpassword l,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword and idtypeutilisateur_typeutilisateur <> ? and u.idqualitedemandeuraca_qualitedemandeuraca is not null
 and u.idcentrale_centrale is not null and lower(nom) like lower(?) lower(prenom) like lower(?) and idtypeutilisateur_typeutilisateur <>? and idcentrale_centrale=? ";
-
         $localexternenomprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword and idtypeutilisateur_typeutilisateur <> ? and idcentrale_centrale is null
 and u.idqualitedemandeurindust_qualitedemandeurindust is null and lower(nom) like lower(?) lower(prenom) like lower(?) and idtypeutilisateur_typeutilisateur <>?";
-
         $localindustrielnomprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u
@@ -503,9 +492,9 @@ FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword and
         }
     }
 }
-if (!empty($_GET['idutilisateur'])) {
+if (!empty($_GET['iduser'])) {
     $req = "select nom,prenom,idtypeutilisateur_typeutilisateur,idutilisateur,datecreation from utilisateur where idutilisateur =? and idtypeutilisateur_typeutilisateur <>" . ADMINNATIONNAL . " and idtypeutilisateur_typeutilisateur <>" . ADMINLOCAL . " and idcentrale_centrale=?";
-    $param = array($_GET['idutilisateur'], $idcentrale_centrale);
+    $param = array($_GET['iduser'], $idcentrale_centrale);
 }
 
 if (empty($_POST['academiqueinterne']) && empty($_POST['academiqueexterne']) && empty($_POST['industriel'])) {

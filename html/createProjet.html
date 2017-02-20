@@ -1,414 +1,113 @@
-<?php
-if(!empty($_SESSION['pseudo'])){
-    $pseudo = $_SESSION['pseudo'];
-}
-$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
-$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-$idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?",$pseudo);
-$idcentrale_centrale=$manager->getSingle2("select idcentrale_centrale from utilisateur where idlogin_loginpassword=?",$idlogin);
-if($idcentrale_centrale>0){
-    $libellecentrale = str_replace('-','',$manager->getSingle2( "SELECT libellecentrale from centrale where idcentrale =?",$idcentrale_centrale));
-    if(!empty($libellecentrale)){
-        echo '<script>require(["dojo/ready"], function(ready){
-        ready(function(){
-        if(typeof('.$libellecentrale.')=="undefined"){
-            var centrale ="'.$libellecentrale.'";
-            dijit.byId(centrale).setValue(true);
-        }else{
-            var centrale ='.$libellecentrale.';
-            dijit.byId(centrale.id).setValue(true);
-        }});});</script>';
-    }
-}
-?>
 <div class='bdeCentrale'>
-        <?php 
-        if(internetExplorer()=='false'){
-            $Cache->inc(ROOT.'/outils/bandeaucentrale.php'); //RECUPERATION DU BANDEAU DEFILANT DANS LE CACHE CACHE
-        }else{
-            include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
-        }
-        ?>   
+    <?php 
+    if(internetExplorer()=='false'){
+    $Cache->inc(ROOT.'/outils/bandeaucentrale.php'); //RECUPERATION DU BANDEAU DEFILANT DANS LE CACHE CACHE
+    }else{
+    include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
+    }
+    ?>   
 </div>
 <div>
-    <fieldset id="identcreateprojet">
+    <fieldset id="identcreateprojet"  style="margin-top: 50px">
         <legend><b><?php echo TXT_DEFINITIONPROJET;?></b></legend>
-        <form data-dojo-type="dijit/form/Form" name="createProjet" id="createProjet" method="post"  action="<?php echo '/'.REPERTOIRE; ?>/modifBase/insertProjet.php?lang=<?php echo $lang; ?>" enctype="multipart/form-data" >
-            <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
-            <script type="dojo/method" data-dojo-event="onSubmit">
+        <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+        <form data-dojo-type="dijit/form/Form" id="contact" name="contact"  method="post" action="<?php echo '/'.REPERTOIRE.'/emailprojetphase2/traitementDemandeProjet.php?lang='.$lang; ?>"  enctype="multipart/form-data" >
+        <script type="dojo/method" data-dojo-event="onSubmit">
                 var nbdescript=stripTags(trim(dojo.byId("descriptifValeur").value)).length;
                 var nbcontexte=stripTags(trim(dojo.byId("contextValeur").value)).length;
-                var nbtitre=stripTags(trim(dijit.byId("titreProjet").value)).length;
-                if(nbtitre==0){
-                    alert("<?php echo TXT_ERRTITREVIDE;?>");
-                    dijit.byId('titreProjet').focus();
+                var nbNom=stripTags(trim(dijit.byId("nomDemande").value)).length;
+                var nbMail=stripTags(trim(dijit.byId("emailDemande").value)).length;
+                var nbMessage=stripTags(trim(dijit.byId("message").value)).length;
+                if(nbNom==0){
+                    alert("<?php echo TXT_ERRNOMVIDE;?>");
+                    dijit.byId('nomDemande').focus();
                     return false;                    
                     exit();
-                }else if(nbcontexte==0){
-                    alert("<?php echo TXT_ERRCONTEXTE;?>");
-                    dijit.byId('contexte').focus();
+                }else if(nbMail==0){
+                    alert("<?php echo TXT_ERRMAILVIDE;?>");
+                    dijit.byId('emailDemande').focus();
                     return false;                    
                     exit();
-                }else if(nbcontexte>5000){
-                    alert("<?php echo TXT_LIMITEDITEURCONTEXTE;?>");
-                    dijit.byId('contexte').focus();
-                    return false;                    
-                    exit();
-                }else if(nbdescript==0){
-                    alert("<?php echo TXT_ERRDESCRIPTIF;?>");
-                    dijit.byId('descriptif').focus();
-                    return false;                    
-                    exit();
-                }else if(nbdescript>800){
-                    alert("<?php echo TXT_LIMITEDITEURDESCRIPTION;?>");
-                    dijit.byId('descriptif').focus();
-                    return false;                    
-                    exit();
-                }else if(!checkcentrale("check")){
-                    alert("<?php echo TXT_CHECKCENTRALE;?>");                    
+                }else if(nbMessage==0){
+                    alert("<?php echo TXT_ERRMESSAGEVIDE;?>");
+                    dijit.byId('message').focus();
                     return false;                    
                     exit();
                 }else if (this.validate()){
                        return true;
                 }
             </script>
-            <table>
-                <tr>
-                    <td>
-                        <input type="hidden" id="contextValeur" name="contextValeur" >
-                        <input type="hidden" id="descriptifValeur" name="descriptifValeur" >
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="titreProjet" ><?php echo TXT_TITREPROJET.'* :'; ?>
-                            <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/>
-                                <span style="text-align: left;padding:10px;width: 250px;border-radius:5px" >
-                                    <?php echo affiche('TXT_AIDETITREPROJET');?></span>
-                            </a>
-                        </label>
-                        <input id="titreProjet" type="text" name="titreProjet"  required="required"   autocomplete="on" style="width: 550px;height:25px;" maxlength="295" 
-                               value="<?php if(isset($_SESSION['titreProjet'])){echo trim($_SESSION['titreProjet']);}else{echo '';}?>"
-                               data-dojo-invalidMessage="<?php echo TXT_ERRTITRE ;?>"   data-dojo-type="dijit.form.ValidationTextBox"
-                               data-dojo-props="<?php echo REGEX_TYPE;?>" />                                
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?>
-                            <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 600px;border-radius:5px" ><?php echo affiche('TXT_AIDEACRONYME');?></span></a>
-                        </label>
-                        <input id="acronyme" type="text" name="acronyme" style="width: 550px;height:25px;" maxlength="100"
-                               value="<?php if(isset($_SESSION['acronyme'])){echo $_SESSION['acronyme'];}?> "  autocomplete="on"
-                               data-dojo-invalidMessage="<?php echo TXT_ERRACRONYME ;?>"   data-dojo-type="dijit.form.ValidationTextBox"
-                               data-dojo-props="<?php echo REGEX_TYPE;?>" />
-                    </td>
-                </tr>
-                <tr><td>&nbsp;</td></tr>
-                <tr>
-                    <td>
-                        <label for="confid"><?php echo TXT_PROJETCONFIDENTIEL . ' *:'; ?><a class="infoBulle" href="#">&nbsp;
-                                <img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 650px;border-radius:5px" ><?php echo affiche('TXT_AIDECONFIDENTIEL');?></span></a></label>
-                    </td>
-                </tr>
-                <?php if (isset($_SESSION['confid'])&&$_SESSION['confid']=='TRUE'){?>
-                <tr>
-                    <td>
-                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE"  checked="checked"
-                               class="btRadio" onclick="start();" >
-                        <?php echo TXT_OUI; ?>
-                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="FALSE" class="btRadio" onclick="non()">
-                        <?php echo TXT_NON; ?>
-                        <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
-                        <label id='donneeConfid' style="width: 450px;display: none;"  ><?php echo TXT_DONNECONFID;?></label>
-                    </td>
-                </tr>
-                <?php }elseif(isset($_SESSION['confid'])&&$_SESSION['confid']=='FALSE') {?>
-                <tr>
-                    <td>
-                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE" class="btRadio" onclick="start();" >
-                        <?php echo TXT_OUI; ?>
-                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE" checked="checked" class="btRadio"  onclick="non()">
-                        <?php echo TXT_NON; ?>
-                        <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
-                        <label id='donneeConfid' style="width: 450px;display: none;"  ><?php echo TXT_DONNECONFID;?></label>
-                    </td>
-                </tr>
-                <?php }else{?>
-                <tr>
-                    <td>
-                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE" class="btRadio" onclick="start();" >
-                        <?php echo TXT_OUI; ?>
-                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE" checked="checked"  class="btRadio" onclick="non()">
-                        <?php echo TXT_NON; ?>
-                        <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
-                        <label id='donneeConfid' style="width: 450px;display: none;"  ><?php echo TXT_DONNECONFID;?></label>
-                    </td>
-                </tr>
-                <?php }?>
-                <tr><td>&nbsp;</td></tr>
-            <tr><td>&nbsp;</td></tr>            
-                <tr><td>&nbsp;</td></tr>
-                <tr>
-                    <td>
-                        <label for="contexte" style="width: 330px"><?php echo TXT_OBJECTIF.'/'.TXT_CONTEXTESCIENTIFIQUE.' :*' ?>
-                            <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/>
-                                <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >
-                                    <?php echo affiche('TXT_AIDECONTEXTE');?></span>
-                            </a>
-                        </label>
-                        <div id="contexte" name="contexte" style="width:960px" >
-                            <?php if(!empty($_SESSION['contextValeur'] )){echo stripslashes(str_replace("''","'",$_SESSION['contextValeur'])) ;}?></div>
-                    </td>
-                </tr><tr><td><label id="cptcontext" style="width:450px;color:#B71701"></label></td></tr>
-                <tr style="display: none" id="msgerrcontexte">
-                    <td>
-                        <fieldset class='msgerrcontexteph1' >
-                            <legend><?php echo TXT_INFO;?></legend>
-                            <?php echo stripslashes(TXT_LIMITEDITEURCONTEXTE).'<br>';?>
-                        </fieldset>
-                    </td>
-                </tr>
-                <tr><td>&nbsp;</td></tr>
-                <tr>
-                    <td>
-                        <label for="descriptif" style="width: 330px"><?php echo TXT_DESCRIPTIFTRAVAIL.' :*'; ?>
-                            <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >
-                                    <?php echo affiche('TXT_AIDEDESCRIPTIF');?></span>
-                            </a>
-                        </label>
-                        <div id="descriptif" name="descriptif" style="width:960px" ><?php if(!empty($_SESSION['descriptifValeur'] )){
-                        echo stripslashes(str_replace("''","'",$_SESSION['descriptifValeur'])) ;}?></div>
-                    </td>
-                </tr>
-                <tr><td><label id="cptdescript" style="width:450px;color:#B71701"></label></td></tr>
-                <tr><td>&nbsp;</td></tr>
-                <tr style="display: none" id="msgerrdescription">
-                    <td>
-                        <fieldset class='msgerrdescriptionph1' >
-                            <legend><?php echo TXT_INFO;?></legend>
-                            <?php echo stripslashes(TXT_LIMITEDITEURDESCRIPTION).'<br>';?>
-                        </fieldset>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
+        <input type="hidden" id="messageValeur" name="messageValeur" >
+        <div id="msgerrpiecejointe">
+            <?php 
+            if(isset($_GET['err'])){            
+                if($_GET['err']=='Err99'){
+                    echo  "Il y a eu un problème avec la pièce jointe, l'E-Mail n'as pas été envoyé! ";
+                }elseif($_GET['err']=='Err01'){
+                    echo TXT_ERREURUPLOAD;
+                }elseif($_GET['err']=='Err02'){
+                    echo  TXT_ERREURTAILLEFICHIER;
+                }
+            }?></div>
+        <fieldset class="formDemande">            
+            <legend style="margin-bottom:10px;margin-top: 25px">Vos coordonnées</legend>                
+                <div style="padding-bottom: 10px">			
+                    <label style="padding-right: 20px"><?php echo TXT_NOM.'* :'  ; ?></label>
+                    <input id="nomDemande" type="text" name="nomDemande" data-dojo-type="dijit/form/ValidationTextBox"  required="required" value="<?php if(isset($defaulNom)){echo $defaulNom;} ?>"    
+                           placeHolder ="<?php echo TXT_NOM; ?>"/>
+                </div>
+                <div style="padding-bottom: 10px">
+                    <label style="padding-right: 20px"><?php echo TXT_EMAIL.'* :' ?></label>
+                    <input id="emailDemande" type="text" name="emailDemande" class="long" data-dojo-type="dijit/form/ValidationTextBox"  regExpGen="dojox.validate.regexp.emailAddress" required="required"                    
+                           invalidMessage="<?php echo TXT_EMAILNONVALIDE ?>" value="<?php if(isset($defaultMail)){echo $defaultMail;} ?>"  placeHolder ="<?php echo TXT_EMAIL; ?>"/>
+                </div>                
+        </fieldset>
+
+            <fieldset class="formDemande"><legend style="padding-bottom: 10px;margin-top: 20px">Votre message :</legend>
+                <div style="padding-bottom: 10px">			
+                    <label style="padding-right: 20px"><?php echo 'Objet:'  ; ?></label>
+                    <input id="objetDemande" type="text" name="objetDemande" data-dojo-type="dijit/form/ValidationTextBox"  placeHolder ="<?php echo TXT_OBJET; ?>"  
+                           value="<?php if(isset($_SESSION['objet'])){echo $_SESSION['objet'];} ?>"/>
+                </div>                
+                <label for="message" style="width: 330px"><?php echo 'Message* :'; ?></label>
+                <div id="message" name="message" style="width:960px;margin-bottom: 20px" ><?php if(isset($_SESSION['message'])){echo $_SESSION['message'];}?></div>     
+                    <div id="errUpload">
+                        <?php echo TXT_ERREURUPLOAD;?>
+                    </div>
+                    <div id="pieceJointeDemandeFaisabilite">
                         <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader"   data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'>
                         <a class="infoBulle" href="#">
                             <img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 370px;border-radius:5px" ><?php echo TXT_ERREURUPLOAD;?></span>
                         </a>
-                        <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file'></div>
-                        <div>
-                            <?php if(isset($_GET['erreur'])){echo $_GET['erreur'];}?>
-                        </div>
-                    </td>
-                </tr><?php BD::deconnecter(); //DECONNEXION DE LA BASE DE DONNEE ?>
-                <tr>
-                    <td><p><label id='msgerrcentrale' style="width: 350px;display: none;color: #c00" ><?php echo TXT_CHECKCENTRALE; ?>
-                            </label></p>
-                        <?php include 'outils/centraleCheck.php' ?></td>
-                </tr>
-                <tr><td><br></td></tr>
-                <!-- barre de défilement !-->
-                <tr>
-                    <td>
-                        <div data-dojo-type="dijit/ProgressBar" style="width:300px; visibility:hidden " data-dojo-id="myProgressBar"
-                             id="downloadProgress" data-dojo-props="maximum:10">
-                        </div>
-                        <script>
-                            require(["dojo/parser", "dijit/ProgressBar"], function() {
-                                var i = 0;
-                                download = function() {
-                                    var btn = dijit.byId('downloadProgress').domNode;
-                                    dojo.style(btn, {visibility: 'visible'});
-                                    myProgressBar.set({value: ++i});
-                                    if (i < 10) {
-                                        setTimeout(download, 100 + Math.floor(Math.random() * 1000));
-                                    }
-                                }
-                            });
-                        </script>
-                        <div id="btnEtapeSuivante" style="display: block;"  >
-                            <input type="submit"   label="<?php echo TXT_ETAPESUIVANTE; ?>" data-dojo-Type="dijit.form.Button" data-dojo-props="showLabel:true,onClick:function(){ download(); }" />
-                        </div>
-                        <p style="font-size: x-small;"><?php echo TXT_CHAMPSOBLIGATOIRES; ?></p>
-                    </td>
-                </tr>
-            </table>
+                        <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file'></div>                        
+                    </div>
+            </fieldset>
+            <div style="text-align:center;margin-bottom: 10px;margin-top: 10px">
+            <input type="submit"   label="<?php echo 'Envoyer la demande'; ?>" data-dojo-Type="dijit.form.Button" data-dojo-props="" />
+            </div>
         </form>
+
     </fieldset>
 </div>
+<p style="font-size: x-small">
+    <?php echo TXT_CHAMPSOBLIGATOIRES;?>
+</p>
+
 <script>
     require(["dojo/parser", "dijit/Editor"]);
-    require(["dojo"], function(dojo) {
-    });
-    // Load the editor resource
+    require(["dojo"], function(dojo) { });    
     require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
         ready(function() {
             new Editor({
                 plugins: ["undo", "redo", ],
-                height: "100px"
-            }, "contexte");
-            new Editor({
-                plugins: ["undo", "redo", ],
-                height: "100px"
-            }, "descriptif");
+                height: "350px"
+            }, "message");           
         });
         dojo.addOnLoad(function() {
-            var editor2 = dijit.byId("contexte");
-              dojo.connect(editor2, "onChange", this, function(event) {
-                    dojo.byId("contextValeur").value = editor2.get("value");                    
-                });
-            var editor3 = dijit.byId("descriptif");
-                dojo.connect(editor3, "onChange", this, function(event) {
-                    dojo.byId("descriptifValeur").value = editor3.get("value");                   
-                });
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                              DESCRIPTIF
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                                                                
-                dojo.connect(editor3, "onChange", this, function(event) {
-                    dojo.byId("descriptifValeur").value = editor3.get("value");
-                    document.getElementById('cptdescript').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
-                            + stripTags(trim(dojo.byId("descriptifValeur").value)).length;
-                    if (trim(stripTags(editor3.get("value"))).length > 800) {
-                        document.getElementById('msgerrdescription').style.display = 'block';
-                    } else {
-                        document.getElementById('msgerrdescription').style.display = 'none';
-                    }                    
-                });
-                dojo.connect(editor3, "onKeyPress", this, function(event) {
-                    dojo.byId("descriptifValeur").value = editor3.get("value");
-                    document.getElementById('cptdescript').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
-                            + stripTags(trim(dojo.byId("descriptifValeur").value)).length;
-                    if (trim(stripTags(editor3.get("value"))).length > 800) {
-                        document.getElementById('msgerrdescription').style.display = 'block';
-                    } else {
-                        document.getElementById('msgerrdescription').style.display = 'none';
-                    }
-                });
-                dojo.connect(editor3, "onBlur", this, function(event) {
-                    dojo.byId("descriptifValeur").value = editor3.get("value");
-                    document.getElementById('cptdescript').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
-                            + stripTags(trim(dojo.byId("descriptifValeur").value)).length;
-                    if (trim(stripTags(editor3.get("value"))).length > 800) {
-                        document.getElementById('msgerrdescription').style.display = 'block';
-                    } else {
-                        document.getElementById('msgerrdescription').style.display = 'none';
-                    }
-                });
-                dojo.connect(editor3, "onClick", this, function(event) {
-                    dojo.byId("descriptifValeur").value = editor3.get("value");
-                    document.getElementById('cptdescript').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
-                            + stripTags(trim(dojo.byId("descriptifValeur").value)).length;
-                    if (trim(stripTags(editor3.get("value"))).length > 800) {
-                        document.getElementById('msgerrdescription').style.display = 'block';
-                    } else {
-                        document.getElementById('msgerrdescription').style.display = 'none';
-                    }                    
-                });
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                              OBJECTIF / CONTEXTE
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                                                    
-               dojo.connect(editor2, "onKeyPress", this, function(event) {
-                    dojo.byId("contextValeur").value = editor2.get("value");
-                    document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
-                            + stripTags(trim(dojo.byId("contextValeur").value)).length;
-                    if (trim(stripTags(editor2.get("value"))).length > 5000) {
-                        document.getElementById('msgerrcontexte').style.display = 'block';
-                    } else {
-                        document.getElementById('msgerrcontexte').style.display = 'none';
-                    } 
-                });                
-                dojo.connect(editor2, "onChange", this, function(event) {
-                    dojo.byId("contextValeur").value = editor2.get("value");
-                    document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
-                            + stripTags(trim(dojo.byId("contextValeur").value)).length;
-                    if (trim(stripTags(editor2.get("value"))).length > 5000) {
-                        document.getElementById('msgerrcontexte').style.display = 'block';
-                    } else {
-                        document.getElementById('msgerrcontexte').style.display = 'none';
-                    } 
-                });
-                dojo.connect(editor2, "onBlur", this, function(event) {
-                    dojo.byId("contextValeur").value = editor2.get("value");
-                    document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
-                            + stripTags(trim(dojo.byId("contextValeur").value)).length;
-                    if (trim(stripTags(editor2.get("value"))).length > 5000) {
-                        document.getElementById('msgerrcontexte').style.display = 'block';
-                    } else {
-                        document.getElementById('msgerrcontexte').style.display = 'none';
-                    } 
-                });
-                dojo.connect(editor2, "onClick", this, function(event) {
-                    dojo.byId("contextValeur").value = editor2.get("value");
-                    document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
-                            + stripTags(trim(dojo.byId("contextValeur").value)).length;
-                    if (trim(stripTags(editor2.get("value"))).length > 5000) {
-                        document.getElementById('msgerrcontexte').style.display = 'block';
-                    } else {
-                        document.getElementById('msgerrcontexte').style.display = 'none';
-                    } 
-                });
+            var editor1 = dijit.byId("message");
+                dojo.connect(editor1, "onChange", this, function(event) {
+                    dojo.byId("messageValeur").value = editor1.get("value");                   
+            }); 
         });
     })
 </script>
-<script>
-    var counter = 5;
-    var intervalId = null;
-    function action() {
-        document.getElementById('donneeConfid').style.display = 'block';
-        clearInterval(intervalId);
-        document.getElementById('nda').style.display = 'none';
-    }
-    function decompte() {
-        counter--;
-    }
-    function start() {
-        document.getElementById('nda').style.display = 'block'
-        intervalId = setInterval(decompte, 1000);
-        setTimeout(action, 2000);
-    }
-    function non() {
-        document.getElementById('nda').style.display = 'none';
-        document.getElementById('donneeConfid').style.display = 'none';
-    }
-</script>
- <?php
-//RECUPERATION DES CENTRALES SELECTIONNEES
-if(!empty($_SESSION['libellecentrale'])){
-    $row =$_SESSION['libellecentrale'];
-    $nbrow= count($_SESSION['idcentrale']);
-    if($nbrow!=0){
-        for ($i = 0;$i < count($row);$i++) {
-            $centrale[]  =$_SESSION['libellecentrale'][$i];
-        }
-        $nbcentrale=count($centrale);
-    }else{
-        $nbcentrale=0;
-    }
-}
-?>
-<?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
-<script>
-    require(["dojo/ready"], function(ready) {
-    ready(function() {//MSIE
-    '<?php if(!empty($nbcentrale)){for ( $i=0;$i < $nbcentrale; $i++){?>'
-        var centrale = '<?php echo $centrale[$i] ?>';
-        dijit.byId(centrale).set('checked', true);
-    '<?php }} ?>'
-    });
-    });
-</script>
-<?php  }else{?>
-<script>
-    require(["dojo/ready"], function(ready) {
-    ready(function() {//FIREFOX
-    '<?php if(!empty($nbcentrale)){for ( $i=0;$i < $nbcentrale; $i++){?>'
-        var centrale = '<?php echo str_replace("-", "",$centrale[$i]) ?>';
-        dijit.byId(document.getElementById(centrale).id).setValue(true);
-    '<?php }} ?>'
-    });
-    });
-</script>
-<?php }?>
-<?php BD::deconnecter(); //DECONNEXION A LA BASE DE DONNEE ?>

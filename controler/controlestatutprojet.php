@@ -47,15 +47,7 @@ if(!empty($idprojetsoustraitance[0]['idcentrale'])){
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  
 //-----------------------------------------------------------------------------------------------------------------------------------------------    
-    switch ($idstatutprojet) {
-        case ENATTENTE://EN ATTENTE             
-            header('location: /' . REPERTOIRE . '/Waiting_project/' . $lang . '/' . $numProjet . '/'.ENATTENTE. '/' . $idcentrale);
-            
-            break;
-        case ENCOURSANALYSE://EN COURS D'ANALYSE
-            $idcentrale=  $manager->getSingle2("select idcentrale from centrale where libellecentrale=? ",$_GET['centrale']);
-            header('location: /' . REPERTOIRE . '/Analyse_project/' . $lang . '/' . $numProjet . '/'.ENCOURSANALYSE.'' . '/' . $idcentrale);
-            break;
+    switch ($idstatutprojet) {     
         case ACCEPTE:// ACCEPTE
             if(!empty($idcentralesoustraitance) && $idcentralesoustraitance==IDCENTRALEUSER){                
                 header('location: /' . REPERTOIRE . '/Run_projectsoustraitance/' . $lang . '/' . $numProjet . '/'.ACCEPTE.'');

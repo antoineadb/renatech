@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 include_once '../decide-lang.php';
@@ -6,11 +7,12 @@ include '../class/Manager.php';
 include '../class/Securite.php';
 include_once '../outils/toolBox.php';
 include_once '../outils/constantes.php';
+
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 if (isset($_GET['statut'])) {
     $idstatutprojet = $_GET['statut'];
-}elseif (isset($_POST['idstatut'])) {
+} elseif (isset($_POST['idstatut'])) {
     $idstatutprojet = $_POST['idstatut'];
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -18,7 +20,7 @@ if (isset($_GET['statut'])) {
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 $arrayAutresQualite = $manager->getList("select idautresqualite,libelleautresqualite from autresqualite where idautresqualite not in(select idautresqualite from personneaccueilcentrale)");
 for ($i = 0; $i < count($arrayAutresQualite); $i++) {
-    $autresQualite = new Autresqualite($arrayAutresQualite[$i]['idautresqualite'],$arrayAutresQualite[$i]['libelleautresqualite']);    
+    $autresQualite = new Autresqualite($arrayAutresQualite[$i]['idautresqualite'], $arrayAutresQualite[$i]['libelleautresqualite']);
     $manager->deleteAutresQualite($autresQualite);
 }
 
@@ -29,10 +31,11 @@ if (isset($_POST['page_precedente'])) {
     if ($_POST['page_precedente'] == 'phase2.html' || $_POST['page_precedente'] == 'createProjetphase2.html') {
         if (!empty($_GET['idprojet'])) {
             $idprojet = $_GET['idprojet'];
-        }        
-        
-        $sendmail = $manager->getSingle2("select sendmail from projetautrecentrale where idprojet =?",$idprojet);
-        
+            $numero = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
+        }
+
+        $sendmail = $manager->getSingle2("select sendmail from projetautrecentrale where idprojet =?", $idprojet);
+
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
         //                                            SAUVEGARDE
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -42,61 +45,54 @@ if (isset($_POST['page_precedente'])) {
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
         //                                            CHANGEMENT DE STATUT
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui'   && $_POST['etapeautrecentrale'] == 'TRUE'  && $_POST['majcentrale']=='oui') {
+        elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'TRUE' && $_POST['majcentrale'] == 'oui') {
             //CHANGEMENT DE STATUT ON A CLIQUER SUR OUI POUR RENVOYER L'EMAIL AUX AUTRES CENTRALES QU'ON A DEJA ENVOYE
             $cas = 'chgstatutAutCentraleEmailDejaEnvoye';
-        }elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui'   && $_POST['etapeautrecentrale'] == 'TRUE'  && $_POST['majcentrale']=='non' && $sendmail==TRUE) {
+        } elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'TRUE' && $_POST['majcentrale'] == 'non' && $sendmail == TRUE) {
             //CHANGEMENT DE STATUT ON A CLIQUER SUR ON POUR  NE PAS RENVOYER L'EMAIL AUX AUTRES CENTRALES QU'ON A DEJA ENVOYE
             $cas = 'chgstatutAutCentraleEmailDejaEnvoyeNon';
-        }elseif ( isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui'  && $_POST['etapeautrecentrale'] == 'TRUE'  && $_POST['majcentrale']=='non' && $sendmail==FALSE) {
+        } elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'TRUE' && $_POST['majcentrale'] == 'non' && $sendmail == FALSE) {
             //CHANGEMENT DE STATUT AVEC AJOUT D'UNE ETAPE DANS UNE AUTRES CENTRALE POUR LA 1ER FOIS  
             $cas = 'chgstatutAutCentraleEmailJammaisEnvoye';
-        }elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale']== 'FALSE' && $_POST['majcentrale']=='non')  {
+        } elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'FALSE' && $_POST['majcentrale'] == 'non') {
             //CHANGEMENT DE STATUT, PAS D'ETAPE DANS UNE AUTRE CENTRALE
             $cas = 'chgstatut';
-        } 
+        }
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
         //                                            MISE A JOUR
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        
-        elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale']=='oui' ) {
+        elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'oui') {
             //MISE A JOUR avec autre centrale déja envoyé
             $cas = 'miseAJourEmailAutreCentrale';
-        } elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui'&& $_POST['majcentrale']=='non' && $_POST['etapeautrecentrale']=='TRUE' && $sendmail == FALSE) {
+        } elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'non' && $_POST['etapeautrecentrale'] == 'TRUE' && $sendmail == FALSE) {
             //MISE A JOUR AVEC AUTRE CENTRALE 1ER FOIS 
-            $cas = 'miseAJourEmailautreEmailpremierefois';//--> TO BE DONE
-        }elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale']=='non' && $sendmail == TRUE) {         
+            $cas = 'miseAJourEmailautreEmailpremierefois'; //--> TO BE DONE
+        } elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'non' && $sendmail == TRUE) {
             //REPONDU NON A L'ENVOI D'UN EMAIL AUX AUTRES CENTRALES
             $cas = 'miseAJourEmail';
-        }elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale']=='non' && $_POST['etapeautrecentrale']=='FALSE') {
+        } elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'non' && $_POST['etapeautrecentrale'] == 'FALSE') {
             //MISE A JOUR SANS AUTRE CENTRALE
             $cas = 'miseAJourEmail';
-        }    
+        }
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
         //                                            VALIDATION 
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-                
         elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'non' & !isset($_POST['chgstatut'])) {//VALIDATION APRES UNE SAUVEGARDE
             if ($_POST['etapeautrecentrale'] == 'TRUE') {//VALIDATION AVEC UNE ETAPE AUTRE CENTRALE --> OK VERIFER
                 $cas = 'creationprojetphase2etape';
-            } elseif ($_POST['etapeautrecentrale'] == 'FALSE' && !isset($_POST['chgstatut']) ) {//VALIDATION SANS UNE ETAPE AUTRE CENTRALE --> OK VERIFER
+            } elseif ($_POST['etapeautrecentrale'] == 'FALSE' && !isset($_POST['chgstatut'])) {//VALIDATION SANS UNE ETAPE AUTRE CENTRALE --> OK VERIFER
                 $cas = 'creerprojetphase2';
             }
-        }        
+        }
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
         //  CAS PARTICULIER DE LA VALIDATION, SI ON VALIDE UN PROJET AVEC UNE AUTRE CENTRALE SUR LEQUEL L'ADMINLOCAL ENLEVE L'AUTRE CENTRALE
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        elseif ($_POST['etapeautrecentrale']=='FALSE' && $_POST['majcentrale']=='oui') {//on envoi pas le message au autres centrales            
+        elseif ($_POST['etapeautrecentrale'] == 'FALSE' && $_POST['majcentrale'] == 'oui') {//on envoi pas le message au autres centrales            
             $cas = 'miseAJourEmail';
         }
-            
-        
-   
-        
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 //                            FIN AFFECTATION D'UNE VARIABLE $CAS
-//----------------------------------------------------------------------------------------------------------------------------------------------------------    
-        $IDCENTRALEUSER = $manager->getSingle2("select idcentrale_centrale from utilisateur, loginpassword where idlogin_loginpassword=idlogin and pseudo=? ", $_SESSION['pseudo']);
+//----------------------------------------------------------------------------------------------------------------------------------------------------------            
         if (!empty($_POST['datemodifstatut'])) {
             $datemodifstatut = $_POST['datemodifstatut'];
         } else {
@@ -111,11 +107,13 @@ if (isset($_POST['page_precedente'])) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                      TRAITEMENT DE LA PARTIE 1 DANS LE CAS D'UNE SAUVEGARDE D'UNE VALIDATION OU D'UNE MISE A JOUR
 //------------------------------------------------------------------------------------------------------------------------------------------------------------        
-        include_once '../modifBase/updatePhase2succincte.php';        
+        include_once '../modifBase/updatePhase2succincte.php';
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                             TRAITEMENT DE LA PARTIE PHASE 2
 //------------------------------------------------------------------------------------------------------------------------------------------------------------   
-        $rowprojet = $manager->getList2("select contactscentraleaccueil,idtypeprojet_typeprojet,typeFormation,emailrespdevis,idthematique_thematique,attachementdesc,idautrethematique_autrethematique,nbheure,porteurprojet,envoidevis,nbeleve,datedebuttravaux,dureeprojet,descriptiftechnologique,idperiodicite_periodicite,centralepartenaireprojet,nbplaque,nbrun,nomformateur,refinterneprojet,partenaire1,dureeestime,periodestime,devtechnologique,verrouidentifiee,descriptionautrecentrale,descriptioncentraleproximite,reussite from projet where idprojet=?", $idprojet);
+        $rowprojet = $manager->getList2("select contactscentraleaccueil,idtypeprojet_typeprojet,typeFormation,emailrespdevis,idthematique_thematique,attachementdesc,idautrethematique_autrethematique,nbheure,porteurprojet,"
+                . "envoidevis,nbeleve,datedebuttravaux,dureeprojet,descriptiftechnologique,idperiodicite_periodicite,centralepartenaireprojet,nbplaque,nbrun,nomformateur,refinterneprojet,partenaire1,dureeestime,periodestime,"
+                . "devtechnologique,verrouidentifiee,descriptionautrecentrale,descriptioncentraleproximite,reussite from projet where idprojet=?", $idprojet);
         $contactscentraleaccueilBDD = $rowprojet[0]['contactscentraleaccueil'];
         $typeprojetBDD = (int) $rowprojet[0]['idtypeprojet_typeprojet'];
         if (!empty($rowprojet[0]['typeFormation'])) {
@@ -169,7 +167,7 @@ if (isset($_POST['page_precedente'])) {
         $partenairesBDD = '';
         if (!empty($nombrePartenaireBDD)) {
             for ($i = 0; $i < count($arraypartenaireBDD); $i++) {
-                $partenairesBDD .=$arraypartenaireBDD[$i]['nompartenaire'] . ' - ' . $arraypartenaireBDD[$i]['nomlaboentreprise'] . ' - ';
+                $partenairesBDD .= $arraypartenaireBDD[$i]['nompartenaire'] . ' - ' . $arraypartenaireBDD[$i]['nomlaboentreprise'] . ' - ';
             }
             $sPartenairesBDD = substr(trim($partenairesBDD), 0, -1);
         } else {
@@ -202,8 +200,7 @@ if (isset($_POST['page_precedente'])) {
         }
 
         //RECUPERATION DU NOMBRE DE "Personne susceptible de travailler en salle blanche sur ce projet"
-        $arraypersonnecentraleBDD = 
-        $manager->getList2(""
+        $arraypersonnecentraleBDD = $manager->getList2(""
                 . "SELECT "
                 . "nomaccueilcentrale,"
                 . "prenomaccueilcentrale,"
@@ -221,10 +218,10 @@ if (isset($_POST['page_precedente'])) {
         if (!empty($nombrePersonnecentraleBDD)) {
             for ($i = 0; $i < $nombrePersonnecentraleBDD; $i++) {
                 if ($lang == 'fr') {
-                    $personnecentraleBDD .=$arraypersonnecentraleBDD[$i]['nomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['prenomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['mailaccueilcentrale'] .
+                    $personnecentraleBDD .= $arraypersonnecentraleBDD[$i]['nomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['prenomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['mailaccueilcentrale'] .
                             ' - ' . $arraypersonnecentraleBDD[$i]['telaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['libellequalitedemandeuraca'] . '-';
                 } else {
-                    $personnecentraleBDD .=$arraypersonnecentraleBDD[$i]['nomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['prenomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['mailaccueilcentrale'] .
+                    $personnecentraleBDD .= $arraypersonnecentraleBDD[$i]['nomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['prenomaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['mailaccueilcentrale'] .
                             ' - ' . $arraypersonnecentraleBDD[$i]['telaccueilcentrale'] . ' - ' . $arraypersonnecentraleBDD[$i]['libellequalitedemandeuracaen'] . '-';
                 }
             }
@@ -479,10 +476,10 @@ if (isset($_POST['page_precedente'])) {
         if ($porteurprojetBDD != $porteurprojet) {
             if ($porteurprojet == 'TRUE') {
                 $_SESSION['porteurprojetmodif'] = TXT_OUI;
-                $porteurprojetBDD =TXT_OUI;
+                $porteurprojetBDD = TXT_OUI;
             } else {
                 $_SESSION['porteurprojetmodif'] = TXT_NON;
-                $porteurprojetBDD =TXT_NON;
+                $porteurprojetBDD = TXT_NON;
             }
         } else {
             $_SESSION['porteurprojetmodif'] = '';
@@ -490,39 +487,39 @@ if (isset($_POST['page_precedente'])) {
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DES PARTENAIRES DU PROJET
 //------------------------------------------------------------------------------------------------------------
-     if (!empty($_POST['nombrePartenaire']) && $_POST['nombrePartenaire'] != 0) {   
-        if (!empty($_POST['centralepartenaireprojet'])) {
-            $centralepartenaireprojet = stripslashes(Securite::bdd($_POST['centralepartenaireprojet']));
-            if ($centralepartenaireprojetBDD != $centralepartenaireprojet) {
-                $_SESSION['centralepartenaireprojetmodif'] = $centralepartenaireprojet;
+        if (!empty($_POST['nombrePartenaire']) && $_POST['nombrePartenaire'] != 0) {
+            if (!empty($_POST['centralepartenaireprojet'])) {
+                $centralepartenaireprojet = stripslashes(Securite::bdd($_POST['centralepartenaireprojet']));
+                if ($centralepartenaireprojetBDD != $centralepartenaireprojet) {
+                    $_SESSION['centralepartenaireprojetmodif'] = $centralepartenaireprojet;
+                } else {
+                    $_SESSION['centralepartenaireprojetmodif'] = '';
+                }
             } else {
+                $centralepartenaireprojet = null;
                 $_SESSION['centralepartenaireprojetmodif'] = '';
             }
-        } else {
-            $centralepartenaireprojet = null;
-            $_SESSION['centralepartenaireprojetmodif'] = '';
-        }
 //------------------------------------------------------------------------------------------------------------
 //                                       TRAITEMENT DES NOMS PARTENAIRE
 //------------------------------------------------------------------------------------------------------------
-        if (!empty($_POST['nomPartenaire01'])) {
-            $partenaire1 = stripslashes(Securite::bdd(($_POST['nomPartenaire01'])));
-            if ($partenaire1BDD != $partenaire1) {
-                $_SESSION['partenaire1modif'] = $partenaire1;
+            if (!empty($_POST['nomPartenaire01'])) {
+                $partenaire1 = stripslashes(Securite::bdd(($_POST['nomPartenaire01'])));
+                if ($partenaire1BDD != $partenaire1) {
+                    $_SESSION['partenaire1modif'] = $partenaire1;
+                } else {
+                    $_SESSION['partenaire1modif'] = '';
+                }
             } else {
+                $partenaire1 = null;
                 $_SESSION['partenaire1modif'] = '';
             }
         } else {
+            $nombrePartenaire = 0;
             $partenaire1 = null;
-            $_SESSION['partenaire1modif'] = '';
+            $centralepartenaireprojet = null;
+            $partenairefromprojet = new Partenairefromprojet($centralepartenaireprojet, $partenaire1);
+            $manager->updatepartenairefromprojet($partenairefromprojet, $idprojet);
         }
-     }else{
-        $nombrePartenaire = 0; 
-        $partenaire1 = null;
-        $centralepartenaireprojet=null;
-        $partenairefromprojet = new Partenairefromprojet($centralepartenaireprojet, $partenaire1);
-        $manager->updatepartenairefromprojet($partenairefromprojet, $idprojet);
-     }
 
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
@@ -574,7 +571,7 @@ if (isset($_POST['page_precedente'])) {
                 $idpartenaire = $manager->getSingle("select max (idpartenaire) from partenaireprojet") + 1;
                 $newpartenaireprojet = new Partenaireprojet($idpartenaire, $nomPartenaire, $nomLaboEntreprise);
                 $manager->addpartenaireprojet($newpartenaireprojet);
-                $partenaires .=$nomPartenaire . ' - ' . $nomLaboEntreprise . ' - ';
+                $partenaires .= $nomPartenaire . ' - ' . $nomLaboEntreprise . ' - ';
                 //TRAITEMENT AJOUT DANS LA TABLE PROJETPARTENAIRE
                 $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet);
                 $manager->addprojetpartenaire($newprojetpartenaire);
@@ -720,7 +717,7 @@ if (isset($_POST['page_precedente'])) {
                 $idqualitedemandeuraca = substr($idqualitedemandeurAca, -1);
                 if (empty($idqualitedemandeuraca)) {
                     $idqualitedemandeuraca = 1;
-                }               
+                }
                 if ($lang == 'fr') {
                     $libellequalite = $manager->getSingle2("select libellequalitedemandeuraca from qualitedemandeuraca where idqualitedemandeuraca =?", $idqualitedemandeuraca);
                 } elseif ($lang == 'en') {
@@ -730,8 +727,8 @@ if (isset($_POST['page_precedente'])) {
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             //                          TRAITEMENT DES AUTRES QUALITE DOCTORANT,POSTDOC OU AUTRES SI AUTRES VALEUR DE AUTRES
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            
-            if($idqualitedemandeuraca != PERMANENT ){
+
+            if ($idqualitedemandeuraca != PERMANENT) {
                 if (!empty($_POST['autreQualite' . $i . ''])) {
                     if ($_POST['autreQualite' . $i . ''] == 'qac' . IDAUTREQUALITE) {//cas autres
                         if (!empty($_POST['autresQualite' . $i . ''])) {
@@ -740,7 +737,7 @@ if (isset($_POST['page_precedente'])) {
                             $autresqualite = new Autresqualite($idautrequalite, $libAutreQualite); //CREATION DE L'ENTREE DANS LA TABLE AUTRESQUALITE
                             $manager->addAutresQualite($autresqualite);
                             $idpersonneQualite = (int) substr(trim($_POST['autreQualite' . $i . '']), -1);
-                        } else {                            
+                        } else {
                             $idpersonneQualite = IDNAAUTRESQUALITE;
                             $idautrequalite = IDNAAUTREQUALITE;
                         }
@@ -751,17 +748,17 @@ if (isset($_POST['page_precedente'])) {
                             $autresqualite = new Autresqualite($idautrequalite, $libAutreQualite); //CREATION DE L'ENTREE DANS LA TABLE AUTRESQUALITE
                             $manager->addAutresQualite($autresqualite);
                             $idpersonneQualite = IDNAAUTRESQUALITE;
-                        }else{
+                        } else {
                             $idpersonneQualite = (int) substr(trim($_POST['autreQualite' . $i . '']), -1);
-                            $idautrequalite = IDNAAUTREQUALITE;                            
+                            $idautrequalite = IDNAAUTREQUALITE;
                         }
                     }
                 }
-            }else{
+            } else {
                 $idautrequalite = IDNAAUTREQUALITE;
                 $idpersonneQualite = IDNAAUTRESQUALITE;
-            } 
-                 
+            }
+
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             //
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -781,18 +778,16 @@ if (isset($_POST['page_precedente'])) {
             } else {
                 $connaissancetechnologiqueaccueil = '';
             }
-                       
+
             //TRAITEMENT AJOUT DANS LA TABLE PERSONNEACCUEILCENTRALE            
-            $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;            
-            $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil),$idpersonneQualite,$idautrequalite);
-            
+            $idpersonneaccueilcentrale = $manager->getSingle("select max(idpersonneaccueilcentrale) from Personneaccueilcentrale") + 1;
+            $personne = new Personneaccueilcentrale($idpersonneaccueilcentrale, $nomaccueilcentrale, $prenomaccueilcentrale, $idqualitedemandeuraca, $mailaccueilcentrale, $telaccueilcentrale, trim($connaissancetechnologiqueAccueil), $idpersonneQualite, $idautrequalite);
+
             $manager->addPersonneaccueilcentrale($personne);
             //TRAITEMENT AJOUT DANS LA TABLE PROJETPERSONNEACCUEILCENTRALE
             $projetpersonneaccueilcentrale = new Projetpersonneaccueilcentrale($idprojet, $idpersonneaccueilcentrale);
             $manager->addprojetpersonneaccueilcentrale($projetpersonneaccueilcentrale);
             //TRAITEMENT DES AUTRES QUALITE
-            
-            
         }
     }
     $personnecentrale = '';
@@ -818,7 +813,7 @@ if (isset($_POST['page_precedente'])) {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              AUTRE CENTRALE                
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    
+
     $arrayautrecentraleBDD = $manager->getList2("SELECT c.libellecentrale FROM  projetautrecentrale p,centrale c WHERE  p.idcentrale = c.idcentrale and p.idprojet=?", $idprojet);
     $arrayAutreCentraleBDD = array();
     for ($i = 0; $i < count($arrayautrecentraleBDD); $i++) {
@@ -836,7 +831,7 @@ if (isset($_POST['page_precedente'])) {
             $manager->deleteprojetautrecentrale($idprojet);
             for ($i = 0; $i < count($_POST['autrecentrale']); $i++) {
                 $idautrecentrale = $manager->getSingle2("select idcentrale from centrale where libellecentrale=?", $_POST['autrecentrale'][$i]);
-                $projetautrecentrale = new Projetautrecentrale($idautrecentrale, $idprojet,$sendmail);
+                $projetautrecentrale = new Projetautrecentrale($idautrecentrale, $idprojet, $sendmail);
                 $manager->addprojetautrescentrale($projetautrecentrale);
             }
         }
@@ -864,7 +859,7 @@ if (isset($_POST['page_precedente'])) {
     if (!empty($_POST['autrecentrale'])) {
         if ($arrayAutreCentraleBDD != $_POST['autrecentrale']) {
             for ($i = 0; $i < count($_POST['autrecentrale']); $i++) {
-                $sautrecentrale.=$_POST['autrecentrale'][$i] . ' - ';
+                $sautrecentrale .= $_POST['autrecentrale'][$i] . ' - ';
             }
             $_SESSION['autrecentralemodif'] = substr($sautrecentrale, 0, -2);
         } else {
@@ -873,47 +868,8 @@ if (isset($_POST['page_precedente'])) {
     } else {
         $sautrecentrale = '';
     }
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                              CENTRALE DE PROXIMITE
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
-    $centrale_proximiteBDD = $manager->getList2("SELECT idcentrale_proximite FROM projet_centraleproximite where idprojet=?", $idprojet);
-    $centraleProximiteBDD = array();
-    for ($i = 0; $i < count($centrale_proximiteBDD); $i++) {
-        array_push($centraleProximiteBDD, 'cp' . $centrale_proximiteBDD[$i]['idcentrale_proximite']);
-    }
-    $centrale_proximite = stripslashes(Securite::bdd($_POST['centrale_proximite']));
 
-    $descriptioncentraleproximiteBDD = $rowprojet[0]['descriptioncentraleproximite'];
 
-    if ($_POST['centrale_proximite'] == TRUE) {
-        if (!empty($_POST['centrale_Proximite'])) {
-            if ($centraleProximiteBDD != $_POST['centrale_Proximite']) {
-                $_SESSION['centraleproximitemodif'] = $_POST['centrale_Proximite'];
-            } else {
-                $_SESSION['centraleproximitemodif'] = '';
-            }
-            $manager->deleteprojetcentraleproximite($idprojet);
-            for ($i = 0; $i < count($_POST['centrale_Proximite']); $i++) {
-                $idcentrale_proximite = substr($_POST['centrale_Proximite'][$i], 2);
-                $centraleproximite = new Projet_centraleproximite($idprojet, $idcentrale_proximite);
-                $manager->addprojetcentraleproximite($centraleproximite);
-            }
-        } else {
-            $_SESSION['centraleproximitemodif'] = '';
-        }
-        if (!empty($_POST['centraleproximitevaleur'])) {
-            $descriptioncentraleproximite = clean($_POST['centraleproximitevaleur']);
-            if ($descriptioncentraleproximiteBDD != $descriptioncentraleproximite) {
-                $_SESSION['descriptioncentraleproximitemodif'] = $descriptioncentraleproximite;
-            } else {
-                $_SESSION['descriptioncentraleproximitemodif'] = '';
-                $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
-            }
-        } else {
-            $_SESSION['descriptioncentraleproximitemodif'] = '';
-            $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
-        }
-    }
     if (!empty($_POST['desTechno'])) {
         $descriptifTechnologique = clean($_POST['desTechno']);
         if ($descriptiftechnologiqueBDD != $descriptifTechnologique) {
@@ -1067,11 +1023,11 @@ if (isset($_POST['page_precedente'])) {
         $extension = strrchr($_FILES['fichierphase2']['name'], '.');
         if (!in_array($extension, $extensions)) {//VERIFICATION DU FORMAT SI IL N'EST PAS BON ON SORT
             $erreur1 = TXT_ERREURUPLOAD;
-            header('Location: /' . REPERTOIRE . '/Upload_Errorphase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet.'/'.$idstatutprojet);
+            header('Location: /' . REPERTOIRE . '/Upload_Errorphase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '/' . $idstatutprojet);
             exit();
         } elseif ($taille > $taille_maxi) {//VERIFICATION DE LA TAILLE SI ELLE EST >1mo ON SORT
             $erreur1 = TXT_ERREURTAILLEFICHIER;
-            header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet.'/'.$idstatutprojet);
+            header('Location: /' . REPERTOIRE . '/Upload_Errorsizephase2/' . $lang . '/' . rand(0, 10000) . '/' . $idprojet . '/' . $idstatutprojet);
             exit();
         } elseif (!isset($erreur1)) {//S'il n'y a pas d'erreur, on upload
             if (move_uploaded_file($_FILES['fichierphase2']['tmp_name'], $dossier . $fichierPhase)) {
@@ -1095,60 +1051,59 @@ if (isset($_POST['page_precedente'])) {
     //------------------------------------------------------------------------------------------------------------
     //                              TRAITEMENT DU PROJETPHASE2
     //------------------------------------------------------------------------------------------------------------        
-    if($_SESSION['idTypeUser']==ADMINLOCAL){
-        if($_POST['interneExterne']=='ie0'){
+    if ($_SESSION['idTypeUser'] == ADMINLOCAL) {
+        if ($_POST['interneExterne'] == 'ie0') {
             $interneexterne = null;
-        }elseif($_POST['interneExterne']=='ie1'){
+        } elseif ($_POST['interneExterne'] == 'ie1') {
             $interneexterne = 'I';
-        }else{
+        } else {
             $interneexterne = 'E';
         }
-        if($_POST['internationnalNationnal']=='in0'){
+        if ($_POST['internationnalNationnal'] == 'in0') {
             $internationalNational = null;
-        }elseif($_POST['internationnalNationnal']=='in1'){
+        } elseif ($_POST['internationnalNationnal'] == 'in1') {
             $internationalNational = 'N';
-        }else{
+        } else {
             $internationalNational = 'I';
         }
-        
-    }else{
+    } else {
         $interneexterne = $manager->getSingle2("select interneexterne from projet where idprojet=?", $idprojet);
         $internationalNational = $manager->getSingle2("select internationalnational from projet where idprojet=?", $idprojet);
-        if(empty($interneexterne)){
+        if (empty($interneexterne)) {
             $interneexterne = null;
         }
-        if(empty($internationalNational)){
+        if (empty($internationalNational)) {
             $internationalNational = null;
         }
     }
-        
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite,$interneexterne, $internationalNational);    
+
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //------------------------------------------------------------------------------------------------------------------------
     //                  GESTION DES CAS OU LE DEMANDEUR EST ADMINISTRATEUR DE PROJET
     //------------------------------------------------------------------------------------------------------------------------
-    if(isset($_SESSION['idutilisateur'])&&!empty($_SESSION['idutilisateur'])){
+    if (isset($_SESSION['idutilisateur']) && !empty($_SESSION['idutilisateur'])) {
         $idutilisateur = $_SESSION['idutilisateur'];
-    }elseif (isset($_GET['idprojet'])&&!empty($_GET['idprojet'])) {
+    } elseif (isset($_GET['idprojet']) && !empty($_GET['idprojet'])) {
         $idprojet = $_GET['idprojet'];
-        $idutilisateur= $manager->getSingle2("select idutilisateur_utilisateur from creer where idprojet_projet=?", $idprojet);
+        $idutilisateur = $manager->getSingle2("select idutilisateur_utilisateur from creer where idprojet_projet=?", $idprojet);
     }
-    
-    $admin = $manager->getSingle2("select administrateur from utilisateur where idutilisateur=?", $idutilisateur);    
-    if($admin==1){
+
+    $admin = $manager->getSingle2("select administrateur from utilisateur where idutilisateur=?", $idutilisateur);
+    if ($admin == 1) {
         ajouteAdministrationProjet($idutilisateur);
     }
     //------------------------------------------------------------------------------------------------------------------------
     //                  GESTION DES CAS OU LE DEMANDEUR A UN RESPONSABLE DANS L'APPLICATION QUI EST ADMINISTRATEUR DE PROJET
     //------------------------------------------------------------------------------------------------------------------------
     $mailResponsable = $manager->getSingle2("select mailresponsable from utilisateur where idutilisateur=?", $idutilisateur);
-    if(!empty($mailResponsable)){
+    if (!empty($mailResponsable)) {
         $idresponsable = $manager->getSingle2("select idutilisateur from utilisateur,loginpassword  where idlogin=idlogin_loginpassword and lower(mail) like lower(?) ", trim($mailResponsable));
-        if(!empty($idresponsable)){
-            ajouteResponsableAdministrationProjet($idutilisateur,$idresponsable);
+        if (!empty($idresponsable)) {
+            ajouteResponsableAdministrationProjet($idutilisateur, $idresponsable);
         }
     }
-    
+
     //------------------------------------------------------------------------------------------------------------------------
     //			 MISE A JOUR DE LA TABLE RESSOURCEPROJET  ON EFFACE TOUTES LES RESSOURCES SELECTIONNEES
     //------------------------------------------------------------------------------------------------------------------------
@@ -1157,8 +1112,12 @@ if (isset($_POST['page_precedente'])) {
         $manager->deleteressourceprojet($idprojet);
         $ressource = $_POST['ressource'];
         foreach ($ressource as $chkbx) {
-            $arrayressource = $manager->getListbyArray("SELECT idressource FROM ressource where libelleressource =?", array($chkbx));
-            $ressources .=$chkbx . ',';
+            if ($lang == 'fr') {
+                $arrayressource = $manager->getListbyArray("SELECT idressource FROM ressource where libelleressource =?", array($chkbx));
+            } else {
+                $arrayressource = $manager->getListbyArray("SELECT idressource FROM ressource where libelleressourceen =?", array($chkbx));
+            }
+            $ressources .= $chkbx . ',';
             $nbarrayressource = count($arrayressource);
             for ($i = 0; $i < $nbarrayressource; $i++) {
                 $idressource_ressource = $arrayressource[$i]['idressource'];
@@ -1174,7 +1133,7 @@ if (isset($_POST['page_precedente'])) {
         if ($arrayRessourceBDD != $_POST['ressource']) {
             $sressources = '';
             for ($i = 0; $i < count($_POST['ressource']); $i++) {
-                $sressources.=$_POST['ressource'][$i] . ' - ';
+                $sressources .= $_POST['ressource'][$i] . ' - ';
             }
             $_SESSION['ressourcesmodif'] = substr($sressources, 0, -2);
         } else {
@@ -1183,6 +1142,7 @@ if (isset($_POST['page_precedente'])) {
     } else {
         $sressources = '';
     }
+
 //------------------------------------------------------------------------------------------------------------------------
 //			 FIN
 //------------------------------------------------------------------------------------------------------------------------   
@@ -1200,6 +1160,7 @@ if (isset($_POST['page_precedente'])) {
         $idstatutprojet = ACCEPTE;
         $concerne = new Concerne($idcentrale, $idprojet, $idstatutprojet, "");
         $manager->addConcerne($concerne);
+        effaceCache(LIBELLECENTRALEUSER);
         $_SESSION['idstatutprojet'] = $idstatutprojet;
         include '../uploadprojetphase2.php';
     } elseif ($cas == 'enregistrement') {//CAS OU ON SAUVEGARDE UN PROJET                
@@ -1216,49 +1177,33 @@ if (isset($_POST['page_precedente'])) {
             $_SESSION['idstatutprojet'] = $idstatutprojet;
         }
     }
-    if ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' || $cas == 'chgstatutAutCentraleEmailDejaEnvoye'|| $cas == 'chgstatut' || $cas == 'chgstatutAutCentraleEmailDejaEnvoyeNon') {
-        if ($idstatutprojet == ACCEPTE) {//PROJET EN COURS D'EXPERTISE            
-            $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword, utilisateur  WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
-            $concerne = new Concerne($idcentrale, $idprojet, ACCEPTE, "");
+    if ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' || $cas == 'chgstatutAutCentraleEmailDejaEnvoye' || $cas == 'chgstatut' || $cas == 'chgstatutAutCentraleEmailDejaEnvoyeNon') {
+        if ($idstatutprojet == ACCEPTE) {//PROJET EN COURS D'EXPERTISE                        
+            $concerne = new Concerne(IDCENTRALEUSER, $idprojet, ACCEPTE, "");
             $manager->updateConcerne($concerne, $idprojet);
+            //vide le cache
+            effaceCache(LIBELLECENTRALEUSER);
             include '../uploadphase2.php';
         } elseif ($idstatutprojet == ENCOURSREALISATION) {
             //PROJET EN COURS DE REALISATION             
             $datedebutprojet = $datemodifstatut;
-            $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword, utilisateur  WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
-            $concerne = new Concerne($idcentrale, $idprojet, ENCOURSREALISATION, "");
+            $concerne = new Concerne(IDCENTRALEUSER, $idprojet, ENCOURSREALISATION, "");
             $manager->updateConcerne($concerne, $idprojet);
             //MISE A JOUR DE LA TABLE PROJET --> DATEDEBUT DU PROJET = DATE DU JOUR DE changementDeStatut
             $datedebut = new DateDebutProjet($idprojet, $datedebutprojet);
             $manager->updateDateDebutProjet($datedebut, $idprojet);
             //CONTROLE QUE LE PROJET N'EST PAS PLUS DE 1 FOIS DANS LA MEME CENTRALE ET SUPPERSION DU DOUBLON
             $nbcentrale = $manager->getSingle2("select count(idcentrale_centrale) from concerne where idprojet_projet=? ", $idprojet);
-            if ($nbcentrale > 1) {
-                //MISE A JOUR DU STATUT DU PROJET DANS LES AUTRES CENTRALES
-                $arraycentrale = $manager->getListbyArray("select idcentrale_centrale from concerne where idcentrale_centrale!=? and idprojet_projet=?", array($idcentrale, $idprojet));
-                $nbarraycentrale = count($arraycentrale);
-                $datejour = date('Y-m-d');
-                $commentaireProjet = affiche('TXT_PROJETREALISATIONCENTRALE');
-                $libellecentrale = $manager->getSinglebyArray("SELECT libellecentrale FROM  concerne, centrale WHERE  idcentrale_centrale = idcentrale AND idstatutprojet_statutprojet =? and idprojet_projet=?", array(ENCOURSREALISATION, $idprojet));
-                for ($i = 0; $i < $nbarraycentrale; $i++) {
-                    $concerne = new Concerne($arraycentrale[$i]['idcentrale_centrale'], $idprojet, REFUSE, $commentaireProjet . ' ' . $libellecentrale);
-                    $manager->updateConcerne($concerne, $idprojet);
-                    $daterefus = new DateStatutRefusProjet($idprojet, $datejour);
-                    $manager->updateDateStatutRefuser($daterefus, $idprojet, $arraycentrale[$i]['idcentrale_centrale']);
-                }
-                include_once '../EmailProjetRealiInfoautrecentrale.php'; //ENVOIE D'UN EMAIL DANS LES AUTRES CENTRALES
-            } else {
-                $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword, utilisateur  WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
-                $concerne = new Concerne($idcentrale, $idprojet, ENCOURSREALISATION, "");
-                $manager->updateConcerne($concerne, $idprojet);
-                include '../EmailProjetEncoursrealisation.php';
-                if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye') {
-                    include '../emailAutreCentrales.php';
-                } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye') {
-                    include '../outils/envoiEmailAutreCentrale.php';
-                }
-                header('Location: /' . REPERTOIRE . '/myproject/' . $lang . '/' . $idprojet);
+            $concerne1 = new Concerne(IDCENTRALEUSER, $idprojet, ENCOURSREALISATION, "");
+            $manager->updateConcerne($concerne1, $idprojet);
+            effaceCache(LIBELLECENTRALEUSER);
+            include '../EmailProjetEncoursrealisation.php';
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye') {
+                include '../emailAutreCentrales.php';
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye') {
+                include '../outils/envoiEmailAutreCentrale.php';
             }
+            header('Location: /' . REPERTOIRE . '/myproject/' . $lang . '/' . $idprojet);
         } elseif ($idstatutprojet == FINI) {//PROJET FINI
             //VERIFICATION QUE LE PROJET A BIEN UNE DATE DE DEBUT DE PROJET,AFFECTATION DE LA DATE STAUTFINI DANS LE CAS CONTRAIRE
             $datedebutduprojet = $manager->getSingle2("select datedebutprojet from projet where idprojet=?", $idprojet);
@@ -1270,11 +1215,10 @@ if (isset($_POST['page_precedente'])) {
             $datestatutFini = $datemodifstatut;
             $datefini = new DateStatutFiniProjet($idprojet, $datestatutFini);
             $manager->updateDateStatutFini($datefini, $idprojet);
-            $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword, utilisateur  WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
-            $concerne = new Concerne($idcentrale, $idprojet, FINI, "");
+            $concerne = new Concerne(IDCENTRALEUSER, $idprojet, FINI, "");
             $manager->updateConcerne($concerne, $idprojet);
+            effaceCache(LIBELLECENTRALEUSER);
             // ENVOI D'UN EMAIL
-            
             include '../EmailProjetfini.php';
             //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
             if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye') {
@@ -1282,6 +1226,8 @@ if (isset($_POST['page_precedente'])) {
             } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye') {
                 include '../outils/envoiEmailAutreCentrale.php';
             }
+            //vide le cache
+            
             header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
             exit();
             //include '../uploadphase2.php';
@@ -1301,9 +1247,9 @@ if (isset($_POST['page_precedente'])) {
             }
             $datecloturer = new DateStatutCloturerProjet($idprojet, $datestatutCloturer);
             $manager->updateDateStatutCloturer($datecloturer, $idprojet);
-            $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword, utilisateur  WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
-            $concerne = new Concerne($idcentrale, $idprojet, CLOTURE, "");
+            $concerne = new Concerne(IDCENTRALEUSER, $idprojet, CLOTURE, "");
             $manager->updateConcerne($concerne, $idprojet);
+            effaceCache(LIBELLECENTRALEUSER);
             // ENVOI D'UN EMAIL
             include '../EmailProjetcloture.php';
 
@@ -1313,58 +1259,63 @@ if (isset($_POST['page_precedente'])) {
             } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye') {
                 include '../outils/envoiEmailAutreCentrale.php';
             }
-
+            //vide le cache
+            
             header('Location: /' . REPERTOIRE . '/closed_project/' . $lang . '/' . $idprojet . '/' . $idstatutprojet);
             exit();
-            //include '../uploadphase2.php';
-        } elseif ($idstatutprojet == REFUSE) {//PROJET REFUSER
-            $idcentrale = $manager->getSingle2('select idcentrale from centrale,loginpassword,utilisateur where idlogin=idlogin_loginpassword and idcentrale=idcentrale_centrale and pseudo=?', $_SESSION['pseudo']);
+        } elseif ($idstatutprojet == REFUSE) {//PROJET REFUSER            
             $datejour = date('Y-m-d');
-            //RECUPERATION DE L'EV.$idcentrale;ENTUEL PREMIER COMMENTAIRE
+            //RECUPERATION DE L'EVENTUEL PREMIER COMMENTAIRE
             if (!empty($_POST['commentairephase2Valeur'])) {
                 $commentaireProjet = $_POST['commentairephase2Valeur'];
             } else {
                 $commentaireProjet = '';
             }
-            $concerne = new Concerne($idcentrale, $idprojet, REFUSE, $commentaireProjet);
+            $concerne = new Concerne(IDCENTRALEUSER, $idprojet, REFUSE, $commentaireProjet);
             $manager->updateConcerne($concerne, $idprojet);
             $daterefus = new DateStatutRefusProjet($idprojet, $datejour);
-            $manager->updateDateStatutRefuser($daterefus, $idprojet, $idcentrale);
-          
+            $manager->updateDateStatutRefuser($daterefus, $idprojet, IDCENTRALEUSER);
+            effaceCache(LIBELLECENTRALEUSER);
+            $libelleCentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDCENTRALEUSER);
             include_once '../emailprojetphase2/emailRefuse.php';
             include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
             $_SESSION['idstatutprojet'] = $idstatutprojet; //NE PAS EFFACER ON A BESOIN DANS UPLOADPHASE2
+            //vide le cache
+            
         } elseif ($idstatutprojet == TRANSFERERCENTRALE) {
-            $ancienStatut = $manager->getSinglebyArray("select idstatutprojet_statutprojet from concerne where idprojet_projet=? and idcentrale_centrale=?", array($idprojet, $IDCENTRALEUSER));
+            $ancienStatut = $manager->getSinglebyArray("select idstatutprojet_statutprojet from concerne where idprojet_projet=? and idcentrale_centrale=?", array($idprojet, IDCENTRALEUSER));
             $datejour = date('Y-m-d');
             $idnouvellecentrale = $_POST['centraletrs'];
             $rowidcentrale = $manager->getListbyArray("select idcentrale_centrale from concerne where idprojet_projet =? and idcentrale_centrale <>?  ", array($idprojet, $idnouvellecentrale));
-            $libellecentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", $idnouvellecentrale); //NOM DE LA CENTRALE
+            $libellecentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", $idnouvellecentrale); //NOM DE LA CENTRALE            
             foreach ($rowidcentrale as $key => $value) {
                 $concerne = new Concerne($value[0], $idprojet, REFUSE, TXT_COMMENTTRS . ' ' . $libellecentrale);
                 $manager->updateConcerne($concerne, $idprojet);
                 $daterefus = new DateStatutRefusProjet($idprojet, $datejour);
                 $manager->updateDateStatutRefuser($daterefus, $idprojet, $value[0]);
+                $libelleCentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", $value[0]);
             }
             //MISE A JOUR DE LA CENTRALE AFFECTE
             if ($ancienStatut == ACCEPTE) {
                 $centraleaffecte = new Concerne($idnouvellecentrale, $idprojet, ACCEPTE, TXT_PROJETTRANSFERT);
-            } elseif ($ancienStatut == ENCOURSANALYSE) {
-                $centraleaffecte = new Concerne($idnouvellecentrale, $idprojet, ENCOURSANALYSE, TXT_PROJETTRANSFERT);
             } else {
                 $centraleaffecte = new Concerne($idnouvellecentrale, $idprojet, ACCEPTE, TXT_PROJETTRANSFERT);
             }
             $manager->addConcerne($centraleaffecte);
+            //vide le cache
+            effaceCache(LIBELLECENTRALEUSER);
             include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
             $_SESSION['idstatutprojet'] = $idstatutprojet;
         }
     } else {
         $_SESSION['idstatutprojet'] = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
+        $statut = $manager->getSingle2("SELECT libellestatutprojet FROM statutprojet,concerne WHERE idstatutprojet_statutprojet = idstatutprojet and  concerne.idprojet_projet = ?", $idprojet);
         include '../uploadphase2.php';
     }
-
     BD::deconnecter(); //DECONNEXION A LA BASE DE DONNEE
 } else {
     include_once '../decide-lang.php';
+    $idcentrale = $manager->getSingle2('select idcentrale_centrale from concerne where idprojet_projet=?', $idprojet);
+    createLogInfo(NOW, "Erreur sur mise à jour  d'un projet en phase 2", NOMUSER . ' ' . PRENOMUSER, "", $manager, $idcentrale);
     header('Location:/' . REPERTOIRE . '/Login_Error/' . $lang);
 }

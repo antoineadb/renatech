@@ -14,8 +14,7 @@ function nomEntete($mail, $pseudo) {
     }
     $db = BD::connecter();
     $manager = new Manager($db);
-    $param = array($mail, $pseudo);
-    $array = $manager->getListbyArray("SELECT u.nom,u.prenom FROM loginpassword l, utilisateur u  WHERE l.idlogin = u.idlogin_loginpassword AND l.mail=? and l.pseudo=?", $param);
+    $array = $manager->getListbyArray("SELECT u.nom,u.prenom FROM loginpassword l, utilisateur u  WHERE l.idlogin = u.idlogin_loginpassword AND l.mail=? and l.pseudo=?", array($mail, $pseudo));
     $_SESSION['nomConnect'] = str_replace("''", "'", $array[0][0]);
     $_SESSION['prenomConnect'] = str_replace("''", "'", $array[0][1]);
     //FERMETURE DE LA CONNEXION
@@ -203,11 +202,9 @@ function check_authent($pseudo) {
  * This function calculate the connextion time, if the connection time is above 30 minutes without any action, the session are closed
  * @param type $limitInactif
  */
-function checktimeconnect($pseudo) {
-    $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
-    $manager = new Manager($db);
-    $limitInactif = (int) $manager->getSingle2("select tmpcx from loginpassword where pseudo=?", $pseudo)*60;
-    if($limitInactif==0){
+function checktimeconnect($pseudo, $manager) {
+    $limitInactif = (int) $manager->getSingle2("select tmpcx from loginpassword where pseudo=?", $pseudo) * 60;
+    if ($limitInactif == 0) {
         $limitInactif = 30;
     }
     if (isset($_GET['lang'])) {
@@ -215,14 +212,25 @@ function checktimeconnect($pseudo) {
     } else {//Si aucune langue n'est déclarée on tente de reconnaitre la langue par défaut du navigateur
         $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
     }
+
+
     if (isset($_SESSION['lastLoad']) && $_SESSION['lastLoad'] < time() - $limitInactif) {
+        createLogInfo(NOW, TXT_ACCESLIMIT, NOMUSER . ' ' . PRENOMUSER, '', $manager, IDCENTRALEUSER);
         session_unset();
         echo '<script>window.location.replace("/' . REPERTOIRE . '/Login_Timeout/' . $lang . '")</script>';
     }
+    /* if ($adresse == 'phase2.php' || $adresse == 'creerprojetphase2.php') {//Je suis soit en train de créeer un projet en phase 2 soir en train de modificer un projet
+      //SAUVEGARDE DU PROJET EN FIN DE SESSION
+      echo "<HTML><HEAD>";
+      echo "<TITLE>Demande d'intervention non envoyée!</TITLE>";
+      echo "<script> setTimeout('window.close()', 0); </script>";
+      echo "</HEAD>";
+      //   } */
     $_SESSION['lastLoad'] = time();
     $_SESSION['creationencours'] = 'non';
+
+
     BD::deconnecter(); //CONNEXION A LA BASE DE DONNEE
-    
 }
 
 /**
@@ -386,6 +394,72 @@ function filterEditor($string0) {
 }
 
 /**
+ * 
+ * @param type $string
+ * @return type
+ */
+function cleanRapportTPDF($string) {
+    $arrayCar = array('à', 'û', '–', 'è');
+    $arrayCarcorrige = array('à', 'û', '-', 'è');
+    $string0 = filterEditorWithoutStripTags(str_replace("é", "é", $string));
+    $string1 = str_replace("ç", "ç", $string0);
+    //$string2 = str_replace(array(chr(13)), '', $string1);
+    $string2 = str_replace($arrayCar, $arrayCarcorrige, $string1);
+    $string3 = str_replace('€', utf8_encode(chr(128)), $string2);
+    $string4 = (stripslashes(str_replace("''", "'", $string3)));
+    return $string4;
+}
+
+/**
+ * This function filter the editor by removing all the tag between <!-- and ->
+ * @param type $string
+ * @return type
+ */
+function filterEditorWithoutStripTags($string) {
+    if (mb_substr_count($string, "<!--") > 0) {
+        $nb = mb_substr_count($string, "<!--");
+        //Compte le nombre d'occurrences de la sous-chaîne <!--
+        for ($i = 0; $i <= $nb; $i++) {
+            $val0 = stripos($string, '<!');
+            $val1 = stripos($string, '->');
+            $string1 = (substr_replace($string, "", $val0 + 1, $val1 - $val0 + 2));
+            $string = str_replace("&; ", "", $string1);
+        }
+        return $string;
+    } elseif (mb_substr_count($string, "<style") > 0) {
+        $nb = mb_substr_count($string, "<style");
+        for ($i = 0; $i <= $nb; $i++) {
+            $val0 = stripos($string, '<style');
+            $val1 = stripos($string, '/style>');
+            $string1 = (substr_replace($string, "", $val0 + 1, $val1 - $val0 + 2));
+            $string = str_replace("&; ", "", $string1);
+        }
+        return $string;
+    } elseif (mb_substr_count($string, "&lt;!-- /") > 0) {
+        $nb = mb_substr_count($string, "&lt;!-- /");
+        for ($i = 0; $i <= $nb; $i++) {
+            $val0 = stripos($string, "&lt;!-- /");
+            $val1 = stripos($string, '--&gt;');
+            $string1 = (substr_replace($string, "", $val0 + 1, $val1 - $val0 + 2));
+            $string = str_replace("&; ", "", $string1);
+        }
+        //return $string;
+        if (substr($string, 0, 1) == "<") {
+            return substr(str_replace("&lt;", "", $string), 1);
+        } else {
+            return str_replace("&lt;", "", $string);
+        }
+    } else {
+        //return $string;
+        if (substr($string, 0, 1) == "<") {
+            return substr(str_replace("&lt;", "", $string), 1);
+        } else {
+            return str_replace("&lt;", "", $string);
+        }
+    }
+}
+
+/**
  * clean all the tags of a string
  * @param type $string
  * @return type
@@ -420,22 +494,22 @@ function noreturn($chaine) {
 }
 
 /**
- * 
+ * Fonction qui supprime les éventuels doublons dans la table concerne
  * @param type $idprojet
  * @param type $idcentrale
  * @param type $idstatutprojet
  */
 function checkConcerne($idprojet, $idcentrale, $idstatutprojet) {
-    $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
-    $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+    $db = BD::connecter();
+    $manager = new Manager($db);
     $nbcentrale = $manager->getSinglebyArray("select count(idprojet_projet) from concerne where idprojet_projet=? and idcentrale_centrale=?", array($idprojet, $idcentrale));
     if ($nbcentrale > 1) {
         $commentaireProjet = $manager->getSinglebyArray("select commentaireprojet from concerne where idprojet_projet=? and idcentrale_centrale=?", array($idprojet, $idcentrale));
-        $manager->deleteConcerneProjetCentrale($idprojet, $idcentrale); //SUPPRESSION DES
+        $manager->deleteConcerneProjetCentrale($idprojet, $idcentrale); //SUPPRESSION DES AFFECTATIONS DANS LA TABLE CONCERNE
         $concerne = new Concerne($idcentrale, $idprojet, $idstatutprojet, $commentaireProjet);
         $manager->addConcerne($concerne);
     }
-    BD::deconnecter(); //CONNEXION A LA BASE DE DONNEE
+    BD::deconnecter();
 }
 
 /**
@@ -445,15 +519,15 @@ function supprDouble() {//SUPPRESSION DES DOUBLONS
     $db = BD::connecter();
     $manager = new Manager($db);
     $arraydoublon = $manager->getList("SELECT distinct(idprojet) FROM projet, creer where idprojet not in (select idprojet_projet from creer)");
-    $nbarraydoublon = count($arraydoublon);    
+    $nbarraydoublon = count($arraydoublon);
     for ($i = 0; $i < $nbarraydoublon; $i++) {
         $manager->deleteprojetcentraleproximite($arraydoublon[$i][0]);
         $manager->deleterapport($arraydoublon[$i][0]);
         $manager->deleteprojetautrecentrale($arraydoublon[$i][0]);
         $manager->deleteprojetsf($arraydoublon[$i][0]);
-        $manager->deleteressourceprojet($arraydoublon[$i][0]);       
+        $manager->deleteressourceprojet($arraydoublon[$i][0]);
         $manager->deleteprojetpersonneaccueilcentrale($arraydoublon[$i][0]);
-        $manager->deleteprojetpartenaire($arraydoublon[$i][0]);//ok
+        $manager->deleteprojetpartenaire($arraydoublon[$i][0]); //ok
         $manager->deleteConcerne($arraydoublon[$i][0]);
         $manager->deleteUtilisateurPorteur($arraydoublon[$i][0]);
         $manager->deleteUtilisateurAdministrateur($arraydoublon[$i][0]);
@@ -463,13 +537,12 @@ function supprDouble() {//SUPPRESSION DES DOUBLONS
     $manager->exeRequete("delete from personneaccueilcentrale WHERE  idpersonneaccueilcentrale not in (select idpersonneaccueilcentrale_personneaccueilcentrale from projetpersonneaccueilcentrale);");
     //suppression des partenaireprojet orphelin
     $manager->exeRequete("delete from partenaireprojet  WHERE  idpartenaire not in (select idpartenaire_partenaireprojet from projetpartenaire);");
-    
     BD::deconnecter(); //CONNEXION A LA BASE DE DONNEE
 }
 
 /**
  * This function check if you are using internet explorer
- * @return string
+ * @return string 
  */
 function internetExplorer() {
     $ie = false;
@@ -553,6 +626,15 @@ function removeDoubleQuote($string) {
 }
 
 /**
+ * Function qui supprime les doubles quote decode en utf8 et fait un stripslashes
+ * @param type $string
+ * @return type
+ */
+function cleanString($string) {
+    return removeDoubleQuote(stripslashes(utf8_decode($string)));
+}
+
+/**
  * This function Show Error on dev and testonly
  * @param type $dir
  */
@@ -564,7 +646,7 @@ function showError($dir) {
         error_reporting(E_ALL);
     } elseif ($repertoire[1] == 'projet') {
         error_reporting(0);
-    }elseif ($repertoire[1] == 'renatech') {
+    } elseif ($repertoire[1] == 'renatech') {
         error_reporting(E_ALL);
     }
 }
@@ -641,36 +723,35 @@ function responsablePorteur($pseudo, $idprojet) {
     }
     $db = BD::deconnecter();
 }
+
 /**
  * Modifie le nom d'un chaine de caractère en mettant des _ a la place de blancs
  * @param type $chaineNonValide
  * @return type
  */
-function nomFichierValide($chaineNonValide){
-  $chaineNonValide0 = preg_replace('`\s+`', '_', trim($chaineNonValide));
-  $chaineNonValide1 = str_replace("'", "_", $chaineNonValide0);
-  $chaineNonValide2 = preg_replace('`_+`', '_', trim($chaineNonValide1));
-  $chaineValide=strtr($chaineNonValide2,
-"ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ",
-                        "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
-  return ($chaineValide);
+function nomFichierValide($chaineNonValide) {
+    $chaineNonValide0 = preg_replace('`\s+`', '_', trim($chaineNonValide));
+    $chaineNonValide1 = str_replace("'", "_", $chaineNonValide0);
+    $chaineNonValide2 = preg_replace('`_+`', '_', trim($chaineNonValide1));
+    $chaineValide = strtr($chaineNonValide2, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+    return ($chaineValide);
 }
 
-function supprLogoFigure(){
+function supprLogoFigure() {
     if (is_file('../class/Manager.php')) {
         include_once '../class/Manager.php';
     } else {
         include_once 'class/Manager.php';
     }
     $db = BD::connecter();
-    $manager = new Manager($db);        
-    $dir    = '../uploadlogo/';
+    $manager = new Manager($db);
+    $dir = '../uploadlogo/';
     $arrayImages = scandir($dir);
     $nbarrayImg = count($arrayImages);
     for ($i = 0; $i < $nbarrayImg; $i++) {
-        $idrapportLogo = $manager->getSinglebyArray("select idrapport from rapport where logo = ? or logocentrale =? or figure=?", array($arrayImages[$i],$arrayImages[$i],$arrayImages[$i]));
-        if(empty($idrapportLogo) && $arrayImages[$i]!='.' && $arrayImages[$i]!='..'){
-            if(!empty($arrayImages[$i])){
+        $idrapportLogo = $manager->getSinglebyArray("select idrapport from rapport where logo = ? or logocentrale =? or figure=?", array($arrayImages[$i], $arrayImages[$i], $arrayImages[$i]));
+        if (empty($idrapportLogo) && $arrayImages[$i] != '.' && $arrayImages[$i] != '..') {
+            if (!empty($arrayImages[$i])) {
                 unlink('../uploadlogo/' . $arrayImages[$i]); //EFFACE LE FICHIER SUR LE SERVEUR
             }
         }
@@ -681,8 +762,9 @@ function supprLogoFigure(){
 /**
  * 
  * @param type $array
+ * Fonction qui redimensionne des image
  */
-function sizeLogo($array,$t) {
+function sizeLogo($array, $t) {
     if ($array[0] > $t) {//si width>$t px
         $f = $t / $array[0];
         $w = $t;
@@ -705,19 +787,19 @@ function sizeLogo($array,$t) {
         $w = $array[0];
         $h = $array[1];
     }
-    
-    if($h<$t){
-        $f= $t/$h;
-        $h= $f*$h;
-        $w= $f*$w;
-        if($w>560){
-            $f=560/$w;
-            $w=560;
-            $h=$f*$h;
+
+    if ($h < $t) {
+        $f = $t / $h;
+        $h = $f * $h;
+        $w = $f * $w;
+        if ($w > 560) {
+            $f = 560 / $w;
+            $w = 560;
+            $h = $f * $h;
         }
     }
-    
-    return array($w,$h);
+
+    return array($w, $h);
 }
 
 /**
@@ -726,13 +808,14 @@ function sizeLogo($array,$t) {
  * @param type $charset
  * @return type
  */
-function wd_remove_accents($str, $charset='utf-8'){
-    $str = htmlentities($str, ENT_NOQUOTES, $charset);    
+function wd_remove_accents($str, $charset = 'utf-8') {
+    $str = htmlentities($str, ENT_NOQUOTES, $charset);
     $str = preg_replace('#&([A-za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $str);
     $str = preg_replace('#&([A-za-z]{2})(?:lig);#', '\1', $str); // pour les ligatures e.g. '&oelig;'
     $str = preg_replace('#&[^;]+;#', '', $str); // supprime les autres caractères    
     return $str;
 }
+
 /**
  * Fonction qui remome tous les noms de fichier
  * @param string $filemane
@@ -741,9 +824,8 @@ function wd_remove_accents($str, $charset='utf-8'){
 function renameFile($filename) {
     $ext = strrchr($filename, '.');
     return basename($filename, $ext) . time() . $ext;
-    
-    
 }
+
 /**
  * Fonction qui enlève les accents dans une chaine de caratère et remplace les espaces par _
  * @param type $chaineNonValide
@@ -757,6 +839,7 @@ function nomFichierValidesansAccent($chaineNonValide) {
     $chaineValide = strtr($chaineNonValide3, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
     return $chaineValide;
 }
+
 /**
  * 
  * @param type $idutilisateur
@@ -779,13 +862,13 @@ function ajouteAdministrationProjet($idutilisateur) {
     $arrayIdProjetAdmin = array();
     for ($i = 0; $i < count($arrayidprojetadmin); $i++) {
         array_push($arrayIdProjetAdmin, $arrayidprojetadmin[$i]['idprojet']);
-    }    
+    }
     //CONSTRUCTION D4UN TABLEAU DES ECARTS DES 2 TABLEAUX
-    $array = array_slice(array_diff($arrayidprojet, $arrayIdProjetAdmin),0);//REMISE DES INDEX A ZERO
+    $array = array_slice(array_diff($arrayidprojet, $arrayIdProjetAdmin), 0); //REMISE DES INDEX A ZERO
     if (!empty($array)) {
         for ($i = 0; $i < count($array); $i++) {
             $dateaffectation = date('Y-m-d');
-            if(!empty($array[$i])){
+            if (!empty($array[$i])) {
                 $utilisateurAdmin = new UtilisateurAdmin($idutilisateur, $array[$i], $dateaffectation);
                 $manager->addUtilisateurAdmin($utilisateurAdmin);
             }
@@ -793,6 +876,7 @@ function ajouteAdministrationProjet($idutilisateur) {
     }
     BD::deconnecter();
 }
+
 /**
  * 
  * @param type $idutilisateur
@@ -814,8 +898,7 @@ function retireAdministrationProjet($idutilisateur) {
     BD::deconnecter();
 }
 
-
-function ajouteResponsableAdministrationProjet($idutilisateur,$idresponsable) {
+function ajouteResponsableAdministrationProjet($idutilisateur, $idresponsable) {
     if (is_file('../class/Manager.php')) {
         include_once '../class/Manager.php';
     } else {
@@ -828,22 +911,379 @@ function ajouteResponsableAdministrationProjet($idutilisateur,$idresponsable) {
     for ($i = 0; $i < count($arrayIdprojet); $i++) {
         array_push($arrayidprojet, $arrayIdprojet[$i]['idprojet_projet']);
     }
-    
+
     $arrayidprojetadmin = $manager->getList2("select idprojet from utilisateuradministrateur where idutilisateur=?", $idresponsable);
     $arrayIdProjetAdmin = array();
     for ($i = 0; $i < count($arrayidprojetadmin); $i++) {
         array_push($arrayIdProjetAdmin, $arrayidprojetadmin[$i]['idprojet']);
-    }    
+    }
     //CONSTRUCTION D'UN TABLEAU DES ECARTS DES 2 TABLEAUX
-    $array = array_slice(array_diff($arrayidprojet, $arrayIdProjetAdmin),0);//REMISE DES INDEX A ZERO
+    $array = array_slice(array_diff($arrayidprojet, $arrayIdProjetAdmin), 0); //REMISE DES INDEX A ZERO
     if (!empty($array)) {
         for ($i = 0; $i < count($array); $i++) {
             $dateaffectation = date('Y-m-d');
-            if(!empty($array[$i])){
+            if (!empty($array[$i])) {
                 $utilisateurAdmin = new UtilisateurAdmin($idresponsable, $array[$i], $dateaffectation);
                 $manager->addUtilisateurAdmin($utilisateurAdmin);
             }
         }
     }
     BD::deconnecter();
+}
+
+function showMonth($id, $lang) {
+    $mois = "";
+    if ($id == 1) {
+        if ($lang == 'fr') {
+            $mois = 'janvier';
+        } else {
+            $mois = 'January';
+        }
+    } elseif ($id == 2) {
+        if ($lang == 'fr') {
+            $mois = 'février';
+        } else {
+            $mois = 'February';
+        }
+    } elseif ($id == 3) {
+        if ($lang == 'fr') {
+            $mois = 'mars';
+        } else {
+            $mois = 'March';
+        }
+    } elseif ($id == 4) {
+        if ($lang == 'fr') {
+            $mois = 'avril';
+        } else {
+            $mois = 'April';
+        }
+    } elseif ($id == 5) {
+        if ($lang == 'fr') {
+            $mois = 'mai';
+        } else {
+            $mois = 'May';
+        }
+    } elseif ($id == 6) {
+        if ($lang == 'fr') {
+            $mois = 'juin';
+        } else {
+            $mois = 'June';
+        }
+    } elseif ($id == 7) {
+        if ($lang == 'fr') {
+            $mois = 'juillet';
+        } else {
+            $mois = 'July';
+        }
+    } elseif ($id == 8) {
+        if ($lang == 'fr') {
+            $mois = 'août';
+        } else {
+            $mois = 'Agust';
+        }
+    } elseif ($id == 9) {
+        if ($lang == 'fr') {
+            $mois = 'septembre';
+        } else {
+            $mois = 'September';
+        }
+    } elseif ($id == 10) {
+        if ($lang == 'fr') {
+            $mois = 'octobre';
+        } else {
+            $mois = 'October';
+        }
+    } elseif ($id == 11) {
+        if ($lang == 'fr') {
+            $mois = 'novembre';
+        } else {
+            $mois = 'November';
+        }
+    } elseif ($id == 12) {
+        if ($lang == 'fr') {
+            $mois = 'décembre';
+        } else {
+            $mois = 'December';
+        }
+    }
+    return $mois;
+}
+
+function createLogInfo($dateHeure, $infos, $nomPrenom, $statutProjet, $manager, $idcentrale) {
+    $id = $manager->getSingle("select max(id) from logs") + 1;
+    $logs = new Logs($id, $dateHeure, $infos, $nomPrenom, $statutProjet, $idcentrale);
+    $manager->addlogs($logs);
+}
+
+function getCentrale($numero, $manager) {
+    $centrales = $manager->getList2("SELECT libellecentrale FROM concerne, projet,centrale WHERE idprojet_projet =  idprojet AND idcentrale = idcentrale_centrale AND   numero = ?", $numero);
+    $nomCentrale = "";
+    if ($centrales[0][0] == TXT_AUTRES) {
+        $nomCentrale = TXT_AUCUNE;
+        return 'Aucune centrale sélectionnée';
+    } elseif ($centrales[0][0] != TXT_AUTRES) {
+        foreach ($centrales as $centrale) {
+            $nomCentrale.=$centrale[0] . ', ';
+        }
+        if (count($centrales) > 1) {
+            return ' Centrales: ' . substr($nomCentrale, 0, -2);
+        } else {
+            return ' Centrale: ' . substr($nomCentrale, 0, -2);
+        }
+    } else {
+        return '';
+    }
+}
+
+function purgeTableLogs($manager) {
+    $manager->delLogs();
+}
+
+/**
+ * Function qui simplie les includes
+ * @param type $class
+ */
+function fileExist($class) {
+    if (is_file($class)) {
+        include_once $class;
+    } elseif (is_file('../' . $class)) {
+        include_once '../' . $class;
+    }
+}
+
+function requeteCloture($manager, $mois, $idcentrale) {
+    return $manager->getListbyArray("SELECT idprojet,numero,titre,refinterneprojet,datestatutfini,libellecentrale,(SELECT (DATE_PART('year', current_date::date) - DATE_PART('year', (datestatutfini)::date)) * 12 + 
+        (DATE_PART('month', current_date::date) - DATE_PART('month', (datestatutfini)))) as ecart  FROM concerne,projet,statutprojet,centrale WHERE idcentrale_centrale =  idcentrale 
+        AND idprojet_projet = idprojet AND idstatutprojet_statutprojet = idstatutprojet  AND idstatutprojet=? AND (SELECT (DATE_PART('year', current_date::date) - DATE_PART('year', (datestatutfini)::date)) * 12 + 
+        (DATE_PART('month', current_date::date) - DATE_PART('month', (datestatutfini))))>? AND idcentrale=? order by datestatutfini asc", array(FINI, $mois, $idcentrale));
+}
+
+/**
+ * 
+ * @param type $manager
+ * @param type $idcentrale
+ * @param type $mois
+ */
+function clotureProjet($manager, $idcentrale, $mois) {
+    fileExist('decide-lang.php');
+    fileExist('class/email.php');
+    $body = utf8_decode(affiche('TXT_MRSMR') . '<br><br><br>' . affiche('TXT_LISTEPROJETECHEANCE') . ', ' . affiche('TXT_SIVOUSNEFAITERIEN') . '.<br><br><br>'
+            . affiche('TXT_SINCERESALUTATION') . '<br><br>' . affiche('TXT_RESEAURENATECH') . '<br><br><br>');
+    $tableau = requeteCloture($manager, $mois, $idcentrale);
+    /*
+     * Madame, Monsieur,
+      Voici la liste des projets qui vont arrivés à échéance(date de statut fini +18 mois), vous pouvez changer cette état de fait en repassant le projet au statut "En cours de réalisation",
+     * si vous faites rien ces projets passeront automatiquement au statut clôturé.
+      Sincères salutations,
+      Le réseau Renatech.
+     */
+    $body .= "
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+        <link rel='stylesheet' href='" . '/' . REPERTOIRE . "/styles/style.css' media='screen' />
+    </head>
+<body>
+        <table>
+        <tr>
+            <th style='background-color:lightgrey;border: 1px solid black;text-align: center;;width: 90px;padding:5px'>" . utf8_decode(TXT_NUMERO) . "</th>
+            <th style='background-color:lightgrey;border: 1px solid black;padding:5px'>" . utf8_decode(TXT_TITREPROJET) . "</th>
+            <th style='background-color:lightgrey;border: 1px solid black;padding:5px'>" . utf8_decode(TXT_REFINTERNE) . "</th>
+            <th style='background-color:lightgrey;border: 1px solid black;padding:5px'>" . utf8_decode(TXT_DATESTATUTFIN) . "</th>                        
+            <th style='background-color:lightgrey;border: 1px solid black;padding:5px'>" . utf8_decode(TXT_DATEPASSAGECLOTURE) . "</th>
+                <th style='background-color:lightgrey;border: 1px solid black;padding:5px'>" . utf8_decode(TXT_CENTRALE) . "</th>
+         </tr>";
+    $DateFin = 18;
+    for ($i = 0; $i < count($tableau); $i++) {
+        $DateDebut = $tableau[$i]['datestatutfini'];
+        $body.= "
+         <tr>
+            <td style='border: 1px solid black;width: 90px;;padding:5px'>" . $tableau[$i]['numero'] . "</td>
+            <td style='padding:5px;border: 1px solid black;padding:5px'>" . utf8_decode($tableau[$i]['titre']) . "</td>
+            <td style='padding:5px;border: 1px solid black;padding:5px'>" . $tableau[$i]['refinterneprojet'] . "</td>
+            <td style='padding:5px;border: 1px solid black;padding:5px'>" . date('d-m-Y', strtotime($tableau[$i]['datestatutfini'])) . "</td>
+            <td style='padding:5px;border: 1px solid black;padding:5px'>" . date('d-m-Y', strtotime($DateDebut . ' +' . $DateFin . ' month')) . "</td>
+             <td style='padding:5px;border: 1px solid black;padding:5px'>" . $tableau[$i]['libellecentrale'] . "</td>
+        </tr>
+        ";
+    }
+    $body.= "</table></body>";
+    $body.= utf8_decode('<br><br>' . affiche('TXT_DONOTREPLY') . '<br><br>');
+    if (count($tableau) > 0) {
+        envoieEmail($body, affiche('TXT_NOTIFICATION'), array("antoineadb@gmail.com"), array('antoineadb@orange.fr'));
+    }
+}
+
+function emailclotureProjet($manager, $idprojet, $idcentrale) {
+    fileExist('decide-lang.php');
+    fileExist('class/email.php');
+    fileExist('outils/constantes.php');
+//JE PASSE LE PROJET AU STATUT CLOTURE
+    try {
+        $concerne = new Concerne($idcentrale, $idprojet, CLOTURE, "Clôture automatique du projet le " . date('d-m-Y'));
+        $manager->updateConcerne($concerne, $idprojet);
+        $dateCloture = new DateStatutCloturerProjet($idprojet, date('Y-m-d'));
+        $manager->updateDateStatutCloturer($dateCloture, $idprojet);
+    } catch (Exception $exc) {
+        echo $exc->getMessage() . '<hr>' . 'Problème de mise à jour du statut du projet<hr>' . 'Mise à jour automatique du projet abandonnée!';
+        exit(); // je n'envoi pas d'email en cas d'echec
+    }
+
+//J'ENVOI l'EMAIL DE NOTIFICATION
+    $body = utf8_decode(affiche('TXT_MRSMR') . '<br><br>' . affiche('TXT_CLOTUREAUTO')
+            . '<br>' . affiche('TXT_NOINFOPROJECT') . "<br><br>" . affiche('TXT_REACTPROJECT') . "<br><br>"
+            . '' . affiche('TXT_REMERCIEMENT') . '.<br><br>'
+            . '' . affiche('TXT_SINCERESALUTATION') . '<br><br>' . affiche('TXT_RESEAURENATECH') . '<br><br><br><a href="https://www.renatech.org/projet" >' . TXT_RETOUR . '</a>'
+            . '<br><br>' . affiche('TXT_DONOTREPLY') . '<br><br>');
+    /*
+     *  Madame, Monsieur,
+      Suite à l'aboutissement de votre projet en référence ci-dessus et après un delai supérieur à 18 mois au dela du passage au statut «Fini» , nous vous informons que votre projet est passé au statut «Cloturé».
+      Vous ne pouvez donc plus accéder aux informations concernant ce projet.
+      Si vous souhaitez continuer votre projet, merci d'en faire la demande auprès de l'administrateur local de la centrale.
+      En vous remerciant pour votre confiance au réseau RENATECH. En cas de nouveau projet, merci de bien vouloir remplir une nouvelle demande.
+      Sincères salutations,
+      Le réseau Renatech.
+      Retour sur la plateforme Renatech
+      Merci de ne pas répondre à cette adresse.
+     */
+
+    $infodemandeur = array($manager->getList2("SELECT mail, mailresponsable FROM creer,loginpassword,utilisateur WHERE idutilisateur_utilisateur = idutilisateur
+            AND idlogin_loginpassword = idlogin and idprojet_projet=?", $idprojet));
+    $maildemandeur = array($infodemandeur[0][0]['mail']); //EMAIL DU DEMANDEUR NE PEUT PAS NE PAS EXISTER
+    $mailCC = array();
+    if (!empty($infodemandeur[0][0]['mailresponsable'])) {
+        array_push($mailCC, $infodemandeur[0][0]['mailresponsable']); //EMAIL DU RESPONSABLE SI IL EXISTE
+    }
+    $infoProjet = $manager->getList2("select titre,numero from projet where idprojet=?", $idprojet);
+    envoieEmail($body, "Cloture du projet " . '"' . utf8_decode($infoProjet[0]['titre']) . '"' . utf8_decode(" numéro ") . $infoProjet[0]['numero'] . "", $maildemandeur, $mailCC);
+}
+
+function clotureProjetAuto($manager) {
+    $centrales = $manager->getList2("select idcentrale from centrale where idcentrale!=? order by idcentrale asc", IDCENTRALEAUTRE);
+    foreach ($centrales as $centrale) {
+        $cloture = requeteCloture($manager, 18, $centrale[0]);
+        if (count($cloture) > 0) {
+            for ($i = 0; $i < count($cloture); $i++) {
+                emailclotureProjet($manager, $cloture[$i]['idprojet'], $centrale[0]);
+            }
+        }
+    }
+}
+
+function startClosure($manager) {
+    try {//Je met à jour la table cloture projet pour éviter d'avoir à renvoyer 2 fois l'email
+        $date = date('Y-M');
+        $date_explosee = explode("-", $date);
+        $moisannee = $date_explosee[1] . '-' . $date_explosee[0];
+        $nbcentrale = $manager->getSingle2("select count(idcentrale) from centrale where idcentrale !=? ", IDCENTRALEAUTRE);
+        $test = $manager->getList("select datecloture,idcentrale from clotureprojet");
+        for ($i = 0; $i < $nbcentrale; $i++) {
+            if ($test[$i]['datecloture'] != $moisannee) {
+                $tab = requeteCloture($manager, 15, $test[$i]['idcentrale']);
+                if (!empty($tab[$i]['libellecentrale'])) {
+                    $clotureprojet = new ClotureProjet($moisannee, $test[$i]['idcentrale']);
+                    $manager->updateClotureProjet($clotureprojet, $test[$i]['idcentrale']);
+                    clotureProjet($manager, $test[$i]['idcentrale'], 15);
+                }
+            }
+        }
+    } catch (Exception $exc) {
+        echo $exc->getTraceAsString();
+    }
+}
+
+/**
+ * Fonction qui retourne un tableau de différence entre 2 tableaux à 2 dimensions
+ * @param type $array1
+ * @param type $array2
+ * @return array
+ */
+function arrayDiff2dim($array1, $array2) {
+    $array3 = array();
+    for ($i = 0; $i < count($array1); $i++) {
+        array_push($array3, serialize($array1[$i]));
+    }
+    $array4 = array();
+    for ($i = 0; $i < count($array2); $i++) {
+        array_push($array4, serialize($array2[$i]));
+    }
+    if (count($array1) >= count($array2)) {
+        $array5 = array_values(array_diff($array3, $array4));
+    } else {
+        $array5 = array_values(array_diff($array4, $array3));
+    }
+    $array6 = array();
+    for ($i = 0; $i < count($array5); $i++) {
+        array_push($array6, unserialize($array5[$i]));
+    }
+    return $array6;
+}
+
+/**
+ * Fonction qui découpe une boucle if en portion de $freq
+ * si freq = 40  alors la fonction retourne array(10,20,30,40)
+ * @param type $entier
+ * @param type $freq
+ * @return array
+ */
+function boucleTempo($entier, $freq) {
+    $var = array();
+    if ($entier > 20) {
+        $nb = ceil($entier / 20);
+        for ($i = 1; $i <= $nb; $i++) {
+            array_push($var, $i * $freq);
+        }
+    } else {
+        array_push($var, $entier);
+    }
+    return $var;
+}
+
+function check_URL($pseudo, $idprojet) {
+    $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+    $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+    $iduser = $manager->getSingle2("select idutilisateur  from utilisateur,loginpassword where idlogin= idlogin_loginpassword  and pseudo = ?", $pseudo);
+    /* VERIFICATION QUE L'UTILISATEUR A LE DROIR D'ACCEDER AU PROJET */
+    /* VERIFICATION QUE L'UTILISATEUR A CREER LE PROJET */
+    $creer = $manager->getSingle2("select idutilisateur_utilisateur from creer where idprojet_projet=?", $idprojet);
+    /* VERIFICATION QUE L'UTILISATEUR EST PORTEUR DU PROJET */
+    $porteur = $manager->getSingle2("select idutilisateur_utilisateur from utilisateurporteurprojet where idprojet_projet=?", $idprojet);
+    /* VERIFICATION QUE L'UTILISATEUR EST ADMINISTRATEUR DU PROJET */
+    $administrateurProjet = $manager->getSingle2("select idutilisateur from utilisateuradministrateur where idprojet=?", $idprojet);
+    /* VERIFICATION DE LA CENTRALE DE DEPOT DU PROJET */
+    $arrayidcentrale = $manager->getList2("select idcentrale_centrale  from concerne  where idprojet_projet = ?", $idprojet);
+    //$arrayUser = $manager->getList2("select idtypeutilisateur_typeutilisateur,idcentrale_centrale from utilisateur where idutilisateur=?", $iduser);    
+    foreach ($arrayidcentrale as $key => $idcentrale) {
+        $arrayTypeUser = $manager->getSinglebyArray("select idtypeutilisateur_typeutilisateur from utilisateur where idcentrale_centrale=? and idutilisateur=?", array($idcentrale[0], $iduser));
+        if ($arrayTypeUser == ADMINLOCAL) {
+            return true;
+        }
+    }
+    if ($iduser == $creer || $iduser == $porteur || $iduser == $administrateurProjet || $iduser=ADMINNATIONNAL) {//  ||  $arrayUser[0]['idcentrale_centrale']==$idcentrale){
+        return true;
+    } else {
+        return false;
+    }
+    BD::deconnecter();
+}
+
+function effaceCache($libelleCentraleUser){
+    if(is_file(include_once '../class/Cache.php')){
+        include_once '../class/Cache.php';
+    }else{
+        include_once 'class/Cache.php';
+    }
+    $videCache = new Cache(REP_ROOT . '/cache' . $libelleCentraleUser , 1);
+    $videCache->delete('tous_'.$libelleCentraleUser);
+    $videCache->delete('soustraitance_'.$libelleCentraleUser);
+    $videCache->delete('refuse_'.$libelleCentraleUser);
+    $videCache->delete('encours_'.$libelleCentraleUser);
+    $videCache->delete('rapport_'.$libelleCentraleUser);
+    $videCache->delete('accepte_'.$libelleCentraleUser);
+    $videCache->delete('analyse_'.$libelleCentraleUser);
+    $videCache->delete('attente_'.$libelleCentraleUser);
+    $videCache->delete('cloture_'.$libelleCentraleUser);
+    $videCache->delete('finis_'.$libelleCentraleUser);
 }

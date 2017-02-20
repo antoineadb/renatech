@@ -11,50 +11,49 @@ $db = BD::connecter();
 $fichierlogo = nomFichierValidesansAccent(renameFile(basename($_FILES['filelogo']['name'])));
 $fichierlogocentrale = nomFichierValidesansAccent(renameFile(basename($_FILES['filelogocentrale']['name'])));
 $fichierfigure = nomFichierValidesansAccent(renameFile(basename($_FILES['figure']['name'])));
-
 if (!empty($_GET['idprojet'])) {
     $idprojet = $_GET['idprojet'];
     $numero = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
     $idstatutprojet = $manager->getSingle2("select ", $idprojet);
 }
 $idrapport = $manager->getSingle("select max(idrapport) from rapport") + 1;
-
+$ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
 if (!empty($_POST['author'])) {
     $author = substr(Securite::bdd($_POST['author']), 0, 60);
 } else {
-    $author = '';
+    $author=$manager->getSingle2("select author from rapport where idrapport=?", $ancienidrapport);
 }
 if (!empty($_POST['entity'])) {
     $entity = substr(Securite::bdd($_POST['entity']), 0, 75);
 } else {
-    $entity = '';
+    $entity=$manager->getSingle2("select entity from rapport where idrapport=?", $ancienidrapport);
 }
 if (!empty($_POST['villepays'])) {
     $villepays = substr(Securite::bdd($_POST['villepays']), 0, 60);
 } else {
-    $villepays = '';
+    $villepays = $manager->getSingle2("select villepays from rapport where idrapport=?", $ancienidrapport);
 }
 if (!empty($_POST['instituteinterest'])) {
     $instituteinterest = substr(Securite::bdd($_POST['instituteinterest']), 0, 50);
 } else {
-    $instituteinterest = '';
+    $instituteinterest = $manager->getSingle2("select instituteinterest from rapport where idrapport=?", $ancienidrapport);
 }
 if (!empty($_POST['fundingsource'])) {
     $fundingsource = substr(Securite::bdd($_POST['fundingsource']), 0, 80);
 } else {
-    $fundingsource = '';
+    $fundingsource = $manager->getSingle2("select fundingsource from rapport where idrapport=?", $ancienidrapport);
 }
 
 if (!empty($_POST['collaborator'])) {
     $collaborator = substr(Securite::bdd($_POST['collaborator']), 0, 64);
 } else {
-    $collaborator = '';
+    $collaborator = $manager->getSingle2("select collaborator from rapport where idrapport=?", $ancienidrapport);
 }
 
 if (!empty($_POST['thematics'])) {
     $thematics = Securite::bdd($_POST['thematics']);
 } else {
-    $thematics = '';
+    $thematics = $manager->getSingle2("select thematics from rapport where idrapport=?", $ancienidrapport);
 }
 
 if (!empty($_POST['startingdate'])) {
@@ -66,34 +65,33 @@ if (!empty($_POST['startingdate'])) {
 if (!empty($_POST['contexteobjectif'])) {
     $objectif = substr(clean(strip_tags($_POST['contexteobjectif'])), 0, 1250);
 } else {
-    $objectif = '';
+    $objectif = $manager->getSingle2("select objectif from rapport where idrapport=?", $ancienidrapport);
 }
 $results = strip_tags($_POST['resultats']);
 if (!empty($results)) {
     $results = substr(clean(strip_tags($_POST['resultats'])), 0, 1250);
 } else {
-    $results = "";
+    $results = $manager->getSingle2("select results from rapport where idrapport=?", $ancienidrapport);
 }
-$valorisation = strip_tags($_POST['valorisation']);
-if (!empty($valorisation)) {
-    $valorization = substr(clean(strip_tags($_POST['valorisation'])), 0, 850);
+if (!empty($_POST['valorisation'])) {
+    $valorization = cleanRapportTPDF($_POST['valorisation']);
 } else {
-    $valorization = '';
+    $valorization = $manager->getSingle2("select valorization from rapport where idrapport=?", $ancienidrapport);
 }
 if (!empty($_POST['technicalwork'])) {
     $technologicalwc = substr(clean(strip_tags($_POST['technicalwork'])), 0, 110);
 } else {
-    $technologicalwc = '';
+    $technologicalwc = $manager->getSingle2("select technicalwork from rapport where idrapport=?", $ancienidrapport);
 }
 if (!empty($_POST['titre'])) {
     $title = substr(clean(strip_tags($_POST['titre'])), 0, 300);
 } else {
-    $title = '';
+    $title = $manager->getSingle2("select title from rapport where idrapport=?", $ancienidrapport);
 }
 if (!empty($_POST['legende'])) {
     $legend = substr(clean(strip_tags($_POST['legende'])), 0, 115);
 } else {
-    $legend = '';
+    $legend = $manager->getSingle2("select legend from rapport where idrapport=?", $ancienidrapport);
 }
 
 $imagelogo = $manager->getSingle2("select logo from rapport where idprojet=?", $idprojet);
@@ -131,93 +129,11 @@ if (!empty($_FILES['figure']['name'])) {
 }
 include_once '../rapport/updateRapportCommun.php';
 supprLogoFigure();
+
+$centrale = $manager->getSingle2("SELECT libellecentrale FROM concerne,centrale WHERE idcentrale = idcentrale_centrale and idprojet_projet=?",$idprojet);
+$nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+$statut = $manager->getSingle2("SELECT libellestatutprojet FROM concerne,statutprojet WHERE idstatutprojet = idstatutprojet_statutprojet AND idprojet_projet=?", $idprojet);
+$idcentrale = $manager->getsingle2('select idcentrale_centrale from concerne where idprojet_projet=?',$idprojet);
+createLogInfo(NOW, 'Mise à jour du rapport du projet n° '.$numero, 'Demandeur: '.$nomPrenomDemandeur[0]['nom'] . ' ' .$nomPrenomDemandeur[0]['prenom'] , removeDoubleQuote($statut), $manager,$idcentrale);
+
 header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-
-/*
-if (empty($_FILES['figure']['name'])) {
-    $_bFigure = 'FALSE';
-} else {
-    $_bFigure = 'TRUE';
-}
-/*if (empty($_FILES['filelogo']['name'])) {
-    $_bLogo = 'FALSE';
-} else {
-    $_bLogo = 'TRUE';
-}
-if (empty($_FILES['filelogocentrale']['name'])) {
-    $_bLogocentrale = 'FALSE';
-} else {
-    $_bLogocentrale = 'TRUE';
-}
-$image = $manager->getSingle2("select logo from rapport where idprojet=?", $idprojet);
-if (!empty($_FILES['filelogo']['name'])) {
-    include_once '../rapport/updateRapportCommun.php';
-    supprLogoFigure();
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-    exit();
-} elseif (!empty($image)) {
-    $logo = $image;
-} else {
-    $logo = '';
-}
-
-if (!empty($_FILES['filelogocentrale']['name'])) {
-    $imagecentrale = $manager->getSingle2("select logocentrale from rapport where idprojet=?", $idprojet);
-    include_once '../rapport/updateRapportCommun.php';
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-    exit();
-} elseif (!empty($imagecentrale)) {
-    $logocentrale = $imagecentrale;
-} else {
-    $logocentrale = '';
-}
-include_once '../rapport/updateRapportCommun.php';
-header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-
-if ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'FALSE') {//aucun fichier downloadé
-    include_once '../rapport/updateRapportCommun.php';
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-} elseif ($_bFigure == 'FALSE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'FALSE') {//Un logo mais pas d'image downloadé  ni de logocentrale    
-    /*if (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
-        chmod($dossier . $fichierlogo, 0777);        
-    }
-    include_once '../rapport/updateRapportCommun.php';
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-} elseif ($_bFigure == 'FALSE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'TRUE') {//Un logocentrale mais pas d'image ni de logo labo downloadé      
-    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale)) { //Si la fonction renvoie TRUE, c'est que ça a fonctionné
-        chmod($dossier . $fichierlogocentrale, 0777);
-        include_once '../rapport/updateRapportCommun.php';
-        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-    }
-} elseif ($_bFigure == 'TRUE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'FALSE') {//Une image downloadé mais pas de logo
-    $ancienidrapport = $manager->getSingle2("select idrapport from rapport where idprojet=?", $idprojet);
-    include_once '../rapport/updateRapportCommun.php';
-    header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-} elseif ($_bFigure == 'TRUE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'FALSE') {//Une image et un logo downloadé    
-    if (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo)) {
-        chmod($dossier . $fichierlogo, 0777);
-        include_once '../rapport/updateRapportCommun.php';
-        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-    }
-} elseif ($_bFigure == 'TRUE' && $_bLogo == 'FALSE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé    
-    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale)) {
-        chmod($dossier . $fichierlogocentrale, 0777);
-        include_once '../rapport/updateRapportCommun.php';
-        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-    }
-} elseif ($_bFigure == 'FALSE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé    
-    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale) && (move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo))) {
-        chmod($dossier . $fichierlogocentrale, 0777);
-        chmod($dossier . $fichierlogo, 0777);
-        include_once '../rapport/updateRapportCommun.php';
-        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-    }
-} elseif ($_bFigure == 'TRUE' && $_bLogo == 'TRUE' && $_bLogocentrale == 'TRUE') {//Une image et un logo downloadé    
-    if (move_uploaded_file($_FILES['filelogocentrale']['tmp_name'], $dossier . $fichierlogocentrale) && move_uploaded_file($_FILES['filelogo']['tmp_name'], $dossier . $fichierlogo) && move_uploaded_file($_FILES['figure']['tmp_name'], $dossier . $fichierfigure)) {
-        chmod($dossier . $fichierlogocentrale, 0777);
-        chmod($dossier . $fichierlogo, 0777);
-        include_once '../rapport/updateRapportCommun.php';
-        header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numero . '/' . $_GET['idstatut'] . '/' . rand(0, 10000));
-    }
-}*/
-

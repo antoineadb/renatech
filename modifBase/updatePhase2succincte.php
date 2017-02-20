@@ -10,7 +10,7 @@ $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 //RECUPERATION DES DONNEES DE LA BASE DE DONNEES POUR  COMPARER AUX DONNEES SAISIES
 $arraydonneeBDD = $manager->getList2("select titre,acronyme,confidentiel,contexte,description,attachement from projet where idprojet=?", $idprojet);
-$titreBDD = $arraydonneeBDD[0]['titre'];
+$titreBDD =  str_replace("– "," - ",$arraydonneeBDD[0]['titre']);
 if (!empty($arraydonneeBDD[0]['acronyme'])) {
     $acronymeBDD = $arraydonneeBDD[0]['acronyme']; //CHAMP FACULTATIF
 }else{
@@ -100,6 +100,60 @@ if ($confidentielBDD != $confidentiel) {
 }
 $projetcontextedescriptif = new Projetcontextedescriptif($idprojet, $descriptif, $contexte, $confidentiel, $titre, $acronyme, $attachement);
 $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                              CENTRALE DE PROXIMITE
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
+    $centrale_proximiteBDD = $manager->getList2("SELECT idcentraleproximite FROM centraleproximiteprojet where idprojet=?", $idprojet);
+    $centraleProximiteBDD = array();
+    for ($i = 0; $i < count($centrale_proximiteBDD); $i++) {
+        array_push($centraleProximiteBDD, 'cp' . $centrale_proximiteBDD[$i]['idcentraleproximite']);
+    }
+    $centrale_proximite = stripslashes(Securite::bdd($_POST['centrale_proximite']));
+    if (!empty($_POST['descriptioncentraleproximite'])) {
+        $descriptioncentraleproximiteBDD = $_POST['descriptioncentraleproximite'];
+    }else{
+        $descriptioncentraleproximiteBDD = '';
+    }
+
+    if ($_POST['centrale_proximite'] == 'TRUE') {
+        if (!empty($_POST['centrale_Proximite'])) {
+            if ($centraleProximiteBDD != $_POST['centrale_Proximite']) {
+                $_SESSION['centraleproximitemodif'] = $_POST['centrale_Proximite'];
+            } else {
+                $_SESSION['centraleproximitemodif'] = '';
+            }
+            $manager->deletecentraleproximiteprojet($idprojet);
+            for ($i = 0; $i < count($_POST['centrale_Proximite']); $i++) {
+                $idcentrale_proximite = substr($_POST['centrale_Proximite'][$i], 2);
+                $centraleproximite = new CentraleProximiteProjet($idcentrale_proximite, $idprojet);
+                $manager->addCentraleProximiteProjet($centraleproximite);
+            }
+        } else {
+            $_SESSION['centraleproximitemodif'] = '';
+             
+        }
+        if (!empty($_POST['centraleproximitevaleur'])) {
+            $descriptioncentraleproximite = clean($_POST['centraleproximitevaleur']);
+            if ($descriptioncentraleproximiteBDD != $descriptioncentraleproximite) {
+                $_SESSION['descriptioncentraleproximitemodif'] = $descriptioncentraleproximite;
+            } else {
+                $_SESSION['descriptioncentraleproximitemodif'] = '';
+                $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
+            }
+        } else {
+            $_SESSION['descriptioncentraleproximitemodif'] = '';
+            $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
+        }
+    }else{
+        $descriptioncentraleproximite='';
+        $manager->deletecentraleproximiteprojet($idprojet);
+    }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                              FIN DES CENTRALES DE PROXIMITE
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
+
+
+
 //MISE A JOUR DE LA PIECE JOINTE
 $dossier1 = '../upload/';
 $fichierPhase1 = basename($_FILES['fichierProjet']['name']);

@@ -18,15 +18,7 @@ if (!empty($_GET['idprojet'])) {
     $idprojet = $_GET['idprojet'];
 }
 $statut = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=? ", $idprojet);
-
-if ($statut == ENATTENTE) {//PROJET EN ATTENTE PHASE 1
-    $Fichier = $manager->getSingle2("select attachement from projet where idprojet = ?", $idprojet);
-    $fichier = str_replace("''", "\'", $Fichier);
-    //EFFACE LE NOM DANS LA TABLE
-    $projetattachement = new Projetattachement($idprojet, '');
-    $manager->updateProjetattachement($projetattachement, $idprojet);
-    unlink('../upload/' . $fichier); //EFFACE LE FICHIER SUR LE SERVEUR
-} elseif ($statut == ACCEPTE || $statut==ENCOURSREALISATION) {//PROJET ACCEPTE PHASE 2
+if ($statut == ACCEPTE || $statut==ENCOURSREALISATION) {//PROJET ACCEPTE PHASE 2
     $Fichier = $manager->getSingle2("select attachementdesc from projet where idprojet = ?", $idprojet);
     $fichier = str_replace("''", "\'", $Fichier);
     //EFFACE LE NOM DANS LA TABLE

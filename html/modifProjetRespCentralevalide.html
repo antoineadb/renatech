@@ -8,8 +8,7 @@
             $idcentrale = $_GET['idcentrale'];
         }else{
             $idcentrale = $manager->getSinglebyArray("select idcentrale_centrale from concerne where idprojet_projet =? and idstatutprojet_statutprojet=?",array($idprojet,ACCEPTE));
-        }
-            
+        }            
         $centrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale =?",$idcentrale);
         echo TXT_STATUTPROJETVALIDE.' '.'numéro = ';
         ?><a style="text-decoration: none"

@@ -19,6 +19,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createLogi
     if (isset($_POST['pseudo'])) {
         $_SESSION['pseudo'] = Securite::bdd($_POST['pseudo']);
     }
+    
     $_SESSION['lastLoad'] = time();
 } else {
     if (!isset($_SESSION['page_precedente'])) {

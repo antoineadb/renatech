@@ -17,18 +17,18 @@ include 'html/header.html';
 $arraycentrale= $manager->getList2("SELECT ce.libellecentrale,co.idstatutprojet_statutprojet,co.idcentrale_centrale FROM loginpassword l,concerne co,centrale ce,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale AND u.idcentrale_centrale = co.idcentrale_centrale and l.pseudo =? ", $_SESSION['pseudo']);
 
-$arrayprojetnodev = $manager->getListbyArray("SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =? AND trashed =FALSE
-and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport)
-union
-SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =? AND trashed =FALSE
-and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport)
-union
-SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =? AND trashed =FALSE
-and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport)
-order by libellethematiqueen asc", array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,$arraycentrale[0]['idcentrale_centrale'],FINI,$arraycentrale[0]['idcentrale_centrale'],CLOTURE));
+$arrayprojetnodev = $manager->getListbyArray("SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,"
+        . "concerne co WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet "
+        . "and co.idcentrale_centrale =? AND trashed =FALSE and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport) "
+        . "union "
+        . "SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co "
+        . "WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =? "
+        . "AND trashed =FALSE and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport) "
+        . "union "
+        . "SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co "
+        . "WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =? "
+        . "AND trashed =FALSE and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport) order by libellethematiqueen asc",
+        array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,$arraycentrale[0]['idcentrale_centrale'],FINI,$arraycentrale[0]['idcentrale_centrale'],CLOTURE)); 
 
 $fprow = fopen('tmp/projetNoDev.json', 'w');
 $projetnodev = "";
@@ -138,8 +138,6 @@ chmod('tmp/projetNoDev.json', 0777);
         function excel(){
             document.getElementById('excel').value='oui';
             document.getElementById('word').value='non';
-            console.log('excel = '+document.getElementById('excel').value);
-            //this.form.submit();
         }
         </script> 
 <script>

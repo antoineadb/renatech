@@ -1,7 +1,3 @@
-<?php 
-include_once 'class/Cache.php';
-$cacheTous = new Cache(REP_ROOT . '/cache', 60); //1 heure
-?>
 <style type="text/css">
     #grid {
         width: 65em;
@@ -20,7 +16,7 @@ $cacheTous = new Cache(REP_ROOT . '/cache', 60); //1 heure
     dojo.require("dojox.grid.enhanced.plugins.Pagination");
 dojo.ready(function(){
     /*set up data store*/
-    var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetCentrale.json"});
+    var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetCentrale<?php echo IDCENTRALEUSER?>.json"});
     /*set up layout*/    
     var layout = [[
         {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px", formatter: hrefFormatterNumero},
@@ -39,18 +35,16 @@ dojo.ready(function(){
         structure: layout,
         autoHeight:true,
         rowSelector: '20px',
-        plugins: { <?php if($_SESSION['idTypeUser']==ADMINLOCAL){;?>menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}, <?php }?>  
+        plugins: { <?php if($_SESSION["idTypeUser"]==ADMINLOCAL){;?>menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}, <?php }?>          
             pagination: {
             pageSizes: ["5", "10", "50","100", "All"],
             description: true,
             sizeSwitch: true,
             pageStepper: true,
-            gotoButton: true,
-            /*page step to be displayed*/
-            maxPageStep: 5,
-            /*position of the pagination bar*/
+            gotoButton: true,            
+            maxPageStep: 5,            
             position: "top"
-        }}
+        }},
     },
       document.createElement('div'));
 //----------------------------------------------------------------------------------------------------------------------
@@ -161,7 +155,7 @@ dojo.ready(function(){
 $idcentrale =$manager->getSingle2("SELECT idcentrale_centrale FROM  utilisateur,loginpassword  WHERE idlogin = idlogin_loginpassword and pseudo=?",$_SESSION['pseudo']);
 $row = $manager->getListbyArray("select nom,prenom,idutilisateur,datecreation from utilisateur where  idcentrale_centrale=?  union select nom,prenom,idutilisateur,datecreation from utilisateur
     where  idqualitedemandeurindust_qualitedemandeurindust is not null union select nom,prenom,idutilisateur,datecreation from utilisateur where idcentrale_centrale is null AND idtypeutilisateur_typeutilisateur != ?", array($idcentrale,ADMINNATIONNAL));
-$fprow = fopen('tmp/compteUtilisateur.json', 'w');
+$fprow = fopen('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 'w');
 $datausercompte = "";
 for ($i = 0; $i < count($row); $i++) {
     $datausercompte = "" . '{"datecreation":' . '"' . $row[$i]['datecreation'] . '"' . "," .
@@ -170,12 +164,12 @@ for ($i = 0; $i < count($row); $i++) {
     fputs($fprow, $datausercompte);
     fwrite($fprow, '');
 }
-$json_filecompteUtilisateur = "tmp/compteUtilisateur.json";
+$json_filecompteUtilisateur = 'tmp/compteUtilisateur'.IDCENTRALEUSER.'.json';
 $jsonusercompte1 = file_get_contents($json_filecompteUtilisateur);
 $jsonUsercompte = substr($jsonusercompte1,0,-1 );
 file_put_contents($json_filecompteUtilisateur, $jsonUsercompte);
 fclose($fprow);
-chmod('tmp/compteUtilisateur.json', 0777);
+chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
 ?>
 <input type="text" id="input_affecte_porteur" style="display: none" value="non">
 <input type="text" id="input_affecte_admin" style="display: none" value="non">
@@ -198,7 +192,7 @@ chmod('tmp/compteUtilisateur.json', 0777);
         myDialog.show();
         var myMemoryStore = new dojo.store.Memory(
             {data:[
-               <?php include 'tmp/compteUtilisateur.json'   ;?>
+               <?php include 'tmp/compteUtilisateur'.IDCENTRALEUSER.'.json'   ;?>
             ]});
         var myObjectStore = new dojo.data.ObjectStore({objectStore:myMemoryStore });
         var myStructure = [

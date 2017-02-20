@@ -34,55 +34,55 @@ if ($lang == 'fr') {
     <div style="font-size: 1.2em">
         <?php if($typeuser!=ADMINNATIONNAL){ ?>    
         <p>
-            <?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJET0'))).
-            '<br>'.stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJET1'))).' '.strtolower(affiche('TXT_CLICK')) ;?>
-            <a href="<?php echo '/'.REPERTOIRE ?>/new_request/<?php echo $lang;?>" style="text-decoration: none">
-                <?php echo html_entity_decode(stripslashes(str_replace("''","'",TXT_CREERPROJET))); ?></a>
-        </p>
-								<p>
-            <?php echo stripslashes(str_replace("''","'",affiche('TXT_PROJETREALISABLE'))).', '.strtolower(affiche('TXT_CLICK'));?>
-            <a href="<?php echo '/'.REPERTOIRE ?>/new_project/<?php echo $lang?>" style="text-decoration: none">
-                <?php echo html_entity_decode(stripslashes(str_replace("''","'",TXT_DEMANDEPROJET))); ?></a>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET0'))).
+            '<br>'.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET1'))).' '.strtolower(affiche('TXT_CLICK')) ;?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/new_project/<?php echo $lang;?>" style="text-decoration: none">
+                <?php echo html_entity_decode(stripslashes(removeDoubleQuote(TXT_DEMANDEPROJET))); ?></a>
         </p>
         <p>
-            <?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETSOUMIS0'))).' '.affiche('TXT_ACCUEILPROJETSOUMIS1');?>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_PROJETREALISABLE')));?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/new_request/<?php echo $lang?>" style="text-decoration: none">
+                <?php echo html_entity_decode(stripslashes(removeDoubleQuote(TXT_CREERPROJET))); ?></a>
+        </p>
+        <p>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETSOUMIS0'))).' '.affiche('TXT_ACCUEILPROJETSOUMIS1');?>
             <a href="<?php echo '/'.REPERTOIRE ?>/controler/controleSuiviProjet.php?lang=<?php echo $lang;?>" style="text-decoration: none">
                 <?php echo strtolower(TXT_CONSULTERPROJET); ?></a>
         </p>        
         <?php
         if(isset ($_SESSION['responsableCentrale'])){
             if($_SESSION['responsableCentrale']=='true'){
-                echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETUSER0'))).' '
-                .stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETUSER1'))).
+                echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETUSER0'))).' '
+                .stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETUSER1'))).
                 '<a href="/'.REPERTOIRE.'/controler/controleSuiviProjetRespCentrale.php?lang='.$_GET['lang'].'"
-                style="text-decoration: none">'." ".stripslashes(str_replace("''","'",strtolower(TXT_VUESUIVIPROJETCENTRALE))).'</a>';
+                style="text-decoration: none">'." ".stripslashes(removeDoubleQuote(strtolower(TXT_VUESUIVIPROJETCENTRALE))).'</a>';
             }
         }
         ?>
-        <p><?php echo stripslashes(str_replace("''","'",affiche('TXT_MODIFPROFIL'))).
-            ' '.stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETUSER1'))) ;?>
+        <p><?php echo stripslashes(removeDoubleQuote(affiche('TXT_MODIFPROFIL'))).
+            ' '.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETUSER1'))) ;?>
             <a href="<?php echo '/'.REPERTOIRE ?>/moncompte/<?php echo $lang;?>" style="text-decoration: none">
-                <?php echo strtolower(stripslashes(str_replace("''","'",TXT_MONCOMPTE))); ?></a>
+                <?php echo strtolower(stripslashes(removeDoubleQuote(TXT_MONCOMPTE))); ?></a>
         </p>
         <?php }elseif($typeuser==ADMINNATIONNAL){ ?> 
-        <p><?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETADMIN'))).', '. stripslashes(str_replace("''","'",affiche('TXT_PROJETADMIN')));?></p>
+        <p><?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN'))).', '. stripslashes(removeDoubleQuote(affiche('TXT_PROJETADMIN')));?></p>
         <p>
-            <?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETADMIN0'))) ;?>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN0'))) ;?>
             <a href="liste/<?php echo $lang;?>" style="text-decoration: none">
-                <?php echo stripslashes(str_replace("''","'",TXT_LISTE)).' ,';?></a>
+                <?php echo stripslashes(removeDoubleQuote(TXT_LISTE)).' ,';?></a>
 
-            <?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETADMIN1'))) ;?>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN1'))) ;?>
             <a href="<?php echo '/'.REPERTOIRE ?>/graph/<?php echo $lang;?>/ok" style="text-decoration: none">
-                <?php echo stripslashes(str_replace("''","'",TXT_STATISTIQUE)).', ';?></a>
-            <?php echo stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETADMIN2'))) ;?>
+                <?php echo stripslashes(removeDoubleQuote(TXT_STATISTIQUE)).', ';?></a>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN2'))) ;?>
             <a href="<?php echo '/'.REPERTOIRE ?>/compteadmin/<?php echo $lang;?>" style="text-decoration: none">
-                <?php echo stripslashes(str_replace("''","'",TXT_GESTIONCOMPTE));?></a>
-            <?php echo ' '.stripslashes(str_replace("''","'",affiche('TXT_ACCUEILPROJETADMIN3'))).' '; ?>
+                <?php echo stripslashes(removeDoubleQuote(TXT_GESTIONCOMPTE));?></a>
+            <?php echo ' '.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN3'))).' '; ?>
         </p>
         <p>
-            <?php echo stripslashes(str_replace("''","'",affiche('TXT_MODIFPROFILADMIN'))) ;?>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_MODIFPROFILADMIN'))) ;?>
             <a href="moncompte/<?php echo $lang ?>" style="text-decoration: none">
-                <?php echo strtolower(stripslashes(str_replace("''","'",TXT_MONCOMPTE))); ?></a>
+                <?php echo strtolower(stripslashes(removeDoubleQuote(TXT_MONCOMPTE))); ?></a>
         </p>
         <?php }?>   
     </div>

@@ -48,8 +48,8 @@ if (!empty($_POST['masquepays']) && !empty($_POST['idlibellepaysactuel']) && !em
 //--------------------------------------------------------------------------------------------------------------------------------------------
 //TYPE ENTREPRISE
 //--------------------------------------------------------------------------------------------------------------------------------------------
-} elseif (!empty($_POST['masquetypeentreprise']) && !empty($_POST['modiftypeentreprise']) && !empty($_POST['idtypeentrepriseactuel'])) {
-    include '../modifBase/affichemasqueTypeentreprise.php';
+//} elseif (!empty($_POST['masquetypeentreprise']) && !empty($_POST['modiftypeentreprise']) && !empty($_POST['idtypeentrepriseactuel'])) {
+//    include '../modifBase/affichemasqueTypeentreprise.php';
 } elseif (!empty($_POST['affichetypeentreprise']) && !empty($_POST['modiftypeentreprise']) && !empty($_POST['idtypeentrepriseactuel'])) {
     include '../modifBase/affichemasqueTypeentreprise.php';
 } elseif (!empty($_POST['ajoutetypeentreprise']) && !empty($_POST['modiftypeentreprise'])) {
@@ -148,7 +148,32 @@ if (!empty($_POST['masquepays']) && !empty($_POST['idlibellepaysactuel']) && !em
 //CODE UNITE CENTRALE
 //--------------------------------------------------------------------------------------------------------------------------------------------
     include '../modifBase/updateCodeuniteCentrale.php';
-} else {
+//--------------------------------------------------------------------------------------------------------------------------------------------
+// AJOUT CENTRALE DE PROXIMITE
+//--------------------------------------------------------------------------------------------------------------------------------------------    
+} elseif (!empty($_POST['addCentraleProximite']) && empty($_POST['libellecentraleProximite'])&& !empty($_POST['regionCorrespondante'])) {
+    include '../modifBase/insertCentraleProximite.php';
+//--------------------------------------------------------------------------------------------------------------------------------------------
+// AJOUT CENTRALE DE PROXIMITE
+//--------------------------------------------------------------------------------------------------------------------------------------------    
+}elseif (!empty($_POST['modifcentraleProximite']) && !empty($_POST['idlibellecentraleProximiteactuel']) && !empty($_POST['regioncorrespondante'])) {
+    include '../modifBase/modifCentraleProximite.php';
+//--------------------------------------------------------------------------------------------------------------------------------------------
+// MASQUE CENTRALE DE PROXIMITE
+//--------------------------------------------------------------------------------------------------------------------------------------------    
+}elseif (!empty($_POST['idlibellecentraleProximiteactuel']) && !empty($_POST['masquecentraleproximite']) && !empty($_POST['regioncorrespondante'])) {
+    include '../modifBase/afficheMasqueCentraleProximite.php';
+//--------------------------------------------------------------------------------------------------------------------------------------------
+// AJOUT REGION
+//--------------------------------------------------------------------------------------------------------------------------------------------    
+}elseif (!empty($_POST['region']) && isset($_POST['ajouteRegion'])) {
+    include '../modifBase/ajouteRegion.php';
+}elseif (!empty($_POST['modifregion']) && !empty($_POST['idregionActuel'])) {
+    include '../modifBase/updateRegion.php';
+}elseif (!empty($_POST['masqueregion']) && !empty($_POST['idlibelleregionactuel'])) {
+    include '../modifBase/afficheMasqueRegion.php';
+}else {
     include '../decide-lang.php';
     header('location:/'.REPERTOIRE.'/update_paysErr1/' . $lang );
 }
+

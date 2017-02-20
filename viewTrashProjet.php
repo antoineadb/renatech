@@ -69,7 +69,6 @@ chmod('tmp/projetefface.json', 0777);
     }
     #menuCorbeille div {
      display: inline;
-    // margin: 0 1em 0 20em ;
         margin-left: 20px;
      width: 30%;
 }

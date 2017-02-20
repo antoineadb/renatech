@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 include_once 'decide-lang.php';
 include_once 'outils/toolBox.php';
@@ -10,7 +10,6 @@ if (isset($_SESSION['pseudo'])) {
 }
 include 'html/header.html';
 $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
-
 ?>
 
 <div id="global">
@@ -24,20 +23,18 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
     } elseif (isset($_GET['anneeuser'])) {
         $ongletutilisateur = true;
     }
-    if ($typeUser == ADMINNATIONNAL) {
-        $arraystat = $manager->getList("select * from statistique");
-    } elseif ($typeUser == ADMINLOCAL) {
-        $arraystat = $manager->getList2("select * from statistique where idstatistique!=? ", STATCENTRALETYPE);
-    }
+    
+    $arraystat = $manager->getList("select * from statistique");
     $nbstat = count($arraystat);
     ?>    
-<script src='<?php echo '/'.REPERTOIRE; ?>/js/jquery-1.8.0.min.js'></script>    
+<script src='<?php echo '/'.REPERTOIRE; ?>/js/jquery-1.8.0.min.js'></script>
 <script src="<?php echo '/'.REPERTOIRE; ?>/js/highcharts.js"></script>
 <script src="<?php echo '/'.REPERTOIRE; ?>/js/exporting.js"></script>
 <script src="<?php echo '/'.REPERTOIRE; ?>/js/rgbcolor.js"></script>
 <script src="<?php echo '/'.REPERTOIRE; ?>/js/StackBlur.js"></script>
 <script src="<?php echo '/'.REPERTOIRE; ?>/js/canvg.js"></script>
-<script src="<?php echo '/'.REPERTOIRE; ?>/js//highcharts-3d.js"></script>
+<script src="<?php echo '/'.REPERTOIRE; ?>/js/highcharts-3d.js"></script>
+<script src="<?php echo '/'.REPERTOIRE; ?>/js/drilldown.js"></script>
     <fieldset id='stat'><legend><?php echo TXT_STATISTIQUE; ?></legend>
         <select  id="choixstat" data-dojo-type="dijit/form/FilteringSelect"  data-dojo-props="name: 'libellechoix',value: '',required:false,placeHolder: '<?php echo TXT_SELECTTYPE; ?>'"
                  style="width: 300px;margin-top:25px;" onchange="window.location.replace('<?php echo "/" . REPERTOIRE; ?>/chxStatistique/<?php echo $lang ?>/' + this.value)" >
@@ -52,55 +49,57 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                          }
                      }
                      ?>
-        </select>        
+        </select>       
+         <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
+            <a id='aideStatNouveauProjet' href="<?php echo '/'.REPERTOIRE.'/downloadManual/aideContextuelleNouveauProjeDeposes.pdf' ?>" target="_blank">
+                <img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/infoStat.png" title="<?php echo TXT_AIDESTAT; ?>"  >
+            </a>
+            <?php }else{ ?>
+            <a id='aideStatNouveauProjet' href="<?php echo '/'.REPERTOIRE.'/downloadManual/aideContextuelleNouveauProjeDeposeslocal.pdf' ?>" target="_blank">
+                <img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/infoStat.png" title="<?php echo TXT_AIDESTAT; ?>"  >
+            </a>
+            <?php } ?>
     </fieldset>
-    <?php if (isset($_GET['statistique']) && $_GET['statistique'] == 'ok') { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?></legend>
+    <?php if (isset($_GET['statistique']) && $_GET['statistique'] == 'ok') {?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 445px;">
+            <?php echo affiche('TXT_AIDENOUVEAUPROJETDEPOSE'); ?></span></a></legend>           
             <table>
                 <tr>
                     <td>
-                        <?php include 'statistiques/projetCentraleBar.php'; ?>
-                        <?php include 'statistiques/projetCentralePie.php'; ?>
+                        <?php include 'statistiques/nouveauProjetsBar.php'; ?>
+                        <?php include 'statistiques/nouveauProjetsPie.php'; ?>
                     </td>
                 </tr>
             </table>
         </fieldset>
     <?php } ?>
-    <?php if (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPROJETDATE || isset($_GET['anneeprojet']) && $_GET['anneeprojet'] != 99 || isset($_GET['statut']) && $_GET['statut'] != 99) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?></legend>
+    <?php if (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATNOUVEAUPROJET || isset($_GET['anneeNouveauProjet']) ) { ?>        
+        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 445px;">
+            <?php echo affiche('TXT_AIDENOUVEAUPROJETDEPOSE'); ?></span></a></legend>            
             <table>
                 <tr>
                     <td>
-                        <?php include 'statistiques/projetCentraleBar.php'; ?>
-                        <?php include 'statistiques/projetCentralePie.php'; ?>
+                        <?php include 'statistiques/nouveauProjetsBar.php'; ?>
+                        <?php include 'statistiques/nouveauProjetsPie.php'; ?>
                     </td>
                 </tr>
             </table>
         </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPROJETDATE || isset($_GET['statut']) && $_GET['statut'] != 99) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?></legend>
+    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == STATUSERDATE || isset($_GET['anneeNewUserHolder']))  { ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_INFO; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' >
+                    <span style="width: 800px"><?php if (IDTYPEUSER==ADMINNATIONNAL){echo TXT_AIDENBUSER;}else{echo TXT_AIDENBUSERLOCAL;} ?></span></a></legend>
             <table>
                 <tr>
                     <td>
-                        <?php include 'statistiques/projetCentraleBar.php'; ?>
-                        <?php include 'statistiques/projetCentralePie.php'; ?>
+                        <?php include 'statistiques/newUserBar.php'; ?>																									
+                        <?php include 'statistiques/newUserPie.php'; ?>
                     </td>
                 </tr>
             </table>
         </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == STATUSERDATE || isset($_GET['anneeuser']) && $_GET['anneeuser'] != 99) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_USER; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 800px"><?php echo TXT_AIDENBUSER; ?></span></a></legend>
-            <table>
-                <tr>
-                    <td>
-                        <?php include 'statistiques/userCentraleBar.php'; ?>																									
-                        <?php include 'statistiques/userCentralePie.php'; ?>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPROJETDATETYPE || isset($_GET['anneeprojetautres']) && $_GET['anneeprojetautres'] != 99) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_PROJETPARDATETYPE; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 750px;"><?php echo TXT_AIDECALCULTYPEPROJET; ?></span></a></legend>
+    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPROJETDATETYPE || isset($_GET['anneeType'])) { ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 590px;">
+            <?php echo TXT_AIDECALCULTYPEPROJET; ?></span></a></legend>
             <table>
                 <tr>
                     <td>
@@ -110,19 +109,14 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                 </tr>
             </table>
         </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPROJETCENTRALETYPE || !empty($_GET['idcentrale'])||isset($_GET['anneecentrale']) && !empty($_GET['anneecentrale'])) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_PROJETPARCENTRALETYPE; ?></legend>
-            <table>
-                <tr>
-                    <td>
-                        <?php include 'statistiques/projetAutresCentraleBar.php'; ?>
-                        <?php include 'statistiques/projetAutresCentralePIE.php'; ?>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATSF || !empty($_GET['anneeprojetsf'])) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_SOURCEFINANCEMENT; ?></legend>
+    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATSF || !empty($_GET['anneeSF'])) { ?>        
+        <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_ORIGINEFINANCEMENT; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 630px;">        
+        <?php echo affiche('TXT_AIDESF'); ?></span></a></legend>        
+        <?php }else{ ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_ORIGINEFINANCEMENT; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 620px;">
+        <?php echo affiche('TXT_AIDESFLOCAL'); ?></span></a></legend>        
+        <?php } ?>
             <table>
                 <tr>
                     <td>
@@ -132,8 +126,15 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                 </tr>
             </table>
         </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATRESSOURCE || !empty($_GET['anneeprojetRessource'])) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_RESSOURCE; ?></legend>
+    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATRESSOURCE || isset($_GET['anneeRessources']) ) { ?>        
+        <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_RESSOURCE.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 840px;">        
+        <?php echo affiche('TXT_AIDERESSOURCE'); ?></span></a></legend>       
+        <?php }else{ ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_RESSOURCE.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 735px;">
+        <?php echo affiche('TXT_AIDERESSOURCELOCAL'); ?></span></a></legend>
+        
+        <?php } ?>
             <table>
                 <tr>
                     <td>
@@ -143,30 +144,156 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                 </tr>
             </table>
         </fieldset>
-        <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPROJETDATETYPEPROJET || isset($_GET['anneeprojettypeprojet']) && $_GET['anneeprojettypeprojet'] != 99  || (isset($_GET['centrale']) && isset($_GET['l']))) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?></legend>
+        <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATTYPOLOGIENOUVEAUPROJET || isset($_GET['anneeTypo']) ) { ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' >
+                    <span style="width: 550px;"><?php if(IDTYPEUSER == ADMINNATIONNAL){echo affiche('TXT_AIDETYPOLOGIENOUVAUPROJET');}else{echo affiche('TXT_AIDETYPOLOGIENOUVEAUPROJETLOCAL');} ?></span></a></legend>
             <table>
                 <tr>
                     <td>
-                        <?php include 'statistiques/projetDateTypeprojet.php'; ?>																									
-                        <?php include 'statistiques/projetDateTypeprojetPie.php'; ?>
+                        <?php include 'statistiques/typologieNouveauProjetBar.php'; ?>																									
+                        <?php include 'statistiques/typologieNouveauProjetPie.php'; ?>
                     </td>
                 </tr>
             </table>
         </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDDUREEPROJETDATE || isset($_GET['annee_nbprojet']) && $_GET['annee_nbprojet'] != 99  || (isset($_GET['centrale']) && isset($_GET['l']))) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?></legend>
+    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDDUREEPROJETENCOURS || isset($_GET['anneeDureeeProjet'])) { ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_DUREEPROJETS; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' >
+                    <span style="width: 750px;"><?php echo TXT_AIDEDUREEPROJET; ?></span></a></legend>
             <table>
                 <tr>
                     <td>
-                        <?php include 'statistiques/duree_projet_date.php'; ?>																									
-                        <?php //include 'statistiques/duree_projet_pie.php'; ?>
+                        <?php include 'statistiques/dureeProjetEncoursBar.php'; ?>																									
+                        <?php include 'statistiques/dureeProjetEncoursPie.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>    
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDPERMANENTNONPERMANENTBYDATE  || isset($_GET['anneeNouveauxPorteursProjet'])) { ?>        
+        <fieldset id ="statprojet">
+            <legend><?php echo TXT_PORTEURSPROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' >
+                    <span style="width: 550px;"><?php if(IDTYPEUSER == ADMINNATIONNAL){echo affiche('TXT_AIDEORIGINEPORTEURPROJET');}else{echo affiche('TXT_AIDEORIGINEPORTEURPROJETLOCAL');} ?></span></a></legend>
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/origineNouveauxPorteursProjetBar.php'; ?>																									
+                        <?php include 'statistiques/origineNouveauxPorteursProjetPie.php'; ?>
                     </td>
                 </tr>
             </table>
         </fieldset>
-    <?php }
-    include 'html/footer.html'; ?>
+        <?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDPARTHORSRENATECH || isset($_GET['anneePartenaireHorsRenatech'])) { ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_USER.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' >
+                    <span style="width: 500px;"><?php if(IDTYPEUSER==ADMINNATIONNAL){echo TXT_AIDEREALUSER;}else{echo TXT_AIDEREALUSERLOCAL;}  ?></span></a></legend>
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/nbPartHorsRenatechBar.php'; ?>
+                        <?php include 'statistiques/nbPartHorsRenatechPie.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDNBUSERCLEANROOMNEWPROJET || isset($_GET['anneeUserCleanRoom'])) { ?>
+        <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_USER.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 750px;">        
+        <?php echo affiche('TXT_AIDE_PERSONNECENTRALE'); ?></span></a></legend>            
+        <?php }else{ ?>
+            <fieldset id ="statprojet"><legend><?php echo TXT_USER.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 580px;">
+            <?php echo affiche('TXT_AIDE_PERSONNECENTRALELOCAL'); ?></span></a></legend>            
+            <?php } ?>
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/nbUserCleanRoomNewProjetBar.php'; ?>
+                        <?php include 'statistiques/nbUserCleanRoomNewProjetPie.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDNBUSERCLEANROOMRUNNINGPROJET || isset($_GET['anneeUserCleanRoomRunninProject'])) { ?>
+        <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_USER.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 750px;">        
+        <?php echo affiche('TXT_AIDE_PERSONNECENTRALEENCOURS'); ?></span></a></legend>            
+        <?php }else{ ?>
+            <fieldset id ="statprojet"><legend><?php echo TXT_USER.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 580px;">
+            <?php echo affiche('TXT_AIDE_PERSONNECENTRALEENCOURSLOCAL'); ?></span></a></legend>            
+            <?php } ?>
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/nbUserCleanRoomRunningProjetBar.php'; ?>
+                        <?php include 'statistiques/nbUserCleanRoomRunningProjetPie.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDNBRUNNINGPROJECT || isset($_GET['anneeProjetEncours']) ) { ?>
+    <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 750px;">
+        <?php if(IDTYPEUSER==ADMINNATIONNAL){echo affiche('TXT_AIDENBPROJETENCOURS');}  else {echo affiche('TXT_AIDENBPROJETENCOURSLOCAL');} ?></span></a></legend>
+        <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/projetCentraleBarEncours.php'; ?>
+                        <?php include 'statistiques/projetCentralePieEncours.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDNBPORTEURRUNNINGPROJECT || isset($_GET['anneePorteurProjetEncours']) ) { ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 750px;">
+        <?php if(IDTYPEUSER==ADMINNATIONNAL){echo TXT_AIDENBUSERENCOURS;}  else {echo TXT_AIDENBUSERENCOURSLOCAL;} ?></span></a></legend>
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/nbProjetPorteurBarEncours.php'; ?>
+                        <?php  include 'statistiques/nbProjetPorteurPieEncours.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATTYPOLOGIEPROJETENCOURS || isset($_GET['anneeTypoProjetEncours']) ) { ?>        
+            <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
+            <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 750px;">        
+            <?php echo affiche('TXT_AIDETYPOLOGIEPROJETENCOURS'); ?></span></a></legend>            
+            <?php }else{ ?>
+            <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 580px;">
+            <?php echo affiche('TXT_AIDETYPOLOGIEPROJETENCOURSLOCAL'); ?></span></a></legend>            
+            <?php } ?>
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/typologieProjetEnCoursBar.php'; ?>
+                        <?php include 'statistiques/typologieProjetEnCoursPie.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDREPARTIONPROJETENCOURSTYPE || isset($_GET['anneerepartitionProjetEncoursParType']) ) { ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 600px;">
+            <?php echo TXT_AIDECALCULTYPEPROJETENCOURS; ?></span></a></legend>
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/projetAutresEnCoursBar.php'; ?>
+                        <?php include 'statistiques/projetAutresEnCoursPIE.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDORIGINEPORTPORTEURPROJETENCOURS || isset($_GET['anneeOriginePorteurProjetEncours']) ) { ?>
+        <fieldset id ="statprojet">
+             <legend><?php echo TXT_PORTEURSPROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' >
+                    <span style="width: 550px;"><?php if(IDTYPEUSER==ADMINNATIONNAL){echo affiche('TXT_AIDEORIGINEPORTEURPROJETENCOURS');}else{echo affiche('TXT_AIDEORIGINEPORTEURPROJETENCOURSLOCAL');} ?></span></a></legend>            
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/originePorteursProjetEncoursBar.php'; ?>
+                        <?php include 'statistiques/originePorteursProjetEncoursPie.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    <?php }include 'html/footer.html'; ?>
 </div>
 </body>
 </html>

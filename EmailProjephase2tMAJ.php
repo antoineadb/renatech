@@ -500,7 +500,7 @@ $arrayresult=array();
         }
        $nbarrayresult =  count($arrayresult);
 if($nbarrayresult>0){        
-$body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+$body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR5'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .        
         $titreProjet.$acronyme.$confidentiel .$contexte.$descriptif.$attachement. $contactscentraleaccueil .$typeprojet.$typeFormation.$nbHeure .$nbEleve.$nomFormateur.$dureeProjet .$s_Sourcefinancement.$s_acronymesf.
@@ -511,7 +511,7 @@ $body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR0'))), EN
         "<a href='https://www.renatech.org/projet' ><br><br>" . TXT_RETOUR . '</a><br>    ' .
         '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 }else{
-    $body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
+    $body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR5'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .  utf8_decode(TXT_MESSAGEERREURENODATA).'<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') .
         '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') .
@@ -543,6 +543,23 @@ if (!empty($mailresponsable)) {
 }
 $emailcc = array_merge($emailcentrales, $CC);
 $mailCC = array_unique($emailcc);
+
+$sMailCc='';
+for ($i = 0;$i < count($mailCC);$i++) {
+    $sMailCc.=$mailCC[$i].',';
+}
+$statut = $manager->getSingle2("SELECT libellestatutprojet FROM concerne,statutprojet WHERE idstatutprojet = idstatutprojet_statutprojet and idprojet_projet = ?", $idprojet);
+$sMailCC = substr($sMailCc,0,-1);
+$centrale = $manager->getSingle2("SELECT libellecentrale FROM concerne,centrale WHERE idcentrale = idcentrale_centrale and idprojet_projet=?",$idprojet);
+$nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+$idcentrales = $manager->getList2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+    foreach ($idcentrales as $idcentrale) {
+        createLogInfo(NOW, 'Projet mise à jour, centrale '.$centrale.' : E-mail demandeur: ' .$infodemandeur[0][0]['mail'].' : '.' copie E-mail à  : ' .$sMailCC.' : n°: '. $numero, 'Demandeur: '.$nomPrenomDemandeur[0]['nom'] .
+        ' ' .$nomPrenomDemandeur[0]['prenom'] , removeDoubleQuote($statut), $manager,$idcentrale[0]);
+    }
+    
+
+
 envoieEmail($body, $sujet, $maildemandeur, $mailCC); //envoie de l'email au responsable centrale et au copiste
 if (!empty($_GET['nbpersonne'])) {
     $nbpersonne = $_GET['nbpersonne'];

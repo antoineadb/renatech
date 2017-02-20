@@ -238,6 +238,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                     <?php echo TXT_ERREURUPLOAD;?>
             </td>
         </tr>
+        <tr><td><?php include_once 'centraleProximite/centraleProximite.php'; ?></td></tr>
         <tr>
             <td>
                 <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader" 
@@ -316,7 +317,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                             <?php
                                 $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=?
                                 and masquecentrale!=TRUE order by idcentrale asc",'Autres');
-                                echo "<option>".TXT_SELECTCENTRALE."</option>";
+                                echo "<option >".TXT_SELECTCENTRALE."</option>";
                                 for($i=0;$i<count($rowcentrale);$i++){
                                     echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
                                 }
@@ -333,9 +334,9 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                         
                     }                
                 ?>
-            </td></tr>                       
-        <tr><td><br></td></tr>
+            </td></tr>                               
         <tr><td><input type="text" style='display: none' id='idstatut' name='idstatut' value="<?php if(isset($_GET['statut'])){echo $_GET['statut'];} ?>" >
+                
 <!-----------------------------------------------------------------------------------------------------------------------------------
                 COMMENTAIRE
 -------------------------------------------------------------------------------------------------------------------------------------->
@@ -375,7 +376,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                 height: "100px", disabled: '<?php echo $bool1;?>'
             }, "descriptif");
         });
-        dojo.addOnLoad(function() {             
+        dojo.addOnLoad(function() {
             var editor1 = dijit.byId("commentaire");
             dojo.connect(editor1, "onChange", this, function(value) {
                 dojo.byId("commentaireValeur").value = editor1.get("value");

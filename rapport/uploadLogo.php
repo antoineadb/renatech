@@ -47,6 +47,7 @@ if (!empty($_FILES)) {
         $src_h = $size[1];
         $dossier = '../uploadlogo/';
         $filelogo = basename($my_img);
+        //$filelogo = basename($my_img).'_'.time();
         $dst_w = 2700;
         $dst_h = round(($dst_w / $src_w) * $src_h);
         $dst_im = imagecreatetruecolor($dst_w, $dst_h);

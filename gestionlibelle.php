@@ -12,6 +12,9 @@ include 'outils/parser.php';
 include_once 'class/Manager.php';
 include 'class/Securite.php';
 include 'html/header.html';
+include_once  'class/Cache.php';
+define('ROOT',  dirname(__FILE__));
+$cache = new Cache(ROOT.'/cache', 60);
 ?>
 
 <?php
@@ -34,16 +37,23 @@ if (isset($_GET['msgupdatesiteweb'])) {
     $ongletemailprojetphase1 = true;
 }elseif(isset($_GET['msgupdateemailprojetphase2'])){
     $ongletmsgupdateemailprojetphase2=true;
+}elseif(isset($_GET['centrale'])){
+    $ongletsite=true;
 }
 ?>
 <div id="global">
-    <?php include 'html/entete.html'; ?>
-       <div style="margin-top: 70px;">
-        <?php include_once 'outils/bandeaucentrale.php'; ?>
+    
+    <?php include 'html/entete.html';?>
+       <div style="margin-top: 70px;">           
+           <?php if(internetExplorer()=='false'){
+            $cache->inc(ROOT.'/outils/bandeaucentrale.php'); //RECUPERATION DU BANDEAU DEFILANT DANS LE CACHE CACHE
+        }else{
+            include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
+        } ?>    
     </div>
     <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:50px;width: 1050px;font-size: 1.2em;" doLayout="false">
         <?php if ($ongletsite === true) { ?>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" >
+        <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px" >
                 <?php include 'html/gestionlibelleHome.html'; ?>
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEACCUEIL; ?>" >
@@ -62,7 +72,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
             </div>           
         <?php } elseif ($ongletconnexion == true) { ?>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" >
+            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEACCUEIL; ?>" data-dojo-props="selected:true" >
@@ -78,7 +88,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
             </div>           
         <?php } elseif ($ongletemailcontact == true) { ?>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" >
+            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEACCUEIL; ?>" >
@@ -97,7 +107,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
             </div>            
         <?php } elseif ($ongletemailprojetphase1 == true) { ?>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" >
+            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEACCUEIL; ?>" >
@@ -116,7 +126,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
             </div>            
         <?php } elseif ($ongletmsgupdateemailprojetphase2 == true) { ?>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" >
+            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEACCUEIL; ?>" >
@@ -135,7 +145,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
             </div>            
         <?php } else { ?>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" data-dojo-props="selected:true">
+        <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" data-dojo-props="selected:true" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEACCUEIL; ?>" >

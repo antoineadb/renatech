@@ -168,10 +168,10 @@
             </td>
         </tr>
     </table>
-    <table>
+    <table style="margin-top: 10px">
         <tr>
             <td>
-                <label for="porteurProjet"  style="width: 350px;margin-left: 20px;;margin-top:15px"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?>
+                <label for="porteurProjet"  style="width: 450px;margin-left: 20px;"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?>
                 </label>
             </td>           
             <td>
@@ -214,13 +214,15 @@
         });
     </script>
     <fieldset id="dev" style="border-color: #5D8BA2;width:966px;padding-top: 0px;margin-top:20px;margin-left: 20px;padding-left:0px;">
-        <legend style="margin-left: 20px;"><?php echo TXT_PARTENAIRE;?></legend>
-        <table>
-            <tr><td>&nbsp;</td></tr>
-            <tr>
-                <td><div style="width: 415px;margin-left: 20px;"><?php echo affiche('TXT_AIDEPARTENAIREPROJET');?></div></td>
-            </tr>
-            <tr><td>&nbsp;</td></tr>
+        <legend style="margin-left: 20px;"><?php echo TXT_PARTENAIRE;?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+            <span style="text-align: left;padding:10px;width: 270px;border-radius:5px" >
+                 <?php //MISE EN CACHE DES AIDES
+                            if(!$aidepartenaireprojet=$Cache->read('aidepartenaireprojet')){
+                                $aidepartenaireprojet=affiche('TXT_AIDEPARTENAIREPROJET') ;
+                                $Cache->write('aidepartenaireprojet',$aidepartenaireprojet);
+                            }?><?= $aidepartenaireprojet; ?></span></a>
+            </legend>
+        <table>           
             <tr>
                 <td>
                     <label style="width: 400px;margin-left: 20px;"><?php echo TXT_NBPARTENAIRE_PROJET.' : '.'( 0 - 10 )'; ?></label>
@@ -232,10 +234,10 @@
                            onchange="addnom(dijit.byId(this.value))" onclick="addnom(dijit.byId(this.value))" >
                 </td>
             </tr>
-            <tr><td><br></td></tr>
+            
         </table>        
         <table>
-            <tr><td>&nbsp;</td></tr>
+            
             <tr id="trcentralepartenaireprojet" style="display: none" >
                 <td>
                     <label style="margin-left: 18px;width:310px" for="<?php	echo 'nomLaboEntreprise'.$i;	?>">
@@ -694,6 +696,7 @@
                         </tr>
                         </table>
                 </fieldset>
+                    <?php /* ?>
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                                                                                 CENTRALE DE PROXIMITE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->                            
@@ -777,7 +780,7 @@ function masquecentraleproximite(){
         </td>                            
     </tr>
     </table>
-</fieldset>
+</fieldset><?php */ ?>
 <!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                                                                                 FIN DES CENTRALES DE PROXIMITE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->                                                                                                            

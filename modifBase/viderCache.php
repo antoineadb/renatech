@@ -14,29 +14,39 @@ if (isset($_SESSION['pseudo'])) {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
 include_once '../class/Cache.php';
-$videCache = new Cache(REP_ROOT . '/cache/'.LIBELLECENTRALEUSER.'/', 1);
-        
+$videCache = new Cache(REP_ROOT . '/cache' . LIBELLECENTRALEUSER , 1);
 
-
-if(isset($_POST['donnee'])&& $_POST['donnee']=='FALSE'){
-    //UNIQUEMENT LES DONNEES    
-    $videCache->delete('tous');
-    $videCache->delete('soustraitance');
-    $videCache->delete('refuse');
-    $videCache->delete('realisation');
-    $videCache->delete('rapport');
-    $videCache->delete('accepte');
-    $videCache->delete('analyse');
-    $videCache->delete('attente');
-    $videCache->delete('cloture');
-    $videCache->delete('finis');
-    header('Location: /' . REPERTOIRE . '/videCache/' . $lang.'/d');
+if (isset($_POST) && !empty($_POST)) {
+    if (isset($_POST['donnee']) && $_POST['donnee'] == 'FALSE') {
+        //UNIQUEMENT LES DONNEES    
+        $videCache->delete('tous_'.LIBELLECENTRALEUSER);
+        $videCache->delete('soustraitance_'.LIBELLECENTRALEUSER);
+        $videCache->delete('refuse_'.LIBELLECENTRALEUSER);
+        $videCache->delete('encours_'.LIBELLECENTRALEUSER);
+        $videCache->delete('rapport_'.LIBELLECENTRALEUSER);
+        $videCache->delete('accepte_'.LIBELLECENTRALEUSER);
+        $videCache->delete('analyse_'.LIBELLECENTRALEUSER);
+        $videCache->delete('attente_'.LIBELLECENTRALEUSER);
+        $videCache->delete('cloture_'.LIBELLECENTRALEUSER);
+        $videCache->delete('finis_'.LIBELLECENTRALEUSER);
+        header('Location: /' . REPERTOIRE . '/videCache/' . $lang . '/d');
+    } else {
+        $videCache->clear();        
+        header('Location: /' . REPERTOIRE . '/videCache/' . $lang . '/a');
+        //TOUS LE CACHE
+    }
+} else {
     
-}else{
-    $videCache->clear();
-    header('Location: /' . REPERTOIRE . '/videCache/' . $lang.'/a');
-    //TOUS LE CACHE
+    $videCache->delete('tous_'.LIBELLECENTRALEUSER);
+    $videCache->delete('soustraitance_'.LIBELLECENTRALEUSER);
+    $videCache->delete('refuse_'.LIBELLECENTRALEUSER);
+    $videCache->delete('encours_'.LIBELLECENTRALEUSER);
+    $videCache->delete('rapport_'.LIBELLECENTRALEUSER);
+    $videCache->delete('accepte_'.LIBELLECENTRALEUSER);
+    $videCache->delete('analyse_'.LIBELLECENTRALEUSER);
+    $videCache->delete('attente_'.LIBELLECENTRALEUSER);
+    $videCache->delete('cloture_'.LIBELLECENTRALEUSER);
+    $videCache->delete('finis_'.LIBELLECENTRALEUSER);
+    header('Location: /' . REPERTOIRE . '/controler/controleSuiviProjetRespCentrale.php?lang='.$lang);
 }
 BD::deconnecter();
-
-

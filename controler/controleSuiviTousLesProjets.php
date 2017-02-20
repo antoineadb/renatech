@@ -54,7 +54,7 @@ $rowprojet=$manager->getList("select * from tmptouscentrale");
 
 $nbarrayprojet = count($rowprojet);
 for ($i = 0; $i < $nbarrayprojet; $i++) {
-    if($rowprojet[$i]['idstatutprojet']!=ENATTENTE && $rowprojet[$i]['idstatutprojet']!=ENCOURSANALYSE&& $rowprojet[$i]['idstatutprojet']!=REFUSE&& $rowprojet[$i]['idstatutprojet']!=FINI
+    if($rowprojet[$i]['idstatutprojet']!=REFUSE&& $rowprojet[$i]['idstatutprojet']!=FINI
             && $rowprojet[$i]['idstatutprojet']!=CLOTURE&& $rowprojet[$i]['idstatutprojet']!=ACCEPTE){
         if ($rowprojet[$i]['idperiodicite_periodicite'] == JOUR) {
             $datedepart = strtotime($rowprojet[$i]['datedebutprojet']);

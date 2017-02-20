@@ -2,16 +2,8 @@
 $db = BD::connecter();
 $manager = new Manager($db);
 if (isset($_GET['erreur'])){
-			echo $_GET['erreur'];
+echo $_GET['erreur'];
 }
-?>
-
-<script>
-    function enablemodifacceuil() {
-        dijit.byId("modifsiteweb").setAttribute('disabled', false);
-    }
-</script>
-<?php
 if(isset($_GET['msgupdatesiteweb'])){?>
 <table>
     <tr>
@@ -19,107 +11,152 @@ if(isset($_GET['msgupdatesiteweb'])){?>
             <fieldset class='msgsiteweb' >
                 <?php echo TXT_MSGUPDATESITEWEB; ?>
             </fieldset>
-
         </td>
     </tr>
 </table>
 <?php }?>
-<form data-dojo-type="dijit/form/Form" method="post" name="siteweb" id="siteweb" 	action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updatesiteweb.php">
-    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+
     <fieldset id="gestionsiteweb" style="margin-top: 25px">
+            <a id='aideGestionLibelle' href="<?php echo '/'.REPERTOIRE.'/downloadManual/aideContextuellegestionLibelle.pdf' ?>" target="_blank">
+                <img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/infoStat.png" title="<?php echo TXT_AIDEGESTIONLIBELLE; ?>"  >
+            </a>
+        <?php $arrayLibelleCentrale = $manager->getListbyArray("select libellecentrale,idcentrale from centrale where masquecentrale!=? and idcentrale!=?", array(TRUE, IDCENTRALEAUTRE));?>
         <table>
-            <?php
-            $arrayfemto =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
-            'FEMTO-ST');
-            $femto = $arrayfemto[0]['adressesitewebcentrale'];
-            $logofemto=$arrayfemto[0]['adresselogcentrale'];
-            $arrayief =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
-            'IEF');
-
-            $ief = $arrayief[0]['adressesitewebcentrale'];
-            $logoief=$arrayief[0]['adresselogcentrale'];
-            $arrayiemn =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
-            'IEMN');
-
-            $iemn = $arrayiemn[0]['adressesitewebcentrale'];
-            $logoiemn=$arrayiemn[0]['adresselogcentrale'];
-            $arraylpn =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
-            'LPN');
-
-            $arraylaas =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
-            'LAAS');
-            $laas = $arraylaas[0]['adressesitewebcentrale'];
-            $logolaas=$arraylaas[0]['adresselogcentrale'];
-
-            $arraylpn =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
-            'LPN');
-            $lpn = $arraylpn[0]['adressesitewebcentrale'];
-            $logolpn=$arraylpn[0]['adresselogcentrale'];
-
-            $arrayltm =  $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb	=?',
-            'LTM');
-            $ltm = $arrayltm[0]['adressesitewebcentrale'];
-            $logoltm=$arrayltm[0]['adresselogcentrale'];
-            ?>
             <tr>
-                <td valign="middle" style="width:450px">
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo $femto; ?>"				onfocus="enablemodifacceuil()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="sitefemto" name="sitefemto"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
-
-                </td>
-                <td valign="middle" style="width:450px">
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo $ief; ?>"				onfocus="enablemodifacceuil()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="siteief" name="siteief"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
-
+                <td>
+                    <select id="nomCentrale" name="nomCentrale" data-dojo-type="dijit/form/FilteringSelect" style="width: 250px;height:24px" 
+                            data-dojo-props="value: '' , placeHolder: '<?php echo TXT_SELECTCENTRALE; ?>',required:'required'"  
+                            onselect="window.location.replace('<?php echo '/'.REPERTOIRE?>/libelle/<?php echo $lang;?>/'+this.value+'')">
+                        <?php                                        
+                            for ($i = 0; $i < count($arrayLibelleCentrale); $i++) {
+                                echo "<option value='" . $arrayLibelleCentrale[$i]['idcentrale'] . "'>" . $arrayLibelleCentrale[$i]['libellecentrale'] . "</option>";
+                            }
+                        ?>
+                    </select>
                 </td>
             </tr>
-            <tr>
-                <td valign="middle" style="width:450px">
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo $iemn; ?>"				onfocus="enablemodifacceuil()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="siteiemn" name="siteiemn"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
-
-                </td>
-                <td valign="middle" style="width:450px">
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo $laas; ?>"				onfocus="enablemodifacceuil()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="sitelaas" name="sitelaas"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
-
-                </td>
-            </tr>
-
-            <tr>
-                <td valign="middle" style="width:450px">
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo $lpn; ?>"				onfocus="enablemodifacceuil()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="sitelpn" name="sitelpn"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
-                </td>
-                <td valign="middle" style="width:450px">
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo $ltm; ?>"				onfocus="enablemodifacceuil()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="siteltm" name="siteltm"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-\:\/]+'" >
-
-                </td>
-            </tr>
-
         </table>
-    </fieldset>
-				<table>
-							<tr><td>&nbsp;</td></tr>
-							<tr><td>
-													<input style="text-align: left;margin-left: 10px"  type="submit" id ="modifsiteweb" name="modifsiteweb"
-																				label="<?php echo TXT_MODIFIER ;?>"   data-dojo-type="dijit/form/Button" disabled="disabled"				>
-										</td>
-							</tr>
-							<tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
-				</table>
+        <?php 
+            if(isset($_GET['centrale'])&&!empty($_GET['centrale'])){ 
+                $arrayCentrale = $manager->getList2('select adressesitewebcentrale,adresselogcentrale from sitewebapplication where refsiteweb=? ',$_GET['centrale']);
+                if(!empty($arrayCentrale[0]['adressesitewebcentrale'])){
+                    $centrale = $arrayCentrale[0]['adressesitewebcentrale'];
+                }else{
+                    $centrale ='';
+                }
+                if(isset($arrayCentrale[0]['adresselogcentrale']) && !empty($arrayCentrale[0]['adresselogcentrale'])){
+                    $logocentrale = $arrayCentrale[0]['adresselogcentrale'];
+                    $figure = nomFichierValidesansAccent($logocentrale);
+                    //CALCUL DES DIMENSIONS DE L'IMAGE
+                    $arrayInfoImg =getimagesize($figure);
+                    $v = sizeLogo($arrayInfoImg,75);
+                    $width = $v[0];
+                    $height = $v[1];
+                }else{
+                       $logocentrale = '';
+                       $width = 95;
+                       $height = 37;
+                }
+                
+
+        
+        ?>
+<form data-dojo-type="dijit/form/Form" method="post" name="siteweb" id="siteweb" 	action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updatesiteweb.php" enctype="multipart/form-data" >
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+    <table>
+        <tr>
+            <td>
+                <label style="border: 1px solid #B5BCC7;width:100px;padding-left: 10px;margin-bottom: 10px;margin-left: 10px" ><?php echo $_GET['centrale']; ?></label>                    
+                <input type="text" style="display: none" value="<?php echo $_GET['centrale']; ?>" name="nomCentrale">
+                <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $centrale; ?>" onfocus="enablemodifacceuil()"
+                       style="margin-left: 10px;text-align: left;width: 350px;" id="<?php echo 'site' . $_GET['centrale'] ?>" name="adresseSite"                      
+                       data-dojo-props="regExp: dojox.validate.regexp.url, invalidMessage:'Invalid URL.',placeHolder:'<?php echo TXT_ADRESSWEB; ?>',required:true"  >
+                        
+            </td>
+            <td style="display: none">
+                <input data-dojo-type="dijit/form/ValidationTextBox" id="<?php echo 'logo' . $_GET['centrale'] ?>" name="logoSite" value="<?php echo $logocentrale; ?>" >
+            </td>
+
+            <td ><?php
+                $fileName = 'fileName' . $_GET['centrale'];
+                ?>
+                <input name='fileCentrale' type='file' id='fileCentrale'   size='20' style="display: none "  onchange="dijit.byId('<?php echo $fileName; ?>').set('value', document.getElementById('fileCentrale').files[0].name);">
+            </td>
+            <td>
+                <button type="button" data-dojo-type="dijit/form/Button" style="margin-left:20px;margin-top: 30px;margin-right: 25px"  data-dojo-props="onClick:function(){document.getElementById('fileCentrale').click();}">
+                    <?php echo TXT_PARCOURIR; ?></button>
+            </td>
+            <td>
+                <input type="text" data-dojo-type="dijit/form/ValidationTextBox" id='<?php echo $fileName; ?>' readonly="true" style="margin-top: 30px;width:250px"
+                       data-dojo-props="placeHolder:'<?php echo 'Logo de la Centrale'; ?>'"  >
+
+            </td>
+            <td>
+                <button type="button" data-dojo-type="dijit/form/Button"   data-dojo-props="onClick:function(){uploadFichier('fileCentrale');}" style="margin-left: 25px;margin-top: 30px"><?php echo TXT_VALIDER; ?></button>
+            </td>
+        </tr>
+        <tr>
+            <td id="cibleFigure" style="width: 100px">
+                <img src=" <?php echo '/' . REPERTOIRE . '/' . $logocentrale ?>" width='<?php echo $width; ?>' height='<?php echo $height; ?>' style="margin-bottom: 5px;margin-top: 15px;margin-left:20px"></td>
+        </tr>
+        <tr><td><progress id="progressBar" value="0" max="100" style="width:290px;margin-left:20px;height: 20px;visibility: hidden;margin-top: 10px" ></progress>
+                <div id="status" style="margin-left:20px;float: left;margin-top: 10px"></div><div id="status_bytes" style="padding-right: 240px;float: right;margin-top: 10px"></div>
+            </td>            
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td>
+                <input style="text-align: left;margin-left: 10px"  type="submit" id ="modifsiteweb" name="modifsiteweb"  label="<?php echo TXT_MODIFIER; ?>"   data-dojo-type="dijit/form/Button" disabled="disabled"				>
+            </td>
+        </tr>    
+    </table>
 </form>
+        <?php } ?>
+            
+                <div id='cibleCentrale'></div>
+            
+    </fieldset>
+        <div style="font-size: x-small; margin-top: 10px;"><?php echo TXT_CHAMPSOBLIGATOIRES;?></div>
+
+<script>
+    function uploadFichier(id) {
+        var file = document.getElementById(id).files[0];
+        var data = new FormData();
+        data.append('file', file);
+        var ajax = new XMLHttpRequest();
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/outils/uploadLogoCentrales.php");
+        ajax.send(data);
+        enablemodifacceuil();
+    }
+    function progressHandler(event) {
+        document.getElementById('progressBar').style.visibility = 'visible';
+        document.getElementById('status_bytes').innerHTML = event.loaded + ' bytes uploaded on ' + event.total;
+        var pourcentage = (event.loaded / event.total) * 100;
+        document.getElementById('progressBar').value = Math.round(pourcentage);
+        document.getElementById('status').innerHTML = Math.round(pourcentage) + '% uploaded... Wait';
+        require(["dojo/dom-construct"], function (domConstruct) {
+            domConstruct.destroy("cibleFigure");
+        });
+    }
+    function completeHandler(event) {
+        document.getElementById('status').innerHTML = event.target.responseText;
+        document.getElementById('progressBar').value = 0;
+        document.getElementById('progressBar').style.visibility = 'hidden';
+        document.getElementById('status_bytes').innerHTML = '';
+    }
+    function errorHandler() {
+        document.getElementById('status').innerHTML = "The upload failed !";
+    }
+    function abortHandler() {
+        document.getElementById('status').innerHTML = "The upload was canceled !";
+    }
+    
+    function enablemodifacceuil() {
+        dijit.byId("modifsiteweb").setAttribute('disabled', false);
+    }
+    require(["dijit/form/ValidationTextBox", "dojo/parser", "dojox/validate/regexp","dijit/form/Form","dijit/form/Button"]);
+</script>
 <?php BD::deconnecter(); ?>

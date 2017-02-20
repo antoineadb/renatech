@@ -17,9 +17,12 @@ $Refusedprojects ='/'.REPERTOIRE."/controler/controleProjetRefuser.php?lang=".$l
 $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 $vueCentraleAN = '/'.REPERTOIRE.'/vueCentraleAN/'.$lang;
 $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
+$manual= '/'.REPERTOIRE.'/manuel/'.$lang;
+$log= '/'.REPERTOIRE.'/log/'.$lang;
+$viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
 ?>
 <div style="z-index: 5">
-    <ul class="menu" style="width:620px;margin-left:58px">
+    <ul class="menu" style="width:630px;margin-left:58px">
     <li><a href="<?php echo $indexchoix; ?>" style="font-weight: bold" ><?php echo TXT_ACCUEIL; ?></a></li>    
     
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_PROJET.'</u>'; ?></a>
@@ -41,16 +44,19 @@ $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_COMPTES.'</u>'; ?></a>
         <ul style="z-index: 5;font-weight: normal">
             <li><a href="<?php echo $moncompte;?>" class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MONCOMPTE;?></a></li>
-            <li><a href="<?php echo $gestioncompte;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONCOMPTE;?></a></li>
+            <li><a href="<?php echo $gestioncompte;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_GESTIONCOMPTE);?></a></li>
         </ul> 
     </li>
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_ADMIN.'</u>'; ?></a>
         <ul style="z-index: 5;  ">
-            <li><a href="<?php echo $liste;?>" class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_LISTE;?></a></li>
+            <li><a href="<?php echo $liste;?>" class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_LISTE);?></a></li>
             <li><a href="<?php echo $libelle;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONLIBELLE;?></a></li>
-            <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_STATISTIQUE;?></a></li>
+            <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_STATISTIQUE);?></a></li>
             <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>
             <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
+             <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
+            <li><a href="<?php echo $log;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Logs';?></a></li>
+             <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
         </ul>
  
     </li>

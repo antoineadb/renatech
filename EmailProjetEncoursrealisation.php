@@ -90,4 +90,15 @@ if (!empty($infodemandeur[0][0]['mailresponsable'])) {
 $emailcc = array_merge($emailcentrales, $CC);
 $mailCC = array_unique($emailcc);
 
+$sMailCc='';
+for ($i = 0;$i < count($mailCC);$i++) {
+    $sMailCc.=$mailCC[$i].',';
+}
+$sMailCC = substr($sMailCc,0,-1);
+$nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+$idcentrales = $manager->getList2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+foreach ($idcentrales as $idcentrale) {
+createLogInfo(NOW, 'Projet passé en cours de réalisation par la centrale '.$centrale.' : E-mail demandeur: ' .$infodemandeur[0][0]['mail'].' : '.' copie E-mail à  : ' .$sMailCC.' : n°: '. $numprojet, 'Demandeur: '.$nomPrenomDemandeur[0]['nom'] .
+        ' ' .$nomPrenomDemandeur[0]['prenom'] , TXT_ENCOURSREALISATION, $manager,$idcentrale[0]);
+}
 envoieEmail($body, $sujet, $maildemandeur, $mailCC);

@@ -14,6 +14,22 @@ if (isset($_SESSION['pseudo'])) {
     } else {
          header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
+
+/* VERIFICATION EN CAS DE MODIFICATION MANUEL D'URL */
+include_once 'class/Manager.php';
+$db = BD::connecter();
+$manager = new Manager($db); 
+if(isset($_GET['numProjet'])){
+    $idprojet=$manager->getSingle2('select idprojet from projet where numero =?',$_GET['numProjet']);
+}elseif (isset ($_SESSION['numProjet'])) {
+    $idprojet=$manager->getSingle2('select idprojet from projet where numero =?',$_SESSION['numProjet']);
+}
+if(!check_URL($_SESSION['pseudo'], $idprojet)){
+         header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
+}
+BD::deconnecter();
+/* FIN DE LA VERIFICATION EN CAS DE MODIFICATION MANUEL D'URL */
+
 include 'html/header.html';
 ?>
 <script src="<?php echo '/'.REPERTOIRE ?>/js/ajaxefface.js"></script>
@@ -24,7 +40,7 @@ include 'html/header.html';
             ?>
             <div name="modifProjet" data-dojo-type="dijit/form/Form" id="modifProjet" data-dojo-id="modifProjet"  method="post" action="<?php echo '/'.REPERTOIRE; ?>/modifBase/updateProjetphase2.php?lang=<?php echo $lang; ?>&idprojet=<?php echo $idprojet ;?>&numProjet=<?php echo $numProjet;?>" enctype="multipart/form-data" >
                 <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
-                <script type="dojo/on" data-dojo-event="submit">                    
+                <script type="dojo/on" data-dojo-event="submit">
                 var nbdescript=stripTags(trim(dojo.byId("descriptifValeur").value)).length;
                 var nbcontexte=stripTags(trim(dojo.byId("contextValeur").value)).length;
                 var nbtitre=stripTags(trim(dijit.byId("titreProjet").value)).length;                
@@ -40,6 +56,16 @@ include 'html/header.html';
                 var nbreussite=stripTags(trim(dojo.byId("reussit").value)).length;
                 var typeProjet = dijit.byId("typeProjet").value;
                 var nbdureeestimeprojet = dojo.byId("dureeestimeprojet").value.length;
+                if(dijit.byId("statutProjet")){
+                    var statutProjet = dijit.byId("statutProjet").value;
+                    var commentaireprojet = stripTags (document.getElementById("commentairephase2Valeur").value);
+                    if(statutProjet==='st4' && commentaireprojet ==''){
+                        alert("<?php echo TXT_COMMENTREFUS; ?>");
+                        return false;    
+                        exit(); 
+                    }
+                }               
+                
                 if(document.getElementById('save').value=='oui'){//DANS LE CAS D'UNE SAUVEGARDE ON NE CONTROLE PAS LES CHAMPS                      
                     if(nbdescript>800){
                         alert("<?php echo TXT_LIMITEDITEURDESCRIPTION; ?>");
@@ -157,7 +183,7 @@ include 'html/header.html';
                         <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:30px;width: 1050px;font-size: 1.2em;" doLayout="false" id="MyTabContainer" >
                             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" style="width: auto; height: auto;overflow: hidden" ><?php include 'html/vueModifProjet.html'; ?></div>
                             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" style="width: auto; height: auto;overflow:hidden;"  ><?php  include 'html/phase2.html'; ?></div>                        
-                            <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2600px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
+                            <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2900px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
                 <?php }else{//-- DANS LE CAS NORMAL SANS UN RAPPORT OU UNE ERREUR SUR UN RAPPORT -- ?>
                 <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:30px;width: 1050px;font-size: 1.2em;" doLayout="false" id="MyTabContainer" >
                     <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" style="width: auto; height: auto;overflow: hidden" ><?php include 'html/vueModifProjet.html'; ?></div>

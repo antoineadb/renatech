@@ -233,7 +233,15 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
         
     }    
 
-    
+//---------------------------------------------------------------------------------------------------------------------------------------
+//                                                             NOM DE L'EQUIPE
+//---------------------------------------------------------------------------------------------------------------------------------------
+    $ancienNomEquipe = $manager->getsingle2("SELECT nomequipe FROM  loginpassword WHERE idlogin =(select idlogin_loginpassword from utilisateur where idutilisateur=?)", $idutilisateur);
+    if (!empty($_GET['nomequipe']) && $_GET['nomequipe'] != $ancienNomEquipe) {
+        $idlogin = $manager->getSingle2("select idlogin_loginpassword from utilisateur where idutilisateur=?", $idutilisateur);        
+        $loginNomEquipe = new UtilisateurNomEquipe($_GET['nomequipe'], $idlogin);
+        $manager->updateLoginNomEquipe($loginNomEquipe, $idlogin);
+    }    
     
     
 //-------------------------------------------------------------------------------------------------------------------------------------------

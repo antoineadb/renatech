@@ -63,5 +63,19 @@ $body = utf8_decode(htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MR
         "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 $sujet = utf8_decode(TXT_PROJETNUM) . $numprojet;
+
+$sMailCc='';
+for ($i = 0;$i < count($mailCC);$i++) {
+    $sMailCc.=$mailCC[$i].',';
+}
+$statut =  removeDoubleQuote($manager->getSingle2("SELECT libellestatutprojet FROM concerne,statutprojet WHERE idstatutprojet = idstatutprojet_statutprojet and idprojet_projet = ?", $idprojet));
+$sMailCC = substr($sMailCc,0,-1);
+$centrale = $manager->getSingle2("SELECT libellecentrale FROM concerne,centrale WHERE idcentrale = idcentrale_centrale and idprojet_projet=?",$idprojet);
+$nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+$idcentrales = $manager->getList2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+foreach ($idcentrales as $idcentrale) {
+createLogInfo(NOW, 'Projet mise à jour, centrale '.$centrale.' : E-mail demandeur: ' .$sEmailcentrale.' : '.' copie E-mail à  : ' .$sMailCC.' : n°: '. $numprojet, 'Demandeur: '.$nomPrenomDemandeur[0]['nom'] .
+       ' ' .$nomPrenomDemandeur[0]['prenom'] , $statut, $manager,$idcentrale[0]);
+}
 envoieEmail($body, $sujet, $maildestinataire, $mailCC);
 $db = BD::deconnecter();

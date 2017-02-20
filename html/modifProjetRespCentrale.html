@@ -50,17 +50,7 @@ $bool ='true';
 <fieldset id="identcreateprojet">
     <?php     
     if (isset($_SESSION['idTypeUser'])&& $_SESSION['idTypeUser']!='1'){ 
-    switch ($idstatutprojet) {
-    case ENATTENTE:
-    echo '<legend><b>'.TXT_ENATTENTE.'</b></legend>';
-    $bool ='false';
-    $bool1='';
-    break;
-    case ENCOURSANALYSE:
-    echo '<legend><b>'.TXT_CONSULTPROJET.'</b></legend>';//Projet En cours d'analyse
-    $bool ='true';
-    $bool1='true';
-    break;
+    switch ($idstatutprojet) {   
     case ACCEPTE:
     echo '<legend><b>'.TXT_PROJETACCEPTE.'</b></legend>';//projet Acceptée
     $bool ='true';
@@ -262,9 +252,9 @@ $bool ='true';
                 <td style="width:250px">
                     <label for="statutProjet" ><?php echo TXT_STATUTPROJET.'* :'; ?> </label>
                     <?php 
-                    $param=array(ENCOURSANALYSE,FINI,CLOTURE,ENCOURSREALISATION);
+                    $param=array(FINI,CLOTURE,ENCOURSREALISATION);
                     $rowstatut = $manager->getListbyArray("select idstatutprojet,libellestatutprojet,libellestatutprojeten from statutprojet
-                    where idstatutprojet !=? and idstatutprojet!=? and idstatutprojet!=? and idstatutprojet!=?  order by ordre asc",$param) ;?>
+                    where idstatutprojet!=? and idstatutprojet!=? and idstatutprojet!=?  order by ordre asc",$param) ;?>
                     <select name="statutProjet" id="statutProjet" data-dojo-type="dijit/form/FilteringSelect" style="width: 220px"
                             data-dojo-props="  value: '', placeHolder: '<?php echo TXT_CHOIXSTATUTPROJET; ?>',required:'required',
                             onChange: function(value){
@@ -295,9 +285,10 @@ $bool ='true';
                 <td id="central" style="display: none">
                     <label for="centrale" ><?php echo TXT_CENTRALE.'* :'; ?> </label>
                     <?php 
-                    $idcentrale = $_GET['idcentrale'];
-                    $libellecentrale = $manager->getList("select idcentrale,libellecentrale from centrale where libellecentrale!='Autres' and
-                    idcentrale!=$idcentrale order by libellecentrale asc"); ?>
+                    $idcentrale = $_GET['idcentrale'];                    
+                    $libellecentrale = $manager->getListbyArray("select idcentrale,libellecentrale from centrale where idcentrale!=? and masquecentrale!=? 
+                    and idcentrale!=? order by libellecentrale asc",array(IDCENTRALEAUTRE,TRUE,$idcentrale)); 
+                    ?>
                     <select id="centrale" name="centrale" data-dojo-type="dijit/form/Select" style="width: 220px"
                             data-dojo-props="  value: '' , placeHolder: '<?php echo TXT_SELECTCENTRALE;?>',
                             onChange: function(value){
@@ -310,9 +301,8 @@ $bool ='true';
                             " >
                         <?php
                         echo "<option value='0'>".TXT_SELECTCENTRALE."</option>";
-                        for ($i = 0;$i < count($libellecentrale);$i++) {
-                        echo "<option value='".$libellecentrale[$i]['idcentrale']."'>".str_replace("''","'",$libellecentrale[$i]['libellecentrale'])."
-                        </option>";
+                        for ($i = 0;$i < count($libellecentrale);$i++) {                        
+                        echo "<option value='".$libellecentrale[$i]['idcentrale']."'>".str_replace("''","'",$libellecentrale[$i]['libellecentrale'])."</option>";
                         }?>
                     </select>
                 </td>

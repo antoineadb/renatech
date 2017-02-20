@@ -115,7 +115,7 @@ if (!empty($idprojet)) {
     }
 
     if (!empty($row[0]['descriptioncentraleproximite'])) {
-        $descriptioncentraleproximite = stripslashes(str_replace("''", "'", $row[0]['descriptioncentraleproximite']));
+        $descriptioncentraleproximite = stripslashes(removeDoubleQuote($row[0]['descriptioncentraleproximite']));
     } else {
         $descriptioncentraleproximite = '';
     }

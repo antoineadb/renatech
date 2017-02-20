@@ -10,7 +10,6 @@ include_once '../class/Manager.php';
 include '../class/Securite.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-
 //------------------------------------------------------------------------------------------------------------
 //                                       RECUPERATION DES PARAMETRES
 //------------------------------------------------------------------------------------------------------------
@@ -50,14 +49,20 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
         $_SESSION['fax'] = $fax;
     } else {
         $fax = '';
-    }    
+    }
+    if (!empty($_POST['nomequipe'])) {
+        $nomEquipe = stripslashes(Securite::bdd($_POST['nomequipe']));
+        $_SESSION['nomequipe'] = $nomEquipe;
+    } else {
+        $nomEquipe = '';
+    }
     $idPays = (int) substr($_POST['pays'], 2);
     if ($lang == 'fr') {
         $pays = $manager->getSingle2("select nompays from pays where idpays=?", $idPays);
     } elseif ($lang == 'en') {
         $pays = $manager->getSingle2("select nompaysen from pays where idpays=?", $idPays);
     }
-    
+
     $_SESSION['pays'] = $pays;
     if (!empty($_POST['typeuser'])) {
         $typeuser = $_POST['typeuser'];
@@ -78,7 +83,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
     }
     //VERIFIFACTION QUE SI ON EST RESPONSABLE CENTRALE (EMAIL SAISIE = EMAIL1 TABLE CENTRALE) ON NE PEUT PAS S'INSCRIRE COMME INDUSTRIEL
     for ($i = 1; $i < 6; $i++) {
-        $idcentrale = $manager->getSingle2("select idcentrale from centrale where email".$i."=?", $email);
+        $idcentrale = $manager->getSingle2("select idcentrale from centrale where email" . $i . "=?", $email);
         if (!empty($idcentrale)) {
             if ($typeuser == TXT_INDUSTRIELCONTACT) {
                 header('location: /' . REPERTOIRE . '/contactadmnErr/' . $lang . '/ok');
@@ -165,7 +170,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
         $libelcentrale = strstr($acronymelaboratoire, '(', TRUE); //PARTIE GAUCHE DE "libellecentrale(villecentrale)"
         $Vilcentrale = strstr($acronymelaboratoire, '(', FALSE); // PARTIE DROITE
         $param = array(trim($libelcentrale), trim($Vilcentrale));
-        $rescodeunite = $manager->getListbyArray("SELECT idcentrale,codeunite FROM centrale where libellecentrale=? or villecentrale=?",$param);
+        $rescodeunite = $manager->getListbyArray("SELECT idcentrale,codeunite FROM centrale where libellecentrale=? or villecentrale=?", $param);
         if (!empty($rescodeunite[0][0])) {//SI IL EXISTE ALORS ON AFFECTE L'IDAUTRECODE UNITE A 1
             $idcentrale_centrale = $rescodeunite[0][0];
             $codeunite = $rescodeunite[0][1];
@@ -260,7 +265,10 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
 //------------------------------------------------------------------------------------------------------------
         $utilisateur = new Utilisateuracademique($nom, $prenom, $entrepriselaboratoire, $adresse, $cp, $ville, $date, $tel, $fax, $nomresponsable, $mailresponsable, $idtypeutilisateur_typeutilisateur, $idPays, $idlogin_loginpassword, $iddisciplineScientifique, $idcentrale_centrale, $idqualitedemandeuraca_qualitedemandeuraca, $idtutelle_tutelle, $idemployeur_nomemployeur, $idautrestutelle_autrestutelle, $idautrediscipline_autredisciplinescientifique, $idautrenomemployeur_autrenomemployeur, $idautrecodeunite_autrecodeunite, $acronymelaboratoire);
         //INSERTION DE L'UTILISATEUR
-        $manager->addUtilisateuracademique($utilisateur);        
+        $manager->addUtilisateuracademique($utilisateur);
+        $idlogin = $manager->getSingle("select max (idlogin) from loginpassword");
+        $nomequipe = new UtilisateurNomEquipe($nomEquipe, $idlogin);
+        $manager->updateLoginNomEquipe($nomequipe, $idlogin);
         nomEntete($email, $pseudo);
         $_SESSION['pseudo'] = $pseudo;
         include '../EmailContact.php';
@@ -274,6 +282,9 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
         $utilisateur = new Utilisateuracadext($nom, $prenom, $entrepriselaboratoire, $adresse, $cp, $ville, $date, $tel, $fax, $nomresponsable, $mailresponsable, $idtypeutilisateur_typeutilisateur, $idPays, $idlogin_loginpassword, $iddisciplineScientifique, $idqualitedemandeuraca_qualitedemandeuraca, $idtutelle_tutelle, $idemployeur_nomemployeur, $idautrestutelle_autrestutelle, $idautrediscipline_autredisciplinescientifique, $idautrenomemployeur_autrenomemployeur, $idautrecodeunite_autrecodeunite, $acronymelaboratoire);
         //INSERTION DE L'UTILISATEUR        
         $manager->addUtilisateuracademiqueext($utilisateur);
+        $idlogin = $manager->getSingle("select max (idlogin) from loginpassword");
+        $nomequipe = new UtilisateurNomEquipe($nomEquipe, $idlogin);
+        $manager->updateLoginNomEquipe($nomequipe, $idlogin);
         nomEntete($email, $pseudo);
         $_SESSION['pseudo'] = $pseudo;
         include '../EmailContact.php';
@@ -287,9 +298,13 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
         $utilisateur = new Utilisateurindustriel($nom, $prenom, $entrepriselaboratoire, $adresse, $cp, $ville, $date, $tel, $fax, $nomresponsable, $mailresponsable, $nomEntreprise, $idtypeutilisateur_typeutilisateur, $idPays, $idlogin_loginpassword, $idqualitedemandeurindust_qualitedemandeurindust);
         //INSERTION DE L'UTILISATEUR
         $manager->addUtilisateurindustriel($utilisateur);
+        $idlogin = $manager->getSingle("select max (idlogin) from loginpassword");
+        $nomequipe = new UtilisateurNomEquipe($nomEquipe, $idlogin);
+        $manager->updateLoginNomEquipe($nomequipe, $idlogin);
         BD::deconnecter();
         //MISE A JOUR DU NOM ET PRENOM DANS L'ENTETE DE LA PAGE
         nomEntete($email, $pseudo);
+        $_SESSION['pseudo'] = $pseudo;
         $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
         $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
         // RECUPERATION DE L'idutilisateur
@@ -299,9 +314,8 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createCont
         $manager->addAppartient($appartient);
         //INSERTION DANS LA TABLE INTERVIENT POUR LE SECTEUR D'ACTIVITE
         $intervient = new Intervient($idsecteuractivite_secteuractivite, $idUtilisateur);
-        $manager->addIntervient($intervient);
-        $_SESSION['pseudo'] = $pseudo;
-        //ENVOI DE L'EMAIL CONTACT
+        $manager->addIntervient($intervient);                
+         //ENVOI DE L'EMAIL CONTACT
         include '../EmailContact.php';
         //REDIRECTION VERS LA PAGE D'ACCUEIL DU CONTACT FRAICHEMENT CREE
         header('location: /' . REPERTOIRE . '/compte/' . $lang);

@@ -62,13 +62,11 @@ if (empty($_SESSION['nomConnect'])) {
                 $_SESSION['adresse'] = $adresse;
                 $_SESSION['idTypeUser'] = $idTypeUser;
                 $_SESSION['lastLoad'] = time(); //MISE A JOUR DE L'HEURE DE CONNEXION
-                include_once '../compteur.php';
-                
+                include_once '../compteur.php';                
                 include_once '../class/Cache.php';
                 $libelleCentrale = $manager->getSingle2("select libellecentrale from centrale,utilisateur, loginpassword where idlogin_loginpassword=idlogin and idcentrale_centrale=idcentrale and pseudo=? ", $_SESSION['pseudo']);
                 $videCache = new Cache(REP_ROOT . '/cache/' . $libelleCentrale . '/', 1);
                 $videCache->clear();
-                
                 header('Location: /' . REPERTOIRE . '/home/' . $lang); //REDIRECTION VERS LA PAGE CONNECTE
             } else {
                 header('Location: /' . REPERTOIRE . '/Login_Erreur/' . $lang); //REDIRECTION VERS LA PAGE INSERCONTACT

@@ -1,7 +1,6 @@
 <?php
 include_once 'decide-lang.php';
 $indexchoix = '/'.REPERTOIRE."/home/".$lang;
-$createProjet = '/'.REPERTOIRE."/new_request/".$lang;
 $creerprojetphase2 = '/'.REPERTOIRE."/new_project/".$lang;
 $controleSuiviProjet = '/'.REPERTOIRE."/controler/controleSuiviProjet.php?lang=".$lang;
 $moncompte = '/'.REPERTOIRE.'/moncompte/'.$lang;
@@ -22,8 +21,7 @@ $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
             <ul class="menu" style="width:480px;margin-left:58px">
     <li><a href="<?php echo $indexchoix; ?>" style="font-weight: bold" ><?php echo TXT_ACCUEIL; ?></a></li>    
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'. TXT_PROJET.'</u>'; ?></a>
-        <ul style="z-index: 5">
-            <li><a href='<?php echo $createProjet;?>' class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_CREERPROJET;?></a></li>
+        <ul style="z-index: 5">            
             <li><a href="<?php echo $creerprojetphase2;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_DEMANDEPROJET.'<br>';?></a></li>          
             <li><a href="<?php echo $controleSuiviProjet ;?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_SUIVIPROJET;?></a></li>
             <?php if($nbrowprojetadmin>0){?>

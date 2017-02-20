@@ -15,8 +15,7 @@ include 'html/header.html';
 ?>
 <div id="global">        
     <?php
-    include 'html/entete.html';
-    $idtypeuser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword, utilisateur WHERE idlogin = idlogin_loginpassword and  pseudo =?", $_SESSION['pseudo']);
+    include 'html/entete.html'; 
     ?>
     <script>
         function unselect() {
@@ -32,8 +31,7 @@ include 'html/header.html';
                 alert('<?php echo TXT_MESSAGEERREURCONTACT; ?>');
                 return false;
                 exit();
-            }
-            
+            }            
         </script>
     <div style="margin-top: 70px;">
         <?php include_once 'outils/bandeaucentrale.php'; ?>
@@ -44,7 +42,7 @@ include 'html/header.html';
                     <tr>
                         <td><div style="margin-right: 10px"><?php echo TXT_CENTRALE . '* :'; ?></div></td>
                         <td>
-                            <?php $libellecentrale = $manager->getList("select idcentrale,libellecentrale from centrale where libellecentrale!='Autres' order by libellecentrale asc"); ?>
+                            <?php $libellecentrale = $manager->getListbyArray("select idcentrale,libellecentrale from centrale where idcentrale!=? and masquecentrale!=? order by libellecentrale asc",array(IDCENTRALEAUTRE,TRUE)); ?>
                             </select>
                             <select id="centrale" name="centrale" data-dojo-type="dijit/form/FilteringSelect" style="width: 230px;height:24px"
                                     data-dojo-props="  value: '' , placeHolder: '<?php echo TXT_SELECTCENTRALE; ?>',required:'required'" >

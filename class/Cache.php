@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 class Cache {
 
     public $dirname;
@@ -12,7 +12,7 @@ class Cache {
     }
 
     public function write($filename, $content) {
-        error_reporting(0);        
+        //error_reporting(0);        
         return file_put_contents($this->dirname . '/' . $filename, $content);
     }
 
@@ -21,8 +21,9 @@ class Cache {
         if (!file_exists($file)) {
             return false;
         }
-        $lifetime = (time() - filemtime($file)) / 60;
-        if ($lifetime > $this->duration) {
+        $lifetime = (time() - filemtime($file))/60 ;
+        $temp = $this->duration;
+        if ($lifetime > $temp) {
             return false;
         }
         return file_get_contents($file);
@@ -38,7 +39,9 @@ class Cache {
     public function clear() {
         $files = glob($this ->dirname . '/*');        
             foreach ($files as $file) {
+                if(is_file($file)){
                     unlink($file);
+                } 
             }
         
     }

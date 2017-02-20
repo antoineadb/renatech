@@ -8,7 +8,7 @@ function checkcentrale(id) {
             }
         }
 
-    });    
+    });
     if (centrale.length === 0) {
         return false;
     } else {
@@ -123,7 +123,7 @@ function empty(mixed_var) {
 }
 
 function afficherAutre(id1, id2) {
-    if (dijit.byId(id1).value === 'Autres' || dijit.byId(id1).get('displayedValue') === 'Autres' || dijit.byId(id1).value === 'Others' || dijit.byId(id1).get('displayedValue') === 'Others') {        
+    if (dijit.byId(id1).value === 'Autres' || dijit.byId(id1).get('displayedValue') === 'Autres' || dijit.byId(id1).value === 'Others' || dijit.byId(id1).get('displayedValue') === 'Others') {
         dijit.byId(id2).domNode.style.display = 'block';
     } else {
         dijit.byId(id2).domNode.style.display = 'none';
@@ -184,51 +184,114 @@ function utf8length(str) {
 function addnomCentrale(nb) {
     if (nb === 0) {
         document.getElementById('personCent').style.display = 'none';
-        for (i = 0; i < 21; i++) {            
-                dijit.byId('nomaccueilcentrale' + i).set('required', '');
-                dijit.byId('prenomaccueilcentrale' + i).set('required', '');
-                dijit.byId('qualiteaccueilcentrale' + i).set('required', '');
-                dijit.byId('mailaccueilcentrale' + i).set('required', '');
+        for (i = 0; i < 21; i++) {
+            dijit.byId('nomaccueilcentrale' + i).set('required', '');
+            dijit.byId('prenomaccueilcentrale' + i).set('required', '');
+            dijit.byId('qualiteaccueilcentrale' + i).set('required', '');
+            dijit.byId('mailaccueilcentrale' + i).set('required', '');
         }
     } else {
         switch (nb) {
             case nb:
-                document.getElementById('personCent').style.display = 'block';                
-                for (i = 0;i <nb; i++) {
-                    if(document.getElementById('divpersonne' + i)){
+                document.getElementById('personCent').style.display = 'block';
+                for (i = 0; i < nb; i++) {
+                    if (document.getElementById('divpersonne' + i)) {
                         document.getElementById('divpersonne' + i).style.display = 'block';
                     }
-                    if(dijit.byId('nomaccueilcentrale' + i)){
-                        dijit.byId('nomaccueilcentrale' + i).set('required', 'required');                        
+                    if (dijit.byId('nomaccueilcentrale' + i)) {
+                        dijit.byId('nomaccueilcentrale' + i).set('required', 'required');
                     }
-                    if(dijit.byId('prenomaccueilcentrale' + i)){
+                    if (dijit.byId('prenomaccueilcentrale' + i)) {
                         dijit.byId('prenomaccueilcentrale' + i).set('required', 'required');
                     }
-                    if(dijit.byId('qualiteaccueilcentrale' + i)){
+                    if (dijit.byId('qualiteaccueilcentrale' + i)) {
                         dijit.byId('qualiteaccueilcentrale' + i).set('required', 'required');
                     }
-                    if(dijit.byId('mailaccueilcentrale' + i)){
+                    if (dijit.byId('mailaccueilcentrale' + i)) {
                         dijit.byId('mailaccueilcentrale' + i).set('required', 'required');
                     }
                 }
-            for (j = nb; j < 21; j++) {
-                    if(document.getElementById('divpersonne' + j)){
+                for (j = nb; j < 21; j++) {
+                    if (document.getElementById('divpersonne' + j)) {
                         document.getElementById('divpersonne' + j).style.display = 'none';
                     }
-                    if(dijit.byId('nomaccueilcentrale' + j)){
+                    if (dijit.byId('nomaccueilcentrale' + j)) {
                         dijit.byId('nomaccueilcentrale' + j).set('required', '');
                     }
-                    if( dijit.byId('prenomaccueilcentrale' + j)){
+                    if (dijit.byId('prenomaccueilcentrale' + j)) {
                         dijit.byId('prenomaccueilcentrale' + j).set('required', '');
                     }
-                     if(dijit.byId('qualiteaccueilcentrale' + j)){
+                    if (dijit.byId('qualiteaccueilcentrale' + j)) {
                         dijit.byId('qualiteaccueilcentrale' + j).set('required', '');
                     }
-                    if(dijit.byId('mailaccueilcentrale' + j)){
+                    if (dijit.byId('mailaccueilcentrale' + j)) {
                         dijit.byId('mailaccueilcentrale' + j).set('required', '');
                     }
                 }
                 break;
         }
     }
+}
+/**
+ * 
+ * @returns {undefined}
+ */
+function moisLettre(moisChiffre) {
+    switch (moisChiffre) {
+        case 1:
+            return 'Jan.';
+            break;
+        case 2:
+            return 'Fev.';
+            break;
+        case 3:
+            return 'Mar.';
+            break;
+        case 4:
+            return 'Apr.';
+            break;
+        case 5:
+            return 'May';
+            break;
+        case 6:
+            return 'Jun.';
+            break;
+        case 7:
+            return 'Jul.';
+            break;
+        case 8:
+            return 'Aug.';
+            break;
+        case 9:
+            return 'Sep.';
+            break;
+        case 10:
+            return 'Oct.';
+            break;
+        case 11:
+            return 'Nov.';
+            break;
+        case 12:
+            return 'Dec.';
+            break;
+    }
+}
+/**
+ *   Remplacer toutes les occurrences d'une sous-chaîne
+ Cette fonction recherche dans une chaîne expr toutes les occurrences d'une sous-chaîne a et les remplace par une sous-chaîne b.
+ * @param {type} expr
+ * @param {type} a
+ * @param {type} b
+ * @returns {String|@var;b}     
+ * */
+function remplace(expr, a, b) {
+    var i = 0;
+    while (i !== -1) {
+        i = expr.indexOf(a, i);
+        if (i >= 0) {
+            expr = expr.substring(0, i) + b + expr.substring(i + a.length);
+            i += b.length;
+        }
+    }
+    return expr;
 }

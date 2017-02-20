@@ -109,7 +109,7 @@ include 'html/header.html';
                 $iduser = $_GET['iduser'];
                 $row = $manager->getList2("
 SELECT u.nom,u.prenom,u.adresse,u.ville,u.codepostal,u.telephone,u.fax,u.idpays_pays,u.idqualitedemandeuraca_qualitedemandeuraca,l.pseudo,l.mail,l.actif,qa.libellequalitedemandeuraca,n.libelleemployeur,n.idemployeur,an.libelleautrenomemployeur,at.libelleautrestutelle,t.idtutelle,t.libelletutelle,d.libellediscipline,d.iddiscipline,ad.libelleautrediscipline,
-at.idautrestutelle,an.idautrenomemployeur,ad.idautrediscipline,u.nomresponsable,u.mailresponsable,u.idtypeutilisateur_typeutilisateur,u.administrateur,u.entrepriselaboratoire,u.acronymelaboratoire
+at.idautrestutelle,an.idautrenomemployeur,ad.idautrediscipline,u.nomresponsable,u.mailresponsable,u.idtypeutilisateur_typeutilisateur,u.administrateur,u.entrepriselaboratoire,u.acronymelaboratoire,l.nomequipe
 FROM utilisateur u,loginpassword l,qualitedemandeuraca qa,nomemployeur n,autrenomemployeur an,autrestutelle at,tutelle t,autrecodeunite ac,disciplinescientifique d,autredisciplinescientifique ad
 WHERE l.idlogin = u.idlogin_loginpassword AND qa.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca AND
 n.idemployeur = u.idemployeur_nomemployeur AND an.idautrenomemployeur = u.idautrenomemployeur_autrenomemployeur AND 
@@ -143,6 +143,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                     $administrateur = $row[$i]['administrateur'];
                     $acronymelaboratoire = $row[$i]['acronymelaboratoire'];
                     $entrepriselaboratoire = $row[$i]['entrepriselaboratoire'];
+                    $nomEquipe = $row[$i]['nomequipe'];
                 }
                 if (empty($actif)) {
                     $valeuractif = TXT_NONACTIF;
@@ -339,6 +340,13 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                         echo stripslashes(str_replace("''", "'", ($libelleautrenomemployeur)));
                                     }
                                     ?>"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top"><?php echo TXT_NOMEQUIPE; ?></td><td></td>
+                                <td>
+                                    <input type="text" style="width: 318px;margin-left: 50px" maxlength="20"  name="nomequipe" data-dojo-type="dijit/form/ValidationTextBox" id="nomequipe" 
+                                           value="<?php echo $nomEquipe; ?>"   />
                                 </td>
                             </tr>
                             <tr>
@@ -670,19 +678,33 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                 } else {
                                     admin = 0;
                                 }
-                                 if (dijit.byId('vueOui').checked) {
-                                    var vue = 'TRUE';
+                                if(dijit.byId('vueOui')){
+                                    if (dijit.byId('vueOui').checked) {
+                                        var vue = 'TRUE';
+                                    } else {
+                                        vue = 'FALSE';
+                                    }
+                                }
+                                if (dijit.byId('nomequipe')) {
+                                    var nomequipe = dijit.byId('nomequipe').value;
                                 } else {
-                                    vue = 'FALSE';
+                                    nomequipe = '';
                                 }
                                 
-                                
-                                
+                                if(dijit.byId('vueOui')){                                
                                 window.location.replace("<?php echo '/'.REPERTOIRE ?>/modifBase/majgestioncompteaca.php?pseudo="+pseudo+"&mail="+mail+"&nomuser="+nomuser+"&prenomuser="+prenomuser+"&pays="+nompays+"&teluser="+teluser+
                                         "&faxuser="+faxuser+"&adresseuser="+adresseuser+"&codepostal="+codepostal+"&ville="+ville+"&qualitedemandeuraca="+idqualitedemandeuraca+"&nomresponsable=" + nomresponsable +"&mailresponsable=" + mailresponsable 
                                         + "&acronymelaboratoire=" + acronymelaboratoire + "&entrepriselaboratoire=" + entrepriselaboratoire + "&idemployeur=" + idemployeur + "&role=" + role + "&idtutelle=" + idtutelle 
                                 + "&libelleautretutelle=" + libelleautretutelle + "&libelleautrenomemployeur=" + libelleautrenomemployeur + "&iddiscipline=" + iddiscipline + "&centrale=" + centrale 
-                                + "&libelleautrediscipline=" + libelleautrediscipline + "&iduser=" +<?php echo $iduser; ?> + "&statutcompte=" + statutcompte +"&admin="+admin+"&vue="+vue+ "&page_precedente=<?php echo basename(__FILE__); ?>");
+                                + "&libelleautrediscipline=" + libelleautrediscipline + "&iduser=" +<?php echo $iduser; ?> + "&statutcompte=" + statutcompte +"&admin="+admin+"&vue="+vue+"&nomequipe="+nomequipe+ "&page_precedente=<?php echo basename(__FILE__); ?>");
+                                }else{
+                                    window.location.replace("<?php echo '/'.REPERTOIRE ?>/modifBase/majgestioncompteaca.php?pseudo="+pseudo+"&mail="+mail+"&nomuser="+nomuser+"&prenomuser="+prenomuser+"&pays="+nompays+"&teluser="+teluser+
+                                            "&faxuser="+faxuser+"&adresseuser="+adresseuser+"&codepostal="+codepostal+"&ville="+ville+"&qualitedemandeuraca="+idqualitedemandeuraca+"&nomresponsable=" + nomresponsable +"&mailresponsable=" + mailresponsable 
+                                            + "&acronymelaboratoire=" + acronymelaboratoire + "&entrepriselaboratoire=" + entrepriselaboratoire + "&idemployeur=" + idemployeur + "&role=" + role + "&idtutelle=" + idtutelle 
+                                    + "&libelleautretutelle=" + libelleautretutelle + "&libelleautrenomemployeur=" + libelleautrenomemployeur + "&iddiscipline=" + iddiscipline + "&centrale=" + centrale 
+                                    + "&libelleautrediscipline=" + libelleautrediscipline + "&iduser=" +<?php echo $iduser; ?> + "&statutcompte=" + statutcompte +"&admin="+admin+"&nomequipe="+nomequipe+ "&page_precedente=<?php echo basename(__FILE__); ?>");
+                                }
+                                    
                             }
                         }, "progButtonNode");
                     });
@@ -888,9 +910,9 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                                     </select>
                                 </td>
                             </tr>
-                            <!-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                            
-                            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<!-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
                             <?php
                             if (!empty($nomresponsable)) {
                                 $nomResponsable = removeDoubleQuote($nomresponsable);

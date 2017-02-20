@@ -10,8 +10,8 @@
         "dojo/date/locale",
         "dojo/domReady!", ],
             function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
-                request.get("<?php echo "/".REPERTOIRE; ?>/tmp/ProjetAttentecentrale.json", {
-                    handleAs: "json"}).then(function(data) {
+                request.get("<?php echo "/".REPERTOIRE; ?>/tmp/ProjetEnAttenteCentrale<?php echo IDCENTRALEUSER; ?>.json", {
+                    handleAs: "json"}).then(function(data){
                     store = new Memory({data: data.items});
                     dataStore = new ObjectStore({objectStore: store});
                     function hrefFormatter(numero, idx) {

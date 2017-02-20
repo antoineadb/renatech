@@ -10,17 +10,13 @@ if (isset($_SESSION['pseudo'])) {
 }
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-
-$idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword,utilisateur WHERE  idlogin = idlogin_loginpassword and pseudo =?", $_SESSION['pseudo']);
-$row = $manager->getListbyArray("select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? 
-and co.idstatutprojet_statutprojet=? and trashed = FALSE
-union select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=?
-and co.idstatutprojet_statutprojet=? and trashed = FALSE
-union select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? 
-and co.idstatutprojet_statutprojet=? and trashed = FALSE
+$row = $manager->getListbyArray("select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet 
+    and co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? and trashed = FALSE
 union select p.idprojet,p.dateprojet,p.numero,p.acronyme,p.titre,co.idstatutprojet_statutprojet,p.refinterneprojet from projet p,concerne co where co.idprojet_projet = p.idprojet and co.idcentrale_centrale=? 
 and co.idstatutprojet_statutprojet=? and trashed = FALSE order by dateprojet desc",
-        array($idcentrale, ENATTENTE,$idcentrale,ENCOURSANALYSE,$idcentrale,ACCEPTE,$idcentrale,ENATTENTEPHASE2));
+        array($idcentrale,ACCEPTE,$idcentrale,ENATTENTEPHASE2));
+
+
 $fprow = fopen('tmp/projetsEnattentecentrale.json', 'w');
 $datausercompte = "";
 fwrite($fprow, '{"items": [');

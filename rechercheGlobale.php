@@ -393,13 +393,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                 <div id="gridrechercheglobale" >
                     <script>
                         var gridrechercheglobale, dataStore, store;
-                        require([
-                            "dojox/grid/DataGrid",
-                            "dojo/store/Memory",
-                            "dojo/data/ObjectStore",
-                            "dojo/request",
-                            "dojo/domReady!"
-                        ], function(DataGrid, Memory, ObjectStore, request) {                           
+                        require(["dojox/grid/DataGrid","dojo/store/Memory","dojo/data/ObjectStore","dojo/request","dojo/domReady!"], function(DataGrid, Memory, ObjectStore, request) {                           
                            request.get("<?php echo '/' . REPERTOIRE.'/tmp/resultatrechercheprojet'.$rand.'.json'?>", {
                                 handleAs: "json"
                             }).then(function(data) {

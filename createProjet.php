@@ -5,21 +5,27 @@ include_once 'class/Manager.php';
 include_once 'class/Cache.php';
 include_once 'outils/constantes.php';
 include 'decide-lang.php';
-define('ROOT',  dirname(__FILE__));
-$Cache = new Cache(ROOT.'/cache', 60);
+$db = BD::connecter();
+$manager = new Manager($db);
+
+define('ROOT', dirname(__FILE__));
+$Cache = new Cache(ROOT . '/cache', 60);
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
-if (!isset($_GET['msgerr'])) {
-    unset($_SESSION['contextValeur']);
-    unset($_SESSION['descriptifValeur']);
-    unset($_SESSION['libellecentrale']);
-    unset($_SESSION['idcentrale']);
-    unset($_SESSION['titreProjet']);
-    unset($_SESSION['acronyme']);
-    unset($_SESSION['confid']);
+$arrayDefaultValues = $manager->getList2("select nom,mail from loginpassword,utilisateur where idlogin_loginpassword=idlogin and pseudo=?", $_SESSION['pseudo']);
+if (!empty($arrayDefaultValues)) {
+    $defaulNom = $arrayDefaultValues[0]['nom'];
+    $defaultMail = $arrayDefaultValues[0]['mail'];
+}
+
+if (!isset($_GET['err'])) {
+    $_SESSION['descriptif'] = '';
+    $_SESSION['contexte'] = '';
+    $_SESSION['objet'] = '';
+    $_SESSION['message'] = '';
 }
 include 'html/header.html';
 ?>

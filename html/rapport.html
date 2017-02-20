@@ -182,7 +182,7 @@ if(isset($_GET['statut'])){
                     alert("<?php echo 'The number of characters for the Rsults must be less than 1200, please correct'; ?>");
                     return false;                    
                     exit();                
-                }else if(nbvalorization>800){
+                }else if(nbvalorization>820){
                     alert("<?php echo 'The number of characters for the Valorization must be less than 800, please correct'; ?>");
                     return false;                    
                     exit();                
@@ -716,10 +716,11 @@ if(isset($figure) && $figure!=''){
         </tr>   
     
 </table>
+
 <hr>
 <table>
     <tr><td><label for="valorization" style="width: 1000px;float: left;margin-left: 20px;font-weight:bold;"><?php echo 'Valorization :' ?></label></td></tr>
-    <tr><td><div id="valorization" name="valorization" style="margin-left:20px" ><?php if(!empty($valorisation)){echo $valorisation;} ?></div></td></tr>
+    <tr><td><div id="valorization" name="valorization" style="margin-left:20px" height="124" ><?php if(!empty($valorisation)){echo $valorisation;} ?></div></td></tr>
     <tr><td><label id="cptvalorisation" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
         <tr style="display: none;margin-left:20px" id="msgerrvalorization">
             <td>
@@ -755,8 +756,10 @@ if(isset($figure) && $figure!=''){
         </td>
     </tr>
 </table>
+
 <script>
-    require(["dojo/parser", "dijit/Editor"]);    
+    dojo.require("dojox.editor.plugins.SafePaste");
+    require(["dojo/parser", "dijit/Editor"]);
     require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
         ready(function() {            
             new Editor({
@@ -769,6 +772,7 @@ if(isset($figure) && $figure!=''){
             }, "results");
              new Editor({
                 plugins: ["undo", "redo" ],
+                extraPlugins:['safepaste'],
                 height: "124px"
             }, "valorization");
              new Editor({
@@ -776,6 +780,7 @@ if(isset($figure) && $figure!=''){
                 height: "35px"
             }, "legend");
         });
+        
         dojo.addOnLoad(function() {
             var editor1 = dijit.byId("contextObjectif");
             var editor2 = dijit.byId("results");
@@ -810,6 +815,7 @@ if(isset($figure) && $figure!=''){
                 document.getElementById('cptlegend').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;
                 if (trim(strip_tags(editor4.get("value")),'').length > 115) {    
                     document.getElementById('msgerrlegend').style.display = 'block';
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
                     document.getElementById('msgerrlegend').style.display = 'none';
                 }                 
@@ -819,6 +825,7 @@ if(isset($figure) && $figure!=''){
                 document.getElementById('cptlegend').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;
                 if (trim(strip_tags(editor4.get("value")),'').length > 115) {    
                     document.getElementById('msgerrlegend').style.display = 'block';
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
                     document.getElementById('msgerrlegend').style.display = 'none';
                 }                 
@@ -828,6 +835,7 @@ if(isset($figure) && $figure!=''){
                 document.getElementById('cptlegend').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;
                 if (trim(strip_tags(editor4.get("value")),'').length > 115) {  
                     document.getElementById('msgerrlegend').style.display = 'block';
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
                     document.getElementById('msgerrlegend').style.display = 'none';
                 }                
@@ -837,6 +845,7 @@ if(isset($figure) && $figure!=''){
                 document.getElementById('cptlegend').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("legende").value),'').length;
                 if (trim(strip_tags(editor4.get("value")),'').length > 115) {  
                     document.getElementById('msgerrlegend').style.display = 'block';
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
                     document.getElementById('msgerrlegend').style.display = 'none';
                 }            
@@ -932,33 +941,33 @@ if(isset($figure) && $figure!=''){
             dojo.connect(editor3, "onKeyPress", this, function(event) {
                 dojo.byId("valorisation").value = editor3.get("value");
                 document.getElementById('cptvalorisation').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;                
-                if (trim(strip_tags(editor3.get("value")),'').length > 800) {
+                if (trim(strip_tags(editor3.get("value")),'').length > 820) {
                     document.getElementById('msgerrvalorization').style.display = 'block';                    
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2610px";});
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2510px";});
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2600px";});
                     document.getElementById('msgerrvalorization').style.display = 'none';
                 }                 
             });												
             dojo.connect(editor3, "onBlur", this, function(event) {
                 dojo.byId("valorisation").value = editor3.get("value");
                 document.getElementById('cptvalorisation').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;
-                if (trim(strip_tags(editor3.get("value")),'').length > 800) {
+                if (trim(strip_tags(editor3.get("value")),'').length > 820) {
                     document.getElementById('msgerrvalorization').style.display = 'block';
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2610px";});
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2510px";});
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2600px";});
                     document.getElementById('msgerrvalorization').style.display = 'none';
                 }                
             });
             dojo.connect(editor3, "onClick", this, function(event) {
                 dojo.byId("valorisation").value = editor3.get("value");
                 document.getElementById('cptvalorisation').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;
-                if (trim(stripTags(editor3.get("value"))).length > 800) {
+                if (trim(stripTags(editor3.get("value"))).length > 820) {
                     document.getElementById('msgerrvalorization').style.display = 'block';
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2610px";});
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2510px";}); 
+                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2600px";}); 
                     document.getElementById('msgerrvalorization').style.display = 'none';
                 }            
             });

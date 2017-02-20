@@ -1,38 +1,47 @@
 <?php
 
-session_start();
 include_once '../outils/toolBox.php';
 showError($_SERVER['PHP_SELF']);;
 include '../decide-lang.php';
 include '../class/Manager.php';
 include_once '../outils/constantes.php';
+include_once '../class/Cache.php';
+define('ROOT',  dirname(__FILE__));
+$cache = new Cache(ROOT.'/cache', 60);
+
+
 if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'gestionsiteweb.html') {
     $db = BD::connecter();
     $manager = new Manager($db);
     include_once '../class/Securite.php';
-
-    $arraysite = array(
-        array("adressesitewebcentrale" => $_POST['sitefemto'], "refsiteweb" => "FEMTO"),
-        array("adressesitewebcentrale" => $_POST['siteief'], "refsiteweb" => "IEF"),
-        array("adressesitewebcentrale" => $_POST['siteiemn'], "refsiteweb" => "IEMN"),
-        array("adressesitewebcentrale" => $_POST['sitelaas'], "refsiteweb" => "LAAS"),
-        array("adressesitewebcentrale" => $_POST['sitelpn'], "refsiteweb" => "LPN"),
-        array("adressesitewebcentrale" => $_POST['siteltm'], "refsiteweb" => "LTM")
-    );
-
-    for ($j = 0; $j < count($arraysite); $j++) {
-        if (!empty($arraysite[$j]['adressesitewebcentrale'])) {
-            $anciensite = $manager->getSingle2("select adressesitewebcentrale from sitewebapplication where refsiteweb=?", $arraysite[$j]['refsiteweb']);
-            if ($anciensite != $arraysite[$j]['adressesitewebcentrale']) {
-                $sitewebapplication = new Sitewebapplication($arraysite[$j]['refsiteweb'], $arraysite[$j]['adressesitewebcentrale']);
-                $manager->updatesitewebApplication($sitewebapplication, $arraysite[$j]['refsiteweb']);
-            }
-        }
+    
+    if(isset($_POST['adresseSite']) && !empty($_POST['adresseSite'])){
+        $adressesitewebcentrale = $_POST['adresseSite'];
+    }else{
+        $adressesitewebcentrale = '';
     }
+    if(isset($_POST['nomCentrale']) && !empty($_POST['nomCentrale'])){
+        $refsiteweb=$_POST['nomCentrale'];
+    }else{
+        $refsiteweb="";
+    }
+    if(isset($_FILES['fileCentrale']['name']) && !empty($_FILES['fileCentrale']['name'])){
+        $nomLogo ='styles/img/logoCentrales/'. $_FILES['fileCentrale']['name'];
+    }else{
+        $nomLogo = "";
+    } 
+    $nb = $manager->getSingle2("select count(refsiteweb) from sitewebapplication where refsiteweb=?", $refsiteweb);
+    if($nb==0){
+        $sitewebapplication = new Sitewebapplication($refsiteweb, $adressesitewebcentrale, $nomLogo);
+        $manager->addSiteWebApplication($sitewebapplication);
+    }else{
+        $sitewebapplication = new Sitewebapplication($refsiteweb, $adressesitewebcentrale, $nomLogo);
+        $manager->updatesitewebApplication($sitewebapplication, $refsiteweb);
+    }
+    $cache->clear();
+    BD::deconnecter();
     header('location: /' . REPERTOIRE . '/Manage_label3/' . $lang . '/msgupdatesiteweb');
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
     exit();
 }
-
-BD::deconnecter();

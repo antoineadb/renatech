@@ -10,7 +10,7 @@
         "dojo/date/locale",
         "dojo/domReady!"
     ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
-        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/ProjetRefuseecentrale.json", {
+        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/ProjetRefuseecentrale<?php echo IDCENTRALEUSER?>.json", {            
             handleAs: "json"}).then(function(data) {
             store = new Memory({data: data.items});
             dataStore = new ObjectStore({objectStore: store});

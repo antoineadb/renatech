@@ -20,7 +20,7 @@ dojo.ready(function(){
     var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetCentraleUser.json"});
     /*set up layout*/    
     var layout = [[
-       {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px", formatter: hrefFormatterNumero},
+       {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px"},//, formatter: hrefFormatterNumero},
         {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet",width: "80px",formatter:formatDate},
         {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "210px"},
         {name: "<?php echo TXT_UPDATE; ?>", field: "datemaj",width: "80px",formatter:formatDate},
@@ -49,38 +49,10 @@ dojo.ready(function(){
             /*position of the pagination bar*/
             position: "top"
         }}
-    },
-      document.createElement('div'));
+    },document.createElement('div'));
 //----------------------------------------------------------------------------------------------------------------------
 //                                              FONCTIONS DE FORMATAGE
 //----------------------------------------------------------------------------------------------------------------------
-         function hrefFormatterNumero(numero,idx) {
-            var item = grid.getItem(idx);
-            var centrale = item.libellecentrale;
-            var statut = +item.idstatutprojet;
-            return "<a  href=\"<?php echo '/'.REPERTOIRE;?>/controler/controlestatutprojet.php?lang=<?php echo $lang; ?>&statut=" + statut + "&numProjet=" + numero +"&centrale=" + centrale + "\">"+ numero + "</a>";
-        }
-        function hrefFormatter(numero, idx) {
-            var item = grid.getItem(idx);//idx = index
-            var centrale = item.nomcentrale;//libelle centrale
-            var statut=+ item.idstatutprojet;//id statut
-            if (statut ===+ '<?php echo REFUSE; ?>' || statut ===+'<?php echo CLOTURE; ?>') {
-                return numero;
-            }else{
-                return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $lang;?>&statut="+statut+"&numProjet=" + numero + "&centrale=" + centrale+ "\">" + numero + "</a>";
-            }                        
-        }
-        
-        function hrefFormatter(numero, idx) {
-                var item = grid.getItem(idx);//idx = index
-                var centrale = item.nomcentrale;//libelle centrale
-                var statut=+ item.idstatutprojet;//id statut
-                if (statut ===+ '<?php echo REFUSE; ?>' || statut ===+'<?php echo CLOTURE; ?>') {
-                    return numero;
-                }else{
-                    return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $lang;?>&statut="+statut+"&numProjet=" + numero + "&centrale=" + centrale+ "\">" + numero + "</a>";
-                }                        
-            }
             function hrefFormatterPDF(index, idx) {
                 var item = grid.getItem(idx);
                 var numero = item.numero;
@@ -116,12 +88,8 @@ dojo.ready(function(){
                 
                  if(statut === '<?php echo ACCEPTE ?>'){
                      return accepte;
-                 }else if(statut === '<?php echo ENCOURSANALYSE ?>'){
-                     return encours;
                  }else if(statut === '<?php echo REFUSE ?>'){
                      return refuse;
-                 }else if(statut === '<?php echo ENATTENTE ?>'){
-                     return enattente;
                  }else if(statut === '<?php echo ENATTENTEPHASE2 ?>'){
                      return enattente;
                  }else if(statut === '<?php echo ENCOURSREALISATION ?>'){

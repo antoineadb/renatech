@@ -23,7 +23,7 @@ dojo.ready(function(){
        {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "auto", formatter: hrefFormatter},
         {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet", width: "auto", formatter: formatDate},
         {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "auto"},
-        {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
+        {name: "  ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
         {name: "<?php echo TXT_ACRONYME; ?>", field: "acronyme", width: "auto"},
         {name: "<?php echo TXT_STATUTPROJET;?>", field: "libellestatutprojet", width: "auto"},
         {name: "<?php echo TXT_CENTRALS; ?>", field: "", width: "auto", formatter: formatterLibelle}
@@ -108,12 +108,8 @@ dojo.ready(function(){
                 
                  if(statut === '<?php echo ACCEPTE ?>'){
                      return accepte;
-                 }else if(statut === '<?php echo ENCOURSANALYSE ?>'){
-                     return encours;
                  }else if(statut === '<?php echo REFUSE ?>'){
                      return refuse;
-                 }else if(statut === '<?php echo ENATTENTE ?>'){
-                     return enattente;
                  }else if(statut === '<?php echo ENATTENTEPHASE2 ?>'){
                      return enattente;
                  }else if(statut === '<?php echo ENCOURSREALISATION ?>'){
@@ -162,7 +158,7 @@ dojo.ready(function(){
 <script>
 //---------------------------------------------------------------------------------------------------------------------------------------
 //                    SELECTION DE L'AFFECTATION D'UN PORTEUR OU D'UN ADMINISTRATEUR
-//                    Gestion de l'éveneùent click sur le menu
+//                    Gestion de l'évenement click sur le menu
 //---------------------------------------------------------------------------------------------------------------------------------------
         dojo.connect(gridDiv, 'onRowClick', function(e){
             var rowIndex = e.rowIndex;
@@ -174,8 +170,7 @@ dojo.ready(function(){
             if(document.getElementById('duplicate_project').value=='oui'){                
                 duplicateProject.show();
             }
-        })
-      
+        })     
         
 </script>
 <script>

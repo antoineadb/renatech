@@ -59,5 +59,16 @@ if ($cas == 'miseAJourEmail') {
      include 'outils/envoiEmailAutreCentrale.php';
     header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJ.php?lang=' . $lang . '&idprojet=' . $idprojet . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale']);
 }else {
+    $sCentrale ="";
+    $aCentrale = $manager->getList2("select libellecentrale from centrale,concerne,projet where idcentrale_centrale=idcentrale and idprojet=idprojet_projet and idprojet=?", $idprojet);
+    foreach ($aCentrale as $key => $centrales) {
+        $sCentrale .=$centrales[0].',';    
+    }
+    $centrale =  substr($sCentrale,0,-1);
+    $libelleStatut = $manager->getSingle2("select libellestatutprojet from statutprojet where idstatutprojet=?", $idstatutprojet);
+    $nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+    $idcentrale = $manager->getsingle2('select idcentrale_centrale from concerne where idprojet_projet=?',$idprojet);
+    createLogInfo(NOW, 'Sauvegarde du projet n° '.$numero.' :  Centrale: '. $centrale, 'Demandeur: '.$nomPrenomDemandeur[0]['nom'] .
+        ' ' .$nomPrenomDemandeur[0]['prenom'] , removeDoubleQuote($libelleStatut), $manager,$idcentrale);
     header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
 }

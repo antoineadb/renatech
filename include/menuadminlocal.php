@@ -1,7 +1,6 @@
 <?php
 include_once 'decide-lang.php';
 $indexchoix = '/' . REPERTOIRE . "/home/" . $lang;
-$createProjet = '/' . REPERTOIRE . "/new_request/" . $lang;
 $creerprojetphase2 = '/' . REPERTOIRE . "/new_project/" . $lang;
 $controleSuiviProjetRespCentrale = '/' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang;
 $controleSuiviProjet = '/' . REPERTOIRE . "/controler/controleSuiviProjet.php?lang=" . $lang;
@@ -14,7 +13,6 @@ $exportUtilisateur = '/' . REPERTOIRE . "/exportutilisateur/" . $lang;
 $exportUtilisateurcentrale = '/' . REPERTOIRE . "/exportTousutilisateur/" . $lang;
 $exportSultan='/' . REPERTOIRE . "/exportSultan/" . $lang;
 $exportRapportWord='/' . REPERTOIRE . "/exportreport/" . $lang;
-
 $moncompte = '/' . REPERTOIRE . '/moncompte/' . $lang;
 $gestioncompte = '/' . REPERTOIRE . "/compteadmin/" . $lang;
 $logout = '/' . REPERTOIRE . "/index/" . $lang . "/logout";
@@ -28,14 +26,16 @@ $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 $projetSansDev = '/'.REPERTOIRE.'/noDevProject/'.$lang;
 $viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
 $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
+$log= '/'.REPERTOIRE.'/log/'.$lang;
+$requete = '/'.REPERTOIRE.'/req/'.$lang;
+$mail  = '/'.REPERTOIRE.'/relance/'.$lang;
 ?>
 <div style="z-index: 5;">
-    <ul class="menu" style="width:620px;margin-left:58px">
+    <ul class="menu" style="width:630px;margin-left:58px">
         <li><a href="<?php echo $indexchoix; ?>" style="font-weight: bold"><?php echo TXT_ACCUEIL; ?></a></li> 
         <li><a href="#" style="font-weight: bold"><?php echo '<u>' . TXT_PROJET . '</u>'; ?></a>
-            <ul style="z-index: 5">
-                <li><a href='<?php echo $createProjet; ?>' class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_CREERPROJET; ?></a></li>
-                <li><a href="<?php echo $creerprojetphase2; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_DEMANDEPROJET . '<br>'; ?></a></li>
+            <ul style="z-index: 5">                
+                <li><a href="<?php echo $creerprojetphase2; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_DEMANDEPROJET) . '<br>'; ?></a></li>
                 <li><a href="<?php echo $controleSuiviProjetRespCentrale; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_LOGINPROJETCENTRALE; ?></a></li>
                 <li><a href="<?php echo $projetSansDev; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PROJETSANSDEV; ?></a></li>
                 <li><a href="<?php echo $controleSuiviProjet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_SUIVIPROJET; ?></a></li>
@@ -62,22 +62,22 @@ $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
         <li><a href="#" style="font-weight: bold"><?php echo '<u>' . TXT_COMPTES . '</u>'; ?></a>
             <ul style="z-index: 5">
                 <li><a href="<?php echo $moncompte; ?>" class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MONCOMPTE; ?></a></li>
-                <li><a href="<?php echo $gestioncompte; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONCOMPTE; ?></a></li>												
+                <li><a href="<?php echo $gestioncompte; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_GESTIONCOMPTE); ?></a></li>												
             </ul>
 
         </li>
         <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_DIVERS.'</u>'; ?></a>
         <ul style="z-index: 5;  ">
-            <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_STATISTIQUE;?></a></li>
+            <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_STATISTIQUE);?></a></li>
             <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>
             <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
             <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
             <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
-        </ul>
- 
+            <li><a href="<?php echo $log;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Logs';?></a></li>
+            <li><a href="<?php echo $mail;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Relance par E-Mail';?></a></li>
+            <?php /* ?><li><a href="<?php echo $requete;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Requetes paramétrables';?></a></li> <?php */ ?>
+        </ul> 
     </li>
-        
-
         <li><a href="<?php echo $logout; ?>" style="font-weight: bold"><?php echo TXT_DECONNECTER; ?></a></li> 
     </ul>
 </div>

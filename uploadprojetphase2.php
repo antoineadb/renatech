@@ -4,7 +4,8 @@ include_once 'outils/constantes.php';
 include_once 'decide-lang.php';
 include_once 'outils/toolBox.php';
 include_once 'class/Manager.php';
-
+$db = BD::connecter();
+$manager = new Manager($db);
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
 } else {
@@ -17,14 +18,14 @@ if (isset($_GET['idprojet'])) {
 }
 
 if (!empty($_POST['centrale'])) {
-    $idCentrale =(int) substr($_POST['centrale'], 2);
+    $idCentrale = (int) substr($_POST['centrale'], 2);
 } else {
     $idCentrale = AUTRECENTRALE;
 }
 
 if (isset($_POST['enregistre']) && $_POST['enregistre'] == 'oui') {
     $cas = 'enregistrement';
-}elseif (isset($_POST['creerprojetphase2']) && $_POST['creerprojetphase2'] == 'oui' && $_POST['enregistre'] == 'non') {
+} elseif (isset($_POST['creerprojetphase2']) && $_POST['creerprojetphase2'] == 'oui' && $_POST['enregistre'] == 'non') {
     if (isset($_POST['etapeautrecentrale']) && $_POST['etapeautrecentrale'] == 'TRUE') {
         $cas = 'creationprojetphase2etape';
     } else {
@@ -48,15 +49,18 @@ if (isset($_POST['integerspinner']) && !empty($_POST['integerspinner'])) {
 } else {
     $nbpersonnecentrale = 0;
 }
-if ($cas == 'enregistrement') {//OK VALIDE
+$numero = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
+if ($cas == 'enregistrement') {//OK VALIDE    
+    createLogInfo(NOW, TXT_CREATIONPROJETPHASE2 .' : '. $numero, NOMUSER . ' ' . PRENOMUSER .' : '. getCentrale($numero, $manager), TXT_ENATTENTEPHASE2, $manager,$idCentrale);
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
-} elseif ($cas == 'creationprojetphase2' || $cas == 'creationprojetphase2etape') {
+} elseif ($cas == 'creationprojetphase2' || $cas == 'creationprojetphase2etape') {    
     include 'EmailProjetphase2.php';
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
-}elseif($cas =='creerprojetphase2'){
+} elseif ($cas == 'creerprojetphase2') {    
     include 'emailprojetphase2/creerphase2.php';
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
     exit();
-}else{
+} else {
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
-} 
+}
+BD::deconnecter();

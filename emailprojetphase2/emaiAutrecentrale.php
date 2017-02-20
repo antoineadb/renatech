@@ -47,4 +47,10 @@ if (isset($_POST['integerspinner']) && !empty($_POST['integerspinner'])) {
 } else {
     $nbpersonnecentrale = 0;
 }
+
+$sMailCc='';
+for ($i = 0;$i < count($mailCC);$i++) {
+    $sMailCc.=$mailCC[$i].',';
+}
+$sMailCC = substr($sMailCc,0,-1);
 envoieEmail($body, $sujet, $maildestinataire, $mailDemandeur);

@@ -15,16 +15,16 @@ if (!empty($_POST['anneeExport'])) {
 } else {
     $anneeExport = date('Y'); //Année du jour si vide
 }
-$arrayidcentrale = $manager->getList2("select idcentrale from centrale where libellecentrale !=? order by idcentrale asc", 'Autres');
+$arrayidcentrale = $manager->getList2("select idcentrale from centrale where idcentrale !=? order by idcentrale asc", IDCENTRALEAUTRE);
 $nbidcentrale = count($arrayidcentrale);
 $z = 0;
 for ($i = 0; $i < $nbidcentrale; $i++) {
     $z++;
-    $donnee = array($arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, $anneeExport, REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE
-        , $arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE);
+    $donnee = array($arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, $anneeExport, REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport,
+        REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE);
     $manager->exeRequete("drop table if exists tmpcentrale" . $z . "");
 //CREATION DE LA TABLE TEMPORAIRE
-    $manager->getRequete("create table tmpcentrale" . $z . " as (SELECT  p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
+    $manager->getRequete("create table tmpcentrale" . $z . " as (SELECT p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
 u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
 u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
 u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
@@ -113,7 +113,7 @@ if ($ordreprojet == 0) {
 for ($i = 0; $i < $nbrow; $i++) {
     $idprojet = $row[$i]['idprojet'];
     include 'outils/communExport.php';
-    $data .= "" .
+    $data .= "" .            
             $titre . ";" .
             $ref . ";" .
             utf8_decode($devtechno) . ";" .

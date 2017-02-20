@@ -48,14 +48,26 @@ if (!empty($infodemandeur[0][0]['mailresponsable'])) {
 $CC = array_merge($arrayemailCC, $emailcentraledestinations); //CENTRALE DESTINATION
 $cc = array_merge($mailCC, $CC); //CENTRALE SOURCE
 $mailCC = array_unique($cc);
-$body = utf8_decode(str_replace("''", "'", stripslashes(affiche('TXT_MRSMR')))) . '<br><br>' . utf8_decode(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILTRSFPHASE20')))) . '<br><br>' .
-        utf8_decode(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE21')))) . " <a href='https://www.renatech.org/projet'>" . utf8_decode(str_replace("''", "'", stripslashes(affiche('TXT_FINSUJETMAILRESPONSABLE')))) . "</a>" .
-        '<br><br>' . htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILTRSFPHASE22')))) . '<br><br>' .
-        utf8_decode(str_replace("''", "'", stripslashes(affiche('TXT_RAPPELINSERTLOGO1')))) . '<br><br>' . utf8_decode(str_replace("''", "'", stripslashes(affiche('TXT_SINCERESALUTATION')))) . '<br><br>' . utf8_decode(str_replace("''", "'", stripslashes(affiche('TXT_RESEAURENATECH')))) .
+$body = utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_MRSMR7')))) . '<br><br>' . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_BODYEMAILTRSFPHASE20')))) . '<br><br>' .
+        utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_BODYEMAILPHASE21')))) . " <a href='https://www.renatech.org/projet'>" . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_FINSUJETMAILRESPONSABLE')))) . "</a>" .
+        '<br><br>' . htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_BODYEMAILTRSFPHASE22')))) . '<br><br>' .
+        utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_RAPPELINSERTLOGO1')))) . '<br><br>' . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_SINCERESALUTATION')))) . '<br><br>' . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_RESEAURENATECH')))) .
         '<br><br>' . utf8_decode(affiche('TXT_EMAILADDRESSCENTRAL')) . ' ' . utf8_decode($libellecentraledestination) . ' <br> ' . $emailCentrale . '<br><br>' .
         '<br><br><a href="https://www.renatech.org/projet">' . utf8_decode(TXT_RETOUR) . '<a>' . '<br><br>' .
-        utf8_decode(str_replace("''", "'", stripslashes(affiche('TXT_DONOTREPLY'))));
+        utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_DONOTREPLY'))));
 $EmailCC = array_values($mailCC); //Renumérotation des index
-envoieEmail($body, $sujet, $maildemandeur, $EmailCC); //envoie de l'email au responsable centrale et au copiste
+envoieEmail($body,  $sujet, $maildemandeur, $EmailCC); //envoie de l'email au responsable centrale et au copiste
+$numero = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+$sMailCc="";
+for ($i = 0; $i < count($mailCC); $i++) {
+    $sMailCc.=$mailCC[$i] . ',';
+}
+$sMailCC = substr($sMailCc, 0, -1);
+$nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+$idcentrale = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+createLogInfo(NOW, "Projet transféré à la centrale " . $libellecentraledestination . ' : E-mail demandeur: ' . $maildemandeur[0]. ' : ' . ' copie E-mail à  : ' . $sMailCC . ' : n°: ' . $numero, 'Demandeur: ' . $nomPrenomDemandeur[0]['nom'] .
+        ' ' . $nomPrenomDemandeur[0]['prenom'], removeDoubleQuote(TXT_ACCEPTE), $manager,$idcentrale);
+
+
 header('Location: /' . REPERTOIRE . '/transfered_project/' . $lang . '/' . $idprojet . '/' . $numprojet . '/' . $idcentrale);
 exit();

@@ -15,8 +15,7 @@ if (isset($_SESSION['pseudo'])) {
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
-include 'html/header.html';
-?>
+include 'html/header.html';?>
 <div id="global">
     <?php include 'html/entete.html'; ?>
     <div style="padding-top: 75px;">
@@ -39,10 +38,7 @@ include 'html/header.html';
         <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_VUESUIVIPROJETCENTRALE ?>" style="width: auto; height:500px;" >
             <?php require_once 'html/vueSuiviProjetCentraleUser.html'; ?>
         </div>
-            <?php }?>
-        <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_CONSULTPROJET ?>" style="width: auto; height:500px;" >
-            <?php require_once 'html/vueSuiviProjetEnCours.html'; ?>
-        </div>
+            <?php }?>        
         <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PROJETSENATTENTE ?>" style="width: auto; height:500px;" >
             <?php require_once 'html/vueSuiviProjetEnAttente.html'; ?>
         </div>

@@ -87,8 +87,8 @@ $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN calcfinprojet date;");
 $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN finprojetproche date;");
 $arrayprojet = $manager->getList("select * from tmptous");
 $nbarrayprojet = count($arrayprojet);
-for ($i = 0; $i < $nbarrayprojet; $i++) {
-    if($arrayprojet[$i]['idstatutprojet']!=ENATTENTE && $arrayprojet[$i]['idstatutprojet']!=ENCOURSANALYSE&& $arrayprojet[$i]['idstatutprojet']!=REFUSE&& $arrayprojet[$i]['idstatutprojet']!=FINI
+for ($i = 0; $i < $nbarrayprojet; $i++) {    
+      if($arrayprojet[$i]['idstatutprojet']!=REFUSE&& $arrayprojet[$i]['idstatutprojet']!=FINI          
             && $arrayprojet[$i]['idstatutprojet']!=CLOTURE&& $arrayprojet[$i]['idstatutprojet']!=ACCEPTE&& $arrayprojet[$i]['idstatutprojet']!=ENATTENTEPHASE2){
         if ($arrayprojet[$i]['idperiodicite_periodicite'] == JOUR) {
             $datedepart = strtotime($arrayprojet[$i]['datedebutprojet']);

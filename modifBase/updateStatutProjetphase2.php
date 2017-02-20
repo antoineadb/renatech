@@ -1,7 +1,8 @@
 <?php
+
 session_start();
 include_once '../outils/toolBox.php';
-showError($_SERVER['PHP_SELF']);
+showError($_SERVER['PHP_SELF']);// Activation des erreurs pour la dev et le test uniquememnt
 include_once '../class/Manager.php';
 include_once '../outils/constantes.php';
 include '../class/Securite.php';
@@ -14,25 +15,25 @@ if (!empty($_POST['page_precedente']) && $_POST['page_precedente'] == 'modifProj
     $numprojet = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
     $idutilisateur = $_SESSION['idutilisateur'];
     $idcentrale = $manager->getSingle2("select idcentrale_centrale from utilisateur where idutilisateur =?", $idutilisateur);
-    if (empty($_POST['comment']) && $_POST['statutProjet'] == REFUSE) {
-        header('Location: /' . REPERTOIRE . '/RefusedProject/' . $lang . '/' . $idprojet . '/' . $numprojet . '/' . $idcentrale . '/' . rand(0, 100000));
-        exit();
-    } else {
+    if (!empty($_POST['comment']) && $_POST['statutProjet'] == REFUSE) {        
         $commentaire = $_POST['comment'];
-    }
+    }else{
+        $commentaire = TXT_NOCOMMENT;
+    }  
 //Récupération de l'idcentrale --> L'utilisateur qui peut changer le statut est forcément un responsable de centrale
     $_SESSION['idcentrale'] = $idcentrale;
     $idstatutprojet = (int) $_POST['statutProjet'];
     $_SESSION['idstatutprojet'] = $idstatutprojet;
     $concerne = new Concerne($idcentrale, $idprojet, $idstatutprojet, $commentaire);
     $manager->addConcerne($concerne);
-    checkConcerne($idprojet,	$idcentrale,	$idstatutprojet);//On efface l'affectation de toutes les centrales pour le projet en cours    
+   
+    checkConcerne($idprojet,	$idcentrale,	$idstatutprojet);//ON EFFACE LES EVENTUELS DOUBLONS POUR LA CENTRALE SELECTIONNEE
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 //			ACCEPTE
-//------------------------------------------------------------------------------------------------------------------------------------------------------    
+//------------------------------------------------------------------------------------------------------------------------------------------------------            
     if ($idstatutprojet == ACCEPTE) {
         $manager->updateConcerne($concerne, $idprojet); //mise à jour du statut du projet
-        checkConcerne($idprojet,	$idcentrale,	ACCEPTE);//PROJET ACCEPTE POUR EXPERTISE DANS LA CENTRALE        
+        checkConcerne($idprojet,$idcentrale,ACCEPTE);//PROJET ACCEPTE POUR EXPERTISE DANS LA CENTRALE        
         //SI LE PROJET CONCERNE PLUS DE UNE CENTRALE
         $nbcentrale = $manager->getSingle2("select count(idcentrale_centrale) from concerne where idprojet_projet=?", $idprojet);
         if ($nbcentrale > 1) {            
@@ -40,6 +41,7 @@ if (!empty($_POST['page_precedente']) && $_POST['page_precedente'] == 'modifProj
         } else {
             include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
             header('Location: /' . REPERTOIRE . '/accepted_project/' . $lang . '/' . $idprojet . '/' .ACCEPTE.'/'. $numprojet );
+            exit();
         }
 
 
@@ -71,22 +73,22 @@ if (!empty($_POST['page_precedente']) && $_POST['page_precedente'] == 'modifProj
             $manager->updateDateStatutRefuser($daterefus, $idprojet, $value[0]);
         }
         //MISE A JOUR DE LA CENTRALE AFFECTE
-        $centraleaffecte = new Concerne($idcentrale, $idprojet, ENCOURSANALYSE, TXT_PROJETTRANSFERT . '<br>' . $commentaire);        
+        $centraleaffecte = new Concerne($idcentrale, $idprojet, ACCEPTE, TXT_PROJETTRANSFERT . '<br>' . $commentaire);        
         $manager->addConcerne($centraleaffecte);
         include '../EmailProjetphase2.php';
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 //			EN ATTENTE
 //------------------------------------------------------------------------------------------------------------------------------------------------------
-    } elseif ($idstatutprojet == ENATTENTE) {
+    }elseif ($idstatutprojet == ENATTENTEPHASE2) {
         if (isset($_POST['comment'])) {
-            $comment = $_POST['comment'];
-            $_SESSION['comment'] = $comment;
+            $comment = $_POST['comment'];            
         } else {
-            $comment = '';
+            $comment = TXT_NOCOMMENT;
         }
+        $_SESSION['comment'] = $comment;
         $rowidcentrale = $manager->getList2("select idcentrale_centrale from concerne where idprojet_projet =?  ", $idprojet);
         foreach ($rowidcentrale as $key => $value) {
-            $centraleenattente = new Concerne($value[0], $idprojet, ENATTENTE, $comment);
+            $centraleenattente = new Concerne($value[0], $idprojet, ENATTENTEPHASE2, $comment);
             $manager->updateConcerne($centraleenattente, $idprojet);
         }
         include '../EmailProjetphase2.php';

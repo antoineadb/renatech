@@ -20,7 +20,7 @@ include 'html/header.html';
                                         <span style="text-align: left;padding:10px;width: 240px;border-radius:5px" >
                                             <?php echo TXT_SUPPRESSIONPROJET;?></span></a> </legend>
         
-        <div style="   height: 30px;margin-top: -5px;text-align: center;width: auto;" ><?php echo TXT_PROJETSENATTENTE.' - '.TXT_PROJETSENATTENTEPHASE2. ' - '.TXT_PROJETSACCEPTE.' - '.TXT_CONSULTPROJET ;?></div>
+        <div style="   height: 30px;margin-top: -5px;text-align: center;width: auto;" ><?php echo TXT_PROJETSENATTENTEPHASE2. ' - '.TXT_PROJETSACCEPTE;?></div>
     <?php 
             if(isset($_GET['idprojet'])){
                 $numero = $manager->getSingle2("select numero from projet where idprojet=?",$_GET['idprojet']);?><div style="margin-left:350px;"><?php echo TXT_PROJETNUM.' '.$numero.' '.TXT_RESTORED ;?></div> 

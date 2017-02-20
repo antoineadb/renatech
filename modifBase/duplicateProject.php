@@ -105,6 +105,11 @@ if (isset($_GET['idprojet']) && !empty($_GET['idprojet'])) {
     $manager->updateProjetphase2($projetPhase2, $newIdProjet);
 }
 $videCache->clear();
+$numProjet = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
+$idcentrale = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+$nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+createLogInfo(NOW, "Duplication du projet n° " . $numProjet . ' : ,nouveau n° '.$numero.'  demandeur ', $nomPrenomDemandeur[0]['nom'] .' ' . $nomPrenomDemandeur[0]['prenom'], TXT_ENATTENTEPHASE2, $manager,$idcentrale);
+
 if ($_SESSION['idTypeUser'] == ADMINLOCAL) {
     header('Location: /' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang);
 } else {

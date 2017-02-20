@@ -25,4 +25,5 @@ class LoginPassword {
     public function getPseudo() {
         return $this->_pseudo;
     }
+
 }

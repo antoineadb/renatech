@@ -61,17 +61,7 @@ if (!empty($resreport[0]['results'])) {
 }
 
 if (!empty($resreport[0]['valorization'])) {
-    $arrayCar = array('à', 'û', '–', 'è');
-    $arrayCarcorrige = array('à', 'û', '-', 'è');
-    $tabCar = array("\r");
-    $valorization0 = filterEditor(stripTaggsbr(str_replace("é", "é", $resreport[0]['valorization'])));
-    $valorization1 = str_replace("ç", "ç", $valorization0);
-    $valorization2 = str_replace($tabCar, array(), $valorization1);
-    $valorization3 = ltrim(rtrim(str_replace(array(chr(13)), '', $valorization2)));
-    $valorization4 = str_replace($arrayCar, $arrayCarcorrige, $valorization3);
-    $valorization5 = str_replace('€', utf8_encode(chr(128)), $valorization4);
-    $valorization6 = (stripslashes(str_replace("''", "'", $valorization5)));
-    $valorization = substr($valorization6, 0, 800);
+    $valorization = $resreport[0]['valorization'];    
 } else {
     $valorization = '';
 }
@@ -123,7 +113,7 @@ $height = $w[1];
     <br><br>
     <table  align="center" style="margin-top: -30px">
         <tr>
-            <td><?php echo removeDoubleQuote($title); ?></td>        
+            <td><?php echo removeDoubleQuote($title); ?></td>    
         </tr>
     </table>    
     <hr>
@@ -184,8 +174,8 @@ $height = $w[1];
                         $y = sizeLogo($arrayInfoImg,185);
                         $width2 = $y[0];
                         $height2 = $y[1];
-                ?>
-                 <img   align="left"  src="<?php echo $figure; ?>"  height="<?php echo $height2; ?>" width="<?php echo $width2; ?>">
+                ?>               
+                 <img  align="left" height="<?php echo $height2; ?>" width="<?php echo $width2; ?>" src="<?php echo $figure; ?>" >
             <?php   } ?>
             </td>
         </tr>
@@ -208,8 +198,9 @@ $height = $w[1];
 <?php
 $content = ob_get_clean();
 include_once '../html2pdf/html2pdf.class.php';
-try {
+try {    
     $pdf = new HTML2PDF('P', 'A4', 'en');
+    $pdf->setDefaultFont('times');
     $pdf->pdf->SetDisplayMode('fullpage');
     $pdf->writeHTML($content);
     $pdf->Output('report.pdf');

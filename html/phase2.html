@@ -390,10 +390,10 @@ $date  = $date->format('d-m-Y');
             ?>
             <input type="text" value='<?php if(!empty($s_collaborator)){ echo $s_collaborator;} ?>' style="display: none" id='collaborators'>
             <input type="text" value='<?php if(!empty($stringRessource)){ echo $stringRessource;} ?>' style="display: none" id='technicalworks'>            
-        <table>
+            <table style="margin-top: 10px">
             <tr>
                 <td>
-                    <label for="porteurProjet"  style="width: 350px;margin-left: 20px;margin-top:15px"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?></label>
+                    <label for="porteurProjet"  style="width: 445px;margin-left: 20px;"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?></label>
                 </td>
                 <td>
                     <?php if($porteurProjet=='TRUE'){?>
@@ -413,7 +413,7 @@ $date  = $date->format('d-m-Y');
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet" value="FALSE" checked="checked"  class="btRadio" disabled="<?php echo $bool; ?>"
                            onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '')">
                     <?php echo TXT_NON;?>
-                    </tr>
+                    </tr>                    
                 <tr>
                 <td>
                     <label id='msgporteurProjet' style="width: 350px;margin-left:20px;display: block;"  ><?php echo TXT_MSGPORTEURPROJET ?></label>
@@ -424,7 +424,7 @@ $date  = $date->format('d-m-Y');
         <input id="reponsenomlabo" value='' style="display: none" >
         <fieldset id="dev" style="border-color: #5D8BA2;width:966px;padding-top: 0px;margin-top:20px;margin-left: 20px;padding-left:0px;">
             <legend style="margin-left: 20px;"><?php echo TXT_PARTENAIRE;?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
-            <span style="text-align: left;padding:10px;width: 700px;border-radius:5px" >
+            <span style="text-align: left;padding:10px;width: 290px;border-radius:5px" >
                  <?php //MISE EN CACHE DES AIDES
                             if(!$aidepartenaireprojet=$Cache->read('aidepartenaireprojet')){
                                 $aidepartenaireprojet=affiche('TXT_AIDEPARTENAIREPROJET') ;

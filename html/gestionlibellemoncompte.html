@@ -1,0 +1,556 @@
+<?php
+$db = BD::connecter();
+$manager = new Manager($db);
+if (isset($_GET['erreur'])){
+echo $_GET['erreur'];
+}
+?>
+
+<script>
+    function enabledmodif() {
+        dijit.byId("modifmoncompte").setAttribute('disabled', false);
+    }
+</script>
+<?php
+if(isset($_GET['msgupdate'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msgencours' >
+                <?php echo TXT_MSGUPDATELIBELLE; ?>
+            </fieldset>
+
+        </td>
+    </tr>
+</table>
+<?php }?>
+<form data-dojo-type="dijit/form/Form" method="post" name="moncompteedit" id="moncompteedit" 	action="modifBase/updatelibellemoncompte.php">
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+    <legend style="color: #5D8BA2;text-align: center;width:885px;height:30px;font-weight: bold"><b><?php echo TXT_PARTIEACA ;?></b></legend>
+    <table>
+        <tr>
+            <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                    <?php echo TXT_FRANCAIS;?></div></td>
+            <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                    <?php echo TXT_ANGLAIS;?></div></td>
+        </tr>
+        <tr>
+            <td valign="middle" style="width:450px">
+                <?php
+                $pseudofr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_PSEUDO'))); 																		
+                $pseudoen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_PSEUDO')));
+                ?>
+                <input data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $pseudofr; ?>"				onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  id="pseudolibedit" name="pseudolibedit"
+                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-]+'" >
+            </td>
+            <td valign="middle" style="width:450px">
+                <input data-dojo-type="dijit/form/ValidationTextBox"		onfocus="enabledmodif()"
+                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-]+'"
+                       value="<?php echo $pseudoen; ?>"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  id="pseudoenlibedit" name="pseudoenlibedit"  >
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle" >
+                <?php
+                $mailfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_MAIL')));
+                $mailen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_MAIL')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $mailfr; ?>"		onfocus="enabledmodif()"
+                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-]+'"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='maillibedit' name='maillibedit'>
+            </td>
+            <td valign="middle" >
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $mailen; ?>" onfocus="enabledmodif()"
+                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-]+'"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='mailenlibedit' name='mailenlibedit' >
+            </td>
+
+        </tr>
+        <tr>
+            <td valign="middle" >
+                <?php
+                $nomfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_NOM')));
+                $nomen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_NOM')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomfr; ?>"			onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='nomlibedit' name='nomlibedit' >
+            </td>
+            <td valign="middle" >
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomen; ?>"			onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='nomlibediten' name='nomenlibedit'>
+            </td>
+        </tr>
+        <td valign="middle" >
+            <?php
+            $prenomfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+            where reflibelle=?', 'TXT_PRENOM')));
+            $prenomen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+            where reflibelle=?', 'TXT_PRENOM')));
+            ?>
+            <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                   value="<?php echo $prenomfr; ?>"			onfocus="enabledmodif()"
+                   style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='prenomlibedit' name='prenomlibedit'>
+        </td>
+        <td valign="middle" >
+            <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                   value="<?php echo $prenomen; ?>"			onfocus="enabledmodif()"
+                   style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='prenomlibediten' name='prenomenlibedit' >
+        </td>
+        </tr>
+        <tr>
+            <td valign="middle" >
+                <?php
+                $adressefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_ADRESSE')));
+                $adresseen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_ADRESSE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $adressefr; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='adresselibedit' name='adresselibedit'>
+            </td>
+            <td valign="middle" >
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $adresseen; ?>"		name='adresseenlibedit'  onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='adresseenlibedit' >
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle" >
+                <?php
+                $codepostalfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_CP')));
+                $codepostalen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_CP')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $codepostalfr; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='cplibedit' name='cplibedit'>
+            </td>
+            <td valign="middle" >
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $codepostalen; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='cpenlibedit' name='cpenlibedit' >
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle" >
+                <?php
+                $villefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_VILLE')));
+                $villeen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_VILLE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $villefr; ?>"	onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='villelibedit' name='villelibedit'>
+            </td>
+            <td valign="middle" >
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $villeen; ?>"	onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='villeenlibedit' name='villeenlibedit' >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $paysfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_PAYS')));
+                $paysen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_PAYS')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $paysfr; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='payslibedit' name='payslibedit'	>
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $paysen; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='paysenlibedit' name='paysenlibedit' >
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle">
+                <?php
+                $telfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_TELEPHONE')));
+                $telen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_TELEPHONE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $telfr; ?>"			onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='tellibedit' name='tellibedit' >
+                </a>
+            </td>
+            <td valign="middle">
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $telen; ?>"			onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='telenlibedit' name='telenlibedit' >
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle" >
+                <?php
+                $faxfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_FAX')));
+                $faxen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_FAX')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo TXT_FAX; ?>"
+                       value="<?php echo $faxfr; ?>"			onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='faxlibedit' name='faxlibedit'>
+            </td>
+            <td valign="middle" >
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo TXT_FAX; ?>"
+                       value="<?php echo $faxen; ?>"			onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='faxenlibedit' name='faxenlibedit' >
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle" >
+                <?php
+                $nomentlabofr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_NOMENTELABO')));
+                $nomentlaboen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_NOMENTELABO')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomentlabofr; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='nomentlibedit' name='nomentlibedit' >
+            </td>
+            <td valign="middle" >
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomentlaboen; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='nomentenlibedit' name='nomentenlibedit'>
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle" >
+                <?php
+                $qualitefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_QUALITE')));
+                $qualiteen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_QUALITE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $qualitefr; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='qualitelibedit' name='qualitelibedit'
+                       >
+            </td>
+            <td valign="middle" >
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $qualiteen; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='qualiteenlibedit' name='qualiteenlibedit'>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $nomrespfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_NOMRESPONSABLE')));
+                $nomrespen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_NOMRESPONSABLE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomrespfr; ?>"		onfocus="enabledmodif()"
+                       id='nomresplibedit' name='nomresplibedit' style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" >
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomrespen; ?>"		onfocus="enabledmodif()"
+                       id='nomrespenlibedit' name='nomrespenlibedit' style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $nomrespmailfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_RESPMAILMAIL')));
+                $nomrespmailen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_RESPMAILMAIL')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomrespmailfr; ?>"	onfocus="enabledmodif()"
+                       id='mailresplibedit' name='mailresplibedit' style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px">
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomrespmailen; ?>"	onfocus="enabledmodif()" 
+                       id='mailrespenlibedit' name='mailrespenlibedit' style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px">
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle">
+                <?php
+                $tutellefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_TUTELLE')));
+                $tutelleen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_TUTELLE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $tutellefr; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='tutellelibedit' name='tutellelibedit' >
+            </td>
+            <td valign="middle">
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $tutelleen; ?>"		onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='tutelleenlibedit' name='tutelleenlibedit'>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $autretutellefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_AUTRETUTELLE')));
+                $autretutelleen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_AUTRETUTELLE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $autretutellefr; ?>"			onfocus="enabledmodif()" name='autretutellelibedit'
+                       id='autretutellelibedit'  style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" >
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $autretutelleen; ?>"			onfocus="enabledmodif()" id='autretutelleenlibedit'
+                       name='autretutelleenlibedit' style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $codeunitefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_CODEUNITE')));
+                $codeuniteen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_CODEUNITE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $codeunitefr; ?>" name='codeunitelibedit' onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='codeunitelibedit' >
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $codeuniteen; ?>"			name='codeuniteenlibedit' onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='codeuniteenlibedit' >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $autrecodeunitefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_AUTRECODEUNITE')));
+                $autrecodeuniteen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_AUTRECODEUNITE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $autrecodeunitefr; ?>"	id='autrecodeunitelibedit' onfocus="enabledmodif()"
+                       name='autrecodeunitelibedit' style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" >
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $autrecodeuniteen; ?>"				id='autrecodeuniteenlibedit'		onfocus="enabledmodif()"
+                       name='autrecodeuniteenlibedit' style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $disciplinefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_DISCIPLINESCIENTIFIQUE')));
+                $disciplineen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_DISCIPLINESCIENTIFIQUE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $disciplinefr; ?>"		onfocus="enabledmodif()"			name='disciplinelibedit'
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='disciplinelibedit'>
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $disciplineen; ?>"		name='disciplineenlibedit' onfocus="enabledmodif()"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='disciplineenlibedit' >
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <?php
+                $autredisciplinefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_AUTREDISCIPLINE')));
+                $autredisciplineen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_AUTREDISCIPLINE')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $autredisciplinefr; ?>"			id='autredisciplinelibedit'			onfocus="enabledmodif()"
+                       name='autredisciplinelibedit' style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" >
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $autredisciplineen; ?>"	id='autredisciplineenlibedit' name='autredisciplineenlibedit'
+                       onfocus="enabledmodif()"	style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $nomresponsablefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_NOMRESPONSABLE')));
+                $nomresponsableen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_NOMRESPONSABLE')));
+                ?>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"
+                       name="nomresponsablelibedit" id="nomresponsablelibedit" data-dojo-type="dijit/form/ValidationTextBox" onfocus="enabledmodif()"
+                       value="<?php echo $nomresponsablefr; ?>"  >
+            </td>
+            <td>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"
+                       name="nomresponsableenlibedit" id="nomresponsableenlibedit" data-dojo-type="dijit/form/ValidationTextBox" onfocus="enabledmodif()"
+                       value="<?php echo $nomresponsableen; ?>" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $nomresponsablemailfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_RESPMAILMAIL')));
+                $nomresponsablemailen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_RESPMAILMAIL')));
+                ?>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"
+                       name="mailresponsablelibeedit" id="mailresponsablelibeedit" data-dojo-type="dijit/form/ValidationTextBox" onfocus="enabledmodif()"
+                       value="<?php echo $nomresponsablemailfr; ?>" >
+            </td>
+            <td>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"		onfocus="enabledmodif()"
+                       name="mailresponsableenlibeedit" id="mailresponsableenlibeedit" data-dojo-type="dijit/form/ValidationTextBox" 
+                       value="<?php echo $nomresponsablemailen; ?>" >
+            </td>
+        </tr>
+        <tr>
+            <td>	<?php
+                $nomemployeurfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_RESPMAILMAIL')));
+                $nomemployeuren =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_RESPMAILMAIL')));
+                ?>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"				onfocus="enabledmodif()"
+                       value="<?php echo $nomemployeurfr; ?>"
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px" id='nomemployeurlibedit'
+                       name='nomemployeurlibedit' onfocus="enabledmodif()">
+            </td>
+            <td>
+                <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
+                       value="<?php echo $nomemployeuren; ?>"			id='nomemployeurenlibedit'	onfocus="enabledmodif()" 
+                       style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  name='nomemployeurenlibedit' >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $autreemployeurfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_AUTREEMPLOYEUR')));
+                $autreemployeuren =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_AUTREEMPLOYEUR')));
+                ?>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="autreemployeurlibedit" 
+                       id="autreemployeurlibedit" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $autreemployeurfr; ?>"
+                       onfocus="enabledmodif()" >
+            </td>
+            <td>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="autreemployeurenlibedit" 
+                       id="autreemployeurenlibedit" data-dojo-type="dijit/form/ValidationTextBox"			value="<?php echo $autreemployeuren; ?>"
+                       onfocus="enabledmodif()">
+            </td>
+        </tr>
+    </table>
+
+    <legend style="color: #5D8BA2;margin-top:25px;text-align: center;width:885px;height:30px;font-weight: bold"><b>
+            <?php echo TXT_PARTIEINDUST ;?></b>
+    </legend>
+    <table>
+        <tr>
+            <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                    <?php echo TXT_FRANCAIS;?></div></td>
+            <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                    <?php echo TXT_ANGLAIS;?></div></td>
+        </tr>
+        <tr>
+            <td valign="middle" style="width:450px">
+                <?php
+                $nomentreprisefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_NOMENTREPRISE')));
+                $nomentrepriseen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_NOMENTREPRISE')));
+                ?>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="nomentrepriselibedit" 
+                       id="nomentrepriselibedit" data-dojo-type="dijit/form/ValidationTextBox"			value="<?php echo $nomentreprisefr; ?>"
+                       onfocus="enabledmodif()"  >
+            </td>
+            <td valign="middle" style="width:450px">
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="nomentrepriseenlibedit" 
+                       id="nomentrepriseenlibedit" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $nomentrepriseen; ?>"
+                       onfocus="enabledmodif()" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $typeentreprisefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_TYPEENTREPRISE')));
+                $typeentrepriseen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_TYPEENTREPRISE')));
+                ?>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="typeentrepriselibedit" 
+                       id="typeentrepriselibedit" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $typeentreprisefr; ?>"
+                       onfocus="enabledmodif()" >
+            </td>
+            <td>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="typeentrepriseenlibedit" 
+                       id="typeentrepriseenlibedit" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $typeentrepriseen; ?>"
+                       onfocus="enabledmodif()">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php
+                $secteuractivitefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                where reflibelle=?', 'TXT_SECTEURACTIVITE')));
+                $secteuractiviteen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                where reflibelle=?', 'TXT_SECTEURACTIVITE')));
+                ?>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="secteuractivitelibedit" 
+                       id="secteuractivitelibedit" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $secteuractivitefr; ?>"
+                       onfocus="enabledmodif()" >
+            </td>
+            <td>
+                <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="secteuractiviteenlibedit" 
+                       id="secteuractiviteenlibedit" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $secteuractiviteen; ?>"
+                       onfocus="enabledmodif()" >
+            </td>
+        </tr>
+    </table>
+
+    <br>						
+    <p style="font-size: x-small;margin-left:40px">
+        <?php echo TXT_CHAMPSOBLIGATOIRES;?>
+    </p>
+    <p>
+        <input style="text-align: left;height:30px;width:340px;margin-left:40px"  type="submit" id ="modifmoncompte" name="modifmoncompte"
+               label="<?php echo TXT_MODIFIER ;?>" id="Envoyer"  data-dojo-type="dijit/form/Button"
+               disabled="disabled"				>
+    </p>
+</form>
+
+<?php BD::deconnecter(); ?>

@@ -14,34 +14,56 @@ if (isset($_SESSION['pseudo'])) {
 include 'html/header.html';
 ?>
 
-<div id="global">
+<div id="global" style="width:1050px">
     <?php include 'html/entete.html'; ?>
     <div style="margin-top: 70px;">
         <?php include_once 'outils/bandeaucentrale.php'; ?>
     </div>
-    <div style="margin-top:40px;width:1050px" >
-        <form  method="post" action="<?php echo '/' . REPERTOIRE ?>/exportUser.php?lang=<?php echo $lang; ?>" id='exportuser' name='exportuser' onsubmit="if(document.getElementById('msgerreur')){document.getElementById('msgerreur').style.display='none'}">
-            <fieldset id="ident" style="border-color: #5D8BA2;width: 1008px;padding-bottom:30px;padding-top:10px;font-size:1.2em" >
-                <?php
-                $idtypeuser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
-                if ($idtypeuser == ADMINLOCAL) {
-                    ?>
+                <fieldset id="idExportUser" style="border-color: #5D8BA2;padding-bottom:30px;padding-top:10px;font-size:1.2em" >
+                <?php                
+                if (IDTYPEUSER == ADMINLOCAL) {?>
                     <legend><?php echo TXT_USERCENTRALE; ?></legend>
-                <?php } elseif ($idtypeuser == ADMINNATIONNAL) { ?>
-                    <legend><?php echo TXT_TOUSUSER; ?></legend>
-<?php } ?>
-                <table>
-                    <tr><td><br></td></tr>
-                    <tr><td>
+                <?php } elseif (IDTYPEUSER == ADMINNATIONNAL) { ?><legend><?php echo TXT_TOUSUSER; ?></legend><?php } ?>
+                <form  method="post" action="<?php echo '/' . REPERTOIRE ?>/exportUser.php?lang=<?php echo $lang; ?>" id='exportuser' name='exportuser' onsubmit="if(document.getElementById('msgerreur')){document.getElementById('msgerreur').style.display='none'}">                
+                <table id="tbexportUser">
+                    <tr>
+                        <td>
                             <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueinterne' name='academiqueinterne' checked>
                             <label for='academiqueinterne' class='opt' ><?php echo TXT_ACADEMIQUEINTERNE; ?></label>
-                            <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne'>
+                        <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne'>
                             <label for='academiqueexterne' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
+                
                             <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true"  >
-                            <label for='industriel' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
-                            <button type="submit" data-dojo-type="dijit/form/Button" ><?php echo TXT_EXPORTUTILISATEUR; ?></button>
+                            <label for='industriel' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>                            
+                        </td>
+                    </tr>
+                    <tr><td>    <button type="submit" data-dojo-type="dijit/form/Button" style="margin-top: 20px"><?php echo TXT_EXPORTUTILISATEUR; ?></button></td></tr>
                 </table>															
-<?php if (isset($_GET['msgerr'])) { ?>
+
+                </form>
+            
+        
+    
+        
+            <fieldset id="idexportUser"> <legend><?php echo TX_CENTRALEUSER; ?></legend>
+                <form  method="post" action="<?php echo '/' . REPERTOIRE ?>/exportUserCentrale.php?lang=<?php echo $lang; ?>" id='exportUserCentrale' name='exportuser' >
+                <table>
+                    <tr><td><br></td></tr>
+                    <tr><td>                            
+                            <label for='personnecentrale' class='opt' ><?php echo TXT_PERSONCENTRALE; ?></label>
+                    </tr>
+                    <tr >
+                        <td>
+                            <button type="submit" data-dojo-type="dijit/form/Button" style="margin-top: 20px" ><?php echo TXT_EXPORTER; ?></button>
+                        </td>
+                    </tr>
+                </table>															
+                    </form> 
+            </fieldset>
+
+               
+    </fieldset>
+    <?php if (isset($_GET['msgerr'])) { ?>
                     <table id="msgerreur">
                         <tr>
                             <td>
@@ -50,9 +72,6 @@ include 'html/header.html';
                         </tr>
                     </table>
             <?php } ?>
-            </fieldset>
-<?php include 'html/footer.html'; ?>
-        </form>
-    </div>
+    <?php include 'html/footer.html'; ?>
 </div>
 

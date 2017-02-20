@@ -21,5 +21,16 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'modifProje
             htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_RESPONSABLEBODYTEMAIL10'))), ENT_QUOTES, 'UTF-8') . ' ' . htmlentities($centrale, ENT_QUOTES, 'UTF-8') . '<br>' . $emailCentrale . '<br><br>' .
             '<a href="https://www.renatech.org/projet">' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>      ' .
             htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8') . '<br><br>';
+    
+    $sMailCc = '';
+    for ($i = 0; $i < count($mailCC); $i++) {
+        $sMailCc.=$mailCC[$i] . ',';
+    }
+    $sMailCC = substr($sMailCc, 0, -1);
+    $centrale = $manager->getSingle2("SELECT libellecentrale FROM concerne,centrale WHERE idcentrale = idcentrale_centrale and idprojet_projet=?", $idprojet);
+    $nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);
+    $idcentrale = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+    createLogInfo(NOW, 'Projet soumis dans la centrale ' . $centrale . ' : E-mail demandeur: ' . $maildemandeur[0] . ' : ' . ' E-mail copie : ' . $sMailCC . ' : n°: ' . $numprojet, 'Demandeur: ' . $nomPrenomDemandeur[0]['nom'] .
+            ' ' . $nomPrenomDemandeur[0]['prenom'], TXT_ACCEPTE, $manager,$idcentrale);
     envoieEmail($body, $sujet, $maildemandeur, $mailCC); //envoie de l'email au responsable centrale et au copiste
 }

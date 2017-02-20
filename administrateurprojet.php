@@ -63,8 +63,8 @@ include 'html/header.html';
                         </td>
                     <tr>
                 </table>
-            <?php } ?>
-<?php if (!empty($_GET['update'])) { ?>
+            <?php }?>
+<?php if (!empty($_GET['idutilisateur'])) { ?>
                 <br>
                 <table>
                     <tr>

@@ -56,8 +56,8 @@ include 'html/header.html';
                                      ?>
                         </select>
                         <?php 
-                            if($_SESSION['idTypeUser']==ADMINNATIONNAL){ 
-                            $libellecentrale = $manager->getList("select idcentrale,libellecentrale from centrale where libellecentrale!='Autres' order by libellecentrale asc");
+                            if($_SESSION['idTypeUser']==ADMINNATIONNAL){                             
+                            $libellecentrale = $manager->getListbyArray("select idcentrale,libellecentrale from centrale where idcentrale!=? and masquecentrale!=? order by libellecentrale asc",array(IDCENTRALEAUTRE,TRUE)); 
                             ?>
                             <select id="centrale" name="centrale" data-dojo-type="dijit/form/FilteringSelect" style="width:240px;height:25px;font-size:1.2em;margin-right: 20px;margin-left: 20px"
                                     data-dojo-props="  value: '' , placeHolder: '<?php echo TXT_SELECTCENTRALE; ?>',required:'required'" >

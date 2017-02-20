@@ -70,8 +70,8 @@
         }
         $param=array($mail,$pseudo);
         $identite = $manager->getListbyArray("SELECT u.idutilisateur,u.nom,u.prenom,u.adresse,u.ville, u.telephone, u.fax, u.codepostal,u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.nomresponsable,
-        u.mailresponsable,u.idqualitedemandeuraca_qualitedemandeuraca,u.entrepriselaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,idemployeur_nomemployeur,iddiscipline_disciplinescientifique
-        ,nomentreprise,idautrenomemployeur_autrenomemployeur   FROM loginpassword l, utilisateur u WHERE u.idlogin_loginpassword = l.idlogin AND   l.mail =? AND l.pseudo =?",$param);
+        u.mailresponsable,u.idqualitedemandeuraca_qualitedemandeuraca,u.entrepriselaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,u.idemployeur_nomemployeur,u.iddiscipline_disciplinescientifique
+        ,u.nomentreprise,u.idautrenomemployeur_autrenomemployeur,l.nomequipe   FROM loginpassword l, utilisateur u WHERE u.idlogin_loginpassword = l.idlogin AND   l.mail =? AND l.pseudo =?",$param);
 
         $nom = $identite[0]['nom'];
         $prenom = $identite[0]['prenom'];
@@ -85,6 +85,7 @@
         $nomresponsable = $identite[0]['nomresponsable'];
         $mailresponsable = $identite[0]['mailresponsable'];
         $entrepriselaboratoire = $identite[0]['entrepriselaboratoire'];
+        $nomequipe = $identite[0]['nomequipe'];
         $idqualitedemandeuraca= $identite[0]['idqualitedemandeuraca_qualitedemandeuraca'];
         $idqualitedemandeurindust =$identite[0]['idqualitedemandeurindust_qualitedemandeurindust'];
         $nomentreprise = $identite[0]['nomentreprise'];
@@ -129,14 +130,13 @@
                     </td><td></td>
                     <td>
                         <?php
-                        if(!empty($nom)){$nom =stripslashes(str_replace("''","'",$nom));}else{
-                        $nom =stripslashes(str_replace("''","'",$_SESSION['nom']));
+                        if(!empty($nom)){$nom =stripslashes(removeDoubleQuote($nom));}else{
+                        $nom =stripslashes(removeDoubleQuote($_SESSION['nom']));
                         }
                         ?>
                         <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="nom" id="nom"
                                data-dojo-type="dijit/form/ValidationTextBox" value="<?php if(!empty($nom)){echo $nom;}else{echo $_SESSION['nom'];}?>"
-                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð_ ,\.\'\-]+'"
-                               onfocus="enabledmodif()" >
+                               data-dojo-props="<?php echo REGEX_TYPESTRING; ?>" onfocus="enabledmodif()" >
                     </td>
                 </tr>
                 <tr>
@@ -147,13 +147,12 @@
                     <td>
                         <?php
                         if(!empty($prenom)){$prenom =stripslashes(str_replace("''",	"'",$prenom));}else{
-                        $prenom =stripslashes(str_replace("''","'",$_SESSION['prenom']));
+                        $prenom =stripslashes(removeDoubleQuote($_SESSION['prenom']));
                         }
                         ?>
                         <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="prenom"
                                id="prenom" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $prenom;?>"
-                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð_ ,\.\'\-]+'"
-                               onfocus="enabledmodif()" >
+                               data-dojo-props="<?php echo REGEX_TYPESTRING; ?>" onfocus="enabledmodif()" >
                     </td>
                 </tr>
                 <tr>
@@ -163,14 +162,14 @@
                     <td>
                         <?php
                         if(!empty($adresse)){
-                        $adresse =stripslashes(str_replace("''","'",$adresse));
+                            $adresse =stripslashes(removeDoubleQuote($adresse));
                         }else{
-                        $adresse =stripslashes(str_replace("''","'",$_SESSION['adresse']));
+                            $adresse =stripslashes(removeDoubleQuote($_SESSION['adresse']));
                         }
                         ?>
                         <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="adresse"
                                id="adresse" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $adresse;?>"
-                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\'\-]+'"
+                               data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '"                               
                                onfocus="enabledmodif()" >
                     </td>
                 </tr>
@@ -182,9 +181,9 @@
                     <td>
                         <?php
                         if(!empty($cp)){
-                        $cp =stripslashes(str_replace("''","'",$cp));
+                        $cp =stripslashes(removeDoubleQuote($cp));
                         }else{
-                        $cp= stripslashes(str_replace("''","'",$_SESSION['cp']));
+                        $cp= stripslashes(removeDoubleQuote($_SESSION['cp']));
                         }
                         ?>
                         <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="cp" id="cp"
@@ -198,8 +197,8 @@
                     </td><td></td>
                     <td>
                         <?php
-                        if(!empty($ville)){$ville =stripslashes(str_replace("''",	"'",	$ville));}else{
-                        $ville =stripslashes(str_replace("''",	"'",	$_SESSION['ville']));
+                        if(!empty($ville)){$ville =stripslashes(removeDoubleQuote($ville));}else{
+                            $ville =stripslashes(removeDoubleQuote($_SESSION['ville']));
                         }
                         ?>
                         <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="ville" id="ville"	data-dojo-type="dijit/form/ValidationTextBox"  value="<?php echo $ville; ?>"
@@ -231,9 +230,7 @@
                     <td><input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="tel" id="tel"  required="required"
                                data-dojo-type="dijit/form/ValidationTextBox"
                                value="<?php if(!empty($tel)){echo $tel;}else{echo $_SESSION['tel'];} ?>"  onfocus="enabledmodif()"
-                               data-dojo-props="maxLength:'20',regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9-+ ,\()\/\.\']+',
-                               invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '"
-                               autocomplete="on" >
+                               data-dojo-props="maxLength:'20',<?php echo REGEX_TEL;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '" autocomplete="on" >
                     </td>
                 </tr>
                 <tr>
@@ -244,10 +241,9 @@
                     <td>
                         <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="fax" id="fax"
                                value="<?php if(!empty($fax)){echo $fax;}elseif(isset($_SESSION['fax'])){echo $_SESSION['fax'];} ?>"
-                               data-dojo-props="maxLength:'20',regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9-+ ,\()\/\.\']+',
-                               invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?>'"
-                               data-dojo-type="dijit/form/ValidationTextBox"
-                               onfocus="enabledmodif()"/> </td>
+                               data-dojo-props="maxLength:'20',<?php echo REGEX_TEL;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '" autocomplete="on"
+                               data-dojo-type="dijit/form/ValidationTextBox"onfocus="enabledmodif()"/> 
+                    </td>
                 </tr>
                 <tr>
                     <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
@@ -255,9 +251,20 @@
                     </td>
                     <td></td>
                     <td>
-                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="entrepriselaboratoire" id="entrepriselaboratoire" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"
-                               value="<?php echo $entrepriselaboratoire;?>" required="required" onfocus="enabledmodif()"
-                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\/\.\'\-]+'" >
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="entrepriselaboratoire" id="entrepriselaboratoire" data-dojo-type="dijit/form/ValidationTextBox" 
+                               autocomplete="on" value="<?php echo $entrepriselaboratoire;?>" required="required" onfocus="enabledmodif()"
+                               data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '"  >
+                    </td>
+                </tr>
+                   <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_NOMEQUIPE;?></div>
+                    </td>
+                    <td></td>
+                    <td>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="nomequipe" id="nomequipe" data-dojo-type="dijit/form/ValidationTextBox" 
+                               autocomplete="on" value="<?php echo $nomequipe;?>"  onfocus="enabledmodif()"
+                               data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '"  >
                     </td>
                 </tr>
                 <script>
@@ -335,7 +342,4 @@
                label="<?php echo TXT_MODIFIER ;?>"  data-dojo-type="dijit/form/Button" disabled="disabled" >
     </form>
 </fieldset>
-
-
-
 <?php BD::deconnecter(); ?>

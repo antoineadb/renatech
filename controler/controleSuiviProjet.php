@@ -45,12 +45,12 @@ $manager->getRequete("create table tmptousmesprojet as (
 SELECT p.idprojet,p.datedebutprojet,p.acronyme,s.libellestatutprojet,s.idstatutprojet,p.titre,p.numero,p.dateprojet,ce.libellecentrale
 FROM projet p,concerne co,utilisateur u,loginpassword l,centrale ce,statutprojet s,creer cr
 WHERE  co.idprojet_projet = p.idprojet AND  co.idcentrale_centrale = ce.idcentrale AND co.idstatutprojet_statutprojet = s.idstatutprojet AND
-  l.idlogin = u.idlogin_loginpassword AND cr.idutilisateur_utilisateur = u.idutilisateur AND cr.idprojet_projet = p.idprojet AND l.pseudo=? AND trashed =FALSE and confidentiel = FALSE
+  l.idlogin = u.idlogin_loginpassword AND cr.idutilisateur_utilisateur = u.idutilisateur AND cr.idprojet_projet = p.idprojet AND l.pseudo=? AND trashed =FALSE 
   union
 SELECT p.idprojet,p.datedebutprojet,p.acronyme,s.libellestatutprojet,s.idstatutprojet,p.titre,p.numero,p.dateprojet,ce.libellecentrale
 FROM projet p,concerne co,utilisateur u,loginpassword l,centrale ce,statutprojet s,utilisateurporteurprojet up
 WHERE  co.idprojet_projet = p.idprojet AND  co.idcentrale_centrale = ce.idcentrale AND co.idstatutprojet_statutprojet = s.idstatutprojet AND
-  l.idlogin = u.idlogin_loginpassword AND up.idutilisateur_utilisateur = u.idutilisateur AND p.idprojet = up.idprojet_projet AND l.pseudo=? AND trashed =FALSE and confidentiel = FALSE )", array($pseudo, $pseudo));
+  l.idlogin = u.idlogin_loginpassword AND up.idutilisateur_utilisateur = u.idutilisateur AND p.idprojet = up.idprojet_projet AND l.pseudo=? AND trashed =FALSE )", array($pseudo, $pseudo));
 // SI ACADEMIQUE INTERNE ET DANB UNE CENTRALE
 //if (!empty($idacademiqueInterne)) {
 $s_centrale = "";
@@ -67,13 +67,6 @@ for ($i = 0; $i < count($rowEncours); $i++) {
             $s_centrale .=$arraycentraleencours[$j]['libellecentrale'] . ' - ';
         }
         $libellecentrale = substr(trim($s_centrale), 0, -1);
-    } elseif ($rowEncours[$i]['idstatutprojet'] == ENCOURSANALYSE) {
-        $arraycentraleencours = $manager->getListbyArray("select libellecentrale from tmptousmesprojet where idprojet=? and idstatutprojet=?", array($rowEncours[$i]['idprojet'], ENCOURSANALYSE));
-        $nbcentrale = count($arraycentraleencours);
-        for ($j = 0; $j < $nbcentrale; $j++) {
-            $s_centrale .=$arraycentraleencours[$j]['libellecentrale'] . ' - ';
-        }
-        $libellecentrale = substr(trim($s_centrale), 0, -1);
     } elseif ($rowEncours[$i]['idstatutprojet'] == ENCOURSREALISATION) {
         $arraycentraleencours = $manager->getListbyArray("select libellecentrale from tmptousmesprojet where idprojet=? and idstatutprojet=?", array($rowEncours[$i]['idprojet'], ENCOURSREALISATION));
         $nbcentrale = count($arraycentraleencours);
@@ -83,13 +76,6 @@ for ($i = 0; $i < count($rowEncours); $i++) {
         $libellecentrale = substr(trim($s_centrale), 0, -1);
     } elseif ($rowEncours[$i]['idstatutprojet'] == ACCEPTE) {
         $arraycentraleencours = $manager->getListbyArray("select libellecentrale from tmptousmesprojet where idprojet=? and idstatutprojet=?", array($rowEncours[$i]['idprojet'], ACCEPTE));
-        $nbcentrale = count($arraycentraleencours);
-        for ($j = 0; $j < $nbcentrale; $j++) {
-            $s_centrale .=$arraycentraleencours[$j]['libellecentrale'] . ' - ';
-        }
-        $libellecentrale = substr(trim($s_centrale), 0, -1);
-    } elseif ($rowEncours[$i]['idstatutprojet'] == ENATTENTE) {
-        $arraycentraleencours = $manager->getListbyArray("select libellecentrale from tmptousmesprojet where idprojet=? and idstatutprojet=?", array($rowEncours[$i]['idprojet'], ENATTENTE));
         $nbcentrale = count($arraycentraleencours);
         for ($j = 0; $j < $nbcentrale; $j++) {
             $s_centrale .=$arraycentraleencours[$j]['libellecentrale'] . ' - ';
@@ -118,21 +104,19 @@ for ($i = 0; $i < count($rowEncours); $i++) {
         $libellecentrale = substr(trim($s_centrale), 0, -1);
     }
 
-
     $nomcentrale = $manager->getSinglebyArray("select libellecentrale from tmptousmesprojet where idprojet=? limit 1", array($rowEncours[$i]['idprojet']));
-
     $dataEncours = ""
             . '{"numero":' . '"' . $rowEncours[$i]['numero'] . '"' . ","
             . '"dateprojet":' . '"' . $rowEncours[$i]['dateprojet'] . '"' . ","
             . '"idstatutprojet":' . '"' . $rowEncours[$i]['idstatutprojet'] . '"' . ","
             . '"titre":' . '"' . filtredonnee($rowEncours[$i]['titre']) . '"' . ","
             . '"acronyme":' . '"' . filtredonnee($rowEncours[$i]['acronyme']) . '"'
-            . "," . '"libellestatutprojet":' . '"' . str_replace("''", "'", $rowEncours[$i]['libellestatutprojet']) . '"'
+            . "," . '"libellestatutprojet":' . '"' . removeDoubleQuote(trim($rowEncours[$i]['libellestatutprojet'])) . '"'
             . "," . '"idprojet":' . '"' . $rowEncours[$i]['idprojet'] . '"'
             . "," . '"imprime":' . '"' . TXT_PDF . '"'
             . "," . '"academiqueinterne":' . '"' . 'TRUE' . '"'
             . "," . '"nomcentrale":' . '"' . $nomcentrale . '"'
-            . "," . '"libellecentrale":' . '"' . $libellecentrale . '"' . "},";
+            . "," . '"libellecentrale":' . '"' . trim($libellecentrale) . '"' . "},";
     fputs($fpEncours, $dataEncours);
     fwrite($fpEncours, '');
     $s_centrale = "";
@@ -152,17 +136,13 @@ $_SESSION['pseudo'] = $pseudo;
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 
 $manager->exeRequete("drop table if exists tmpprojetenattente;");
-$manager->getRequete("create table tmpprojetenattente as (
-    SELECT ce.idcentrale,ce.libellecentrale,p.idprojet,p.datedebutprojet,p.acronyme,s.libellestatutprojet,s.idstatutprojet,p.numero,p.titre,p.dateprojet,u.nom,u.prenom
-FROM projet p,concerne co,creer cr,centrale ce,utilisateur u,loginpassword l,statutprojet s
-WHERE   co.idcentrale_centrale = ce.idcentrale AND  co.idprojet_projet = p.idprojet AND  cr.idprojet_projet = p.idprojet AND  cr.idutilisateur_utilisateur = u.idutilisateur AND
-  u.idlogin_loginpassword = l.idlogin AND  s.idstatutprojet = co.idstatutprojet_statutprojet and  l.pseudo =? and s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
-union  
+$manager->getRequete("create table tmpprojetenattente as (    
 SELECT ce.idcentrale,ce.libellecentrale,p.idprojet,p.datedebutprojet,p.acronyme,s.libellestatutprojet,s.idstatutprojet,p.numero,p.titre,p.dateprojet,u.nom,u.prenom
 FROM projet p,concerne co,creer cr,centrale ce,utilisateur u,loginpassword l,statutprojet s
 WHERE   co.idcentrale_centrale = ce.idcentrale AND  co.idprojet_projet = p.idprojet AND  cr.idprojet_projet = p.idprojet AND  cr.idutilisateur_utilisateur = u.idutilisateur AND
-  u.idlogin_loginpassword = l.idlogin AND  s.idstatutprojet = co.idstatutprojet_statutprojet and  l.pseudo =? and s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
-)", array($pseudo, ENATTENTE, $pseudo, ENATTENTEPHASE2));
+  u.idlogin_loginpassword = l.idlogin AND  s.idstatutprojet = co.idstatutprojet_statutprojet and  l.pseudo =? and s.idstatutprojet=? AND trashed =FALSE 
+)", array($pseudo, ENATTENTEPHASE2));
+
 if (!empty($idacademiqueInterne)) {
     $rowEnattente = $manager->getList("select distinct on (idprojet) idprojet,acronyme,idcentrale,libellestatutprojet,libellecentrale,idstatutprojet,numero,titre,dateprojet from tmpprojetenattente  order by idprojet asc");
     $fpEnattente = fopen('../tmp/projetEnattente.json', 'w');
@@ -205,39 +185,6 @@ $jsonenattente = str_replace('},]}', '}]}', $jsonenattente1);
 file_put_contents($json_fileenattente, $jsonenattente);
 fclose($fpEnattente);
 chmod('../tmp/projetEnattente.json', 0777);
-//---------------------------------------------------------------------------------------------------------------------------------------------------
-//                          CREATION DU PROJET JSON EN COURS D'ANALYSE
-//---------------------------------------------------------------------------------------------------------------------------------------------------
-
-$manager->exeRequete("drop table if exists tmpprojetencoursanalyse;");
-$manager->getRequete("create table tmpprojetencoursanalyse as (SELECT  distinct on(p.idprojet) p.idprojet,co.idstatutprojet_statutprojet,ce.libellecentrale,p.acronyme,p.titre,p.numero,p.dateprojet
-FROM projet p,concerne co,creer cr,centrale ce,utilisateur u,loginpassword l
-WHERE co.idprojet_projet = p.idprojet AND  cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND   ce.idcentrale = co.idcentrale_centrale AND
-u.idlogin_loginpassword = l.idlogin AND l.pseudo=? AND  co.idstatutprojet_statutprojet=? AND trashed =FALSE and confidentiel = FALSE)", array($pseudo, ENCOURSANALYSE));
-$rowEncoursAnalyse = $manager->getList("select  idprojet,acronyme,libellecentrale,numero,titre,dateprojet,idstatutprojet_statutprojet from tmpprojetencoursanalyse order by idprojet asc");
-$fpEncoursAnalyse = fopen('../tmp/projetAnalyse.json', 'w');
-$dataEncoursAnalyse = "";
-fwrite($fpEncoursAnalyse, '{"items": [');
-for ($i = 0; $i < count($rowEncoursAnalyse); $i++) {
-    $dataEncoursAnalyse = ""
-            . '{"dateProjet":' . '"' . $rowEncoursAnalyse[$i]['dateprojet'] . '"'
-            . "," . '"numero":' . '"' . $rowEncoursAnalyse[$i]['numero'] . '"'
-            . "," . '"idstatutprojet":' . '"' . $rowEncoursAnalyse[$i]['idstatutprojet_statutprojet'] . '"'
-            . "," . '"titre":' . '"' . filtredonnee($rowEncoursAnalyse[$i]['titre']) . '"'
-            . "," . '"acronyme":' . '"' . $rowEncoursAnalyse[$i]['acronyme'] . '"'
-            . "," . '"libellecentrale":' . '"' . $rowEncoursAnalyse[$i]['libellecentrale'] . '"' . "},";
-    fputs($fpEncoursAnalyse, $dataEncoursAnalyse);
-    fwrite($fpEncoursAnalyse, '');
-}
-fwrite($fpEncoursAnalyse, ']}');
-$json_fileencoursanalyse = "../tmp/projetAnalyse.json";
-$jsonencoursanalyse1 = file_get_contents($json_fileencoursanalyse);
-$jsonencoursanalyse = str_replace('},]}', '}]}', $jsonencoursanalyse1);
-file_put_contents($json_fileencoursanalyse, $jsonencoursanalyse);
-fclose($fpEncoursAnalyse);
-chmod('../tmp/projetAnalyse.json', 0777);
-
-
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 //                                 CREATION DU PROJET JSON REFUSE
@@ -246,12 +193,12 @@ chmod('../tmp/projetAnalyse.json', 0777);
 $rowRefuse = $manager->getListbyArray("SELECT  distinct on(p.numero,s.libellestatutprojet) p.numero,co.commentaireprojet, p.acronyme,p.dateprojet,p.titre,s.libellestatutprojet,ce.libellecentrale
 FROM projet p,concerne co,utilisateur u,centrale ce,loginpassword l,creer cr,statutprojet s
 WHERE co.idprojet_projet = p.idprojet AND   co.idcentrale_centrale = ce.idcentrale AND  co.idstatutprojet_statutprojet = s.idstatutprojet AND
-u.idutilisateur = cr.idutilisateur_utilisateur AND  l.idlogin = u.idlogin_loginpassword  AND cr.idprojet_projet = p.idprojet AND  s.idstatutprojet=? and  l.pseudo=? AND trashed =FALSE and confidentiel = FALSE
+u.idutilisateur = cr.idutilisateur_utilisateur AND  l.idlogin = u.idlogin_loginpassword  AND cr.idprojet_projet = p.idprojet AND  s.idstatutprojet=? and  l.pseudo=? AND trashed =FALSE
 union
 SELECT  distinct on(p.numero,s.libellestatutprojet) p.numero,co.commentaireprojet, p.acronyme,p.dateprojet,p.titre,s.libellestatutprojet,ce.libellecentrale
 FROM utilisateurporteurprojet up,statutprojet s,projet p,utilisateur u,concerne co,centrale ce,loginpassword l
 WHERE up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur AND s.idstatutprojet = co.idstatutprojet_statutprojet AND
-co.idprojet_projet = p.idprojet AND  ce.idcentrale = co.idcentrale_centrale AND  l.idlogin = u.idlogin_loginpassword AND  s.idstatutprojet=? and  l.pseudo=? AND trashed =FALSE and confidentiel = FALSE
+co.idprojet_projet = p.idprojet AND  ce.idcentrale = co.idcentrale_centrale AND  l.idlogin = u.idlogin_loginpassword AND  s.idstatutprojet=? and  l.pseudo=? AND trashed =FALSE 
 
 ", array(REFUSE, $pseudo, REFUSE, $pseudo));
 
@@ -286,7 +233,7 @@ $manager->getRequete("create table tmpaccepte as (
 SELECT ce.libellecentrale,p.idprojet,p.acronyme,p.titre,p.numero,p.dateprojet,p.datedebutprojet,co.idstatutprojet_statutprojet
 FROM  projet p,concerne co,creer cr,centrale ce,utilisateur u,loginpassword l
 WHERE co.idprojet_projet = p.idprojet AND  cr.idprojet_projet = p.idprojet AND   cr.idutilisateur_utilisateur = u.idutilisateur AND
-  ce.idcentrale = co.idcentrale_centrale AND   u.idlogin_loginpassword = l.idlogin and l.pseudo =? and co.idstatutprojet_statutprojet = ? AND trashed =FALSE and confidentiel = FALSE);", array($pseudo, ACCEPTE));
+  ce.idcentrale = co.idcentrale_centrale AND   u.idlogin_loginpassword = l.idlogin and l.pseudo =? and co.idstatutprojet_statutprojet = ? AND trashed =FALSE);", array($pseudo, ACCEPTE));
 
 $rowAccepte = $manager->getList("select  distinct on(idprojet) idprojet,idstatutprojet_statutprojet,acronyme,numero,titre,dateprojet,libellecentrale from tmpaccepte order by idprojet asc");
 $fpAccepte = fopen('../tmp/projetAccepte.json', 'w');
@@ -321,28 +268,28 @@ FROM projet p,concerne co ,utilisateur u,utilisateurporteurprojet up,loginpasswo
 WHERE  co.idprojet_projet = p.idprojet AND up.idprojet_projet = p.idprojet
 AND up.idutilisateur_utilisateur = u.idutilisateur AND  s.idstatutprojet = co.idstatutprojet_statutprojet
 and l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet
-and  l.pseudo =? and s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
+and  l.pseudo =? and s.idstatutprojet=? AND trashed =FALSE
  union
  SELECT p.idprojet,p.acronyme,p.datedebutprojet,s.libellestatutprojet,p.numero,p.titre,p.dateprojet,null as nomAffecte,null as prenomAffecte
 FROM projet p,concerne co,utilisateur u,loginpassword l,statutprojet s,creer cr
 WHERE co.idprojet_projet = p.idprojet AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = co.idstatutprojet_statutprojet and s.idstatutprojet = co.idstatutprojet_statutprojet
 AND cr.idutilisateur_utilisateur = u.idutilisateur
-and cr.idprojet_projet = p.idprojet and l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
+and cr.idprojet_projet = p.idprojet and l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE 
 union
  SELECT p.idprojet,p.acronyme,p.datedebutprojet,s.libellestatutprojet,p.numero,p.titre,p.dateprojet,null as nomAffecte,null as prenomAffecte
 FROM projet p,concerne co,utilisateur u,loginpassword l,statutprojet s,creer cr
 WHERE  co.idprojet_projet = p.idprojet AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = co.idstatutprojet_statutprojet and s.idstatutprojet = co.idstatutprojet_statutprojet
 AND cr.idutilisateur_utilisateur = u.idutilisateur
-and cr.idprojet_projet = p.idprojet and l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
+and cr.idprojet_projet = p.idprojet and l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE 
  union
  SELECT   p.idprojet,p.acronyme,p.datedebutprojet,s.libellestatutprojet,p.numero,p.titre,p.dateprojet,u1.nom,u1.prenom
 FROM projet p,concerne co,utilisateur u,loginpassword l,statutprojet s,typeprojet tp,creer cr,utilisateur u1,utilisateurporteurprojet up
 WHERE co.idprojet_projet = p.idprojet AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = co.idstatutprojet_statutprojet AND tp.idtypeprojet = p.idtypeprojet_typeprojet
 AND cr.idutilisateur_utilisateur = u.idutilisateur AND  cr.idprojet_projet = p.idprojet AND  up.idprojet_projet = p.idprojet
-AND   up.idutilisateur_utilisateur = u1.idutilisateur and  l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
+AND   up.idutilisateur_utilisateur = u1.idutilisateur and  l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE 
 order by idprojet asc);", array($pseudo, FINI, $pseudo, FINI, $pseudo, FINI, $pseudo, FINI));
 
 
@@ -378,28 +325,28 @@ FROM projet p,concerne co ,utilisateur u,utilisateurporteurprojet up,loginpasswo
 WHERE co.idcentrale_centrale = u.idcentrale_centrale AND co.idprojet_projet = p.idprojet AND up.idprojet_projet = p.idprojet
 AND up.idutilisateur_utilisateur = u.idutilisateur AND  s.idstatutprojet = co.idstatutprojet_statutprojet
 and l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet AND ce.idcentrale = co.idcentrale_centrale
-and  l.pseudo =? and s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
+and  l.pseudo =? and s.idstatutprojet=? AND trashed =FALSE 
  union
  SELECT p.idprojet,p.datestatutcloturer,p.acronyme,s.libellestatutprojet,p.numero,p.titre,p.dateprojet,null as nomAffecte,null as prenomAffecte
 FROM projet p,concerne co,utilisateur u,loginpassword l,statutprojet s,centrale ce,creer cr
 WHERE co.idcentrale_centrale = u.idcentrale_centrale AND co.idprojet_projet = p.idprojet AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = co.idstatutprojet_statutprojet and s.idstatutprojet = co.idstatutprojet_statutprojet
 AND ce.idcentrale = co.idcentrale_centrale AND cr.idutilisateur_utilisateur = u.idutilisateur
-and cr.idprojet_projet = p.idprojet and l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
+and cr.idprojet_projet = p.idprojet and l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE
  union
  SELECT   p.idprojet,p.datestatutcloturer,p.acronyme,s.libellestatutprojet,p.numero,p.titre,p.dateprojet,u1.nom,u1.prenom
 FROM projet p,concerne co,utilisateur u,loginpassword l,statutprojet s,centrale ce,typeprojet tp,creer cr,utilisateur u1,utilisateurporteurprojet up
 WHERE co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = co.idstatutprojet_statutprojet AND ce.idcentrale = u.idcentrale_centrale AND tp.idtypeprojet = p.idtypeprojet_typeprojet
 AND cr.idutilisateur_utilisateur = u.idutilisateur AND  cr.idprojet_projet = p.idprojet AND  up.idprojet_projet = p.idprojet
-AND   up.idutilisateur_utilisateur = u1.idutilisateur and  l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
+AND   up.idutilisateur_utilisateur = u1.idutilisateur and  l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE 
  union
  SELECT   p.idprojet,p.datestatutcloturer,p.acronyme,s.libellestatutprojet,p.numero,p.titre,p.dateprojet,null as nom,null as prenom
 FROM projet p,concerne co,utilisateur u,loginpassword l,statutprojet s,centrale ce,typeprojet tp,creer cr
 WHERE co.idprojet_projet = p.idprojet AND l.idlogin = u.idlogin_loginpassword
 AND s.idstatutprojet = co.idstatutprojet_statutprojet AND tp.idtypeprojet = p.idtypeprojet_typeprojet
 AND cr.idutilisateur_utilisateur = u.idutilisateur AND  cr.idprojet_projet = p.idprojet
-AND   l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE and confidentiel = FALSE
+AND   l.pseudo =? AND s.idstatutprojet=? AND trashed =FALSE 
 );", array($pseudo, CLOTURE, $pseudo, CLOTURE, $pseudo, CLOTURE, $pseudo, CLOTURE));
 
 $rowCloturer = $manager->getList("select  idprojet,acronyme,libellestatutprojet,numero,titre,datestatutcloturer,nomaffecte,prenomaffecte from tmpcloturer
@@ -436,12 +383,12 @@ $manager->getRequete("create table tmpencoursrealisation as
 FROM concerne co, projet p,utilisateur u,creer cr,statutprojet s,centrale ce,loginpassword l
 WHERE p.idprojet = co.idprojet_projet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND
   s.idstatutprojet = co.idstatutprojet_statutprojet AND ce.idcentrale = co.idcentrale_centrale AND
-  l.idlogin = u.idlogin_loginpassword AND l.pseudo=? and co.idstatutprojet_statutprojet=? AND trashed =FALSE and confidentiel = FALSE
+  l.idlogin = u.idlogin_loginpassword AND l.pseudo=? and co.idstatutprojet_statutprojet=? AND trashed =FALSE
 union
 SELECT p.idprojet,p.acronyme,s.libellestatutprojet,p.datedebutprojet,co.idstatutprojet_statutprojet,p.titre,p.numero,p.dateprojet,ce.libellecentrale
 FROM projet p,utilisateurporteurprojet up,concerne co,utilisateur u,statutprojet s,centrale ce,loginpassword l
 WHERE p.idprojet = up.idprojet_projet AND co.idprojet_projet = p.idprojet AND u.idutilisateur = up.idutilisateur_utilisateur AND
-  s.idstatutprojet = co.idstatutprojet_statutprojet AND ce.idcentrale = co.idcentrale_centrale AND l.idlogin = u.idlogin_loginpassword and l.pseudo=? and co.idstatutprojet_statutprojet=? AND trashed =FALSE and confidentiel = FALSE
+  s.idstatutprojet = co.idstatutprojet_statutprojet AND ce.idcentrale = co.idcentrale_centrale AND l.idlogin = u.idlogin_loginpassword and l.pseudo=? and co.idstatutprojet_statutprojet=? AND trashed =FALSE 
 );", array($pseudo, ENCOURSREALISATION, $pseudo, ENCOURSREALISATION));
 
 if (!empty($idacademiqueInterne)) {
@@ -557,8 +504,8 @@ AND ce.libellecentrale =? and idstatutprojet_statutprojet!=? and idstatutprojet_
         $nbProjet = count($arrayprojet);
         $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN calcfinprojet date;");
         $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN finprojetproche date;");
-        for ($i = 0; $i < $nbProjet; $i++) {
-            if ($arrayprojet[$i]['idstatutprojet'] != ENATTENTE && $arrayprojet[$i]['idstatutprojet'] != ENCOURSANALYSE && $arrayprojet[$i]['idstatutprojet'] != REFUSE && $arrayprojet[$i]['idstatutprojet'] != FINI && $arrayprojet[$i]['idstatutprojet'] != CLOTURE && $arrayprojet[$i]['idstatutprojet'] != ACCEPTE && $arrayprojet[$i]['idstatutprojet'] != ENATTENTEPHASE2) {
+        for ($i = 0; $i < $nbProjet; $i++) {         
+            if ( $arrayprojet[$i]['idstatutprojet'] != REFUSE && $arrayprojet[$i]['idstatutprojet'] != FINI && $arrayprojet[$i]['idstatutprojet'] != CLOTURE && $arrayprojet[$i]['idstatutprojet'] != ACCEPTE && $arrayprojet[$i]['idstatutprojet'] != ENATTENTEPHASE2) {    
                 if ($arrayprojet[$i]['idperiodicite_periodicite'] == JOUR) {
                     $datedepart = strtotime($arrayprojet[$i]['datedebutprojet']);
                     $duree = ($arrayprojet[$i]['dureeprojet']);

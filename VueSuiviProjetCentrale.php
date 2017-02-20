@@ -21,12 +21,12 @@ $nbprojet = $_SESSION['nbprojet'];
 $nbprojetEncoursRealisation = $_SESSION['nbprojetencoursrealisation'];
 $nbprojetAccepte = $_SESSION['nbprojetaccepte'];
 $nbprojetAttente = $_SESSION['nbprojetattente'];
-$nbProjetEncours = $_SESSION['nbprojetencours'];
 $nbProjetRefusee = $_SESSION['nbProjetRefusee'];
 $nbProjetFini = $_SESSION['nbFini'];
 $nbProjetCloturer = $_SESSION['nbprojetCloturer'];
 $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
 $nbRapportProjet = $_SESSION['nbProjetRapport'];
+
 ?>
 <div id="global" >
     <?php include 'html/entete.html'; ?>        
@@ -40,16 +40,18 @@ $nbRapportProjet = $_SESSION['nbProjetRapport'];
         <?php if(isset($_GET['err'])&&!empty($_GET['err'])){?><div style="padding-top: 15px;margin-bottom: -33px;text-align: center;font-size: 1.1em;color: #007A99; font-weight: bold;">
             <?php echo "Ce projet ne peux pas être dupliqué, il n'est pas \"En cours d'expertise\",\"En cours de réalisation\" ou \"Fini\" ";}?></div>
         <form action="#" method="POST" id="vueprojetcentrale">
-         
-            <div style='width:100px;margin-left:10px;margin-bottom: -20px'><a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/exportjson.php?lang=' . $lang ?>">&nbsp;
-                    <img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/export.png' ><span style="width: 260px"><?php echo TXT_EXPORTPROJETCENTRALE; ?></span></a>
-            </div>            
+            <?php if(IDTYPEUSER!=ADMINNATIONNAL){ ?>
+            <div style="float: left"><a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/exportjson.php?lang=' . $lang ?>">&nbsp;<img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/export.png' ><span style="width: 260px"><?php echo TXT_EXPORTPROJETCENTRALE; ?></span></a></div>
+            <div style="float: left;margin-top: 3px;margin-left:5px">                
+                <a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/modifBase/viderCache.php?lang=' . $lang; ?>">&nbsp;<img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/refresh.png' ><span style="width: 200px;border-radius: 4px;text-align:center; ">
+                <?php echo TXT_ACTUALDATA; ?></span></a>
+            </div>
+            <?php } ?>
+            <div style='width:100px;'>
+            </div>
             <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:25px;width: 1050px;font-size: 1.2em;" doLayout="false" selected="true" >               
                 <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbprojet . "'>" . TXT_PROJETMACENTRALE . "</div>"; ?>" style="height:550px;white-space: normal" >
                     <?php include_once 'html/vueSuiviProjetCentrale.html'; ?>
-                </div>
-                <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetEncours . "'>" . TXT_CONSULTPROJET . "</div>"; ?>" style="height:500px;" >
-                    <?php include_once 'html/vueSuiviProjetCoursCentrale.html'; ?>
                 </div>
                 <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbprojetAttente . "'>" . TXT_PROJETSENATTENTE . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetAttenteCentrale.html'; ?>
