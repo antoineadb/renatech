@@ -1359,9 +1359,7 @@ function masqueetapeautrecentrale(){
         <div data-dojo-type="dijit/Dialog" data-dojo-id="rep2" title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;   ">
            <table class="dijitDialogPaneContentArea">
                <tr>
-                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui2"  data-dojo-props="onClick:function(){maj();}">
-                           <?php echo TXT_OUI ;?></button></td>
-                           <td>
+                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui2"  data-dojo-props="onClick:function(){maj();}"><?php echo TXT_OUI ;?></button></td><td>
                    <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitCancel2"><?php echo TXT_ANNULE;?></button></td>
                </tr>
            </table>         
@@ -1530,19 +1528,15 @@ if($idstatut!=ENATTENTEPHASE2){
             <label for="datemodifstatut" style="width: 260px;margin-top: 16px">
                 <?php echo TXT_DATECANGEMENTSTATUT; ?></label>
             <input type="text" name="datemodifstatut" id="datemodifstatut" value="<?php echo date('Y-m-d');?>" data-dojo-type="dijit/form/DateTextBox"  autocomplete="on" >
-<?php 
-       $etapeautrecentrale= $manager->getSingle2("select etapeautrecentrale from projet where idprojet =?",$idprojet);
-        $sendmail = $manager->getSingle2("select sendmail from projetautrecentrale where idprojet =?",$idprojet);        
-            if ($etapeautrecentrale==TRUE && $sendmail==TRUE){?>
+
                 <input data-dojo-type="dijit/form/Button"  type="button"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" 
                        data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){repstatut0.show();}}" >
-<?php }else{?>
-                     <input data-dojo-type="dijit/form/Button"  type="button"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" 
-                       data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){modifProjet.submit();}}" >
-<?php }?>
         </td>
     </tr>
-    <!--CE MODULE EST PRESENT POUR LE CAS IL N'Y A PAS DE DATE A MODIFIER, PASSGE ENCOURS DE REALISATION VERS EN COURS D'EXPERTISE  -->
+    <?php  
+        $etapeautrecentrale= $manager->getSingle2("select etapeautrecentrale from projet where idprojet =?",$idprojet); 
+        $sendmail = $manager->getSingle2("select sendmail from projetautrecentrale where idprojet =?",$idprojet);
+    ?>
     <tr>
         <td id="validestatut" style="display: none;margin-top: 32px;">
             <input type="submit"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" >
@@ -1552,13 +1546,18 @@ if($idstatut!=ENATTENTEPHASE2){
     <div data-dojo-type="dijit/Dialog" data-dojo-id="repstatut0" title="<?php echo 'Souhaitez-vous envoyer les emails correspondants au changement de statut?';?>" style="width: 500px;margin-left: 20px;   ">
           <table class="dijitDialogPaneContentArea">
               <tr>
+                <?php if ($etapeautrecentrale==TRUE && $sendmail==TRUE){?>
                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="yes4" data-dojo-props="onClick:function(){repstatut.show();}"><?php echo TXT_OUI ;?></button></td><td>
+                <?php }else{?>
+                    <td><button type="submit" data-dojo-type="dijit/form/Button"  id="yes4" data-dojo-props="onClick:function(){repStatut();}"><?php echo TXT_OUI ;?></button></td><td>
+                <?php }?>                        
                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="no4"  data-dojo-props="onClick:function(){repStatutNon0();}"><?php echo TXT_NON ;?></button></td>                               
-                  <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repstatut.hide();}" id="submitCancel4"><?php echo TXT_ANNULE;?></button></td>
+                  <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repstatut0.hide();}" id="submitCancel4"><?php echo TXT_ANNULE;?></button></td>
               </tr>
           </table>
       </div> 
-                                
+<?php 
+    if ($etapeautrecentrale==TRUE && $sendmail==TRUE){?>
      <div data-dojo-type="dijit/Dialog" data-dojo-id="repstatut" title="<?php echo TXT_RESULTMESSAGECONFIRMAUTRECENTRALE;?>" style="width: 500px;margin-left: 20px;   ">
           <table class="dijitDialogPaneContentArea">
               <tr>
@@ -1567,7 +1566,8 @@ if($idstatut!=ENATTENTEPHASE2){
                   <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repstatut.hide();}" id="submitCancel5"><?php echo TXT_ANNULE;?></button></td>
               </tr>
           </table>
-      </div> 
+      </div>
+    <?php } ?>
     <script>
         function repStatut(){
             document.getElementById('save').value='non';
