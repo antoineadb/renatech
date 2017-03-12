@@ -211,8 +211,8 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                 document.getElementById(libellecentrale).style.textDecoration  ='line-through';
             }
         }        
-         modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
-        // afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+        modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+        afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
     }
     function enableCheckBoxAutrecentrale(id){
         var selectObject = dijit.byId(id);

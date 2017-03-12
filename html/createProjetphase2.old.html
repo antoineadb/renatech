@@ -763,7 +763,7 @@
                             <td style="width:250px">
                                 <?php $statut=str_replace("''","'", $statutaccepte); ?>
                                 <label for="statutProjet" style="width: 200px;margin-left: 20px;"><?php echo TXT_STATUTPROJET.'* :'; ?> </label>
-                                <input name="statutProjet" id="statutProjet" type="text" data-dojo-type="dijit/form/ValidationTextBox"
+                                <input name="statutProjet" id="" type="text" data-dojo-type="dijit/form/ValidationTextBox"
                                        style="width: 220px;margin-left: 20px;"
                                        value="<?php if(!empty($statutaccepte))echo $statut; ?>" disabled="true">                                
                             </td>
@@ -853,10 +853,10 @@
                             plugins: ["undo", "redo"],
                             height: "150px"
                         }, "descriptionautrecentrale");
-                        new Editor({
+                        /*new Editor({
                             plugins: ["undo", "redo" ],
                             height: "150px"
-                        },"descriptioncentraleproximite");
+                        },"descriptioncentraleproximite");*/
                     });
 
                     function modiProjetPhase2OnSubmit() {

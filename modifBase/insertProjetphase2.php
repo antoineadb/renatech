@@ -346,20 +346,18 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $descriptioncentraleproximiteBDD = '';
     }
 
-    if ($_POST['centrale_proximite'] == TRUE) {
+    if ($_POST['centrale_proximite']) {
         if (!empty($_POST['centrale_Proximite'])) {
             if ($centraleProximiteBDD != $_POST['centrale_Proximite']) {
                 $_SESSION['centraleproximitemodif'] = $_POST['centrale_Proximite'];
             } else {
                 $_SESSION['centraleproximitemodif'] = '';
             }
-            $manager->deletecentraleproximiteprojet($idprojet);
+            $manager->deletecentraleproximiteprojet($idprojet);           
             for ($i = 0; $i < count($_POST['centrale_Proximite']); $i++) {
                 $idcentrale_proximite = substr($_POST['centrale_Proximite'][$i], 2);
                 $centraleproximite = new CentraleProximiteProjet($idcentrale_proximite, $idprojet);
                 $manager->addCentraleProximiteProjet($centraleproximite);
-                
-                
             }
         } else {
             $_SESSION['centraleproximitemodif'] = '';

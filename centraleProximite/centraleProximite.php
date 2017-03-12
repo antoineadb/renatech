@@ -9,9 +9,6 @@ CENTRALES DE PROXIMITES
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>                                               
 <script>
     function affichecentraleproximite() {
-        console.log('etapecentraleproximite = '+document.getElementById('etapecentraleproximite'));console.log('centraleProximite = '+document.getElementById('centraleProximite'));
-        console.log('cptcentraleproximite = '+document.getElementById('cptcentraleproximite'));console.log('chckcentraleproximite = '+document.getElementById('chckcentraleproximite'));
-        console.log('descriptioncentraleproximite = '+document.getElementById('descriptioncentraleproximite'));console.log('affiche_centrale_proximite = '+document.getElementById('affiche_centrale_proximite'));
         document.getElementById('etapecentraleproximite').style.display = 'block';
         document.getElementById('centraleProximite').style.display = 'block';
         document.getElementById('cptcentraleproximite').style.display = 'block';
@@ -75,11 +72,13 @@ CENTRALES DE PROXIMITES
                 <td style="float: left;" >                  
                     <fieldset style="font-size: 1.1em;font-style: italic;width: 520px;display: block" id="centraleProximite" >
                         <legend style="margin-left:20px;margin-top: 10px"><?php echo TXT_SELECTCENTRALES; ?></legend>
-                        <?php if (!empty(IDCENTRALEUSER)) {;?>
+                        <?php $idcentraleProjet =(int) $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+                        ?>
+                        <?php if (!empty($idcentraleProjet)) {?>
                             <div id='chckcentraleproximite' style=" margin-bottom: 15px; margin-left: 25px; margin-top: 10px; display: inline-block;">
                                 <?php
                                 $arrayCentraleRegion = $manager->getListbyArray("SELECT r.libelleregion, cp.libellecentraleproximite, cp.idcentraleproximite FROM centraleproximite cp,region r,centraleregion cr "
-                                        . "WHERE cp.idregion = r.idregion AND cr.idregion = r.idregion and cr.idcentrale=? and masquecentraleproximite !=?", array(IDCENTRALEUSER, TRUE));
+                                        . " WHERE cp.idregion = r.idregion AND cr.idregion = r.idregion and cr.idcentrale=? and masquecentraleproximite !=?", array($idcentraleProjet, TRUE));                                                                
                                 for ($i = 0; $i < count($arrayCentraleRegion); $i++) {
                                     $nomcentraleproximite = $arrayCentraleRegion[$i]['libellecentraleproximite'];
                                     $idcentraleproximite = $arrayCentraleRegion[$i]['idcentraleproximite'];
@@ -149,11 +148,16 @@ CENTRALES DE PROXIMITES
                 <td style="float: left;" >                  
                     <fieldset style="font-size: 1.1em;font-style: italic;width: 520px;display: none" id="centraleProximite" >
                         <legend style="margin-left:20px;margin-top: 10px"><?php echo TXT_SELECTCENTRALES; ?></legend>
-                            <?php if (!empty(IDCENTRALEUSER)) {  ?>
+                        <?php $idcentraleProjet =(int) $manager->getList2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet); 
+                            if (empty($idcentraleProjet)) {
+                                $idcentraleProjet = IDCENTRALEUSER;
+                            }
+                        ?>
+                            <?php if (!empty($idcentraleProjet)) {?>
                             <div id='chckcentraleproximite' style=" margin-bottom: 15px; margin-left: 25px; margin-top: 10px; display: inline-block;">
                                  <?php                                 
                                 $arrayCentraleRegion = $manager->getListbyArray("SELECT r.libelleregion, cp.libellecentraleproximite, cp.idcentraleproximite FROM centraleproximite cp,region r,centraleregion cr "
-                                        . " WHERE cp.idregion = r.idregion AND cr.idregion = r.idregion and cr.idcentrale=? and masquecentraleproximite !=?", array(IDCENTRALEUSER, TRUE));                                
+                                        . " WHERE cp.idregion = r.idregion AND cr.idregion = r.idregion and cr.idcentrale=? and masquecentraleproximite !=?", array($idcentraleProjet, TRUE));                                
                                 $rowspecifique = $manager->getListbyArray("SELECT cp.libellecentraleproximite, cp.idcentraleproximite FROM region r,centraleproximite cp WHERE cp.idregion = r.idregion  "
                                         . "AND r.libelleregion =? and masquecentraleproximite !=? order by idcentraleproximite asc", array(TXT_CENTRALESPECIFIQUES, TRUE));
                                 for ($i = 0; $i < count($arrayCentraleRegion); $i++) {
@@ -218,7 +222,7 @@ CENTRALES DE PROXIMITES
 if (isset($idprojet)) {
 //RECUPERATION DES CENTRALE DE PROXIMITE SELECTIONNEES
     $row = $manager->getList2("select cp.idcentraleproximite,libellecentraleproximite from centraleproximite cp,centraleproximiteprojet cpp where cp.idcentraleproximite=cpp.idcentraleproximite and idprojet =?", $idprojet);
-    $nbrow = count($row);
+    
     if ($nbrow != 0) {
         for ($i = 0; $i < $nbrow; $i++) {
             $centraleproximite = 'cp' . $row[$i]['idcentraleproximite'];
@@ -281,7 +285,7 @@ BD::deconnecter();
         dojo.addOnLoad(function() {
             var editor11 = dijit.byId("descriptioncentraleproximite");
             dojo.connect(editor11, "onChange", this, function(event) {
-                dojo.byId("centraleproximiteValeur").value = editor3.get("value");
+                dojo.byId("centraleproximiteValeur").value = editor11.get("value");
             });
         //CAS POUR CHROME                
         dojo.byId("centraleproximitevaleur").value = editor11.get("value");
