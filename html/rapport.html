@@ -614,8 +614,10 @@ if(isset($_GET['statut'])){
     </table>
 <table>
     <tr>
-        <td><label for="contextObjectif" style="width: 160px;float: left;margin-left: 20px;font-weight:bold;padding: 10px"><?php echo 'Project objectives :' ?></label>
         
+        <td><label for="contextObjectif" style="width: 160px;float: left;margin-left: 20px;font-weight:bold;padding: 10px"><?php echo 'Project objectives :' ?></label>
+            <div  class="eraseDigitObj"><input type="button"  label="<?php echo 'Delete Project objectives' ;?>" data-dojo-type="dijit/form/Button" 
+        data-dojo-props="onClick:function(){menuConfirmationEmptyTrash('repEmptyTrash',this.id)}" id='contextDialog' ></div>
             <a href="javascript:updateInput('contextObjectif','contexte')"  title="<?php echo 'Update the Project objectives from the project' ;?>">
             <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/update.png' height="16" width="16" style="margin-top: 8px;"/>
             </a>
@@ -636,7 +638,15 @@ if(isset($_GET['statut'])){
 </table>
 <hr>
 <table>
-    <tr><td><label for="results" style="width: 990px;float: left;margin-left: 20px;font-weight:bold;"><?php echo 'Results :' ?></label></td></tr>
+    <tr>
+        <td>
+            <label for="results" style="width: 120px;float: left;margin-left: 20px;font-weight:bold;"><?php echo 'Results :' ?></label>
+            <div  class="eraseDigit">
+                <input type="button"  label="<?php echo 'Delete Results' ;?>" data-dojo-type="dijit/form/Button" 
+                data-dojo-props="onClick:function(){menuConfirmationEmptyTrash('repEmptyTrash',this.id)}" id='resultDialog'>                
+            </div>
+        </td>
+    </tr>
     <tr><td><div id="results" name="results" style="width:1000px;margin-left: 20px" ><?php if(!empty($results)){echo $results;} ?></div></td></tr>
     <tr><td><label id="cptresultats" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
         <tr style="display: none;margin-left:20px" id="msgerrresults">
@@ -704,7 +714,12 @@ if(isset($figure) && $figure!=''){
 </table>
 <?php $legend = $manager->getSingle2("select legend from rapport where idrapport=?",$idrapport);?>
 <table>
-    <tr><td><label for="legend" style="font-weight:bold;width: 1000px;margin-left:20px"><?php echo 'Caption :' ?></label></td></tr>
+    <tr><td><label for="legend" style="font-weight:bold;width: 1000px;margin-left:20px"><?php echo 'Caption :' ?></label>
+        <div  class="eraseDigit">
+                <input type="button"  label="<?php echo 'Delete Caption' ;?>" data-dojo-type="dijit/form/Button" 
+                data-dojo-props="onClick:function(){menuConfirmationEmptyTrash('repEmptyTrash',this.id)}" id="captionDialog">
+            </div>
+        </td></tr>
     <tr><td><div id="legend" name="legend" style="margin-left:20px" ><?php if(!empty($legend)){echo stripslashes(removeDoubleQuote($legend));} ?></div></td></tr>    
     <tr><td><label id="cptlegend" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
         <tr style="display: none;margin-left:20px" id="msgerrlegend">
@@ -719,7 +734,12 @@ if(isset($figure) && $figure!=''){
 
 <hr>
 <table>
-    <tr><td><label for="valorization" style="width: 1000px;float: left;margin-left: 20px;font-weight:bold;"><?php echo 'Valorization :' ?></label></td></tr>
+    <tr><td><label for="valorization" style="width: 1000px;float: left;margin-left: 20px;font-weight:bold;"><?php echo 'Valorization :' ?></label>
+         <div  class="eraseDigitValorization">
+                <input type="button"  label="<?php echo 'Delete Valorization' ;?>" data-dojo-type="dijit/form/Button" 
+                data-dojo-props="onClick:function(){menuConfirmationEmptyTrash('repEmptyTrash',this.id)}" id="valorizationDialog">
+            </div>
+        </td></tr>
     <tr><td><div id="valorization" name="valorization" style="margin-left:20px" height="124" ><?php if(!empty($valorisation)){echo $valorisation;} ?></div></td></tr>
     <tr><td><label id="cptvalorisation" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
         <tr style="display: none;margin-left:20px" id="msgerrvalorization">
@@ -756,7 +776,39 @@ if(isset($figure) && $figure!=''){
         </td>
     </tr>
 </table>
+<script>
+function menuConfirmationEmptyTrash(e,id){
+	dijit.byId(e).set('title', 'Thanks to confirm the deletion of the current input!');
+        document.getElementById('currentInput').value=id;
+	repEmptyTrash.show();
+}
 
+function deleteCurrentInput(){
+    if( document.getElementById('currentInput').value === 'contextDialog' ){
+        dijit.byId('contextObjectif').set('value','');
+        document.getElementById('cptcontexteobjectif').innerHTML='Number of characters entered : '+0;
+    }else if( document.getElementById('currentInput').value === 'resultDialog' ){
+        dijit.byId('results').set('value','');
+        document.getElementById('cptresultats').innerHTML='Number of characters entered : '+0;
+    }else if( document.getElementById('currentInput').value === 'captionDialog' ){
+        dijit.byId('legend').set('value','');
+        document.getElementById('cptlegend').innerHTML='Number of characters entered : '+0;
+    }else if( document.getElementById('currentInput').value === 'valorizationDialog' ){
+        dijit.byId('valorization').set('value',''); 
+        document.getElementById('cptvalorisation').innerHTML='Number of characters entered : '+0;
+    }
+}
+</script>
+<input type="text" value="" style="display: none" id='currentInput'/>
+<div data-dojo-type="dijit/Dialog" data-dojo-id="repEmptyTrash" id ='repEmptyTrash'  title="<?php echo TXT_CONFIRMATIONDELPROJET; ?>" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconCut', showLabel: true"
+style="width: 400px;margin-left: 20px;   ">
+<table class="dijitDialogPaneContentArea" >
+   <tr>
+	   <td><button type="submit" data-dojo-type="dijit/form/Button"   id="sOui" onclick="deleteCurrentInput()">Yes</button></td>
+	   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="sNon" data-dojo-props="onClick:function(){rep.hide();}">No</button></td>	   
+   </tr>
+</table>
+</div>
 <script>
     dojo.require("dojox.editor.plugins.SafePaste");
     require(["dojo/parser", "dijit/Editor"]);

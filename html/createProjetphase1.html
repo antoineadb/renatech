@@ -62,7 +62,7 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                 <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                     <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" ><?php echo affiche('TXT_AIDECONTEXTE');?></span></a>
             </label>
-            <div id="contexte" name="contexte"  height="100px" ></div>
+            <div id="contexte" name="contexte" style="width: 980px"></div>
         </td>
     </tr><tr><td><label id="cptcontext" style="width:450px;color:#B71701"></label></td></tr>
     <tr style="display: none" id="msgerrcontexte">
@@ -79,13 +79,12 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
 <!--------------------------------------------------------------------------------------------------------------------------------------
             DESCRIPTIF
 -------------------------------------------------------------------------------------------------------------------------------------->
-            <label for="descriptif" style='margin-top: 30px' ><?php echo TXT_DESCRIPTIFTRAVAIL.' :*'; ?> s
+            <label for="descriptif" style='margin-top: 30px' ><?php echo TXT_DESCRIPTIFTRAVAIL.' :*'; ?>
                 <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                     <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" ><?php echo affiche('TXT_AIDEDESCRIPTIF');?></span>
                 </a>
             </label>
-            <div id="descriptif" name="descriptif" height="100px"  >
-            </div>
+            <div id="descriptif" name="descriptif"  style="width: 980px"></div>
             <!---------------------------------------------------------------------------------------------------------------------------------------->
         </td>
     </tr><tr><td><label id="cptdescript" style="width:450px;color:#B71701"></label></td></tr>
@@ -211,7 +210,9 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                 dijit.byId(selectedCentrale).set('disabled',true);
                 document.getElementById(libellecentrale).style.textDecoration  ='line-through';
             }
-        }
+        }        
+         modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+        // afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
     }
     function enableCheckBoxAutrecentrale(id){
         var selectObject = dijit.byId(id);
@@ -224,8 +225,9 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         }
     }
 </script>
+
 <tr><td>
-        <fieldset id="ident">
+        <fieldset id="ident" style="width:939px">
             <legend>
                 <?php echo ' ' . TXT_CHOIXCENTRALE . '*'. ':'; ?>
                 <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
@@ -246,7 +248,8 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                 }
                 ?>
             </select>
-            <?php }else{ ?>                 
+            <?php }else{?>
+                 
             <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select" style="margin-left: 20px;" required="required"  onchange="disableCheckBoxAutrecentrale(this.id)">
                 <?php
                 $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=?
@@ -257,11 +260,12 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                 }
                 ?>
             </select>
-            <?php  }
+            <?php }
             ?>
         </fieldset>
     </td>
 </tr>
+<tr><td><?php include_once 'centraleProximite/centraleProximite.php'; ?></td><tr>
 <tr>
     <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 625px;margin-top:20px">
         <?php echo TXT_ERREURUPLOAD;?>

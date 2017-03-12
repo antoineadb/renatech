@@ -58,6 +58,10 @@ if (isset($_POST['page_precedente'])) {
             //CHANGEMENT DE STATUT, PAS D'ETAPE DANS UNE AUTRE CENTRALE
             $cas = 'chgstatut';
         }
+        
+        if($_POST['emailNon']=='non'){
+            $cas1 = 'noEmail';
+        }
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
         //                                            MISE A JOUR
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -1197,10 +1201,12 @@ if (isset($_POST['page_precedente'])) {
             $concerne1 = new Concerne(IDCENTRALEUSER, $idprojet, ENCOURSREALISATION, "");
             $manager->updateConcerne($concerne1, $idprojet);
             effaceCache(LIBELLECENTRALEUSER);
-            include '../EmailProjetEncoursrealisation.php';
-            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye') {
+            if($cas1 !='noEmail'){
+                include '../EmailProjetEncoursrealisation.php';
+            }
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail') {
                 include '../emailAutreCentrales.php';
-            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye') {
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' && $cas1 !='noEmail') {
                 include '../outils/envoiEmailAutreCentrale.php';
             }
             header('Location: /' . REPERTOIRE . '/myproject/' . $lang . '/' . $idprojet);
@@ -1219,18 +1225,19 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateConcerne($concerne, $idprojet);
             effaceCache(LIBELLECENTRALEUSER);
             // ENVOI D'UN EMAIL
-            include '../EmailProjetfini.php';
+            if($cas1 !='noEmail'){
+                include '../EmailProjetfini.php';
+            }
             //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
-            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye') {
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail') {
                 include '../emailAutreCentrales.php';
-            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye') {
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' && $cas1 !='noEmail') {
                 include '../outils/envoiEmailAutreCentrale.php';
             }
             //vide le cache
             
             header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
-            exit();
-            //include '../uploadphase2.php';
+            exit();            
         } elseif ($idstatutprojet == CLOTURE) {//PROJET CLOTURER
             $datestatutCloturer = $datemodifstatut;
             //VERIFICATION QUE LE PROJET A BIEN UNE DATE DE DEBUT DE PROJET,AFFECTATION DE LA DATE STATUTCLOTURER DANS LE CAS CONTRAIRE
@@ -1250,13 +1257,14 @@ if (isset($_POST['page_precedente'])) {
             $concerne = new Concerne(IDCENTRALEUSER, $idprojet, CLOTURE, "");
             $manager->updateConcerne($concerne, $idprojet);
             effaceCache(LIBELLECENTRALEUSER);
-            // ENVOI D'UN EMAIL
-            include '../EmailProjetcloture.php';
+            if($cas1!='noEmail'){
+                include '../EmailProjetcloture.php';
+            }
 
             //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
-            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye') {
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1!='noEmail') {
                 include '../emailAutreCentrales.php';
-            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye') {
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye'&& $cas1!='noEmail') {
                 include '../outils/envoiEmailAutreCentrale.php';
             }
             //vide le cache
@@ -1277,8 +1285,10 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateDateStatutRefuser($daterefus, $idprojet, IDCENTRALEUSER);
             effaceCache(LIBELLECENTRALEUSER);
             $libelleCentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDCENTRALEUSER);
-            include_once '../emailprojetphase2/emailRefuse.php';
-            include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
+            if($cas1!='noEmail'){
+                include_once '../emailprojetphase2/emailRefuse.php';
+                include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
+            }
             $_SESSION['idstatutprojet'] = $idstatutprojet; //NE PAS EFFACER ON A BESOIN DANS UPLOADPHASE2
             //vide le cache
             

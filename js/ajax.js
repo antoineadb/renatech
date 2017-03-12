@@ -203,3 +203,99 @@ function callbackmodifAcronyme(reponse) {
       document.getElementById('afficheMessage').style.display='none';
     }
 }
+function refreshLogs(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function () {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            callbackrefreshLogs(xhr2.responseText);
+        }
+    };
+
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+function callbackrefreshLogs(reponse){
+    document.getElementById('zoneText').innerHTML = reponse; 
+}
+
+function relanceEmail(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function () {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            callbackrelance(xhr2.responseText);
+        }
+    };
+
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+function callbackrelance(reponse){
+    document.getElementById('test2').innerHTML = reponse; 
+}
+
+
+/**
+ * 
+ * @param {type} cheminEtFichierPhp
+ * @returns {undefined}
+ */
+function modifCentraleAffectation(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function () {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            callbackmodifCentraleAffectation(xhr2.responseText);
+        }
+    };
+
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+
+function callbackmodifCentraleAffectation(reponse) {
+    document.getElementById('selection').style.display = "block";
+    document.getElementById('default').style.display = "none";
+    document.getElementById('selection').innerHTML = reponse; 
+}
+/**
+ * 
+ * @param {type} cheminEtFichierPhp
+ * @returns {undefined}
+ */
+function afficheCentraleProximite(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function () {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            callBackAfficheCentraleProximite(xhr2.responseText);
+        }
+    };
+
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+
+function callBackAfficheCentraleProximite(reponse) {
+    document.getElementById('chckcentraleproximite').style.display = "block";
+    document.getElementById('chckcentraleproximite').innerHTML = reponse; 
+}
+
+/**
+ * 
+ * @param {type} cheminEtFichierPhp
+ * @returns {undefined}
+ */
+function calculNbdeProjet(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function () {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            callbackafficheCentraleproximite(xhr2.responseText);
+        }
+    };
+
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+
+function callbackafficheCentraleproximite(reponse) {
+    document.getElementById('nbProjet').style.display = "block";
+    document.getElementById('nbProjet').innerHTML = reponse; 
+}

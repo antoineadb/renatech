@@ -79,7 +79,7 @@ if (isset($_SESSION['pseudo'])) {
   <?php }else{ ?>
             <div data-dojo-type="dijit/layout/ContentPane" title=" <?php echo '--- ' . TXT_ONGLETADMINLISTE1 . ' ---'; ?>  " style=" height: auto;" >
                 <?php include 'admin/formulaireListe1.php'; ?>
-            </div> <
+            </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="  <?php echo '--- ' . TXT_ONGLETADMINLISTE2 . ' ---'; ?> " style="width: 1050px; height: auto;" >
                 <?php include 'admin/formulaireListe2.php'; ?>
             </div>

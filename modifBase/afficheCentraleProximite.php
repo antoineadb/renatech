@@ -10,17 +10,17 @@ if(isset($_GET['centrale'])&&!empty($_GET['centrale'])){
     for ($i = 0; $i < count($arrayCentraleRegion); $i++) {
         $nomcentraleproximite = $arrayCentraleRegion[$i]['libellecentraleproximite'];
         $idcentraleproximite = $arrayCentraleRegion[$i]['idcentraleproximite'];
-        echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' class='centraleP' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp'.$idcentraleproximite . "'  >
+        echo "<input  class='dijit dijitReset dijitInline dijitCheckBox centPrx'  type='checkbox' data-dojo-type='dijit/form/CheckBox' class='centraleP' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp'.$idcentraleproximite . "'  >
         <label for = '" .'cp'. $idcentraleproximite . "' class='centraleP' > ".$nomcentraleproximite."</label>";
         echo '<br>';
     }
-    echo "<p><u>Centrales spécifiques</u></p>";
+    echo "<p><u>".TXT_CENTRALESPECIFIQUES."</u></p>";
         $rowspecifique = $manager->getListbyArray("SELECT cp.libellecentraleproximite, cp.idcentraleproximite FROM region r,centraleproximite cp WHERE cp.idregion = r.idregion  "
-                . "AND r.libelleregion =? and cp.masquecentraleproximite!=? order by idcentraleproximite asc",array('Centrales spécifiques',TRUE));
+                . "AND r.libelleregion =? and cp.masquecentraleproximite!=? order by idcentraleproximite asc",array(TXT_CENTRALESPECIFIQUES,TRUE));
         for ($i = 0; $i < count($rowspecifique); $i++) {
             $nomcentraleproximite = $rowspecifique[$i]['libellecentraleproximite'];
             $idcentraleproximite = $rowspecifique[$i]['idcentraleproximite'];
-            echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' class='centraleP'  value='" . 'cp'.$idcentraleproximite . "'  >
+            echo "<input class='dijit dijitReset dijitInline dijitCheckBox centPrx'   type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' class='centraleP'  value='" . 'cp'.$idcentraleproximite . "'  >
             <label for = '" .'cp'. $idcentraleproximite . "' class='opt' class='centraleP' > ".$nomcentraleproximite."</label>";
             echo '<br>';
         }

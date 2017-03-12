@@ -146,7 +146,7 @@ include 'html/header.html';
         <?php } ?>
             
         </script>
-        <div data-dojo-type="dijit/layout/TabContainer" id="tabcontainer" doLayout="false">
+        <div data-dojo-type="dijit/layout/TabContainer" id="tabcont" doLayout="false">
             <div data-dojo-type="dijit/layout/ContentPane" id="succinct"  title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" >
                 <?php include 'html/createProjetphase1.html'; ?>
             </div>

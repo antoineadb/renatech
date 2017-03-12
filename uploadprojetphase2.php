@@ -53,7 +53,7 @@ $numero = $manager->getSingle2("select numero from projet where idprojet=?", $id
 if ($cas == 'enregistrement') {//OK VALIDE    
     createLogInfo(NOW, TXT_CREATIONPROJETPHASE2 .' : '. $numero, NOMUSER . ' ' . PRENOMUSER .' : '. getCentrale($numero, $manager), TXT_ENATTENTEPHASE2, $manager,$idCentrale);
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
-} elseif ($cas == 'creationprojetphase2' || $cas == 'creationprojetphase2etape') {    
+} elseif ($cas == 'creationprojetphase2' || $cas == 'creationprojetphase2etape'  ) {    
     include 'EmailProjetphase2.php';
     header('Location: /' . REPERTOIRE . '/project/' . $lang . '/' . $idprojet . '/' . $nombrePersonneCentrale . '/' . $idCentrale);
 } elseif ($cas == 'creerprojetphase2') {    

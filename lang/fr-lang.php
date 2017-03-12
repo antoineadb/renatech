@@ -41,15 +41,16 @@ define("TXT_BOUTONRECHERCHE","Recherche");
 define("TXT_CADREINSTITUTIONNEL","Cadre institutionnel du projet");
 define("TXT_CAPTCHA","Saisir le code ci dessus");
 define("TXT_CAPTCHASECU","Contrôle de sécurité");
-define("TXT_CENTRALE","Centrale");
-define("TXT_CENTRALS","Centrale(s)");
+define("TXT_CENTRALE","Centrale Renatech");
+define("TXT_CENTRALS","Centrale(s) Renatech");
 define("TXT_CENTRALENONDEFINI","Centrale non défini");
 define("TXT_CENTRALEPARTENAIRE","Nom de la centrale partenaire");
-define("TXT_CENTRALEPART","Centrale partenaire");
+define("TXT_CENTRALEPART","Centrale de proximité/spécifique");
+define("TXT_CENTRALESPECIFIQUES","Centrales internationales");
 define("TXT_CENTRALERAT","Centrale de rattachement");
-define("TXT_CENTRALES","Centrales");
-define("TXT_CENTRALESELECTON","Centrale sélectionnée");
-define("TXT_CENTRALESELECTONNEE","Centrale(s) sélectionnée(s)");
+define("TXT_CENTRALES","Centrales Renatech");
+define("TXT_CENTRALESELECTON","Centrale Renatech sélectionnée");
+define("TXT_CENTRALESELECTONNEE","Centrale(s) Renatech sélectionnée(s)");
 define("TXT_CHAMPSOBLIGATOIRES","(*)Champs obligatoires");
 define("TXT_CHANGERMOTPASSE","Changer votre mot de passe");
 define("TXT_CHARACTERISATIONMETROLOGY","Caractérisation/Métrologie");
@@ -144,7 +145,7 @@ define("TXT_EMAILDOUBLONADMINLOCAL","L'email que vous avez saisi est déjà enre
 define("TXT_EMAILMODIF","Voulez-vous envoyer les modifications par email?");
 define("TXT_EMAILNONVALIDE","Courriel non valide");
 define("TXT_EMAILPSEUDOUTILISE","Pseudo ou email utilisé pour vous inscrire ?");
-define("TXT_EMAILRESPDEVIS","Courriel du responsable des devis");
+define("TXT_EMAILRESPDEVIS","Courriel du destinataire du devis");
 define("TXT_EMAILUTILISE","Pseudo utilisé pour vous inscrire ?");
 define("TXT_ENATTENTE","Projet en attente");
 define("TXT_ENATTENTEPHASE2","Projet en attente phase2");
@@ -824,7 +825,7 @@ define('TXT_ETAPEAUTRECENTRALE','Etape(s) réalisée(s) dans une autre centrale'
 define ("TXT_DESCRIPTETAPE","Description de l'(ou des) étape(s):");
 define ("TXT_DESCRIPTCENTRALEROXIMITE","Descriptions de la demande ou de l’opération technologique (réalisée ou à réaliser)");
 define('TXT_SELECTCENTRALES','Vous devez sélectionnez une ou plusieurs centrales');
-define("TXT_AUTRESCENTRALES","Autre(s) centrale(s)");
+define("TXT_AUTRESCENTRALES","Autre(s) centrale(s) Renatech");
 define("TXT_CENTRALEPROXIMITE","Centrales de proximité");
 define("TXT_QUESTIONCENTRALEPROXIMITE","Utilisez-vous (ou utiliserez-vous) dans votre projet des moyens technologiques d'une centrale « dite de proximité » ou d’une centrale « internationale » partenaire? ");
 define('TXT_HELPCENTRALEPROXIMITE',"Aide sur les centrales de proximités");
@@ -994,10 +995,10 @@ define('TXT_QUESTIONCENTRALEPARTENAIRE',"Utiliserez-vous une centrale associée 
 define('TXT_QUESTIONCPARTCONNU',"Utiliserez-vous une centrale associée à la centrale ");
 define("TXT_AIDECENTRALEPROXIMITE","Les centrales de proximité ont vocation à compléter, à l’échelle locale, les dispositifs du réseau des grandes centrales de technologie nationales.<br>
  Localisation des centrales de proximité<br>
-•	Grenoble, NANOFAB CNRS<br>
-•	Lyon, ECL-INSA<br>
-•	Nancy-Strasbourg : Centrale de Technologie spécifique Grand-Esr<br>
-•	Saclay : Atelier de nanofabrication du SPEC<br>
-•	Paris- Centre : Salles blanches<br>
-•	Rennes : Centrale de technologie <br>
+• Grenoble, NANOFAB CNRS<br>
+• Lyon, ECL-INSA<br>
+• Nancy-Strasbourg : Centrale de Technologie spécifique Grand-Est<br>
+• Saclay : Atelier de nanofabrication du SPEC<br>
+• Paris- Centre : Salles blanches<br>
+• Rennes : Centrale de technologie<br>
 ");

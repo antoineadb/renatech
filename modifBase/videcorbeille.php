@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start();echo 1;die;
 include '../class/Manager.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
@@ -15,7 +15,7 @@ if (isset($_SESSION['pseudo'])) {
 $idcentrale = $manager->getSingle2("select idcentrale_centrale from utilisateur,loginpassword where idlogin_loginpassword=idlogin and pseudo=?", $_SESSION['pseudo']);
 $arrayIdProjetToDelete = $manager->getList2("SELECT idprojet FROM  projet,concerne WHERE idprojet_projet = idprojet and trashed =TRUE and idcentrale_centrale =? ", $idcentrale);
 
-for ($i = 0; $i < count($arrayIdProjetToDelete); $i++) {
+for ($i = 0; $i < count($arrayIdProjetToDelete); $i++) {    
     $manager->deleteconcerneprojet($arrayIdProjetToDelete[$i]['idprojet']);
     $manager->deletecreerprojet($arrayIdProjetToDelete[$i]['idprojet']);
     $manager->deleteprojetsourcefinancement($arrayIdProjetToDelete[$i]['idprojet']);
@@ -44,5 +44,6 @@ for ($i = 0; $i < count($arrayIdProjetToDelete); $i++) {
     $manager->deleterapport($arrayIdProjetToDelete[$i]['idprojet']);
     $manager->deleteprojet($arrayIdProjetToDelete[$i]['idprojet']);
     $manager->deleteautrethematique($arrayIdProjetToDelete[$i]['idprojet']);
+    
 }
 header('Location: /' . REPERTOIRE . '/delete_projet/' . $lang );

@@ -129,6 +129,17 @@ th {
     padding-right: 20px;
     width: 60px;
 }
+.centraleP {
+    display: inline;
+    float: none;
+    margin-left: 7px;
+    width: 5px;
+}
+
+.centPrx {
+    margin-left: 20px;
+    width: 60px;
+}
 
 select {
     width: 200px;
@@ -345,7 +356,7 @@ a.infoBulle:hover span{
 .but{
     width:80px;
 }
-#entete {    
+#entete {
     padding: 0px 20px 20px 0;
 }
 #entete h1 {
@@ -376,7 +387,7 @@ a.infoBulle:hover span{
     text-decoration: none;
 }
 #new, #ident, #droit, #compte, #compteuser, #compteuserindust, #msg, #dev, #identpays, #identsa, #identte, #identds, #identne, #identtu, #identtp,#identtf,
-#identth, #identsf, #identac, #identvc, #identce, #identco,#identres{
+#identth, #identsf, #identac, #identvc, #identce, #identco,#identres,#identre,#identcentraleProximite{
     padding:20px 20px 20px 20px;
     border:solid 1px #5D8BA2;
     color:midnightblue;
@@ -386,26 +397,43 @@ a.infoBulle:hover span{
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
 }
-#identre {     
+
+#idexportUser{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
     color:midnightblue;
     font-family:verdana;
     -moz-border-radius: 5px;
     -khtml-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
-    background-color:#F9FCFC;
-    border: 2px solid #5d8ba2;
-    width:1033px;
-    padding-top: 0px;
-    margin-top:20px;
-    padding-left:0px;    
-    margin-left: -3px;
-    padding-bottom: 20px;
+    border-color: #5d8ba2;
+    font-size: 1em;
+    height: 142px;
+    margin-left: 50px;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    padding-top: 10px;
+    width: 490px;
 }
-
-
-#gestionlibelle, #gestionlibelleautres,#gestionlibellecommun,#gestionhome,#gestionemailcontact,#gestionemailprojetphase1cloture,#gestionemailprojetphase1fini,#gestionemailprojetrealisation,#gestionemaildemandeur,
-#gestionemailprojetphase1,#gestionemailprojetphase2,#gestionemailprojetphase21,#gestionemailprojetphase1enattente,#gestionemailprojetphase1refuse,#gestionemailprojetphase1transfert, #gestionemailprojetphase1expertise {
+#idExportUser{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;    
+    margin-top: 70px;
+}
+#tbexportUser{
+    margin-bottom: 70px;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+#gestionlibelle, #gestionlibelleautres,#gestionlibellecommun,#gestionhome,#gestionhome1,#gestionemailcontact,#gestionemailprojetphase1cloture,#gestionemailprojetphase1fini,#gestionemailprojetrealisation,#gestionemaildemandeur,
+#gestionemailprojetphase1,#gestionemailprojetphase2,#gestionemailprojetphase21,#gestionemailprojetphase1enattente,#gestionemailprojetphase1refuse,#gestionemailprojetphase1transfert, #gestionemailprojetphase1expertise, #gestionemailprojetvalide {
     padding:8px;
     border:solid 1px #5D8BA2;
     color:midnightblue;
@@ -448,7 +476,7 @@ a.infoBulle:hover span{
 
 }
 
-#export{
+#export,#gestionsiteweb{
     padding:15px 15px 15px 15px;
     border:solid 1px #5D8BA2;
     color:midnightblue;
@@ -483,6 +511,38 @@ a.infoBulle:hover span{
     margin-top: 40px;
     padding: 45px 20px 0 10px;
     width: 1017px;
+
+}
+#requetparam{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: auto;
+    margin-top: 40px;
+    padding: 45px 20px 0 10px;
+    width: 1017px;
+
+}
+.userTable{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    padding: 15px 10px 0 20px;
+    width: auto;
+
+
+}
+#projetTable{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 430px;
+    padding: 15px 10px 0 20px;
+    width: auto;
+
 
 }
 #stat{
@@ -959,6 +1019,31 @@ a.infoBulle:hover span{
     margin-left: 5px;
     usemap:"#carte1" ;
 }
+.eraseDigitObj {
+    border: medium none;
+    float: right;
+    font-size: 12px;
+    margin: 0 20px 0 0;
+    padding: 0;
+    width: 144px;
+}
+.eraseDigit {
+    border: medium none;
+    float: right;
+    font-size: 12px;
+    margin-bottom: 5px;
+    margin-top: -5px;
+    width: 110px;
+}
+
+.eraseDigitValorization {
+    border: medium none;
+    float: right;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    width: 133px;
+}
 
 .datedebutprojet{
     border: 1px solid #3380BE;
@@ -1075,8 +1160,156 @@ a.infoBulle:hover span{
 #detail{
     width: auto; 
 }
-#tabcontainer{
+#tabcont{
     margin-top:15px;
     width: 1050px;
     font-size: 1.2em;
+}
+.zoneText{
+    width: 982px;
+    height: 480px;
+    text-align: left;
+    border: 1px solid black;
+    overflow: auto;
+    background-color:black;
+    color:white;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+#requete{
+    margin-top: 50px;
+    padding:5px 5px 10px 5px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+
+
+}
+
+.academicIndust{
+    border: 1px solid #5d8ba2;
+    border-radius: 4px;
+    float: left;
+    margin-left: 20px;
+    margin-top: -6px;
+    padding: 10px;    
+    visibility: hidden;
+    width: 346px;
+}
+
+.tblRelance {
+        border-collapse:collapse;width:100%;
+    }
+.thRelance , tdRelance {
+        border:1px solid black;width:20%;
+    }
+.tdRelance td{
+        text-align:center;
+    }
+
+.thRelance th{
+        background-color:#BBC4CC;color:midnightblue;
+    }
+#aideStatNouveauProjet {
+    background-color: white;
+    float: right;
+    font-size: 12px;
+    font-style: italic;
+    margin-right: 10px;
+    margin-top: -20px;
+    padding-left: 3px;
+    padding-right: 3px;
+    text-decoration: none;
+}
+#aideGestionLibelle {
+    background-color: white;
+    float: right;
+    font-size: 12px;
+    font-style: italic;
+    margin-right: 10px;
+    margin-top: -30px;
+    padding-left: 3px;
+    padding-right: 3px;
+    text-decoration: none;
+}
+#post{margin: 20px;}
+
+#msginfo {
+    color: green;
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 198px;
+    margin-top: -34px;
+    width: 500px;
+}
+#EnvoyerEmail{
+    width:167px;
+}
+
+#aideRelance {
+    background-color: white;
+    float: right;
+    font-size: 12px;
+    font-style: italic;
+    margin-right: 10px;
+    margin-top: -43px;
+    padding-left: 3px;
+    padding-right: 3px;
+    text-decoration: none;
+}
+
+.formDemande {
+    margin-left: 20px;    
+    width: 500px;
+}
+#pieceJointeDemandeFaisabilite{
+    margin-top: 20px;
+    float: left;
+    width:150px;
+}
+
+
+#msgerrpiecejointe {
+    color: red;
+    font-family: verdana;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    padding: 5px;
+    text-align: center;
+    width: 600px;
+}
+#errUpload{
+    background: #529ab7 none no-repeat scroll 15px 50%;
+    color: white;
+    float: right;
+    font-size: 0.9em;
+    margin-right: 150px;
+    margin-top: 20px;
+    padding: 7px;
+    text-align: center;
+    width: 625px;
+}
+#emailFaisabilite{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 130px;
+    margin-top: 40px;
+    padding: 45px 20px 0 10px;
+    width: 1017px;
+
+}
+
+.enteteProjet{
+    border: 1px solid gray;padding-left: 10px;padding-right:10px;
+}
+.titreEnteteProjet{
+    border: 1px solid gray;padding-left: 10px;padding-right:10px;background-color: #E4F0FC;
 }

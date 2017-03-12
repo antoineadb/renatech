@@ -211,12 +211,14 @@ if (!empty($idprojet)) {
     $sPorteur = '';
     $nbarrayporteur = count($arrayporteur);
     for ($i = 0; $i < $nbarrayporteur; $i++) {
-        $sPorteur.=$arrayporteur[$i]['nom'] . ' ' . $arrayporteur[$i]['prenom'] . ' / ';
+        $sPorteur.=$arrayporteur[$i]['nom'] . ' ' . $arrayporteur[$i]['prenom'] . ' </br> ';
     }
-    $rowResult = $manager->getListbyArray("SELECT idutilisateur,nom, prenom, entrepriselaboratoire FROM utilisateur, projet, creer WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=?", array($idprojet));
+    $rowResult = $manager->getListbyArray("SELECT mail,idutilisateur,nom, prenom, entrepriselaboratoire FROM utilisateur, projet, creer,loginpassword "
+            . "WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=? and idlogin=idlogin_loginpassword", array($idprojet));
     $demandeur = $rowResult[0]['nom'] . ' ' . $rowResult[0]['prenom'];
+    $emaildemandeur = $rowResult[0]['mail'];
     $entrepriselaboratoireo = $rowResult[0]['entrepriselaboratoire'];
-    $sPorteur = $demandeur . ' / ' . substr($sPorteur, 0, -1);
+    $sPorteur = $demandeur . ' </br> ' . substr($sPorteur, 0, -1);
     $sporteur = substr($sPorteur, 0, -2);
     $iddemandeur = $rowResult[0]['idutilisateur'];
     $arrayadminprojet = $manager->getList2("Select nom,prenom from utilisateur u,utilisateuradministrateur ua where ua.idutilisateur=u.idutilisateur and ua.idprojet=?", $idprojet);

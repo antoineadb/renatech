@@ -56,7 +56,9 @@ if ($cas == 'miseAJourEmail') {
     header('Location: /' . REPERTOIRE . '/EmailProjetphase2Session.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet 
             . '&nbpersonne=' . $_POST['nombrePersonneCentrale'] . '&etautrecentrale=' . $etautrecentrale.'&majcentrale=oui');
 }elseif($cas=='miseAJourEmailautreEmailpremierefois'){
-     include 'outils/envoiEmailAutreCentrale.php';
+    if( $cas1 !='noEmail') {
+        include 'outils/envoiEmailAutreCentrale.php';
+    }
     header('Location: /' . REPERTOIRE . '/EmailProjephase2tMAJ.php?lang=' . $lang . '&idprojet=' . $idprojet . '&statut=' . $idstatutprojet . '&nbpersonne=' . $_POST['nombrePersonneCentrale']);
 }else {
     $sCentrale ="";

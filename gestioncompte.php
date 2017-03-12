@@ -10,7 +10,7 @@ if (isset($_SESSION['pseudo'])) {
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
-include 'html/header.html';
+include 'html/header.html'; 
 ?>
 <div id="global">
     <?php
@@ -104,7 +104,7 @@ include 'html/header.html';
 /**------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  *          CAS ACADEMIQUE
  * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
- */            
+ */           
             if (!empty($_GET['iduser']) && !empty($_GET['idqualiteaca']) && empty($_GET['idqualiteindust'])) {
                 $iduser = $_GET['iduser'];
                 $row = $manager->getList2("

@@ -23,7 +23,12 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
     <legend style="width: 850px;padding-left: 20px">
         <b><?php echo TXT_NUMPROJET.' : '.$numProjet;?></b> - <b><?php echo TXT_ACRONYMEPROJET.' : '.stripslashes(str_replace("''","'",$acronyme));  ?></b>        
     </legend>
-    <?php switch ($idstatutprojet) {
+    <?php 
+    $dateStatutFini = $manager->getSingle2('select datestatutfini from projet where idprojet = ?',$idprojet);
+    $dateFini = new DateTime($dateStatutFini);
+    $dateFini  = $dateFini->format('d-m-Y');
+    
+    switch ($idstatutprojet) {
         case "":
             echo '<legend style="margin-left:20px"><b>' . TXT_STATUTPROJETS . ': ' . TXT_ATTENTE . '</b></legend>'; //projet en attente
             $bool = 'false';
@@ -55,7 +60,7 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
             $disabled = "'disabled'";
             break;
         case FINI:
-            echo "<fieldset class='statut' ><b>" . TXT_PROJET . " " . TXT_FINI . "</b></fieldset>";
+            echo "<fieldset class='statut' ><b>" . TXT_PROJET . " " . TXT_FINI . " le : ".$dateFini."</b></fieldset>";
             $bool = 'false';
             $bool1 = '';
             $disabled = "''";
@@ -107,21 +112,22 @@ $date  = $date->format('d-m-Y');
                 </td>
             </tr>
         </table>
-        <table style="border-collapse:collapse;width:1035px;margin-top:10px;">
+        <table style="border-collapse:collapse;margin-top:10px;">
         <tr>
-            <th style="border: 1px solid gray;padding-left:5px;background-color: #E4F0FC"><?php echo TXT_DEMANDEUR;?></th>
-            <th style="border: 1px solid gray;padding-left:5px;background-color: #E4F0FC"><?php echo TXT_PORTEURS;?></th>
-            <?php if(!empty($listeadminprojet)){?>
-            <th style="border: 1px solid gray;padding-left:5px;background-color: #E4F0FC"><?php echo TXT_ADMINPROJET;?></th>
-            <?php }?>             
+            <th class="titreEnteteProjet" ><?php echo TXT_DEMANDEUR;?></th>
+            <th class="titreEnteteProjet" ><?php echo TXT_PORTEURS;?></th>
+        <?php if(!empty($listeadminprojet)){?>
+            <th class="titreEnteteProjet"><?php echo TXT_ADMINPROJET;?></th>
+        <?php }?>
         </tr>
         <tr>
-            <td style="border: 1px solid gray;padding-left: 5px;width:200px"><?php echo $demandeur;?></td>
-            <td style="border: 1px solid gray;padding-left: 5px;width:400px"><?php echo $sporteur;?></td>
-            <?php if(!empty($listeadminprojet)){?>
-            <td style="border: 1px solid gray;padding-left: 5px"><?php echo $listeadminprojet;?></td>
-            <?php }?>
+            <td class="enteteProjet"><?php echo $demandeur.'<br/>'.$emaildemandeur;?></td>
+            <td class="enteteProjet"><?php echo $sporteur;?></td>
+        <?php if(!empty($listeadminprojet)){?>
+            <td class="enteteProjet"><?php echo $listeadminprojet;?></td>
+        <?php }?>
         </tr>
+        
         </table>
         <?php if($_SESSION['idTypeUser']==ADMINLOCAL){?>
         <table style="border-collapse:collapse;width:210px;margin-top:10px;">
@@ -1133,161 +1139,7 @@ function masqueetapeautrecentrale(){
                         </tr>                              
                         </table>                                
                     </fieldset>
-<!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                                                                                CENTRALES DE PROXIMITES
- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>                                               
- <script>
-function affichecentraleproximite(){
-    document.getElementById('etapecentraleproximite').style.display = 'block';
-    document.getElementById('centraleProximite').style.display = 'block';
-    document.getElementById('cptcentraleproximite').style.display = 'block';
-    document.getElementById('chckcentraleproximite').style.display = 'block';
-    document.getElementById('descriptioncentraleproximite').style.display = 'block';
-    document.getElementById('affiche_centrale_proximite').value = 'oui';
-}
-function masquecentraleproximite(){
-    document.getElementById('etapecentraleproximite').style.display = 'none';
-    document.getElementById('centraleProximite').style.display = 'none';
-    document.getElementById('cptcentraleproximite').style.display = 'none';
-    document.getElementById('chckcentraleproximite').style.display = 'none';
-    document.getElementById('descriptioncentraleproximite').style.display = 'none';
-    document.getElementById('affiche_centrale_proximite').value = 'non';
-}                            
-</script>
-                    <fieldset style="  padding:10px 15px 15px; border:solid 1px #5D8BA2; margin-right: 20px;margin-top: 15px;width:958px;
-                                          margin-bottom: 15px;margin-left: 20px;color:midnightblue;font-family:verdana;border-radius: 5px;border-radius: 5px 5px 5px 5px;border-color: #5D8BA2;" >
-                    <legend><?php echo TXT_CENTRALEPROXIMITE; ?><a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 750px">
-                                            <?php echo TXT_AIDECENTRALEPROXIMITE;?></span></a></legend>
-                        <?php 
-                        $centraleproximite = $manager->getSingle2("select centraleproximite from projet where idprojet=?",$idprojet);
-                        if ($centraleproximite== 'TRUE'){ ?>
-                        <table>
-                            <tr>
-                                <td><label for="centraleproximite" style="width:918px;margin-left: 20px;;margin-top: 10px"><?php echo TXT_QUESTIONCENTRALEPROXIMITE; ?></label>                                    
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"   value="TRUE" checked="checked" class="btRadio" style="margin-left: 20px;" onclick="affichecentraleproximite()" ><?php echo TXT_OUI; ?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" class="btRadio" style="margin-left: 20px;" onclick="masquecentraleproximite()"><?php echo TXT_NON; ?>
-                                </td>
-                            </tr>
-                        </table>
-                        <?php }else{ ?>
-                        <table>
-                            <tr>
-                                <td><label for="centraleproximite" style="width:918px;margin-left: 20px;;margin-top: 10px"><?php echo TXT_QUESTIONCENTRALEPROXIMITE; ?></label>                                    
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"   value="TRUE"  class="btRadio" style="margin-left: 20px;" onclick="affichecentraleproximite()">
-                                    <?php echo TXT_OUI; ?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" checked="checked" class="btRadio" style="margin-left: 20px;" onclick="masquecentraleproximite()">
-                                    <?php echo TXT_NON; ?>
-                                </td>                                
-                            </tr>
-                        </table>
-                        <?php }
-                        if ($centraleproximite== 'TRUE'){ ?>
-                        <table>
-                            <tr>
-                            <td style="float: left;block" id="centraleProximite">
-                                <fieldset style="font-size: 1.1em;font-style: italic;width: 520px">
-                                    <legend><?php echo TXT_SELECTCENTRALES; ?></legend>
-                                <div id='chckcentraleproximite' style="float: left;margin-bottom: 15px;margin-left:20px;margin-top: 10px">
-                                    <?php
-                                    $row = $manager->getList("SELECT idcentrale_proximite,nom_centrale_proximite FROM centrale_proximite where centralespecifique =FALSE order by idcentrale_proximite asc");
-                                    for ($i = 0; $i < count($row); $i++) {
-                                        $nomcentraleproximite = $row[$i]['nom_centrale_proximite'];
-                                        $idcentraleproximite = $row[$i]['idcentrale_proximite'];
-                                        echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp'.$idcentraleproximite . "'  >
-                                        <label for = '" .'cp'. $idcentraleproximite . "' class='opt' > ".$nomcentraleproximite."</label>";
-                                        echo '<br>';
-                                    }
-                                    echo '<br>';
-                                    echo "<p><u>Centrales spécifiques</u></p>";
-                                    $rowspecifique = $manager->getList("SELECT idcentrale_proximite,nom_centrale_proximite FROM centrale_proximite where centralespecifique =TRUE order by idcentrale_proximite asc");
-                                    for ($i = 0; $i < count($rowspecifique); $i++) {
-                                        $nomcentraleproximite = $rowspecifique[$i]['nom_centrale_proximite'];
-                                        $idcentraleproximite = $rowspecifique[$i]['idcentrale_proximite'];
-                                        echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp'.$idcentraleproximite . "'  >
-                                        <label for = '" .'cp'. $idcentraleproximite . "' class='opt' > ".$nomcentraleproximite."</label>";
-                                        echo '<br>';
-                                    }
-                                    ?>                                    
-                                </div>
-                                </fieldset>
-                            </td>
-                            <td  id="etapecentraleproximite" style="display:block;float: left">
-                                    <?php $descriptioncentraleproximite = stripslashes(str_replace("''","'",$descriptioncentraleproximite)) ?>
-                                    <label for="descriptioncentraleproximite" style="width: auto;margin-top:15px">
-                                        <?php echo TXT_DESCRIPTCENTRALEROXIMITE; ?>
-                                    </label>
-                                    <div id="descriptioncentraleproximite"  name="descriptioncentraleproximite" disabled="<?php echo $bool; ?>" 
-                                         style="margin-right: 0px;color:midnightblue;font-family:verdana;margin-left:0px;width:960px;;margin-bottom: 20px" >
-                                    <?php echo $descriptioncentraleproximite;?></div>
-                                </td>
-                                <tr>
-                            <td><label id="cptcentraleproximite" style="width:450px;color:#B71701;margin-bottom: 10px;display: block "></label></td>
-                        </tr>
-                        <tr style="display: none" id="msgerrcentraleproximite">
-                            <td>
-                                <fieldset class='msgerrverrou' ><legend><?php echo TXT_INFO;?></legend>
-                                    <?php 	echo stripslashes(TXT_LIMITEDITEURVERROU).'<br>';?>
-                                </fieldset>
-                            </td>                            
-                        </tr>
-                        </table>
-                        <?php }else{ ?>
-                        <table>
-                            <tr>
-                            <td style="float: left;" >
-                                <fieldset style="font-size: 1.1em;font-style: italic;width: 520px;display: none" id="centraleProximite" >
-                                    <legend><?php echo TXT_SELECTCENTRALES; ?></legend>
-                                <div id='chckcentraleproximite' style="float: left;margin-bottom: 15px;margin-left:20px;margin-top: 10px;display: none">
-                                    <?php                                    
-                                    $row = $manager->getList("SELECT idcentrale_proximite,nom_centrale_proximite FROM centrale_proximite where centralespecifique =FALSE order by idcentrale_proximite asc");
-                                    for ($i = 0; $i < count($row); $i++) {
-                                        $nomcentraleproximite = $row[$i]['nom_centrale_proximite'];
-                                        $idcentraleproximite = $row[$i]['idcentrale_proximite'];
-                                        echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp'.$idcentraleproximite . "'  >
-                                        <label for = '" .'cp'. $idcentraleproximite . "' class='opt' > ".$nomcentraleproximite."</label>";
-                                        echo '<br>';
-                                    }
-                                    echo '<br>';
-                                    echo "<p><u>Centrales spécifiques</u></p>";
-                                    $rowspecifique = $manager->getList("SELECT idcentrale_proximite,nom_centrale_proximite FROM centrale_proximite where centralespecifique =TRUE order by idcentrale_proximite asc");
-                                    for ($i = 0; $i < count($rowspecifique); $i++) {
-                                        $nomcentraleproximite = $rowspecifique[$i]['nom_centrale_proximite'];
-                                        $idcentraleproximite = $rowspecifique[$i]['idcentrale_proximite'];
-                                        echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp'.$idcentraleproximite . "'  >
-                                        <label for = '" .'cp'. $idcentraleproximite . "' class='opt' > ".$nomcentraleproximite."</label>";
-                                        echo '<br>';
-                                    }
-                                    ?>
-                                </div>
-                                </fieldset>
-                            </td>
-                            <td  id="etapecentraleproximite" style="display:none;float: left">
-                                    <?php $descriptioncentraleproximite = stripslashes(str_replace("''","'",$descriptioncentraleproximite)) ?>
-                                    <label for="descriptioncentraleproximite" style="width: auto;margin-top:15px;">
-                                        <?php echo TXT_DESCRIPTCENTRALEROXIMITE; ?>
-                                    </label>
-                                    <div id="descriptioncentraleproximite"  name="descriptioncentraleproximite" disabled="<?php echo $bool; ?>" 
-                                         style="margin-right: 0px;color:midnightblue;font-family:verdana;margin-left:0px;width:960px;;margin-bottom: 20px" >
-                                    <?php echo $descriptioncentraleproximite;?></div>
-                                </td>
-                                <tr>
-                            <td><label id="cptcentraleproximite" style="width:450px;color:#B71701;margin-bottom: 10px;display: none "></label></td>
-                        </tr>
-                        <tr style="display: none" id="msgerrcentraleproximite">
-                            <td>
-                                <fieldset class='msgerrverrou' ><legend><?php echo TXT_INFO;?></legend>
-                                    <?php 	echo stripslashes(TXT_LIMITEDITEURVERROU).'<br>';?>
-                                </fieldset>
-                            </td>                            
-                        </tr>      
-                        </tr>
-                        </table>
-                        <?php } ?>
-                    </fieldset>
-<!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                                                                                FIN CENTRALES DE PROXIMITES
- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>                                               
-                                                                                
+                                                                 
                         <table style="margin-bottom: 15px">
                             <tr>
                                 <td>
@@ -1522,8 +1374,7 @@ function masquecentraleproximite(){
                   <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitCancel3"><?php echo TXT_ANNULE;?></button></td>
               </tr>
           </table>
-      </div>                
-            <script>            
+      </div><script>            
           function valide(){
                 document.getElementById('save').value='non';
                 document.getElementById('maj').value = 'non';
@@ -1572,9 +1423,9 @@ if($idstatut!=ENATTENTEPHASE2){
         <label for="statutProjet" style="width: 200px;margin-top:12px;margin-left:5px"><?php echo TXT_STATUTPROJET.'* :'; ?> </label>
     <?php
 
-    $param=array(ENATTENTE,ENCOURSANALYSE,$idstatutencours,ENATTENTEPHASE2);
+    $param=array(ENATTENTEPHASE2,$idstatut,ENATTENTEPHASE2);
     $rowstatut = $manager->getListbyArray("select idstatutprojet,libellestatutprojet,libellestatutprojeten from statutprojet where idstatutprojet !=? and idstatutprojet!=? 
-    and idstatutprojet!=? and idstatutprojet!=? order by idstatutprojet asc",$param);
+    and idstatutprojet!=?  order by idstatutprojet asc",$param);    
     $value='st'.$idstatutencours;
 
     ?>
@@ -1655,7 +1506,7 @@ if($idstatut!=ENATTENTEPHASE2){
             </div>
     </td>
     <td id="central" style="display: none">
-                    <label for="centraletrs" style="width: 90px;margin-top: 16px"><?php echo TXT_CENTRALE.'* :'; ?> </label>
+                    <label for="centraletrs" style="width: auto;margin-top: 16px"><?php echo TXT_CENTRALE.'* :'; ?> </label>
                     <?php                     
                     $libellecentrale = $manager->getList("select idcentrale,libellecentrale from centrale where libellecentrale!='Autres' and
                     idcentrale!=$idcentraleconnecte order by libellecentrale asc"); ?>
@@ -1684,7 +1535,7 @@ if($idstatut!=ENATTENTEPHASE2){
         $sendmail = $manager->getSingle2("select sendmail from projetautrecentrale where idprojet =?",$idprojet);        
             if ($etapeautrecentrale==TRUE && $sendmail==TRUE){?>
                 <input data-dojo-type="dijit/form/Button"  type="button"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" 
-                       data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){repstatut.show();}}" >
+                       data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){repstatut0.show();}}" >
 <?php }else{?>
                      <input data-dojo-type="dijit/form/Button"  type="button"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" 
                        data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){modifProjet.submit();}}" >
@@ -1698,12 +1549,22 @@ if($idstatut!=ENATTENTEPHASE2){
         </td>
     </tr>
     </table>
+    <div data-dojo-type="dijit/Dialog" data-dojo-id="repstatut0" title="<?php echo 'Souhaitez-vous envoyer les emails correspondants au changement de statut?';?>" style="width: 500px;margin-left: 20px;   ">
+          <table class="dijitDialogPaneContentArea">
+              <tr>
+                  <td><button type="submit" data-dojo-type="dijit/form/Button"  id="yes4" data-dojo-props="onClick:function(){repstatut.show();}"><?php echo TXT_OUI ;?></button></td><td>
+                  <td><button type="submit" data-dojo-type="dijit/form/Button"  id="no4"  data-dojo-props="onClick:function(){repStatutNon0();}"><?php echo TXT_NON ;?></button></td>                               
+                  <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repstatut.hide();}" id="submitCancel4"><?php echo TXT_ANNULE;?></button></td>
+              </tr>
+          </table>
+      </div> 
+                                
      <div data-dojo-type="dijit/Dialog" data-dojo-id="repstatut" title="<?php echo TXT_RESULTMESSAGECONFIRMAUTRECENTRALE;?>" style="width: 500px;margin-left: 20px;   ">
           <table class="dijitDialogPaneContentArea">
               <tr>
                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="yes3" data-dojo-props="onClick:function(){repStatut();}"><?php echo TXT_OUI ;?></button></td><td>
                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="no3"  data-dojo-props="onClick:function(){repStatutNon();}"><?php echo TXT_NON ;?></button></td>                               
-                  <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repstatut.hide();}" id="submitCancel4"><?php echo TXT_ANNULE;?></button></td>
+                  <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repstatut.hide();}" id="submitCancel5"><?php echo TXT_ANNULE;?></button></td>
               </tr>
           </table>
       </div> 
@@ -1712,12 +1573,18 @@ if($idstatut!=ENATTENTEPHASE2){
             document.getElementById('save').value='non';
             document.getElementById('maj').value = 'non';   
             document.getElementById('majcentrale').value = 'oui';
+            document.getElementById('emailNon').value='oui';
             modifProjet.submit();
         }
         function repStatutNon(){
             document.getElementById('save').value='non';
             document.getElementById('maj').value = 'non';   
             document.getElementById('majcentrale').value = 'non';
+            document.getElementById('emailNon').value='oui';
+            modifProjet.submit();
+        }
+        function repStatutNon0(){
+            document.getElementById('emailNon').value='non';
             modifProjet.submit();
         }
     </script>
@@ -1727,7 +1594,7 @@ if($idstatut!=ENATTENTEPHASE2){
 <!-----------------------------------------------------------------------------------------------------------------------------------
                 COMMENTAIRE
 -------------------------------------------------------------------------------------------------------------------------------------->
-
+<input type='text' value='oui' name='emailNon' id='emailNon' style='display:none'>
 <table style="display: none" id="commentphase2">
 <tr>
     <td>
@@ -1746,7 +1613,6 @@ if($idstatut!=ENATTENTEPHASE2){
 <input type="hidden" id="verrouide" name="verrouide" >
 <input type="hidden" id="reussit" name="reussit" >
 <input type="hidden" id="etautrecentrale" name="etautrecentrale" >
-<input type="hidden" id="centraleproximitevaleur" name="centraleproximitevaleur" >
 <input type="hidden" id="commentairephase2Valeur" name="commentairephase2Valeur" >
 
 <input type="hidden" id="rb_oui" name="rb_oui" >
@@ -1780,10 +1646,7 @@ if($idstatut!=ENATTENTEPHASE2){
                                         plugins: ["undo", "redo", "|"],
                                         height: "150px", disabled: '<?php echo $bool1;?>'
                                     }, "descriptionautrecentrale");
-                                    new Editor({
-                                        plugins: ["undo", "redo", "|"],
-                                        height: "150px", disabled: '<?php echo $bool1;?>'
-                                    },"descriptioncentraleproximite");
+                                    
                                 });
 
                                 function modiProjetPhase2OnSubmit() {}
@@ -1793,7 +1656,7 @@ if($idstatut!=ENATTENTEPHASE2){
                                     var editor3 = dijit.byId("reussite");
                                     var editor4 = dijit.byId("commentairephase2");
                                     var editor5 = dijit.byId("descriptionautrecentrale");
-                                    var editor6 = dijit.byId("descriptioncentraleproximite");                                                                        
+                                    var editor6 = dijit.byId("descriptioncentraleproximite");
                                     var formElements = dojo.query("input:checked");
                                     var editor10 = formElements[0].value;                 
                                     document.getElementById('rb_oui').value=editor10;                                    
@@ -1826,20 +1689,16 @@ if($idstatut!=ENATTENTEPHASE2){
                                         dojo.byId("etautrecentrale").value = editor5.get("value");
                                     });
                                      dojo.connect(editor6, "onChange", this, function() {
-                                        dojo.byId("centraleproximitevaleur").value = editor6.get("value");
-                                    });
-                                    
                                      //CAS POUR CHROME etautrecentrale
                                     dojo.byId("desTechno").value = editor1.get("value");
-                                    document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("desTechno").value),'').length; 
-                                    dojo.byId("verrouide").value = editor2.get("value");
-                                    document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("verrouide").value),'').length;
-                                    dojo.byId("reussit").value = editor3.get("value");
-                                    document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("reussit").value),'').length;
-                                    dojo.byId("etautrecentrale").value = editor5.get("value");
-                                    document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("etautrecentrale").value),'').length; 
-                                    dojo.byId("centraleproximitevaleur").value = editor6.get("value");
-                                    document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length; 
+                                        document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("desTechno").value),'').length; 
+                                        dojo.byId("verrouide").value = editor2.get("value");
+                                        document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("verrouide").value),'').length;
+                                        dojo.byId("reussit").value = editor3.get("value");
+                                        document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("reussit").value),'').length;
+                                        dojo.byId("etautrecentrale").value = editor5.get("value");
+                                        document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("etautrecentrale").value),'').length; 
+                                     });
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              DESCIPTIF TECHNOLOGIQUE
 //----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1945,36 +1804,7 @@ if($idstatut!=ENATTENTEPHASE2){
                                         dojo.byId("etautrecentrale").value = editor5.get("value");
                                         document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
                                     });
-//----------------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                              CENTRALE PROXIMITE
-//----------------------------------------------------------------------------------------------------------------------------------------------------
-                                    dojo.connect(editor6, "onKeyPress", this, function(event) {
-                                        dojo.byId("centraleproximitevaleur").value = editor6.get("value");                                        
-                                        document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length;
-                                        if (trim(strip_tags(editor6.get("value")),'').length > 3000) {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'block';
-                                        } else {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'none';
-                                        }
-                                    });
-                                    dojo.connect(editor6, "onClick", this, function(event) {
-                                        dojo.byId("centraleproximitevaleur").value = editor6.get("value");                                        
-                                        document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length;
-                                        if (trim(strip_tags(editor6.get("value")),'').length > 3000) {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'block';
-                                        } else {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'none';
-                                        }
-                                    });
-                                    dojo.connect(editor6, "onBlur", this, function(event) {
-                                        dojo.byId("centraleproximitevaleur").value = editor6.get("value");                                        
-                                        document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length;
-                                        if (trim(strip_tags(editor6.get("value")),'').length > 3000) {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'block';
-                                        } else {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'none';
-                                        }
-                                    });
+
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              REUSSITE
 //---------------------------------------------------------------------------------------------------------------------------------------------------

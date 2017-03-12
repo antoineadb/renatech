@@ -375,6 +375,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                 plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
                 height: "100px", disabled: '<?php echo $bool1;?>'
             }, "descriptif");
+           
         });
         dojo.addOnLoad(function() {
             var editor1 = dijit.byId("commentaire");
@@ -388,12 +389,12 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
             var editor3 = dijit.byId("descriptif");
             dojo.connect(editor3, "onChange", this, function(event) {
                 dojo.byId("descriptifValeur").value = editor3.get("value");
-            });
+            });           
                 //CAS POUR CHROME
                 dojo.byId("descriptifValeur").value = editor3.get("value");
                 document.getElementById('cptdescript').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;
                 dojo.byId("contextValeur").value = editor2.get("value");
-                document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;                
+                document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;
             /* --------------------------------------------------------------------------------------------------------------------
                                                                                 CONTEXTE
              --------------------------------------------------------------------------------------------------------------------*/
@@ -405,7 +406,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                     document.getElementById('msgerrcontexte').style.display = 'block';
                 } else {
                     document.getElementById('msgerrcontexte').style.display = 'none';
-                }                
+                }
             });												
             dojo.connect(editor2, "onBlur", this, function(event) {
                 dojo.byId("contextValeur").value = editor2.get("value");

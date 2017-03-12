@@ -17,8 +17,9 @@ if (isset($_GET['idprojet']) && !empty($_GET['idprojet'])) {
     $idprojet = $_GET['idprojet'];
     $idcentralelocal = $manager->getSingle2("select idcentrale_centrale from utilisateur,loginpassword where idlogin_loginpassword=idlogin and pseudo=?", $_SESSION['pseudo']);
     $numero = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
-    $idcentrale = $manager->getList2("select idcentrale_centrale from concerne where idprojet_projet =?", $idprojet);
-    $nom = $manager->getList2("select nom from utilisateur where idlogin = idlogin_loginpassword and  pseudo =?", $_SESSION['pseudo']);
+    $idcentrale = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet =?", $idprojet);
+    $nom = $manager->getSingle2("select nom from utilisateur,loginpassword where idlogin=idlogin_loginpassword  and  pseudo =?", $_SESSION['pseudo']);
+    $statutProjet = $manager->getSingle2('select libellestatutprojet from concerne,statutprojet  where idstatutprojet_statutprojet=idstatutprojet  and idprojet_projet=?',$idprojet);
     if (count($idcentrale) > 1) {
         $manager->deleteConcerneProjetCentrale($idprojet, $idcentralelocal);
     } else {
@@ -48,8 +49,11 @@ if (isset($_GET['idprojet']) && !empty($_GET['idprojet'])) {
         $manager->deleteUtilisateurPorteur($idprojet);
         $manager->deleterapport($idprojet);
         $manager->deleteprojet($idprojet);
-        $manager->deleteautrethematique($idprojet);
-        createLogInfo(NOW, ' le projet n° '.$numero.' de la centrale ' . LIBELLECENTRALEUSER . ' à été mis à la corbeille par '.$nom);
+        $manager->deleteautrethematique($idprojet);   
+        if(empty($statutProjet)){
+           $statutProjet=''; 
+        }
+        createLogInfo(NOW, ' le projet n° '.$numero.' a été  supprimé.  Centrale ' . LIBELLECENTRALEUSER, $nom ,$statutProjet,$manager,$idcentrale);
         
     }
     header('Location: /' . REPERTOIRE . '/delete_projet/' . $lang . '/' . $numero);

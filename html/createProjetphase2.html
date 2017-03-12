@@ -666,15 +666,17 @@
                                             <fieldset style="font-size: 1.1em;font-style: italic;width: 520px">
                                                 <legend><?php echo TXT_SELECTCENTRALES; ?></legend>                                              
                                                 <div id='chckautrecentrale' style="float: left;margin-bottom: 15px"></div>                                                
-                                                  <?php                                                  
-                                                $row = $manager->getList("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE order by libelleCentrale asc");
-                                                for ($i = 0; $i < count($row); $i++) {                                                
-                                                    $libellecentrale = $row[$i][0];
-                                                    $villecentrale = $row[$i][1];?>
-                                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' data-dojo-id="<?php echo str_replace('-', '', $libellecentrale) ?>" 
-                                                        id="<?php  echo str_replace('-', '', $libellecentrale); ?>" name='autrecentrale[]'
+                                                <?php                                                  
+                                                    $row = $manager->getList("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE order by libelleCentrale asc");
+                                                    for ($i = 0; $i < count($row); $i++) {
+                                                        $libellecentrale = str_replace('-','',$row[$i][0]);
+                                                        $villecentrale = $row[$i][1];
+                                                        
+                                                ?>
+                                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id="<?php echo $libellecentrale ?>"  data-dojo-id="<?php echo $libellecentrale ?>" 
+                                                         name='autrecentrale[]'
                                                         value='<?php echo $libellecentrale ?>'  >
-                                                        <label for = "<?php  echo str_replace('-', '', $libellecentrale); ?>" class='opt' id="<?php  echo 'lbl'.str_replace('-', '', $libellecentrale); ?>">
+                                                        <label for = "<?php  echo $libellecentrale; ?>" class='opt' id="<?php  echo 'lbl'.$libellecentrale; ?>">
                                                             <?php echo ($libellecentrale).' (<i>' . removeDoubleQuote($villecentrale) . '</i>)'?>
                                                         </label>
                                                 <br>
@@ -696,94 +698,6 @@
                         </tr>
                         </table>
                 </fieldset>
-                    <?php /* ?>
-<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                                                                                CENTRALE DE PROXIMITE
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->                            
-<script>
-function affichecentraleproximite(){
-    document.getElementById('etapecentraleproximite').style.display = 'block';
-    document.getElementById('centraleProximite').style.display = 'block';
-    document.getElementById('cptcentraleproximite').style.display = 'block';
-    document.getElementById('chckcentraleproximite').style.display = 'block';
-    document.getElementById('descriptioncentraleproximite').style.display = 'block';
-    document.getElementById('affiche_centrale_proximite').value = 'oui';
-}
-function masquecentraleproximite(){
-    document.getElementById('etapecentraleproximite').style.display = 'none';
-    document.getElementById('centraleProximite').style.display = 'none';
-    document.getElementById('cptcentraleproximite').style.display = 'none';
-    document.getElementById('chckcentraleproximite').style.display = 'none';
-    document.getElementById('descriptioncentraleproximite').style.display = 'none';
-    document.getElementById('affiche_centrale_proximite').value = 'non';
-}                            
-</script>
-<input type='text' id='affiche_centrale_proximite' style='display: none' value='non'>
-<fieldset style="  padding:10px 15px 15px; border:solid 1px #5D8BA2; margin-right: 20px;margin-top: 15px;width:958px;
-                  margin-bottom: 15px;margin-left: 20px;color:midnightblue;font-family:verdana;border-radius: 5px;border-radius: 5px 5px 5px 5px;border-color: #5D8BA2;" >
-<legend><?php echo TXT_CENTRALEPROXIMITE; ?>
-<a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 750px"><?php echo TXT_AIDECENTRALEPROXIMITE;?></span></a>
-</legend>
-<table>
-    <tr>
-        <td><label for="centraleproximite" style="width:918px;margin-left: 20px;;margin-top: 10px"><?php echo TXT_QUESTIONCENTRALEPROXIMITE; ?></label>                                    
-            <input type="radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"   value="TRUE"  class="btRadio" style="margin-left: 20px;" onclick="affichecentraleproximite()"><?php echo TXT_OUI; ?>
-            <input type="radio" data-dojo-type="dijit/form/RadioButton" name="centrale_proximite"  value="FALSE" checked="checked" class="btRadio" style="margin-left: 20px;" onclick="masquecentraleproximite()"><?php echo TXT_NON; ?>
-        </td>    
-    </tr>
-</table>
-<table>
-    <tr>
-        <td style="float: left;" >
-            <fieldset style="font-size: 1.1em;font-style: italic;width: 520px;display: none" id="centraleProximite" >
-            <legend><?php echo TXT_SELECTCENTRALES; ?></legend>
-            <div id='chckcentraleproximite' style="float: left;margin-bottom: 15px;margin-left:20px;margin-top: 10px;display: none">
-            <?php                                    
-                $row = $manager->getList("SELECT idcentrale_proximite,nom_centrale_proximite FROM centrale_proximite where centralespecifique =FALSE order by idcentrale_proximite asc");
-                for ($i = 0; $i < count($row); $i++) {
-                    $nomcentraleproximite = $row[$i]['nom_centrale_proximite'];
-                    $idcentraleproximite = $row[$i]['idcentrale_proximite'];
-                    echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp'.$idcentraleproximite . "'  >
-                    <label for = '" .'cp'. $idcentraleproximite . "' class='opt' > ".$nomcentraleproximite."</label>";
-                    echo '<br>';
-                }
-                echo '<br>';
-                echo "<p><u>Centrales spécifiques</u></p>";
-                $rowspecifique = $manager->getList("SELECT idcentrale_proximite,nom_centrale_proximite FROM centrale_proximite where centralespecifique =TRUE order by idcentrale_proximite asc");
-                for ($i = 0; $i < count($rowspecifique); $i++) {
-                    $nomcentraleproximite = $rowspecifique[$i]['nom_centrale_proximite'];
-                    $idcentraleproximite = $rowspecifique[$i]['idcentrale_proximite'];
-                    echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" .'cp'. $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp'.$idcentraleproximite . "'  >
-                    <label for = '" .'cp'. $idcentraleproximite . "' class='opt' > ".$nomcentraleproximite."</label>";
-                    echo '<br>';
-                }
-            ?>
-            </div>
-            </fieldset>
-        </td>
-        <td  id="etapecentraleproximite" style="display:none;float: left">            
-            <label for="descriptioncentraleproximite" style="width: auto;margin-top:15px;">
-                <?php echo TXT_DESCRIPTCENTRALEROXIMITE; ?>
-            </label>
-            <div id="descriptioncentraleproximite"  name="descriptioncentraleproximite" disabled="<?php echo $bool; ?>" 
-                 style="margin-right: 0px;color:midnightblue;font-family:verdana;margin-left:0px;width:960px;;margin-bottom: 20px" >
-            </div>
-        </td>
-    <tr>
-        <td><label id="cptcentraleproximite" style="width:450px;color:#B71701;margin-bottom: 10px;display: none "></label></td>
-    </tr>
-    <tr style="display: none" id="msgerrcentraleproximite">
-        <td>
-        <fieldset class='msgerrdes' ><legend><?php echo TXT_INFO;?></legend>
-            <?php 	echo stripslashes(TXT_LIMITEDITEURVERROU).'<br>';?>
-        </fieldset>
-        </td>                            
-    </tr>
-    </table>
-</fieldset><?php */ ?>
-<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                                                                                FIN DES CENTRALES DE PROXIMITE
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->                                                                                                            
                     <table>
                         <tr>
                             <td>
@@ -939,10 +853,10 @@ function masquecentraleproximite(){
                             plugins: ["undo", "redo"],
                             height: "150px"
                         }, "descriptionautrecentrale");
-                        new Editor({
+                        /*new Editor({
                             plugins: ["undo", "redo" ],
                             height: "150px"
-                        },"descriptioncentraleproximite");
+                        },"descriptioncentraleproximite");*/
                     });
 
                     function modiProjetPhase2OnSubmit() {

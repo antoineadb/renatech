@@ -56,7 +56,8 @@ $libelleStatut = removeDoubleQuote($manager->getSingle2("select libellestatutpro
 $arraylibellecentrale= $manager->getList2("SELECT libellecentrale from centrale,concerne where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
 $rowdemandeur = $manager->getList2("SELECT nom, prenom,mail,telephone,adresse,codepostal,ville,nompays,nomresponsable,mailresponsable,acronymelaboratoire,entrepriselaboratoire FROM utilisateur, projet, creer,loginpassword,pays WHERE idutilisateur_utilisateur = idutilisateur and idlogin=idlogin_loginpassword "
         . "AND idprojet_projet = idprojet and idprojet=? and idpays=idpays_pays", $idprojet);
-$demandeur = ($rowdemandeur[0]['nom']) . ' -  ' . ($rowdemandeur[0]['prenom']). ' -  ' .  removeDoubleQuote(($rowdemandeur[0]['adresse'])). ' -  ' . $rowdemandeur[0]['codepostal']. ' -  ' . ($rowdemandeur[0]['ville']). ' -  ' . $rowdemandeur[0]['nompays'];
+$demandeur = ($rowdemandeur[0]['nom']) . ' -  ' . ($rowdemandeur[0]['prenom']).' -  ' . $rowdemandeur[0]['mail']. ' <br>  ' .  removeDoubleQuote(($rowdemandeur[0]['adresse'])). ' -  ' . $rowdemandeur[0]['codepostal']. ' -  ' . ($rowdemandeur[0]['ville']).
+        ' -  ' . $rowdemandeur[0]['nompays'];
 if(!empty($rowdemandeur[0]['nomresponsable'])){
     $sonresponsable = $rowdemandeur[0]['nomresponsable'] . ' -  ' . $rowdemandeur[0]['mailresponsable'];
 }

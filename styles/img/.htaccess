@@ -354,6 +354,7 @@ RewriteRule   chxStatistique/([a-z]+)/([0-9]+)                                  
 RewriteRule   userPorteurProjet/([a-z]+)                                            userPorteurProjet.php?lang=$1 [L]
 RewriteRule   useradminprojet/([a-z]+)                                              useradminprojet.php?lang=$1 [L]
 
-
+RewriteRule   traceProjet/([a-z]+)/([0-9]+)                                         traceProjet.php?lang=$1&idprojet=$2 [L]
+RewriteRule   traceProjet/([a-z]+)                                                  traceProjet.php?lang=$1 [L]
 RewriteRule   trace/([a-z]+)                                                        ctrltrace.php?lang=$1   [L]
 RewriteRule   oldProject/([a-z]+)                                                   oldproject.php?lang=$1   [L]
