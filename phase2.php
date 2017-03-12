@@ -186,8 +186,8 @@ include 'html/header.html';
                             <div data-dojo-type="dijit/layout/ContentPane" title="rapport"   id="reportDiv"   style="width: auto; height: 2900px;overflow:hidden;" selected="true" ><?php  include  'html/rapport.html'; ?></div>
                 <?php }else{//-- DANS LE CAS NORMAL SANS UN RAPPORT OU UNE ERREUR SUR UN RAPPORT -- ?>
                 <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:30px;width: 1050px;font-size: 1.2em;" doLayout="false" id="MyTabContainer" >
-                    <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" style="width: auto; height: auto;overflow: hidden" ><?php include 'html/vueModifProjet.html'; ?></div>
-                    <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" style="width: auto; height: auto;overflow:hidden;" selected="true" ><?php  include 'html/phase2.html'; ?></div>               
+                    <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONSUCCINTE ?>" style="width: auto; height: auto;overflow: hidden" id='vue_modif_projet'><?php include 'html/vueModifProjet.html'; ?></div>
+                    <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_DESCRIPTIONDETAILLE ?>" style="width: auto; height: auto;overflow:hidden;" selected="true" id='vuePhase2' ><?php  include 'html/phase2.html'; ?></div>               
                 </div>
                 </div> <?php } ?>
                 <div style="margin-left: 20px"><?php include 'html/footer.html'; ?></div>

@@ -30,7 +30,7 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
     </tr>
     <tr> <td>&nbsp;</td></tr>
     <tr><td>
-            <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?>
+            <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo ' ('.TXT_DISPO.')'; ?><?php echo ' :';?>
                 <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                     <span id="aideAcronyme" ><?php echo affiche('TXT_AIDEACRONYME');?></span></a>
             </label>          
@@ -277,7 +277,11 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file'></div>
         <div id='reponse'></div>
     </td>
-</tr>
+    <td style="float: right">
+        <input type="button"  label="<?php echo 'Page suivante' ;?>" data-dojo-type="dijit/form/Button" 
+            data-dojo-props="onClick:function(){require(['dijit/registry', 'dijit/layout/ContentPane'], function(registry, ContentPane){var tabs = registry.byId('tabcont');tabs.selectChild('detail');});}">
+    </td>
+    </tr>
 </table>
 <table>
 <tr>

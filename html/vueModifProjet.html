@@ -113,7 +113,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
         </tr>
         <tr> <td>&nbsp;</td></tr>
         <tr><td>
-                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'.' :';?>
+                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo ' ('.TXT_DISPO.')'.' :';?>
                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                         <span id="aideAcronyme" >
                             <?php //MISE EN CACHE DES AIDES
@@ -273,8 +273,14 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                     </script>
                     <?php }?>
 
-                    <div id='reponse'></div>
-            </td>           
+                    <div id='reponse'></div>                    
+            </td>
+        </tr>
+        <tr>
+             <td style="float: right;margin-right: -20px;margin-top: -37px;">
+                <input type="button"  label="<?php echo 'Page suivante' ;?>" data-dojo-type="dijit/form/Button" 
+                data-dojo-props="onClick:function(){require(['dijit/registry', 'dijit/layout/ContentPane'], function(registry, ContentPane){var tabs = registry.byId('MyTabContainer');tabs.selectChild('vuePhase2');});}">
+            </td>
         </tr><tr><td>&nbsp;</td></tr>
         <tr><td>
                 <?php 
