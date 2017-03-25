@@ -271,7 +271,7 @@ BD::deconnecter();
         ready(function() {
             new Editor({
                 plugins: ["undo", "redo", "|"],
-                height: "150px", disabled: '<?php echo $bool1;?>'
+                height: "150px"
             },"descriptioncentraleproximite");
         });
     
@@ -287,6 +287,15 @@ BD::deconnecter();
         //                                                                              CENTRALE PROXIMITE
         //----------------------------------------------------------------------------------------------------------------------------------------------------
             dojo.connect(editor11, "onChange", this, function(event) {
+                dojo.byId("centraleproximitevaleur").value = editor11.get("value");                
+                document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length;
+                if (trim(strip_tags(editor11.get("value")),'').length > 3000) {
+                    document.getElementById('msgerrcentraleproximite').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrcentraleproximite').style.display = 'none';
+                }
+            });
+            dojo.connect(editor11, "onMouseOut", this, function(event) {
                 dojo.byId("centraleproximitevaleur").value = editor11.get("value");                
                 document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length;
                 if (trim(strip_tags(editor11.get("value")),'').length > 3000) {

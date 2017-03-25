@@ -852,11 +852,7 @@
                         new Editor({
                             plugins: ["undo", "redo"],
                             height: "150px"
-                        }, "descriptionautrecentrale");
-                        new Editor({
-                            plugins: ["undo", "redo" ],
-                            height: "150px"
-                        },"descriptioncentraleproximite");
+                        }, "descriptionautrecentrale");                       
                     });
 
                     function modiProjetPhase2OnSubmit() {
@@ -914,6 +910,15 @@
                                 document.getElementById('msgerrdescriptechno').style.display = 'none';
                             }
                         });
+                        dojo.connect(editor1, "onMouseOut", this, function(event) {
+                            dojo.byId("desTechno").value = editor1.get("value");
+                            document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" +  strip_tags(trim(dojo.byId("desTechno").value),'').length;                            
+                            if (trim(strip_tags(editor1.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrdescriptechno').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrdescriptechno').style.display = 'none';
+                            }
+                        });
                         dojo.connect(editor1, "onClick", this, function(event) {
                             dojo.byId("desTechno").value = editor1.get("value");
                             document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("desTechno").value),'').length; 
@@ -933,40 +938,18 @@
                             }
                         });
 //----------------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                              CENTRALE PROXIMITE
-//----------------------------------------------------------------------------------------------------------------------------------------------------
-                                    dojo.connect(editor6, "onKeyPress", this, function(event) {
-                                        dojo.byId("centraleproximitevaleur").value = editor6.get("value");                                        
-                                        document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length; 
-                                        if (trim(strip_tags(editor6.get("value")),'').length > 3000) {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'block';
-                                        } else {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'none';
-                                        }
-                                    });
-                                    dojo.connect(editor6, "onClick", this, function(event) {
-                                        dojo.byId("centraleproximitevaleur").value = editor6.get("value");                                        
-                                        document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length; 
-                                        if (trim(strip_tags(editor6.get("value")),'').length > 3000) {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'block';
-                                        } else {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'none';
-                                        }
-                                    });
-                                    dojo.connect(editor6, "onBlur", this, function(event) {
-                                        dojo.byId("centraleproximitevaleur").value = editor6.get("value");                                        
-                                        document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length; 
-                                        if (trim(strip_tags(editor6.get("value")),'').length > 3000) {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'block';
-                                        } else {
-                                            document.getElementById('msgerrcentraleproximite').style.display = 'none';
-                                        }
-                                    });
-                        
-//----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              VERROU
 //----------------------------------------------------------------------------------------------------------------------------------------------------
                         dojo.connect(editor2, "onKeyPress", this, function(event) {
+                            dojo.byId("verrouide").value = editor2.get("value");
+                            document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("verrouide").value),'').length;
+                            if (trim(strip_tags(editor2.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrverrou').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrverrou').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor2, "onMouseOut", this, function(event) {
                             dojo.byId("verrouide").value = editor2.get("value");
                             document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("verrouide").value),'').length;
                             if (trim(strip_tags(editor2.get("value")),'').length > 3000) {
@@ -1005,6 +988,15 @@
                                 document.getElementById('msgerrreussite').style.display = 'none';
                             }
                         });
+                        dojo.connect(editor3, "onMouseOut", this, function(event) {
+                            dojo.byId("reussit").value = editor3.get("value");
+                            document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("reussit").value),'').length;
+                            if (trim(strip_tags(editor3.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrreussite').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrreussite').style.display = 'none';
+                            }
+                        });        
                         dojo.connect(editor3, "onClick", this, function(event) {
                             dojo.byId("reussit").value = editor3.get("value");
                             document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("reussit").value),'').length;
@@ -1013,7 +1005,7 @@
                             } else {
                                 document.getElementById('msgerrreussite').style.display = 'none';
                             }
-                        });                        
+                        });        
                         dojo.connect(editor3, "onBlur", this, function(event) {
                             dojo.byId("reussit").value = editor3.get("value");
                             document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("reussit").value),'').length;
@@ -1036,6 +1028,15 @@
                             }
                         });
                         dojo.connect(editor4, "onClick", this, function(event) {
+                            dojo.byId("etautrecentrale").value = editor4.get("value");
+                            document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
+                            if (trim(strip_tags(editor4.get("value")),'').length > 3000) {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'none';
+                            }
+                        }); 
+                        dojo.connect(editor4, "onMouseOut", this, function(event) {
                             dojo.byId("etautrecentrale").value = editor4.get("value");
                             document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
                             if (trim(strip_tags(editor4.get("value")),'').length > 3000) {

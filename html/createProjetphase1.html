@@ -133,6 +133,15 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                         document.getElementById('msgerrcontexte').style.display = 'none';
                     }
                 });
+                dojo.connect(editor2, "onMouseOut", this, function(event) {
+                    dojo.byId("contextValeur").value = editor2.get("value");
+                    document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" +  strip_tags(trim(dojo.byId("contextValeur").value),'').length;
+                    if (trim(strip_tags(editor2.get("value")),'').length > 5000) {                    
+                        document.getElementById('msgerrcontexte').style.display = 'block';
+                    } else {
+                        document.getElementById('msgerrcontexte').style.display = 'none';
+                    }
+                });
                 dojo.connect(editor2, "onBlur", this, function(event) {
                     dojo.byId("contextValeur").value = editor2.get("value");
                     document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;
@@ -159,6 +168,15 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
                  DESCRIPTIF
                  --------------------------------------------------------------------------------------------------------------------*/
                 dojo.connect(editor3, "onKeyPress", this, function(event) {
+                    dojo.byId("descriptifValeur").value = editor3.get("value");
+                    document.getElementById('cptdescript').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" +strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;
+                    if (trim(strip_tags(editor3.get("value")),'').length > 800) {                    
+                        document.getElementById('msgerrdescription').style.display = 'block';
+                    } else {
+                        document.getElementById('msgerrdescription').style.display = 'none';
+                    }
+                });
+                dojo.connect(editor3, "onMouseOut", this, function(event) {
                     dojo.byId("descriptifValeur").value = editor3.get("value");
                     document.getElementById('cptdescript').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" +strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;
                     if (trim(strip_tags(editor3.get("value")),'').length > 800) {                    
