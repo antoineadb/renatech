@@ -157,7 +157,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
     }else{
         echo '<tr><td valign="top" style="width: 300px">'.TXT_CODEUNITE.' *:'.'</td>';
         echo " <td><div id='codeUnite' ></div></td></tr>";
-        $requete="SELECT codeunite,libellecentrale|| ' (' ||villecentrale || ') ' as libellecentrale FROM centrale";
+        $requete="SELECT codeunite,libellecentrale|| ' (' ||villecentrale || ') ' as libellecentrale FROM centrale where masquecentrale!=TRUE";
         $chemin ="tmp";
         $nomselect ="selectCodeunite.json";
         $libelleattribut1 = "codeunite";

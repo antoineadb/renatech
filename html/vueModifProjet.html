@@ -2,14 +2,14 @@
 include_once 'class/Manager.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-//récupération de l'idprojet et des valeurs à intégrer dans les champs input
+//r�cup�ration de l'idprojet et des valeurs � int�grer dans les champs input
 
 if(!empty($_GET['idprojet'])){
     $idprojet=$_GET['idprojet'];
     $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
 }elseif(isset($_GET['numProjet'])){
     $numProjet=$_GET['numProjet'];
-    $idprojet = $manager->getSingle2("select idprojet from projet where numero =?",$numProjet);//récupération de l'idprojet à l'aide de $numProjet
+    $idprojet = $manager->getSingle2("select idprojet from projet where numero =?",$numProjet);//r�cup�ration de l'idprojet � l'aide de $numProjet
 }else{
     $idprojet =$_GET['idprojet'];
     $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
@@ -113,7 +113,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
         </tr>
         <tr> <td>&nbsp;</td></tr>
         <tr><td>
-                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo ' ('.TXT_DISPO.')'.' :';?>
+                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'.' :';?>
                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                         <span id="aideAcronyme" >
                             <?php //MISE EN CACHE DES AIDES
@@ -273,12 +273,12 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                     </script>
                     <?php }?>
 
-                    <div id='reponse'></div>                    
-            </td>
+                    <div id='reponse'></div>
+            </td>           
         </tr>
         <tr>
-             <td style="float: right;margin-right: -20px;margin-top: -37px;">
-                <input type="button"  label="<?php echo 'Page suivante' ;?>" data-dojo-type="dijit/form/Button" 
+             <td style="float: right;margin-top: -37px;">
+                <input type="button"  label="<?php echo 'Page suivante' ;?>" data-dojo-type="dijit/form/Button"
                 data-dojo-props="onClick:function(){require(['dijit/registry', 'dijit/layout/ContentPane'], function(registry, ContentPane){var tabs = registry.byId('MyTabContainer');tabs.selectChild('vuePhase2');});}">
             </td>
         </tr><tr><td>&nbsp;</td></tr>
@@ -381,9 +381,8 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                 plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
                 height: "100px", disabled: '<?php echo $bool1;?>'
             }, "descriptif");
-           
         });
-        dojo.addOnLoad(function() {
+        dojo.addOnLoad(function() {             
             var editor1 = dijit.byId("commentaire");
             dojo.connect(editor1, "onChange", this, function(value) {
                 dojo.byId("commentaireValeur").value = editor1.get("value");
@@ -395,12 +394,12 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
             var editor3 = dijit.byId("descriptif");
             dojo.connect(editor3, "onChange", this, function(event) {
                 dojo.byId("descriptifValeur").value = editor3.get("value");
-            });           
+            });
                 //CAS POUR CHROME
                 dojo.byId("descriptifValeur").value = editor3.get("value");
                 document.getElementById('cptdescript').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;
                 dojo.byId("contextValeur").value = editor2.get("value");
-                document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;
+                document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;                
             /* --------------------------------------------------------------------------------------------------------------------
                                                                                 CONTEXTE
              --------------------------------------------------------------------------------------------------------------------*/
@@ -412,7 +411,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                     document.getElementById('msgerrcontexte').style.display = 'block';
                 } else {
                     document.getElementById('msgerrcontexte').style.display = 'none';
-                }
+                }                
             });												
             dojo.connect(editor2, "onBlur", this, function(event) {
                 dojo.byId("contextValeur").value = editor2.get("value");

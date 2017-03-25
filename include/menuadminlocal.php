@@ -29,6 +29,7 @@ $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
 $log= '/'.REPERTOIRE.'/log/'.$lang;
 $requete = '/'.REPERTOIRE.'/req/'.$lang;
 $mail  = '/'.REPERTOIRE.'/relance/'.$lang;
+$faisabilite= '/'.REPERTOIRE.'/new_request/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -36,6 +37,7 @@ $mail  = '/'.REPERTOIRE.'/relance/'.$lang;
         <li><a href="#" style="font-weight: bold"><?php echo '<u>' . TXT_PROJET . '</u>'; ?></a>
             <ul style="z-index: 5">                
                 <li><a href="<?php echo $creerprojetphase2; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_DEMANDEPROJET) . '<br>'; ?></a></li>
+                <li><a href="<?php echo $faisabilite; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_CREERPROJET); ?></a></li>
                 <li><a href="<?php echo $controleSuiviProjetRespCentrale; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_LOGINPROJETCENTRALE; ?></a></li>
                 <li><a href="<?php echo $projetSansDev; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PROJETSANSDEV; ?></a></li>
                 <li><a href="<?php echo $controleSuiviProjet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_SUIVIPROJET; ?></a></li>
@@ -44,7 +46,7 @@ $mail  = '/'.REPERTOIRE.'/relance/'.$lang;
                 <li><a href="<?php echo $userPorteurProjet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VUEUSERPROJET; ?></a></li>
                 <li><a href="<?php echo $adminprojet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONADMIN; ?></a></li>
                 <li><a href="<?php echo $useradminprojet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VUEADMINPROJET; ?></a></li>
-
+                
             </ul>
 
         </li>

@@ -533,6 +533,7 @@ define("TXT_PRENOMMAIL","First name");
 define("TXT_PRENOMPORTEUR","First name of the project leader");
 define("TXT_PRENOMUTILISATEUR","User's first name");
 define("TXT_PROJET","Projects");
+define("TXT_PROJECT","Project");
 define("TXT_PROJETACCEPTE","Current project(s) expertise");
 define("TXT_PROJETSACCEPTE","Current project(s) expertise");
 define("TXT_PROJETADD","Modification done");
@@ -1006,3 +1007,6 @@ define("TXT_AIDECENTRALEPROXIMITE","Centrale proximity  intended to supplement l
 •	Paris- Centre : Salles blanches<br>
 •	Rennes : Centrale de technologie<br>
 ");
+define("TXT_MESSAGEUPDATEDATEDEBUTPROJET", "The project start date has been updated");
+define("TXT_MESSAGENOUPDATEDATEDEBUTPROJET", "The project start date will not be changed");
+define("TXT_MESSAGECONFIRMUPDATEDATEDEBUTPROJET", "Are you sure you want to change the project start date?");

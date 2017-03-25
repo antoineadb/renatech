@@ -68,11 +68,9 @@ $nbRapportProjet = $_SESSION['nbProjetRapport'];
                 <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbRapportProjet . "'>" . TXT_REPORT . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviRapportProjet.html'; ?>
                 </div>
-                <?php if ($nbProjetSoustraitance > 0) { ?>
                     <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetSoustraitance . "'>" . TXT_PROJETSOUSTRAITANCE . "</div>"; ?>" style="height:500px;" >
                         <?php include_once 'html/vueSuiviProjetensoustaitance.html'; ?>
                     </div>
-                <?php } ?>
                 <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetRefusee . "'>" . TXT_PROJETREFUSE . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetRefuseCentrale.html'; ?>
                 </div>

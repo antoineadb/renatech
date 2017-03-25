@@ -58,7 +58,6 @@ if (isset($_POST['page_precedente'])) {
             //CHANGEMENT DE STATUT, PAS D'ETAPE DANS UNE AUTRE CENTRALE
             $cas = 'chgstatut';
         }
-        
         if($_POST['emailNon']=='non'){
             $cas1 = 'noEmail';
         }

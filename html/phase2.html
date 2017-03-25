@@ -17,6 +17,10 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
         $numero = $manager->getSingle2("select numero from projet where idprojet=?",$_GET['idprojet']);
     }
     $datedebutProjet = $manager->getSingle2("select datedebutprojet from projet where numero =? ",$numero);
+    if(!empty($datedebutProjet)){
+        $date = new DateTime($datedebutProjet);
+        $date  = $date->format('Y-m-d');
+}
 }
 ?>
 <fieldset>
@@ -35,7 +39,7 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
             $bool1 = '';
             $disabled = "''";
             break;
-        case ENATTENTE:
+        case ENATTENTEPHASE2:
             echo '<legend style="margin-left:20px"><b>' . TXT_STATUTPROJETS . ': ' . TXT_ATTENTE . '</b></legend>'; //projet en attente
             $bool = 'false';
             $bool1 = '';
@@ -54,19 +58,19 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
             $disabled = "''";
             break;
         case REFUSE:
-            echo "<fieldset class='statut' ><b>" . TXT_PROJET . " " . TXT_REFUSE . "</b></fieldset>";
+            echo "<fieldset class='statut' ><b>" . TXT_PROJECT . " " . TXT_REFUSE . "</b></fieldset>";
             $bool = 'false';
             $bool1 = '';
             $disabled = "'disabled'";
             break;
         case FINI:
-            echo "<fieldset class='statut' ><b>" . TXT_PROJET . " " . TXT_FINI . " le : ".$dateFini."</b></fieldset>";
+            echo "<fieldset class='statut' ><b>" . TXT_PROJECT . " " . TXT_FINI . " le : ".$dateFini."</b></fieldset>";
             $bool = 'false';
             $bool1 = '';
             $disabled = "''";
             break;
         case CLOTURE:
-            echo "<fieldset class='statut' ><b>" . TXT_PROJET . " " . TXT_CLOTURE . "</b></fieldset>";
+            echo "<fieldset class='statut' ><b>" . TXT_PROJECT . " " . TXT_CLOTURE . "</b></fieldset>";
             $bool = 'false';
             $bool1 = '';
             $disabled = "''";
@@ -91,12 +95,35 @@ if(isset($_GET['statut'])){
 }else{
     $idstatut = $manager->getSingle2("SELECT  idstatutprojet_statutprojet FROM concerne,projet WHERE idprojet_projet = idprojet and idprojet = ?",$idprojet);
 }?>
-<?php if(!empty($datedebutProjet)){
+    <?php 
+        if(!empty($datedebutProjet)){
 $date = new DateTime($datedebutProjet);
+            if($_SESSION['idTypeUser']==ADMINLOCAL && empty($dateStatutFini) ){
+             $date  = $date->format('Y-m-d'); ?>        
+            <fieldset class='datedebutprojet' >
+                <b><?php echo TXT_DATEDEBUTPROJET.' : '?>
+                    <input type='text' data-dojo-type="dijit/form/DateTextBox" id="date_debut_projet"  value="<?php echo $date; ?>" onchange="
+                        if(confirm('<?php echo TXT_MESSAGEUPDATEDATEDEBUTPROJET; ?>')){
+                        var d = new Date(this.value);
+                        var newDate =  d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+                        modifDateDebutProjet('/<?php echo REPERTOIRE; ?>/modifBase/modifDateDebut.php?date=' + newDate+'&idprojet=<?php echo $idprojet?>'); 
+                    }else{
+                        document.getElementById('majDateDebutProjet').style.display='none';
+                        document.getElementById('NomajDateDebutProjet').style.display='Block';
+                    }
+                    
+                           
+                           ">
+                </b>
+            </fieldset>        
+             <label id='majDateDebutProjet' style="display: none;color: #B71701;width:350px;margin-left:150px;font-weight: bold;margin-top: -15px;"><?php echo TXT_MESSAGEUPDATEDATEDEBUTPROJET ; ?></label>
+             <label id='NomajDateDebutProjet' style="display: none;color: #B71701;width:450px;margin-left:150px;font-weight: bold;margin-top: -15px;"><?php echo TXT_MESSAGENOUPDATEDATEDEBUTPROJET ; ?></label>
+            <?php }else{ 
 $date  = $date->format('d-m-Y');
 ?>
 <fieldset class='datedebutprojet' ><b><?php echo TXT_DATEDEBUTPROJET.' : '.$date;  ?></b></fieldset>
 <?php }?>
+<?php   }?>
 <input type='text' id='affiche_centrale_proximite' style='display: none' value='non'>
 <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
         <table style='width:1050px'>
@@ -1286,13 +1313,23 @@ function masqueetapeautrecentrale(){
                             $idtypeutilisateur = $manager->getSingle2('select idtypeutilisateur_typeutilisateur from utilisateur,loginpassword where idlogin_loginpassword=idlogin and pseudo=?',$_SESSION['pseudo']);
                             $pseudo =  $manager->getSingle2('SELECT pseudo FROM loginpassword,projet,creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet 
                             AND idlogin_loginpassword = idlogin AND idprojet=?',$idprojet);
-                            $pseudoAdministrateur =$manager->getSingle2('SELECT l.pseudo FROM loginpassword l,projet p,utilisateur u,utilisateuradministrateur ua WHERE u.idlogin_loginpassword = l.idlogin 
-                            AND ua.idprojet = p.idprojet AND ua.idutilisateur = u.idutilisateur AND  p.idprojet=?',$idprojet);
-                            $pseudoPorteur = $manager->getSingle2('SELECT pseudo FROM loginpassword,projet,utilisateur,utilisateurporteurprojet WHERE idlogin_loginpassword = idlogin 
+                            $pseudoAdministrateur =$manager->getList2('SELECT l.pseudo FROM loginpassword l,projet p,utilisateur u,utilisateuradministrateur ua WHERE u.idlogin_loginpassword = l.idlogin 
+                            AND ua.idprojet = p.idprojet AND ua.idutilisateur = u.idutilisateur AND  p.idprojet=?',$idprojet);                            
+                            $pseudoPorteur = $manager->getList2('SELECT pseudo FROM loginpassword,projet,utilisateur,utilisateurporteurprojet WHERE idlogin_loginpassword = idlogin 
                             AND idutilisateur = idutilisateur_utilisateur AND idprojet_projet = idprojet AND idprojet=?',$idprojet);
+                            
+                            
+                            $admin=array();
+                            for ($i=0;$i<count($pseudoAdministrateur);$i++){
+                                array_push($admin,$pseudoAdministrateur[$i]['pseudo']);
+                            }
+                            $porteur=array();
+                            for ($i=0;$i<count($pseudoPorteur);$i++){
+                                array_push($porteur,$pseudoPorteur[$i]['pseudo']);
+                            }                           
                             ?>     
                             
-                <?php if($_SESSION['pseudo'] == $pseudo || $_SESSION['pseudo'] == $pseudoAdministrateur ||$_SESSION['pseudo'] == $pseudoPorteur ||  $idtypeutilisateur == ADMINLOCAL) {?>            
+                <?php if($_SESSION['pseudo'] == $pseudo || in_array($_SESSION['pseudo'],$admin) ||$_SESSION['pseudo'] == $pseudoPorteur ||  $idtypeutilisateur == ADMINLOCAL) {?>            
                 <table>                     
                     <tr>
                         <td>
@@ -1362,7 +1399,7 @@ function masqueetapeautrecentrale(){
                    <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui2"  data-dojo-props="onClick:function(){maj();}"><?php echo TXT_OUI ;?></button></td><td>
                    <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitCancel2"><?php echo TXT_ANNULE;?></button></td>
                </tr>
-           </table>         
+           </table>
         </div>                                                                       <!---  Vous avez déja envoyer un email aux autres centrales, est ce que vous souhaiter les informer des modifications du projet?-->
         <div data-dojo-type="dijit/Dialog" data-dojo-id="repautrecentrale" title="<?php echo TXT_RESULTMESSAGECONFIRMAUTRECENTRALE;?>" style="width: 500px;margin-left: 20px;   ">
           <table class="dijitDialogPaneContentArea">
@@ -1400,7 +1437,7 @@ function masqueetapeautrecentrale(){
 
         </script>
      <input type='text' value='non' name='save' id='save' style='display:none'>
- <?php if ($_SESSION['idTypeUser']==ADMINLOCAL){;?>    
+ <?php if ($_SESSION['idTypeUser']==ADMINLOCAL || in_array($_SESSION['pseudo'],$admin)){;?>    
 <?php
 if(!empty($_GET['statut'])){
     $idstatutencours=$_GET['statut'];

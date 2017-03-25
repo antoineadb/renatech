@@ -1,5 +1,6 @@
 <?php
-
+ini_set('display_errors', 1); 
+error_reporting(E_ALL); 
 /* * ************************************************************************* */
 /*          Projet Renatech : Outils  de gestion de projet                    */
 /*          Copyright (C) 2013 CNRS RENATECH                                  */

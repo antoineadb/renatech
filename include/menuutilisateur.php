@@ -15,6 +15,7 @@ $nbrowprojetadmin = count($rowprojetadmin);
 $controleSuiviProjetadmin = '/'.REPERTOIRE.'/mes_projets_admin/'.$lang;
 $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
+$faisabilite= '/'.REPERTOIRE.'/new_request/'.$lang;
 ?>
 <div style="z-index: 5;  margin-left: -178px;" >
         
@@ -23,6 +24,7 @@ $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'. TXT_PROJET.'</u>'; ?></a>
         <ul style="z-index: 5">            
             <li><a href="<?php echo $creerprojetphase2;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_DEMANDEPROJET.'<br>';?></a></li>          
+            <li><a href="<?php echo $faisabilite; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_CREERPROJET); ?></a></li>
             <li><a href="<?php echo $controleSuiviProjet ;?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_SUIVIPROJET;?></a></li>
             <?php if($nbrowprojetadmin>0){?>
             <li><a href="<?php echo $controleSuiviProjetadmin ;?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PROJETADMIN;?></a></li>

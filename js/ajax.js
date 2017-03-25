@@ -299,3 +299,20 @@ function callbackafficheCentraleproximite(reponse) {
     document.getElementById('nbProjet').style.display = "block";
     document.getElementById('nbProjet').innerHTML = reponse; 
 }
+
+function modifDateDebutProjet(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function () {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            callbackModifDateDebutProjet(xhr2.responseText);
+        }
+    };
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+
+function callbackModifDateDebutProjet(reponse) {
+    if (reponse === 'TRUE') {
+        document.getElementById('majDateDebutProjet').style.display='block';      
+    }    
+}

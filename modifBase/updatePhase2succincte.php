@@ -122,7 +122,9 @@ $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
             } else {
                 $_SESSION['centraleproximitemodif'] = '';
             }
+            
             $manager->deletecentraleproximiteprojet($idprojet);
+            
             for ($i = 0; $i < count($_POST['centrale_Proximite']); $i++) {
                 $idcentrale_proximite = substr($_POST['centrale_Proximite'][$i], 2);
                 $centraleproximite = new CentraleProximiteProjet($idcentrale_proximite, $idprojet);
@@ -144,9 +146,9 @@ $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
             $_SESSION['descriptioncentraleproximitemodif'] = '';
             $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
         }
-    }else{
-        $descriptioncentraleproximite='';
-        $manager->deletecentraleproximiteprojet($idprojet);
+    }else{        
+            $descriptioncentraleproximite='';
+            $manager->deletecentraleproximiteprojet($idprojet);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              FIN DES CENTRALES DE PROXIMITE

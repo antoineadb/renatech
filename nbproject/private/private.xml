@@ -13,16 +13,15 @@
             <url>html/phase2.html</url>
             <bookmark id="1">
                 <name/>
-                <line>24</line>
+                <line>0</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/projetRenatechNV/.htaccess</file>
-            <file>file:/G:/projetRenatechNV/html/createProjetphase1.html</file>
-            <file>file:/G:/projetRenatechNV/creerprojetphase2.php</file>
+            <file>file:/G:/projetRenatechNV/class/BD.php</file>
+            <file>file:/G:/projetRenatechNV/outils/constantes.php</file>
         </group>
     </open-files>
 </project-private>

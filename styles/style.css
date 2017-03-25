@@ -1313,3 +1313,9 @@ a.infoBulle:hover span{
 .titreEnteteProjet{
     border: 1px solid gray;padding-left: 10px;padding-right:10px;background-color: #E4F0FC;
 }
+
+#date_debut_projet {
+    padding: 1px;
+    color:#3380be;
+    text-align: center;
+}

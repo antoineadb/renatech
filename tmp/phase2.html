@@ -1537,9 +1537,9 @@ if($idstatut!=ENATTENTEPHASE2){
         <label for="statutProjet" style="width: 200px;margin-top:12px;margin-left:5px"><?php echo TXT_STATUTPROJET.'* :'; ?> </label>
     <?php
 
-    $param=array(ENATTENTE,ENCOURSANALYSE,$idstatutencours,ENATTENTEPHASE2);
+    $param=array(ENCOURSANALYSE,$idstatutencours,ENATTENTEPHASE2);
     $rowstatut = $manager->getListbyArray("select idstatutprojet,libellestatutprojet,libellestatutprojeten from statutprojet where idstatutprojet !=? and idstatutprojet!=? 
-    and idstatutprojet!=? and idstatutprojet!=? order by idstatutprojet asc",$param);
+    and idstatutprojet!=?  order by idstatutprojet asc",$param);
     $value='st'.$idstatutencours;
 
     ?>

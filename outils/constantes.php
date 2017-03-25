@@ -9,6 +9,8 @@ if ($repertoire[1] == 'projet-dev') {
     include_once '/var/www/rtb/html/' . $repertoire[1] . '/class/Manager.php';
 } elseif ($repertoire[1] == 'projet-archive') {
     include_once '/var/www/rtb/html/' . $repertoire[1] . '/class/Manager.php';
+} elseif ($repertoire[1] == 'projet-prod') {
+    include_once '/var/www/rtb/html/' . $repertoire[1] . '/class/Manager.php';
 }
 
 
@@ -19,6 +21,8 @@ define('ADMINLOCAL', $manager->getSingle2("select idtypeutilisateur from typeuti
 define('ADMINNATIONNAL', $manager->getSingle2("select idtypeutilisateur from typeutilisateur where libelletype=? ", 'Administrateur national'));
 define('UTILISATEUR', $manager->getSingle2("select idtypeutilisateur from typeutilisateur where libelletype=? ", 'utilisateur'));
 define('ENATTENTEPHASE2', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'En Attente'));
+define('ENATTENTE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'En Attente'));
+define('ENCOURSANALYSE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'Current expertise'));
 define('TRANSFERERCENTRALE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'Transférée à une autre centrale'));
 define('REFUSE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'Refusée'));
 define('FINI', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'Fini'));
