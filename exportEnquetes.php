@@ -20,24 +20,47 @@ $data .= "\n";
 if (!empty($_POST['annee'])) {
     $anneeExport =$_POST['annee'];
     if($anneeExport==1){
-        $andreq1 = '';
-        $andreq2 = '';
+       //$andreq1 = '';
+       $andreq2 = '';
     }else{
-        $andreq1 = ' AND EXTRACT(YEAR from dateaffectation )  = ? ';
+        //$andreq1 = ' AND EXTRACT(YEAR from dateaffectation )  = ? ';
         $andreq2 = ' AND EXTRACT(YEAR from p.dateprojet ) = ? ';
-        $param = array($anneeExport,$anneeExport,$anneeExport, $anneeExport,$anneeExport);
+        //$param = array($anneeExport,$anneeExport,$anneeExport, $anneeExport,$anneeExport);
+        $param = array($anneeExport,$anneeExport);
     }
 } else {
     $anneeExport = date('Y'); //Année du jour si vide
-    $andreq1 = ' AND EXTRACT(YEAR from dateaffectation )  = ? ';
+    //$andreq1 = ' AND EXTRACT(YEAR from dateaffectation )  = ? ';
     $andreq2 = ' AND EXTRACT(YEAR from p.dateprojet ) = ? ';
-    $param = array($anneeExport,$anneeExport,$anneeExport, $anneeExport,$anneeExport);
+    //$param = array($anneeExport,$anneeExport,$anneeExport, $anneeExport,$anneeExport);
+    //$param = array($anneeExport,$anneeExport,$anneeExport, $anneeExport,$anneeExport);
+    $param = array($anneeExport,$anneeExport);
 }
 
 //RECUPERATION DE L'IDUTILISATEUR EN FONCTION DU PSEUDO
 
 
 $manager->exeRequete("drop  table if exists tmpenquete");
+$sql="create table tmpenquete as(
+      SELECT distinct u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire, u.entrepriselaboratoire, u.nom,u.prenom,l.mail
+      FROM utilisateur u,projet p,loginpassword l,qualitedemandeurindust q, creer c
+      WHERE c.idprojet_projet= p.idprojet and u.idutilisateur=c.idutilisateur_utilisateur
+      AND q.idqualitedemandeurindust = u.idqualitedemandeurindust_qualitedemandeurindust 
+      AND l.idlogin = u.idlogin_loginpassword
+      ".$andreq2."
+      union      
+      SELECT distinct u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire, u.entrepriselaboratoire, u.nom,u.prenom,l.mail
+      FROM utilisateur u,projet p,loginpassword l,qualitedemandeuraca q, creer c
+      WHERE c.idprojet_projet= p.idprojet and u.idutilisateur=c.idutilisateur_utilisateur
+      AND q.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca
+      and q.idqualitedemandeuraca=3
+      AND l.idlogin = u.idlogin_loginpassword
+       ".$andreq2."
+       )
+	order by idutilisateur";
+
+/*
+
 $sql = "create table tmpenquete as(
        SELECT distinct on (u.idutilisateur) u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire,u.entrepriselaboratoire,u.nom,u.prenom,l.mail
 	FROM utilisateur u,utilisateurporteurprojet up,loginpassword l,qualitedemandeuraca q 
@@ -80,6 +103,8 @@ $sql = "create table tmpenquete as(
 	and u.idcentrale_centrale is null	
 )
 	order by idutilisateur";
+ * 
+ */
 if($anneeExport==1){
     $manager->exeRequete($sql);
 }else{

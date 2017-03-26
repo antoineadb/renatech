@@ -1,5 +1,4 @@
 <?php
-
 include_once 'decide-lang.php';
 include 'class/email.php';
 include_once 'class/Manager.php';

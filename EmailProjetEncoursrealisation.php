@@ -44,7 +44,6 @@ if (!empty($_SESSION['pseudo'])) {
         }
     }
 }
-
 if (!empty($_GET['numProjet'])) {
     $numprojet = $_GET['numProjet'];
 } else {

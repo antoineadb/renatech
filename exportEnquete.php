@@ -19,7 +19,8 @@ include 'html/header.html';
         <?php include_once 'outils/bandeaucentrale.php'; ?>
     </div>
     <div style="margin-top:40px;width:1050px" >
-        <form  method="post" action="<?php echo '/' . REPERTOIRE ?>/exportEnquetes.php?lang=<?php echo $lang; ?>" id='exportenquete' name='exportenquete' onsubmit="if (document.getElementById('msgerreur')) {
+        <form  method="post" action="<?php echo '/' . REPERTOIRE ?>/exportEnquetes.php?lang=<?php echo $lang; ?>" id='exportenquete' name='exportenquete' 
+               onsubmit="if (document.getElementById('msgerreur')) {
                     document.getElementById('msgerreur').style.display = 'none'
                 }">
             <fieldset id="ident" style="border-color: #5D8BA2;width: 1008px;padding-bottom:30px;padding-top:10px;font-size:1.2em" >
