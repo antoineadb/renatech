@@ -16,7 +16,6 @@ function str_to_utf8($str) {
 }
 
 class BD {
-
     public static $connexion = null;
     public static $dsn;
     public static $username;
@@ -27,7 +26,7 @@ class BD {
         $passwd = Chiffrement::decrypt('dx07jTMsCC+oUXKCdZjayg==');
         $repertoire = explode('/', $_SERVER['PHP_SELF']);
 
-        if ($repertoire[1] == 'projet-dev') {
+        if ($repertoire[1] == 'projet-dev' || $repertoire[1] == 'projet-prod') {
             $dsn = Chiffrement::decrypt("f5OWYoqO9uAEEsudTqVbfratnjOZiXJDlS+GS9fdHjM+yn2phrKnHwfE7wEWVZnv4cgXRUiJWZXBkBaraCmbeA==");
         } elseif ($repertoire[1] == 'projet-test') {
             $dsn = Chiffrement::decrypt('f5OWYoqO9uAEEsudTqVbfratnjOZiXJDlS+GS9fdHjM+yn2phrKnHwfE7wEWVZnvPzcD+VlYxo5S3deQVYqp2g==');
