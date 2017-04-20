@@ -65,5 +65,9 @@ $body = (htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_MRSMR'))), ENT
         "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br><br>' .
         htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 $sujet = utf8_decode(TXT_PROJETNUM) . $numprojet;
-envoieEmail($body, $sujet, $maildestinataire, $mailCC);
+if(!empty($maildestinataire)){
+    envoieEmail($body, $sujet, $maildestinataire, $mailCC);
+}else{
+     createLogInfo(NOW, "Erreur sur l'envoi de l'E-mail au destinataire, E-mail absent ou invalide");    
+}
 $db = BD::deconnecter();

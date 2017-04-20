@@ -273,11 +273,12 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $idthematique_thematique = null;
         $idautrethematique_autrethematique = null;
     }
-    if (!empty($_POST['nomPartenaire01'])) {
+    /*if (!empty($_POST['nomPartenaire01'])) {
         $partenaire1 = stripslashes(Securite::bdd(($_POST['nomPartenaire01'])));
     } else {
         $partenaire1 = '';
-    }
+    }*/
+    $partenaire1='';
     $porteurprojet = $_POST['porteurprojet'];
     if (!empty($_POST['dureeestimeprojet'])) {
         $dureeestime = stripslashes(Securite::bdd($_POST['dureeestimeprojet']));
@@ -345,8 +346,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     }else{
         $descriptioncentraleproximiteBDD = '';
     }
-
-    if ($_POST['centrale_proximite']) {
+    if ($_POST['centrale_proximite'] == 'TRUE') {
         if (!empty($_POST['centrale_Proximite'])) {
             if ($centraleProximiteBDD != $_POST['centrale_Proximite']) {
                 $_SESSION['centraleproximitemodif'] = $_POST['centrale_Proximite'];
@@ -374,6 +374,9 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
             $_SESSION['descriptioncentraleproximitemodif'] = '';
             $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
         }
+    }else{
+        $_SESSION['descriptioncentraleproximitemodif'] = '';
+        $descriptioncentraleproximite = '';
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              FIN DES CENTRALES DE PROXIMITE

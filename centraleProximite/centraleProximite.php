@@ -23,6 +23,7 @@ CENTRALES DE PROXIMITES
         document.getElementById('chckcentraleproximite').style.display = 'none';
         document.getElementById('descriptioncentraleproximite').style.display = 'none';
         document.getElementById('affiche_centrale_proximite').value = 'non';
+        
     }
 </script>
 <input type='text' id='affiche_centrale_proximite' style='display: none' value='non'>
@@ -53,11 +54,13 @@ CENTRALES DE PROXIMITES
     } else {
         $centraleproximite = 'FALSE';
     }
-
-    if ($centraleproximite == 'TRUE' ) {
-        ?>
+?>
     <input type="hidden" id="centraleproximitevaleur" name="centraleproximitevaleur" >
     <input type="hidden" id="commentairephase2Valeur" name="commentairephase2Valeur" >
+<?php
+    if ($centraleproximite == 'TRUE' ) {
+        ?>
+    
         <table>
             <tr>
                 <td>
@@ -277,8 +280,9 @@ BD::deconnecter();
         dojo.addOnLoad(function() {
             var editor11 = dijit.byId("descriptioncentraleproximite");
             dojo.connect(editor11, "onChange", this, function(event) {
-                dojo.byId("centraleproximiteValeur").value = editor11.get("value");
+                dojo.byId("centraleproximitevaleur").value = editor11.get("value");
         });
+    
         //CAS POUR CHROME                
                 dojo.byId("centraleproximitevaleur").value = editor11.get("value");
                 document.getElementById('cptcentraleproximite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("centraleproximitevaleur").value),'').length; 
@@ -341,7 +345,6 @@ BD::deconnecter();
             });            
         })}
     );
-
 </script>
 <!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 FIN CENTRALES DE PROXIMITES

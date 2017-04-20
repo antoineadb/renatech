@@ -58,13 +58,16 @@ if (isset($_POST['page_precedente'])) {
             //CHANGEMENT DE STATUT, PAS D'ETAPE DANS UNE AUTRE CENTRALE
             $cas = 'chgstatut';
         }
+     
         if($_POST['emailNon']=='non'){
             $cas1 = 'noEmail';
+        }else{
+            $cas1 = '';
         }
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
         //                                            MISE A JOUR
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'oui') {
+        if ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'oui') {
             //MISE A JOUR avec autre centrale déja envoyé
             $cas = 'miseAJourEmailAutreCentrale';
         } elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'non' && $_POST['etapeautrecentrale'] == 'TRUE' && $sendmail == FALSE) {
@@ -92,7 +95,7 @@ if (isset($_POST['page_precedente'])) {
         //----------------------------------------------------------------------------------------------------------------------------------------------------------        
         elseif ($_POST['etapeautrecentrale'] == 'FALSE' && $_POST['majcentrale'] == 'oui') {//on envoi pas le message au autres centrales            
             $cas = 'miseAJourEmail';
-        }
+        } 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 //                            FIN AFFECTATION D'UNE VARIABLE $CAS
 //----------------------------------------------------------------------------------------------------------------------------------------------------------            
@@ -101,6 +104,7 @@ if (isset($_POST['page_precedente'])) {
         } else {
             $datemodifstatut = date('Y-m-d');
         }
+        
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 //                       AFFECTATION DE LA  DATE DE MISE A JOUR DU PROJET DANS TOUS LES CAS
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -505,7 +509,7 @@ if (isset($_POST['page_precedente'])) {
 //------------------------------------------------------------------------------------------------------------
 //                                       TRAITEMENT DES NOMS PARTENAIRE
 //------------------------------------------------------------------------------------------------------------
-            if (!empty($_POST['nomPartenaire01'])) {
+            /*if (!empty($_POST['nomPartenaire01'])) {
                 $partenaire1 = stripslashes(Securite::bdd(($_POST['nomPartenaire01'])));
                 if ($partenaire1BDD != $partenaire1) {
                     $_SESSION['partenaire1modif'] = $partenaire1;
@@ -515,7 +519,7 @@ if (isset($_POST['page_precedente'])) {
             } else {
                 $partenaire1 = null;
                 $_SESSION['partenaire1modif'] = '';
-            }
+            }*/            
         } else {
             $nombrePartenaire = 0;
             $partenaire1 = null;
@@ -523,7 +527,7 @@ if (isset($_POST['page_precedente'])) {
             $partenairefromprojet = new Partenairefromprojet($centralepartenaireprojet, $partenaire1);
             $manager->updatepartenairefromprojet($partenairefromprojet, $idprojet);
         }
-
+        $partenaire1='';
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
 //------------------------------------------------------------------------------
@@ -555,9 +559,9 @@ if (isset($_POST['page_precedente'])) {
             } //EFFACAGE DU ER PARTENAIRE DANS LA TABLE PROJET           
             $centralepartenaireprojet = $manager->getSingle2("select centralepartenaireprojet from projet where idprojet=?", $idprojet);
             //$autrenomcentrale = $manager->getSingle2("select autrenomcentrale from projet where idprojet=?", $idprojet);
-            $partenaire1 = $manager->getSingle2("select partenaire1 from projet where idprojet=?", $idprojet);
+           /* $partenaire1 = $manager->getSingle2("select partenaire1 from projet where idprojet=?", $idprojet);
             $partenairefromprojet = new Partenairefromprojet($centralepartenaireprojet, $partenaire1);
-            $manager->updatepartenairefromprojet($partenairefromprojet, $idprojet);
+            $manager->updatepartenairefromprojet($partenairefromprojet, $idprojet);*/
         }
         if ($_POST['nombrePartenaire'] > 1) {
             for ($i = 0; $i < $_POST['nombrePartenaire'] - 1; $i++) {

@@ -14,132 +14,68 @@ $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 $data = utf8_decode("Nom;Prénom;E-Mail;Nom du responsable; Mail du reponsable;Acronyme du laboratoire; Nom de l'entreprise ou du laboratoire");
 $data .= "\n";
-//Récupération de l'idcentrale de l'utilisateur
 
-
-if (!empty($_POST['annee'])) {
-    $anneeExport =$_POST['annee'];
-    if($anneeExport==1){
-       //$andreq1 = '';
-       $andreq2 = '';
+if (isset($_POST['annee'])&& !empty($_POST['annee'])) {
+    if($_POST['annee']==1){
+        $anneeExport = $_POST['annee'];
+        $sqlExport = " and EXTRACT(YEAR from dateprojet ) >= ?";
     }else{
-        //$andreq1 = ' AND EXTRACT(YEAR from dateaffectation )  = ? ';
-        $andreq2 = ' AND EXTRACT(YEAR from p.dateprojet ) = ? ';
-        //$param = array($anneeExport,$anneeExport,$anneeExport, $anneeExport,$anneeExport);
-        $param = array($anneeExport,$anneeExport);
+       $anneeExport = $_POST['annee'];
+       $sqlExport = " and EXTRACT(YEAR from dateprojet ) = ?";
     }
 } else {
-    $anneeExport = date('Y'); //Année du jour si vide
-    //$andreq1 = ' AND EXTRACT(YEAR from dateaffectation )  = ? ';
-    $andreq2 = ' AND EXTRACT(YEAR from p.dateprojet ) = ? ';
-    //$param = array($anneeExport,$anneeExport,$anneeExport, $anneeExport,$anneeExport);
-    //$param = array($anneeExport,$anneeExport,$anneeExport, $anneeExport,$anneeExport);
-    $param = array($anneeExport,$anneeExport);
+    echo ' <script>alert("Vous devez choisir une année!");window.location.replace("/' . REPERTOIRE . '/enquete/' . $lang . '")</script>';
+    exit();
 }
 
-//RECUPERATION DE L'IDUTILISATEUR EN FONCTION DU PSEUDO
-
-
-$manager->exeRequete("drop  table if exists tmpenquete");
-$sql="create table tmpenquete as(
-      SELECT distinct u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire, u.entrepriselaboratoire, u.nom,u.prenom,l.mail
-      FROM utilisateur u,projet p,loginpassword l,qualitedemandeurindust q, creer c
-      WHERE c.idprojet_projet= p.idprojet and u.idutilisateur=c.idutilisateur_utilisateur
-      AND q.idqualitedemandeurindust = u.idqualitedemandeurindust_qualitedemandeurindust 
-      AND l.idlogin = u.idlogin_loginpassword
-      ".$andreq2."
-      union      
-      SELECT distinct u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire, u.entrepriselaboratoire, u.nom,u.prenom,l.mail
-      FROM utilisateur u,projet p,loginpassword l,qualitedemandeuraca q, creer c
-      WHERE c.idprojet_projet= p.idprojet and u.idutilisateur=c.idutilisateur_utilisateur
-      AND q.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca
-      and q.idqualitedemandeuraca=3
-      AND l.idlogin = u.idlogin_loginpassword
-       ".$andreq2."
-       )
-	order by idutilisateur";
-
-/*
-
-$sql = "create table tmpenquete as(
-       SELECT distinct on (u.idutilisateur) u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire,u.entrepriselaboratoire,u.nom,u.prenom,l.mail
-	FROM utilisateur u,utilisateurporteurprojet up,loginpassword l,qualitedemandeuraca q 
-	WHERE up.idutilisateur_utilisateur = u.idutilisateur 
-	AND  l.idlogin = u.idlogin_loginpassword 
-	".$andreq1."
-	AND q.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca 
-	and u.idcentrale_centrale is null
-        union						
-	SELECT distinct on (u.idutilisateur) u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire, u.entrepriselaboratoire, u.nom,u.prenom,l.mail
-	FROM utilisateur u,utilisateurporteurprojet up,loginpassword l,	qualitedemandeurindust q
-	WHERE up.idutilisateur_utilisateur = u.idutilisateur 
-	AND l.idlogin = u.idlogin_loginpassword
-	".$andreq1."
-	AND q.idqualitedemandeurindust = u.idqualitedemandeurindust_qualitedemandeurindust
-        union
-	SELECT distinct on (u.idutilisateur) u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire, u.entrepriselaboratoire, u.nom,u.prenom,l.mail
-	FROM creer c,utilisateur u,loginpassword l,qualitedemandeuraca q,projet p
-	WHERE u.idutilisateur = c.idutilisateur_utilisateur 
-	AND u.idqualitedemandeuraca_qualitedemandeuraca = q.idqualitedemandeuraca 
-	".$andreq2."
-	AND l.idlogin = u.idlogin_loginpassword 
-	AND p.idprojet = c.idprojet_projet
-	and u.idcentrale_centrale is null
-        union
-	SELECT distinct on (u.idutilisateur) u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire, u.entrepriselaboratoire,   u.nom, u.prenom, l.mail
-	FROM creer c,utilisateur u,loginpassword l,qualitedemandeurindust q,projet p
-	WHERE u.idutilisateur = c.idutilisateur_utilisateur 
-	".$andreq2."
-	AND p.idprojet = c.idprojet_projet
-	AND l.idlogin = u.idlogin_loginpassword 
-	AND q.idqualitedemandeurindust = u.idqualitedemandeurindust_qualitedemandeurindust
-        union
-        SELECT distinct on (u.idutilisateur) u.idutilisateur, u.nomresponsable,u.mailresponsable, u.acronymelaboratoire, u.entrepriselaboratoire, u.nom,u.prenom,l.mail
-	FROM utilisateur u,loginpassword l,utilisateuradministrateur ua,qualitedemandeuraca q
-	WHERE l.idlogin = u.idlogin_loginpassword 
-	".$andreq1."
-	AND ua.idutilisateur = u.idutilisateur 
-	AND q.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca 
-	and u.idcentrale_centrale is null	
-)
-	order by idutilisateur";
- * 
- */
-if($anneeExport==1){
-    $manager->exeRequete($sql);
-}else{
-    $manager->getRequete($sql, $param);
+//Récupération des idprojet en cours de réalisation de l'année sélectionnée
+$arrayProjetEncours = $manager->getListbyArray("select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? "
+        . "".$sqlExport." order by idprojet asc",array(ENCOURSREALISATION,$anneeExport));
+// Création d'un tableau de d'idutilisateur académique externe et industriel qui ont créé un projet qui est en cours de réalisation sur l'année sélectionnée
+$arrayUtilisateur = array();
+foreach ($arrayProjetEncours as $idProjet){
+    array_push($arrayUtilisateur, $manager->getSingle2("select idutilisateur from utilisateur, creer where idutilisateur_utilisateur=idutilisateur and idcentrale_centrale is null AND idprojet_projet=?",$idProjet['idprojet']));
 }
-$row = $manager->getList("select * from tmpenquete");
-$nbrow = count($row);
+// Création d'un tableau de d'idutilisateur académique externe et industriel qui sont porteur d'un projet qui est en cours de réalisation sur l'année sélectionnée
+$arrayPorteur = array();
+foreach ($arrayProjetEncours as $idProjet){
+    array_push($arrayPorteur, $manager->getSingle2("select idutilisateur_utilisateur from utilisateurporteurprojet,utilisateur where idutilisateur_utilisateur=idutilisateur and idcentrale_centrale is null"
+            . " and idprojet_projet=?",$idProjet['idprojet']));
+}
+$arrayIdUtilisateur = array_unique(array_merge(array_filter($arrayUtilisateur),array_filter($arrayPorteur)));
+$nbrow = count($arrayIdUtilisateur);
+$elementsUser =array();
+foreach ($arrayIdUtilisateur as $idUser){   
+     array_push($elementsUser,  $manager->getList2("select idutilisateur,nomresponsable,mailresponsable,acronymelaboratoire,entrepriselaboratoire,nom,prenom,mail from utilisateur,loginpassword where idlogin =idlogin_loginpassword "
+        . " and idutilisateur = ?",$idUser));
+}
 
 if ($nbrow != 0) {
 // ENREGISTREMENT DES RESULTATS LIGNE PAR LIGNE
     for ($i = 0; $i < $nbrow; $i++) {       
-            $nom = cleanForExportOther($row[$i]['nom']);
-            $prenom = cleanForExportOther($row[$i]['prenom']);
-            $email = $row[$i]['mail'];            
-            if (!empty($row[$i]['nomresponsable'])) {
-                $nomresponsable = cleanForExportOther($row[$i]['nomresponsable']);
+            $nom = cleanForExportOther($elementsUser[$i][0]['nom']);
+            $prenom = cleanForExportOther($elementsUser[$i][0]['prenom']);
+            $email = $elementsUser[$i][0]['mail'];            
+            if (!empty($elementsUser[$i][0]['nomresponsable'])) {
+                $nomresponsable = cleanForExportOther($elementsUser[$i][0]['nomresponsable']);
             } else {
                 $nomresponsable = '';
             }
-            if (!empty($row[$i]['mailresponsable'])) {
-                $mailresponsable = $row[$i]['mailresponsable'];
+            if (!empty($elementsUser[$i][0]['mailresponsable'])) {
+                $mailresponsable = $elementsUser[$i][0]['mailresponsable'];
             } else {
                 $mailresponsable = '';
             }
-            if (!empty($row[$i]['acronymelaboratoire'])) {
-                $acronymelaboratoire = cleanForExportOther($row[$i]['acronymelaboratoire']);
+            if (!empty($elementsUser[$i][0]['acronymelaboratoire'])) {
+                $acronymelaboratoire = cleanForExportOther($elementsUser[$i][0]['acronymelaboratoire']);
             } else {
                 $acronymelaboratoire = '';
             }
-            if (!empty($row[$i]['entrepriselaboratoire'])) {
-                $entrepriselaboratoire = cleanForExportOther($row[$i]['entrepriselaboratoire']);
+            if (!empty($elementsUser[$i][0]['entrepriselaboratoire'])) {
+                $entrepriselaboratoire = cleanForExportOther($elementsUser[$i][0]['entrepriselaboratoire']);
             } else {
                 $entrepriselaboratoire = '';
             }
-
             $data .= "" .
                     $nom . ";" .
                     $prenom . ";" .

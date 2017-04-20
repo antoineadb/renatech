@@ -32,6 +32,7 @@ for ($i = 0; $i < 11; $i++) {
                                                                                             
             </td>
         </tr>
+        <?php /* ?>
         <tr>
             <td>
                 <label  for="<?php echo 'nomPartenaire' . $i; ?>"><?php echo TXT_NOMPARTENAIRE . '  ' . ($j + 1); ?></label>
@@ -47,6 +48,8 @@ for ($i = 0; $i < 11; $i++) {
                       data-dojo-props="<?php echo REGEX_TYPE ?>">
             </td>
         </tr>
+         <?php  */ ?>
+         
     </table>
 <?php
 }

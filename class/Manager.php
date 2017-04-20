@@ -140,6 +140,8 @@ include_once 'Region.php';
 include_once 'CentraleRegion.php';
 include_once 'CentraleProximite.php';
 include_once 'CentraleProximiteProjet.php';
+include_once 'DescriptionCentraleProximiteProjet.php';
+
 showError($_SERVER['PHP_SELF']);
 
 class Manager {

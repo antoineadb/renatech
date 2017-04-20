@@ -24,12 +24,12 @@ $monUrl = "http://" . $_SERVER['HTTP_HOST'];
 $resprojet = $manager->getList2(
         "select titre,acronyme,numero,confidentiel,description,dateprojet,contexte,commentaire,attachement,attachementdesc,contactscentraleaccueil,datedebuttravaux,dureeprojet,centralepartenaire,verrouidentifiee,nbplaque,nbrun,envoidevis,
 emailrespdevis,reussite,refinterneprojet,idtypeprojet_typeprojet,idthematique_thematique,idperiodicite_periodicite,typeformation,nbheure,centralepartenaireprojet,idautrethematique_autrethematique,descriptiftechnologique,
-devtechnologique,nbeleve,nomformateur,datedebutprojet,datestatutfini,datestatutcloturer,acrosourcefinancement,partenaire1,porteurprojet,idetat_etatprojet,dureeestime,periodestime,etapeautrecentrale,descriptionautrecentrale,
+devtechnologique,nbeleve,nomformateur,datedebutprojet,datestatutfini,datestatutcloturer,acrosourcefinancement,porteurprojet,idetat_etatprojet,dureeestime,periodestime,etapeautrecentrale,descriptionautrecentrale,
 centraleproximite,datemaj,descriptioncentraleproximite from projet where idprojet=?", $idprojet);
 
 $arraylibelle = array('titre','acronyme','numero','confidentiel','description','dateprojet','contexte','commentaire','attachement','attachementdesc','contactscentraleaccueil','datedebuttravaux','dureeprojet','centralepartenaire','verrouidentifiee','nbplaque','nbrun','envoidevis',
 'emailrespdevis','reussite','refinterneprojet','idtypeprojet_typeprojet','idthematique_thematique','idperiodicite_periodicite','typeformation','nbheure','centralepartenaireprojet','idautrethematique_autrethematique','descriptiftechnologique',
-'devtechnologique','nbeleve','nomformateur','datedebutprojet','datestatutfini','datestatutcloturer','acrosourcefinancement','partenaire1','porteurprojet','idetat_etatprojet','dureeestime','periodestime','etapeautrecentrale','descriptionautrecentrale',
+'devtechnologique','nbeleve','nomformateur','datedebutprojet','datestatutfini','datestatutcloturer','acrosourcefinancement','porteurprojet','idetat_etatprojet','dureeestime','periodestime','etapeautrecentrale','descriptionautrecentrale',
 'centraleproximite','datemaj','descriptioncentraleproximite');
 //Définition des variables
 for ($i = 0; $i < count($arraylibelle); $i++) {
@@ -122,6 +122,7 @@ $S_nompartenaire = '';
 if (!empty($resprojet[0]['centralepartenaireprojet'])) {
     $centralepartenaireprojet = removeDoubleQuote(str_replace("’", "''", $resprojet [0]['centralepartenaireprojet']));
 }
+
 for ($i = 0; $i < count($partenaireprojet); $i++) {
     if (!empty($partenaireprojet[$i]['nompartenaire'])) {
         $nompartenaire = removeDoubleQuote(str_replace("’", "''", $partenaireprojet [$i]['nompartenaire']));        
@@ -138,14 +139,6 @@ for ($i = 0; $i < count($partenaireprojet); $i++) {
 }
 $s_nomlaboentreprise = substr(trim($S_nomlaboentreprise), 0, -1);
 
-if (!empty($resprojet[0]['partenaire1'])) {
-    $partenaire1 = removeDoubleQuote(str_replace("’", "''", $resprojet [0]['partenaire1']));
-}
-if (!empty($partenaire1)) {
-    $partenaire = stripslashes(trim($partenaire1)) . ', ' . stripslashes($s_nompartenaire);
-} else {
-    $partenaire = stripslashes($s_nompartenaire);
-}
 if($lang=='fr'){
     $libelleThematique = $manager->getSingle2("select libellethematique from thematique where idthematique=?", $idthematique_thematique);
 }else{
@@ -339,8 +332,8 @@ ob_start();
                     <?php if(!empty($arraySourcefinancement)){?>
                     <tr><td><strong><?php echo  TXT_FINANCEMENTPROJET .':<br /> ';?></strong><?php echo $s_sourcefinancement; ?></td></tr><tr><td></td></tr>
                     <?php } ?>
-                    <?php if(!empty($partenaire)){?>
-                    <tr><td><strong><?php echo  TXT_AUTREPARTENAIRE .':<br /> ';?></strong><?php echo $partenaire.'<br>'.trim($centralepartenaireprojet).', '.$s_nomlaboentreprise; ?></td></tr><tr><td></td></tr>
+                    <?php if(!empty($centralepartenaireprojet)){?>
+                    <tr><td><strong><?php echo  TXT_AUTREPARTENAIRE .':<br /> ';?></strong><?php echo trim($centralepartenaireprojet).', '.$s_nomlaboentreprise; ?></td></tr><tr><td></td></tr>
                     <?php } ?>
                     <?php if(!empty($libelleThematique)){?>
                     <tr><td><strong><?php echo  TXT_THEMATIQUE .': ';?></strong><?php echo $libelleThematique; ?></td></tr><tr><td></td></tr>

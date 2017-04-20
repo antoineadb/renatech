@@ -429,22 +429,22 @@ $s_Sourcefinancement = '';
             $centralepartenaireprojet = '';
         }
         //RECUPERATION DES INFOS DES PARTENAIRES DU PROJET
-        $rowpartenaireprojet = $manager->getList2("SELECT nompartenaire,nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=?", $idprojet);
+        $rowpartenaireprojet = $manager->getList2("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=?", $idprojet);
         $nomPartenaire = '';
         $nomLaboentreprise = '';
-        for ($j = 0; $j < count($rowpartenaireprojet) - 1; $j++) {
+        /*for ($j = 0; $j < count($rowpartenaireprojet) - 1; $j++) {
             $nomPartenaire .= $rowpartenaireprojet[$j]['nompartenaire'] . " - ";
-        }
+        }*/
         for ($j = 0; $j < count($rowpartenaireprojet) - 1; $j++) {
             if (!empty($rowpartenaireprojet[$j]['nomlaboentreprise'])) {
                 $nomLaboentreprise .= $rowpartenaireprojet[$j]['nomlaboentreprise'] . " - ";
             }
         }
-        if (empty($nomPartenaire)) {
+        /*if (empty($nomPartenaire)) {
             $nompartenaire = $partenaire1;
         } else {
             $nompartenaire = $partenaire1 . ' - ' . substr($nomPartenaire, 0, -2);
-        }
+        }*/
         if (empty($nomLaboentreprise)) {
             $nomlaboentreprise = $centralepartenaireprojet;
         } else {
@@ -503,7 +503,7 @@ $s_Sourcefinancement = '';
                 removeDoubleQuote(stripslashes(utf8_decode($mailpersonne))) . ";" .
                 removeDoubleQuote(stripslashes(utf8_decode($telpersonne))) . ";" .
                 removeDoubleQuote(stripslashes(utf8_decode(trim($connaissancepersonne)))) . ";" .
-                stripslashes(utf8_decode($nompartenaire)) . ";" .
+                //stripslashes(utf8_decode($nompartenaire)) . ";" .
                 stripslashes(utf8_decode($nomlaboentreprise)) . ";" .
                 stripslashes(utf8_decode($descriptifTechno)) . ";".
                 $attachementdesc . ";".

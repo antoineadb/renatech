@@ -34,5 +34,4 @@ class DescriptionCentraleProximiteProjet {
     function setCentraleproximite($_centraleproximite) {
         $this->_centraleproximite = $_centraleproximite;
     }
-
 }

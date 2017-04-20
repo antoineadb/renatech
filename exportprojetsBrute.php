@@ -39,7 +39,8 @@ for ($b = 1; $b <= 5; $b++) {
 
 $s_partenaire="";
 for ($c = 2; $c <= 10; $c++) {
-    $s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";Nom de la personne impliqué".$c.";";
+    //$s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";Nom de la personne impliqué".$c.";";
+    $s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";";
 }
 $s_personnesalleblanche = "";
 for ($d = 1; $d <= 21; $d++) {
@@ -62,7 +63,7 @@ $data = utf8_decode("Id du projet;Date du projet;Titre du projet;référence int
         . "Source de financement 6;"
         . "Etes vous le coordinateur du projet?;Statut;"            
         . "Nom du Laboratoire&Entreprise1;"
-        . "Nom de la personne impliqué1;"
+     //   . "Nom de la personne impliqué1;"
         ."".$s_partenaire.""        
         . "Descriptif Technologique;pièce jointe;Le projet nécessite-t'il un développement technologique pour certaines étapes?;Verrous identifiés;Etape(s)réalisée(s)dans une autre centrale;Autre(s) centrale(s);"
         . "Description de l'(ou des) étape(s):;Utilisez-vous dans votre projet une centrale de proximité? ;Centrales de proximité;Descriptions de la demande;"
@@ -97,7 +98,7 @@ if (empty($idcentrale)) {
 //récupération du type utilisateur
 //VERIFICATION QU'IL Y A BIEN DES PROJETS DANS LA BASE DE DONNEES
 $donnee = array($idcentrale, $datedebut, $datefin);
-$sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentraleproximite,p.centraleproximite,p.devtechnologique,p.etapeautrecentrale,p.porteurprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,p.partenaire1,p.attachement,p.attachementdesc,p.emailrespdevis,
+$sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentraleproximite,p.centraleproximite,p.devtechnologique,p.etapeautrecentrale,p.porteurprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,p.attachement,p.attachementdesc,p.emailrespdevis,
             u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
             u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
             u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
@@ -674,14 +675,8 @@ if ($nbrow != 0) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
 //      RECUPERATION DES INFOS DES PARTENAIRES 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        $rowpartenaireprojet = $manager->getList2("SELECT partenaire1,centralepartenaireprojet FROM projet WHERE idprojet=?", $idprojet); 
+        $rowpartenaireprojet = $manager->getList2("SELECT centralepartenaireprojet FROM projet WHERE idprojet=?", $idprojet); 
         //  DONNEES INCLUES DANS LA TABLE PROJET
-        //PARTENAIRE N°1
-        if (!empty($row[$i]['partenaire1'])) {
-            $partenaire1 = cleanForExportOther($row[$i]['partenaire1']);
-        } else {
-            $partenaire1 = '';
-        }
         //ENTREPRISE N°1
         if (!empty($row[$i]['centralepartenaireprojet'])) {
             $laboentreprise1 = cleanForExportOther($row[$i]['centralepartenaireprojet']);
@@ -785,7 +780,7 @@ if ($nbrow != 0) {
                 $porteur.";".
                 removeDoubleQuote(stripslashes(utf8_decode($libellestatutprojet))) . ";" .               
                 $laboentreprise1.";" .
-                $partenaire1.";" .                
+            //    $partenaire1.";" .                
                 $varpartenaires.                
                 $descriptifTechno . ";" .
                 $attachementdesc . ";" .

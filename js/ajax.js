@@ -41,13 +41,13 @@ function callbacknomlabo(reponse) {
     document.getElementById('reponsenomlabo').value = reponse; //affiche dans le div de reponse
     if (reponse === 'TRUE') {
         dijit.byId('centralepartenaireprojet').set('required', '');
-        dijit.byId('nomPartenaire01').set('required', '');
+        //dijit.byId('nomPartenaire01').set('required', '');
         dijit.byId('integerspinner2').set('value', 0);
         document.getElementById('msgporteurProjet').style.display = 'none';
     } else {
         document.getElementById('msgporteurProjet').style.display = 'block';
         dijit.byId('centralepartenaireprojet').set('required', 'true');
-        dijit.byId('nomPartenaire01').set('required', 'true');
+        //dijit.byId('nomPartenaire01').set('required', 'true');
         dijit.byId('integerspinner2').set('value', 1);
     }
 }

@@ -48,5 +48,4 @@ if (isset($_POST['integerspinner']) && !empty($_POST['integerspinner'])) {
 } else {
     $nbpersonnecentrale = 0;
 }
-echo $body;die;
 envoieEmail($body, $sujet, $maildestinataire, $maildemandeur);

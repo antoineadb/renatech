@@ -178,7 +178,6 @@ while ($i < $nbressource) {
     $i++;
 }
 $pdf->WriteHTML(stripslashes($slibelleressource) . '<br>');
-
 if (!empty($resultprojetphase2[0]['centralepartenaireprojet'])) {
     $Centralepartenaireprojet = str_replace("’", "''", $resultprojetphase2 [0]['centralepartenaireprojet']);
     $centralepartenaireprojet = str_replace("''", "'", utf8_decode($Centralepartenaireprojet));

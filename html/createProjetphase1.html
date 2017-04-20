@@ -222,11 +222,12 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         enableCheckBoxAutrecentrale(id);
         var selectObject = dijit.byId(id);
         var selectedCentrale =dijit.byId(id).get('displayedValue').replace('-','');
-        var libellecentrale = 'lbl'+selectedCentrale;
+		var libelle = dijit.byId(id).get('displayedValue');
+        var libellecentrale = 'lbl'+libelle;
         for (var i = 0; i < selectObject.options.length; i++) {
             if (selectObject.options[i].selected) {
-                dijit.byId(selectedCentrale).set('disabled',true);
-                document.getElementById(libellecentrale).style.textDecoration  ='line-through';
+                dijit.byId(selectedCentrale).set('disabled',true);				
+				document.getElementById(libellecentrale).style.textDecoration  ='line-through';
             }
         }        
         modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
@@ -243,7 +244,6 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         }
     }
 </script>
-
 <tr><td>
         <fieldset id="ident" style="width:939px">
             <legend>
