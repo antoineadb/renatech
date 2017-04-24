@@ -261,7 +261,7 @@ if(!empty($_SESSION['centraleproximitemodif'])){
         }else{// MOINS DE 9 CENTRALE DE POXIMITE
             $idcentrale=(int) substr($_SESSION['centraleproximitemodif'][$i],2,1);
         }
-        $sCentraleProximite .= $manager->getSingle2("select nom_centrale_proximite from centrale_proximite where idcentrale_proximite=?", $idcentrale).' - ';
+        $sCentraleProximite .= $manager->getSingle2("select libellecentraleproximite from centraleproximite where idcentraleproximite=?", $idcentrale).' - ';
     }
 $scentraleProximite =  str_replace("''","'",TXT_CENTRALEPROXIMITE.':  '. substr($sCentraleProximite,0, -2));
 }else{

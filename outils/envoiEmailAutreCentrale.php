@@ -68,6 +68,6 @@ $sujet = utf8_decode(TXT_PROJETNUM) . $numprojet;
 if(!empty($maildestinataire)){
     envoieEmail($body, $sujet, $maildestinataire, $mailCC);
 }else{
-     createLogInfo(NOW, "Erreur sur l'envoi de l'E-mail au destinataire, E-mail absent ou invalide");    
+     createLogInfo(NOW, "Erreur sur l'envoi de l'E-mail au destinataire, E-mail absent ou invalide",'','','','');
 }
 $db = BD::deconnecter();

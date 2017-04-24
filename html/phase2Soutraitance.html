@@ -835,10 +835,10 @@ for ($i = 0; $i < $nbpartenaire; $i++) {
         $nbressource=0;
     }
     //RECUPERATION DES CENTRALES DE PROXIMITE SELECTIONNEES
-    $row =$manager->getList2("SELECT  idcentrale_proximite  FROM projet_centraleproximite  WHERE idprojet =?",$idprojet);
+    $row =$manager->getList2("SELECT  idcentraleproximite  FROM centraleproximiteprojet  WHERE idprojet =?",$idprojet);
     $nbcentraleproximite=count($row);                        
     for ($i = 0;$i < $nbcentraleproximite;$i++) {
-        $centrale_Proximite[]  ='cp'.$row[$i]['idcentrale_proximite'];
+        $centrale_Proximite[]  ='cp'.$row[$i]['idcentraleproximite'];
     }   
      //RECUPERATION DES AUTRES CENTRALES SELECTIONNEES
     $row =$manager->getList2("SELECT DISTINCT libellecentrale FROM centrale c,projetautrecentrale p  WHERE c.idcentrale =p.idcentrale AND idprojet =?",$idprojet);

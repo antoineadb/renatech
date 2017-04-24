@@ -187,10 +187,11 @@ for ($i = 0; $i < count($arrayautrecentrale); $i++) {
 }
 $slibelleAutreCentrale = substr($slibelleautrecentrale,0,-2);
 
-$arraycentraleproximite = $manager->getList2("SELECT cp.nom_centrale_proximite FROM projet_centraleproximite pc,centrale_proximite cp WHERE  pc.idcentrale_proximite = cp.idcentrale_proximite and pc.idprojet=?", $idprojet);
+$arraycentraleproximite = $manager->getList2("SELECT cp.libellecentraleproximite FROM centraleproximiteprojet pc,centraleproximite cp "
+        . "WHERE  pc.idcentraleproximite = cp.idcentraleproximite and pc.idprojet=?", $idprojet);
 $scentraleproximite ='';
 for ($i = 0; $i < count($arraycentraleproximite); $i++) {
-    $scentraleproximite .=$arraycentraleproximite[$i]['nom_centrale_proximite'].', ';
+    $scentraleproximite .=$arraycentraleproximite[$i]['libellecentraleproximite'].', ';
 }
 $scentraleProximite =  substr($scentraleproximite, 0.,-2);
 if($confidentiel != ucfirst(TXT_OUI)){

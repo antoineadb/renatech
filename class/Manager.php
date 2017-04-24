@@ -112,8 +112,6 @@ include_once 'Compteur.php';
 include_once 'Projetautrecentrale.php';
 include_once 'Rapport.php';
 include_once 'Rapportfigure.php';
-include_once 'Projet_centraleproximite.php';
-include_once 'Centrale_proximite.php';
 include_once 'UtilisateurQualiteaca.php';
 include_once 'UtilisateurCodeunite.php';
 include_once 'UtilisateurAutreCodeunite.php';
@@ -3217,96 +3215,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
             $this->_db->rollBack();
         }
-    }
-
-//-----------------------------------------------------------------------------------------------------------
-//             PROJET CENTRALES DE PROXIMITE ANCIENNE VERSION
-//-----------------------------------------------------------------------------------------------------------
-    /**
-     * ancienne version
-     * @param Projet_centraleproximite $projetcentraleproximite
-     */
-    public function addprojetcentraleproximite(Projet_centraleproximite $projetcentraleproximite) {
-        try {
-            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO projet_centraleproximite (idprojet,idcentrale_proximite) VALUES (?,?)');
-            $idprojet = $projetcentraleproximite->getIdprojet();
-            $idcentrale_proximite = $projetcentraleproximite->getIdcentrale_proximite();
-            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
-            $requete->bindParam(2, $idcentrale_proximite, PDO::PARAM_INT);
-            $requete->execute();
-            $this->_db->commit();
-        } catch (Exception $exc) {
-            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
-            $this->_db->rollBack();
-        }
-    }
-    
-    
-
-    /**
-     * 
-     * @param type $idprojet
-     * ancienne version
-     */
-    public function deleteprojetcentraleproximite($idprojet) {
-        try {
-            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('DELETE from projet_centraleproximite WHERE idprojet = ?');
-            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
-            $requete->execute();
-            $this->_db->commit();
-        } catch (Exception $exc) {
-            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
-            $this->_db->rollBack();
-        }
-    }
-
-    /**
-     * 
-     * @param Centrale_proximite $centraleproximite
-     * ancienne version
-     */
-    public function addcentraleproximite(Centrale_proximite $centraleproximite) {
-        try {
-            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO centrale_proximite (idcentrale_proximite,nom_centrale_proximite) VALUES (?,?)');
-            $idcentrale_proximite = $centraleproximite->getIdcentrale_proximite();
-            $nom_centrale_proximite = $centraleproximite->getNom_centrale_proximite();
-            $requete->bindParam(1, $idcentrale_proximite, PDO::PARAM_INT);
-            $requete->bindParam(2, $nom_centrale_proximite, PDO::PARAM_STR);
-            $requete->execute();
-            $this->_db->commit();
-        } catch (Exception $exc) {
-            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
-            $this->_db->rollBack();
-        }
-    }
-
-    /**
-     * 
-     * @param Centrale_proximite $centraleproximite
-     * @param type $idcentraleproximite
-     * ancienne version
-     */
-    public function updatecentraleproximite(Centrale_proximite $centraleproximite, $idcentraleproximite) {
-        try {
-            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('Update centrale_pproximite set nom_centrale_proximite = ? where idcentrale_proximite=?');
-            $nom_centrale_proximite = $centraleproximite->getNom_centrale_proximite();
-            $requete->bindParam(1, $nom_centrale_proximite, PDO::PARAM_STR);
-            $requete->bindParam(2, $idcentraleproximite, PDO::PARAM_INT);
-            $requete->execute();
-            $this->_db->commit();
-        } catch (Exception $exc) {
-            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
-            $this->_db->rollBack();
-        }
-    }
+    }    
 //-----------------------------------------------------------------------------------------------------------
 //             PROJET CENTRALES DE PROXIMITE NOUVELLE VERSION
 //-----------------------------------------------------------------------------------------------------------

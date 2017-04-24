@@ -75,8 +75,7 @@ CENTRALES DE PROXIMITES
                 <td style="float: left;" >                  
                     <fieldset style="font-size: 1.1em;font-style: italic;width: 520px;display: block" id="centraleProximite" >
                         <legend style="margin-left:20px;margin-top: 10px"><?php echo TXT_SELECTCENTRALES; ?></legend>
-                        <?php $idcentraleProjet =(int) $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
-                        ?>
+                        <?php $idcentraleProjet =(int) $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);?>
                         <?php if (!empty($idcentraleProjet)) {?>
                             <div id='chckcentraleproximite' style=" margin-bottom: 15px; margin-left: 25px; margin-top: 10px; display: inline-block;">
                                 <?php
@@ -149,13 +148,32 @@ CENTRALES DE PROXIMITES
                 <td style="float: left;" >                  
                     <fieldset style="font-size: 1.1em;font-style: italic;width: 520px;display: none" id="centraleProximite" >
                         <legend style="margin-left:20px;margin-top: 10px"><?php echo TXT_SELECTCENTRALES; ?></legend>
-                            <?php if (!empty(IDCENTRALEUSER)) {  ?>
+                        <?php 
+                            if(isset($idprojet)){
+                                $idcentraleProjet =(int) $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
+                            }else{
+                                $idcentraleProjet='';
+                            }
+                            if(empty($idcentraleProjet)){
+                               if (!empty(IDCENTRALEUSER)){
+                                   $centraleSelectionne = IDCENTRALEUSER;
+                               }else{
+                                   $centraleSelectionne='';
+                               }
+                            }else{
+                                 $centraleSelectionne = $idcentraleProjet;
+                            }                       
+                        ?>
+                        
+                        
+                            <?php if (!empty($centraleSelectionne)) {?>
                             <div id='chckcentraleproximite' style=" margin-bottom: 15px; margin-left: 25px; margin-top: 10px; display: inline-block;">
                                  <?php                                 
                                 $arrayCentraleRegion = $manager->getListbyArray("SELECT r.libelleregion, cp.libellecentraleproximite, cp.idcentraleproximite FROM centraleproximite cp,region r,centraleregion cr "
-                                        . " WHERE cp.idregion = r.idregion AND cr.idregion = r.idregion and cr.idcentrale=? and masquecentraleproximite !=?", array(IDCENTRALEUSER, TRUE));                                
+                                        . " WHERE cp.idregion = r.idregion AND cr.idregion = r.idregion and cr.idcentrale=? and masquecentraleproximite !=?", array($centraleSelectionne, TRUE));                                
                                 $rowspecifique = $manager->getListbyArray("SELECT cp.libellecentraleproximite, cp.idcentraleproximite FROM region r,centraleproximite cp WHERE cp.idregion = r.idregion  "
                                         . "AND r.libelleregion =? and masquecentraleproximite !=? order by idcentraleproximite asc", array(TXT_CENTRALESPECIFIQUES, TRUE));
+                             
                                 for ($i = 0; $i < count($arrayCentraleRegion); $i++) {
                                     $nomcentraleproximite = $arrayCentraleRegion[$i]['libellecentraleproximite'];
                                     $idcentraleproximite = $arrayCentraleRegion[$i]['idcentraleproximite'];
@@ -173,8 +191,21 @@ CENTRALES DE PROXIMITES
                                 }
                                 ?>
                             </div>
-                        <?php } else { ?>
-                            <div id='chckcentraleproximite' style=" margin-bottom: 15px; margin-left: 20px; margin-top: 10px; display: inline-block;" ></div>
+                        <?php } else {?>
+                            <div id='chckcentraleproximite' style=" margin-bottom: 15px; margin-left: 25px; margin-top: 10px; display: inline-block;">
+                                 <?php                                 
+                                
+                                $rowspecifique = $manager->getListbyArray("SELECT cp.libellecentraleproximite, cp.idcentraleproximite FROM region r,centraleproximite cp WHERE cp.idregion = r.idregion  "
+                                        . "AND r.libelleregion =? and masquecentraleproximite !=? order by idcentraleproximite asc", array(TXT_CENTRALESPECIFIQUES, TRUE));                                
+                                echo "<p><u>".TXT_CENTRALESPECIFIQUES."</u></p>";                                
+                                for ($i = 0; $i < count($rowspecifique); $i++) {
+                                    $nomcentraleproximite = $rowspecifique[$i]['libellecentraleproximite'];
+                                    $idcentraleproximite = $rowspecifique[$i]['idcentraleproximite'];
+                                    echo "<input    type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" . 'cp' . $idcentraleproximite . "' " . "name='centrale_Proximite[]' value='" . 'cp' . $idcentraleproximite . "'  >
+                                        <label for = '" . 'cp' . $idcentraleproximite . "' class='opt' > " . $nomcentraleproximite . "</label>";
+                                    echo '<br>';
+                                }
+                                ?>
     <?php } ?>
                     </fieldset>
                 </td>

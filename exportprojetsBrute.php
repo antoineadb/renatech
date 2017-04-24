@@ -440,11 +440,12 @@ if ($nbrow != 0) {
         } else {
             $centraleproximite = TXT_NON;
         }
-        $arraycentraleproximte = $manager->getList2("SELECT cp.nom_centrale_proximite FROM centrale_proximite cp,projet_centraleproximite pc WHERE cp.idcentrale_proximite = pc.idcentrale_proximite and pc.idprojet =?",$idprojet);
+        $arraycentraleproximte = $manager->getList2("SELECT cp.libellecentraleproximite FROM centraleproximite cp,centraleproximiteprojet pc"
+                . " WHERE cp.idcentraleproximite = pc.idcentraleproximite and pc.idprojet =?",$idprojet);
         $nbcentraleproximite =count($arraycentraleproximte);
         $libellecentraleproximite= "";
         for ($cp = 0; $cp < $nbcentraleproximite; $cp++) {
-            $libellecentraleproximite .=  $arraycentraleproximte[$cp]['nom_centrale_proximite'].' - ';
+            $libellecentraleproximite .=  $arraycentraleproximte[$cp]['libellecentraleproximite'].' - ';
         }
         $libelleCentraleProximite = cleanForExportOther(substr($libellecentraleproximite,0,-2));
         if(!empty($row[$i]['descriptioncentraleproximite'])){

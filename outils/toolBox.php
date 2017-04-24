@@ -521,7 +521,6 @@ function supprDouble() {//SUPPRESSION DES DOUBLONS
     $arraydoublon = $manager->getList("SELECT distinct(idprojet) FROM projet, creer where idprojet not in (select idprojet_projet from creer)");
     $nbarraydoublon = count($arraydoublon);
     for ($i = 0; $i < $nbarraydoublon; $i++) {
-        $manager->deleteprojetcentraleproximite($arraydoublon[$i][0]);
         $manager->deleterapport($arraydoublon[$i][0]);
         $manager->deleteprojetautrecentrale($arraydoublon[$i][0]);
         $manager->deleteprojetsf($arraydoublon[$i][0]);

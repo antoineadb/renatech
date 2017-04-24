@@ -297,9 +297,9 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 
     if ($_POST['etapeautrecentrale'] == 'TRUE') {
         $etapeautrecentrale = TRUE;
-        if (!empty($_POST['autrecentrale'])) {//CENTRALE SELECTIONNE            
+        if (!empty($_POST['autrecentrale'])) {//CENTRALE SELECTIONNE
             for ($i = 0; $i < count($_POST['autrecentrale']); $i++) {
-                $idcentrale = $manager->getSingle2("select idcentrale from centrale where libellecentrale=?", $_POST['autrecentrale'][$i]);
+                $idcentrale = $manager->getSingle2("select idcentrale from centrale where replace(libellecentrale,'-','') =?", $_POST['autrecentrale'][$i]);
                 $projetautrecentrale = new Projetautrecentrale($idcentrale, $idprojet, FALSE);
                 $manager->addprojetautrescentrale($projetautrecentrale);
             }
@@ -313,26 +313,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $etapeautrecentrale = 'FALSE';
         $descriptionautrecentrale = '';
     }
-//  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-//                                                                             CENTRALE DE PROXIMITE
-//  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
- /*   $centrale_proximite  = $_POST['centrale_proximite'];    
-    if(isset($_POST['centrale_proximite'])&& $_POST['centrale_proximite']==TRUE){//TRUE/FALSE
-        if (!empty($_POST['centrale_Proximite'])) {
-            for ($i = 0; $i < count($_POST['centrale_Proximite']); $i++) {
-                $idCentraleProximite = substr($_POST['centrale_Proximite'][$i], 2);
-                $centraleproximite = new CentraleProximiteProjet($idCentraleProximite, $idProjet);
-                $manager->addCentraleProximiteProjet($centraleproximite);
-            }
-        }
-        if (!empty($_POST['centraleproximitevaleur'])) {
-            $descriptioncentraleproximite = clean($_POST['centraleproximitevaleur']);
-        } else {
-            $descriptioncentraleproximite = '';
-        }        
-    }  */
-    
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              CENTRALE DE PROXIMITE
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
     $centrale_proximiteBDD = $manager->getList2("SELECT idcentraleproximite FROM centraleproximiteprojet where idprojet=?", $idprojet);

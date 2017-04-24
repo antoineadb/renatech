@@ -59,7 +59,7 @@ if (isset($_POST['page_precedente'])) {
             $cas = 'chgstatut';
         }
      
-        if($_POST['emailNon']=='non'){
+        if(isset($_POST['emailNon'])&& $_POST['emailNon']=='non'){
             $cas1 = 'noEmail';
         }else{
             $cas1 = '';
