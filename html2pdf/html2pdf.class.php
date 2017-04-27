@@ -1311,7 +1311,7 @@ if (!defined('__CLASS_HTML2PDF__')) {
             // get the size of the image
             // WARNING : if URL, "allow_url_fopen" must turned to "on" in php.ini
             $infos=@getimagesize($src);
-
+            
             // if the image does not exist, or can not be loaded
             if (count($infos)<2) {
                 // if the test is activ => exception

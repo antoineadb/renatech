@@ -297,7 +297,9 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                             }
                         if($libellecentraleprojet[0]['idcentrale']==AUTRECENTRALE){
                         ?>                        
-                        <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select"  required="required" >
+                        <select name="centrale" id="centrale" data-dojo-type="dijit/form/FilteringSelect" style="margin-left: 20px;" required="required"  onchange="disableCheckBoxAutrecentrale1(this.id)" 
+                    data-dojo-props="name: 'centrale',value: '',required:true, placeHolder: '<?php echo TXT_SELECTCENTRALE; ?>'"
+                    >
                             <?php
                                 $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=?
                                 and masquecentrale!=TRUE order by idcentrale asc",'Autres');
@@ -319,7 +321,9 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                         idcentrale_centrale = idcentrale and  idprojet_projet =? and idstatutprojet_statutprojet !=?",array($idprojet,REFUSE));
                         if($libellecentraleprojet[0]['idcentrale']==AUTRECENTRALE){
                             ?>
-                            <select name="centrale" id="centrale" data-dojo-type="dijit/form/Select"  required="required" >
+                            <select name="centrale" id="centrale" data-dojo-type="dijit/form/FilteringSelect" style="margin-left: 20px;" required="required"  onchange="disableCheckBoxAutrecentrale1(this.id)" 
+                    data-dojo-props="name: 'centrale',value: '',required:true, placeHolder: '<?php echo TXT_SELECTCENTRALE; ?>'"
+                    >
                             <?php
                                 $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=?
                                 and masquecentrale!=TRUE order by idcentrale asc",'Autres');
@@ -364,6 +368,54 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
         </tr>        
     </table>
 <?php BD::deconnecter();?>
+<script>
+    function disableCheckBoxAutrecentrale(id){
+        enableCheckBoxAutrecentrale(id);
+        var selectObject = dijit.byId(id);
+        var selectedCentrale =dijit.byId(id).get('displayedValue').replace('-','');
+        var libellecentrale = 'lbl'+selectedCentrale;
+        for (var i = 0; i < selectObject.options.length; i++) {
+            if (selectObject.options[i].selected) {
+                dijit.byId(selectedCentrale).set('disabled',true);
+                document.getElementById(libellecentrale).style.textDecoration  ='line-through';
+            }
+        }
+        modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+        afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+    }
+    function enableCheckBoxAutrecentrale(id){        
+        var selectObject = dijit.byId(id);            
+        for (var i = 0; i < selectObject.options.length; i++) {
+            var select = dijit.byId(id);
+            var idallcentrale =  select.options[i].label.replace('-','');
+            document.getElementById('lbl'+idallcentrale).style.textDecoration ='none';
+            dijit.byId(idallcentrale).set('disabled',false);
+            dijit.byId(idallcentrale).set('checked',false);
+        }
+    }
+    function disableCheckBoxAutrecentrale1(id){
+        enableCheckBoxAutrecentrale1(id);
+        var nbCentrale = parseInt('<?php echo $manager->getSingle2("select count(idcentrale) from centrale where masquecentrale!=TRUE and idcentrale!=?",IDAUTRECENTRALE) ?>');
+        var selectedCentrale =dijit.byId(id).attr('displayedValue').replace("-",'');;
+        var libellecentrale = 'lbl'+selectedCentrale;
+        for (var i = 0; i < nbCentrale; i++) {
+           dijit.byId(selectedCentrale).set('disabled',true);
+           document.getElementById(libellecentrale).style.textDecoration  ='line-through';
+        }
+        modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+        afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+    }    
+    
+     function enableCheckBoxAutrecentrale1(id){        
+        var nbCentrale = parseInt('<?php echo $manager->getSingle2("select count(idcentrale) from centrale where masquecentrale!=TRUE and idcentrale!=?",IDAUTRECENTRALE) ?>');        
+        for (var i = 0; i < nbCentrale; i++) {            
+            var idallcentrale =  dijit.byId(id).attr('displayedValue').replace("-",'');
+            document.getElementById('lbl'+idallcentrale).style.textDecoration ='none';
+            dijit.byId(idallcentrale).set('disabled',false);
+            dijit.byId(idallcentrale).set('checked',false);
+        }
+    }
+    </script>
 <script>
     require(["dojo/parser", "dijit/Editor"]);
     require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {

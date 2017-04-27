@@ -238,6 +238,16 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
         afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
     }
+    function enableCheckBoxAutrecentrale(id){        
+        var selectObject = dijit.byId(id);            
+        for (var i = 0; i < selectObject.options.length; i++) {
+            var select = dijit.byId(id);
+            var idallcentrale =  select.options[i].label.replace('-','');
+            document.getElementById('lbl'+idallcentrale).style.textDecoration ='none';
+            dijit.byId(idallcentrale).set('disabled',false);
+            dijit.byId(idallcentrale).set('checked',false);
+        }
+    }
     function disableCheckBoxAutrecentrale1(id){
         enableCheckBoxAutrecentrale1(id);
         var nbCentrale = parseInt('<?php echo $manager->getSingle2("select count(idcentrale) from centrale where masquecentrale!=TRUE and idcentrale!=?",IDAUTRECENTRALE) ?>');        
@@ -250,16 +260,7 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
         afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
     }    
-    function enableCheckBoxAutrecentrale(id){        
-        var selectObject = dijit.byId(id);            
-        for (var i = 0; i < selectObject.options.length; i++) {
-            var select = dijit.byId(id);
-            var idallcentrale =  select.options[i].label.replace('-','');
-            document.getElementById('lbl'+idallcentrale).style.textDecoration ='none';
-            dijit.byId(idallcentrale).set('disabled',false);
-            dijit.byId(idallcentrale).set('checked',false);
-        }
-    }
+    
      function enableCheckBoxAutrecentrale1(id){        
         var nbCentrale = parseInt('<?php echo $manager->getSingle2("select count(idcentrale) from centrale where masquecentrale!=TRUE and idcentrale!=?",IDAUTRECENTRALE) ?>');        
         for (var i = 0; i < nbCentrale; i++) {            

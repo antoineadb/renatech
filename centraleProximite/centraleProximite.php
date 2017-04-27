@@ -162,11 +162,11 @@ CENTRALES DE PROXIMITES
                                }
                             }else{
                                  $centraleSelectionne = $idcentraleProjet;
-                            }                       
+                            }
                         ?>
                         
                         
-                            <?php if (!empty($centraleSelectionne)) {?>
+                            <?php if (!empty($centraleSelectionne) && $centraleSelectionne != IDCENTRALEAUTRE) {?>
                             <div id='chckcentraleproximite' style=" margin-bottom: 15px; margin-left: 25px; margin-top: 10px; display: inline-block;">
                                  <?php                                 
                                 $arrayCentraleRegion = $manager->getListbyArray("SELECT r.libelleregion, cp.libellecentraleproximite, cp.idcentraleproximite FROM centraleproximite cp,region r,centraleregion cr "
@@ -193,10 +193,9 @@ CENTRALES DE PROXIMITES
                             </div>
                         <?php } else {?>
                             <div id='chckcentraleproximite' style=" margin-bottom: 15px; margin-left: 25px; margin-top: 10px; display: inline-block;">
-                                 <?php                                 
-                                
+                                 <?php 
                                 $rowspecifique = $manager->getListbyArray("SELECT cp.libellecentraleproximite, cp.idcentraleproximite FROM region r,centraleproximite cp WHERE cp.idregion = r.idregion  "
-                                        . "AND r.libelleregion =? and masquecentraleproximite !=? order by idcentraleproximite asc", array(TXT_CENTRALESPECIFIQUES, TRUE));                                
+                                        . "AND r.libelleregion =? and masquecentraleproximite !=? order by idcentraleproximite asc", array(TXT_CENTRALESPECIFIQUES, TRUE));
                                 echo "<p><u>".TXT_CENTRALESPECIFIQUES."</u></p>";                                
                                 for ($i = 0; $i < count($rowspecifique); $i++) {
                                     $nomcentraleproximite = $rowspecifique[$i]['libellecentraleproximite'];

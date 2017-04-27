@@ -1095,14 +1095,14 @@ function masqueetapeautrecentrale(){
                                         $icentraleselectionne = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?",$idprojet);
                                         $row = $manager->getList2("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE and idcentrale!= ? order by libelleCentrale asc",$icentraleselectionne);
                                         for ($i = 0; $i < count($row); $i++) {
-                                            $libellecentrale = $row[$i][0];
+                                            $libellecentrale = str_replace('-', '',$row[$i][0]);
                                             $villecentrale = $row[$i][1];
-                                            echo
-                                            "<input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" . str_replace('-', '', $libellecentrale) . "' "
-                                            . "name='autrecentrale[]' value='" . $libellecentrale . "'  >
-                                            <label for = '" . $libellecentrale . "' class='opt' > " . ($libellecentrale) . ' (<i>' . str_replace("''", "'", $villecentrale) . '</i>)' . "</label>";
-                                            echo '<br>';
-                                        }                
+                                            ?>
+                                            <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id="<?php echo $libellecentrale;?>" name="autrecentrale[]"  data-dojo-id="<?php echo trim($libellecentrale); ?>" 
+                                            value="<?php echo  $libellecentrale ;?>"  >
+                                            <label for = "<?php echo  $libellecentrale; ?> " class='opt' id="<?php echo 'lbl'.$libellecentrale;?>" > <?php echo  $row[$i][0] . ' (<i>' . $villecentrale . '</i>)'?> </label>
+                                            <br>
+                                        <?php }                
                                         ?>                                        
                                         
                                     </div>
@@ -1131,15 +1131,16 @@ function masqueetapeautrecentrale(){
                                     $icentraleselectionne = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?",$idprojet);
                                     $row = $manager->getList2("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE and idcentrale!= ? order by libelleCentrale asc",$icentraleselectionne);
                                     for ($i = 0; $i < count($row); $i++) {
-                                        $libellecentrale = $row[$i][0];
-                                        $villecentrale = $row[$i][1];
-                                        echo
-                                        "<input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='" . str_replace('-', '', $libellecentrale) . "' "
-                                        . "name='autrecentrale[]' value='" . $libellecentrale . "'  >
-                                        <label for = '" . $libellecentrale . "' class='opt' > " . ($libellecentrale) . ' (<i>' . str_replace("''", "'", $villecentrale) . '</i>)' . "</label>";
-                                        echo '<br>';
-                                    }
-                                    ?>
+                                        $libellecentrale = str_replace('-', '', $row[$i][0]);
+                                        $villecentrale = $row[$i][1];?>
+                                        
+                                        <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id="<?php echo trim($libellecentrale);?>" data-dojo-id="<?php echo trim($libellecentrale);?>" 
+                                                name='autrecentrale[]' value="<?php echo  $libellecentrale;?>"  >
+                                        <label for = "<?php echo  $libellecentrale ?>" class='opt' id="<?php echo 'lbl'.$libellecentrale; ?>"> 
+                                            <?php echo $row[$i][0] . ' (<i>' . $villecentrale . '</i>)' ?>
+                                        </label>
+                                        <br>
+                                   <?php }?>
                                 </div>
                                 </fieldset>
                             </td>                            

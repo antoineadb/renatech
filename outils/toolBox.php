@@ -788,13 +788,15 @@ function sizeLogo($array, $t) {
     }
 
     if ($h < $t) {
-        $f = $t / $h;
-        $h = $f * $h;
-        $w = $f * $w;
-        if ($w > 560) {
-            $f = 560 / $w;
-            $w = 560;
+        if(isset($h)){
+            $f = $t / $h;
             $h = $f * $h;
+            $w = $f * $w;
+            if ($w > 560) {
+                $f = 560 / $w;
+                $w = 560;
+                $h = $f * $h;
+            }
         }
     }
 
