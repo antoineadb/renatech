@@ -17,21 +17,22 @@ $data .= "\n";
 
 if (isset($_POST['annee'])&& !empty($_POST['annee'])) {
     if($_POST['annee']==1){
-        $anneeExport = $_POST['annee'];
-        $sqlExport = " and EXTRACT(YEAR from dateprojet ) >= ?";
-    }else{
-       $anneeExport = $_POST['annee'];
-       $sqlExport = " and EXTRACT(YEAR from dateprojet ) = ?";
+        $arrayProjetEncours = $manager->getListbyArray(" 
+        select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? and EXTRACT(YEAR from datedebutprojet ) >?
+         union 
+        select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? and EXTRACT(YEAR from datestatutfini ) >?
+        order by idprojet asc;",array(ENCOURSREALISATION,$_POST['annee'],FINI,$_POST['annee']));
+    }else{       
+       $arrayProjetEncours = $manager->getListbyArray("
+           select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? and EXTRACT(YEAR from datedebutprojet ) =?   union 
+           select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? and EXTRACT(YEAR from datestatutfini ) =? union
+           select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and EXTRACT(YEAR from datedebutprojet ) <? and EXTRACT(YEAR from datestatutfini ) >?
+            order by idprojet asc;",array(ENCOURSREALISATION,$_POST['annee'],FINI,$_POST['annee'],$_POST['annee'],$_POST['annee']));       
     }
 } else {
     echo ' <script>alert("Vous devez choisir une année!");window.location.replace("/' . REPERTOIRE . '/enquete/' . $lang . '")</script>';
     exit();
 }
-
-//Récupération des idprojet en cours de réalisation de l'année sélectionnée
-$arrayProjetEncours = $manager->getListbyArray("select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? "
-        . "".$sqlExport." order by idprojet asc",array(ENCOURSREALISATION,$anneeExport));
-// Création d'un tableau de d'idutilisateur académique externe et industriel qui ont créé un projet qui est en cours de réalisation sur l'année sélectionnée
 $arrayUtilisateur = array();
 foreach ($arrayProjetEncours as $idProjet){
     array_push($arrayUtilisateur, $manager->getSingle2("select idutilisateur from utilisateur, creer where idutilisateur_utilisateur=idutilisateur and idcentrale_centrale is null AND idprojet_projet=?",$idProjet['idprojet']));
@@ -46,8 +47,8 @@ $arrayIdUtilisateur = array_unique(array_merge(array_filter($arrayUtilisateur),a
 $nbrow = count($arrayIdUtilisateur);
 $elementsUser =array();
 foreach ($arrayIdUtilisateur as $idUser){   
-     array_push($elementsUser,  $manager->getList2("select idutilisateur,nomresponsable,mailresponsable,acronymelaboratoire,entrepriselaboratoire,nom,prenom,mail from utilisateur,loginpassword where idlogin =idlogin_loginpassword "
-        . " and idutilisateur = ?",$idUser));
+     array_push($elementsUser,  $manager->getList2("select idutilisateur,nomresponsable,mailresponsable,acronymelaboratoire,entrepriselaboratoire,nom,prenom,mail from utilisateur,loginpassword "
+             . "where idlogin =idlogin_loginpassword  and idutilisateur = ?",$idUser));
 }
 
 if ($nbrow != 0) {

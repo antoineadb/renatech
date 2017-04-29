@@ -39,7 +39,6 @@ for ($b = 1; $b <= 5; $b++) {
 
 $s_partenaire="";
 for ($c = 2; $c <= 10; $c++) {
-    //$s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";Nom de la personne impliqué".$c.";";
     $s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";";
 }
 $s_personnesalleblanche = "";
@@ -63,7 +62,6 @@ $data = utf8_decode("Id du projet;Date du projet;Titre du projet;référence int
         . "Source de financement 6;"
         . "Etes vous le coordinateur du projet?;Statut;"            
         . "Nom du Laboratoire&Entreprise1;"
-     //   . "Nom de la personne impliqué1;"
         ."".$s_partenaire.""        
         . "Descriptif Technologique;pièce jointe;Le projet nécessite-t'il un développement technologique pour certaines étapes?;Verrous identifiés;Etape(s)réalisée(s)dans une autre centrale;Autre(s) centrale(s);"
         . "Description de l'(ou des) étape(s):;Utilisez-vous dans votre projet une centrale de proximité? ;Centrales de proximité;Descriptions de la demande;"
@@ -434,25 +432,30 @@ if ($nbrow != 0) {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
 //                              CENTRALES DE PROXIMITES
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------          
+        
+        
+        
         $centraleproximite = $row[$i]['centraleproximite'];
-        if ($centraleproximite == 't') {
+        if($centraleproximite){
             $centraleproximite = TXT_OUI;
-        } else {
-            $centraleproximite = TXT_NON;
-        }
-        $arraycentraleproximte = $manager->getList2("SELECT cp.libellecentraleproximite FROM centraleproximite cp,centraleproximiteprojet pc"
-                . " WHERE cp.idcentraleproximite = pc.idcentraleproximite and pc.idprojet =?",$idprojet);
-        $nbcentraleproximite =count($arraycentraleproximte);
-        $libellecentraleproximite= "";
-        for ($cp = 0; $cp < $nbcentraleproximite; $cp++) {
-            $libellecentraleproximite .=  $arraycentraleproximte[$cp]['libellecentraleproximite'].' - ';
-        }
-        $libelleCentraleProximite = cleanForExportOther(substr($libellecentraleproximite,0,-2));
-        if(!empty($row[$i]['descriptioncentraleproximite'])){
+            $arraycentraleproximte = $manager->getList2("SELECT cp.libellecentraleproximite FROM centraleproximite cp,centraleproximiteprojet pc  WHERE cp.idcentraleproximite = pc.idcentraleproximite and pc.idprojet =?",$idprojet);
+            $nbcentraleproximite =count($arraycentraleproximte); 
+            $libellecentraleproximite= "";
+            for ($cp = 0; $cp < $nbcentraleproximite; $cp++) {                
+                $libellecentraleproximite .=  $arraycentraleproximte[$cp]['libellecentraleproximite'].' - ';
+            }            
+            $libelleCentraleProximite = cleanForExportOther(substr($libellecentraleproximite,0,-2));
+            if(!empty($row[$i]['descriptioncentraleproximite'])){
             $descriptioncentraleproximite = cleanForExportOther($row[$i]['descriptioncentraleproximite']);
         }else{
             $descriptioncentraleproximite = '';
         }
+        }else {
+            $centraleproximite = TXT_NON;
+            $libelleCentraleProximite="";
+            $descriptioncentraleproximite = '';
+        }
+        
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
 //                              RECUPERATION DES RESSOURCES
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                
@@ -686,14 +689,12 @@ if ($nbrow != 0) {
         }
         //  DONNEES INCLUES DANS LA TABLE PARTENAIREPROJET
         for ($f = 2; $f <= 10; $f++) {            
-                ${'rowpartenaireprojet'.$f}= $manager->getList2("SELECT idpartenaire,nompartenaire,nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=? "
+                ${'rowpartenaireprojet'.$f}= $manager->getList2("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=? "
                 . "order by idpartenaire_partenaireprojet asc limit 1 offset ".($f-2)." ", $idprojet);
-            if (!empty(${'rowpartenaireprojet'.$f}[0]['idpartenaire'])) {
-                ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']);
-                ${'partenaire'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nompartenaire']);
+            if (!empty(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise'])) {
+                ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']);               
             }else{
                 ${'laboentreprise'.$f} = '';
-                ${'partenaire'.$f} = '';
             }           
         }
         
@@ -707,7 +708,7 @@ if ($nbrow != 0) {
         }
         $varpartenaires='';
         for ($w = 2; $w <= 10; $w++) {
-            $varpartenaires .= utf8_decode(${'laboentreprise'.$w}) . ";".utf8_decode(${'partenaire'.$w}) . ";"  ;
+            $varpartenaires .= utf8_decode(${'laboentreprise'.$w}) . ";"  ;
         }
         
         $varressource='';
@@ -780,9 +781,8 @@ if ($nbrow != 0) {
                 $varsourcefinancement.
                 $porteur.";".
                 removeDoubleQuote(stripslashes(utf8_decode($libellestatutprojet))) . ";" .               
-                $laboentreprise1.";" .
-            //    $partenaire1.";" .                
-                $varpartenaires.                
+                $laboentreprise1.";" .                
+                $varpartenaires.
                 $descriptifTechno . ";" .
                 $attachementdesc . ";" .
                 $devtechnologique.";".
@@ -791,7 +791,7 @@ if ($nbrow != 0) {
                 $libelleAutreCentrale.";".
                 $descriptionEtape.";".
                 $centraleproximite.";".
-                $libelleCentraleProximite.";".
+                $libellecentraleproximite.";".
                 $descriptioncentraleproximite.";".
                 $emailrespdevis . ";" .
                 stripslashes(utf8_decode($reussite)) .";".
