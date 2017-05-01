@@ -14,7 +14,7 @@ if (!empty($_SESSION['pseudo'])) {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
 if (!empty($numProjet)) {
-    $arrayPartenaire = $manager->getList("SELECT nompartenaire, nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = projet.idprojet and numero='" . $numProjet . "'");
+    $arrayPartenaire = $manager->getList("SELECT  nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = projet.idprojet and numero='" . $numProjet . "'");
 }
 for ($i = 0; $i < 11; $i++) {
     $j = $i + 1;
@@ -31,25 +31,21 @@ for ($i = 0; $i < 11; $i++) {
                        ?>" maxlength="100" disabled="<?php echo $bool; ?>" data-dojo-props="<?php echo REGEX_TYPE ?>">
                                                                                             
             </td>
-        </tr>
-        <?php /* ?>
-        <tr>
             <td>
-                <label  for="<?php echo 'nomPartenaire' . $i; ?>"><?php echo TXT_NOMPARTENAIRE . '  ' . ($j + 1); ?></label>
-            </td>
-            <td>
-                <input type="text" id="<?php echo 'nomPartenaire' . $i; ?>" autocomplete="on" name="<?php echo 'nomPartenaire' . $i; ?>"
-                       data-dojo-type="dijit/form/ValidationTextBox" disabled="<?php echo $bool; ?>"
-                       value="<?php
-                       if (!empty($arrayPartenaire[$i]['nompartenaire'])) {
-                           echo str_replace("''", "'", $arrayPartenaire[$i]['nompartenaire']);
-                       }
-                       ?>" maxlength="100"
-                      data-dojo-props="<?php echo REGEX_TYPE ?>">
+<?php /*?>                
+                <select name="<?php echo 'typeEntreprise' . $i; ?>" id="<?php echo 'typeEntreprise' . $i; ?>"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">
+                <?php 
+                        echo '<option>'.TXT_SELECTTYPEENTREPRISE.'</option>';
+                        $rowtypeentreprise = $manager->getList("select idtypeentreprise,libelletypeentreprise from typeentreprise where masquetypeentreprise!=TRUE order by idtypeentreprise desc");
+                        for($k=0;$k<count($rowtypeentreprise);$k++){
+                                echo "<option value='".'te'.$rowtypeentreprise[$k]['idtypeentreprise']."'>".$rowtypeentreprise[$k]['libelletypeentreprise']."</option>";
+                        }
+                ?>
+                </select>
+<?php  */?>                
             </td>
         </tr>
-         <?php  */ ?>
-         
+      
     </table>
 <?php
 }

@@ -248,18 +248,7 @@
                     <input type="text" id="centralepartenaireprojet" autocomplete="on" name="centralepartenaireprojet" data-dojo-type="dijit/form/ValidationTextBox"
                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()\0133\0135\+_ ,.-]+'" >
                 </td>
-            </tr>
-            <tr id='trnomPartenaire01'>
-                <td>
-                    <label style="margin-left: 18px;width:310px" for="nomPartenaire01">
-                        <?php echo TXT_NOMPARTENAIRE.'1' ;?>
-                    </label>
-                </td>
-                <td>
-                    <input type="text" id="nomPartenaire01" autocomplete="on" name="nomPartenaire01" data-dojo-type="dijit/form/ValidationTextBox"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()\0133\0135\+_ ,.-]+'">
-                </td>
-            </tr>
+            </tr>            
         </table>        
         <script>
             function addnom(nb) {
@@ -269,14 +258,12 @@
                             dijit.byId('centralepartenaireprojet').set('required', '');
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
-                            document.getElementById('trcentralepartenaireprojet').style.display = 'none';
-                            document.getElementById('trnomPartenaire01').style.display = 'none';
+                            document.getElementById('trcentralepartenaireprojet').style.display = 'none';                 
                             dijit.byId('nomLaboEntreprise' + i).set('required', '');
                         }
                         break;
                     case 1:
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         dijit.byId('centralepartenaireprojet').set('required', 'true');
                         for (i = 0; i < 11; i++) {
                             dijit.byId('nomLaboEntreprise' + i).set('required', '');
@@ -300,7 +287,6 @@
                             document.getElementById(nom).style.display = 'none';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         break;
                     case 3:
                         dijit.byId('nomLaboEntreprise0').set('required', 'required');
@@ -312,7 +298,6 @@
                             document.getElementById('nom' + i).style.display = 'block';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         for (i = nb - 1; i < 10; i++) {
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
@@ -329,7 +314,6 @@
                             document.getElementById('nom' + i).style.display = 'block';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         for (i = nb - 1; i < 10; i++) {
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
@@ -347,7 +331,6 @@
                             document.getElementById('nom' + i).style.display = 'block';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         for (i = nb - 1; i < 10; i++) {
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
@@ -364,7 +347,6 @@
                             document.getElementById('nom' + i).style.display = 'block';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         for (i = nb - 1; i < 10; i++) {
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
@@ -381,7 +363,6 @@
                             document.getElementById('nom' + i).style.display = 'block';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         for (i = nb - 1; i < 10; i++) {
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
@@ -399,7 +380,6 @@
                             document.getElementById('nom' + i).style.display = 'block';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         for (i = nb - 1; i < 10; i++) {
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
@@ -416,7 +396,6 @@
                             document.getElementById('nom' + i).style.display = 'block';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         for (i = nb - 1; i < 10; i++) {
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
@@ -433,8 +412,7 @@
                         for (i = 0; i < nb - 1; i++) {
                             document.getElementById('nom' + i).style.display = 'block';
                         }
-                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';                        
                         for (i = nb - 1; i < 10; i++) {
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
@@ -448,7 +426,6 @@
                             document.getElementById('nom' + i).style.display = 'block';
                         }
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                        document.getElementById('trnomPartenaire01').style.display = 'block';
                         break;
                     default:
                         break;

@@ -46,15 +46,20 @@ if (!empty($idutilisateur) && !empty($idprojet)) {
     if (empty($datedejaaffect)) {
         $utilisateuradminprojet = new UtilisateurAdmin($idutilisateur, $idprojet, $dateaffectation);
         $manager->addUtilisateurAdmin($utilisateuradminprojet);
+        $statutprojet = $manager->getSingle2("select libellestatutprojet from concerne,statutprojet where idprojet_projet=? and idstatutprojet=idstatutprojet_statutprojet", $idprojet);
+        $centrale= $manager->getSingle2("select idcentrale_centrale from concerne,centrale where idprojet_projet=? and idcentrale_centrale=idcentrale", $idprojet);
+        $numero = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
+        $nomprenomdemandeur = $manager->getSingle2("select concat (nom,' - ',prenom) from utilisateur where idutilisateur=?", $idutilisateur);
+        //Créer un log
+        createLogInfo(NOW, "Affectation du projet n° ".$numero." en tant qu'administrateur de projet à l'utilisateur ", $nomprenomdemandeur." ", $statutprojet, $manager, $centrale);
 //ENVOI DE L'EMAIL        
-        //include	'../EmailProjetAffecte.php';// DEMANDE A FAIRE  POUR ENVOYER OU NON UN EMAIL
-        if(!empty($_GET['idprojet'])) {            
-            header('Location:/'.REPERTOIRE.'/projet_centrale_admin/' . $lang . '/' . $idprojet.'/'.$idutilisateur.'/ok' );            
-            exit();            
-        }else{
-            header('Location:/'.REPERTOIRE.'/affecte_AdminProjet/' . $lang . '/' . $idutilisateur );            
-            exit();
-        }
+        //include	'../EmailProjetAffecte.php';// DEMANDE A FAIRE  POUR ENVOYER OU NON UN EMAIL        
+        //vider le cache
+            effaceCache(LIBELLECENTRALEUSER);    
+            header('Location:/' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang . "&idprojet=".$idprojet."&idutilisateur=".$idutilisateur."&administrateur=ok");
+            //header('Location:/'.REPERTOIRE.'/projetCentraleAdmin/' . $lang . '/' . $idprojet.'/'.$idutilisateur.'/ok' );
+        exit();            
+        
     } else {
          if(!empty($_GET['idprojet'])) {
             header('Location:/'.REPERTOIRE.'/projet_deja_admin/' . $lang . '/' . $idutilisateur.'/ok');   

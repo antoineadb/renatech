@@ -17,16 +17,27 @@ if (isset($_SESSION['pseudo'])) {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
 include 'html/header.html';
-$nbprojet = $_SESSION['nbprojet'];
-$nbprojetEncoursRealisation = $_SESSION['nbprojetencoursrealisation'];
-$nbprojetAccepte = $_SESSION['nbprojetaccepte'];
-$nbprojetAttente = $_SESSION['nbprojetattente'];
-$nbProjetRefusee = $_SESSION['nbProjetRefusee'];
-$nbProjetFini = $_SESSION['nbFini'];
-$nbProjetCloturer = $_SESSION['nbprojetCloturer'];
-$nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
-$nbRapportProjet = $_SESSION['nbProjetRapport'];
-
+if(isset($_SESSION['nbprojet'])){
+    $nbprojet = $_SESSION['nbprojet'];
+    $nbprojetEncoursRealisation = $_SESSION['nbprojetencoursrealisation'];
+    $nbprojetAccepte = $_SESSION['nbprojetaccepte'];
+    $nbprojetAttente = $_SESSION['nbprojetattente'];
+    $nbProjetRefusee = $_SESSION['nbProjetRefusee'];
+    $nbProjetFini = $_SESSION['nbFini'];
+    $nbProjetCloturer = $_SESSION['nbprojetCloturer'];
+    $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
+    $nbRapportProjet = $_SESSION['nbProjetRapport'];
+}else{
+    $nbprojet = 0;
+    $nbprojetEncoursRealisation = 0;
+    $nbprojetAccepte = 0;
+    $nbprojetAttente = 0;
+    $nbProjetRefusee = 0;
+    $nbProjetFini = 0;
+    $nbProjetCloturer = 0;
+    $nbProjetSoustraitance = 0;
+    $nbRapportProjet =  0;
+}
 ?>
 <div id="global" >
     <?php include 'html/entete.html'; ?>        
@@ -36,7 +47,8 @@ $nbRapportProjet = $_SESSION['nbProjetRapport'];
             $Cache->inc(ROOT . '/outils/bandeaucentrale.php'); //RECUPERATION DU BANDEAU DEFILANT DANS LE CACHE CACHE
         } else {
             include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
-        }?>
+        }
+        ?>
         <?php if(isset($_GET['err'])&&!empty($_GET['err'])){?><div style="padding-top: 15px;margin-bottom: -33px;text-align: center;font-size: 1.1em;color: #007A99; font-weight: bold;">
             <?php echo "Ce projet ne peux pas être dupliqué, il n'est pas \"En cours d'expertise\",\"En cours de réalisation\" ou \"Fini\" ";}?></div>
         <form action="#" method="POST" id="vueprojetcentrale">

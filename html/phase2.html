@@ -1090,7 +1090,7 @@ function masqueetapeautrecentrale(){
                             <td style="float: left" id="etapeautre1">
                                     <fieldset style="font-size: 1.1em;font-style: italic;width: 520px">
                                         <legend><?php echo TXT_SELECTCENTRALES; ?></legend>
-                                    <div id='chckautrecentrale' style="float: left;margin-bottom: 15px;margin-left:20px;margin-top: 10px">
+                                    
                                         <?php
                                         $icentraleselectionne = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?",$idprojet);
                                         $row = $manager->getList2("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE and idcentrale!= ? order by libelleCentrale asc",$icentraleselectionne);
@@ -1098,14 +1098,15 @@ function masqueetapeautrecentrale(){
                                             $libellecentrale = str_replace('-', '',$row[$i][0]);
                                             $villecentrale = $row[$i][1];
                                             ?>
-                                            <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id="<?php echo $libellecentrale;?>" name="autrecentrale[]"  data-dojo-id="<?php echo trim($libellecentrale); ?>" 
+                                            <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id="<?php echo $libellecentrale;?>" name="autrecentrale[]" 
+                                                    data-dojo-id="<?php echo trim($libellecentrale); ?>" 
                                             value="<?php echo  $libellecentrale ;?>"  >
                                             <label for = "<?php echo  $libellecentrale; ?> " class='opt' id="<?php echo 'lbl'.$libellecentrale;?>" > <?php echo  $row[$i][0] . ' (<i>' . $villecentrale . '</i>)'?> </label>
                                             <br>
                                         <?php }                
                                         ?>                                        
                                         
-                                    </div>
+                                    
                                     </fieldset>
                                 </td> 
                                 <td  id="etapeautre" style="display:block;float: left">

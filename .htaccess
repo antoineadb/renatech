@@ -290,7 +290,11 @@ RewriteRule   new_request/([a-z]+)                              createProjet.php
 RewriteRule   new_project/([a-z]+)                              creerprojetphase2.php?lang=$1                               [L]
 
 RewriteRule   projet_centrale_affect/([a-z]+)/([0-9]+)/([0-9]+)/([a-z]+) VueSuiviProjetCentrale.php?lang=$1&idprojet=$2&idutilisateur=$3&porteur=$4  [L]
-RewriteRule   projet_centrale_admin/([a-z]+)/([0-9]+)/([0-9]+)/([a-z]+)  VueSuiviProjetCentrale.php?lang=$1&idprojet=$2&idutilisateur=$3&administrateur=$4  [L]
+RewriteRule   projet_centrale_admin/([a-z]+)/([A-Z\-]+)/([a-z]+)  VueSuiviProjetCentrale.php?lang=$1&centrale=$2&changeApplicant=$3  [L]
+RewriteRule   projetCentraleAdmin/([a-z]+)/([0-9]+)/([0-9]+)/([a-z]+)  VueSuiviProjetCentrale.php?lang=$1&idprojet=$2&idutilisateur=$3&administrateur=$4  [L]
+
+RewriteRule   projetCentrale/([a-z]+)/([A-Z\-]+)/([0-9]+)/([0-9]+)/([a-z]+)  VueSuiviProjetCentrale.php?lang=$1&centrale=$2&idprojet=$3&idutilisateur=$4&changeApplicant=$5  [L]
+
 RewriteRule   mes_projets/([a-z]+)                              VueSuiviProjet.php?lang=$1                                  [L]
 RewriteRule   mes_projets_admin/([a-z]+)                        VueSuiviProjetAdmin.php?lang=$1                             [L]
 RewriteRule   myproject/([a-z]+)/([0-9]+)			phase2.php?lang=$1&idprojet=$2                              [L]

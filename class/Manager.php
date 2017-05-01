@@ -2754,6 +2754,23 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         }
     }
 
+    public function updateCreer(Creer $creer) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE CREER set idutilisateur_utilisateur = ? where idprojet_projet=? ');
+            $idutilisateur = $creer->getIdutilisateur_utilisateur();
+            $idprojet = $creer->getIdprojet_projet();
+            $requete->bindParam(1, $idutilisateur, PDO::PARAM_INT);
+            $requete->bindParam(2, $idprojet, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRCREER . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+
 //------------------------------------------------------------------------------------------------------------
 //                      METHODE PERSONNE ACCUEIL CENTRALE
 //------------------------------------------------------------------------------------------------------------

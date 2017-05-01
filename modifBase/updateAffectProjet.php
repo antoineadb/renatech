@@ -45,10 +45,19 @@ if ($idutilisateur > 0 && $idprojet > 0) {
         $utilisateurporteurprojet = new UtilisateurPorteurProjet($idutilisateur, $idprojet, $dateaffectation);        
         $manager->addUtilisateurPorteurProjet($utilisateurporteurprojet);
          include_once '../outils/creerJsonProjetCentrale.php';//MISE A JOUR DU FICHIER JSON
-//ENVOI DE L'EMAIL        
+//ENVOI DE L'EMAIL
+        $statutprojet = $manager->getSingle2("select libellestatutprojet from concerne,statutprojet where idprojet_projet=? and idstatutprojet=idstatutprojet_statutprojet", $idprojet);
+        $centrale= $manager->getSingle2("select idcentrale_centrale from concerne,centrale where idprojet_projet=? and idcentrale_centrale=idcentrale", $idprojet);
+        $numero = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
+        $nomprenomdemandeur = $manager->getSingle2("select concat (nom,' - ',prenom) from utilisateur where idutilisateur=?", $idutilisateur);
+            //Créer un log
+            createLogInfo(NOW, "Affectation du projet n° ".$numero." en tant que porteur à l'utilisateur ", $nomprenomdemandeur." ", $statutprojet, $manager, $centrale);
         include	'../EmailProjetAffecte.php';       
         if(!empty($_GET['idprojet'])) {            
-            header('Location:/'.REPERTOIRE.'/projet_centrale_affect/' . $lang . '/' . $idprojet.'/'.$idutilisateur.'/ok' );            
+            //header('Location:/'.REPERTOIRE.'/projet_centrale_affect/' . $lang . '/' . $idprojet.'/'.$idutilisateur.'/ok' ); 
+            //vider le cache
+            effaceCache(LIBELLECENTRALEUSER);    
+            header('Location:/' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang . "&idprojet=".$idprojet."&idutilisateur=".$idutilisateur."&porteur=ok");
             exit();            
         }else{
             header('Location:/'.REPERTOIRE.'/affecte_projet/' . $lang . '/' . $idutilisateur );        
@@ -57,7 +66,7 @@ if ($idutilisateur > 0 && $idprojet > 0) {
         if(!empty($_GET['idprojet'])) {
             header('Location:/'.REPERTOIRE.'/projet_deja_affecte/' . $lang . '/' . $idutilisateur.'/ok');   
             exit();
-        }else{
+        }else{                        
             header('Location:/'.REPERTOIRE.'/projet_affecte/' . $lang . '/' . $idutilisateur . '/ok');
             exit();
         }

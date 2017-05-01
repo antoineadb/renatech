@@ -738,8 +738,15 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
 //-----------------------------------------------------------------------------------------------------------------------------------------------
     $_SESSION['email'] = $mail;
     $_SESSION['pseudo'] = $pseudo;
-
-    header('location:/' . REPERTOIRE . '/projet_centrale/' . $lang . '/' . $libellecentrale);
+    if(isset($_GET['changeApplicant'])){
+        header('location:/' . REPERTOIRE . '/projetCentrale/' . $lang . '/' . $libellecentrale.'/'.$_GET['idprojet'].'/'.$_GET['idutilisateur'].'/ok' ); 
+    }elseif (isset($_GET['porteur'])) {
+        header('Location:/'.REPERTOIRE.'/projet_centrale_affect/' . $lang . '/' . $_GET['idprojet'].'/'.$_GET['idutilisateur'].'/ok' ); 
+    }elseif(isset($_GET['administrateur'])){
+        header('Location:/'.REPERTOIRE.'/projetCentraleAdmin/' . $lang . '/' . $_GET['idprojet'].'/'.$_GET['idutilisateur'].'/ok' ); 
+    }else{
+        header('location:/' . REPERTOIRE . '/projet_centrale/' . $lang . '/' . $libellecentrale);
+    }
     BD::deconnecter();
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
