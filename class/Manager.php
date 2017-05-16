@@ -139,7 +139,7 @@ include_once 'CentraleRegion.php';
 include_once 'CentraleProximite.php';
 include_once 'CentraleProximiteProjet.php';
 include_once 'DescriptionCentraleProximiteProjet.php';
-
+include_once 'DemandeFaisabilite.php';
 showError($_SERVER['PHP_SELF']);
 
 class Manager {
@@ -181,6 +181,63 @@ class Manager {
             $this->_db->rollBack();
         }
     }
+ //------------------------------------------------------------------------------------------------------------
+//                                       SUPPRESSION D'UN UTILISATEUR
+//------------------------------------------------------------------------------------------------------------
+    public function deleteUtilisateur($idutilisateur) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("delete from utilisateur where idutilisateur=?");            
+            $requete->bindParam(1, $idutilisateur, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRDELETEUSER . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+    
+    public function deleteLogin($idlogin) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("delete from loginpassword where idlogin=?");            
+            $requete->bindParam(1, $idlogin, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRDELETEUSER . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }  
+    public function deleteAppartient($iduser) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("delete from appartient where idutilisateur_utilisateur=?");            
+            $requete->bindParam(1, $iduser, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRDELETEUSER . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+    public function deleteIntervient($iduser) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("delete from intervient where idutilisateur_utilisateur=?");            
+            $requete->bindParam(1, $iduser, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRINSERTUSER . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }    
+    
 //------------------------------------------------------------------------------------------------------------
 //                                       LOGS
 //------------------------------------------------------------------------------------------------------------
@@ -3532,9 +3589,37 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
         }
     }
 //-----------------------------------------------------------------------------------------------------------
+//             Demande de faisabilite
+//-----------------------------------------------------------------------------------------------------------
+    public function addDemande(DemandeFaisabilite $demande) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO demande_faisabilite (id_demande,nom_demandeur,email_demandeur,objet_demande,date_demande)  VALUES  (?,?,?,?,?)');
+            $iddemande = $demande->getIdDemande();
+            $nomdemandeur = $demande->getNomDemandeur();
+            $emaildemandeur = $demande->getEmailDemandeur();
+            $objetdemande = $demande->getObjetDemande();
+            $datedemande = $demande->getDateDemande();
+            
+            $requete->bindParam(1, $iddemande, PDO::PARAM_INT);
+            $requete->bindParam(2, $nomdemandeur, PDO::PARAM_STR);
+            $requete->bindParam(3, $emaildemandeur, PDO::PARAM_STR);
+            $requete->bindParam(4, $objetdemande, PDO::PARAM_STR);
+            $requete->bindParam(5, $datedemande, PDO::PARAM_STR);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+
+    
+//-----------------------------------------------------------------------------------------------------------
 //             Envoi Email pour relance de mise à jour
 //-----------------------------------------------------------------------------------------------------------
-
+    
     public function updateDateenvoiemail(ProjetDateEnvoiEmail $projetdate,$idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

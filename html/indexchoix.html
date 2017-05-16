@@ -38,6 +38,7 @@ if ($lang == 'fr') {
             '<br>'.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET1'))).' '.strtolower(affiche('TXT_CLICK')) ;?>
             <a href="<?php echo '/'.REPERTOIRE ?>/new_project/<?php echo $lang;?>" style="text-decoration: none">
                 <?php echo html_entity_decode(stripslashes(removeDoubleQuote(TXT_DEMANDEPROJET))); ?></a>
+            , <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/Manuel_partie_commune.pdf' ?>" download="Manuel_partie_commune" style="text-decoration: none"><?php echo TXT_DOWNLOADUSERMANUAL; ?></a> <?php echo TXT_DOWNLOADUSERMANUAL1; ?>
         </p>
         <p>
             <?php echo stripslashes(removeDoubleQuote(affiche('TXT_PROJETREALISABLE')));?>

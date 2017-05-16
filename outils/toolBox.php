@@ -1271,7 +1271,7 @@ function check_URL($pseudo, $idprojet) {
 }
 
 function effaceCache($libelleCentraleUser){
-    if(is_file(include_once '../class/Cache.php')){
+    if(is_file('../class/Cache.php')){
         include_once '../class/Cache.php';
     }else{
         include_once 'class/Cache.php';

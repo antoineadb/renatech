@@ -48,7 +48,7 @@ define('NONPERMANENT', $manager->getSingle2("select idqualitedemandeuraca from q
 define('MOIS', $manager->getSingle2("select idperiodicite from period where libelleperiodicite=?", 'mois'));
 define('JOUR', $manager->getSingle2("select idperiodicite from period where libelleperiodicite=?", 'jour(s)'));
 define('ANNEE', $manager->getSingle2("select idperiodicite from period where libelleperiodicite=?", 'année(s)'));
-define('REP_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/' . REPERTOIRE); //REPERTOIRE /var/www/rtb/html/projet-dev/outils/
+define('REP_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/' . REPERTOIRE);
 define('ABSPATH', dirname(__FILE__) . '/');
 define('STATCENTRALETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Projet par centrale et par type'));
 define('STATUSERDATE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de nouveaux porteurs de projets'));

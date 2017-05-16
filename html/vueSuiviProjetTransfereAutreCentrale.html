@@ -1,0 +1,41 @@
+<div id="gridTransfert"></div>
+<script>
+    var gridTransfert, dataStore, store;
+    require([
+        "dojox/grid/DataGrid",
+        "dojo/store/Memory",
+        "dojo/data/ObjectStore",
+        "dojo/request",
+        "dojo/date/stamp",
+        "dojo/date/locale",
+        "dojo/domReady!"
+    ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
+        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/ProjetRefuseTransfert<?php echo IDCENTRALEUSER?>.json", {            
+            handleAs: "json"}).then(function(data) {
+            store = new Memory({data: data.items});
+            dataStore = new ObjectStore({objectStore: store});
+            function formatDate(datum) {
+                var d = stamp.fromISOString(datum);
+                return locale.format(d, {selector: 'date', formatLength: 'long'});
+            }
+            function hrefFormatter(numero, idx) {
+                var item = gridTransfert.getItem(idx);//idx = index
+                var centrale = item.libellecentrale;//libelle centrale
+                return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $lang;?>&numProjet=" + numero + "&centrale="
+                        + centrale + "\">" + numero + "</a>";
+            }
+            gridTransfert = new DataGrid({store: dataStore, query: {id: "*"},
+                structure: [
+                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "85px", formatter: hrefFormatter},
+                    {name: "<?php echo TXT_COMMENT; ?>", field: "commentaire", width: "130px"},
+                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "120px"},
+                    {name: "<?php echo 'Commentaire des différentes centrales'; ?>", field: "centraleRefus", width: "auto"},
+                    {name: "<?php echo 'Accepté dans la centrale'; ?>", field: "centraleAcceptation", width: "80px"},
+                    {name: "<?php echo TXT_DATEREFUS; ?>", field: "datestatutrefuser", width: "85px", formatter: formatDate},
+                    {name: "<?php echo TXT_NOMDEMANDEUR;?>", field: "nom", width: "90px"}
+                ]
+            }, "gridTransfert");
+            gridTransfert.startup();
+        });
+    });
+</script>

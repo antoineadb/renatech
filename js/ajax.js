@@ -217,7 +217,6 @@ function refreshLogs(cheminEtFichierPhp) {
 function callbackrefreshLogs(reponse){
     document.getElementById('zoneText').innerHTML = reponse; 
 }
-
 function relanceEmail(cheminEtFichierPhp) {
     var xhr2 = getXMLHttpRequest();
     xhr2.onreadystatechange = function () {

@@ -1319,3 +1319,7 @@ a.infoBulle:hover span{
     color:#3380be;
     text-align: center;
 }
+
+.errDeleteUser{
+    color: red;text-align: center; font-weight: lighter
+}

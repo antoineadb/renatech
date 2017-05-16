@@ -23,6 +23,7 @@ if(isset($_SESSION['nbprojet'])){
     $nbprojetAccepte = $_SESSION['nbprojetaccepte'];
     $nbprojetAttente = $_SESSION['nbprojetattente'];
     $nbProjetRefusee = $_SESSION['nbProjetRefusee'];
+    $nbrowProjetRefuseTransfert = $_SESSION['nbProjetRefuseTransfert'];
     $nbProjetFini = $_SESSION['nbFini'];
     $nbProjetCloturer = $_SESSION['nbprojetCloturer'];
     $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
@@ -33,6 +34,7 @@ if(isset($_SESSION['nbprojet'])){
     $nbprojetAccepte = 0;
     $nbprojetAttente = 0;
     $nbProjetRefusee = 0;
+    $nbrowProjetRefuseTransfert = 0;
     $nbProjetFini = 0;
     $nbProjetCloturer = 0;
     $nbProjetSoustraitance = 0;
@@ -85,6 +87,9 @@ if(isset($_SESSION['nbprojet'])){
                     </div>
                 <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetRefusee . "'>" . TXT_PROJETREFUSE . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetRefuseCentrale.html'; ?>
+                </div>
+                <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbrowProjetRefuseTransfert . "'>" . 'Projets transférés dans une autre centrale' . "</div>"; ?>" style="height:500px;" >
+                    <?php include_once 'html/vueSuiviProjetTransfereAutreCentrale.html'; ?>
                 </div>
                 <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetCloturer . "'>" . TXT_PROJETCLOTURE . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetClotureCentrale.html'; ?>

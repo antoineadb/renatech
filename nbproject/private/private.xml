@@ -20,12 +20,9 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/projetRenatechNV/controler/controleSuiviProjetRespCentrale.php</file>
-            <file>file:/G:/projetRenatechNV/lang/fr-lang.php</file>
-            <file>file:/G:/projetRenatechNV/VueSuiviProjetCentrale.php</file>
-            <file>file:/G:/projetRenatechNV/class/Manager.php</file>
-            <file>file:/G:/projetRenatechNV/html/vueSuiviProjetCentrale.html</file>
-            <file>file:/G:/projetRenatechNV/modifBase/changeDemandeur.php</file>
+            <file>file:/G:/projetRenatechNV/.htaccess</file>
+            <file>file:/G:/projetRenatechNV/modifBase/deleteUser.php</file>
+            <file>file:/G:/projetRenatechNV/gestioncompte.php</file>
         </group>
     </open-files>
 </project-private>

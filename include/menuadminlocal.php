@@ -30,6 +30,7 @@ $log= '/'.REPERTOIRE.'/log/'.$lang;
 $requete = '/'.REPERTOIRE.'/req/'.$lang;
 $mail  = '/'.REPERTOIRE.'/relance/'.$lang;
 $faisabilite= '/'.REPERTOIRE.'/new_request/'.$lang;
+$nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -46,7 +47,7 @@ $faisabilite= '/'.REPERTOIRE.'/new_request/'.$lang;
                 <li><a href="<?php echo $userPorteurProjet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VUEUSERPROJET; ?></a></li>
                 <li><a href="<?php echo $adminprojet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONADMIN; ?></a></li>
                 <li><a href="<?php echo $useradminprojet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VUEADMINPROJET; ?></a></li>
-                
+                <li><a href="<?php echo $nbfaisabilite;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_REQUESTVIEW;?></a></li>
             </ul>
 
         </li>
@@ -76,7 +77,7 @@ $faisabilite= '/'.REPERTOIRE.'/new_request/'.$lang;
             <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
             <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
             <li><a href="<?php echo $log;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Logs';?></a></li>
-            <li><a href="<?php echo $mail;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Relance par E-Mail';?></a></li>
+            <li><a href="<?php echo $mail;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Relance par E-Mail';?></a></li>            
             <?php /* ?><li><a href="<?php echo $requete;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Requetes paramétrables';?></a></li> <?php */ ?>
         </ul> 
     </li>

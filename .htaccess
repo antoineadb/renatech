@@ -233,6 +233,7 @@ RewriteRule   hide_sourcefinancementErr1/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msg
 RewriteRule   hide_sourcefinancementErr2/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrsourcefinancementnonsaisie=$2	 [L]
 
 #COMPTES
+RewriteRule   delete_user/([a-z]+)/([a-z]+)                              gestioncompte.php?lang=$1&status=$2   [L]
 RewriteRule   compteadmin/([a-z]+)                                      gestioncompte.php?lang=$1                                           [L]
 RewriteRule   compteadminindust/([a-z]+)/([0-9]+)/([0-9]+)              gestioncompte.php?lang=$1&iduser=$2&idqualiteindust=$3              [L]
 RewriteRule   updatecompteindust/([a-z]+)/([0-9]+)/([0-9]+)/([a-z]+)    gestioncompte.php?lang=$1&iduser=$2&idqualiteindust=$3&update=$4    [L]
@@ -242,6 +243,8 @@ RewriteRule   moncompte/([a-z]+)                                        moncompt
 RewriteRule   compte/([a-z]+)                                           indexchoix.php?lang=$1                                              [L]
 RewriteRule   comptes/([a-z]+)                                          ctrlcompte.php?lang=$1                                              [L]
 RewriteRule   gestionCompte/([a-z]+)/([0-9]+)/([a-z]+)			gestioncompte.php?lang=$1&iduser=$2&msgerrcentrale=$3               [L]
+
+
 RewriteRule   updatemoncompteErr/([a-z]+)/([a-zA-Z]+)      		moncompte.php?lang=$1&erreur=$2                                     [L]
 RewriteRule   updatemoncompteErrNom/([a-z]+)/([0-9]+)      		moncompte.php?lang=$1&erreurnom=$2                                     [L]
 RewriteRule   updateMonCompte/([a-z]+)/([a-z]+)                         moncompte.php?lang=$1&msgupdate=$2                                  [L]
@@ -441,3 +444,5 @@ RewriteRule   insertCpErr/([a-z]+)/([a-z]+)                                     
 RewriteRule   insertCpErr1/([a-z]+)/([a-z]+)                                    adminListe.php?lang=$1&rens=$2   [L]
 RewriteRule   insertCpErr2/([a-z]+)/([a-z]+)                                    adminListe.php?lang=$1&cpexist=$2   [L]
 RewriteRule   insertCp/([a-z]+)/([a-z]+)                                        adminListe.php?lang=$1&cpadd=$2   [L]
+RewriteRule   nb_request/([a-z]+)                                               nbRequest.php?lang=$1   [L]
+

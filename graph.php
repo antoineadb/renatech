@@ -292,7 +292,7 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                     </td>
                 </tr>
             </table>
-        </fieldset>
+        </fieldset>  
     <?php }include 'html/footer.html'; ?>
 </div>
 </body>

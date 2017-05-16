@@ -4,18 +4,14 @@ if(isset($_GET['numProjet'])){
 }elseif(isset($_GET['idprojet'])){
     $idprojet=$_GET['idprojet'];
 }
-if(isset($_GET['statut'])){
-    $statut=$_GET['statut'];
-}else{
-       $statut=$manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
-}
+$statut=$manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
 ?>
 <fieldset class='statut' ><b><?php echo TXT_PROJETSOUSTRAITANCE;?></b></fieldset>
 <fieldset>
     <legend style="width: 550px;padding-left: 20px">
         <b><?php echo TXT_NUMPROJET.' : '.$numProjet;?></b> - <b><?php echo TXT_ACRONYME.' : '.stripslashes(str_replace("''","'",$acronyme));  ?></b>
     </legend>
-    <?php switch ($idstatutprojet) {
+    <?php switch ($statut) {
         case "":
             echo '<legend style="margin-left:20px"><b>' . TXT_STATUTPROJETS . ': ' . TXT_ATTENTE . '</b></legend>'; //projet en attente            
             break;

@@ -33,12 +33,33 @@ include 'html/header.html';
 
         </td>
     </tr>
-    <?php } ?>
+    <?php }?>
 </table>
     <div style="margin-top:5px;width:1050px" >
         <form  method="post" action="<?php echo '/'.REPERTOIRE; ?>/comptes/<?php echo $lang; ?>" id='gestioncompte' name='gestioncompte' >
             <fieldset id="ident" style="border-color: #5D8BA2;width: 1008px;padding-bottom:30px;padding-top:10px;font-size:1.2em" >
                 <legend><?php echo TXT_RECHERCHEUSER; ?></legend>
+                <?php if(isset($_GET['status'])&& $_GET['status']=='ok'){?>
+                <div class='errDeleteUser'>
+                    <?php echo 'Utilisateur supprimé!'; ?>
+                </div>
+                <?php } ?>
+                <?php if(isset($_GET['status'])&& $_GET['status']=='creer'){?>
+                <div class='errDeleteUser'>
+                    <?php echo "Cet utilisateur à créé des projets dans l'application, il ne peux pas être supprimé!"; ?>
+                </div>
+                <?php } ?>
+                <?php if(isset($_GET['status'])&& $_GET['status']=='admin'){?>
+                <div class='errDeleteUser'>
+                    <?php echo "Cet utilisateur est administrateur de projets dans l'application, il ne peux pas être supprimé!"; ?>
+                </div>
+                <?php } ?>
+                <?php if(isset($_GET['status'])&& $_GET['status']=='porteur'){?>
+                <div class='errDeleteUser'>
+                    <?php echo "Cet utilisateur est porteur de projets dans l'application, il ne peux pas être supprimé!"; ?>
+                </div>
+                <?php } ?>
+                
                 <table>
                     <tr><td><br></td></tr>
                     <tr>
@@ -549,25 +570,24 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                             <tr>
                                 <th style="text-align: left"><?php echo TXT_VUEPROJETDELACENTRALE; ?><a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                         <span style="text-align: left;padding:10px;width: 420px;border-radius:5px" ><?php echo affiche('TXT_AIDEVUEPROJETCENTRALE');?></span>
-                                    </a></th></th><td></td>                                
+                                    </a></th><td></td>
                                 <td>
                                     <div style="margin-left: 50px">
                                         <?php if($vueprojetcentrale==TRUE){ ?>
-                                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id ="vueOui" checked="true"  class="btRadio" ><?php echo TXT_OUI; ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id ="vueOui" checked="true"  class="btRadio" ><?php echo TXT_OUI; ?>
                                             <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id="vueNon"  class="btRadio"> <?php echo TXT_NON; ?>
                                         <?php }else{ ?>
                                             <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id ="vueOui"   class="btRadio" ><?php echo TXT_OUI; ?>
-                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentralevueprojetcentrale" id="vueNon" checked="true"  class="btRadio"> <?php echo TXT_NON; ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id="vueNon" checked="true"  class="btRadio"> <?php echo TXT_NON; ?>
                                         <?php } ?>
                                     </div>
                                 </td>
                             </tr>
                         <?php }?>
                         </table>
-                        <button id="progButtonNode" data-dojo-type="dijit/form/Button" type="submit" name="submitButtonThree" value="Submit"><?php echo TXT_MAJ; ?></button>
-                    </div>
-                </fieldset>
-                <script>
+                        <button id="progButtonNode" data-dojo-type="dijit/form/Button" type="submit" name="submitButtonThree" value="Submit"></button>                        
+                        <?php include_once 'outils/deleteAccount.php'; ?>
+                <script>                    
                     require(["dijit/form/Button", "dojo/dom", "dojo/domReady!"], function(Button, dom) {
                         // Create a button programmatically:
                         var myButton = new Button({
@@ -1014,6 +1034,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                         </table>
                     </div>
                     <button id="progButtonNodeindust" data-dojo-type="dijit/form/Button" type="submit" name="submitButton" ></button>
+                    <?php include_once 'outils/deleteAccount.php'; ?>
                 </fieldset> <?php include 'html/footer.html'; ?>
             </form>
         </div><!-- navigation -->

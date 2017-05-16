@@ -59,7 +59,8 @@ if (!empty($_FILES['fichierProjet']['name'])) {
 $body = affiche('TXT_BODYEMAILPROJET0').'<br>'. utf8_decode(affiche('TXT_DEMANDEFAISABILITE')).'<br><br>'.  affiche('TXT_NOMDEMANDEUR').':  '.$nom.'<br>'.
         affiche('TXT_MAILDEMANDEUR').':</u>  '.$mail.'<br>'.TXT_NOMLABOENTREPRISE.':  '.$entrepriselaboratoire.
         '<br><br><u>Objet: </u><br>'.$objet . '<br><br>' . '<u>'.TXT_MESS.': </u><br>' . $message . '<br><br>'.utf8_decode(affiche('TXT_SINCERESALUTATION')).'<br><br>'.  utf8_decode(affiche('TXT_RESEAURENATECH')).'<br><br>'.utf8_decode(affiche('TXT_DONOTREPLY'));
-BD::deconnecter();
+
+$id=$manager->getSingle("select max(id_demande) from demande_faisabilite")+1;
 if (isset($erreur)) {
     header('Location: /' . REPERTOIRE . '/new_request/' . $lang . '/' . "Err01");
     exit();
@@ -67,7 +68,10 @@ if (isset($erreur)) {
     header('Location: /' . REPERTOIRE . '/new_request/' . $lang . '/' . "Err02");
     exit();
 }elseif (isset($path) && !empty($path)) {
-    if (envoieEmailAttachement($body, $objet, $emailDemande,$cc ,$path, $fileName)) {
+    if (envoieEmailAttachement($id,$body, $objet, $emailDemande,$cc ,$path, $fileName)) {
+        $dateDemande=  date('Y-m-d');
+        $demande = new DemandeFaisabilite($_POST['nomDemande'], $_POST['emailDemande'], $_POST['objetDemande'], $dateDemande);
+        $manager->addDemande($demande);
         header('Location: /' . REPERTOIRE . '/home/' . $lang);
         exit();
     }else{    
@@ -76,9 +80,13 @@ if (isset($erreur)) {
     }
 } else {  
     envoieEmail($body, $objet, $emailDemande,$cc);
+    $dateDemande=  date('Y-m-d');    
+    
+    $demande = new DemandeFaisabilite($id,$_POST['nomDemande'], $_POST['emailDemande'], $_POST['objetDemande'], $dateDemande);
+    $manager->addDemande($demande);
     header('Location: /' . REPERTOIRE . '/home/' . $lang);
     exit();
 }
-
+BD::deconnecter();
 
 
