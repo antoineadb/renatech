@@ -32,17 +32,23 @@ for ($i = 0; $i < 11; $i++) {
                                                                                             
             </td>
             <td>
-<?php /*?>                
-                <select name="<?php echo 'typeEntreprise' . $i; ?>" id="<?php echo 'typeEntreprise' . $i; ?>"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">
+                
+                <select name="<?php echo 'typepartenaire' . $i; ?>" id="<?php echo 'typepartenaire' . $i; ?>"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">
                 <?php 
-                        echo '<option>'.TXT_SELECTTYPEENTREPRISE.'</option>';
-                        $rowtypeentreprise = $manager->getList("select idtypeentreprise,libelletypeentreprise from typeentreprise where masquetypeentreprise!=TRUE order by idtypeentreprise desc");
-                        for($k=0;$k<count($rowtypeentreprise);$k++){
-                                echo "<option value='".'te'.$rowtypeentreprise[$k]['idtypeentreprise']."'>".$rowtypeentreprise[$k]['libelletypeentreprise']."</option>";
+                        echo '<option>'.TXT_SELECTTYPEPARTENAIRE.'</option>';
+                        $rowtypepartenaire = $manager->getList("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE order by idtypepartenaire asc");                            
+                        if($lang==fr){                            
+                            for($k=0;$k<count($rowtypepartenaire);$k++){
+                                echo "<option value='".'te'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenairefr']."</option>";                                
+                            }
+                        }else{
+                            for($k=0;$k<count($rowtypepartenaire);$k++){
+                                echo "<option value='".'te'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenaireen']."</option>";                                
+                            }
                         }
                 ?>
                 </select>
-<?php  */?>                
+
             </td>
         </tr>
       

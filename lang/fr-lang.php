@@ -627,6 +627,7 @@ define("TXT_SELECTSTATUT","Sélectionner un statut");
 define("TXT_SELECTTHEMATIQUE","Sélectionner une thématique");
 define("TXT_SELECTTUTELLE","Sélectionner un type de tutelle");
 define("TXT_SELECTTYPEENTREPRISE","Sélectionner un type entreprise");
+define("TXT_SELECTTYPEPARTENAIRE","Sélectionner un type de partenaire");
 define("TXT_SELECTTYPEFORMATION","Sélectionnez un type de formation");
 define("TXT_SELECTTYPEPROJET","Sélectionner un type de projet");
 define("TXT_SELECTTYPE","Sélectionner un item");

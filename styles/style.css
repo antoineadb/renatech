@@ -723,8 +723,8 @@ a.infoBulle:hover span{
     height:20px;
     margin-left: 70px;
     border-style: none;
-    border-color: white;
-    background-color: white;
+    border-color: #00AEA6;
+    background-color: #00AEA6;
     background-repeat: no-repeat;
     background-position: top right;
     color:transparent;
@@ -1322,4 +1322,8 @@ a.infoBulle:hover span{
 
 .errDeleteUser{
     color: red;text-align: center; font-weight: lighter
+}
+
+.claro .dijitButton .dijitButtonNode, .claro .dijitDropDownButton .dijitButtonNode, .claro .dijitComboButton .dijitButtonNode, .claro .dijitToggleButton .dijitButtonNode {
+    background-color: #00aea6;
 }

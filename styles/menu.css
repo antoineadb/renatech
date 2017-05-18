@@ -14,12 +14,12 @@
     border-radius: 3px;
     height: 40px;
     width: 560px;
-    background: #CCE3EE;
-    background: -webkit-linear-gradient(top, #CCE3EE 30%,#337C99 70%);
-    background: -moz-linear-gradient(top, #CCE3EE 30%,#337C99 70%);
-    background: -o-linear-gradient(top, #CCE3EE 30%,#337C99 70%);
-    background: -ms-linear-gradient(top, #CCE3EE 30%,#337C99 70%);
-    background: linear-gradient(top, #CCE3EE 30%,#337C99 70%);
+    background: #00aea6;
+    background: -webkit-linear-gradient(top, #CCE3EE 20%,#00aea6 80%);
+    background: -moz-linear-gradient(top, #CCE3EE 20%,#00aea6 80%);
+    background: -o-linear-gradient(top, #CCE3EE 20%,#00aea6 80%);
+    background: -ms-linear-gradient(top, #CCE3EE 20%,#00aea6 80%);
+    background: linear-gradient(top, #CCE3EE 20%,#00aea6 80%);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
@@ -39,14 +39,13 @@
     line-height: 28px;
     text-decoration: none;
  
-    border-left: 1px solid #3380AA;
-    border-right: 1px solid #3380AA;
+    border-left: 1px solid #00AEA6;
+    border-right: 1px solid #00AEA6;
  
     font-family: Helvetica, Arial, sans-serif;
     font-weight: bold;
     font-size: 1.1em;
     color:white;
-    //color: #f3f3f3;
     text-shadow: 1px 1px 1px rgba(0,0,0,.6);
  
     -webkit-transition: color .2s ease-in-out;
@@ -59,8 +58,7 @@
 .menu li:first-child a { border-left: none; }
 .menu li:last-child a{ border-right: none; }
  
-//.menu li:hover > a { color: #086089; }
-.menu li:hover > a { color: #FF4C00; }
+.menu li:hover > a { color: #00AEA6; }
 
  .menu ul {
     position: absolute;
@@ -68,7 +66,7 @@
     left: 0;
  
     opacity: 0;
-    background: #5794AD; 
+    background: #00aea6; 
     -webkit-border-radius: 0 0 5px 5px;
     -moz-border-radius: 0 0 5px 5px;
     border-radius: 0 0 5px 5px; 
@@ -105,7 +103,7 @@
     padding: 4px 0 4px 10px;
     margin: 0;
     border: none;
-    border-bottom: 1px solid #353539;
+    border-bottom: 1px solid #00AEA6;
 }
 .documents, .messages, .signout{
     font-size: 1.1em;

@@ -2191,7 +2191,7 @@ div.dijitTabDisabled, .dj_ie div.dijitTabDisabled {
 .claro .dijitComboButton .dijitButtonNode,
 .claro .dijitToggleButton .dijitButtonNode {
   
-  border: 1px solid #759dc0;
+  border: 1px solid #00AEA6;
   padding: 2px 4px 4px 4px;
   color: #000000;
   -moz-border-radius: 4px;
@@ -2199,7 +2199,7 @@ div.dijitTabDisabled, .dj_ie div.dijitTabDisabled {
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
-  background-color: #bcd8f4;
+  background-color: #00AEA6;
   background-image: url("form/images/buttonEnabled.png");
   background-repeat: repeat-x;
   background-image: -moz-linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0.75) 100%);
