@@ -322,8 +322,94 @@
     <?php } ?>
 <?php } ?>
         </table>
+    </fieldset>
+        
+<!--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TYPE PARTENAIRE
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------      -->
 
+    <fieldset id="identte" style="border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px">
+        <legend><?php echo TXT_TYPEPARTENAIRE ?></legend>
+        <table>
+            <tr>
+                <th><input type="text"  style="height:20px;margin-left:20px;background-color: white; width: 360px;vertical-align:middle;border: 0px" data-dojo-type="dijit/form/ValidationTextBox" readonly="true" ></th>
+            <input type="text" name="idtypepartenaireactuel" style="display: none" data-dojo-type="dijit/form/ValidationTextBox" readonly="true"
+                   value="<?php
+                   if (isset($_GET['idtypepartenaire'])) {
+                       echo $_GET['idtypepartenaire'];
+                   }
+                   ?>" />
+            </tr>
+            <tr>
+                <th>
+                    <?php
+                    if ($lang == 'fr') {
+                        $rowtypepartenaire = $manager->getList("SELECT libelletypepartenairefr,idtypepartenaire from typepartenaire  order by idtypepartenaire asc;");
+                    } elseif ($lang == 'en') {
+                        $rowtypepartenaire = $manager->getList("SELECT libelletypepartenaireen,idtypepartenaire from typepartenaire  order by idtypepartenaire asc;");
+                    }
+                    ?>
+                    <select  id="libelletypepartenairefr" data-dojo-type="dijit/form/FilteringSelect"  data-dojo-props="name: 'libelletypepartenairefr',value: '',required:false,placeHolder: '<?php echo TXT_SELECTTYPEPARTENAIRE; ?>'"
+                             style="width: 360px;margin-left:20px;"    onchange="window.location.replace('<?php echo "/" . REPERTOIRE; ?>/Manage_typepart/<?php echo $lang ?>/' + this.value)" >
+                                 <?php
+                                 if ($lang == 'fr') {
+                                     for ($i = 0; $i < count($rowtypepartenaire); $i++) {
+                                         echo '<option value="' . ($rowtypepartenaire[$i]['idtypepartenaire']) . '">' . removeDoubleQuote($rowtypepartenaire[$i]['libelletypepartenairefr']) . '</option>';
+                                     }
+                                 } elseif ($lang == 'en') {
+                                     for ($i = 0; $i < count($rowtypepartenaire); $i++) {
+                                         echo '<option value="' . ($rowtypepartenaire[$i]['idtypepartenaire']) . '">' . removeDoubleQuote($rowtypepartenaire[$i]['libelletypepartenaireen']) . '</option>';
+                                     }
+                                 }
+                                 ?>
+                    </select>
 
+                </th>
+                <th>
+                    <input id="modiftypepartenaire" type="text" name="modiftypePartenaire" class="long" data-dojo-type="dijit/form/ValidationTextBox"   placeholder="<?php echo TXT_TYPEPARTENAIRE ?>"
+                           style="height:20px;margin-left:20px; width: 360px;vertical-align:middle;"
+                           value="<?php
+                           if (isset($_GET['idtypepartenaire'])) {
+                               echo removeDoubleQuote($manager->getSingle2("select libelletypepartenairefr from typepartenaire where idtypepartenaire=?", $_GET['idtypepartenaire']));
+                           }
+                           ?>" 
+                           data-dojo-props="<?php echo REGEX_TYPESTRINGLISTE; ?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           <!--data-dojo-props="<?php echo REGEX_TYPESTRINGLISTE; ?>" -->
+                </th>
+            </tr>
+            <tr>
+                <td style="width: 360px;"></td>
+                <th>
+                    <input id="modiftypepartenaireen" type="text" name="modiftypepartenaireen" class="long" data-dojo-type="dijit/form/ValidationTextBox"   placeholder="<?php echo TXT_TYPEPARTENAIRE; ?>"
+                           style="height:20px;margin-left:20px; width: 360px;vertical-align:middle;" value="<?php
+                           if (isset($_GET['idtypepartenaire'])) {
+                               echo $manager->getSingle2("select libelletypepartenaireen from typepartenaire where idtypepartenaire=?", $_GET['idtypepartenaire']);
+                           }
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRINGLISTE; ?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <input class="admin" style="padding-left: 21px" type="submit" name="modiftypepartenaire"  value= "<?php echo TXT_MODIFIER; ?>" >
+                    <input class="admin" style="padding-left: 21px" type="submit" name="ajoutetypepartenaire" value="<?php echo TXT_AJOUTER; ?>" />
+                </th>
+                <th>
+                    <input class="admin" style="padding-left: 20px" type="submit" name="masquetypepartenaire" value="<?php echo TXT_MASQUER; ?>"/>
+                    <input class="admin" style="padding-left: 20px" type="submit" name="affichetypepartenaire" value="<?php echo TXT_REAFFICHER; ?>"/>
+                </th>
+            </tr>
+            <tr>
+                <th style="padding-left:22px;">
+                    <?php
+                    if (isset($_GET['idtypepartenaire'])) {
+                        $masque = $manager->getSingle2("select masquetypepartenaire from typepartenaire where idtypepartenaire=?", $_GET['idtypepartenaire']);
+                        infoLibelle($masque);
+                    }
+                    ?>
+                </th>
+            </tr>
+        </table>
+    </fieldset>
     </fieldset>            
 </form>
 

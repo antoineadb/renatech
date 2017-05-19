@@ -1019,3 +1019,13 @@ define('TXT_REQUESTVIEW','Vue des demandes de faisabilité');
 define('TXT_CONFIRMDELETEUSER','Merci de confirmez la suppression de cette utilisateur');
 define("TXT_INFODELETUSER","On peux supprimer un compte que si il n'a aucune activité dans l'application!");
 define("TXT_DELETEACCOUNT","Supprimer ce compte?");
+define("TXT_TYPEPARTENAIRE","Type de partenaire");
+define("TXT_MESSAGEERREURTYPEPARTENAIRESELECT","Vous n'avez pas sélectionné le type de partenaire!");
+define("TXT_MESSAGEERREURTYPEPARTENAIRENONSAISIE","Vous n'avez pas saisie le type de partenaire");
+define("TXT_MESSAGESERVEURTYPEPARTENAIREMASQUER","Le type de partenaire à été masqué!");
+define("TXT_MESSAGESERVEURTYPEPARTENAIREAFFICHE","Le type de partenaire est de nouveau disponible!");
+define("TXT_MESSAGESERVEURTYPEPARTENAIREEXISTE","Le type de partenaire existe déja!");
+define("TXT_MESSAGESERVEURTYPEPARTENAIRE","Le type de partenaire a été ajouté");
+define("TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE","Le type de partenaire a été mise à jour!");
+define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","Le type de partenaire existe déjà!");
+

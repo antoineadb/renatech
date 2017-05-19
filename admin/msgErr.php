@@ -122,6 +122,30 @@ if (!empty($_GET['msgErrVil'])) {
 } elseif (!empty($_GET['msgserveurtypeentrepriseshow'])) {
     echo TXT_MESSAGESERVEURTYPEENTREPRISEAFFICHE;
 }
+
+//TYTE partenaire
+elseif (!empty($_GET['msgErrtypepartenaireenonsaisie'])) {
+    echo TXT_MESSAGEERREURTYPEPARTENAIREENONSAISIE;
+} elseif (!empty($_GET['msgErrtypepartenaireeexiste'])) {
+    echo TXT_MESSAGESERVEURTYPEPARTENAIREEXISTE;
+} elseif (!empty($_GET['msgserveurtypepartenairee'])) {
+    echo TXT_MESSAGESERVEURTYPEPARTENAIRE;
+} elseif (!empty($_GET['msgErrtypepartenaireselect'])) {
+    echo TXT_MESSAGEERREURTYPEPARTENAIRESELECT;
+} elseif (!empty($_GET['msgserveurtypepartenaireeupdate'])) {
+    echo TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE;
+} elseif (!empty($_GET['msgserveurtypepartenaireehide'])) {
+    echo TXT_MESSAGESERVEURTYPEPARTENAIREMASQUER;
+} elseif (!empty($_GET['msgserveurtypepartenaireshow'])) {
+    echo TXT_MESSAGESERVEURTYPEPARTENAIREMASQUER;
+} elseif (!empty($_GET['msgserveurtypepartenairehide'])) {
+    echo TXT_MESSAGESERVEURTYPEPARTENAIREAFFICHE;
+} elseif (!empty($_GET['msgserveurtypepartenaire'])) {
+    echo TXT_MESSAGESERVEURTYPEPARTENAIRE;
+} elseif (!empty($_GET['msgserveurtypepartenaireupdate'])) {
+    echo TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE;
+}
+
 //DISCIPLINE SCIENTIFIQUE
 elseif ((!empty($_GET['msgErrdisciplinenonsaisie']))) {
     echo TXT_MESSAGEERREURDISCIPLINENONSAISIE;

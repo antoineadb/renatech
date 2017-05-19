@@ -88,6 +88,24 @@ RewriteRule   hide_discipline/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurdi
 RewriteRule   hide_disciplineErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrdisciplineeselect=$2        [L]
 RewriteRule   hide_disciplineErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrdisciplinenonsaisie=$2      [L]
 
+#ADMINNATIONNAL TYPE PARTENAIRE AJOUT
+RewriteRule   Manage_typepart/([a-z]+)/([0-9]+) 		adminListe.php?lang=$1&idtypepartenaire=$2          [L]
+RewriteRule   insert_typepart/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypepartenaire=$2       [L]
+RewriteRule   insert_typepartErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypepartenairenonsaisie=$2  [L]
+RewriteRule   insert_typepartErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypepartenairenonsaisie=$2  [L]
+RewriteRule   insert_typepartErr3/([a-z]+)/([A-Z]+)              admin.php?lang=$1&msgErrtypepartenaireexiste=$2     [L]
+#ADMINNATIONNAL TYPE PARTENAIRE MODIF
+RewriteRule   update_typepart/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypepartenaireupdate=$2 [L]
+RewriteRule   update_typepartErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypepartreselect=$2          [L]
+RewriteRule   update_typepartErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypepartenairenonsaisie=$2  [L]
+#ADMINNATIONNAL TYPE PARTENAIRE AFFICHE/MASQUE
+RewriteRule   show_typepart/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypepartenaireshow=$2   [L]
+RewriteRule   show_typepartErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurtypepartenaireshow=$2   [L]
+RewriteRule   hide_typepart/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypepartenairehide=$2   [L]
+RewriteRule   hide_typepartErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypepartreselect=$2          [L]
+RewriteRule   hide_typepartErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypepartenairenonsaisie=$2  [L]
+RewriteRule   hide_typepartErr3/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypepartenaireexiste=$2     [L]
+
 #NOM EMPLOYEUR AJOUT
 RewriteRule   Manage_employeur/([a-z]+)/([0-9]+)		adminListe.php?lang=$1&idemployeur=$2               [L]
 RewriteRule   insert_employeur/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurnomemployeur=$2         [L]

@@ -1,4 +1,5 @@
 <?php
+
 include_once	'../outils/constantes.php';
 //PAYS
 if (!empty($_POST['masquepays']) && !empty($_POST['idlibellepaysactuel']) && !empty($_POST['modifpays'])) {
@@ -9,7 +10,7 @@ if (!empty($_POST['masquepays']) && !empty($_POST['idlibellepaysactuel']) && !em
     include '../modifBase/insertPays.php';
     
 } elseif (!empty($_POST['modifpays']) && !empty($_POST['idlibellepaysactuel'])) {
-    include '../modifBase/updatePays.php';
+    include '../modifBase/updatePays.php';die;
 //--------------------------------------------------------------------------------------------------------------------------------------------
 //SECTEUR ACTIVITE
 //--------------------------------------------------------------------------------------------------------------------------------------------
@@ -44,18 +45,28 @@ if (!empty($_POST['masquepays']) && !empty($_POST['idlibellepaysactuel']) && !em
 } elseif (!empty($_POST['modiftypeformation']) && !empty($_POST['idtypeformationactuel'])) {
     include  '../modifBase/updateTypeformation.php';    
     
-    
 //--------------------------------------------------------------------------------------------------------------------------------------------
 //TYPE ENTREPRISE
 //--------------------------------------------------------------------------------------------------------------------------------------------
-//} elseif (!empty($_POST['masquetypeentreprise']) && !empty($_POST['modiftypeentreprise']) && !empty($_POST['idtypeentrepriseactuel'])) {
-//    include '../modifBase/affichemasqueTypeentreprise.php';
+} elseif (!empty($_POST['masquetypeentreprise']) && !empty($_POST['modiftypeentreprise']) && !empty($_POST['idtypeentrepriseactuel'])) {
+    include '../modifBase/affichemasqueTypeentreprise.php';
 } elseif (!empty($_POST['affichetypeentreprise']) && !empty($_POST['modiftypeentreprise']) && !empty($_POST['idtypeentrepriseactuel'])) {
     include '../modifBase/affichemasqueTypeentreprise.php';
 } elseif (!empty($_POST['ajoutetypeentreprise']) && !empty($_POST['modiftypeentreprise'])) {
     include '../modifBase/insertTypeentreprise.php';
 } elseif (!empty($_POST['modifTypeentreprise']) && !empty($_POST['modiftypeentreprise'])) {
     include '../modifBase/updateTypeentreprise.php';
+//--------------------------------------------------------------------------------------------------------------------------------------------
+//TYPE partenaire
+//--------------------------------------------------------------------------------------------------------------------------------------------
+} elseif (!empty($_POST['affichetypepartenaire']) && !empty($_POST['modiftypepartenaire']) && !empty($_POST['idtypepartenaireactuel'])) {
+    include '../modifBase/affichemasqueTypepartenaire.php';
+} elseif (!empty($_POST['masquetypepartenaire']) && !empty($_POST['modiftypepartenaire']) && !empty($_POST['idtypepartenaireactuel'])) {
+    include '../modifBase/affichemasqueTypepartenaire.php';
+} elseif (!empty($_POST['ajoutetypepartenaire']) && !empty($_POST['modiftypepartenaire'])) {
+    include '../modifBase/insertTypepartenaire.php';
+} elseif (!empty($_POST['modiftypePartenaire']) && !empty($_POST['modiftypepartenaireen'])) {
+    include '../modifBase/updateTypepartenaire.php';
 //--------------------------------------------------------------------------------------------------------------------------------------------
 //THEMATIQUE
 //--------------------------------------------------------------------------------------------------------------------------------------------

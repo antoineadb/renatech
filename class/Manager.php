@@ -140,6 +140,8 @@ include_once 'CentraleProximite.php';
 include_once 'CentraleProximiteProjet.php';
 include_once 'DescriptionCentraleProximiteProjet.php';
 include_once 'DemandeFaisabilite.php';
+include_once 'TypePartenaire.php';
+
 showError($_SERVER['PHP_SELF']);
 
 class Manager {
@@ -3016,8 +3018,66 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->rollBack();
         }
     }
+//------------------------------------------------------------------------------------------------------------
+//                      TYPE PARTENAIRE
+//------------------------------------------------------------------------------------------------------------
 
-//ok
+    public function addTypePartenaire(TypePartenaire $typePartenaire) { //ajout d'un type dans la liste
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO typepartenaire (idtypePartenaire,libelletypePartenairefr,libelletypePartenaireen,masquetypePartenaire)VALUES(?,?,?,?) ');
+            $idtypePartenaire = $typePartenaire->getIdtypePartenaire();
+            $libelletypePartenaire = $typePartenaire->getLibelletypePartenairefr();
+            $masquetypePartenaire = $typePartenaire->getMasquetypePartenaire();
+            $libelletypePartenaireen = $typePartenaire->getLibelletypepartenairefen();
+            $requete->bindParam(1, $idtypePartenaire, PDO::PARAM_INT);
+            $requete->bindParam(2, $libelletypePartenaire, PDO::PARAM_STR);            
+            $requete->bindParam(3, $libelletypePartenaireen, PDO::PARAM_STR);
+            $requete->bindParam(4, $masquetypePartenaire, PDO::PARAM_BOOL);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATETYPEPartenaire . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+
+    public function updatetypePartenaire(TypePartenaire $typePartenaire, $idtypePartenaire) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update typepartenaire set libelletypePartenairefr =?,libelletypePartenaireen=?, masquetypePartenaire=?  WHERE idtypePartenaire =? ');
+            $libelletypePartenaire = $typePartenaire->getLibelletypepartenairefr();
+            $masquetypePartenaire = $typePartenaire->getMasquetypePartenaire();
+            $libelletypePartenaireen = $typePartenaire->getLibelletypepartenairefen();
+            $requete->bindParam(1, $libelletypePartenaire, PDO::PARAM_INT);
+            $requete->bindParam(2, $libelletypePartenaireen, PDO::PARAM_INT);
+            $requete->bindParam(3, $masquetypePartenaire, PDO::PARAM_BOOL);
+            $requete->bindParam(4, $idtypePartenaire, PDO::PARAM_BOOL);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATETYPEPartenaire . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+
+    public function afficheHideTypePartenaire(TypePartenaire $typePartenaire, $idtypePartenaire) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare("UPDATE typepartenaire SET masquetypePartenaire=? WHERE idtypePartenaire=?");
+            $masquetypePartenaire = $typePartenaire->getMasquetypePartenaire();
+            $requete->bindParam(1, $masquetypePartenaire, PDO::PARAM_BOOL);
+            $requete->bindParam(2, $idtypePartenaire, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATETYPEPartenaire . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
 //------------------------------------------------------------------------------------------------------------
 //                      TYPE FORMATION
 //------------------------------------------------------------------------------------------------------------
