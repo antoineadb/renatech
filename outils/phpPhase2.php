@@ -19,13 +19,19 @@ if (!empty($idprojet)) {
     $row = $manager->getList2("SELECT acronyme,nbrun,nbplaque,nbheure,nbeleve,contactscentraleaccueil,typeformation,dureeprojet,datedebuttravaux,descriptionautrecentrale,descriptioncentraleproximite,etapeautrecentrale
     ,idperiodicite_periodicite,idthematique_thematique,dureeestime,periodestime
     ,idautrethematique_autrethematique,idtypeprojet_typeprojet,descriptiftechnologique,nomformateur,emailrespdevis,reussite
-    ,verrouidentifiee,centralepartenaireprojet,acrosourcefinancement,partenaire1 FROM projet where idprojet =?", $idprojet);
+    ,verrouidentifiee,centralepartenaireprojet,acrosourcefinancement,partenaire1,idtypecentralepartenaire FROM projet where idprojet =?", $idprojet);
     $idtypena = $manager->getSingle2("select idtypeprojet from typeprojet where libelletype=?", 'n/a');
     if (!empty($row[0]['idtypeprojet_typeprojet']) && $row[0]['idtypeprojet_typeprojet'] != $idtypena) {
         $libelletype = $manager->getSingle2("select libelletype from typeprojet where idtypeprojet=?", $row[0]['idtypeprojet_typeprojet']);
         $libelletypeen = $manager->getSingle2("select libelletypeen from typeprojet where idtypeprojet=?", $row[0]['idtypeprojet_typeprojet']);
     } else {
         $libelletype = '';
+    }
+    
+    if(!empty($row[0]['idtypecentralepartenaire'])){
+        $idtypecentralepartenaire  =   $row[0]['idtypecentralepartenaire'];
+        $typecentralepartenairefr = $manager->getSingle2("SELECT libelletypepartenairefr from typepartenaire where idtypepartenaire=?", $idtypecentralepartenaire);
+        $typecentralepartenaireen = $manager->getSingle2("SELECT libelletypepartenaireen from typepartenaire where idtypepartenaire=?", $idtypecentralepartenaire);
     }
     //TYPE FORMATION
     $idtypeformationna = $manager->getSingle2("select idtypeformation from typeformation where libelletypeformation = ?", 'n/a');

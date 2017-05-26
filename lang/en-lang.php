@@ -250,6 +250,7 @@ define("TXT_ERRUPDATEDISCILINE","Update problem  in the disciplinescientifique t
 define("TXT_ERRUPDATENOMEMPLOYEUR","Update problem in the nomemployeur table");
 define("TXT_ERRUPDATEPAYS","Update problem in the pays table");
 define("TXT_ERRUPDATEPROJET","Update problem in the project table");
+define("TXT_ERRUPDATEPROJETTYPEPARTENAIRE","Update problem in the projectypepartner table");
 define("TXT_ERRUPDATERESSOURCE","Update problem in the ressource table");
 define("TXT_ERRUPDATESECTEURACTIVITE","Update problem in the secteuractivite table");
 define("TXT_ERRUPDATESOURCEFINANCEMENT","Update problem in the centrale sourcefinancement table");
@@ -689,7 +690,7 @@ define("TXT_UTILISATEURINDUSTRIEL","Industrial user");
 define("TXT_VALIDER","validate");
 define("TXT_VERIFIER","Check");
 define("TXT_VERROUIDENTIFIEE","locks identified");
-define("TXT_VERSION","Renatech form,  Release 5.91 May 2, 2017");
+define("TXT_VERSION","Renatech form,  Release 5.92 May 21, 2017");
 define("TXT_VILLE","Town");
 define("TXT_VOSINFO","Your Informations");
 define("TXT_VOSPSEUDOS","Your logins");

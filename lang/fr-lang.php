@@ -250,6 +250,7 @@ define("TXT_ERRUPDATEDISCILINE","Problème de mise à jour dans la table discipl
 define("TXT_ERRUPDATENOMEMPLOYEUR","Problème de mise à jour dans la table nomemployeur");
 define("TXT_ERRUPDATEPAYS","Problème de mise à jour de la table pays");
 define("TXT_ERRUPDATEPROJET","Problème de mise à jour de la table Projet");
+define("TXT_ERRUPDATEPROJETTYPEPARTENAIRE","Problème de mise à jour de la table Projet type partenaire");
 define("TXT_ERRUPDATERESSOURCE","Problème de mise à jour insertion dans la table ressource");
 define("TXT_ERRUPDATESECTEURACTIVITE","Problème de mise à jour de la tablesecteuractivite");
 define("TXT_ERRUPDATESOURCEFINANCEMENT","Problème de mise à jour de la table sourcefinancement");
@@ -687,7 +688,7 @@ define("TXT_UTILISATEURINDUSTRIEL","Utilisateur Industriel ");
 define("TXT_VALIDER","Valider");
 define("TXT_VERIFIER","Vérifier");
 define("TXT_VERROUIDENTIFIEE","Verrous identifiés");
-define("TXT_VERSION","Formulaire Renatech, version 5.91 du 2 mai 2017");
+define("TXT_VERSION","Formulaire Renatech, version 5.92 du 21 mai 2017");
 define("TXT_VILLE","Ville");
 define("TXT_VOSINFO","Vos Informations");
 define("TXT_VOSPSEUDOS","Vos pseudos");
@@ -1015,7 +1016,7 @@ define("TXT_MESSAGECONFIRMUPDATEDATEDEBUTPROJET", "Etes-vous sûr de vouloir cha
 define("TXT_DOWNLOADUSERMANUAL","télécharger le mode d’emploi");
 define("TXT_DOWNLOADUSERMANUAL1","d'une demande de projet");
 define('TXT_SENDREQUEST',"Envoyer la demande");
-define('TXT_REQUESTVIEW','Vue des demandes de faisabilité');
+define('TXT_REQUESTVIEW','Vue des demandes de faisabilités');
 define('TXT_CONFIRMDELETEUSER','Merci de confirmez la suppression de cette utilisateur');
 define("TXT_INFODELETUSER","On peux supprimer un compte que si il n'a aucune activité dans l'application!");
 define("TXT_DELETEACCOUNT","Supprimer ce compte?");

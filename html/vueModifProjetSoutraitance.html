@@ -29,7 +29,8 @@ if(empty($commentaire)){
 <?php
     $rowResult = $manager->getListbyArray("SELECT nom, prenom, entrepriselaboratoire FROM utilisateur, projet, creer WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=?",array($idprojet));
     $demandeur =$rowResult[0]['nom'].' '.$rowResult[0]['prenom'];
-    $entrepriselaboratoireo=stripslashes(str_replace("''",	"'",$rowResult[0]['entrepriselaboratoire']));
+    $entrepriselaboratoireo=stripslashes(
+removeDoubleQuote($rowResult[0]['entrepriselaboratoire']));
 ?>
     <fieldset class='statut' ><b><?php echo  TXT_PROJETSOUSTRAITANCE;?></b></fieldset>
     <table style="margin-top:20px">
@@ -38,7 +39,8 @@ if(empty($commentaire)){
             <td><label ><?php echo TXT_DEMANDEUR.' : '.$demandeur; ?></label></td>
         </tr>
         <tr>
-            <td><label  style="width: 500px"><?php echo stripslashes(str_replace("''",	"'",TXT_NOMENTELABO)).' : '.$entrepriselaboratoireo; ?></label></td>
+            <td><label  style="width: 500px"><?php echo stripslashes(
+removeDoubleQuote(,TXT_NOMENTELABO)).' : '.$entrepriselaboratoireo; ?></label></td>
         </tr>
     </table>
     <table>       
@@ -122,7 +124,8 @@ if(empty($commentaire)){
                 <label for="commentaire" ><?php echo TXT_COMMENTAIREPROJET.' :'; ?>
                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/></a>
                 </label>
-                <div  id="commentaire" name="commentaire"  height="100px" ><?php echo stripslashes(str_replace("''",	"'",	$commentaire)); ?>
+                <div  id="commentaire" name="commentaire"  height="100px" ><?php echo stripslashes(
+removeDoubleQuote(	$commentaire)); ?>
                 </div>
             </td>
         </tr>        

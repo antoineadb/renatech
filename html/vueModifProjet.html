@@ -43,7 +43,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
     $rowResult = $manager->getListbyArray("SELECT idutilisateur,nom, prenom, entrepriselaboratoire FROM utilisateur, projet, creer WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=?",array($idprojet));
     $demandeur =$rowResult[0]['nom'].' '.$rowResult[0]['prenom'];
     $idutilisateur=$rowResult[0]['idutilisateur'];
-    $entrepriselaboratoireo=stripslashes(str_replace("''",	"'",$rowResult[0]['entrepriselaboratoire']));
+    $entrepriselaboratoireo=stripslashes(removeDoubleQuote($rowResult[0]['entrepriselaboratoire']));
     ?>
     <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
     <table>
@@ -52,7 +52,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
             <td><?php echo TXT_DEMANDEUR.' : '?><input type="text"  data-dojo-type="dijit/form/ValidationTextBox" id='demandeur' value='<?php echo $demandeur; ?>' readonly="true"> </td>
         </tr>
         <tr>
-            <td><label  style="width: 500px"><?php echo stripslashes(str_replace("''",	"'",TXT_NOMENTELABO)).' : '.$entrepriselaboratoireo; ?></label></td>
+            <td><label  style="width: 500px"><?php echo stripslashes(removeDoubleQuote(TXT_NOMENTELABO)).' : '.$entrepriselaboratoireo; ?></label></td>
         </tr>
     </table>
     <?php 
@@ -113,7 +113,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
         </tr>
         <tr> <td>&nbsp;</td></tr>
         <tr><td>
-                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'.' :';?>
+                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo ' ('.TXT_DISPO.')'.' :';?>
                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                         <span id="aideAcronyme" >
                             <?php //MISE EN CACHE DES AIDES
@@ -362,7 +362,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                         </span>
                     </a>
                 </label>
-                <div  id="commentaire" name="commentaire"  height="100px" ><?php echo stripslashes(str_replace("''",	"'",	$commentaire)); ?>
+                <div  id="commentaire" name="commentaire"  height="100px" ><?php echo stripslashes(removeDoubleQuote($commentaire)); ?>
                 </div>
             </td>
         </tr>        

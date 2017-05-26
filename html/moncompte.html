@@ -146,7 +146,8 @@
                     </td>
                     <td>
                         <?php
-                        if(!empty($prenom)){$prenom =stripslashes(str_replace("''",	"'",$prenom));}else{
+                        if(!empty($prenom)){$prenom =stripslashes(
+removeDoubleQuote($prenom));}else{
                         $prenom =stripslashes(removeDoubleQuote($_SESSION['prenom']));
                         }
                         ?>

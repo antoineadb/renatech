@@ -141,7 +141,7 @@ include_once 'CentraleProximiteProjet.php';
 include_once 'DescriptionCentraleProximiteProjet.php';
 include_once 'DemandeFaisabilite.php';
 include_once 'TypePartenaire.php';
-
+include_once 'ProjetTypePartenaire.php';
 showError($_SERVER['PHP_SELF']);
 
 class Manager {
@@ -1248,9 +1248,9 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("update projet set contactscentraleaccueil=?, idtypeprojet_typeprojet=?,nbHeure=?,
-dateDebutTravaux=?,dureeprojet=?,idperiodicite_periodicite=?,centralepartenaireprojet=?,idthematique_thematique=?,idautrethematique_autrethematique=?,descriptifTechnologique=?,
-attachementdesc=?,verrouidentifiee=?,nbplaque=?,nbrun=?,envoidevis=?,emailrespdevis=?,reussite=?,refinterneprojet=?,devtechnologique=?,nbeleve=?,
-nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=?,interneexterne=?,internationalnational=? where idprojet=?");
+            dateDebutTravaux=?,dureeprojet=?,idperiodicite_periodicite=?,centralepartenaireprojet=?,idthematique_thematique=?,idautrethematique_autrethematique=?,descriptifTechnologique=?,
+            attachementdesc=?,verrouidentifiee=?,nbplaque=?,nbrun=?,envoidevis=?,emailrespdevis=?,reussite=?,refinterneprojet=?,devtechnologique=?,nbeleve=?,nomformateur=?,partenaire1=?,
+            porteurprojet =?,dureeestime=?,periodestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=?,interneexterne=?,internationalnational=?,idtypecentralepartenaire=?   where idprojet=?");
             $contactscentralaccueil = $projet2->getContactscentralaccueil();
             $idtypeprojet = $projet2->getIdtypeprojet_typeprojet();
             $nbheure = $projet2->getNbHeure();
@@ -1282,6 +1282,7 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $descriptioncentraleproximite = $projet2->getDescriptioncentraleproximite();
             $interneexterne = $projet2->getInterneExterne();
             $internationalnational = $projet2->getInternationalNational();
+            $idtypecentralepartenaire = $projet2->getIdtypecentralepartenaire();
             $requete->bindParam(1, $contactscentralaccueil, PDO::PARAM_STR);
             $requete->bindParam(2, $idtypeprojet, PDO::PARAM_INT);
             $requete->bindParam(3, $nbheure, PDO::PARAM_INT);
@@ -1313,7 +1314,8 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $requete->bindParam(29, $descriptioncentraleproximite, PDO::PARAM_STR);
             $requete->bindParam(30, $interneexterne, PDO::PARAM_STR);
             $requete->bindParam(31, $internationalnational, PDO::PARAM_STR);
-            $requete->bindParam(32, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(32, $idtypecentralepartenaire, PDO::PARAM_INT);
+            $requete->bindParam(33, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3075,6 +3077,54 @@ nomformateur=?,partenaire1=?,porteurprojet =?,dureeestime=?,periodestime=?,descr
             $this->_db->commit();
         } catch (Exception $exc) {
             echo TXT_ERRUPDATETYPEPartenaire . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+    
+    public function insertProjetTypePartenaire(ProjetTypePartenaire $projetTP) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO projettypepartenaire(idtypepartenaire_typepartenaire,idprojet_projet) VALUES (?,?)');            
+            $idtypePartenaire = $projetTP->getIdtypepartenaire_typepartenaire();            
+            $idprojet = $projetTP->getIdprojet_projet();
+            $requete->bindParam(1, $idtypePartenaire, PDO::PARAM_INT);
+            $requete->bindParam(2, $idprojet, PDO::PARAM_INT);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJETTYPEPARTENAIRE . '<br> Ligne n°' . $exc->getLine().' Class Manager.php';
+            $this->_db->rollBack();
+        }
+    }
+    
+    public function updateProjetTypePartenaire(ProjetTypePartenaire $projetTP, $idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE projettypepartenaire set idtypepartenaire_typepartenaire =? where idprojet_projet=?');            
+            $idtypePartenaire = $projetTP->getIdtypepartenaire_typepartenaire();            
+            
+            $requete->bindParam(1, $idtypePartenaire, PDO::PARAM_INT);
+            $requete->bindParam(2, $idprojet, PDO::PARAM_INT);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJETTYPEPARTENAIRE . '<br> Ligne n°' . $exc->getLine().' Class Manager.php';
+            $this->_db->rollBack();
+        }
+    }
+    
+    public function deleteProjetTypePartenaire($idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('DELETE FROM  projettypepartenaire where idprojet_projet=?');
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJETTYPEPARTENAIRE . '<br> Ligne n°' . $exc->getLine().' Class Manager.php';
             $this->_db->rollBack();
         }
     }

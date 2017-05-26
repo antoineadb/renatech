@@ -34,8 +34,9 @@ class Projetphase2 {
     private $_descriptioncentraleproximite;
     private $_interneExterne;
     private $_internationalnational;
+    private $_idtypecentralepartenaire;
 
-    public function __construct($contactscentral, $idtypeprojet, $nbHeure, $datedebut, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique, $idautrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifiee, $nbplaque, $nbrun, $envoidevis, $emailrespdevis, $reussite, $refinterneprojet, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centraleproximite, $descriptioncentraleproximite, $interneExterne, $internationalNational) {
+    public function __construct($contactscentral, $idtypeprojet, $nbHeure, $datedebut, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique, $idautrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifiee, $nbplaque, $nbrun, $envoidevis, $emailrespdevis, $reussite, $refinterneprojet, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centraleproximite, $descriptioncentraleproximite, $interneExterne, $internationalNational,$idtypecentralepartenaire) {
         $this->setContactscentralaccueil($contactscentral);
         $this->setIdtypeprojet_typeprojet($idtypeprojet);
         $this->setNbHeure($nbHeure);
@@ -67,6 +68,7 @@ class Projetphase2 {
         $this->setDescriptioncentraleproximite($descriptioncentraleproximite);
         $this->setInterneExterne($interneExterne);
         $this->setInternationalNational($internationalNational);
+        $this->setIdtypecentralepartenaire($idtypecentralepartenaire);
     }
 
     public function getInternationalNational() {
@@ -75,6 +77,13 @@ class Projetphase2 {
 
     public function setInternationalNational($internationalNational) {
         $this->_internationalnational = $internationalNational;
+    }
+    public function getIdtypecentralepartenaire() {
+        return $this->_idtypecentralepartenaire;
+    }
+
+    public function setIdtypecentralepartenaire($idtypecentralepartenaire) {
+        $this->_idtypecentralepartenaire = $idtypecentralepartenaire;
     }
 
     public function getInterneExterne() {

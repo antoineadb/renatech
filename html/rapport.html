@@ -33,7 +33,8 @@ $s_Sourcefinancement = substr($sSourcefinancement,0,-1);
 
 $rowResult = $manager->getListbyArray("SELECT idutilisateur,nom, prenom, entrepriselaboratoire FROM utilisateur, projet, creer WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=?",array($idprojet));
 $demandeur =$rowResult[0]['nom'].' '.$rowResult[0]['prenom'];
-$entrepriselaboratoireo=stripslashes(str_replace("''",	"'",$rowResult[0]['entrepriselaboratoire']));
+$entrepriselaboratoireo=stripslashes(
+removeDoubleQuote($rowResult[0]['entrepriselaboratoire']));
 $arrayvillepays=$manager->getList2("select ville,nompays from pays,utilisateur where idpays_pays=idpays and idutilisateur=?",$rowResult[0]['idutilisateur']);    
 $villePays = $arrayvillepays[0]['ville'].', '.$arrayvillepays[0]['nompays'];
 //collaborator

@@ -34,7 +34,8 @@ $pseudo=$_SESSION['pseudo'];
                 <?php }?>
                 <tr>
                     <td valign="top" style="width: 300px"><?php echo affiche('TXT_NOM').'*'; ?> </td>
-                    <?php	if(isset($_SESSION['nom'])){$nom = str_replace("''",	"'",	stripslashes($_SESSION['nom']));} ?>
+                    <?php	if(isset($_SESSION['nom'])){$nom = 
+removeDoubleQuote(	stripslashes($_SESSION['nom']));} ?>
                     <td><input type="text" required="required" name="nom" id="nom" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
                                style="width: 317px"  value="<?php if(isset($_SESSION['nom'])){echo $nom;};?>"
                                data-dojo-props="regExp:'[a-zA-Z$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
@@ -42,21 +43,24 @@ $pseudo=$_SESSION['pseudo'];
                 </tr>
                 <tr>
                     <td valign="top"><?php echo affiche('TXT_PRENOM').'*';  ?></td>
-                    <?php	if(isset($_SESSION['prenom'])){$prenom = str_replace("''",	"'",	stripslashes($_SESSION['prenom']));} ?>
+                    <?php	if(isset($_SESSION['prenom'])){$prenom = 
+removeDoubleQuote(	stripslashes($_SESSION['prenom']));} ?>
                     <td><input type="text" required="required" name="prenom" id="prenom" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"  value="<?php if(isset($_SESSION['prenom'])){echo $prenom;};?>"
                                data-dojo-props="regExp:'[a-zA-Z$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
                     </td>                  
                 </tr>
                 <tr>
                     <td valign="top"><?php echo affiche('TXT_NOMENTELABO').'*';  ?></td>
-                    <?php	if(isset($_SESSION['nomEntLab'])){$nomEntLab = str_replace("''",	"'",	stripslashes($_SESSION['nomEntLab']));} ?>
+                    <?php	if(isset($_SESSION['nomEntLab'])){$nomEntLab = 
+removeDoubleQuote(	stripslashes($_SESSION['nomEntLab']));} ?>
                     <td><input type="text" name="nomEntLab" id="nomEntLab" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"   value="<?php if(isset($_SESSION['nomEntLab'])){echo $nomEntLab;};?>"
                                required="required" data-dojo-props="regExp:'[a-zA-Z$0-9\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
                     </td>                  
                 </tr>	
                 <tr>	
                     <td valign="top"><?php echo affiche('TXT_ADRESSE').'*';  ?></td>
-                    <?php	if(isset($_SESSION['adresse'])){$adresse = str_replace("''",	"'",	stripslashes($_SESSION['adresse']));} ?>
+                    <?php	if(isset($_SESSION['adresse'])){$adresse = 
+removeDoubleQuote(	stripslashes($_SESSION['adresse']));} ?>
                     <td><input type="text" required="required" name="adresse" id="adresse" style="width: 317px" autocomplete="on"
                                data-dojo-type="dijit/form/ValidationTextBox"  value="<?php if(isset($_SESSION['adresse'])){echo $adresse;};?>"
                                data-dojo-props="regExp:'[a-zA-Z0-9$\\054\\073\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
@@ -71,7 +75,8 @@ $pseudo=$_SESSION['pseudo'];
                 </tr>
                 <tr>
                     <td valign="top"><?php echo affiche('TXT_VILLE').'*'; ?></td>
-                    <?php	if(isset($_SESSION['ville'])){$ville = str_replace("''",	"'",	stripslashes($_SESSION['ville']));} ?>
+                    <?php	if(isset($_SESSION['ville'])){$ville = 
+removeDoubleQuote(	stripslashes($_SESSION['ville']));} ?>
                     <td><input type="text" required="required" name="ville" id="ville"  style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" value="<?php if(isset($_SESSION['ville'])){echo $ville;};?>"
                                data-dojo-props="regExp:'[a-zA-Z0-9$\\340\\047\\341\\342\\343\\344\\345\\346\\347\\350\\351\\352\\353\\354\\355\\356\\357\\360\\361\\362\\363\\364\\365\\366\\370\\371\\372\\373\\374\\375\\376\\377\\s\.\-]+'" />
                     </td>

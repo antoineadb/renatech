@@ -97,7 +97,8 @@ $pseudo=$_SESSION['pseudo'];
                 <?php }?>
                 <tr>
                     <td valign="top" style="width: 300px"><?php echo TXT_NOM.' *:'; ?> </td>
-                    <?php	if(!empty($_SESSION['nom'])){$nom = str_replace("''",	"'",	stripslashes($_SESSION['nom']));} ?>
+                    <?php	if(!empty($_SESSION['nom'])){$nom = 
+removeDoubleQuote(	stripslashes($_SESSION['nom']));} ?>
                     <td><input type="text" required="required" name="nom" id="nom" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
                                style="width: 317px"  value="<?php if(!empty($_SESSION['nom'])){echo $nom;};?>"
                                data-dojo-props="maxLength:'30',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '" >
@@ -105,7 +106,8 @@ $pseudo=$_SESSION['pseudo'];
                 </tr>
                 <tr>
                     <td valign="top"><?php echo TXT_PRENOM.' *:';  ?></td>
-                    <?php	if(!empty($_SESSION['prenom'])){$prenom = str_replace("''",	"'",	stripslashes($_SESSION['prenom']));} ?>
+                    <?php	if(!empty($_SESSION['prenom'])){$prenom = 
+removeDoubleQuote(	stripslashes($_SESSION['prenom']));} ?>
                     <td><input type="text" required="required" name="prenom" id="prenom" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"  value="<?php if(!empty($_SESSION['prenom'])){echo $prenom;};?>"
                                data-dojo-props="maxLength:'30',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '" >
                                
@@ -113,7 +115,8 @@ $pseudo=$_SESSION['pseudo'];
                 </tr>
                 <tr>
                     <td valign="top"><?php echo TXT_NOMENTELABO. ' *:';  ?></td>
-                    <?php	if(!empty($_SESSION['entrepriselaboratoire'])){$entrepriselaboratoire = str_replace("''",	"'",	stripslashes($_SESSION['entrepriselaboratoire']));} ?>
+                    <?php	if(!empty($_SESSION['entrepriselaboratoire'])){$entrepriselaboratoire = 
+removeDoubleQuote(	stripslashes($_SESSION['entrepriselaboratoire']));} ?>
                     <td><input type="text" name="entrepriselaboratoire" id="entrepriselaboratoire" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"   
                                value="<?php if(!empty($_SESSION['entrepriselaboratoire'])){echo $entrepriselaboratoire;};?>" required="required" 
                                data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '" >
@@ -122,7 +125,8 @@ $pseudo=$_SESSION['pseudo'];
                 </tr>	
                 <tr>	
                     <td valign="top"><?php echo TXT_ADRESSE.' *:';  ?></td>
-                    <?php	if(!empty($_SESSION['adresse'])){$adresse = str_replace("''",	"'",	stripslashes($_SESSION['adresse']));} ?>
+                    <?php	if(!empty($_SESSION['adresse'])){$adresse = 
+removeDoubleQuote(	stripslashes($_SESSION['adresse']));} ?>
                     <td><input type="text" required="required" name="adresse" id="adresse" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox"  value="<?php if(!empty($_SESSION['adresse'])){echo $adresse;};?>"
                                data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '" autocomplete="on" >
                                
@@ -137,7 +141,8 @@ $pseudo=$_SESSION['pseudo'];
                 </tr>
                 <tr>
                     <td valign="top"><?php echo TXT_VILLE.' *:'; ?></td>
-                    <?php	if(!empty($_SESSION['ville'])){$ville = str_replace("''",	"'",	stripslashes($_SESSION['ville']));} ?>
+                    <?php	if(!empty($_SESSION['ville'])){$ville = 
+removeDoubleQuote(	stripslashes($_SESSION['ville']));} ?>
                     <td><input type="text" required="required" name="ville" id="ville"  style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" value="<?php if(!empty($_SESSION['ville'])){echo $ville;};?>"                               
                                 data-dojo-props="maxLength:'30',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '"  >
                     </td>

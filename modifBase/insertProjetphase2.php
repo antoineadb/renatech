@@ -174,7 +174,29 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     } else {
         $centralepartenaireprojet = '';
     }
-
+    
+// TYPEPARTENAIRE 
+    
+    $arrayidtypepartenaire = array();
+    for ($i = 0; $i < 9; $i++) {
+        $tp = (int)substr($_POST['tp'.$i],-1);
+        if ($tp!=0) { 
+            array_push($arrayidtypepartenaire,$tp);
+        }
+    }
+   
+    for ($i = 0; $i < count($arrayidtypepartenaire); $i++) {
+        $projetTP = new ProjetTypePartenaire($arrayidtypepartenaire[$i],$idprojet);
+        $manager->insertProjetTypePartenaire($projetTP);
+    }
+   
+    
+    if(isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])){
+        $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],-1);
+    }else{
+        $idtypecentralepartenaire=null;
+    }
+    
     if (!empty($_POST['desTechno'])) {
         $descriptifTechnologique = clean($_POST['desTechno']);
     } else {
@@ -390,12 +412,15 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 
     $interneexterne = null;
     $internationalNational = null;
+    
+    
+   
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DU PROJETPHASE2
 //------------------------------------------------------------------------------------------------------------    
     $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique_thematique, 
             $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, 
-            $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational);
+            $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     $admin = $manager->getSingle2("select administrateur from utilisateur where idutilisateur=?", $idutilisateur_utilisateur);
     //TRAITEMENT DU CAS OU L'UTLISATEUR QUI CREER LE PROJET EST DEJA ADMINISTRATEUR DE PROJET

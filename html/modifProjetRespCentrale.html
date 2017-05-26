@@ -104,7 +104,8 @@ $bool ='true';
             </td>
             </tr>
             <tr>
-                <td><label  style="width: auto"><?php echo TXT_NOMENTELABO.' : '.stripslashes(str_replace("''",	"'",$entrepriselaboratoireo)); ?></label></td>
+                <td><label  style="width: auto"><?php echo TXT_NOMENTELABO.' : '.stripslashes(
+removeDoubleQuote($entrepriselaboratoireo)); ?></label></td>
             </tr>
         </table>
         <table style="width: 550px;">
@@ -113,13 +114,15 @@ $bool ='true';
                 <td>
                     <label for="titreProjet" ><?php echo TXT_TITREPROJET.'* :'; ?>
                     </label>
-                    <?php $titre = stripslashes(str_replace("''",	"'",	$titre)) ?>
+                    <?php $titre = stripslashes(
+removeDoubleQuote(	$titre)) ?>
                     <input id="titreProjet" type="text" name="titreProjet" value="<?php echo $titre ;?>"  required="required"    
                            value="<?php echo $titre ;?>" disabled="<?php echo $bool; ?>"  data-dojo-type="dijit.form.ValidationTextBox"
                            data-dojo-invalidMessage="Titre non valide." style="width: 550px;height:22px;" />
                 </td></tr>
             <tr><td>&nbsp;</td></tr>
-            <tr><td><?php $acronyme = stripslashes(str_replace("''",	"'",	$acronyme)) ?>
+            <tr><td><?php $acronyme = stripslashes(
+removeDoubleQuote(	$acronyme)) ?>
                     <label for="acronyme"  ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?></label>
                     <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>" disabled="<?php echo $bool; ?>"
                            data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide." />
@@ -145,7 +148,8 @@ $bool ='true';
             </tr>
             <tr><td>&nbsp;</td></tr>
             <tr>
-                <td><?php $contexte = stripslashes(str_replace("''",	"'",	$contexte)) ?>
+                <td><?php $contexte = stripslashes(
+removeDoubleQuote(	$contexte)) ?>
                     <label for="contexte" ><?php echo TXT_OBJECTIF.'/'.TXT_CONTEXTESCIENTIFIQUE;?><?echo ':' ?>
                         <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 700px"><?php echo affiche('TXT_AIDECONTEXTE');?></span></a>
                     </label>
@@ -154,7 +158,8 @@ $bool ='true';
             </tr>
             <tr><td>&nbsp;</td></tr>
             <tr>
-                <td><?php $description = stripslashes(str_replace("''",	"'",	$description)) ?>
+                <td><?php $description = stripslashes(
+removeDoubleQuote(	$description)) ?>
                     <label for="descriptif" style="width: 270px"><?php echo TXT_DESCRIPTIFTRAVAIL.' :'; ?>
                         <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 700px"><?php echo affiche('TXT_AIDEDESCRIPTIF');?></span></a>
                     </label>

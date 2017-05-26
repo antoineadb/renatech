@@ -37,9 +37,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" style="width:450px">
                 <?php
-                $pseudofr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $pseudofr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_PSEUDO'))); 																		
-                $pseudoen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $pseudoen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_PSEUDO')));
                 ?>
                 <input data-dojo-type="dijit/form/ValidationTextBox"
@@ -57,9 +59,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" >
                 <?php
-                $mailfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $mailfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_MAIL')));
-                $mailen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $mailen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_MAIL')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -78,9 +82,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" >
                 <?php
-                $nomfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $nomfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_NOM')));
-                $nomen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $nomen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_NOM')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -95,9 +101,11 @@ if(isset($_GET['msgupdate'])){?>
         </tr>
         <td valign="middle" >
             <?php
-            $prenomfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+            $prenomfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
             where reflibelle=?', 'TXT_PRENOM')));
-            $prenomen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+            $prenomen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
             where reflibelle=?', 'TXT_PRENOM')));
             ?>
             <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -113,9 +121,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" >
                 <?php
-                $adressefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $adressefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_ADRESSE')));
-                $adresseen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $adresseen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_ADRESSE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -131,9 +141,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" >
                 <?php
-                $codepostalfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $codepostalfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_CP')));
-                $codepostalen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $codepostalen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_CP')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -149,9 +161,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" >
                 <?php
-                $villefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $villefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_VILLE')));
-                $villeen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $villeen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_VILLE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -167,9 +181,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $paysfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $paysfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_PAYS')));
-                $paysen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $paysen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_PAYS')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -185,9 +201,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle">
                 <?php
-                $telfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $telfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_TELEPHONE')));
-                $telen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $telen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_TELEPHONE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -205,9 +223,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" >
                 <?php
-                $faxfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $faxfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_FAX')));
-                $faxen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $faxen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_FAX')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo TXT_FAX; ?>"
@@ -223,9 +243,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" >
                 <?php
-                $nomentlabofr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $nomentlabofr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_NOMENTELABO')));
-                $nomentlaboen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $nomentlaboen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_NOMENTELABO')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -241,9 +263,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" >
                 <?php
-                $qualitefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $qualitefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_QUALITE')));
-                $qualiteen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $qualiteen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_QUALITE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -260,9 +284,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $nomrespfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $nomrespfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_NOMRESPONSABLE')));
-                $nomrespen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $nomrespen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_NOMRESPONSABLE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -278,9 +304,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $nomrespmailfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $nomrespmailfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_RESPMAILMAIL')));
-                $nomrespmailen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $nomrespmailen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_RESPMAILMAIL')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -296,9 +324,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle">
                 <?php
-                $tutellefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $tutellefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_TUTELLE')));
-                $tutelleen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $tutelleen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_TUTELLE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -314,9 +344,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $autretutellefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $autretutellefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_AUTRETUTELLE')));
-                $autretutelleen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $autretutelleen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_AUTRETUTELLE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -332,9 +364,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $codeunitefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $codeunitefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_CODEUNITE')));
-                $codeuniteen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $codeuniteen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_CODEUNITE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -350,9 +384,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $autrecodeunitefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $autrecodeunitefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_AUTRECODEUNITE')));
-                $autrecodeuniteen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $autrecodeuniteen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_AUTRECODEUNITE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -368,9 +404,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $disciplinefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $disciplinefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_DISCIPLINESCIENTIFIQUE')));
-                $disciplineen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $disciplineen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_DISCIPLINESCIENTIFIQUE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -387,9 +425,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $autredisciplinefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $autredisciplinefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_AUTREDISCIPLINE')));
-                $autredisciplineen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $autredisciplineen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_AUTREDISCIPLINE')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"
@@ -405,9 +445,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $nomresponsablefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $nomresponsablefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_NOMRESPONSABLE')));
-                $nomresponsableen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $nomresponsableen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_NOMRESPONSABLE')));
                 ?>
                 <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"
@@ -423,9 +465,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $nomresponsablemailfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $nomresponsablemailfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_RESPMAILMAIL')));
-                $nomresponsablemailen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $nomresponsablemailen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_RESPMAILMAIL')));
                 ?>
                 <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"
@@ -440,9 +484,11 @@ if(isset($_GET['msgupdate'])){?>
         </tr>
         <tr>
             <td>	<?php
-                $nomemployeurfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $nomemployeurfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_RESPMAILMAIL')));
-                $nomemployeuren =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $nomemployeuren =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_RESPMAILMAIL')));
                 ?>
                 <input valign="middle" data-dojo-type="dijit/form/ValidationTextBox"				onfocus="enabledmodif()"
@@ -459,9 +505,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $autreemployeurfr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $autreemployeurfr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_AUTREEMPLOYEUR')));
-                $autreemployeuren =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $autreemployeuren =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_AUTREEMPLOYEUR')));
                 ?>
                 <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="autreemployeurlibedit" 
@@ -489,9 +537,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td valign="middle" style="width:450px">
                 <?php
-                $nomentreprisefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $nomentreprisefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_NOMENTREPRISE')));
-                $nomentrepriseen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $nomentrepriseen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_NOMENTREPRISE')));
                 ?>
                 <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="nomentrepriselibedit" 
@@ -507,9 +557,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $typeentreprisefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $typeentreprisefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_TYPEENTREPRISE')));
-                $typeentrepriseen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $typeentrepriseen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_TYPEENTREPRISE')));
                 ?>
                 <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="typeentrepriselibedit" 
@@ -525,9 +577,11 @@ if(isset($_GET['msgupdate'])){?>
         <tr>
             <td>
                 <?php
-                $secteuractivitefr =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libellefrancais from libelleapplication
+                $secteuractivitefr =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libellefrancais from libelleapplication
                 where reflibelle=?', 'TXT_SECTEURACTIVITE')));
-                $secteuractiviteen =  stripslashes(str_replace("''",	"'",$manager->getSingle2('select libelleanglais from libelleapplication
+                $secteuractiviteen =  stripslashes(
+removeDoubleQuote($manager->getSingle2('select libelleanglais from libelleapplication
                 where reflibelle=?', 'TXT_SECTEURACTIVITE')));
                 ?>
                 <input style="color: #5D8BA2;text-align: left;width:340px;height:30px;margin-left:40px"  type="text"  name="secteuractivitelibedit" 

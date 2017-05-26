@@ -220,7 +220,8 @@ $date  = $date->format('d-m-Y');
                     </select>
                 </td>                
                 <td style="display:none;margin-top: 15px;" id="grpTypeFormation">
-                    <?php $typeformation = stripslashes(str_replace("''",	"'",	$typeformation))?>
+                    <?php $typeformation = stripslashes(
+removeDoubleQuote(	$typeformation))?>
                     <label for="typeFormation" style="width: 260px;margin-left: 20px;" ><?php echo TXT_TYPEFORMATION;?><?php echo ' :*';?></label>
                     <?php
                     $rowTypeformation = $manager->getListbyArray("select libelletypeformation,libelletypeformationen,idtypeformation from typeformation
@@ -749,7 +750,8 @@ $date  = $date->format('d-m-Y');
                             idthematique_thematique and idprojet=?",$idprojet);
                     ?>
                     <?php if($thema=='Autres'){?>
-                    <?php $autrethematique = stripslashes(str_replace("''",	"'",	$autrethematique)) ;?>
+                    <?php $autrethematique = stripslashes(
+removeDoubleQuote(	$autrethematique)) ;?>
                     <input id="autreThematique" type="text" autocomplete="on" name="autreThematique"
                            data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRETHEMATIQUE;?>"
                            style="margin-left: 20px;display:block" value="<?php echo $autrethematique;?>" disabled="<?php echo $bool; ?>"
@@ -977,7 +979,8 @@ $date  = $date->format('d-m-Y');
                         <tr>
                             <?php  if ($devtechnologique=='TRUE'){?>
                             <td  id="verrou" style="display:block">
-                                <?php $verrouidentifiee = stripslashes(str_replace("''",	"'",	$verrouidentifiee)) ?>
+                                <?php $verrouidentifiee = stripslashes(
+removeDoubleQuote(	$verrouidentifiee)) ?>
                                 <label for="verrouidentifie" style="width: auto;margin-left: 20px">
                                     <?php echo TXT_VERROUIDENTIFIEE.' :'; ?>
                                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
@@ -1423,7 +1426,8 @@ function masquecentraleproximite(){
                                 if($idtypeuser!=6 || $adminprojet==1){ ?>
                                 <td>
                                     <label for="refinterne" style="width: 260px;margin-left: 20px;" ><?php echo TXT_REFINTERNE.':';?></label>
-                                    <?php $refinterneprojet =trim(stripslashes(str_replace("''",	"'",
+                                    <?php $refinterneprojet =trim(stripslashes(
+removeDoubleQuote(
                                     $refinterneprojet))) ?>
                                     <input id="refinterne" type="text" name="refinterne"	value="<?php echo $refinterneprojet; ?>"
                                            data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"   style="margin-left: 20px;margin-bottom: 15px"
@@ -1433,7 +1437,8 @@ function masquecentraleproximite(){
                                 <?php }else{?>
                                 <td>
                                     <label for="refinterne" style="width: 260px;margin-left: 20px;" ><?php echo TXT_REFINTERNE.':';?></label>
-                                    <?php $refinterneprojet =trim(stripslashes(str_replace("''",	"'",	$refinterneprojet))) ?>
+                                    <?php $refinterneprojet =trim(stripslashes(
+removeDoubleQuote(	$refinterneprojet))) ?>
                                     <input id="refinterne" type="text" name="refinterne"	value="<?php echo $refinterneprojet; ?>"
                                            data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"
                                            style="margin-left: 20px;" disabled="disabled"   maxlength="100"  >

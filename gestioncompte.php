@@ -135,8 +135,8 @@ FROM utilisateur u,loginpassword l,qualitedemandeuraca qa,nomemployeur n,autreno
 WHERE l.idlogin = u.idlogin_loginpassword AND qa.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca AND
 n.idemployeur = u.idemployeur_nomemployeur AND an.idautrenomemployeur = u.idautrenomemployeur_autrenomemployeur AND 
 at.idautrestutelle = u.idautrestutelle_autrestutelle AND  ad.idautrediscipline = u.idautrediscipline_autredisciplinescientifique and
-t.idtutelle = u.idtutelle_tutelle AND ac.idautrecodeunite = u.idautrecodeunite_autrecodeunite and 
-d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $iduser);
+t.idtutelle = u.idtutelle_tutelle /*AND ac.idautrecodeunite = u.idautrecodeunite_autrecodeunite*/ and 
+d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $iduser);//echo '<pre>';print_r($row);die;
                 for ($i = 0; $i < count($iduser); $i++) {
                     $nom = $row[$i]['nom'];
                     $prenom = $row[$i]['prenom'];

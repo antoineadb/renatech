@@ -153,7 +153,8 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                 </td>
             </tr>
             <tr>
-                <td><?php $acronyme =stripslashes(str_replace("''",	"'",	$acronyme))?>
+                <td><?php $acronyme =stripslashes(
+removeDoubleQuote(	$acronyme))?>
                     <label for="acronyme"  ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?>
                         <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/>
                             <span <span id="aideAcronyme" >
@@ -247,7 +248,8 @@ $centrale[]  =str_replace('-','',$row[$i]['libellecentrale']);
                 </td>
             </tr>
             <tr><td>&nbsp;</td></tr>
-            <tr><td><?php $description =stripslashes(str_replace("''",	"'",	$description));?>
+            <tr><td><?php $description =stripslashes(
+removeDoubleQuote(	$description));?>
                     <label for="descriptif" ><?php echo TXT_DESCRIPTIFTRAVAIL.' :'; ?>
                         <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/>
                             <span id="aideDescriptif">

@@ -94,7 +94,8 @@ if(isset($_GET['statut'])){
                     <?php $idtypeprojet = $manager->getSingle2("select idtypeprojet_typeprojet from projet where idprojet=?",$idprojet );
                     if($idtypeprojet == FORMATION){ ?>
                 <td>
-                    <?php $typeformation = stripslashes(str_replace("''",	"'",	$typeformation))?>
+                    <?php $typeformation = stripslashes(
+removeDoubleQuote(	$typeformation))?>
                     <label for="typeFormation" style="width: 260px;;margin-left: 60px;margin-top:15px;background-color:#FCFAF2;" ><?php echo TXT_TYPEFORMATION;?><?php echo ' :*';?></label>
                     <?php
                     $rowTypeformation = $manager->getListbyArray("select libelletypeformation,libelletypeformationen,idtypeformation from typeformation
@@ -378,7 +379,8 @@ for ($i = 0; $i < $nbpartenaire; $i++) {
                     idthematique_thematique and idprojet=?",$idprojet);
                     ?>
                     <?php if($thema=='Autres'){?>
-                    <?php $autrethematique = stripslashes(str_replace("''",	"'",	$autrethematique)) ;?>
+                    <?php $autrethematique = stripslashes(
+removeDoubleQuote(	$autrethematique)) ;?>
                     <input id="autreThematique" type="text" autocomplete="on" name="autreThematique"
                            data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRETHEMATIQUE;?>"
                            style="margin-left: 20px;display:block;background-color:#FCFAF2;" value="<?php echo $autrethematique;?>" readonly="true" >
@@ -522,7 +524,8 @@ for ($i = 0; $i < $nbpartenaire; $i++) {
                         <tr>
                             <?php  if ($devtechnologique=='TRUE'){?>
                             <td  id="verrou" style="display:block">
-                                <?php $verrouidentifiee = stripslashes(str_replace("''",	"'",	$verrouidentifiee)) ?>
+                                <?php $verrouidentifiee = stripslashes(
+removeDoubleQuote(	$verrouidentifiee)) ?>
                                 <label for="verrouidentifie" style="width: auto;margin-left: 20px">
                                     <?php echo TXT_VERROUIDENTIFIEE.' :'; ?>
                                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
@@ -769,7 +772,8 @@ for ($i = 0; $i < $nbpartenaire; $i++) {
                                 if($idtypeuser!=6 || $adminprojet==1){ ?>
                                 <td>
                                     <label for="refinterne" style="width: 260px;margin-left: 20px;" ><?php echo TXT_REFINTERNE.':';?></label>
-                                    <?php $refinterneprojet =trim(stripslashes(str_replace("''",	"'",
+                                    <?php $refinterneprojet =trim(stripslashes(
+removeDoubleQuote(
                                     $refinterneprojet))) ?>
                                     <input id="refinterne" type="text" name="refinterne"	value="<?php echo $refinterneprojet; ?>"
                                            data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"   style="margin-left: 20px;margin-bottom: 15px;background-color:#FCFAF2;"
@@ -778,7 +782,8 @@ for ($i = 0; $i < $nbpartenaire; $i++) {
                                 <?php }else{?>
                                 <td>
                                     <label for="refinterne" style="width: 260px;margin-left: 20px;" ><?php echo TXT_REFINTERNE.':';?></label>
-                                    <?php $refinterneprojet =trim(stripslashes(str_replace("''",	"'",	$refinterneprojet))) ?>
+                                    <?php $refinterneprojet =trim(stripslashes(
+removeDoubleQuote(	$refinterneprojet))) ?>
                                     <input id="refinterne" type="text" name="refinterne"	value="<?php echo $refinterneprojet; ?>"
                                            data-dojo-type="dijit/form/ValidationTextBox" style="margin-left: 20px;background-color:#FCFAF2;" readonly="true" >
                                 </td>
