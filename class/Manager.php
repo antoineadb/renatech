@@ -141,6 +141,7 @@ include_once 'CentraleProximiteProjet.php';
 include_once 'DescriptionCentraleProximiteProjet.php';
 include_once 'DemandeFaisabilite.php';
 include_once 'TypePartenaire.php';
+include_once 'ProjetTypePartenaire.php';
 showError($_SERVER['PHP_SELF']);
 
 class Manager {
@@ -1791,13 +1792,11 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO projetpartenaire (idpartenaire_partenaireprojet,idprojet_projet, idtypepartenaire_typepartenaire)VALUES(?,?,?)');
+            $requete = $this->_db->prepare('INSERT INTO projetpartenaire (idpartenaire_partenaireprojet,idprojet_projet)VALUES(?,?)');
             $idpartenaire_partenaireprojet = $projetpartenaire->getIdpartenaire_partenaireprojet();
             $idprojet_projet = $projetpartenaire->getIdprojet_projet();
-            $idtypepartenaire_typepartenaire  = $projetpartenaire->getIdtypepartenaire_typepartenaire();
             $requete->bindParam(1, $idpartenaire_partenaireprojet, PDO::PARAM_INT);
             $requete->bindParam(2, $idprojet_projet, PDO::PARAM_INT);
-            $requete->bindParam(3, $idtypepartenaire_typepartenaire, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3082,7 +3081,53 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         }
     }
     
-   
+    public function insertProjetTypePartenaire(ProjetTypePartenaire $projetTP) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO projettypepartenaire(idtypepartenaire_typepartenaire,idprojet_projet) VALUES (?,?)');            
+            $idtypePartenaire = $projetTP->getIdtypepartenaire_typepartenaire();            
+            $idprojet = $projetTP->getIdprojet_projet();
+            $requete->bindParam(1, $idtypePartenaire, PDO::PARAM_INT);
+            $requete->bindParam(2, $idprojet, PDO::PARAM_INT);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJETTYPEPARTENAIRE . '<br> Ligne n°' . $exc->getLine().' Class Manager.php';
+            $this->_db->rollBack();
+        }
+    }
+    
+    public function updateProjetTypePartenaire(ProjetTypePartenaire $projetTP, $idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE projettypepartenaire set idtypepartenaire_typepartenaire =? where idprojet_projet=?');            
+            $idtypePartenaire = $projetTP->getIdtypepartenaire_typepartenaire();            
+            
+            $requete->bindParam(1, $idtypePartenaire, PDO::PARAM_INT);
+            $requete->bindParam(2, $idprojet, PDO::PARAM_INT);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJETTYPEPARTENAIRE . '<br> Ligne n°' . $exc->getLine().' Class Manager.php';
+            $this->_db->rollBack();
+        }
+    }
+    
+    public function deleteProjetTypePartenaire($idprojet) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('DELETE FROM  projettypepartenaire where idprojet_projet=?');
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJETTYPEPARTENAIRE . '<br> Ligne n°' . $exc->getLine().' Class Manager.php';
+            $this->_db->rollBack();
+        }
+    }
 //------------------------------------------------------------------------------------------------------------
 //                      TYPE FORMATION
 //------------------------------------------------------------------------------------------------------------
@@ -3306,7 +3351,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
 //             PROJETAUTRESCENTRALES
 //-----------------------------------------------------------------------------------------------------------
 
-    public function addprojetautrescentrale(Projetautrecentrale $projetautrecentrale) {var_dump($projetautrecentrale);
+    public function addprojetautrescentrale(Projetautrecentrale $projetautrecentrale) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();

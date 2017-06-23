@@ -32,11 +32,10 @@ if (isset($_GET['idUser']) && !empty($_GET['idUser'])) {
     }else{
         //Suppression de l'utilisateur
         $idlogin = $manager->getSingle2("select idlogin_loginpassword from utilisateur where idutilisateur=?", $_GET['idUser']);
-        $manager->deleteIntervient($_GET['idUser']);
-        $manager->deleteAppartient($_GET['idUser']);
         $manager->deleteUtilisateur($_GET['idUser']);
         $manager->deleteLogin($idlogin);
-        
+        $manager->deleteIntervient($_GET['idUser']);
+        $manager->deleteAppartient($_GET['idUser']);
         
         $status='ok';       
         createLogInfo(NOW, " l'utilisateur  " . $infoUser[0]['nom'].' '. $infoUser[0]['prenom'] . " a été  supprimé.  ", null, null, $manager, IDCENTRALEUSER);
