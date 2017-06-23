@@ -251,7 +251,7 @@
                 <td>
                 <select name="typecentralepartenaire" id="typecentralepartenaire"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">
                 <?php 
-                        echo '<option>'.TXT_SELECTTYPEPARTENAIRE.'</option>';
+                        echo "<option value='0'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
                         $rowtypepartenaire = $manager->getList("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE order by idtypepartenaire asc");                            
                         if($lang==fr){                            
                             for($k=0;$k<count($rowtypepartenaire);$k++){

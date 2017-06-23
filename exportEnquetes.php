@@ -16,18 +16,53 @@ $data = utf8_decode("Nom;Prénom;E-Mail;Nom du responsable; Mail du reponsable;A
 $data .= "\n";
 
 if (isset($_POST['annee'])&& !empty($_POST['annee'])) {
-   /* if($_POST['annee']==1){
-        $arrayProjetEncours = $manager->getListbyArray(" 
-        select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? and EXTRACT(YEAR from datedebutprojet ) >?
-         union 
-        select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? and EXTRACT(YEAR from datestatutfini ) >?
-        order by idprojet asc;",array(ENCOURSREALISATION,$_POST['annee'],FINI,$_POST['annee']));
-    }else{*/
-     /*  $arrayProjetEncours = $manager->getListbyArray("
-           select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? and EXTRACT(YEAR from datedebutprojet ) =?   union 
-           select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet =? and EXTRACT(YEAR from datestatutfini ) =? union
-           select  distinct idprojet from concerne,projet where idprojet_projet=idprojet and EXTRACT(YEAR from datedebutprojet ) <? and EXTRACT(YEAR from datestatutfini ) >?
-            order by idprojet asc;",array(ENCOURSREALISATION,$_POST['annee'],FINI,$_POST['annee'],$_POST['annee'],$_POST['annee'])); */
+        if($_POST['annee']==1){
+            $annee = '1970';
+            $arrayProjetEncours=$manager->getListbyArray("SELECT p.idprojet FROM projet p,creer c,utilisateur u,concerne co
+                WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND  datedebutprojet is not null AND  datestatutfini is null  AND  datestatutcloturer is null
+                AND  datestatutrefuser is null 
+                UNION
+                SELECT  p.idprojet
+                FROM projet p,creer c,utilisateur u,concerne co
+                WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is null
+                AND  datestatutrefuser is null  and EXTRACT(YEAR from datestatutfini) >=?
+                UNION
+                SELECT  p.idprojet
+                FROM projet p,creer c,utilisateur u,concerne co
+                WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND  datestatutrefuser is null  and EXTRACT(YEAR from datestatutfini) >=?
+                AND datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is not null
+                UNION
+                SELECT  p.idprojet
+                FROM projet p,creer c,utilisateur u,concerne co
+                WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND  datestatutfini is not null AND  datestatutcloturer is null AND EXTRACT(YEAR from datestatutfini) >=?
+                UNION
+                SELECT  p.idprojet
+                FROM projet p,creer c,utilisateur u,concerne co
+                WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND  datestatutcloturer is not null 
+                UNION
+                SELECT  p.idprojet
+                FROM projet p,creer c,utilisateur u,concerne co
+                WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND  datestatutrefuser is not null  ",array(
+                    REFUSE,ACCEPTE,CLOTURE,
+                    REFUSE,ACCEPTE,CLOTURE,$annee,
+                    REFUSE,ACCEPTE,CLOTURE,$annee,
+                    REFUSE,ACCEPTE,CLOTURE,$annee,
+                    REFUSE,ACCEPTE,CLOTURE,
+                    REFUSE,ACCEPTE,CLOTURE)); 
+            
+        }else{
        $arrayProjetEncours  = $manager->getListbyArray("SELECT p.idprojet
             FROM projet p,creer c,utilisateur u,concerne co
             WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
@@ -59,8 +94,8 @@ if (isset($_POST['annee'])&& !empty($_POST['annee'])) {
             SELECT  p.idprojet
             FROM projet p,creer c,utilisateur u,concerne co
             WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur
-            AND  datestatutcloturer is not null  AND EXTRACT(YEAR from datestatutcloturer)=?
-            AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+            AND  datestatutcloturer is not null 
+            AND EXTRACT(YEAR from datestatutcloturer)=?    AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
             UNION
             SELECT  p.idprojet
             FROM projet p,creer c,utilisateur u,concerne co
@@ -74,10 +109,8 @@ if (isset($_POST['annee'])&& !empty($_POST['annee'])) {
                    $_POST['annee'],$_POST['annee'],REFUSE,ACCEPTE,CLOTURE,
                    $_POST['annee'],REFUSE,ACCEPTE,CLOTURE,
                    $_POST['annee'],REFUSE,ACCEPTE,CLOTURE)); 
-       
-       
-       
-  //  }
+        }
+    
 } else {
     echo ' <script>alert("Vous devez choisir une année!");window.location.replace("/' . REPERTOIRE . '/enquete/' . $lang . '")</script>';
     exit();
@@ -96,7 +129,7 @@ $arrayIdUtilisateur = array_unique(array_merge(array_filter($arrayUtilisateur),a
 $nbrow = count($arrayIdUtilisateur);
 $elementsUser =array();
 foreach ($arrayIdUtilisateur as $idUser){   
-     array_push($elementsUser,  $manager->getList2("select idutilisateur,nomresponsable,mailresponsable,acronymelaboratoire,entrepriselaboratoire,nom,prenom,mail from utilisateur,loginpassword "
+     array_push($elementsUser,  $manager->getList2("select distinct on (mail) mail,idutilisateur,nomresponsable,mailresponsable,acronymelaboratoire,entrepriselaboratoire,nom,prenom from utilisateur,loginpassword "
              . "where idlogin =idlogin_loginpassword  and idutilisateur = ?",$idUser));
 }
 

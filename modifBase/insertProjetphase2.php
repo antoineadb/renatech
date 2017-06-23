@@ -175,22 +175,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $centralepartenaireprojet = '';
     }
     
-// TYPEPARTENAIRE 
-    
-    $arrayidtypepartenaire = array();
-    for ($i = 0; $i < 9; $i++) {
-        $tp = (int)substr($_POST['tp'.$i],-1);
-        if ($tp!=0) { 
-            array_push($arrayidtypepartenaire,$tp);
-        }
-    }
-   
-    for ($i = 0; $i < count($arrayidtypepartenaire); $i++) {
-        $projetTP = new ProjetTypePartenaire($arrayidtypepartenaire[$i],$idprojet);
-        $manager->insertProjetTypePartenaire($projetTP);
-    }
-   
-    
+// TYPEPARTENAIRE PHASE 2
     if(isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])){
         $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],-1);
     }else{
@@ -464,13 +449,19 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
             if (!empty($_POST['' . $nomLaboEntreprise . ''])) {
                 $nomLaboEntreprise = stripslashes(Securite::bdd(($_POST['' . $nomLaboEntreprise . ''])));
             }
+            if(!empty($_POST['tp'.$i])){
+                $idtypepartenaire = (int)substr($_POST['tp'.$i],-1);    
+            }else{
+                $idtypepartenaire = null;
+            }
+            
             //TRAITEMENT AJOUT DANS LA TABLE PARTENAIREPROJET
             $idpartenaire = $manager->getSingle("select max (idpartenaire) from partenaireprojet") + 1;
             $newpartenaireprojet = new Partenaireprojet($idpartenaire, $nomPartenaire, $nomLaboEntreprise);
             $manager->addpartenaireprojet($newpartenaireprojet);
             //$partenaires .=$nomPartenaire . ' - ' . $nomLaboEntreprise . ' - ';
-            //TRAITEMENT AJOUT DANS LA TABLE PROJETPARTENAIRE
-            $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet);
+            //TRAITEMENT AJOUT DANS LA TABLE PROJETPARTENAIRE            
+            $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet, $idtypepartenaire);
             $manager->addprojetpartenaire($newprojetpartenaire);
         }
     } else {

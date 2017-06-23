@@ -33,14 +33,13 @@ CENTRALES DE PROXIMITES
     <?php 
     if (isset($_GET['numProjet'])) {
         $idprojet = $manager->getSingle2('select idprojet from projet where numero=?', $_GET['numProjet']);
-        $centraleselectionne = $manager->getSingle2("select libellecentrale from centrale,concerne  where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
+        $centraleselectionne = $manager->getSinglebyArray("select libellecentrale from centrale,concerne  where idcentrale_centrale=idcentrale and idprojet_projet=? and idstatutprojet_statutprojet !=? ",array($idprojet,REFUSE));
     } elseif (isset($_GET['idprojet'])) {
         $idprojet = $_GET['idprojet'];
-        $centraleselectionne = $manager->getSingle2("select libellecentrale from centrale,concerne  where idcentrale_centrale=idcentrale and idprojet_projet=?", $idprojet);
+        $centraleselectionne = $manager->getSinglebyArray("select libellecentrale from centrale,concerne  where idcentrale_centrale=idcentrale and idprojet_projet=? and idstatutprojet_statutprojet !=? ",array($idprojet,REFUSE));
     }
-    if (isset($libelleCentrale)) {
-        $question = TXT_QUESTIONCPARTCONNU . $libelleCentrale;
-    }elseif (isset($centraleselectionne)) {
+    
+   if (isset($centraleselectionne)) {
         $question = TXT_QUESTIONCPARTCONNU . $centraleselectionne;
     } else {
         $question = TXT_QUESTIONCENTRALEPARTENAIRE;

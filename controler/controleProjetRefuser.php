@@ -7,6 +7,7 @@ include_once '../decide-lang.php';
 include_once '../outils/constantes.php';
 include_once '../outils/toolBox.php';
 $db = BD::connecter();
+
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
 } else {
@@ -50,35 +51,56 @@ $jsonprojet = str_replace('},]}', '}]}', $jsonprojet1);
 file_put_contents($json_fileprojet, $jsonprojet);
 fclose($fpprojet);
 chmod('../tmp/projetRefuseCentrales.json', 0777);
-header('location:/' . REPERTOIRE . '/viewRefusedProject/' . $lang);
-
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                   PROJET REFUSES PAR TOUTES LES CENTRALES
+//                                                                   PROJET TRANSFERER ENTRE 2 CENTRALES
 //-----------------------------------------------------------------------------------------------------------------------------------------------
+$projetRefuse = $manager->getlist2("select idprojet_projet from concerne where idstatutprojet_statutprojet = ? ",REFUSE);
+$arrayIdProjetRefuse=array();
+foreach ($projetRefuse as $value) {
+    array_push($arrayIdProjetRefuse, $value[0]);
+}
+$arrayIdProjetRefuses = array_unique($arrayIdProjetRefuse);
 
-$rowprojetrefuseAll = $manager->getList2("SELECT idprojet,libellecentrale,titre,dateprojet,numero,commentaireprojet,idcentrale_centrale FROM   projet,concerne,centrale WHERE idprojet_projet = idprojet and idcentrale_centrale = idcentrale
-and idprojet not in (select idprojet from projet,concerne WHERE idprojet_projet = idprojet and idstatutprojet_statutprojet !=? ) order by idprojet asc ",REFUSE);
-$fpprojetAll = fopen('../tmp/projectRefusedAll.json', 'w');
+$projetAccepte = $manager->getlist2("select idprojet_projet from concerne where idstatutprojet_statutprojet != ? ",REFUSE);
+$arrayIdProjetAccepte=array();
+foreach ($projetAccepte as $value) {
+    array_push($arrayIdProjetAccepte,$value[0] );
+}
+$resultat = array_values(array_intersect($arrayIdProjetAccepte, $arrayIdProjetRefuse));
+
+$fpprojetAll = fopen('../tmp/ProjetRefuseeCentraleAdminNat.json', 'w');
 fwrite($fpprojetAll, '{"items": [');
-for ($i = 0; $i < count($rowprojetrefuseAll); $i++) {
+$centraleRefusProjet="";
+for ($i = 0; $i < count($resultat); $i++) {    
+    $centraleaffecteProjet = $manager->getSinglebyArray("SELECT libellecentrale FROM projet,concerne,centrale WHERE idprojet_projet = idprojet and idcentrale_centrale = idcentrale and idprojet_projet=? "
+            . "and idstatutprojet_statutprojet !=?",array($resultat[$i],REFUSE));
+    
+    $centraleRefusProjet .= $manager->getSinglebyArray("SELECT libellecentrale FROM projet,concerne,centrale WHERE idprojet_projet = idprojet and idcentrale_centrale = idcentrale and idprojet_projet=? "
+            . "and idstatutprojet_statutprojet =?",array($resultat[$i],REFUSE)).",";
+    
+    $donneeprojet = $manager->getList2("select numero,dateprojet,idprojet,titre,refinterneprojet,acronyme from projet where idprojet=?",$resultat[$i]);
+    $array = explode(",",substr($centraleRefusProjet,0,-1));
+    $array = array_unique($array);
+    $centraleRefuse = implode(",",$array);
     $dataprojet = "" .
-            '{"numero":' . '"' . $rowprojetrefuseAll[$i]['numero'] . '"'
-                . "," . '"idprojet":' . '"' . $rowprojetrefuseAll[$i]['idprojet'] . '"'
-                . "," . '"dateprojet":' . '"' . $rowprojetrefuseAll[$i]['dateprojet'] . '"'
-                . "," . '"titre":' . '"' . filtredonnee(strip_tags($rowprojetrefuseAll[$i]['titre'])) . '"'
-                . "," . '"libellecentrale":' . '"' . $rowprojetrefuseAll[$i]['libellecentrale'] . '"'
-                . "," . '"libellestatutprojet":' . '"' . $rowprojetrefuseAll[$i]['libellestatutprojet'] . '"'
-                . "," . '"commentaireprojet":' . '"' .stripslashes(strip_tags($rowprojetrefuseAll[$i]['commentaireprojet'])) . '"' . "},";
+            '{"numero":' . '"' . $donneeprojet[0]['numero'] . '"'
+                . "," . '"idprojet":' . '"' . $donneeprojet[0]['idprojet'] . '"'
+                . "," . '"dateprojet":' . '"' . $donneeprojet[0]['dateprojet'] . '"'
+                . "," . '"centraleaffect":' . '"' . $centraleaffecteProjet . '"'
+                . "," . '"centraleRefusProjet":' . '"' . $centraleRefuse . '"'
+                . "," . '"titre":' . '"' . filtredonnee(strip_tags($donneeprojet[0]['titre'])) . '"'
+                . "," . '"refinterneprojet":' . '"' . filtredonnee(strip_tags($donneeprojet[0]['refinterneprojet'])) . '"'
+                . "," . '"acronyme":' . '"' . filtredonnee(strip_tags($donneeprojet[0]['acronyme'])) . '"' . "},";
     fputs($fpprojetAll, $dataprojet);
     fwrite($fpprojetAll, '');
 }
 fwrite($fpprojetAll, ']}');
-$json_fileprojetAll = "../tmp/projectRefusedAll.json";
+$json_fileprojetAll = "../tmp/ProjetRefuseeCentraleAdminNat.json";
 $jsonprojetAll1 = file_get_contents($json_fileprojetAll);
 $jsonProjet = str_replace('},]}', '}]}', $jsonprojetAll1);
 file_put_contents($json_fileprojetAll, $jsonProjet);
 fclose($fpprojetAll);
-chmod('../tmp/projectRefusedAll.json', 0777);
+chmod('../tmp/ProjetRefuseeCentraleAdminNat.json', 0777);
 
 header('location:/' . REPERTOIRE . '/viewRefusedProject/' . $lang);
 BD::deconnecter();

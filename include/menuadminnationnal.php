@@ -21,6 +21,7 @@ $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
 $log= '/'.REPERTOIRE.'/log/'.$lang;
 $viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
 $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
+$chgtcompte= '/'.REPERTOIRE.'/switch/'.$lang;
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -47,6 +48,7 @@ $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
         <ul style="z-index: 5;font-weight: normal">
             <li><a href="<?php echo $moncompte;?>" class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MONCOMPTE;?></a></li>
             <li><a href="<?php echo $gestioncompte;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_GESTIONCOMPTE);?></a></li>
+            <li><a href="<?php echo $chgtcompte;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo "Changement de compte";?></a></li>
         </ul> 
     </li>
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_ADMIN.'</u>'; ?></a>

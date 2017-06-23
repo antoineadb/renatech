@@ -5,7 +5,6 @@ include('decide-lang.php');
 include_once 'class/Cache.php';
 include_once 'outils/constantes.php';
 include_once 'outils/toolBox.php';
-include_once 'class/Manager.php';
 define('ROOT', dirname(__FILE__));
 $Cache = new Cache(ROOT . '/cache', 60);
 if (isset($_SESSION['pseudo'])) {
@@ -40,6 +39,7 @@ if(isset($_SESSION['nbprojet'])){
     $nbProjetSoustraitance = 0;
     $nbRapportProjet =  0;
 }
+
 ?>
 <div id="global" >
     <?php include 'html/entete.html'; ?>        
@@ -54,13 +54,21 @@ if(isset($_SESSION['nbprojet'])){
         <?php if(isset($_GET['err'])&&!empty($_GET['err'])){?><div style="padding-top: 15px;margin-bottom: -33px;text-align: center;font-size: 1.1em;color: #007A99; font-weight: bold;">
             <?php echo "Ce projet ne peux pas être dupliqué, il n'est pas \"En cours d'expertise\",\"En cours de réalisation\" ou \"Fini\" ";}?></div>
         <form action="#" method="POST" id="vueprojetcentrale">
-            <?php if(IDTYPEUSER!=ADMINNATIONNAL){ ?>
+            <?php if(IDTYPEUSER == ADMINLOCAL){?>
             <div style="float: left"><a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/exportjson.php?lang=' . $lang ?>">&nbsp;<img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/export.png' ><span style="width: 260px"><?php echo TXT_EXPORTPROJETCENTRALE; ?></span></a></div>
             <div style="float: left;margin-top: 3px;margin-left:5px">                
                 <a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/modifBase/viderCache.php?lang=' . $lang; ?>">&nbsp;<img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/refresh.png' ><span style="width: 200px;border-radius: 4px;text-align:center; ">
                 <?php echo TXT_ACTUALDATA; ?></span></a>
             </div>
-            <?php } ?>
+            <?php }elseif (IDTYPEUSER==ADMINNATIONNAL) {
+                if($_GET['centrale']=='C'){
+                    $centrale='C2N';
+                }else{
+                    $centrale=$_GET['centrale'];
+                }
+                ?>
+            <div style="color: #007a99;font-size: 1.2em;font-weight: bold;margin-bottom: 30px;margin-top: 30px;"> <?php echo TXT_CENTRALESELECTON.' : '.$centrale; ?></div> 
+             <?php } ?>
             <div style='width:100px;'>
             </div>
             <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:25px;width: 1050px;font-size: 1.2em;" doLayout="false" selected="true" >               
@@ -84,13 +92,13 @@ if(isset($_SESSION['nbprojet'])){
                 </div>
                     <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetSoustraitance . "'>" . TXT_PROJETSOUSTRAITANCE . "</div>"; ?>" style="height:500px;" >
                         <?php include_once 'html/vueSuiviProjetensoustaitance.html'; ?>
-                    </div>
+                    </div>                
                 <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetRefusee . "'>" . TXT_PROJETREFUSE . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetRefuseCentrale.html'; ?>
                 </div>
-                <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbrowProjetRefuseTransfert . "'>" . 'Projets transférés dans une autre centrale' . "</div>"; ?>" style="height:500px;" >
+                <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbrowProjetRefuseTransfert . "'>" . TXT_PROJET_TRS_AUTRES_CENTRALE . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetTransfereAutreCentrale.html'; ?>
-                </div>
+                </div>                
                 <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetCloturer . "'>" . TXT_PROJETCLOTURE . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetClotureCentrale.html'; ?>
                 </div>   

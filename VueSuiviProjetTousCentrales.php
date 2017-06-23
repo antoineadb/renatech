@@ -25,29 +25,32 @@ include 'html/header.html';
         }else{
             include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
         }
-        ?>       
-        
-            <div style="height:500px;margin-top: 25px" ><?php require_once 'html/vueSuiviProjetTousCentrales.html'; ?></div>
+        ?>
     </div>
+     <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:25px;width: 1050px;font-size: 1.2em;" doLayout="false" selected="true" >  
+         <div data-dojo-type="dijit/layout/ContentPane">
+            <div style="height:500px;margin-top: -5px" ><?php require_once 'html/vueSuiviProjetTousCentrales.html'; ?></div>
+         </div>
+     </div>
+  
     <table>
-    <tr>
-        <td><div style="background-color: darkgreen;height: 10px;width: 25px;border: 1px solid black; "></div></td>
-        <td><label style="width:378px;margin-left: 5px"  ><?php echo TXT_DATENONDEPASSE; ?></label></td>
-    </tr>
-    <tr>
-        <td><div style="background-color: darkgoldenrod;height: 10px;width: 25px;border: 1px solid black; "></div></td>
-        <td><label style="width:378px;margin-left: 5px"  ><?php echo TXT_DATEPROCHE ?></label></td>
-    </tr>
-    <tr>
-        <td><div style="background-color: red;height: 10px;width: 25px;border: 1px solid black; "></div></td>
-        <td><label style="width:378px;margin-left: 5px"  ><?php echo TXT_DATEDEPASSE ?></label></td>
-    </tr>
-    <tr>
-        <td><div style="background-color: black;height: 10px;width: 25px;border: 1px solid black; "></div></td>
-        <td><label style="width:378px;margin-left: 5px"  ><?php echo TXT_NONGERER ?></label></td>
-    </tr>
-</table>
-    <?php include 'html/footer.html'; ?>
-</div>
+        <tr>
+            <td><div style="background-color: darkgreen;height: 10px;width: 25px;border: 1px solid black; "></div></td>
+            <td><label style="width:378px;margin-left: 5px"  ><?php echo TXT_DATENONDEPASSE; ?></label></td>
+        </tr>
+        <tr>
+            <td><div style="background-color: darkgoldenrod;height: 10px;width: 25px;border: 1px solid black; "></div></td>
+            <td><label style="width:378px;margin-left: 5px"  ><?php echo TXT_DATEPROCHE ?></label></td>
+        </tr>
+        <tr>
+            <td><div style="background-color: red;height: 10px;width: 25px;border: 1px solid black; "></div></td>
+            <td><label style="width:378px;margin-left: 5px"  ><?php echo TXT_DATEDEPASSE ?></label></td>
+        </tr>
+        <tr>
+            <td><div style="background-color: black;height: 10px;width: 25px;border: 1px solid black; "></div></td>
+            <td><label style="width:378px;margin-left: 5px"  ><?php echo TXT_NONGERER ?></label></td>
+        </tr>
+    </table> <?php include 'html/footer.html'; ?>
+    </div>
 </body>
 </html>

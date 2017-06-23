@@ -58,7 +58,12 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
             $disabled = "''";
             break;
         case REFUSE:
-            echo "<fieldset class='statut' ><b>" . TXT_PROJECT . " " . TXT_REFUSE . "</b></fieldset>";
+            $idStatut = $manager->getSinglebyArray("SELECT idstatutprojet_statutprojet from concerne where commentaireprojet like 'Transféré dans la centrale%' and idstatutprojet_statutprojet =? and idprojet_projet =?",array(REFUSE,$idprojet));
+            if($idStatut==REFUSE){
+                    echo "<fieldset class='statut' ><b>" . TXT_TRANSFERTPROJET ."</b></fieldset>";
+            }else{
+                echo "<fieldset class='statut' ><b>" . TXT_PROJECT . " " . TXT_REFUSE . "</b></fieldset>";
+            }
             $bool = 'false';
             $bool1 = '';
             $disabled = "'disabled'";
@@ -533,28 +538,29 @@ $date  = $date->format('d-m-Y');
                         }
                 $nbrowTypePartenaire=count($rowTypePartenaire);?>
                 <select name="typecentralepartenaire" id="typecentralepartenaire"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">          
-                <?php
-                
+                <?php                
                 if (!empty($idtypecentralepartenaire)){
                     if($lang=='fr'){
                         echo "<option  value='".'tp'.$idtypecentralepartenaire."'>".removeDoubleQuote($typecentralepartenairefr)."</option>";    
                         for($i=0;$i<$nbrowTypePartenaire;$i++){			
                             echo "<option  value='".'tp'.$rowTypePartenaire[$i]['idtypepartenaire']."'>".removeDoubleQuote($rowTypePartenaire[$i]['libelletypepartenairefr'])."</option>";
                         }
-                    }else{
-                       echo "<option  value='".'tp'.$idtypecentralepartenaire."'>".removeDoubleQuote($typecentralepartenaireen)."</option>";
-                       for($i=0;$i<$nbrowTypePartenaire;$i++){			
-                            echo "<option  value='".'tp'.$rowTypePartenaire[$i]['idtypepartenaire']."'>".removeDoubleQuote($rowTypePartenaire[$i]['libelletypepartenaireen'])."</option>";
-                        }                       
-                    }
-                }else{                    
+                        echo "<option value='0'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
+                        }else{
+                           echo "<option  value='".'tp'.$idtypecentralepartenaire."'>".removeDoubleQuote($typecentralepartenaireen)."</option>";
+                           for($i=0;$i<$nbrowTypePartenaire;$i++){			
+                                echo "<option  value='".'tp'.$rowTypePartenaire[$i]['idtypepartenaire']."'>".removeDoubleQuote($rowTypePartenaire[$i]['libelletypepartenaireen'])."</option>";
+                            }
+                            echo "<option value='0'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
+                        }
+                }else{
                     if($lang=='fr'){
-                        echo "<option >".TXT_SELECTTYPEPARTENAIRE.'</option>';                        
+                        echo "<option value='0'>".TXT_SELECTTYPEPARTENAIRE.'</option>';                        
                         for($j=0;$j<$nbrowTypePartenaire;$j++){			
                             echo "<option  value='".'tp'.$rowTypePartenaire[$j]['idtypepartenaire']."'>".removeDoubleQuote($rowTypePartenaire[$j]['libelletypepartenairefr'])."</option>";
                         }
                     }else{
-                        echo "<option >".TXT_SELECTTYPEPARTENAIRE.'</option>';
+                        echo "<option value='0'>".TXT_SELECTTYPEPARTENAIRE.'</option>';                        
                          for($i=0;$i<$nbrowTypePartenaire;$i++){			
                             echo "<option  value='".'tp'.$rowTypePartenaire[$i]['idtypepartenaire']."'>".removeDoubleQuote($rowTypePartenaire[$i]['libelletypepartenaireen'])."</option>";
                         }
@@ -1160,8 +1166,9 @@ function masqueetapeautrecentrale(){
                                     <legend><?php echo TXT_SELECTCENTRALES; ?></legend>
                                 <div id='chckautrecentrale' style="float: left;margin-bottom: 15px;margin-left:20px;margin-top: 10px">
                                     <?php
-                                    $icentraleselectionne = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?",$idprojet);
-                                    $row = $manager->getList2("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE and idcentrale!= ? order by libelleCentrale asc",$icentraleselectionne);
+                                    $icentraleselectionne = $manager->getSinglebyArray("select idcentrale_centrale from concerne where idprojet_projet=? and idstatutprojet_statutprojet !=?",array($idprojet,REFUSE));
+                                    $row = $manager->getList2("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE and idcentrale!= ? 
+                                    order by libelleCentrale asc",$icentraleselectionne);
                                     for ($i = 0; $i < count($row); $i++) {
                                         $libellecentrale = str_replace('-', '', $row[$i][0]);
                                         $villecentrale = $row[$i][1];?>

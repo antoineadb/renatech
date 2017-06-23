@@ -44,10 +44,10 @@ $manager->exeRequete("CREATE TABLE tmptouscentrale AS (SELECT p.numero,p.datemaj
 FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s
 WHERE cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND
   co.idprojet_projet = p.idprojet AND  t.idtypeprojet = p.idtypeprojet_typeprojet
-  AND s.idstatutprojet = co.idstatutprojet_statutprojet  order by p.idprojet)");
+  AND s.idstatutprojet = co.idstatutprojet_statutprojet  order by p.idprojet desc)");
 $manager->exeRequete("ALTER TABLE tmptouscentrale ADD COLUMN calcfinprojet date;");
 $manager->exeRequete("ALTER TABLE tmptouscentrale ADD COLUMN finprojetproche date;");
-$rowprojet=$manager->getList("select * from tmptouscentrale");
+$rowprojet=$manager->getList("select * from tmptouscentrale order by idprojet desc");
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  REMPLISSAGE DES DATE DE FIN DE PROJET ET DE PROJET PROCHE
 //-----------------------------------------------------------------------------------------------------------------------------------------------

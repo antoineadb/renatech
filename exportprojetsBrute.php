@@ -37,9 +37,9 @@ for ($b = 1; $b <= 5; $b++) {
     $s_sourcefinancement.="Source de financement ".$b.";acronyme ".$b.";";
 }
 
-$s_partenaire="";
+$s_partenaireTypeEntreprise="";
 for ($c = 2; $c <= 10; $c++) {
-    $s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";";
+    $s_partenaireTypeEntreprise .= "Nom du Laboratoire&Entreprise".$c.";Type entreprise".$c.";";
 }
 $s_personnesalleblanche = "";
 for ($d = 1; $d <= 21; $d++) {
@@ -62,7 +62,8 @@ $data = utf8_decode("Id du projet;Date du projet;Titre du projet;référence int
         . "Source de financement 6;"
         . "Etes vous le coordinateur du projet?;Statut;"            
         . "Nom du Laboratoire&Entreprise1;"
-        ."".$s_partenaire.""        
+        . "Type entreprise1;"
+        ."".$s_partenaireTypeEntreprise.""        
         . "Descriptif Technologique;pièce jointe;Le projet nécessite-t'il un développement technologique pour certaines étapes?;Verrous identifiés;Etape(s)réalisée(s)dans une autre centrale;Autre(s) centrale(s);"
         . "Description de l'(ou des) étape(s):;Utilisez-vous dans votre projet une centrale de proximité? ;Centrales de proximité;Descriptions de la demande;"
         . "email responsable devis;Réussite escompté;"
@@ -433,26 +434,24 @@ if ($nbrow != 0) {
 //                              CENTRALES DE PROXIMITES
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------          
         
-        
-        
         $centraleproximite = $row[$i]['centraleproximite'];
         if($centraleproximite){
             $centraleproximite = TXT_OUI;
-            $arraycentraleproximte = $manager->getList2("SELECT cp.libellecentraleproximite FROM centraleproximite cp,centraleproximiteprojet pc  WHERE cp.idcentraleproximite = pc.idcentraleproximite and pc.idprojet =?",$idprojet);
-            $nbcentraleproximite =count($arraycentraleproximte); 
             $libellecentraleproximite= "";
+            $arraycentraleproximte = $manager->getList2("SELECT cp.libellecentraleproximite FROM centraleproximite cp,centraleproximiteprojet pc  WHERE cp.idcentraleproximite = pc.idcentraleproximite and pc.idprojet =?",$idprojet);
+            $nbcentraleproximite =count($arraycentraleproximte);             
             for ($cp = 0; $cp < $nbcentraleproximite; $cp++) {                
                 $libellecentraleproximite .=  $arraycentraleproximte[$cp]['libellecentraleproximite'].' - ';
             }            
             $libelleCentraleProximite = cleanForExportOther(substr($libellecentraleproximite,0,-2));
             if(!empty($row[$i]['descriptioncentraleproximite'])){
-            $descriptioncentraleproximite = cleanForExportOther($row[$i]['descriptioncentraleproximite']);
-        }else{
-            $descriptioncentraleproximite = '';
-        }
+                $descriptioncentraleproximite = cleanForExportOther($row[$i]['descriptioncentraleproximite']);
+            }else{
+                $descriptioncentraleproximite = '';
+            }
         }else {
             $centraleproximite = TXT_NON;
-            $libelleCentraleProximite="";
+            $libellecentraleproximite="";
             $descriptioncentraleproximite = '';
         }
         
@@ -677,7 +676,7 @@ if ($nbrow != 0) {
             }
         }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
-//      RECUPERATION DES INFOS DES PARTENAIRES 
+//      RECUPERATION DES INFOS DES PARTENAIRES ET DES TYPE D'ENTREPRISE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         $rowpartenaireprojet = $manager->getList2("SELECT centralepartenaireprojet FROM projet WHERE idprojet=?", $idprojet); 
         //  DONNEES INCLUES DANS LA TABLE PROJET
@@ -687,12 +686,35 @@ if ($nbrow != 0) {
         } else {
             $laboentreprise1 = '';
         }
+        //ENTREPRISE N°1
+        if($lang=='fr'){
+            $typePartenaire1 = removeDoubleQuote(stripslashes(utf8_decode($manager->getSingle2("select libelletypepartenairefr from projet,typepartenaire where idprojet=? and idtypepartenaire=idtypecentralepartenaire", $idprojet))));
+        }else{
+            $typePartenaire1 = removeDoubleQuote(stripslashes(utf8_decode($manager->getSingle2("select libelletypepartenaireen from projet,typepartenaire where idprojet=? and idtypepartenaire=idtypecentralepartenaire", $idprojet))));
+        }
+        
+        
         //  DONNEES INCLUES DANS LA TABLE PARTENAIREPROJET
         for ($f = 2; $f <= 10; $f++) {            
                 ${'rowpartenaireprojet'.$f}= $manager->getList2("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=? "
                 . "order by idpartenaire_partenaireprojet asc limit 1 offset ".($f-2)." ", $idprojet);
+                if($lang=='fr'){
+                    ${'rowpartenaireTypeEntreprise'.$f}= $manager->getList2("SELECT libelletypepartenairefr FROM projetpartenaire,typepartenaire WHERE idtypepartenaire_typepartenaire = idtypepartenaire AND idprojet_projet=? "
+                    . "order by idtypepartenaire_typepartenaire asc limit 1 offset ".($f-2)." ", $idprojet);
+                }else{
+                    ${'rowpartenaireTypeEntreprise'.$f}= $manager->getList2("SELECT libelletypepartenaireen FROM projetpartenaire,typepartenaire WHERE idtypepartenaire_typepartenaire = idtypepartenaire AND idprojet_projet=? "
+                    . "order by idtypepartenaire_typepartenaire asc limit 1 offset ".($f-2)." ", $idprojet);
+                }
+                
             if (!empty(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise'])) {
-                ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']);               
+                ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']).";"."";
+                if(!empty(${'rowpartenaireTypeEntreprise'.$f}[0]['libelletypepartenairefr'])){
+                    if($lang=='fr'){
+                        ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']).";".${'rowpartenaireTypeEntreprise'.$f}[0]['libelletypepartenairefr'];
+                    }else{
+                        ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']).";".${'rowpartenaireTypeEntreprise'.$f}[0]['libelletypepartenaireen'];
+                    }
+                }
             }else{
                 ${'laboentreprise'.$f} = '';
             }           
@@ -781,7 +803,8 @@ if ($nbrow != 0) {
                 $varsourcefinancement.
                 $porteur.";".
                 removeDoubleQuote(stripslashes(utf8_decode($libellestatutprojet))) . ";" .               
-                $laboentreprise1.";" .                
+                $laboentreprise1.";" .
+                $typePartenaire1.";".
                 $varpartenaires.
                 $descriptifTechno . ";" .
                 $attachementdesc . ";" .

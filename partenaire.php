@@ -14,16 +14,16 @@ if (!empty($_SESSION['pseudo'])) {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
 if (!empty($numProjet)) {
-    $arrayPartenaire = $manager->getList("SELECT  nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = projet.idprojet and numero='" . $numProjet . "'");
+    $arrayPartenaire = $manager->getList("SELECT  nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = projet.idprojet "
+            . "and numero='" . $numProjet . "'");
 }
 if(isset($idprojet)){
-    $aidpartenaire = $manager->getList2("select  idtypepartenaire_typepartenaire from projettypepartenaire where idprojet_projet=?",$idprojet);
+    $aidpartenaire = $manager->getList2("select  idtypepartenaire_typepartenaire from projetpartenaire where idprojet_projet=?",$idprojet);
 }else{
     $aidpartenaire=array();
 }
-
 for ($i = 0; $i < 11; $i++) {
-    $j = $i + 1;
+    $j = $i + 1; 
     ?>
     <table id="<?php echo 'nom' . $i; ?>" style="display:none">
         <tr>
@@ -35,7 +35,6 @@ for ($i = 0; $i < 11; $i++) {
                            echo stripslashes(removeDoubleQuote($arrayPartenaire[$i]['nomlaboentreprise']));
                        }
                        ?>" maxlength="100" disabled="<?php echo $bool; ?>" data-dojo-props="<?php echo REGEX_TYPE ?>">
-                                                                                            
             </td>
             <td>
                 <select name="<?php echo 'tp' . $i; ?>" id="<?php echo 'typepartenaire' . $i; ?>"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">
@@ -48,30 +47,36 @@ for ($i = 0; $i < 11; $i++) {
                         if($lang==fr){
                             if (!empty($aidpartenaire[$i]['idtypepartenaire_typepartenaire'])){
                                 $libelle = $manager->getSingle2("select libelletypepartenairefr from typepartenaire where idtypepartenaire=?",$aidpartenaire[$i]['idtypepartenaire_typepartenaire']);
-                                echo "<option  value='".'tp'.$aidpartenaire[$i]['idtypepartenaire_typepartenaire']."'>". removeDoubleQuote($libelle)."</option>";
+                                echo "<option  value='".'tp'.$aidpartenaire[$i]['idtypepartenaire_typepartenaire']."' selected='selected'>". removeDoubleQuote($libelle)."</option>";
+                                for($k=0;$k<count($rowtypepartenaire);$k++){
+                                    echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenairefr']."</option>";                                
+                                }
+                                echo "<option value='0'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
                             }else{
-                                echo "<option  >".TXT_SELECTTYPEPARTENAIRE.'</option>';
-                            }
-                            for($k=0;$k<count($rowtypepartenaire);$k++){
-                                echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenairefr']."</option>";                                
+                                echo "<option value='0' selected='selected'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
+                                for($k=0;$k<count($rowtypepartenaire);$k++){
+                                    echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenairefr']."</option>";                                
+                                }
                             }
                         }else{
                             if (!empty($aidpartenaire[$i]['idtypepartenaire_typepartenaire'])){
                                 $libelle = $manager->getSingle2("select libelletypepartenaireen from typepartenaire where idtypepartenaire=?",$aidpartenaire[$i]['idtypepartenaire_typepartenaire']);
-                                echo "<option  value='".'tp'.$aidpartenaire[$i]['idtypepartenaire_typepartenaire']."'>". removeDoubleQuote($libelle)."</option>";
+                                echo "<option  value='".'tp'.$aidpartenaire[$i]['idtypepartenaire_typepartenaire']."' selected='selected'>". removeDoubleQuote($libelle)."</option>";
+                                for($k=0;$k<count($rowtypepartenaire);$k++){
+                                    echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenaireen']."</option>";                                
+                                }
+                                echo "<option value='0'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
                             }else{
-                                echo "<option  >".TXT_SELECTTYPEPARTENAIRE.'</option>';
-                            }
-                            for($k=0;$k<count($rowtypepartenaire);$k++){
-                                echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenaireen']."</option>";                                
+                                echo "<option value='0' selected='selected'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
+                                for($k=0;$k<count($rowtypepartenaire);$k++){
+                                    echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenaireen']."</option>";                                
+                                }
                             }
                         }
                 ?>
                 </select>
-
             </td>
-        </tr>
-      
+        </tr>      
     </table>
 <?php
 }

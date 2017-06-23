@@ -75,6 +75,7 @@ define("TXT_CODEUNITEMAIL","Code unité");
 define("TXT_COMMENTAIREPROJET","Commentaires/motif(s) de refus");
 define("TXT_COMMENTREFUS","Vous devez commenter le refus du projet");
 define("TXT_COMMENTTRS","Transféré dans la centrale");
+define('TXT_TRANSFERTPROJET','Projet transféré');
 define("TXT_COMPTE","Compte");
 define("TXT_COMPTEMAJ","Compte mis à jour");
 define("TXT_COMPTES","Comptes");
@@ -688,7 +689,7 @@ define("TXT_UTILISATEURINDUSTRIEL","Utilisateur Industriel ");
 define("TXT_VALIDER","Valider");
 define("TXT_VERIFIER","Vérifier");
 define("TXT_VERROUIDENTIFIEE","Verrous identifiés");
-define("TXT_VERSION","Formulaire Renatech, version 5.92 du 21 mai 2017");
+define("TXT_VERSION","Formulaire Renatech, version 5.93 du 6 juin 2017");
 define("TXT_VILLE","Ville");
 define("TXT_VOSINFO","Vos Informations");
 define("TXT_VOSPSEUDOS","Vos pseudos");
@@ -870,7 +871,7 @@ define("TXT_MAJTRANSMISSION","Mise à jour et transmission du projet,<br> envoi 
 define("TXT_SAVEDATA","Enregistrement des données sans valider le projet ni envoyer d'E-mail");
 define('TXT_UNDEFINENAME',"Nom indéfini");
 define('TXT_UNDEFINELASTNAME',"Prénom indéfini");
-define('TXT_UNDEFINEMAIL',"mail indéfini");
+define('TXT_UNDEFINEMAIL',"mail@indefini.fr");
 define('TXT_LASTACTION',"Dernière action");
 define ('TXT_PROJETSOUSTRAITANCE',"Projet en sous-traitance");
 define ('TXT_TOUSLESPROJETS',"Vue de tous les projets");
@@ -1029,4 +1030,6 @@ define("TXT_MESSAGESERVEURTYPEPARTENAIREEXISTE","Le type de partenaire existe d�
 define("TXT_MESSAGESERVEURTYPEPARTENAIRE","Le type de partenaire a été ajouté");
 define("TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE","Le type de partenaire a été mise à jour!");
 define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","Le type de partenaire existe déjà!");
-
+define ("TXT_PROJET_TRS_CTR","Projet transféré entre 2 centrales");
+define("TXT_PROJET_TRS_AUTRES_CENTRALE","Projets transférés dans une autre centrale");
+define("TXT_COMMENT_PROJECT","Commentaire");

@@ -463,4 +463,6 @@ RewriteRule   insertCpErr1/([a-z]+)/([a-z]+)                                    
 RewriteRule   insertCpErr2/([a-z]+)/([a-z]+)                                    adminListe.php?lang=$1&cpexist=$2   [L]
 RewriteRule   insertCp/([a-z]+)/([a-z]+)                                        adminListe.php?lang=$1&cpadd=$2   [L]
 RewriteRule   nb_request/([a-z]+)                                               nbRequest.php?lang=$1   [L]
+RewriteRule   switch/([a-z]+)                                                   switch.php?lang=$1   [L]
+
 
