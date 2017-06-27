@@ -136,7 +136,7 @@ WHERE l.idlogin = u.idlogin_loginpassword AND qa.idqualitedemandeuraca = u.idqua
 n.idemployeur = u.idemployeur_nomemployeur AND an.idautrenomemployeur = u.idautrenomemployeur_autrenomemployeur AND 
 at.idautrestutelle = u.idautrestutelle_autrestutelle AND  ad.idautrediscipline = u.idautrediscipline_autredisciplinescientifique and
 t.idtutelle = u.idtutelle_tutelle /*AND ac.idautrecodeunite = u.idautrecodeunite_autrecodeunite*/ and 
-d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $iduser);//echo '<pre>';print_r($row);die;
+d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $iduser);
                 for ($i = 0; $i < count($iduser); $i++) {
                     $nom = $row[$i]['nom'];
                     $prenom = $row[$i]['prenom'];
@@ -526,8 +526,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                             </td>
                         </tr>
                         
-                        <?php                        
-                            
+                        <?php                
                             $rowcentrale = $manager->getList2("select libellecentrale,idcentrale from centrale where libellecentrale!='Autres' and idcentrale!=?", $idcentrale);
                             $rowcentrale2 = $manager->getList("select libellecentrale,idcentrale from centrale where libellecentrale!='Autres'");
                            

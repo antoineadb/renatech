@@ -3819,7 +3819,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
      * @param Rapport $rapport
      * @param type $idprojet
      */
-    public function updateRapport(Rapport $rapport, $idprojet) {
+    public function updateRapport(Rapport $rapport, $idprojet) {//echo '<pre>';print_r($rapport);die;
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();

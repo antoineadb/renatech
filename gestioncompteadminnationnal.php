@@ -49,7 +49,7 @@ if (isset($_SESSION['pseudo'])) {
                 </tr>
             </table>
         </fieldset>
-        <?php
+        <?php 
         if (!isset($_POST['nom']) || !isset($_POST['prenom'])) {
             if (!isset($_GET['iduser'])) {
                 include 'html/footer.html';

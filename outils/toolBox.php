@@ -319,6 +319,7 @@ function infoLibelle($masque) {
 function stripTaggsbr($string) {
     $str1 = strip_tags($string, '<br>');
     $str2 = str_replace("’", "\''", $str1);
+    
     return $str2;
 }
 
@@ -328,7 +329,7 @@ function stripTaggsbr($string) {
  * @return type
  */
 function filterEditor2($string0) {
-    $string = strip_tags($string0);
+    $string = strip_tags($string0,'<br>');
     $nb2 = mb_substr_count($string, "<style");
     if ($nb2 > 0) {
         for ($i = 0; $i <= $nb2; $i++) {
@@ -349,8 +350,8 @@ function filterEditor2($string0) {
  * @return type
  */
 function filterEditor($string0) {
-    $string = strip_tags($string0);
-    if (mb_substr_count($string, "<!--") > 0) {
+    $string = strip_tags($string0,'<br>');
+    if (mb_substr_count($string0, "<!--") > 0) {
         $nb = mb_substr_count($string, "<!--");
         //Compte le nombre d'occurrences de la sous-chaîne <!--
         for ($i = 0; $i <= $nb; $i++) {
@@ -465,7 +466,7 @@ function filterEditorWithoutStripTags($string) {
  * @return type
  */
 function clean($string) {
-    return strip_tags(filterEditor(filterEditor2(Securite::bdd(trim(ltrim(rtrim(str_replace(array(chr(13)), '', removeDoubleQuote($string)))))))));
+    return filterEditor(filterEditor2(Securite::bdd(trim(ltrim(rtrim(str_replace(array(chr(13)), '', removeDoubleQuote($string))))))));
 }
 
 function cleanREPORTPDF($string) {
