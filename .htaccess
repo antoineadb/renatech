@@ -7,6 +7,7 @@ RewriteRule   securite/([a-z]+)                                 indexcaptcha.php
 RewriteRule   contact/([a-z]+)                                  createContact.php?lang=$1                           [L]
 RewriteRule   loginDblErr/([a-z]+)                              createLoginDoublon.php?lang=$1                      [L]
 RewriteRule   loginadmnErr/([a-z]+)/([0-9]+)			createLoginAdminErreur.php?lang=$1&idcentrale=$2    [L]
+RewriteRule   loginadmnNatErr/([a-z]+)/([0-9]+)			createLoginAdminNatErreur.php?lang=$1&idcentrale=$2    [L]
 RewriteRule   contactadmnErr/([a-z]+)/([a-z]+)			createContact.php?lang=$1&msgerreuradmlocal=$2	    [L]
 RewriteRule   emailDblErr/([a-z]+)                              createloginemailexiste.php?lang=$1      	    [L]
 #ADMINNATIONNAL

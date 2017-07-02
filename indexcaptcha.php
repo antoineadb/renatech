@@ -39,7 +39,7 @@ if (isset($_POST['pseudo'])) {
 if (empty($_SESSION['validEmail'])) {
     if (!empty($_POST['email1'])) {
         for ($i = 1; $i < 6; $i++) {
-            $idrespcentrale = $manager->getSingle2("select idcentrale from centrale where email" . $i . "=?", $_POST['email1']);
+            $idrespcentrale = $manager->getSingle2("select idcentrale from centrale where email" . $i . "=?", $_POST['email1']);            
             if (!empty($idrespcentrale)) {//SI IL N'EST PAS VIDE ON VERIFIE QU'IL N'EST PAS DEJA DANS CREEE
                 $emailloginpassword = $manager->getSingle2("select idlogin from loginpassword where mail=?", $_POST['email1']);
                 if (!empty($emailloginpassword)) {
@@ -48,6 +48,12 @@ if (empty($_SESSION['validEmail'])) {
                 }
             }
         }
+        $idadminNational = $manager->getSingle2("select idadminnational from adminnational where emailadminnational=?", $_POST['email1']);
+        if(!empty($idadminNational)){            
+            header('Location: /' . REPERTOIRE . '/loginadmnNatErr/' . $lang . '/' . $idadminNational);
+            exit(); //FIN DE LA VERIFICATION
+        }
+        
         if (empty($idrespcentrale)) {
             $_SESSION['logindoublon'] = '';
             $arraylogin = $manager->getList2("select pseudo  from loginpassword where mail=?", $_POST['email1']);

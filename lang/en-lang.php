@@ -142,6 +142,7 @@ define("TXT_EDITION","Strings edition");
 define("TXT_EMAIL","Your email");
 define("TXT_EMAILDIFF","different email");
 define("TXT_EMAILDOUBLONADMINLOCAL","The email you entered is already registred");
+define("TXT_EMAILDOUBLONADMINNAT","The email you entered is already registred, it's the mail of an national administrator");
 define("TXT_EMAILMODIF","Do you want to send the changes by email?");
 define("TXT_EMAILNONVALIDE","Invalid email");
 define("TXT_EMAILPSEUDOUTILISE","Login or email used to register?");

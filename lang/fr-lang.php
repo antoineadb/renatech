@@ -142,6 +142,7 @@ define("TXT_EDITION","Edition des libellés");
 define("TXT_EMAIL","Votre courriel");
 define("TXT_EMAILDIFF","Courriel différent");
 define("TXT_EMAILDOUBLONADMINLOCAL","L'email que vous avez saisi est déjà enregistré, c'est l'email de l'administrateur local de la centrale :");
+define("TXT_EMAILDOUBLONADMINNAT","L'email que vous avez saisi est déjà enregistré, c'est l'email d'un administrateur national");
 define("TXT_EMAILMODIF","Voulez-vous envoyer les modifications par email?");
 define("TXT_EMAILNONVALIDE","Courriel non valide");
 define("TXT_EMAILPSEUDOUTILISE","Pseudo ou email utilisé pour vous inscrire ?");

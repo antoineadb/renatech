@@ -552,6 +552,7 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
                 ce.idcentrale = co.idcentrale_centrale AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet
                 AND s.idstatutprojet=? and ce.libellecentrale =? and co.commentaireprojet like ?", array(REFUSE, $libellecentrale,"%Transféré dans la centrale%"));
             
+            
             $fpProjetRefuseTransfert = fopen("../tmp/ProjetRefuseTransfert".IDCENTRALEUSER.".json", 'w');
             $dataProjetRefuseTransfert = "";
             fwrite($fpProjetRefuseTransfert, '{"items": [');
