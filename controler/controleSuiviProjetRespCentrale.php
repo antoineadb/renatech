@@ -68,7 +68,7 @@ if (isset($_SESSION['pseudo'])) {
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET CENTRALE TOUS
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-    if($idtypeuser != ADMINNATIONNAL){
+   // if($idtypeuser != ADMINNATIONNAL){
         if (!$cache->read('tous_'.LIBELLECENTRALEUSER)) {
     //SUPPRESSION DE LA TABLE TEMPORAIRE SI ELLE EXISTE
             $manager->exeRequete("drop table if exists tmptous;");
@@ -257,14 +257,13 @@ if (isset($_SESSION['pseudo'])) {
             fclose($fprow);
             chmod("../tmp/projetCentrale".IDCENTRALEUSER.".json", 0777);
         }
-    }
+   // }
     $_SESSION['email'] = $mail;
     $_SESSION['pseudo'] = $pseudo;
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET CENTRALE EN COURS DE REALISATION
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-    if ($idtypeuser != ADMINNATIONNAL) {        
         if (!$cache->read('encours_'.LIBELLECENTRALEUSER)) {
 //SUPPRESSION DE LA TABLE TEMPORAIRE SI ELLE EXISTE
         $manager->exeRequete("drop table if exists tmpencoursrealisation;");
@@ -380,10 +379,7 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
         fclose($fpProjetEncoursRealisation);
         chmod("../tmp/ProjetEncoursRealisationcentrale".IDCENTRALEUSER.".json", 0777);
         $_SESSION['nbprojetencoursrealisation'] = $nbProjetreal;
-        }
-    }
-
-    if ($idtypeuser != ADMINNATIONNAL) {
+        }    
         if (!$cache->read('accepte_'.LIBELLECENTRALEUSER)) {
     //-----------------------------------------------------------------------------------------------------------------------------------------------
     //                                                                  PROJET CENTRALE ACCEPTE
@@ -438,8 +434,6 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
             chmod("../tmp/ProjetAccepteecentrale".IDCENTRALEUSER.".json", 0777);
             $_SESSION['nbprojetaccepte'] = $nbrowProjetAcceptee;
         }
-    }
-    if ($idtypeuser != ADMINNATIONNAL) {
         if (!$cache->read('attente_'.LIBELLECENTRALEUSER)) {
         //-----------------------------------------------------------------------------------------------------------------------------------------------
         //                                                                  PROJET CENTRALE EN ATTENTE
@@ -476,8 +470,6 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
                 chmod("../tmp/ProjetEnAttenteCentrale".IDCENTRALEUSER.".json", 0777);                
                 $_SESSION['nbprojetattente'] = $nbrowProjetAttente;
             }
-    }
-    if ($idtypeuser != ADMINNATIONNAL) {
         if (!$cache->read('refuse_'.LIBELLECENTRALEUSER)) {
     //-----------------------------------------------------------------------------------------------------------------------------------------------
     //                                                                  PROJET CENTRALE REFUSEE
@@ -538,9 +530,7 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
             chmod("../tmp/ProjetRefuseecentrale".IDCENTRALEUSER.".json", 0777);
             $_SESSION['nbProjetRefusee'] = $nbrowProjetRefusee;
         }
-    }
-    
-    if ($idtypeuser != ADMINNATIONNAL) {
+
         if (!$cache->read('refuseTransfert_'.LIBELLECENTRALEUSER)) {
     //-----------------------------------------------------------------------------------------------------------------------------------------------
     //                                                                  PROJET REFUSE ET TRANSFERE DANS UNE AUTRE CENTRALE
@@ -591,12 +581,7 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
             chmod("../tmp/ProjetRefuseTransfert".IDCENTRALEUSER.".json", 0777);
             $_SESSION['nbProjetRefuseTransfert'] = $nbrowProjetRefuseTransfert;
         }
-    }
-    
-    
-    
-    
-    if ($idtypeuser != ADMINNATIONNAL) {
+
         if (!$cache->read('finis_'.LIBELLECENTRALEUSER)) {
     ////---------------------------------------------------------------------------------------------------------------------------------------------------
     //                              CREATION DU PROJET JSON FINI
@@ -650,9 +635,6 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
             chmod("../tmp/projetFiniCentrale".IDCENTRALEUSER.".json", 0777);
             $_SESSION['nbFini'] = $nbrowFini;
         }
-    }
-
-    if ($idtypeuser != ADMINNATIONNAL) {
         if (!$cache->read('cloture_'.LIBELLECENTRALEUSER)) {
     //---------------------------------------------------------------------------------------------------------------------------------------------------
     //										CREATION DU PROJET JSON CLOTURE
@@ -705,11 +687,9 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
             chmod("../tmp/projetCloturerCentrale".IDCENTRALEUSER.".json", 0777);
             $_SESSION['nbprojetCloturer'] = $nbrowCloturer;
         }
-    }
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  PROJET EN SOUS-TRAITANCE
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-    if ($idtypeuser != ADMINNATIONNAL) {
         if (!$cache->read('soustraitance_'.LIBELLECENTRALEUSER)) {
             $rowProjetsoustraitance = $manager->getListbyArray("SELECT p.idprojet,s.idstatutprojet,p.titre,p.acronyme,p.refinterneprojet,s.libellestatutprojet,s.libellestatutprojeten,u.nom,u.prenom,p.numero,p.dateprojet FROM projet p,projetautrecentrale pa,statutprojet s,concerne co,creer cr,utilisateur u
     WHERE p.idprojet = pa.idprojet AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet AND cr.idprojet_projet = p.idprojet AND  cr.idutilisateur_utilisateur = u.idutilisateur
@@ -746,8 +726,6 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
 
 
             $_SESSION['nbProjetSoustraitance'] = $nbrowProjetSoustraitance;
-        }
-        if ($idtypeuser != ADMINNATIONNAL) {
             if (!$cache->read('rapport_'.LIBELLECENTRALEUSER)) {
         //-----------------------------------------------------------------------------------------------------------------------------------------------
         //                                                                  RAPPORTS PROJETS
@@ -791,7 +769,7 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
                 $_SESSION['nbProjetRapport'] = $nbrowProjetRapport;
             }
         }
-    }
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------
     $_SESSION['email'] = $mail;
     $_SESSION['pseudo'] = $pseudo;

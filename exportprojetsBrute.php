@@ -69,29 +69,31 @@ $data = utf8_decode("Id du projet;Date du projet;Titre du projet;référence int
         ."".$s_personnesalleblanche.""     
         );
 $data .= "\n";
-//Récupération de l'idcentrale de l'utilisateur
-if (isset($_SESSION['mail'])) {
-    $mail = $_SESSION['mail'];
-} elseif (isset($_SESSION['email'])) {
-    $mail = $_SESSION['email'];
-}
 if (isset($_SESSION['pseudo'])) {
-    $pseudo = $_SESSION['pseudo'];
+    $pseudo = $_SESSION['pseudo'];    
 }
-//RECUPERATION DE L'IDUTILISATEUR EN FONCTION DU PSEUDO
-$idutilisateur = $manager->getSingle2("SELECT idutilisateur FROM loginpassword, utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $pseudo);
-//RECUPERATION DU NOM ET DE L'ID DE LA CENTRALE DE L'IDUTILISATEUR EN FONCTION DE L'EMAIL
-$rowcentrale = $manager->getListbyArray("select idcentrale,libellecentrale from centrale where email1=?", array($mail));
-if (isset($rowcentrale[0]['idcentrale'])) {
-    $idcentrale = $rowcentrale[0]['idcentrale'];
-}
-if (isset($rowcentrale[0]['libellecentrale'])) {
-    $libellecentrale = $rowcentrale[0]['libellecentrale'];
-}
-//on va récupérer les info de la centrale dans la table utilisateur
-if (empty($idcentrale)) {
-    $idcentrale = $manager->getSingle2("select idcentrale_centrale from utilisateur where idutilisateur = ?", $idutilisateur);
-    $libellecentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", $idcentrale);
+
+if(IDTYPEUSER==ADMINLOCAL){
+    //RECUPERATION DE L'IDUTILISATEUR EN FONCTION DU PSEUDO
+    $idutilisateur = $manager->getSingle2("SELECT idutilisateur FROM loginpassword, utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $pseudo);
+    //RECUPERATION DU NOM ET DE L'ID DE LA CENTRALE DE L'IDUTILISATEUR EN FONCTION DE L'EMAIL
+    $rowcentrale = $manager->getList2("select idcentrale,libellecentrale from centrale where idcentrale=?", IDCENTRALEUSER);
+    if (isset($rowcentrale[0]['idcentrale'])) {
+        $idcentrale = $rowcentrale[0]['idcentrale'];
+    }
+    if (isset($rowcentrale[0]['libellecentrale'])) {
+        $libellecentrale = $rowcentrale[0]['libellecentrale'];
+    }
+    //on va récupérer les info de la centrale dans la table utilisateur
+    if (empty($idcentrale)) {
+        $idcentrale = $manager->getSingle2("select idcentrale_centrale from utilisateur where idutilisateur = ?", $idutilisateur);
+        $libellecentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", $idcentrale);
+    }
+}elseif(IDTYPEUSER==ADMINNATIONNAL){
+    $idcentrale = $_POST['centrale'];
+    $datedebut = $_POST['datedebut'];
+    $datefin = $_POST['datefin'];
+    
 }
 //récupération du type utilisateur
 //VERIFICATION QU'IL Y A BIEN DES PROJETS DANS LA BASE DE DONNEES
@@ -106,8 +108,8 @@ $sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentr
             FROM projet p,creer c,utilisateur u,concerne co 
             WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur AND
             co.idcentrale_centrale =? and dateprojet between ? and ?   order by p.idprojet asc";
-
 $row = $manager->getListbyArray($sql, $donnee);
+
 $nbrow = count($row);
 if($nbrow>300){
     echo ' <script>alert("' . TXT_INTERVALEDATE . '");window.location.replace("/' . REPERTOIRE . '/exportdesProjetsBrute.php?lang=' . $lang . '")</script>';
@@ -447,15 +449,14 @@ if ($nbrow != 0) {
             $libelleCentraleProximite = cleanForExportOther(substr($libellecentraleproximite,0,-2));
             if(!empty($row[$i]['descriptioncentraleproximite'])){
             $descriptioncentraleproximite = cleanForExportOther($row[$i]['descriptioncentraleproximite']);
-        }else{
-            $descriptioncentraleproximite = '';
-        }
+            }else{
+                $descriptioncentraleproximite = '';
+            }
         }else {
             $centraleproximite = TXT_NON;
             $libelleCentraleProximite="";
             $descriptioncentraleproximite = '';
-        }
-        
+        }        
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
 //                              RECUPERATION DES RESSOURCES
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                
@@ -791,7 +792,7 @@ if ($nbrow != 0) {
                 $libelleAutreCentrale.";".
                 $descriptionEtape.";".
                 $centraleproximite.";".
-                $libellecentraleproximite.";".
+                $libelleCentraleProximite.";".
                 $descriptioncentraleproximite.";".
                 $emailrespdevis . ";" .
                 stripslashes(utf8_decode($reussite)) .";".
@@ -804,7 +805,12 @@ if ($nbrow != 0) {
     print $data;
     exit;
 } else {
-    echo ' <script>alert("' . utf8_decode(TXT_PASDEPROJET) . '");window.location.replace("/' . REPERTOIRE . '/exportdesProjetsBrute.php?lang=' . $lang . '")</script>';
-    exit();
+    if(IDTYPEUSER==ADMINLOCAL){
+        echo ' <script>alert("' . utf8_decode(TXT_PASDEPROJET) . '");window.location.replace("/' . REPERTOIRE . '/exportdesProjetsBrute.php?lang=' . $lang . '")</script>';
+        exit();
+    }elseif(IDTYPEUSER==ADMINNATIONNAL){
+        echo ' <script>alert("' . utf8_decode(TXT_PASDEPROJET) . '");window.location.replace("/' . REPERTOIRE . '/exportProjetBruteNational.php?lang=' . $lang . '")</script>';
+        exit();
+    }
 }
 BD::deconnecter();

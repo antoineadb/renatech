@@ -12,17 +12,14 @@ include 'html/header.html';
 ?>
 <script src="<?php echo '/'.REPERTOIRE ?>/js/ajax.js"></script>
 <div id="global">        
-    <?php
-    include 'html/entete.html';
-    $idtypeuser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword, utilisateur WHERE idlogin = idlogin_loginpassword and  pseudo =?", $_SESSION['pseudo']);
-    ?>
+    <?php include 'html/entete.html'; ?>
     <script>
         function unselect() {
             dijit.byId(datedebut).value = '';
             dijit.byId(datefin).value = '';
         }
     </script>    
-    <form data-dojo-type="dijit/form/Form" name="exportProjet" style="font-size:1.2em;" id="exportProjet" method="post" action="<?php echo '/'.REPERTOIRE ?>/exportbilanprojets.php?lang=<?php echo $lang; ?>"  >
+    <form data-dojo-type="dijit/form/Form" name="exportProjet" style="font-size:1.2em;" id="exportProjet" method="post" action="<?php echo '/'.REPERTOIRE ?>/exportbilanprojets.php?lang=<?php echo $lang; ?>"  >   
         <script type="dojo/method" data-dojo-event="onSubmit">
             if(this.validate()){
                 return true;
@@ -36,29 +33,29 @@ include 'html/header.html';
         <div style="margin-top: 70px;">
     <?php include_once 'outils/bandeaucentrale.php'; ?>
             </div>   
-<?php if ($idtypeuser == ADMINLOCAL) { ?>
-            <fieldset id="export" style="border-color: #5D8BA2;width: 1017px;margin-top: 15px;height:80px;padding-top:25px"  >
+<?php if (IDTYPEUSER == ADMINLOCAL) { ?>
+            <fieldset id="export" style="border-color: #5D8BA2;width: 1017px;margin-top: 60px;height:80px;padding-top:25px;padding-bottom: 10px"  >
                 <legend style="color: #5D8BA2;"><b><?php echo TXT_EXPORT; ?></b>
                     <a class="infoBulle" href="#"><img src='<?php echo '/'.REPERTOIRE ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 315px;border-radius: 5px"><?php echo affiche('TXT_AIDEEXPORT'); ?></span></a>
                 </legend>
                 <table>
                     <tr>
                         <td valign="middle" style="text-align: left;padding-left:20px;width:65px"><?php echo TXT_YEAR . ':  ' ?></td>
-                        <td><input id="anneeExport" style="height:22px;padding-left: 18px;"  type="text" name="anneeExport"   data-dojo-type="dijit/form/NumberTextBox"
+                        <td><input id="anneeExport" style="height:25px;padding-left: 18px;"  type="text" name="anneeExport"   data-dojo-type="dijit/form/NumberTextBox"
                                    data-dojo-props="constraints:{min:1970,max:2099,places:0},  invalidMessage:'<?php echo TXT_INT; ?>'"  /></td>
 
                         <td><input type="submit"  style="margin-left: 35px;height:28px;text-align: center;" label="<?php echo TXT_ENVOYER; ?>" data-dojo-Type="dijit.form.Button" data-dojo-type="dijit/form/Button" /></td></tr>
                 </table>
             </fieldset>
             <?php } else { ?>
-            <fieldset id="export" style="border-color: #5D8BA2;width: 1017px;margin-top: 15px;height:120px;padding-top:25px"  >
+            <fieldset id="export" style="border-color: #5D8BA2;width: 1017px;margin-top: 60px;height:120px;padding-top:25px;padding-bottom: 0px"  >
                 <legend style="color: #5D8BA2;"><b><?php echo TXT_EXPORT; ?></b>
                     <a class="infoBulle" href="#"><img src='<?php echo '/'.REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 315px;border-radius: 5px"><?php echo affiche('TXT_AIDEEXPORT'); ?></span></a>
                 </legend>
                 <table style="float: left">
                     <tr>
                         <td valign="middle" style="text-align: left;padding-left:20px;;width:65px"><?php echo TXT_YEAR . ':  ' ?></td>
-                        <td><input id="anneeExport" style="width:150px;height:22px;padding-left: 18px;margin-right: 18px;"  type="text" name="anneeExport"   data-dojo-type="dijit/form/NumberTextBox"
+                        <td><input id="anneeExport" style="width:150px;height:25px;padding-left: 18px;margin-right: 18px;"  type="text" name="anneeExport"   data-dojo-type="dijit/form/NumberTextBox"
                                    data-dojo-props="constraints:{min:1970,max:2099,places:0},  invalidMessage:'<?php echo TXT_INT; ?>'"  />
                         </td>
                         <td><?php echo TXT_CENTRALE . '* :'; ?> </td>

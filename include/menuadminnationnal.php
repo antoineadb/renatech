@@ -21,6 +21,7 @@ $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
 $log= '/'.REPERTOIRE.'/log/'.$lang;
 $viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
 $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
+$exportdesProjets = '/' . REPERTOIRE . "/exportDonneeBruteNation/" . $lang;
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -37,6 +38,7 @@ $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_EXPORTS.'</u>'; ?></a>
        <ul style="z-index: 5;">            
             <li><a href="<?php echo $exportBilanProjet; ?>" class="messages" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORT;?></a></li>
+            <li><a href="<?php echo $exportdesProjets; ?>" class="documents" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTDONNEBRUTE; ?></a></li>
             <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTUTILISATEUR;?></a></li>
             <li><a href="<?php echo $exportenquete; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTENQUETE;?></a></li>
             <li><a href="<?php echo $exportRapportWord; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTREPORT; ?></a></li>
