@@ -6,8 +6,16 @@ include_once 'outils/toolBox.php';
 include_once 'outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-$data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/ International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom labo1;Nom labo2;Nom labo3;Nom labo4;Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement");
-$data .= "\n";
+/*$data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/ International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom labo1;Nom labo2;Nom labo3;Nom labo4;Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement");
+$data .= "\n";*/
+
+$s_partenaire = "";
+for ($c = 2; $c <= 10; $c++) {
+    $s_partenaire .= "Nom du Laboratoire&Entreprise" . $c . ";";
+}
+$data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/ International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom du Laboratoire&Entreprise1;" . $s_partenaire . ";Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement;Administrateur des projets; Vue des projets;");
+$data .= "Nom du Laboratoire&Entreprise1;" . $s_partenaire . "\n";
+
 //Récupération de l'idcentrale de l'utilisateur
 
 if (!empty($_POST['anneeExport'])) {
@@ -20,8 +28,8 @@ $nbidcentrale = count($arrayidcentrale);
 $z = 0;
 for ($i = 0; $i < $nbidcentrale; $i++) {
     $z++;
-    $donnee = array($arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, $anneeExport, REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport,
-        REFUSE,ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE,ACCEPTE);
+    $donnee = array($arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE, ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, $anneeExport, REFUSE, ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport,
+        REFUSE, ACCEPTE, $arrayidcentrale[$i]['idcentrale'], $anneeExport, REFUSE, ACCEPTE);
     $manager->exeRequete("drop table if exists tmpcentrale" . $z . "");
 //CREATION DE LA TABLE TEMPORAIRE
     $manager->getRequete("create table tmpcentrale" . $z . " as (SELECT p.porteurprojet,p.idprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,
@@ -109,11 +117,32 @@ if ($ordreprojet == 0) {
         exit();
     }
 }
+
+$idprojet = $row[$i]['idprojet'];
+//  DONNEES INCLUES DANS LA TABLE PARTENAIREPROJET
+for ($f = 2; $f <= 10; $f++) {
+    ${'rowpartenaireprojet' . $f} = $manager->getList2("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=? "
+            . "order by idpartenaire_partenaireprojet asc limit 1 offset " . ($f - 2) . " ", $idprojet);
+    if (!empty(${'rowpartenaireprojet' . $f}[0]['nomlaboentreprise'])) {
+        ${'laboentreprise' . $f} = clean(${'rowpartenaireprojet' . $f}[0]['nomlaboentreprise']);
+    } else {
+        ${'laboentreprise' . $f} = '';
+    }
+}
+
+$varpartenaires = '';
+for ($w = 2; $w <= 10; $w++) {
+    $varpartenaires .= utf8_decode(removeDoubleQuote(${'laboentreprise' . $w})) . ";";
+}
+
+
+
+
 // ENREGISTREMENT DES RESULTATS LIGNE PAR LIGNE        
 for ($i = 0; $i < $nbrow; $i++) {
     $idprojet = $row[$i]['idprojet'];
     include 'outils/communExport.php';
-    $data .= "" .            
+    $data .= "" .
             $titre . ";" .
             $ref . ";" .
             utf8_decode($devtechno) . ";" .
@@ -132,7 +161,8 @@ for ($i = 0; $i < $nbrow; $i++) {
             $nomresponsable . ";" .
             $mailresponsable . ";" .
             utf8_decode($centralepartenaireprojet) . ";" .
-            trim(substr(utf8_decode($libellenomlabo), 0, -1)) . ";" .
+            $varpartenaires.";".
+           //trim(substr(utf8_decode($libellenomlabo), 0, -1)) . ";" .
             $anneedebut . ";" .
             $dureeEstime . ";" .
             $datefinestime . ";" .

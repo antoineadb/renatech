@@ -289,6 +289,9 @@ if(isset($_GET['statut'])){
         <div style='padding-left: 208px;margin-top:10px' >
             <a href="#"  title="<?php echo 'Delete the Report'; ?>" onclick="confirm.show()"><img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/trash.png"  ></a>
         </div>
+            <div style='padding-left: 208px;margin-top:10px' >
+                <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/ModeEmploiRapportRENATECH.pdf' ?>" download="modeemploiRapport"><img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/aide.png"  title="<?php echo 'Summary of the operation to fill a RENATECH report'; ?>"></a>
+            </div>
         </td>            
     </tr>
 </table> 
@@ -299,6 +302,13 @@ if(isset($_GET['statut'])){
                 <fieldset style='   border: 1px solid darkblue;border-radius: 5px;color: darkblue;font-family: verdana;margin-top: -30px;padding-top: 4px;padding-bottom: 6px;padding-left: 15px;padding-right: 15px;text-align: center;width: 995px;'>Complete in English and save the report before generating the pdf file </fieldset>
             </td>
         <tr>
+        <tr>
+            <td>
+                <div style='margin-left: 990px;margin-top:10px' >
+                    <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/ModeEmploiRapportRENATECH.pdf' ?>" download="modeemploiRapport"><img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/aide.png"  title="<?php echo 'Summary of the operation to fill a RENATECH report'; ?>"></a>
+                </div>
+            </td>
+        </tr>
             
         <tr>    
             <?php if(isset($_GET['delete'])){?>

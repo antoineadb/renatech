@@ -75,6 +75,7 @@ define("TXT_CODEUNITEMAIL","Code unité");
 define("TXT_COMMENTAIREPROJET","Commentaires/motif(s) de refus");
 define("TXT_COMMENTREFUS","Vous devez commenter le refus du projet");
 define("TXT_COMMENTTRS","Transféré dans la centrale");
+define('TXT_TRANSFERTPROJET','Projet transféré');
 define("TXT_COMPTE","Compte");
 define("TXT_COMPTEMAJ","Compte mis à jour");
 define("TXT_COMPTES","Comptes");
@@ -1030,4 +1031,4 @@ define("TXT_MESSAGESERVEURTYPEPARTENAIREEXISTE","Le type de partenaire existe d�
 define("TXT_MESSAGESERVEURTYPEPARTENAIRE","Le type de partenaire a été ajouté");
 define("TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE","Le type de partenaire a été mise à jour!");
 define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","Le type de partenaire existe déjà!");
-
+define('TXT_MESSAGEAIDETYPEPARTENAIRE',"Attention respecter l'ordre de remplissage des champs voir l'aide au survole du picto ? ci dessous");

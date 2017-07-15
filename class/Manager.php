@@ -1323,7 +1323,6 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
-
     public function updatepartenairefromprojet(Partenairefromprojet $Partenairefromprojet, $idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -1338,6 +1337,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         }
     }
 
+    
 //------------------------------------------------------------------------------------------------------------
 //                                       SUPPRESSION D'UN PROJET
 //------------------------------------------------------------------------------------------------------------
@@ -3085,11 +3085,13 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO projettypepartenaire(idtypepartenaire_typepartenaire,idprojet_projet) VALUES (?,?)');            
+            $requete = $this->_db->prepare('INSERT INTO projettypepartenaire(idtypepartenaire_typepartenaire,idprojet_projet, rang) VALUES (?,?,?)');            
             $idtypePartenaire = $projetTP->getIdtypepartenaire_typepartenaire();            
             $idprojet = $projetTP->getIdprojet_projet();
+            $rang = $projetTP->getRang();
             $requete->bindParam(1, $idtypePartenaire, PDO::PARAM_INT);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);            
+            $requete->bindParam(3, $rang, PDO::PARAM_INT);            
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3102,11 +3104,12 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('UPDATE projettypepartenaire set idtypepartenaire_typepartenaire =? where idprojet_projet=?');            
-            $idtypePartenaire = $projetTP->getIdtypepartenaire_typepartenaire();            
-            
+            $requete = $this->_db->prepare('UPDATE projettypepartenaire set idtypepartenaire_typepartenaire =? where idprojet_projet=? and rang=?');            
+            $idtypePartenaire = $projetTP->getIdtypepartenaire_typepartenaire();
+            $rang = $projetTP->getRang();
             $requete->bindParam(1, $idtypePartenaire, PDO::PARAM_INT);
             $requete->bindParam(2, $idprojet, PDO::PARAM_INT);            
+            $requete->bindParam(3, $rang, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3120,7 +3123,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare('DELETE FROM  projettypepartenaire where idprojet_projet=?');
-            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);            
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3819,7 +3822,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
      * @param Rapport $rapport
      * @param type $idprojet
      */
-    public function updateRapport(Rapport $rapport, $idprojet) {//echo '<pre>';print_r($rapport);die;
+    public function updateRapport(Rapport $rapport, $idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();

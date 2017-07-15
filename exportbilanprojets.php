@@ -12,8 +12,17 @@ if (!empty($_SESSION['pseudo'])) {
 }
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-$data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/ International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom labo1;Nom labo2;Nom labo3;Nom labo4;Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement;Administrateur des projets; Vue des projets");
-$data .= "\n";
+if(IDTYPEUSER==ADMINLOCAL){
+    $data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/ International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom labo1;Nom labo2;Nom labo3;Nom labo4;Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement;Administrateur des projets; Vue des projets");
+    $data .= "\n";
+}elseif(IDTYPEUSER==ADMINNATIONNAL){    
+    $s_partenaire="";
+    for ($c = 2; $c <= 10; $c++) {
+        $s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";";
+    }
+    $data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/ International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom du Laboratoire&Entreprise1;".$s_partenaire.";Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement;Administrateur des projets; Vue des projets;");
+    $data .= "Nom du Laboratoire&Entreprise1;".$s_partenaire. "\n";
+}
 //Récupération de l'idcentrale de l'utilisateur
 if (!empty($_SESSION['mail'])) {
     $mail = $_SESSION['mail'];
@@ -43,7 +52,6 @@ if (empty($idcentrale)) {
     $idcentrale = $manager->getSingle2("select idcentrale_centrale from utilisateur where idutilisateur = ?", $idutilisateur);
     $libellecentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", $idcentrale);
 }
-
 
 
 //RECUPERATION DE L'IDUTILISATEUR EN FONCTION DU PSEUDO
@@ -128,7 +136,6 @@ AND EXTRACT(YEAR from datestatutrefuser)=? AND trashed =FALSE
     AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? order by datecreation  asc";
 
 if ($idtypeuser == ADMINNATIONNAL) {//Administrateur national
-//RECUPERATION DU NOM ET DE L'ID DE LA CENTRALE DE L'IDUTILISATEUR EN FONCTION DE L'EMAIL
     $idcentrale = (int) ($_POST['centrale']);
     $donnee = array($idcentrale, $anneeExport,REFUSE,ACCEPTE,CLOTURE, $idcentrale, $anneeExport, $anneeExport,REFUSE,ACCEPTE,CLOTURE, $idcentrale, $anneeExport,$anneeExport,REFUSE,ACCEPTE,CLOTURE, $idcentrale, $anneeExport, $anneeExport,REFUSE,ACCEPTE,CLOTURE,
         $idcentrale, $anneeExport,REFUSE,ACCEPTE,CLOTURE, $idcentrale, $anneeExport,REFUSE,ACCEPTE,CLOTURE);
@@ -177,8 +184,9 @@ if ($nbrow != 0) {
                 $maildemandeur . ";" .
                 $nomresponsable . ";" .
                 $mailresponsable . ";" .
-                utf8_decode($centralepartenaireprojet) . ";" .
-                trim(substr(utf8_decode($libellenomlabo), 0, -1)) . ";" .
+                utf8_decode($centralepartenaireprojet) . ";" ;
+         if(IDTYPEUSER==ADMINLOCAL){
+             $data.= trim(substr(utf8_decode($libellenomlabo), 0, -1)) . ";" .
                 $anneedebut . ";" .
                 $dureeEstime . ";" .
                 $datefinestime . ";" .
@@ -191,16 +199,37 @@ if ($nbrow != 0) {
                 $ressource4 . ";" .
                 $ressource5 . ";" .
                 $ressource6 . ";" .
-                str_replace("''", "'", stripslashes(utf8_decode($libelletypeprojet))) . ";" .
+                removeDoubleQuote(stripslashes(utf8_decode($libelletypeprojet))) . ";" .
                 utf8_decode($s_Sourcefinancement) . ";" .
                 utf8_decode($s_Acrosourcefinancement) . ";" .
                 utf8_decode($administrateur) . ";" .
-                utf8_decode($vueprojetcentrale) . ";" . "\n";
+                utf8_decode($vueprojetcentrale) . ";"."\n";
+         }else if(IDTYPEUSER==ADMINNATIONNAL){
+             $data.= $varpartenaires.";".
+                $anneedebut . ";" .
+                $dureeEstime . ";" .
+                $datefinestime . ";" .
+                $datefinReelle . ";" .
+                $dureeReelle . ";" .
+                utf8_decode($libthematique) . ";" .
+                $ressource1 . ";" .
+                $ressource2 . ";" .
+                $ressource3 . ";" .
+                $ressource4 . ";" .
+                $ressource5 . ";" .
+                $ressource6 . ";" .
+                removeDoubleQuote(stripslashes(utf8_decode($libelletypeprojet))) . ";" .
+                utf8_decode($s_Sourcefinancement) . ";" .
+                utf8_decode($s_Acrosourcefinancement) . ";" .
+                utf8_decode($administrateur) . ";" .
+                utf8_decode($vueprojetcentrale) . ";"."\n";
+         }
+        
     }
 // Déclaration du type de contenu
     if ($idtypeuser == ADMINNATIONNAL) {
         header("Content-type: application/vnd.ms-excel;charset=UTF-8");
-        header("Content-disposition: attachment; filename=export_projet_" . $originalDate ."toto". ".csv");
+        header("Content-disposition: attachment; filename=export_projet_" . $originalDate . ".csv");
     } else {
         header("Content-type: application/vnd.ms-excel;charset=UTF-8");
         header("Content-disposition: attachment; filename=export_centrale_" . $libellecentrale . '_' . $originalDate . ".csv");

@@ -35,10 +35,11 @@ if ($lang == 'fr') {
         <?php if($typeuser!=ADMINNATIONNAL){ ?>    
         <p>
             <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET0'))).
-            '<br>'.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET1'))).' '.strtolower(affiche('TXT_CLICK')) ;?>
+            '<br>'.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET1'))) ;?>
             <a href="<?php echo '/'.REPERTOIRE ?>/new_project/<?php echo $lang;?>" style="text-decoration: none">
                 <?php echo html_entity_decode(stripslashes(removeDoubleQuote(TXT_DEMANDEPROJET))); ?></a>
-            , <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/Manuel_partie_commune.pdf' ?>" download="Manuel_partie_commune" style="text-decoration: none"><?php echo TXT_DOWNLOADUSERMANUAL; ?></a> <?php echo TXT_DOWNLOADUSERMANUAL1; ?>
+            , <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/ModeEmploiDemandeProjetRENATECH.pdf' ?>" download="ModeEmploiDemandeProjetRENATECH" style="text-decoration: none">
+                <?php echo '('.TXT_DOWNLOADUSERMANUAL; ?> <?php echo TXT_DOWNLOADUSERMANUAL1.')'; ?></a>
         </p>
         <p>
             <?php echo stripslashes(removeDoubleQuote(affiche('TXT_PROJETREALISABLE')));?>

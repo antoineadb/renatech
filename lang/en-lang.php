@@ -1034,3 +1034,4 @@ define("TXT_MESSAGESERVEURTYPEPARTENAIREEXISTE","The partner type already exist!
 define("TXT_MESSAGESERVEURTYPEPARTENAIRE","The partner type has been added");
 define("TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE","You have updated the partner type");
 define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","The partner type already exist");
+define('TXT_MESSAGEAIDETYPEPARTENAIRE','Please observe the order of filling of the fields. below');

@@ -87,7 +87,7 @@ define('TXT_REGEXPASS', "regExp:'^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*
 if (isset($_SESSION['pseudo'])) {
     define('IDCENTRALEUSER', $manager->getSingle2("select idcentrale_centrale from utilisateur, loginpassword where idlogin_loginpassword=idlogin and pseudo=? ", $_SESSION['pseudo']));
     define('LIBELLECENTRALEUSER', $manager->getSingle2("select libellecentrale from centrale,utilisateur, loginpassword where idlogin_loginpassword=idlogin and idcentrale_centrale=idcentrale and pseudo=? ", $_SESSION['pseudo']));
-    define('IDTYPEUSER', $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']));
+    define('IDTYPEUSER', $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']));                                                
     define('NOMUSER', $manager->getSingle2("select nom from utilisateur,loginpassword  where idlogin=idlogin_loginpassword and pseudo=? ", $_SESSION['pseudo']));
     define('PRENOMUSER', $manager->getSingle2("select prenom from utilisateur,loginpassword  where idlogin=idlogin_loginpassword and pseudo=? ", $_SESSION['pseudo']));
 }

@@ -230,10 +230,30 @@ if (!empty($row[$i]['nbrun'])) {
 }
 $centralepartenaireprojet = '';
 if (!empty($row[$i]['centralepartenaireprojet'])) {
-    $centralepartenaireprojet = str_replace("''", "'", html_entity_decode(stripslashes($row[$i]['centralepartenaireprojet'])));
+    $centralepartenaireprojet = removeDoubleQuote((stripslashes($row[$i]['centralepartenaireprojet'])));
 } else {
     $centralepartenaireprojet = '';
 }
+
+if(IDTYPEUSER==ADMINNATIONNAL){
+    //  DONNEES INCLUES DANS LA TABLE PARTENAIREPROJET
+    for ($f = 2; $f <= 10; $f++) {            
+            ${'rowpartenaireprojet'.$f}= $manager->getList2("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=? "
+            . "order by idpartenaire_partenaireprojet asc limit 1 offset ".($f-2)." ", $idprojet);
+        if (!empty(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise'])) {
+            ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']);               
+        }else{
+            ${'laboentreprise'.$f} = '';
+        }           
+    }
+
+    $varpartenaires='';
+    for ($w = 2; $w <= 10; $w++) {
+        $varpartenaires .= utf8_decode(removeDoubleQuote(${'laboentreprise'.$w})) . ";"  ;
+    }
+}
+
+
 
 //DOMAINE APPLICATION POUR LES INDUSTRIELS
 $secteuractivite = "";
@@ -347,7 +367,7 @@ $libellenomlabo = '';
 $arraynomlabo = $manager->getListbyArray("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire and idprojet_projet=?", array($idprojet));
 for ($j = 0; $j < 3; $j++) {
     if (!empty($arraynomlabo[$j]['nomlaboentreprise'])) {
-        $libellenomlabo .= $arraynomlabo[$j]['nomlaboentreprise'] . ";";
+        $libellenomlabo .= removeDoubleQuote($arraynomlabo[$j]['nomlaboentreprise']) . ";";
     } else {
         $libellenomlabo .= '' . ";";
     }

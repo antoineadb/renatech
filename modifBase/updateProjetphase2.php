@@ -1086,26 +1086,51 @@ if (isset($_POST['page_precedente'])) {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
 //                                                                              TYPEPARTENAIRE 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    $arrayidtypepartenaire = array();
-    for ($i = 0; $i < 9; $i++) {
-        $tp = (int)substr($_POST['tp'.$i],-1);
-        if ($tp!=0) { 
-            array_push($arrayidtypepartenaire,$tp);
+    
+    if($_POST['nombrePartenaire']==0){
+        $manager->deleteProjetTypePartenaire($idprojet);
+        $_POST['typecentralepartenaire']=null;
+    }elseif($_POST['nombrePartenaire']==1){
+        $manager->deleteProjetTypePartenaire($idprojet);
+    }else{
+        for ($i = $_POST['nombrePartenaire']; $i <10; $i++) {
+            $_POST['tp'.($i-1)] = null;
+        }
+        
+        $arrayidtypepartenaire = array();
+        for ($i = 0; $i < 9; $i++) {
+            $j=$i+1;
+            if(!empty($_POST['tp'.$i])){
+                if(strlen($_POST['tp'.$i])==3){
+                    $tp = (int)substr($_POST['tp'.$i],-1);            
+                }else{
+                    $tp = (int)substr($_POST['tp'.$i],0);
+                }
+                $rang = (int)substr($_POST['rang'.$j],-1);           
+                if ($tp!=0) {
+                    $arrayidtypepartenaire[$i]['typepartenaire'] = $tp;
+                    $arrayidtypepartenaire[$j]['rang'] = $rang;               
+                }
+            }
+        }        
+        $arrayIdTypepartenaire = (array_values($arrayidtypepartenaire));   
+        if(!empty($arrayIdTypepartenaire)){
+            $manager->deleteProjetTypePartenaire($idprojet);
+            for ($i = 0; $i < count($arrayIdTypepartenaire); $i++) {
+                $j=$i+1;
+                if(!empty($arrayIdTypepartenaire[$i]['typepartenaire'])){
+                    $projetTP = new ProjetTypePartenaire($arrayIdTypepartenaire[$i]['typepartenaire'], $idprojet, $arrayIdTypepartenaire[$j]['rang']);               
+                    $manager->insertProjetTypePartenaire($projetTP);
+                }
+            }
         }
     }
-   if(!empty($arrayidtypepartenaire)){
-       $manager->deleteProjetTypePartenaire($idprojet);
-        for ($i = 0; $i < count($arrayidtypepartenaire); $i++) {
-            $projetTP = new ProjetTypePartenaire($arrayidtypepartenaire[$i],$idprojet);
-            $manager->insertProjetTypePartenaire($projetTP);
-        }
-   }
     if(isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])){
         $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],-1);
     }else{
         $idtypecentralepartenaire=null;
     }
-
+    
     $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique,
             $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, 
             $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire);

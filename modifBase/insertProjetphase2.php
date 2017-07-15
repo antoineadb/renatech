@@ -175,21 +175,45 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $centralepartenaireprojet = '';
     }
     
-// TYPEPARTENAIRE 
-    
-    $arrayidtypepartenaire = array();
-    for ($i = 0; $i < 9; $i++) {
-        $tp = (int)substr($_POST['tp'.$i],-1);
-        if ($tp!=0) { 
-            array_push($arrayidtypepartenaire,$tp);
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                              TYPEPARTENAIRE 
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    if($_POST['nombrePartenaire']!=0){
+        $arrayidtypepartenaire = array();
+        for ($i = 0; $i < 9; $i++) {
+            $j=$i+1;
+            if(!empty($_POST['tp'.$i])){
+                if(strlen($_POST['tp'.$i])==3){
+                    $tp = (int)substr($_POST['tp'.$i],-1);            
+                }else{
+                    $tp = (int)substr($_POST['tp'.$i],0);
+                }
+                $rang = (int)substr($_POST['rang'.$j],-1);           
+                if ($tp!=0) {
+                    $arrayidtypepartenaire[$i]['typepartenaire'] = $tp;
+                    $arrayidtypepartenaire[$j]['rang'] = $rang;               
+                }
+            }
+        }        
+        $arrayIdTypepartenaire = (array_values($arrayidtypepartenaire));   
+        if(!empty($arrayIdTypepartenaire)){
+            $manager->deleteProjetTypePartenaire($idprojet);
+            for ($i = 0; $i < count($arrayIdTypepartenaire); $i++) {
+                $j=$i+1;
+                if(!empty($arrayIdTypepartenaire[$i]['typepartenaire'])){
+                    $projetTP = new ProjetTypePartenaire($arrayIdTypepartenaire[$i]['typepartenaire'], $idprojet, $arrayIdTypepartenaire[$j]['rang']);               
+                $manager->insertProjetTypePartenaire($projetTP);
+                }
+            }
         }
+    }else{
+        $manager->deleteProjetTypePartenaire($idprojet);    
+        $_POST['typecentralepartenaire']=null;
     }
-   
-    for ($i = 0; $i < count($arrayidtypepartenaire); $i++) {
-        $projetTP = new ProjetTypePartenaire($arrayidtypepartenaire[$i],$idprojet);
-        $manager->insertProjetTypePartenaire($projetTP);
-    }
-   
+    
+    
+    
+    
     
     if(isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])){
         $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],-1);
