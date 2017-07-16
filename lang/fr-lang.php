@@ -898,7 +898,7 @@ define('TXT_TXUPDATE','Temps de connexion mis à jour');
 define('TXT_TXEMAILUPDATE','Email mis à jour');
 define('TXT_EMAILFAISABILITE','Email destinataire des demandes de faisabilité');
 define('TXT_PARTIEEXPORT',"Partie ayant un impact sur l'export des projets");
-define('TXT_PROJETSANSDEV','Projets sans développement');
+define('TXT_PROJETSANSDEV','Autres projets');
 define('TXT_CONFIRMEMAILEXISTE','Merci de confirmez la création de ce compte en cliquant sur le bouton');
 define('TXT_EMAILEXISTE',"L'email que vous avez saisie est déja utilisé dans le (ou les) login(s) suivant:");
 define('TXT_CHANGEPSEUDO',"ou de changer d'email en cliquant sur");
@@ -1011,6 +1011,7 @@ define("TXT_AIDECENTRALEPROXIMITE","Les centrales de proximité ont vocation à 
 • Saclay : Atelier de nanofabrication du SPEC<br>
 • Paris- Centre : Salles blanches<br>
 • Rennes : Centrale de technologie<br>
+pour les centrales de proximités/spécifiques, veuillez choisir la centrale Renatech la plus proche géographiquement de la centrale demandée
 ");
 define("TXT_MESSAGEUPDATEDATEDEBUTPROJET", "La date de début de projet a été mise à jour");
 define("TXT_MESSAGENOUPDATEDATEDEBUTPROJET", "La date de début de projet ne sera pas modifiée");
