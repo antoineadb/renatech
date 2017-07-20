@@ -190,7 +190,7 @@ if (!empty($row[$i]['idtypeprojet_typeprojet'])) {
     }
     //TRAITEMENT DES TYPE DE FORMATIONS
     if (!empty($row[$i]['typeformation'])) {
-        $typeformation = str_replace("''", "'", html_entity_decode(stripslashes($row[$i]['typeformation'])));
+        $typeformation = removeDoubleQuote(html_entity_decode(stripslashes($row[$i]['typeformation'])));
     } else {
         $typeformation = '';
     }
@@ -241,19 +241,26 @@ if(IDTYPEUSER==ADMINNATIONNAL){
             ${'rowpartenaireprojet'.$f}= $manager->getList2("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=? "
             . "order by idpartenaire_partenaireprojet asc limit 1 offset ".($f-2)." ", $idprojet);
         if (!empty(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise'])) {
-            ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']);               
+            ${'laboentreprise'.$f} = removeDoubleQuote(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']);
         }else{
             ${'laboentreprise'.$f} = '';
-        }           
+        }         
     }
-
+      //  DONNEES INCLUES DANS LA TABLE PARTENAIRETYPEPROJET
+    for ($f = 2; $f <= 10; $f++) {            
+            ${'rowpartenairetypeprojet'.$f}= $manager->getList2("SELECT libelletypepartenairefr FROM typepartenaire,projettypepartenaire WHERE idtypepartenaire = idtypepartenaire_typepartenaire AND idprojet_projet=? "
+            . " limit 1 offset ".($f-2)." ", $idprojet);                
+        if (!empty(${'rowpartenairetypeprojet'.$f}[0]['libelletypepartenairefr'])) {
+            ${'libelletypepartenaire'.$f} = removeDoubleQuote(${'rowpartenairetypeprojet'.$f}[0]['libelletypepartenairefr']);
+        }else{
+            ${'libelletypepartenaire'.$f} = '';
+        }
+    }
     $varpartenaires='';
     for ($w = 2; $w <= 10; $w++) {
-        $varpartenaires .= utf8_decode(removeDoubleQuote(${'laboentreprise'.$w})) . ";"  ;
-    }
+        $varpartenaires .= utf8_decode(${'laboentreprise'.$w}) . ";" . utf8_decode(${'libelletypepartenaire'.$w}) . ";"  ;
+    }        
 }
-
-
 
 //DOMAINE APPLICATION POUR LES INDUSTRIELS
 $secteuractivite = "";
@@ -365,7 +372,7 @@ if ($nbacrosf > 0) {
 //NOM DU LABO 1-->4
 $libellenomlabo = '';
 $arraynomlabo = $manager->getListbyArray("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire and idprojet_projet=?", array($idprojet));
-for ($j = 0; $j < 3; $j++) {
+for ($j = 0; $j < 4; $j++) {
     if (!empty($arraynomlabo[$j]['nomlaboentreprise'])) {
         $libellenomlabo .= removeDoubleQuote($arraynomlabo[$j]['nomlaboentreprise']) . ";";
     } else {

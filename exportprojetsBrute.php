@@ -39,7 +39,7 @@ for ($b = 1; $b <= 5; $b++) {
 
 $s_partenaire="";
 for ($c = 2; $c <= 10; $c++) {
-    $s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";";
+    $s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";".utf8_decode("type d'entreprise").$c.";";
 }
 $s_personnesalleblanche = "";
 for ($d = 1; $d <= 21; $d++) {
@@ -62,7 +62,8 @@ $data = utf8_decode("Id du projet;Date du projet;Titre du projet;référence int
         . "Source de financement 6;"
         . "Etes vous le coordinateur du projet?;Statut;"            
         . "Nom du Laboratoire&Entreprise1;"
-        ."".$s_partenaire.""        
+        . utf8_decode("Type d'entreprise1;")
+        ."".$s_partenaire.""
         . "Descriptif Technologique;pièce jointe;Le projet nécessite-t'il un développement technologique pour certaines étapes?;Verrous identifiés;Etape(s)réalisée(s)dans une autre centrale;Autre(s) centrale(s);"
         . "Description de l'(ou des) étape(s):;Utilisez-vous dans votre projet une centrale de proximité? ;Centrales de proximité;Descriptions de la demande;"
         . "email responsable devis;Réussite escompté;"
@@ -104,7 +105,7 @@ $sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentr
             u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
             p.acronyme,p.description,p.contexte,p.reussite,p.verrouidentifiee,p.commentaire,p.confidentiel,p.numero,p.dureeprojet,p.datedebuttravaux,p.dateprojet,p.contactscentraleaccueil,p.centralepartenaire,p.nbplaque,p.nbrun,
             p.refinterneprojet,p.idtypeprojet_typeprojet,p.idthematique_thematique,p.idperiodicite_periodicite,p.typeformation,p.dureeestime,p.periodestime,
-            p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtechnologique,p.centralepartenaireprojet, co.idstatutprojet_statutprojet,p.nbeleve,p.nomformateur
+            p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtechnologique,p.centralepartenaireprojet, co.idstatutprojet_statutprojet,p.nbeleve,p.nomformateur,p.idtypecentralepartenaire
             FROM projet p,creer c,utilisateur u,concerne co 
             WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur AND
             co.idcentrale_centrale =? and dateprojet between ? and ?   order by p.idprojet asc";
@@ -688,18 +689,39 @@ if ($nbrow != 0) {
         } else {
             $laboentreprise1 = '';
         }
+        
+        if (!empty($row[$i]['idtypecentralepartenaire'])) {
+            if($lang=='fr'){
+                $typeentreprise1 = utf8_decode($manager->getSingle2("select libelletypepartenairefr from typepartenaire where idtypepartenaire=?",($row[$i]['idtypecentralepartenaire'])));
+            }else{
+                $typeentreprise1 = utf8_decode($manager->getSingle2("select libelletypepartenaireen from typepartenaire where idtypepartenaire=?",($row[$i]['idtypecentralepartenaire'])));
+            }
+        } else {
+            $typeentreprise1 = '';
+        }
+        
         //  DONNEES INCLUES DANS LA TABLE PARTENAIREPROJET
         for ($f = 2; $f <= 10; $f++) {            
                 ${'rowpartenaireprojet'.$f}= $manager->getList2("SELECT nomlaboentreprise FROM partenaireprojet,projetpartenaire WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet=? "
                 . "order by idpartenaire_partenaireprojet asc limit 1 offset ".($f-2)." ", $idprojet);
             if (!empty(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise'])) {
-                ${'laboentreprise'.$f} = clean(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']);               
+                ${'laboentreprise'.$f} = removeDoubleQuote(${'rowpartenaireprojet'.$f}[0]['nomlaboentreprise']);               
             }else{
                 ${'laboentreprise'.$f} = '';
             }           
         }
         
-       
+        //  DONNEES INCLUES DANS LA TABLE PARTENAIRETYPEPROJET
+        for ($f = 2; $f <= 10; $f++) {            
+                ${'rowpartenairetypeprojet'.$f}= $manager->getList2("SELECT libelletypepartenairefr FROM typepartenaire,projettypepartenaire WHERE idtypepartenaire = idtypepartenaire_typepartenaire AND idprojet_projet=? "
+                . "order by idtypepartenaire_typepartenaire asc limit 1 offset ".($f-2)." ", $idprojet);                
+            if (!empty(${'rowpartenairetypeprojet'.$f}[0]['libelletypepartenairefr'])) {
+                ${'libelletypepartenaire'.$f} = ${'rowpartenairetypeprojet'.$f}[0]['libelletypepartenairefr'];
+            }else{
+                ${'libelletypepartenaire'.$f} = '';
+            }
+        }
+ 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
 //      VARIABLES LIBELLES MULTIPLE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -709,7 +731,7 @@ if ($nbrow != 0) {
         }
         $varpartenaires='';
         for ($w = 2; $w <= 10; $w++) {
-            $varpartenaires .= utf8_decode(${'laboentreprise'.$w}) . ";"  ;
+            $varpartenaires .= utf8_decode(${'laboentreprise'.$w}) . ";" .utf8_decode(${'libelletypepartenaire'.$w}) . ";"  ;
         }
         
         $varressource='';
@@ -782,7 +804,8 @@ if ($nbrow != 0) {
                 $varsourcefinancement.
                 $porteur.";".
                 removeDoubleQuote(stripslashes(utf8_decode($libellestatutprojet))) . ";" .               
-                $laboentreprise1.";" .                
+                $laboentreprise1.";" .  
+                $typeentreprise1.";".
                 $varpartenaires.
                 $descriptifTechno . ";" .
                 $attachementdesc . ";" .
@@ -797,6 +820,7 @@ if ($nbrow != 0) {
                 $emailrespdevis . ";" .
                 stripslashes(utf8_decode($reussite)) .";".
                 $salleBlanche . "\n";
+        
     }
     $libcentrale = $manager->getSingle2("SELECT libellecentrale FROM loginpassword,centrale,utilisateur WHERE idlogin_loginpassword = idlogin AND idcentrale_centrale = idcentrale AND pseudo=?", $_SESSION['pseudo']);
 // Déclaration du type de contenu

@@ -2,9 +2,14 @@
 include_once 'outils/toolBox.php';
 include_once 'outils/constantes.php';
 include_once 'decide-lang.php';
+include_once 'class/Manager.php';
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+
+
 if (!empty($_GET['numProjet'])) {
     $numProjet = $_GET['numProjet'];
-    $idprojet = $manager->getSingle2("select numero from projet where idprojet=?", $_GET['numProjet']);
+    $idprojet = $manager->getSingle2("select idprojet from projet where numero=?", $_GET['numProjet']);
 } elseif (!empty($_GET['idprojet'])) {
     $numProjet = $manager->getSingle2("select numero from projet where idprojet=?", $_GET['idprojet']);
     $idprojet = $_GET['idprojet'];
@@ -15,14 +20,14 @@ if (!empty($_SESSION['pseudo'])) {
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
-if (!empty($numProjet)) {
-    $arrayPartenaire = $manager->getList("SELECT  nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = projet.idprojet and idprojet=" . $idprojet);
-}
-if (isset($idprojet)) {
-    $aidpartenaire = $manager->getList2("select  idtypepartenaire_typepartenaire,rang from projettypepartenaire where idprojet_projet=?", $idprojet);
-} else {
-    $aidpartenaire = array();
-}
+
+$arrayPartenaire =$manager->getList2("SELECT  nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = idprojet and idprojet=?", $idprojet);
+
+
+
+$aidpartenaire = $manager->getList2("select  idtypepartenaire_typepartenaire,rang from projettypepartenaire where idprojet_projet=?", $idprojet);
+
+
 for ($i = 0; $i < 11; $i++) {
     $j = $i + 1;
     ?>
