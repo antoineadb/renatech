@@ -815,8 +815,8 @@ define('TXT_NBPROJETCENTRALE','Nombre de projet pour la centrale');
 define('TXT_NBPORTEURPROJETENCOURS','Nombre de porteur de projet en cours');
 define('TXT_NBPORTEURPROJETENCOURSPOURANNEE',"Nombre de porteur de projet en cours pour l'année ");
 define('TXT_REPARTITIONPORTEURPROJETENCOURS',"Répartition des porteurs de projet en cours");
-define('TXT_PROJETDATESTATUT','Nouveaux projets déposés');
-define('TXT_PROJETDATESTATUTANNEE',"Nouveaux projets de l'année ");
+define('TXT_PROJETDATESTATUT','Cumul du nombre de projets déposés');
+define('TXT_PROJETDATESTATUTANNEE',"Cumul du nombre de projets pour l'année ");
 define ('TXT_CADREPROJETSCIENTIFIQUE','Cadre du projet scientifique');
 define ('TXT_DUREETRAVAUXTECNO','Estimation de la durée cumulée des travaux technologiques');
 define('TXT_DEROULPROJETSALLE','Déroulement du projet en salle blanche');
@@ -1033,3 +1033,4 @@ define("TXT_MESSAGESERVEURTYPEPARTENAIRE","Le type de partenaire a été ajouté
 define("TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE","Le type de partenaire a été mise à jour!");
 define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","Le type de partenaire existe déjà!");
 define('TXT_MESSAGEAIDETYPEPARTENAIRE',"Attention respecter l'ordre de remplissage des champs voir l'aide au survole du picto ? ci dessous");
+define('TXT_MESSAGEAIDEEXPORTCENTRALEUSER',"Les projets en cours sont les projets en attente, en cours d'expertise et en cours de réalisation");

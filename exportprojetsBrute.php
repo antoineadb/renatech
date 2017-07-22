@@ -68,6 +68,7 @@ $data = utf8_decode("Id du projet;Date du projet;Titre du projet;référence int
         . "Description de l'(ou des) étape(s):;Utilisez-vous dans votre projet une centrale de proximité? ;Centrales de proximité;Descriptions de la demande;"
         . "email responsable devis;Réussite escompté;"
         ."".$s_personnesalleblanche.""     
+        ."Date statut fini"
         );
 $data .= "\n";
 if (isset($_SESSION['pseudo'])) {
@@ -105,7 +106,7 @@ $sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentr
             u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
             p.acronyme,p.description,p.contexte,p.reussite,p.verrouidentifiee,p.commentaire,p.confidentiel,p.numero,p.dureeprojet,p.datedebuttravaux,p.dateprojet,p.contactscentraleaccueil,p.centralepartenaire,p.nbplaque,p.nbrun,
             p.refinterneprojet,p.idtypeprojet_typeprojet,p.idthematique_thematique,p.idperiodicite_periodicite,p.typeformation,p.dureeestime,p.periodestime,
-            p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtechnologique,p.centralepartenaireprojet, co.idstatutprojet_statutprojet,p.nbeleve,p.nomformateur,p.idtypecentralepartenaire
+            p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtechnologique,p.centralepartenaireprojet, co.idstatutprojet_statutprojet,p.nbeleve,p.nomformateur,p.idtypecentralepartenaire,p.datestatutfini
             FROM projet p,creer c,utilisateur u,concerne co 
             WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur AND
             co.idcentrale_centrale =? and dateprojet between ? and ?   order by p.idprojet asc";
@@ -205,6 +206,11 @@ if ($nbrow != 0) {
         }
         $titre = cleanForExportOther($row[$i]['titre']);
         $dateprojet = $row[$i]['dateprojet'];
+        if($row[$i]['idstatutprojet_statutprojet']!= REFUSE){
+            $dateStatutFini = $row[$i]['datestatutfini'];
+        }else{
+            $dateStatutFini = '';
+        }
         $numero = $row[$i]['numero'];
 //ADRESSE
         $Adresse = utf8_decode(filtredonnee($row[$i]['adresse']));
@@ -819,7 +825,8 @@ if ($nbrow != 0) {
                 $descriptioncentraleproximite.";".
                 $emailrespdevis . ";" .
                 stripslashes(utf8_decode($reussite)) .";".
-                $salleBlanche . "\n";
+                $salleBlanche.
+                $dateStatutFini . "\n";
         
     }
     $libcentrale = $manager->getSingle2("SELECT libellecentrale FROM loginpassword,centrale,utilisateur WHERE idlogin_loginpassword = idlogin AND idcentrale_centrale = idcentrale AND pseudo=?", $_SESSION['pseudo']);

@@ -17,26 +17,26 @@ $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpasswor
 $idtypeuser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']);
 $data = utf8_decode("" . TXT_DATEINSCRIPTION . ";" . TXT_LOGIN . ";" . TXT_NOM . ";" . TXT_PRENOM . ";" . TXT_ADRESSE . ";" . TXT_MAIL . ";" . TXT_PAYS . ";" . TXT_NOMRESPONSABLE . ";" . TXT_EMAILRESPONSABLE . ";" . TXT_TYPEUTILISATEUR . ";" . TXT_CENTRALE . ";" . TXT_CODEUNITE . ";"
         . TXT_AUTRECODEUNITE . ";" . TXT_NOMENTELABO . "; " . TXT_NOMENTREPRISE . ";" . TXT_QUALITE . ";" . TXT_USER . ";" . TXT_NOMEMPLOYEUR . ";" . TXT_TUTELLE . ";" . TXT_DISCIPLINESCIENTIFIQUE . ";" . TXT_NBPROJETCREER . ";" . TXT_NBPROJETAFFECTER .
-        ";" . TXT_STATUTCOMPTE . ";" . TXT_NOMEQUIPE);
+        ";" . TXT_STATUTCOMPTE . ";" . TXT_NOMEQUIPE.";".TXT_ADMINDEPROJET.";".TXT_VUEPROJETDELACENTRALE);
 $data .= "\n";
 if ($idtypeuser == ADMINNATIONNAL) {
     $acainterne = "
 SELECT nom,prenom,idutilisateur,mail,pseudo,adresse,codepostal,ville,datecreation,telephone,nomresponsable,mailresponsable,idtypeutilisateur_typeutilisateur,idcentrale_centrale,
 idautrecodeunite_autrecodeunite,entrepriselaboratoire,nomentreprise,idqualitedemandeuraca_qualitedemandeuraca,idemployeur_nomemployeur,idtutelle_tutelle,idautrestutelle_autrestutelle,
 idautrediscipline_autredisciplinescientifique,idautrenomemployeur_autrenomemployeur,idqualitedemandeurindust_qualitedemandeurindust,idlogin_loginpassword,
-iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe 
+iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe,administrateur,vueprojetcentrale 
 FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and idqualitedemandeuraca_qualitedemandeuraca is not null and idcentrale_centrale is not null";
     $acaexterne = "
 SELECT nom,prenom,idutilisateur,mail,pseudo,adresse,codepostal,ville,datecreation,telephone,nomresponsable,mailresponsable,idtypeutilisateur_typeutilisateur,idcentrale_centrale,
 idautrecodeunite_autrecodeunite,entrepriselaboratoire,nomentreprise,idqualitedemandeuraca_qualitedemandeuraca,idemployeur_nomemployeur,idtutelle_tutelle,idautrestutelle_autrestutelle,
 idautrediscipline_autredisciplinescientifique,idautrenomemployeur_autrenomemployeur,idqualitedemandeurindust_qualitedemandeurindust,idlogin_loginpassword,
-iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe
+iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe,administrateur,vueprojetcentrale
 FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and idqualitedemandeuraca_qualitedemandeuraca is not null and idcentrale_centrale is null";
     $industriel = "
 SELECT nom,prenom,idutilisateur,mail,pseudo,adresse,codepostal,ville,datecreation,telephone,nomresponsable,mailresponsable,idtypeutilisateur_typeutilisateur,idcentrale_centrale,
 idautrecodeunite_autrecodeunite,entrepriselaboratoire,nomentreprise,idqualitedemandeuraca_qualitedemandeuraca,idemployeur_nomemployeur,idtutelle_tutelle,idautrestutelle_autrestutelle,
 idautrediscipline_autredisciplinescientifique,idautrenomemployeur_autrenomemployeur,idqualitedemandeurindust_qualitedemandeurindust,idlogin_loginpassword,
-iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe
+iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe,administrateur,vueprojetcentrale
 FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and idqualitedemandeurindust_qualitedemandeurindust is not null";
 
     if (isset($_POST['academiqueinterne']) && isset($_POST['academiqueexterne']) && isset($_POST['industriel'])) {//ACADEMIQUE INTERNE + EXTERNE+INDUSTRIEL
@@ -59,48 +59,48 @@ FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and idquali
 } elseif ($idtypeuser == ADMINLOCAL) {
     $acaexternecentrale = "SELECT  u.idutilisateur,l.pseudo, l.mail,c.idcentrale_centrale,u.nom,u.prenom,p.idprojet,u.adresse,u.codepostal,u.ville,u.datecreation,u.nomresponsable,u.mailresponsable,u.telephone,u.idtypeutilisateur_typeutilisateur,
 u.idautrenomemployeur_autrenomemployeur,u.entrepriselaboratoire,u.nomentreprise,u.idqualitedemandeuraca_qualitedemandeuraca,u.idtutelle_tutelle,u.idemployeur_nomemployeur,u.idautrestutelle_autrestutelle,u.idautrediscipline_autredisciplinescientifique,
-u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe
+u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe,u.administrateur,u.vueprojetcentrale
 FROM utilisateur u,utilisateurporteurprojet up,concerne c,loginpassword l,projet p
 WHERE up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur AND c.idprojet_projet = p.idprojet AND l.idlogin = u.idlogin_loginpassword and u.idcentrale_centrale is null and c.idcentrale_centrale=? and u.idqualitedemandeurindust_qualitedemandeurindust is null
 UNION
 SELECT u.idutilisateur,l.pseudo,l.mail,co.idcentrale_centrale,u.nom,u.prenom,p.idprojet,u.adresse,u.codepostal,u.ville,u.datecreation,u.nomresponsable,u.mailresponsable,u.telephone,u.idtypeutilisateur_typeutilisateur,
 u.idautrenomemployeur_autrenomemployeur,u.entrepriselaboratoire,u.nomentreprise,u.idqualitedemandeuraca_qualitedemandeuraca,u.idtutelle_tutelle,u.idemployeur_nomemployeur,u.idautrestutelle_autrestutelle,u.idautrediscipline_autredisciplinescientifique,
-  u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe
+  u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe,u.administrateur,u.vueprojetcentrale
   FROM utilisateur u,concerne co,loginpassword l,projet p,creer c
   WHERE co.idprojet_projet = p.idprojet AND  l.idlogin = u.idlogin_loginpassword AND  c.idutilisateur_utilisateur = u.idutilisateur and u.idcentrale_centrale is null AND  c.idprojet_projet = p.idprojet and co.idcentrale_centrale=? and u.idqualitedemandeurindust_qualitedemandeurindust is null
   ";
     $acainternecentrale = "SELECT  u.idutilisateur,l.pseudo, l.mail,c.idcentrale_centrale,u.nom,u.prenom,p.idprojet,u.adresse,u.codepostal,u.ville,u.datecreation,u.nomresponsable,u.mailresponsable,u.telephone,u.idtypeutilisateur_typeutilisateur,
 u.idautrenomemployeur_autrenomemployeur,u.entrepriselaboratoire,u.nomentreprise,u.idqualitedemandeuraca_qualitedemandeuraca,u.idtutelle_tutelle,u.idemployeur_nomemployeur,u.idautrestutelle_autrestutelle,u.idautrediscipline_autredisciplinescientifique,
-u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe
+u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe,u.administrateur,u.vueprojetcentrale
 FROM utilisateur u,utilisateurporteurprojet up,concerne c,loginpassword l,projet p
 WHERE up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur AND c.idprojet_projet = p.idprojet AND l.idlogin = u.idlogin_loginpassword and u.idcentrale_centrale is not null and c.idcentrale_centrale=?
 UNION
 SELECT u.idutilisateur,l.pseudo,l.mail,co.idcentrale_centrale,u.nom,u.prenom,p.idprojet,u.adresse,u.codepostal,u.ville,u.datecreation,u.nomresponsable,u.mailresponsable,u.telephone,u.idtypeutilisateur_typeutilisateur,
 u.idautrenomemployeur_autrenomemployeur,u.entrepriselaboratoire,u.nomentreprise,u.idqualitedemandeuraca_qualitedemandeuraca,u.idtutelle_tutelle,u.idemployeur_nomemployeur,u.idautrestutelle_autrestutelle,u.idautrediscipline_autredisciplinescientifique,
-  u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe
+  u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe,u.administrateur,u.vueprojetcentrale
   FROM utilisateur u,concerne co,loginpassword l,projet p,creer c
   WHERE co.idprojet_projet = p.idprojet AND  l.idlogin = u.idlogin_loginpassword AND  c.idutilisateur_utilisateur = u.idutilisateur and u.idcentrale_centrale is not null AND  c.idprojet_projet = p.idprojet and co.idcentrale_centrale=?";
 
     $industrielcentrale = "SELECT u.idutilisateur,l.pseudo,l.mail,co.idcentrale_centrale,u.nom,u.prenom,p.idprojet,u.adresse,u.codepostal,u.ville,u.datecreation,u.nomresponsable,u.mailresponsable,u.telephone,u.idtypeutilisateur_typeutilisateur,
 u.idautrenomemployeur_autrenomemployeur,u.entrepriselaboratoire,u.nomentreprise,u.idqualitedemandeuraca_qualitedemandeuraca,u.idtutelle_tutelle,u.idemployeur_nomemployeur,u.idautrestutelle_autrestutelle,u.idautrediscipline_autredisciplinescientifique,
-  u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe
+  u.iddiscipline_disciplinescientifique,u.idlogin_loginpassword,u.idpays_pays,u.idautrecodeunite_autrecodeunite,u.acronymelaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,l.actif,l.nomequipe,u.administrateur,u.vueprojetcentrale
   FROM utilisateur u,concerne co,loginpassword l,projet p,creer c
   WHERE co.idprojet_projet = p.idprojet AND  l.idlogin = u.idlogin_loginpassword AND  c.idutilisateur_utilisateur = u.idutilisateur and u.idqualitedemandeurindust_qualitedemandeurindust is not null  AND  c.idprojet_projet = p.idprojet
   and co.idcentrale_centrale=?";
     $acainterne = "SELECT nom,prenom,idutilisateur,mail,pseudo,adresse,codepostal,ville,datecreation,telephone,nomresponsable,mailresponsable,idtypeutilisateur_typeutilisateur,idcentrale_centrale,
   idautrecodeunite_autrecodeunite,entrepriselaboratoire,nomentreprise,idqualitedemandeuraca_qualitedemandeuraca,idemployeur_nomemployeur,idtutelle_tutelle,idautrestutelle_autrestutelle,
   idautrediscipline_autredisciplinescientifique,idautrenomemployeur_autrenomemployeur,idqualitedemandeurindust_qualitedemandeurindust,idlogin_loginpassword,
-  iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and idqualitedemandeuraca_qualitedemandeuraca is not null and idcentrale_centrale is not null
+  iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe,administrateur,vueprojetcentrale FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and idqualitedemandeuraca_qualitedemandeuraca is not null and idcentrale_centrale is not null
 		and idcentrale_centrale =?";
     $acaexterne = "SELECT nom,prenom,idutilisateur,mail,pseudo,adresse,codepostal,ville,datecreation,telephone,nomresponsable,mailresponsable,idtypeutilisateur_typeutilisateur,idcentrale_centrale,
   idautrecodeunite_autrecodeunite,entrepriselaboratoire,nomentreprise,idqualitedemandeuraca_qualitedemandeuraca,idemployeur_nomemployeur,idtutelle_tutelle,idautrestutelle_autrestutelle,
   idautrediscipline_autredisciplinescientifique,idautrenomemployeur_autrenomemployeur,idqualitedemandeurindust_qualitedemandeurindust,idlogin_loginpassword,
-  iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe
+  iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe,administrateur,vueprojetcentrale
 FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and idqualitedemandeuraca_qualitedemandeuraca is not null and idcentrale_centrale is null";
     $industriel = "SELECT nom,prenom,idutilisateur,mail,pseudo,adresse,codepostal,ville,datecreation,telephone,nomresponsable,mailresponsable,idtypeutilisateur_typeutilisateur,idcentrale_centrale,
   idautrecodeunite_autrecodeunite,entrepriselaboratoire,nomentreprise,idqualitedemandeuraca_qualitedemandeuraca,idemployeur_nomemployeur,idtutelle_tutelle,idautrestutelle_autrestutelle,
   idautrediscipline_autredisciplinescientifique,idautrenomemployeur_autrenomemployeur,idqualitedemandeurindust_qualitedemandeurindust,idlogin_loginpassword,
-  iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe
+  iddiscipline_disciplinescientifique,idpays_pays,acronymelaboratoire,fax,actif,nomequipe,administrateur,vueprojetcentrale
 FROM utilisateur,loginpassword WHERE idlogin_loginpassword = idlogin and idqualitedemandeurindust_qualitedemandeurindust is not null";
 
     if (isset($_POST['allacademiqueinterne']) && isset($_POST['allacademiqueexterne']) && isset($_POST['allindustriel'])) {//ACADEMIQUE INTERNE +EXTERNE + INDUSTRIEL
@@ -225,6 +225,19 @@ for ($i = 0; $i < $nbrow; $i++) {
     } else {
         $nomentreprise = "";
     }
+    if($row[$i]['administrateur']==1){
+        $administrateur = TXT_OUI;
+    }else{
+        $administrateur = TXT_NON;
+    }
+    if($row[$i]['vueprojetcentrale']){
+        $vueprojetcentrale = TXT_OUI;
+    }else{
+        $vueprojetcentrale = TXT_NON;
+    }    
+    
+    //administrateur,u.
+    
     $nbprojetcreer = $manager->getSingle2("select count(idprojet_projet) from creer where idutilisateur_utilisateur=?", $row[$i]['idutilisateur']);
     $nbprojetaffecter = $manager->getSingle2("select count(idprojet_projet) from utilisateurporteurprojet where idutilisateur_utilisateur=?", $row[$i]['idutilisateur']);
 
@@ -260,7 +273,9 @@ for ($i = 0; $i < $nbrow; $i++) {
             $nbprojetcreer . ";" .
             $nbprojetaffecter . ";"
             . $statut . ";"
-            . cleanString($row[$i]['nomequipe']) . "\n";
+            . cleanString($row[$i]['nomequipe']).";"            
+            . $administrateur.";"          
+            . $vueprojetcentrale . "\n";
 }
 // Déclaration du type de contenu
 header("Content-type: application/vnd.ms-excel;charset=UTF-8");

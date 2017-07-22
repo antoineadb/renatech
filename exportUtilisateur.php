@@ -45,7 +45,9 @@ include 'html/header.html';
         
     
         
-            <fieldset id="idexportUser"> <legend><?php echo TX_CENTRALEUSER; ?></legend>
+            <fieldset id="idexportUser">
+                <legend><?php echo TX_CENTRALEUSER; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 445px;">
+            <?php echo TXT_MESSAGEAIDEEXPORTCENTRALEUSER; ?></span></a></legend>           
                 <form  method="post" action="<?php echo '/' . REPERTOIRE ?>/exportUserCentrale.php?lang=<?php echo $lang; ?>" id='exportUserCentrale' name='exportuser' >
                 <table>
                     <tr><td><br></td></tr>
@@ -53,6 +55,12 @@ include 'html/header.html';
                             <label for='personnecentrale' class='opt' ><?php echo TXT_PERSONCENTRALE; ?></label>
                     </tr>
                     <tr >
+                        <td>
+                            <select id="exportUser" name="exportUser" data-dojo-type="dijit/form/FilteringSelect" style="width: 250px;height:24px">
+                                <option value="enCours" selected="selected">Projets en cours</option>
+                                <option value="tous">Tous les projets</option>                                
+                        </select>
+                        </td>
                         <td>
                             <button type="submit" data-dojo-type="dijit/form/Button" style="margin-top: 20px" ><?php echo TXT_EXPORTER; ?></button>
                         </td>

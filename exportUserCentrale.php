@@ -17,12 +17,23 @@ $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpasswor
 $data = utf8_decode("" . TXT_NOM . ";" . TXT_PRENOM . ";" . TXT_MAIL . ";" . TXT_CONNAISSANCETECHNOLOGIQUE . ";" . TXT_TELEPHONE . ";" . TXT_TYPEUTILISATEUR . ";"
         . TXT_QUALITE . ";" . TXT_AUTRESQUALITE . ";".TXT_NUMPROJECT.";".TXT_REFINTERNE.";");
 $data .= "\n";
+ 
 if (IDTYPEUSER == ADMINLOCAL) {
-    $row = $manager->getListbyArray("SELECT distinct on(pac.mailaccueilcentrale) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,pac.connaissancetechnologiqueaccueil,pac.telaccueilcentrale,
-        q.libellequalitedemandeuraca,pcq.libellepersonnequalite,aq.libelleautresqualite,p.numero,p.refinterneprojet
-  FROM projet p,personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personnecentralequalite pcq,autresqualite aq,concerne c
-WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_personneaccueilcentrale = pac.idpersonneaccueilcentrale AND q.idqualitedemandeuraca = pac.idqualitedemandeuraca_qualitedemandeuraca AND pcq.idpersonnequalite = pac.idpersonnequalite AND
-  aq.idautresqualite = pac.idautresqualite AND  c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ?", array($idcentrale));
+    if($_POST['exportUser']=='enCours'){
+        $row = $manager->getList2("SELECT distinct on(pac.mailaccueilcentrale) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,
+        pac.connaissancetechnologiqueaccueil,pac.telaccueilcentrale,q.libellequalitedemandeuraca,pcq.libellepersonnequalite,aq.libelleautresqualite,p.numero,p.refinterneprojet
+        FROM projet p,personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personnecentralequalite pcq,autresqualite aq,concerne c
+        WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_personneaccueilcentrale = pac.idpersonneaccueilcentrale 
+        AND q.idqualitedemandeuraca = pac.idqualitedemandeuraca_qualitedemandeuraca AND pcq.idpersonnequalite = pac.idpersonnequalite AND   aq.idautresqualite = pac.idautresqualite         
+        AND  c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ? and c.idstatutprojet_statutprojet in (".ENATTENTE.",".ENCOURSANALYSE.",".ENCOURSREALISATION.")", $idcentrale);
+    }else{
+    $row = $manager->getListbyArray("SELECT distinct on(pac.mailaccueilcentrale) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,
+        pac.connaissancetechnologiqueaccueil,pac.telaccueilcentrale,q.libellequalitedemandeuraca,pcq.libellepersonnequalite,aq.libelleautresqualite,p.numero,p.refinterneprojet
+        FROM projet p,personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personnecentralequalite pcq,autresqualite aq,concerne c
+        WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_personneaccueilcentrale = pac.idpersonneaccueilcentrale 
+        AND q.idqualitedemandeuraca = pac.idqualitedemandeuraca_qualitedemandeuraca AND pcq.idpersonnequalite = pac.idpersonnequalite AND   aq.idautresqualite = pac.idautresqualite 
+        AND  c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ? ", array($idcentrale));
+    }
     $nbrow = count($row);
     for ($i = 0; $i < $nbrow; $i++) {
         $connaissancetechnologiqueaccueil = strip_tags(preg_replace("#\n|\t|\r#"," ",$row[$i]['connaissancetechnologiqueaccueil']));
@@ -55,11 +66,20 @@ WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_perso
     print $data;
     exit;
 }else{
+    if($_POST['exportUser']=='enCours'){
+        $row = $manager->getList("SELECT distinct on(lower(pac.mailaccueilcentrale)) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,pac.connaissancetechnologiqueaccueil,pac.telaccueilcentrale,
+        q.libellequalitedemandeuraca,pcq.libellepersonnequalite,aq.libelleautresqualite,p.numero,p.refinterneprojet
+        FROM projet p,personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personnecentralequalite pcq,autresqualite aq, concerne c
+        WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_personneaccueilcentrale = pac.idpersonneaccueilcentrale AND q.idqualitedemandeuraca = pac.idqualitedemandeuraca_qualitedemandeuraca 
+        AND pcq.idpersonnequalite = pac.idpersonnequalite AND aq.idautresqualite = pac.idautresqualite and c.idprojet_projet = p.idprojet 
+        and c.idstatutprojet_statutprojet in (".ENATTENTE.",".ENCOURSANALYSE.",".ENCOURSREALISATION.")");
+    }else{
     $row = $manager->getList("SELECT distinct on(lower(pac.mailaccueilcentrale)) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,pac.connaissancetechnologiqueaccueil,pac.telaccueilcentrale,
         q.libellequalitedemandeuraca,pcq.libellepersonnequalite,aq.libelleautresqualite,p.numero,p.refinterneprojet
-  FROM projet p,personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personnecentralequalite pcq,autresqualite aq
-WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_personneaccueilcentrale = pac.idpersonneaccueilcentrale AND q.idqualitedemandeuraca = pac.idqualitedemandeuraca_qualitedemandeuraca AND pcq.idpersonnequalite = pac.idpersonnequalite AND
-  aq.idautresqualite = pac.idautresqualite");
+        FROM projet p,personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personnecentralequalite pcq,autresqualite aq
+        WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_personneaccueilcentrale = pac.idpersonneaccueilcentrale AND q.idqualitedemandeuraca = pac.idqualitedemandeuraca_qualitedemandeuraca AND pcq.idpersonnequalite = pac.idpersonnequalite AND
+        aq.idautresqualite = pac.idautresqualite");
+    }
     $nbrow = count($row);
     for ($i = 0; $i < $nbrow; $i++) {
         $connaissancetechnologiqueaccueil = strip_tags(preg_replace("#\n|\t|\r#"," ",$row[$i]['connaissancetechnologiqueaccueil']));

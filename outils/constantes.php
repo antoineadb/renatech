@@ -22,7 +22,7 @@ define('ADMINNATIONNAL', $manager->getSingle2("select idtypeutilisateur from typ
 define('UTILISATEUR', $manager->getSingle2("select idtypeutilisateur from typeutilisateur where libelletype=? ", 'utilisateur'));
 define('ENATTENTEPHASE2', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'En Attente'));
 define('ENATTENTE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'En Attente'));
-define('ENCOURSANALYSE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'Current expertise'));
+define('ENCOURSANALYSE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojeten=? ", 'Current expertise'));
 define('TRANSFERERCENTRALE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'Transférée à une autre centrale'));
 define('REFUSE', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'Refusée'));
 define('FINI', $manager->getSingle2("select idstatutprojet from statutprojet where libellestatutprojet=? ", 'Fini'));
@@ -52,7 +52,7 @@ define('REP_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/' . REPERTOIRE);
 define('ABSPATH', dirname(__FILE__) . '/');
 define('STATCENTRALETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Projet par centrale et par type'));
 define('STATUSERDATE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de nouveaux porteurs de projets'));
-define('IDSTATNOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nouveaux projets déposés'));
+define('IDSTATNOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de projets déposés'));
 define('IDSTATPROJETDATETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Répartition des nouveaux projets par type'));
 define('IDSTATTYPOLOGIENOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Typologie des nouveaux projets'));
 define('IDSTATTYPOLOGIEPROJETENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Typologie des projets en cours'));

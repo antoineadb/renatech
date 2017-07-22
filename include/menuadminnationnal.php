@@ -49,6 +49,7 @@ $exportdesProjets = '/' . REPERTOIRE . "/exportDonneeBruteNation/" . $lang;
         <ul style="z-index: 5;font-weight: normal">
             <li><a href="<?php echo $moncompte;?>" class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MONCOMPTE;?></a></li>
             <li><a href="<?php echo $gestioncompte;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_GESTIONCOMPTE);?></a></li>
+            <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
         </ul> 
     </li>
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_ADMIN.'</u>'; ?></a>
@@ -56,8 +57,7 @@ $exportdesProjets = '/' . REPERTOIRE . "/exportDonneeBruteNation/" . $lang;
             <li><a href="<?php echo $liste;?>" class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_LISTE);?></a></li>
             <li><a href="<?php echo $libelle;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONLIBELLE;?></a></li>
             <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_STATISTIQUE);?></a></li>
-            <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>
-            <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
+            <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>            
              <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
             <li><a href="<?php echo $log;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Logs';?></a></li>
              <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
