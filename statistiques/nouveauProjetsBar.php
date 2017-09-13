@@ -173,7 +173,11 @@ foreach ($years as $key => $year) {
         $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
                 . "and extract(year from dateprojet)<=? and  trashed != ?", array(IDCENTRALEUSER,$year[0],TRUE));
         if (empty($nbByYear)) {$nbByYear = 0;}
-        $serie3.="{id: '" . $year[0] . "',name: '" . $year[0] . "'" . ',data: [';
+            if($year[0]=='2013'){
+                $serie3.="{id: '" . $year[0] . "',name: '" . TXT_INFERIEUR2013 . "'" . ',data: [';
+            }else{
+                $serie3.="{id: '" . $year[0] . "',name: '" . $year[0] . "'" . ',data: [';
+            }
          for ($i = 0; $i < count($statutProjets); $i++) {
             $nbByYearByMonth = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet WHERE idprojet_projet = idprojet  AND idcentrale_centrale = ? "
                     . "AND  extract(year from dateprojet)<=? AND idstatutprojet_statutprojet=? and  trashed != ?", array(IDCENTRALEUSER,$year[0],  $statutProjets[$i]['idstatutprojet'],TRUE));

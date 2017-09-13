@@ -90,19 +90,11 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypoProjetEncours'])) {?>
             $nbprojetAcademique = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMIC, $centrale[1],$_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));
             $nbprojetAcademiquePartenariat = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMICPARTENARIAT, $centrale[1],$_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));
             $nbprojetIndustriel = $manager->getSinglebyArray($uneDateUneCentrale, array( INDUSTRIEL, $centrale[1],$_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));
-            $nbprojetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION, $centrale[1],$_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));
-         if($year[0]==2013){
-             $serieAcademique .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
-            $serieAcademiquePartenariat .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
-            $serieIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: ". $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
-            $serieFormation .="{name: '" . TXT_INFERIEUR2013 . "', y: ". $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
-         }else{
-            
+            $nbprojetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION, $centrale[1],$_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));         
             $serieAcademique .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
             $serieAcademiquePartenariat .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
             $serieIndustriel .="{name: '" . $centrale[0] . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
             $serieFormation .="{name: '" . $centrale[0] . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
-         }
     }
     $serieAcademique .="]},";
     $serieAcademiquePartenariat .="]},";
@@ -112,7 +104,11 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypoProjetEncours'])) {?>
     $serie0 = $serieAcademique . $serieAcademiquePartenariat . $serieIndustriel . $serieFormation;
     $serie = str_replace("},]", "}]", $serie0);
     $serieY = substr(str_replace("],]", "]]", $serie), 0, -1);
-    $title = TXT_TYPOLOGIEPROJETENCOURSPOURANNEE. $_GET['anneeTypoProjetEncours'];
+    if($_GET['anneeTypoProjetEncours']==2013){
+        $title = TXT_TYPOLOGIEPROJETENCOURSPOURANNEE. TXT_INFERIEUR2013;
+    }else{
+        $title = TXT_TYPOLOGIEPROJETENCOURSPOURANNEE. $_GET['anneeTypoProjetEncours'];
+    }
     $subtitle = TXT_CLICDETAIL;
     $xasisTitle = "";
     

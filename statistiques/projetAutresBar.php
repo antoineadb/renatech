@@ -147,7 +147,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
         </tr>
     </table> 
     <?php
-    $title = TXT_PROJETPARDATETYPEPOURANNEE . $_GET['anneeType'];
+    if($_GET['anneeType']==2013){
+        $title = TXT_PROJETPARDATETYPEPOURANNEE . TXT_INFERIEUR2013;
+    }else{
+        $title = TXT_PROJETPARDATETYPEPOURANNEE . $_GET['anneeType'];
+    }
     $subtitle = "";
     $xasisTitle = "";
     $nbtotalProjet = $manager->getSinglebyArray("select count(idprojet_projet) from concerne,projet  where idprojet_projet=idprojet and idstatutprojet_statutprojet!=?  and idstatutprojet_statutprojet!=? "

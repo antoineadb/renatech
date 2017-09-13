@@ -153,7 +153,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeSF'])) {
     $serie03 = substr($serie3, 0, -1);
     $serieY = str_replace("],]}", "]]}", $serie03);
     $subtitle = TXT_NBSF . ': <b>' . $nbtotal . '</b>';
-    $title = TXT_ORIGINESOURCEFINANCEMENTANNEE . $_GET['anneeSF'];
+    if($_GET['anneeSF']==2013){
+        $title = TXT_ORIGINESOURCEFINANCEMENTANNEE . TXT_INFERIEUR2013;
+    }else{
+        $title = TXT_ORIGINESOURCEFINANCEMENTANNEE . $_GET['anneeSF'];
+    }
 }
 if (IDTYPEUSER == ADMINLOCAL) {
     $serie = "";

@@ -113,7 +113,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeRessources'])) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     $serie3 = "";
     foreach ($centrales as $key => $centrale) {
-        if($year[0]==2013){
+        if($_GET['anneeRessources']==2013){
             $serie3.="{id: '" . $centrale[0] . $_GET['anneeRessources'] . "',name: '" .TXT_INFERIEUR2013 . "'" . ',data: [';
         }else{
             $serie3.="{id: '" . $centrale[0] . $_GET['anneeRessources'] . "',name: '" . $_GET['anneeRessources'] . "'" . ',data: [';
