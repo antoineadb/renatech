@@ -66,7 +66,11 @@ foreach ($centrales as $key => $centrale) {
     $serie03 = substr($serie3, 0, -1);
     $serieY = str_replace("],]}", "]]}", $serie03);
     $subtitle = TXT_CLICDETAIL;
-    $title = TXT_NBPORTEURPROJETENCOURSPOURANNEE.' '.$_GET['anneePorteurProjetEncours'];
+    if($_GET['anneePorteurProjetEncours']==2013){
+        $title = TXT_NBPORTEURPROJETENCOURSPOURANNEE.' '.TXT_INFERIEUR2013;
+    }else{
+        $title = TXT_NBPORTEURPROJETENCOURSPOURANNEE.' '.$_GET['anneePorteurProjetEncours'];
+    }
     $xasisTitle = TXT_NOMBREOCCURRENCE;
     
     
@@ -94,7 +98,11 @@ foreach ($centrales as $key => $centrale) {
             AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? and EXTRACT(YEAR from datecreation)<=? and  trashed != ?", 
                 array($centrale[1],ENCOURSREALISATION,$year[0],TRUE));
         if (empty($nbByYear)) {$nbByYear = 0;}
-        $serie02 .="{name: '" . $year[0] . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year[0] . "'},";
+        if($year[0]==2013){
+            $serie02 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year[0] . "'},";
+        }else{
+            $serie02 .="{name: '" . $year[0] . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year[0] . "'},";
+        }
     }$serie02 .="]},";        
 }
 $serie2 = str_replace("},]}", "}]}", $serie02);
@@ -103,7 +111,12 @@ $serie3 = "";
 
 foreach ($centrales as $key => $centrale) {
     foreach ($years as $key => $year) {
-        $serie3.="{id: '" . $centrale[0] . $year[0] . "',name: '" .$centrale[0] .' '. $year[0] . "'" . ',data: [';
+        if($year[0]==2013){
+            $serie3.="{id: '" . $centrale[0] . $year[0] . "',name: '" .$centrale[0] .' '. TXT_INFERIEUR2013 . "'" . ',data: [';
+        }else{
+            $serie3.="{id: '" . $centrale[0] . $year[0] . "',name: '" .$centrale[0] .' '. $year[0] . "'" . ',data: [';
+        }
+        
         $nbByYearByStatut=$manager->getSinglebyArray("SELECT count(distinct idutilisateur) FROM concerne co,loginpassword,utilisateur,creer cr,projet WHERE idlogin = idlogin_loginpassword AND "
                     . "idutilisateur = idutilisateur_utilisateur AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? "
                     . "and EXTRACT(YEAR from datecreation)<=?  and  trashed != ?", array( $centrale[1],ENCOURSREALISATION,$year[0]-1,TRUE));; 
@@ -131,14 +144,22 @@ foreach ($years as $key => $year) {
         AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? and EXTRACT(YEAR from datecreation)<=? and  trashed != ?", 
             array(IDCENTRALEUSER,ENCOURSREALISATION,$year[0],TRUE));
     if (empty($nbByYear)) {$nbByYear = 0;}
-    $serie02 .="{name: '" . $year[0] . "', y: " . $nbByYear . " , drilldown: '" . IDCENTRALEUSER . $year[0] . "'},";
+    if($year[0]==2013){
+        $serie02 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYear . " , drilldown: '" . IDCENTRALEUSER . $year[0] . "'},";
+    }else{
+        $serie02 .="{name: '" . $year[0] . "', y: " . $nbByYear . " , drilldown: '" . IDCENTRALEUSER . $year[0] . "'},";
+    }
 }$serie02 .="]},";        
 
 $serieX = str_replace("},]}", "}]}", $serie02);
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 $serie3 = "";
 foreach ($years as $key => $year) {
-    $serie3.="{id: '" . IDCENTRALEUSER . $year[0] . "',name: '" . $year[0] . "'" . ',data: [';
+    if($year[0]==2013){
+        $serie3.="{id: '" . IDCENTRALEUSER . $year[0] . "',name: '" . TXT_INFERIEUR2013 . "'" . ',data: [';
+    }else{
+        $serie3.="{id: '" . IDCENTRALEUSER . $year[0] . "',name: '" . $year[0] . "'" . ',data: [';
+    }
     $nbByYearByStatut=$manager->getSinglebyArray("SELECT count(distinct idutilisateur) FROM concerne co,loginpassword,utilisateur,creer cr,projet WHERE idlogin = idlogin_loginpassword AND "
                 . "idutilisateur = idutilisateur_utilisateur AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? "
                 . "and EXTRACT(YEAR from datecreation)<=?  and  trashed != ?", array(IDCENTRALEUSER,ENCOURSREALISATION,$year[0]-1,TRUE));

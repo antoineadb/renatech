@@ -818,6 +818,7 @@ define('TXT_NBPORTEURPROJETENCOURSPOURANNEE','Number of running project holder f
 define('TXT_REPARTITIONPORTEURPROJETENCOURS',"Distribution of running projects holders");
 define('TXT_PROJETDATESTATUT','Accumulation of the number of projects submitted');
 define('TXT_PROJETDATESTATUTANNEE',"Accumulation of the number of projects of the year ");
+define('TXT_PROJETDATESTATUTANNEE2013',"Accumulation of the number of projects for the year up to and including 2013");
 define ('TXT_CADREPROJETSCIENTIFIQUE','Frame of the scientific project');
 define ('TXT_DUREETRAVAUXTECNO','Estimation of cumulative duration of technological work');
 define('TXT_DEROULPROJETSALLE','Progress of the project in clean room');
@@ -1037,3 +1038,4 @@ define("TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE","You have updated the partner ty
 define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","The partner type already exist");
 define('TXT_MESSAGEAIDETYPEPARTENAIRE','Please observe the order of filling of the fields. below');
 define('TXT_MESSAGEAIDEEXPORTCENTRALEUSER',"Current projects are pending projects, ongoing projects and running projects");
+define("TXT_INFERIEUR2013","Less than or equal to 2013");

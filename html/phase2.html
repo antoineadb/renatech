@@ -47,9 +47,9 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
             break;
         case ENCOURSANALYSE:
             echo '<legend style="margin-left:20px"><b>' . TXT_STATUTPROJETS . ': ' . TXT_CONSULT . '</b></legend>'; //Projet En cours d'analyse
-            $bool = 'true';
-            $bool1 = 'true';
-            $disabled = "'disabled'";
+            $bool = 'false';
+            $bool1 = '';
+            $disabled = "''";
             break;
         case ACCEPTE:
             echo '<legend style="margin-left:20px"><b>' . TXT_STATUTPROJETS . ': ' . TXT_ACCEPTE . '</b></legend>'; //projet Acceptée

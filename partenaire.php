@@ -21,11 +21,17 @@ if (!empty($_SESSION['pseudo'])) {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
 
-$arrayPartenaire =$manager->getList2("SELECT  nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = idprojet and idprojet=?", $idprojet);
+if (!empty($idprojet)) {
+    $arrayPartenaire =$manager->getList2("SELECT  nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = idprojet and idprojet=?", $idprojet);
+    $aidpartenaire = $manager->getList2("select  idtypepartenaire_typepartenaire,rang from projettypepartenaire where idprojet_projet=?", $idprojet);
+}else{
+    $arrayPartenaire =array();
+       $aidpartenaire =array();
+}
 
 
 
-$aidpartenaire = $manager->getList2("select  idtypepartenaire_typepartenaire,rang from projettypepartenaire where idprojet_projet=?", $idprojet);
+
 
 
 for ($i = 0; $i < 11; $i++) {

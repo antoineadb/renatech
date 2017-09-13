@@ -817,6 +817,7 @@ define('TXT_NBPORTEURPROJETENCOURSPOURANNEE',"Nombre de porteur de projet en cou
 define('TXT_REPARTITIONPORTEURPROJETENCOURS',"Répartition des porteurs de projet en cours");
 define('TXT_PROJETDATESTATUT','Cumul du nombre de projets déposés');
 define('TXT_PROJETDATESTATUTANNEE',"Cumul du nombre de projets pour l'année ");
+define('TXT_PROJETDATESTATUTANNEE2013',"Cumul du nombre de projets pour l'année inférieur ou égale à 2013");
 define ('TXT_CADREPROJETSCIENTIFIQUE','Cadre du projet scientifique');
 define ('TXT_DUREETRAVAUXTECNO','Estimation de la durée cumulée des travaux technologiques');
 define('TXT_DEROULPROJETSALLE','Déroulement du projet en salle blanche');
@@ -1034,3 +1035,4 @@ define("TXT_MESSAGESERVEURTYPEPARTENAIREUPDATE","Le type de partenaire a été m
 define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","Le type de partenaire existe déjà!");
 define('TXT_MESSAGEAIDETYPEPARTENAIRE',"Attention respecter l'ordre de remplissage des champs voir l'aide au survole du picto ? ci dessous");
 define('TXT_MESSAGEAIDEEXPORTCENTRALEUSER',"Les projets en cours sont les projets en attente, en cours d'expertise et en cours de réalisation");
+define("TXT_INFERIEUR2013","Inférieur ou égale à 2013");

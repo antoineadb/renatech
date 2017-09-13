@@ -23,7 +23,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneerepartitionProjetEncoursP
     $string0 = '["' . TXT_PROJETINTERNE . '",' . $nbprojetInterne . '],';
     $string3 = '["' . TXT_PROJETEXOEXTERNE . '",' . $nbprojetExogeneExterne . '],';
     $string4 = '["' . TXT_PROJETEXOCOLLABORATIF . '",' . $nbprojetExogeneCollaboratif . '],';
-} elseif (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneerepartitionProjetEncoursParType'])) {echo 'je suis la';
+} elseif (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneerepartitionProjetEncoursParType'])) {
     $title = TXT_PROJETPARDATETYPEPOURANNEE . $_GET['anneerepartitionProjetEncoursParType'];
     $xasisTitle = "";
     $nbtotalprojet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne where idprojet_projet = idprojet and idstatutprojet_statutprojet=? and extract(year from dateprojet)>2012 "

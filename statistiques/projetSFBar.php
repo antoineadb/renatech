@@ -34,11 +34,10 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeSF'])) {
         $nbtotal = 0;
         foreach ($centrales as $key => $centrale) {
             $nbsource = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co WHERE "
-                    . "ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                    . "ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                     . "AND co.idcentrale_centrale=? AND co.idstatutprojet_statutprojet=?", array($centrale[1], ENCOURSREALISATION));
             $nbtotal+=$nbsource;
-            $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS .
-                    '",y: ' . $nbsource . ',drilldown: "' . $centrale[0] . '"}]},';
+            $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbsource . ',drilldown: "' . $centrale[0] . '"}]},';
         }
 
         $serie1 = str_replace("},]}", "}]}", $serie);
@@ -51,12 +50,17 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeSF'])) {
         $serie02 .="{id: '" . $centrale[0] . "',name: '" . $centrale[0] . "',data: [";
         foreach ($years as $key => $year) {
             $nbByYear = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                     . "AND co.idcentrale_centrale=? AND EXTRACT(YEAR from p.dateprojet)<=?  AND co.idstatutprojet_statutprojet=?", array($centrale[1], $year[0], ENCOURSREALISATION));
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
-            $serie02 .="{name: '" . $year[0] . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year[0] . "'},";
+            if($year[0]==2013){
+                $serie02 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year[0] . "'},";
+            }else{
+                $serie02 .="{name: '" . $year[0] . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year[0] . "'},";
+            }
+            
         }$serie02 .="]},";
     }
     $serie2 = str_replace("},]}", "}]}", $serie02);
@@ -65,12 +69,19 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeSF'])) {
     foreach ($centrales as $key => $centrale) {
         foreach ($years as $key => $year) {
             $nbByYear = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                     . "AND co.idcentrale_centrale=? AND EXTRACT(YEAR from p.dateprojet)=? AND co.idstatutprojet_statutprojet=?", array($centrale[1], $year[0], ENCOURSREALISATION));
-            $serie3.="{id: '" . $centrale[0] . $year[0] . "',name: '".$centrale[0] .' '.  $year[0] . "'" . ',data: [';
+            
+            if($year[0]==2013){
+                $serie3.="{id: '" . $centrale[0] . $year[0] . "',name: '".$centrale[0] .' '.  ' ' .TXT_INFERIEUR2013. "'" . ',data: [';
+            }else{
+                $serie3.="{id: '" . $centrale[0] . $year[0] . "',name: '".$centrale[0] .' '.  $year[0] . "'" . ',data: [';
+                
+            }
+            
             foreach ($sourcefinancements as $key => $sourcefinancement) {
                 $nbByYearBySF = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                        . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                        . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                         . "AND co.idcentrale_centrale=? AND EXTRACT(YEAR from p.dateprojet)<=? and s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=?", array($centrale[1], $year[0], $sourcefinancement[1], ENCOURSREALISATION));
                 if (empty($nbByYearBySF)) {
                     $nbByYearBySF = 0;
@@ -104,7 +115,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeSF'])) {
         $nbtotal = 0;
         foreach ($centrales as $key => $centrale) {
             $nbsource = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co WHERE "
-                    . "ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                    . "ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                     . "AND co.idcentrale_centrale=? AND co.idstatutprojet_statutprojet=?  AND EXTRACT(YEAR from p.dateprojet)<=?", array($centrale[1], ENCOURSREALISATION, $_GET['anneeSF']));
             $nbtotal+=$nbsource;
             $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbsource . ',drilldown: "' . $centrale[0] . $_GET['anneeSF'] . '"}]},';
@@ -116,12 +127,17 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeSF'])) {
     $serie3 = "";
     foreach ($centrales as $key => $centrale) {
         $nbByYear = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                 . "AND co.idcentrale_centrale=? AND EXTRACT(YEAR from p.dateprojet)=? AND co.idstatutprojet_statutprojet=?", array($centrale[1], $_GET['anneeSF'], ENCOURSREALISATION));
-        $serie3.="{id: '" . $centrale[0] . $_GET['anneeSF'] . "',name: '" .$centrale[0] .' '.  $_GET['anneeSF'] . "'" . ',data: [';
+        if($_GET['anneeSF']==2013){
+            $serie3.="{id: '" . $centrale[0] . $_GET['anneeSF'] . "',name: '" .$centrale[0] .' '.  TXT_INFERIEUR2013 . "'" . ',data: [';
+        }else{
+            $serie3.="{id: '" . $centrale[0] . $_GET['anneeSF'] . "',name: '" .$centrale[0] .' '.  $_GET['anneeSF'] . "'" . ',data: [';
+        }
+        
         foreach ($sourcefinancements as $key => $sourcefinancement) {
             $nbByYearBySF = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                     . "AND co.idcentrale_centrale=? AND EXTRACT(YEAR from p.dateprojet)<=? and s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=?", array($centrale[1], $_GET['anneeSF'], $sourcefinancement[1], ENCOURSREALISATION));
             if (empty($nbByYearBySF)) {
                 $nbByYearBySF = 0;
@@ -143,7 +159,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
     $serie = "";
     foreach ($sourcefinancements as $key => $sourcefinancement) {
         $nbsource = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co WHERE "
-                . "ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                . "ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                 . "AND co.idcentrale_centrale=? AND s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=?", array(IDCENTRALEUSER, $sourcefinancement[1], ENCOURSREALISATION));
         if ($lang == 'fr') {
             $sf = $sourcefinancement[0];
@@ -166,16 +182,22 @@ if (IDTYPEUSER == ADMINLOCAL) {
         $serie02 .="{id: '" . $sf . "',name: '" . $sf . "',data: [";
         foreach ($years as $key => $year) {
             $nbByYear = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                     . "AND co.idcentrale_centrale=? AND EXTRACT(YEAR from p.dateprojet)<=? AND s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=?", array(IDCENTRALEUSER, $year[0], $sourcefinancement[1], ENCOURSREALISATION));
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
-            $serie02 .="{name: '" . $year[0] . "', y: " . $nbByYear . " , drilldown: '" . $sf . $year[0] . "'},";
+            if($year[0]==2013){
+                $serie02 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYear . " , drilldown: '" . $sf . $year[0] . "'},";
+            }else{
+                $serie02 .="{name: '" . $year[0] . "', y: " . $nbByYear . " , drilldown: '" . $sf . $year[0] . "'},";
+            }
+            
         }$serie02 .="]},";
     }$serie2 = str_replace("},]}", "}]}", $serie02);
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     $serie3 = "";
+    $nbSf=0;
     foreach ($years as $key => $year) {
         foreach ($sourcefinancements as $key => $sourcefinancement) {
             if ($lang == 'fr') {
@@ -184,12 +206,12 @@ if (IDTYPEUSER == ADMINLOCAL) {
                 $sf = $sourcefinancement[2];
             }
             $nbByYear = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                     . "AND co.idcentrale_centrale=? AND EXTRACT(YEAR from p.dateprojet)<=? AND s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=?", array(IDCENTRALEUSER, $year[0], $sourcefinancement[1], ENCOURSREALISATION));
-            $serie3.="{id: '" . $sf . $year[0] . "',name: '" .$sf.' '. $year[0] . "'" . ',data: [';
+            $serie3.="{id: '" . $sf . $year[0] . "',name: '" .$sf.' '. $year[0] . "'" . ',data: [';            
             for ($mois = 1; $mois < 13; $mois++) {
                 $nbByYearMois = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                        . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
+                        . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                         . "AND co.idcentrale_centrale=? AND EXTRACT(YEAR from p.dateprojet)<=? AND EXTRACT(MONTH from p.dateprojet)=? AND s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=?", array(IDCENTRALEUSER, $year[0], $mois, $sourcefinancement[1], ENCOURSREALISATION));
                 if (empty($nbByYearMois)) {
                     $nbByYearMois = 0;
@@ -202,9 +224,9 @@ if (IDTYPEUSER == ADMINLOCAL) {
     $serie03 = substr($serie2 . $serie3, 0, -1);
     $serieY = str_replace("],]}", "]]}", $serie03);
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    $subtitle = TXT_NBSF . ': <b>' . $manager->getSingle2("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
-                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet AND EXTRACT(YEAR from p.dateprojet)>2012 "
-                    . "and co.idcentrale_centrale=?", IDCENTRALEUSER) . '</b>';
+    $subtitle = TXT_NBSF .$nbSf.': <b>' . $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
+                    . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
+                    . "and co.idcentrale_centrale=?  AND co.idstatutprojet_statutprojet=?", array(IDCENTRALEUSER,ENCOURSREALISATION)) . '</b>';
     $title = TXT_ORIGINESOURCEFINANCEMENT;
 }
 

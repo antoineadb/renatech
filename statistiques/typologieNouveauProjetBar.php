@@ -15,18 +15,18 @@ $years = $manager->getList("select distinct EXTRACT(YEAR from dateprojet)as year
 $nbprojet = 0;
 
 $uneDateUneCentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet  and idtypeprojet=? and idcentrale_centrale=?"
-        . "AND EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>2012";
+        . "AND EXTRACT(YEAR from dateprojet)<=?";
 $touscentraleunedate = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet AND EXTRACT(YEAR from dateprojet)=? and idtypeprojet=?"
-        . "and EXTRACT(YEAR from dateprojet)>2012 and idcentrale_centrale!=?";
+        . "and idcentrale_centrale!=?";
 
-$toutesdateCentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? and EXTRACT(YEAR from dateprojet)>2012"
+$toutesdateCentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=?"
         . "and idcentrale_centrale=?";
 $tousdateunecentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet  and idtypeprojet=? and idcentrale_centrale=? "
-        . "and EXTRACT(YEAR from dateprojet)>2012";
+        . "";
 $centraleplusMois = "SELECT count(idprojet) FROM concerne,projet,typeprojet,centrale WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idcentrale_centrale=idcentrale "
-        . "AND EXTRACT(YEAR from dateprojet)=? and idtypeprojet=?  and libellecentrale=? and EXTRACT(MONTH from dateprojet)=? and EXTRACT(YEAR from dateprojet)>2012";
+        . "AND EXTRACT(YEAR from dateprojet)=? and idtypeprojet=?  and libellecentrale=? and EXTRACT(MONTH from dateprojet)=? ";
 
-$touscentraletoutesdate = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? and EXTRACT(YEAR from dateprojet)>2012"
+$touscentraletoutesdate = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
         . "and idcentrale_centrale!=?";
 
 if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypo'])) {?>
@@ -54,13 +54,13 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypo'])) {?>
 <?php 
  $serieX = "";
     $nbprojetacademique = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-                . "and EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>2012 and idcentrale_centrale!=?", array(ACADEMIC, $_GET['anneeTypo'],IDCENTRALEAUTRE));
+                . "and EXTRACT(YEAR from dateprojet)<=?  and idcentrale_centrale!=?", array(ACADEMIC, $_GET['anneeTypo'],IDCENTRALEAUTRE));
     $nbprojetAcademiquepartenariat = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-            . "and EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>2012", array(ACADEMICPARTENARIAT, $_GET['anneeTypo']));
+            . "and EXTRACT(YEAR from dateprojet)<=? ", array(ACADEMICPARTENARIAT, $_GET['anneeTypo']));
     $nbprojetindustriel = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-            . "and EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>2012", array(INDUSTRIEL, $_GET['anneeTypo']));
+            . "and EXTRACT(YEAR from dateprojet)<=? ", array(INDUSTRIEL, $_GET['anneeTypo']));
     $formation = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-            . "and EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>2012", array(FORMATION, $_GET['anneeTypo'])); 
+            . "and EXTRACT(YEAR from dateprojet)<=? ", array(FORMATION, $_GET['anneeTypo'])); 
       
     $serieX .= '{name: "' . ucfirst(TXT_ACADEMIQUE) . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetacademique . ',drilldown: "' . "academic".$_GET['anneeTypo'] . '"}]},';
     $serieX .= '{name: "' . TXT_ACADEMICPARTENARIAT . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetAcademiquepartenariat . ',drilldown: "' . 'academicPartenariat'.$_GET['anneeTypo'] . '"}]},';
@@ -110,7 +110,11 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypo'])) {?>
     $serie0 = $serieAcademique . $serieAcademiquePartenariat . $serieIndustriel . $serieFormation;
     $serie = str_replace("},]", "}]", $serie0);
     $serieY = substr(str_replace("],]", "]]", $serie), 0, -1);
-    $title = TXT_TYPOLOGIENOUVEAUPROJETPOURANNEE. $_GET['anneeTypo'];
+    if($_GET['anneeTypo'] == 2013){
+        $title = TXT_TYPOLOGIENOUVEAUPROJETPOURANNEE ." inférieur ou égale à ". $_GET['anneeTypo'];
+    }else{
+        $title = TXT_TYPOLOGIENOUVEAUPROJETPOURANNEE . $_GET['anneeTypo'];
+    }    
     $subtitle = TXT_CLICDETAIL;
     $xasisTitle = "";
     
@@ -155,10 +159,17 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypo'])) {?>
         $nbprojetAcademiquePartenariat0 += $manager->getSinglebyArray($touscentraleunedate, array($year[0], ACADEMICPARTENARIAT,IDCENTRALEAUTRE));
         $nbprojetIndustriel0 += $manager->getSinglebyArray($touscentraleunedate, array($year[0], INDUSTRIEL,IDCENTRALEAUTRE));
         $nbprojetFormation0 += $manager->getSinglebyArray($touscentraleunedate, array($year[0], FORMATION,IDCENTRALEAUTRE));
-        $serieAcademique .="{name: '" . $year[0] . "', y: " . $nbprojetAcademique0 . " , drilldown: '" . 'academic' . $year[0] . "'},";
-        $serieAcademiquePartenariat .="{name: '" . $year[0] . "', y: " . $nbprojetAcademiquePartenariat0 . " , drilldown: '" . 'academicPartenariat' . $year[0] . "'},";
-        $serieIndustriel .="{name: '" . $year[0] . "', y: " . $nbprojetIndustriel0 . " , drilldown: '" . 'industriel' . $year[0] . "'},";
-        $serieFormation .="{name: '" . $year[0] . "', y: " . $nbprojetFormation0 . " , drilldown: '" . 'formation' . $year[0] . "'},";
+         if($year[0]==2013){
+            $serieAcademique .="{name: '" . 'Inférieur ou égale à 2013' . "', y: " . $nbprojetAcademique0 . " , drilldown: '" . 'academic' . $year[0] . "'},";
+            $serieAcademiquePartenariat .="{name: '" . 'Inférieur ou égale à 2013' . "', y: " . $nbprojetAcademiquePartenariat0 . " , drilldown: '" . 'academicPartenariat' . $year[0] . "'},";
+            $serieIndustriel .="{name: '" . 'Inférieur ou égale à 2013' . "', y: " . $nbprojetIndustriel0 . " , drilldown: '" . 'industriel' . $year[0] . "'},";
+            $serieFormation .="{name: '" . 'Inférieur ou égale à 2013' . "', y: " . $nbprojetFormation0 . " , drilldown: '" . 'formation' . $year[0] . "'},";
+         }else{
+            $serieAcademique .="{name: '" . $year[0] . "', y: " . $nbprojetAcademique0 . " , drilldown: '" . 'academic' . $year[0] . "'},";
+            $serieAcademiquePartenariat .="{name: '" . $year[0] . "', y: " . $nbprojetAcademiquePartenariat0 . " , drilldown: '" . 'academicPartenariat' . $year[0] . "'},";
+            $serieIndustriel .="{name: '" . $year[0] . "', y: " . $nbprojetIndustriel0 . " , drilldown: '" . 'industriel' . $year[0] . "'},";
+            $serieFormation .="{name: '" . $year[0] . "', y: " . $nbprojetFormation0 . " , drilldown: '" . 'formation' . $year[0] . "'},";
+         }
     }
     $serieAcademique .= "]},";
     $serieAcademiquePartenariat.= "]},";
@@ -194,7 +205,7 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypo'])) {?>
     $subtitle = TXT_CLICDETAIL;
     $xasisTitle = "";
 }
-if (IDTYPEUSER == ADMINLOCAL) {    
+if (IDTYPEUSER == ADMINLOCAL) {
     $nbprojetAcademique = $manager->getSinglebyArray($toutesdateCentrale, array(ACADEMIC,IDCENTRALEUSER));
     $nbprojetAcademiquepartenariat = $manager->getSinglebyArray($toutesdateCentrale, array(ACADEMICPARTENARIAT,IDCENTRALEUSER));
     $nbprojetindustriel = $manager->getSinglebyArray($toutesdateCentrale, array(INDUSTRIEL,IDCENTRALEUSER));
@@ -215,10 +226,17 @@ if (IDTYPEUSER == ADMINLOCAL) {
         $nbprojetAcademiquePartenariat = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMICPARTENARIAT,IDCENTRALEUSER,$year[0]));
         $nbprojetIndustriel = $manager->getSinglebyArray($uneDateUneCentrale, array(INDUSTRIEL,IDCENTRALEUSER,$year[0]));
         $nbprojetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION,IDCENTRALEUSER,$year[0]));
-        $serieAcademique .="{name: '" . $year[0] . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $year[0] . "'},";
-        $serieAcademiquePartenariat .="{name: '" . $year[0] . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $year[0] . "'},";
-        $serieIndustriel .="{name: '" . $year[0] . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $year[0] . "'},";
-        $serieFormation .="{name: '" . $year[0] . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $year[0] . "'},";
+        if($year[0]==2013){
+            $serieAcademique .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $year[0] . "'},";
+            $serieAcademiquePartenariat .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $year[0] . "'},";
+            $serieIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $year[0] . "'},";
+            $serieFormation .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $year[0] . "'},";
+        }else{
+            $serieAcademique .="{name: '" . $year[0] . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $year[0] . "'},";
+            $serieAcademiquePartenariat .="{name: '" . $year[0] . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $year[0] . "'},";
+            $serieIndustriel .="{name: '" . $year[0] . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $year[0] . "'},";
+            $serieFormation .="{name: '" . $year[0] . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $year[0] . "'},";
+        }        
     }
     $serieAcademique .= "]},";
     $serieAcademiquePartenariat.= "]},";

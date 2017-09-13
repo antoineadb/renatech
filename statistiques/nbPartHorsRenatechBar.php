@@ -17,7 +17,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
         union 
         SELECT pr.datedebutprojet,libellecentrale,count(distinct(pap.nompartenaire))as nb FROM projetpartenaire ppr,partenaireprojet pap,projet pr,concerne co , centrale ce WHERE  ppr.idprojet_projet = pr.idprojet 
         AND pap.idpartenaire = ppr.idpartenaire_partenaireprojet AND co.idprojet_projet = pr.idprojet and co.idcentrale_centrale = ce.idcentrale and idcentrale_centrale !=? and pr.datedebutprojet is not null 
-        and extract(YEAR FROM pr.datedebutprojet)>=2012 and co.idstatutprojet_statutprojet=? group by pr.datedebutprojet,ce.libellecentrale )", array(IDCENTRALEAUTRE,ENCOURSREALISATION));
+         and co.idstatutprojet_statutprojet=? group by pr.datedebutprojet,ce.libellecentrale )", array(IDCENTRALEAUTRE,ENCOURSREALISATION));
     ?>
     <table>
         <tr>
@@ -58,19 +58,36 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneePartenaireHorsRenatech'])
         $_S_serie2 .="{id: '" . $cent[0] . "',name: '" . $cent[0] . "',data: [";
         foreach ($years as $key => $value) {
             //PARTENAIRE
-            $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], $value[0]));
+            if($value[0]==2013){
+                $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], 2013));
+            }else{
+                   $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], $value[0]));
+            }
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
-            $_S_serie2 .="{name: '" . $value[0] . "', y: " . $nbByYear . " , drilldown: '" . $cent[0] . $value[0] . "'},";
+            if($value[0]==2013){
+                $_S_serie2 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYear . " , drilldown: '" . $cent[0] . $value[0] . "'},";
+            }else{
+                $_S_serie2 .="{name: '" . $value[0] . "', y: " . $nbByYear . " , drilldown: '" . $cent[0] . $value[0] . "'},";
+            }
         }$_S_serie2 .="]},";
     }
     $serie0 = str_replace("},]}", "}]}", $_S_serie2);
     $_S_serie3 = "";
     foreach ($centrale as $key => $cent) {
         foreach ($years as $key => $value) {
-            $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], $value[0]));
-            $_S_serie3.="{id: '" . $cent[0] . $value[0] . "',name: '" .$cent[0] .' '. $value[0] . "'" . ',data: [';
+            if($value[0]==2013){
+                $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], 2013));
+            }else{
+                $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], $value[0]));
+            }
+            if($value[0]==2013){
+                $_S_serie3.="{id: '" . $cent[0] . $value[0] . "',name: '" .$cent[0] .' '. TXT_INFERIEUR2013 . "'" . ',data: [';
+            }else{
+                $_S_serie3.="{id: '" . $cent[0] . $value[0] . "',name: '" .$cent[0] .' '. $value[0] . "'" . ',data: [';
+            }
+            
             for ($mois = 1; $mois < 13; $mois++) {
                 $nbUsercentrale = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)=? AND EXTRACT(MONTH from datedebutprojet)=?", 
                         array($cent[0], $value[0], $mois));
@@ -85,7 +102,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneePartenaireHorsRenatech'])
     $serie_0 = $serie0 . $_S_serie3;
     $serieY = substr($serie_0, 0, -1);
 } elseif (IDTYPEUSER == ADMINNATIONNAL&& isset($_GET['anneePartenaireHorsRenatech'])) {
-    $title= TXT_PARTHORSRENATECHDATE.$_GET['anneePartenaireHorsRenatech'];
+    if($_GET['anneePartenaireHorsRenatech']==2013){
+        $title= TXT_PARTHORSRENATECHDATE.' '.TXT_INFERIEUR2013;
+    }else{
+        $title= TXT_PARTHORSRENATECHDATE.$_GET['anneePartenaireHorsRenatech'];
+    }
        ?>
     <table>
         <tr>
@@ -110,8 +131,16 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneePartenaireHorsRenatech'])
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
     $_S_serie3 = "";
     foreach ($centrale as $key => $cent) {
-            $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], $_GET['anneePartenaireHorsRenatech']));
-            $_S_serie3.="{id: '" . $cent[0]. "',name: '" .$cent[0] .' '. $_GET['anneePartenaireHorsRenatech'] . "'" . ',data: [';
+            if($_GET['anneePartenaireHorsRenatech']==2013){
+                $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], 2013));
+            }else{
+                $nbByYear = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)<=?", array($cent[0], $_GET['anneePartenaireHorsRenatech']));
+            }
+            if($_GET['anneePartenaireHorsRenatech']==2013){
+                $_S_serie3.="{id: '" . $cent[0]. "',name: '" .$cent[0] .' '. TXT_INFERIEUR2013 . "'" . ',data: [';
+            }else{
+                $_S_serie3.="{id: '" . $cent[0]. "',name: '" .$cent[0] .' '. $_GET['anneePartenaireHorsRenatech'] . "'" . ',data: [';
+            }
             for ($mois = 1; $mois < 13; $mois++) {
                 $nbUsercentrale = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where libellecentrale=? AND EXTRACT(YEAR from datedebutprojet)=? "
                         . "AND EXTRACT(MONTH from datedebutprojet)=?", array($cent[0], $_GET['anneePartenaireHorsRenatech'], $mois));
@@ -134,14 +163,22 @@ if (IDTYPEUSER == ADMINLOCAL) {//ADMINISTRATEUR LOCAL
         union 
         SELECT pr.datedebutprojet,libellecentrale,count(distinct(pap.nompartenaire))as nb FROM projetpartenaire ppr,partenaireprojet pap,projet pr,concerne co , centrale ce WHERE  ppr.idprojet_projet = pr.idprojet 
         AND pap.idpartenaire = ppr.idpartenaire_partenaireprojet AND co.idprojet_projet = pr.idprojet and co.idcentrale_centrale = ce.idcentrale and idcentrale_centrale !=? and pr.datedebutprojet is not null 
-        and extract(YEAR FROM pr.datedebutprojet)>=2012 and co.idstatutprojet_statutprojet=? AND co.idcentrale_centrale=? group by pr.datedebutprojet,ce.libellecentrale)"
+         and co.idstatutprojet_statutprojet=? AND co.idcentrale_centrale=? group by pr.datedebutprojet,ce.libellecentrale)"
             , array(IDCENTRALEUSER,IDCENTRALEAUTRE,ENCOURSREALISATION,IDCENTRALEUSER));
     $libellecentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDCENTRALEUSER);
     $years = $manager->getList("select distinct EXTRACT(YEAR from datecreation)as year from utilisateur order by year asc");    
     foreach ($years as $key => $year) {
-        $nbByYear = $manager->getSingle2("select sum(nb) from tmpUserpartenairePorteurDate where  EXTRACT(YEAR from datedebutprojet)<=?", $year[0]);
+        if($year[0]==2013){
+            $nbByYear2013 = $manager->getSingle("select sum(nb) from tmpUserpartenairePorteurDate where  EXTRACT(YEAR from datedebutprojet)<=2013");
+        }else{
+            $nbByYear = $manager->getSingle2("select sum(nb) from tmpUserpartenairePorteurDate where  EXTRACT(YEAR from datedebutprojet)<=?", $year[0]);
+        }
          if(empty($nbByYear)){$nbByYear=0;}
-        $_S_serie .= '{name: "' .$year[0]. '", data: [{name: "' . TXT_DETAILS .'",y: ' . $nbByYear . ',drilldown: "' .$libellecentrale.$year[0] . '"}]},';
+         if($year[0]==2013){
+            $_S_serie .= '{name: "' .TXT_INFERIEUR2013. '", data: [{name: "' . TXT_DETAILS .'",y: ' . $nbByYear2013 . ',drilldown: "' .$libellecentrale.$year[0] . '"}]},';
+         }else{
+             $_S_serie .= '{name: "' .$year[0]. '", data: [{name: "' . TXT_DETAILS .'",y: ' . $nbByYear . ',drilldown: "' .$libellecentrale.$year[0] . '"}]},';
+         }
     }
     $serie_1 = str_replace("},]}", "}]}", $_S_serie);
     $serie_01 = str_replace("},]", "}]", $serie_1);
@@ -152,7 +189,11 @@ if (IDTYPEUSER == ADMINLOCAL) {//ADMINISTRATEUR LOCAL
             if(empty($nbByYear)){
                 $nbByYear=0;
             }
-            $_S_serie3.="{id: '" . $libellecentrale. $year[0] . "',name: '" . $year[0] . "'" . ',data: [';
+            if($year[0]==2013){
+                $_S_serie3.="{id: '" . $libellecentrale. $year[0] . "',name: '" . TXT_INFERIEUR2013 . "'" . ',data: [';
+            }else{
+                $_S_serie3.="{id: '" . $libellecentrale. $year[0] . "',name: '" . $year[0] . "'" . ',data: [';
+            }
             for ($mois = 1; $mois < 13; $mois++) {
                 $nbUsercentrale = $manager->getSinglebyArray("select sum(nb) from tmpUserpartenairePorteurDate where EXTRACT(YEAR from datedebutprojet)=?  AND EXTRACT(MONTH from datedebutprojet)=?", array($year[0], $mois));
                 if (empty($nbUsercentrale)) {$nbUsercentrale = 0;}

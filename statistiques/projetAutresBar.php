@@ -6,7 +6,7 @@ $manager = new Manager($db);
 $libelleCentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDCENTRALEUSER);
 $centrales = $manager->getList2("select libellecentrale,idcentrale from centrale where idcentrale!=? and masquecentrale!=TRUE order by idcentrale asc", IDAUTRECENTRALE);
 $nbtotalprojet = $manager->getSinglebyArray("select count(idprojet_projet) from concerne,projet  where idprojet_projet=idprojet and idstatutprojet_statutprojet!=?  and idstatutprojet_statutprojet!=? "
-        . "and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012", array(ACCEPTE, REFUSE, ENATTENTEPHASE2));
+        . "and idstatutprojet_statutprojet!=? ", array(ACCEPTE, REFUSE, ENATTENTEPHASE2));
 $years = $manager->getList("select distinct EXTRACT(YEAR from dateprojet)as year from projet where   EXTRACT(YEAR from dateprojet)>2012order by year asc");
 if (IDTYPEUSER == ADMINNATIONNAL) {
     ?>
@@ -34,11 +34,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
 
     $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE  cr.idprojet_projet = p.idprojet 
         AND  u.idutilisateur = cr.idutilisateur_utilisateur AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet  and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-        and p.idprojet not in(select idprojet_projet from projetpartenaire )and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012 ", array(ACCEPTE, REFUSE, ENATTENTEPHASE2));
+        and p.idprojet not in(select idprojet_projet from projetpartenaire )and idstatutprojet_statutprojet!=?  ", array(ACCEPTE, REFUSE, ENATTENTEPHASE2));
 
     $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet AND pr.idprojet_projet = p.idprojet
         AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?  and idstatutprojet_statutprojet!=? 
-        and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012", array(ACCEPTE, REFUSE, ENATTENTEPHASE2));
+        and idstatutprojet_statutprojet!=? ", array(ACCEPTE, REFUSE, ENATTENTEPHASE2));
     $nbprojetInterne = $nbtotalprojet - $nbprojetExogeneExterne - $nbprojetExogeneCollaboratif;
     $serieX = '{name: "' . TXT_PROJETINTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetInterne . ',drilldown: "' . TXT_PROJETINTERNE . '"}]},';
     $serieX .= '{name: "' . TXT_PROJETEXOEXTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetExogeneExterne . ',drilldown: "' . "externe" . '"}]},';
@@ -50,8 +50,14 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
         $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                     AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
                     and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=? 
-                    and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2));
-        $serieExterne .="{name: '" . $year[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $year[0] . "'},";
+                     and idstatutprojet_statutprojet!=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2));
+        if($year[0]==2013){
+            $serieExterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $year[0] . "'},";
+        }else{
+            $serieExterne .="{name: '" . $year[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $year[0] . "'},";
+        }
+        
+        
     }$serieExterne .="]},";
     foreach ($years as $key => $year) {
         $serieExterneCentrale .= "{id: '" . 'externe' . $year[0] . "',name: '" . TXT_PROJETEXOEXTERNE . "',data: [";
@@ -59,7 +65,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
             $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                         AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
                         and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=? 
-                        and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1]));
+                         and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1]));
             $serieExterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $libelleCentrale . $year[0] . "'},";
         }$serieExterneCentrale .="]},";
     }
@@ -68,8 +74,13 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
     foreach ($years as $key => $year) {
         $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?  
-                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2));
-        $serieCollaboratif .="{name: '" . $year[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $year[0] . "'},";
+                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2));
+        if($year[0]==2013){
+            $serieCollaboratif .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $year[0] . "'},";
+        }else{
+            $serieCollaboratif .="{name: '" . $year[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $year[0] . "'},";
+        }
+        
     }$serieCollaboratif.="]},";
     $serieCollaboratifCentrale = "";
     foreach ($years as $key => $year) {
@@ -77,7 +88,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
         foreach ($centrales as $key => $centrale) {
             $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
             AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?  
-            and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
+            and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
                     array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1]));
             $serieCollaboratifCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $centrale[0] . $year[0] . "'},";
         }$serieCollaboratifCentrale .="]},";
@@ -87,20 +98,24 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
     $serieInterne = "{id: '" . TXT_PROJETINTERNE . "',name: '" . TXT_PROJETINTERNE . "',data: [";
     foreach ($years as $key => $year) {
         $nbtotalprojet = $manager->getSinglebyArray("select count(distinct idprojet_projet) from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? "
-                . "and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=?", 
+                . "and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=?", 
                 array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2));
 
         $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                     AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=?",
+                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=?",
                     array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2));
         $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?
-                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2));
+                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2));
 
         $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);
-
-        $serieInterne .="{name: '" . $year[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $year[0] . "'},";
+        if($year[0]==2013){
+            $serieInterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $year[0] . "'},";
+        }else{
+            $serieInterne .="{name: '" . $year[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $year[0] . "'},";
+        }
+        
     }$serieInterne.= "]},";
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
     $serieInterneCentrale = "";
@@ -108,14 +123,14 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
         $serieInterneCentrale .= "{id: '" . TXT_PROJETINTERNE . $year[0] . "',name: '" . TXT_PROJETINTERNE . "',data: [";
         foreach ($centrales as $key => $centrale) {
             $nbtotalprojet = $manager->getSinglebyArray("select count(distinct idprojet_projet) from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? "
-                    . "and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1]));
+                    . "and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1]));
             $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                     AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? 
+                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? 
                     and co.idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1]));
             $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=? 
-                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
+                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
                     array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1]));
             $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);
             $serieInterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $year[0] . "'},";
@@ -136,15 +151,15 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
     $subtitle = "";
     $xasisTitle = "";
     $nbtotalProjet = $manager->getSinglebyArray("select count(idprojet_projet) from concerne,projet  where idprojet_projet=idprojet and idstatutprojet_statutprojet!=?  and idstatutprojet_statutprojet!=? "
-            . "and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012 and extract(year from dateprojet)<=?", array(ACCEPTE, REFUSE, ENATTENTEPHASE2, $_GET['anneeType']));
+            . "and idstatutprojet_statutprojet!=?  and extract(year from dateprojet)<=?", array(ACCEPTE, REFUSE, ENATTENTEPHASE2, $_GET['anneeType']));
     $nbProjetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE  cr.idprojet_projet = p.idprojet 
         AND  u.idutilisateur = cr.idutilisateur_utilisateur AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-        and p.idprojet not in(select idprojet_projet from projetpartenaire )and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012 and extract(year from dateprojet)<=? ", 
+        and p.idprojet not in(select idprojet_projet from projetpartenaire )and idstatutprojet_statutprojet!=?  and extract(year from dateprojet)<=? ", 
             array(ACCEPTE, REFUSE, ENATTENTEPHASE2, $_GET['anneeType']));
 
     $nbProjetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet AND pr.idprojet_projet = p.idprojet
         AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?  and idstatutprojet_statutprojet!=? 
-        and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012 and extract(year from dateprojet)<=? ",array(ACCEPTE, REFUSE, ENATTENTEPHASE2, $_GET['anneeType']));
+        and idstatutprojet_statutprojet!=?  and extract(year from dateprojet)<=? ",array(ACCEPTE, REFUSE, ENATTENTEPHASE2, $_GET['anneeType']));
     $nbProjetInterne = $nbtotalProjet - $nbProjetExogeneExterne - $nbProjetExogeneCollaboratif;
     $serieX = '{name: "' . TXT_PROJETINTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetInterne . ',drilldown: "' . TXT_PROJETINTERNE . '"}]},';
     $serieX .= '{name: "' . TXT_PROJETEXOEXTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetExogeneExterne . ',drilldown: "' . TXT_PROJETEXOEXTERNE . '"}]},';
@@ -158,15 +173,15 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
     $serieExogeneCollaboratif = "{id: '" . TXT_PROJETEXOCOLLABORATIF . "',name: '" . TXT_PROJETEXOCOLLABORATIF . "',data: [";
     foreach ($centrales as $key => $centrale) {
         $nbtotalprojet = $manager->getSinglebyArray("select count(distinct idprojet_projet) from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? "
-                . "and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and idcentrale_centrale=?", 
+                . "and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and idcentrale_centrale=?", 
                 array(ACCEPTE, REFUSE, $_GET['anneeType'], ENATTENTEPHASE2, $centrale[1]));
         $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                     AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? 
+                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? 
                     and co.idcentrale_centrale=?", array(ACCEPTE, REFUSE, $_GET['anneeType'], ENATTENTEPHASE2, $centrale[1]));
         $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?
-                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
+                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
                 array(ACCEPTE, REFUSE, $_GET['anneeType'], ENATTENTEPHASE2, $centrale[1]));
         $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);
         $serieInterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $_GET['anneeType'] . "'},";
@@ -188,19 +203,19 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
 
 if (IDTYPEUSER == ADMINLOCAL) {
     $nbtotalprojet = $manager->getSinglebyArray("select count(idprojet_projet) from concerne,projet  where idprojet_projet=idprojet and idstatutprojet_statutprojet!=?  and idstatutprojet_statutprojet!=? "
-            . "and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012 and idcentrale_centrale=?",array(ACCEPTE, REFUSE, ENATTENTEPHASE2,IDCENTRALEUSER));
+            . "and idstatutprojet_statutprojet!=?  and idcentrale_centrale=?",array(ACCEPTE, REFUSE, ENATTENTEPHASE2,IDCENTRALEUSER));
     $title = TXT_PROJETPARDATETYPE;
     $subtitle = "";
     $xasisTitle = "";
 
     $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE  cr.idprojet_projet = p.idprojet 
         AND  u.idutilisateur = cr.idutilisateur_utilisateur AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-        and p.idprojet not in(select idprojet_projet from projetpartenaire )and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012 and co.idcentrale_centrale=?", 
+        and p.idprojet not in(select idprojet_projet from projetpartenaire )and idstatutprojet_statutprojet!=?  and co.idcentrale_centrale=?", 
             array(ACCEPTE, REFUSE, ENATTENTEPHASE2,IDCENTRALEUSER));
 
     $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
         AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=? 
-        and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? and extract(year from dateprojet)>2012 and co.idcentrale_centrale=?",array(ACCEPTE, REFUSE, ENATTENTEPHASE2,IDCENTRALEUSER));
+        and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=?  and co.idcentrale_centrale=?",array(ACCEPTE, REFUSE, ENATTENTEPHASE2,IDCENTRALEUSER));
     $nbprojetInterne = $nbtotalprojet - $nbprojetExogeneExterne - $nbprojetExogeneCollaboratif;    
     $serieX = '{name: "' . TXT_PROJETINTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetInterne . ',drilldown: "' . TXT_PROJETINTERNE . '"}]},';
     $serieX .= '{name: "' . TXT_PROJETEXOEXTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetExogeneExterne . ',drilldown: "' . "externe" . '"}]},';
@@ -211,14 +226,21 @@ if (IDTYPEUSER == ADMINLOCAL) {
     foreach ($years as $key => $year) {
         $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                     AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? 
+                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? 
                     and co.idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2,IDCENTRALEUSER));
-        $serieExterne .="{name: '" . $year[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $year[0] . "'},";
-        $serieExterneMois .="{id: '" . 'externe' . $year[0] . "',name: '" .'externe'. $year[0] . "'" . ',data: [';
+        if($year[0]==2013){
+            $serieExterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $year[0] . "'},";
+        }else{
+            $serieExterne .="{name: '" . $year[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $year[0] . "'},";
+        }        
+        
+            $serieExterneMois .="{id: '" . 'externe' . $year[0] . "',name: '" .'externe'. $year[0] . "'" . ',data: [';
+        
+        
         for ($mois = 1; $mois < 13; $mois++) {
             $nbprojetExogeneExterneMois = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                     AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? 
+                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)=?  and idstatutprojet_statutprojet!=? 
                     and co.idcentrale_centrale=? and extract(month from dateprojet)=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2,IDCENTRALEUSER,$mois));
             $serieExterneMois.= "['" . showMonth($mois,$lang) . "'," . $nbprojetExogeneExterneMois . "],";;
         }$serieExterneMois.=']},';
@@ -230,14 +252,19 @@ if (IDTYPEUSER == ADMINLOCAL) {
     foreach ($years as $key => $year) {
         $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?
-                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
+                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
                 array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2,IDCENTRALEUSER));
-        $serieCollaboratif .="{name: '" . $year[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $year[0] . "'},";
+        if($year[0]==2013){
+            $serieCollaboratif .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $year[0] . "'},";
+        }else{
+            $serieCollaboratif .="{name: '" . $year[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $year[0] . "'},";
+        }
+        
         $serieCollaboratifMois .="{id: '" . 'collaboratif' . $year[0] . "',name: '" .'collaboratif'. $year[0] . "'" . ',data: [';
         for ($mois = 1; $mois < 13; $mois++) {
             $nbprojetCollaboratifMois = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?  
-                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? 
+                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? 
                     and extract(month from dateprojet)=?",array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2,IDCENTRALEUSER,$mois));
             $serieCollaboratifMois.= "['" . showMonth($mois,$lang) . "'," . $nbprojetCollaboratifMois . "],";
         }$serieCollaboratifMois.=']},';
@@ -247,31 +274,36 @@ if (IDTYPEUSER == ADMINLOCAL) {
     $serieInterneMois="";
     foreach ($years as $key => $year) {
         $nbtotalprojet = $manager->getSinglebyArray("select count(distinct idprojet_projet) from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-            and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2,IDCENTRALEUSER));
+            and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2,IDCENTRALEUSER));
         $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                     AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? 
+                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? 
                     and co.idcentrale_centrale=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2,IDCENTRALEUSER));
 
         $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?  
-                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
+                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=?", 
                 array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2,IDCENTRALEUSER));
 
-        $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);        
-        $serieInterne .="{name: '" . $year[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $year[0] . "'},";
+        $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);
+        if($year[0]==2013){
+            $serieInterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $year[0] . "'},";
+        }else{
+            $serieInterne .="{name: '" . $year[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $year[0] . "'},";
+        }
+        
         $serieInterneMois .="{id: '" . TXT_PROJETINTERNE . $year[0] . "',name: '" .TXT_PROJETINTERNE. $year[0] . "'" . ',data: [';
         for ($mois = 1; $mois < 13; $mois++) {
             $nbtotalprojetmois = $manager->getSinglebyArray("select count(distinct idprojet_projet) from concerne,projet where idprojet_projet=idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? "
-                    . "and extract(year from dateprojet)=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and idcentrale_centrale=? and extract(month from dateprojet)=?", 
+                    . "and extract(year from dateprojet)=?  and idstatutprojet_statutprojet!=? and idcentrale_centrale=? and extract(month from dateprojet)=?", 
                     array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, IDCENTRALEUSER, $mois));
             $nbprojetExogeneExterneMois = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                     AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
-                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? 
+                    and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? 
                     and extract(month from dateprojet)=? ", array( ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, IDCENTRALEUSER, $mois));
             $nbprojetExogeneCollaboratifMois = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?
-                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)=? and extract(year from dateprojet)>2012 and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? 
+                    and idstatutprojet_statutprojet!=? and extract(year from dateprojet)=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? 
                     and extract(month from dateprojet)=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, IDCENTRALEUSER, $mois));
             $nbprojetInterneMois = $nbtotalprojetmois - ($nbprojetExogeneExterneMois + $nbprojetExogeneCollaboratifMois);
             $serieInterneMois.= "['" . showMonth($mois,$lang) . "'," . $nbprojetInterneMois . "],";

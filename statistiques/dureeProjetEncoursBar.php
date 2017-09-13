@@ -104,9 +104,15 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeDureeeProjet'])) {
         $nbProjet1 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? AND extract(year from datedebutprojet)<=?", array(1, $year[0]));
         $nbProjet2 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? AND extract(year from datedebutprojet)<=?", array(2, $year[0]));
         $nbProjet3 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? AND extract(year from datedebutprojet)<=?", array(3, $year[0]));
-        $serieRang1 .="{name: '" . $year[0] . "', y: " . $nbProjet1 . " , drilldown: '" . 'rang 1' . $year[0] . "'},";
-        $serieRang2 .="{name: '" . $year[0] . "', y: " . $nbProjet2 . " , drilldown: '" . 'rang 2' . $year[0] . "'},";
-        $serieRang3 .="{name: '" . $year[0] . "', y: " . $nbProjet3 . " , drilldown: '" . 'rang 3' . $year[0] . "'},";
+        if($year[0]==2013){
+            $serieRang1 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbProjet1 . " , drilldown: '" . 'rang 1' . $year[0] . "'},";
+            $serieRang2 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbProjet2 . " , drilldown: '" . 'rang 2' . $year[0] . "'},";
+            $serieRang3 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbProjet3 . " , drilldown: '" . 'rang 3' . $year[0] . "'},";
+        }else{
+            $serieRang1 .="{name: '" . $year[0] . "', y: " . $nbProjet1 . " , drilldown: '" . 'rang 1' . $year[0] . "'},";
+            $serieRang2 .="{name: '" . $year[0] . "', y: " . $nbProjet2 . " , drilldown: '" . 'rang 2' . $year[0] . "'},";
+            $serieRang3 .="{name: '" . $year[0] . "', y: " . $nbProjet3 . " , drilldown: '" . 'rang 3' . $year[0] . "'},";
+        }
     }
     $serieRang1 .= "]},";
     $serieRang2 .= "]},";
@@ -115,9 +121,15 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeDureeeProjet'])) {
 
 
     foreach ($years as $key => $year) {
-        $serieRang1 .= "{id: '" . 'rang 1' . $year[0] . "',name: '" . $year[0] . ' < 1 an' . "',data: [";
-        $serieRang2 .= "{id: '" . 'rang 2' . $year[0] . "',name: '" . $year[0] . ' >= 1 an et < 3 ans' . "',data: [";
-        $serieRang3 .= "{id: '" . 'rang 3' . $year[0] . "',name: '" . $year[0] . ' > 3 ans' . "',data: [";
+        if($year[0]==2013){
+            $serieRang1 .= "{id: '" . 'rang 1' . $year[0] . "',name: '" . TXT_INFERIEUR2013 . ' < 1 an' . "',data: [";
+            $serieRang2 .= "{id: '" . 'rang 2' . $year[0] . "',name: '" . TXT_INFERIEUR2013 . ' >= 1 an et < 3 ans' . "',data: [";
+            $serieRang3 .= "{id: '" . 'rang 3' . $year[0] . "',name: '" . TXT_INFERIEUR2013 . ' > 3 ans' . "',data: [";
+        }else{
+               $serieRang1 .= "{id: '" . 'rang 1' . $year[0] . "',name: '" . $year[0] . ' < 1 an' . "',data: [";
+            $serieRang2 .= "{id: '" . 'rang 2' . $year[0] . "',name: '" . $year[0] . ' >= 1 an et < 3 ans' . "',data: [";
+            $serieRang3 .= "{id: '" . 'rang 3' . $year[0] . "',name: '" . $year[0] . ' > 3 ans' . "',data: [";
+        }
 
         foreach ($centrales as $key => $centrale) {
             $nbprojetRang1 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=? and extract(year from datedebutprojet)<=?", array(1, $centrale[1], $year[0]));
@@ -146,7 +158,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeDureeeProjet'])) {
         </tr>
     </table> 
     <?php
-    $title = TXT_DUREEPROJETENCOURSDATE . $_GET['anneeDureeeProjet'];
+    if($_GET['anneeDureeeProjet']==2013){
+        $title = TXT_DUREEPROJETENCOURSDATE . TXT_INFERIEUR2013;
+    }else{
+        $title = TXT_DUREEPROJETENCOURSDATE . $_GET['anneeDureeeProjet'];
+    }
     $subtitle = "";
     $xasisTitle = "";
 
@@ -167,9 +183,15 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeDureeeProjet'])) {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                              FIN  DE LA DE LA'ABCISSE DES X
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    $serieRang1 = "{id: '" . 'rang 1' . "',name: '" . $_GET['anneeDureeeProjet'] . ' < 1 an' . "',data: [";
-    $serieRang2 = "{id: '" . 'rang 2' . "',name: '" . $_GET['anneeDureeeProjet'] . ' >= 1 an et < 3 ans' . "',data: [";
-    $serieRang3 = "{id: '" . 'rang 3' . "',name: '" . $_GET['anneeDureeeProjet'] . ' > 3 ans' . "',data: [";
+    if($_GET['anneeDureeeProjet']==2013){
+        $serieRang1 = "{id: '" . 'rang 1' . "',name: '" . TXT_INFERIEUR2013 . ' < 1 an' . "',data: [";
+        $serieRang2 = "{id: '" . 'rang 2' . "',name: '" . TXT_INFERIEUR2013 . ' >= 1 an et < 3 ans' . "',data: [";
+        $serieRang3 = "{id: '" . 'rang 3' . "',name: '" . TXT_INFERIEUR2013 . ' > 3 ans' . "',data: [";
+    }else{
+        $serieRang1 = "{id: '" . 'rang 1' . "',name: '" . $_GET['anneeDureeeProjet'] . ' < 1 an' . "',data: [";
+        $serieRang2 = "{id: '" . 'rang 2' . "',name: '" . $_GET['anneeDureeeProjet'] . ' >= 1 an et < 3 ans' . "',data: [";
+        $serieRang3 = "{id: '" . 'rang 3' . "',name: '" . $_GET['anneeDureeeProjet'] . ' > 3 ans' . "',data: [";
+    }
 
     foreach ($centrales as $key => $centrale) {
         $nbprojetRang1 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=? and extract(year from datedebutprojet)<=?", array(1, $centrale[1], $_GET['anneeDureeeProjet']));
@@ -218,9 +240,15 @@ if (IDTYPEUSER == ADMINLOCAL) {
         $nbProjet1 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? AND extract(year from datedebutprojet)<=? and idcentrale_centrale=?", array(1, $year[0],IDCENTRALEUSER));
         $nbProjet2 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? AND extract(year from datedebutprojet)<=? and idcentrale_centrale=?", array(2, $year[0],IDCENTRALEUSER));
         $nbProjet3 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? AND extract(year from datedebutprojet)<=? and idcentrale_centrale=?", array(3, $year[0],IDCENTRALEUSER));
-        $serieRang1 .="{name: '" . $year[0] . "', y: " . $nbProjet1 . " , drilldown: '" . 'rang 1' . $year[0] . "'},";
-        $serieRang2 .="{name: '" . $year[0] . "', y: " . $nbProjet2 . " , drilldown: '" . 'rang 2' . $year[0] . "'},";
-        $serieRang3 .="{name: '" . $year[0] . "', y: " . $nbProjet3 . " , drilldown: '" . 'rang 3' . $year[0] . "'},";
+        if($year[0]==2013){
+            $serieRang1 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbProjet1 . " , drilldown: '" . 'rang 1' . $year[0] . "'},";
+            $serieRang2 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbProjet2 . " , drilldown: '" . 'rang 2' . $year[0] . "'},";
+            $serieRang3 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbProjet3 . " , drilldown: '" . 'rang 3' . $year[0] . "'},";
+        }else{
+            $serieRang1 .="{name: '" . $year[0] . "', y: " . $nbProjet1 . " , drilldown: '" . 'rang 1' . $year[0] . "'},";
+            $serieRang2 .="{name: '" . $year[0] . "', y: " . $nbProjet2 . " , drilldown: '" . 'rang 2' . $year[0] . "'},";
+            $serieRang3 .="{name: '" . $year[0] . "', y: " . $nbProjet3 . " , drilldown: '" . 'rang 3' . $year[0] . "'},";
+        }
     }
     $serieRang1 .= "]},";
     $serieRang2 .= "]},";

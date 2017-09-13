@@ -51,10 +51,14 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
     foreach ($years as $key => $value) {
         $nbByYearPermanentInterne = $manager->getSinglebyArray("select count(idutilisateur) from utilisateur where idqualitedemandeuraca_qualitedemandeuraca = ? and idcentrale_centrale is not null "
                 . "and EXTRACT(YEAR from datecreation)<=?  ", array(PERMANENT, $value[0]));
-        $_pInterne .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentInterne . " , drilldown: '" . 'intper' . $value[0] . "'},";
+        if($value[0]==2013){            
+            $_pInterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearPermanentInterne . " , drilldown: '" . 'intper' . $value[0] . "'},";
+        }else{
+            $_pInterne .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentInterne . " , drilldown: '" . 'intper' . $value[0] . "'},";
+        }
     }$_pInterne .="]},";
     //$_pInterne = str_replace("},]}", "}]}", $_pInterne);
-    foreach ($years as $key => $annee) {
+    foreach ($years as $key => $annee) {        
         $_pInterne .= "{id: 'intper" . $annee[0] . "',name: 'Permanent interne  $annee[0]" . "',data: [";
         foreach ($centrale as $key => $cent) {
             $nbByYearPermanentInterne1 = $manager->getSinglebyArray("select count(idutilisateur) from utilisateur,centrale where idcentrale_centrale=idcentrale and idqualitedemandeuraca_qualitedemandeuraca = ? "
@@ -70,7 +74,12 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
     foreach ($years as $key => $value) {
         $nbByYearNonPermanentInterne = $manager->getSinglebyArray("select count(idutilisateur) from utilisateur where idqualitedemandeuraca_qualitedemandeuraca = ? and idcentrale_centrale is not null "
                 . "and EXTRACT(YEAR from datecreation)<=?  ", array(NONPERMANENT, $value[0]));
-        $_npInterne .="{name: '" . $value[0] . "', y: " . $nbByYearNonPermanentInterne . " , drilldown: '" . 'int' . $value[0] . "'},";
+        if($value[0]==2013){
+            $_npInterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearNonPermanentInterne . " , drilldown: '" . 'int' . $value[0] . "'},";
+        }else{
+            $_npInterne .="{name: '" . $value[0] . "', y: " . $nbByYearNonPermanentInterne . " , drilldown: '" . 'int' . $value[0] . "'},";
+        }
+        
     }$_npInterne .="]},";
     foreach ($years as $key => $value) {
         $_npInterne .= "{id: 'int" . $value[0] . "',name: 'Non Permanent Interne  $value[0]" . "',data: [";
@@ -90,7 +99,12 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
         if (empty($nbByYearPermanentExterne)) {
             $nbByYearPermanentExterne = 0;
         }
-        $_pExterne .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentExterne . " , drilldown: '" . 'ext' . $value[0] . "'},";
+        if($value[0]==2013){
+            $_pExterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearPermanentExterne . " , drilldown: '" . 'ext' . $value[0] . "'},";
+        }else{
+            $_pExterne .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentExterne . " , drilldown: '" . 'ext' . $value[0] . "'},";
+        }
+        
     }$_pExterne .="]},";
     foreach ($years as $key => $year) {
         $_pExterne .= "{id: " . "'ext$year[0]',name: " . "'Permanent Externe $year[0]'," . "data: [";
@@ -114,7 +128,12 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
         if (empty($nbByYearPermanentIndustriel)) {
             $nbByYearPermanentIndustriel = 0;
         }
-        $_pIndustriel .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentIndustriel . " , drilldown: '" . 'ind' . $value[0] . "'},";
+        if($value[0]==2013){
+            $_pIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearPermanentIndustriel . " , drilldown: '" . 'ind' . $value[0] . "'},";
+        }else{
+            $_pIndustriel .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentIndustriel . " , drilldown: '" . 'ind' . $value[0] . "'},";
+        }
+        
     }$_pIndustriel .="]},";
     foreach ($years as $key => $value) {
         $_pIndustriel .= "{id: " . "'ind$value[0]',name: " . "'Permanent Industriel $value[0]'," . "data: [";
@@ -139,7 +158,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
         if (empty($nbByYearNonPermanentExterne)) {
             $nbByYearNonPermanentExterne = 0;
         }
-        $_npExterne .="{name: '" . $value[0] . "', y: " . $nbByYearNonPermanentExterne . " , drilldown: '" . 'npext' . $value[0] . "'},";
+        if($value[0]==2013){
+            $_npExterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearNonPermanentExterne . " , drilldown: '" . 'npext' . $value[0] . "'},";
+        }else{
+            $_npExterne .="{name: '" . $value[0] . "', y: " . $nbByYearNonPermanentExterne . " , drilldown: '" . 'npext' . $value[0] . "'},";
+        }
     }$_npExterne .="]},";
     foreach ($years as $key => $value) {
         $_npExterne .= "{id: " . "'npext$value[0]',name: " . "'Non Permanent Externe $value[0]'," . "data: [";
@@ -152,7 +175,8 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
             if (empty($nbByYearNonPermanentExterneCent)) {
                 $nbByYearNonPermanentExterneCent = 0;
             }
-            $_npExterne .="{name: '" . $cent[0] . "', y: " . $nbByYearNonPermanentExterneCent . " , drilldown: '" . 'indnp' . $value[0] . $cent[0] . "'},";
+            $_npExterne .="{name: '" . $cent[0] . "', y: " . $nbByYearNonPermanentExterneCent . " , drilldown: '" . 'indnp' . $value[0] . $cent[0] . "'},";            
+            
         }$_npExterne .="]},";
     }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -166,7 +190,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
         if (empty($nbByYearNonPermanentIndustriel)) {
             $nbByYearNonPermanentIndustriel = 0;
         }
-        $_npIndustriel .="{name: '" . $valueYear[0] . "', y: " . $nbByYearNonPermanentIndustriel . " , drilldown: '" . 'npIndustriel' . $valueYear[0] . "'},";
+        if($valueYear[0]==2013){
+            $_npIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearNonPermanentIndustriel . " , drilldown: '" . 'npIndustriel' . $valueYear[0] . "'},";
+        }else{
+            $_npIndustriel .="{name: '" . $valueYear[0] . "', y: " . $nbByYearNonPermanentIndustriel . " , drilldown: '" . 'npIndustriel' . $valueYear[0] . "'},";
+        }
     }$_npIndustriel .="]},";
 
     foreach ($years as $key => $valueYear) {
@@ -232,16 +260,24 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              PERMANENT ACADEMIQUE INTERNE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    $_pInterne = "{id: " . "'pInterne',name: " . "'Permanent interne $anneeSelectionne'," . "data: [";    
+    if($anneeSelectionne==2013){
+        $_pInterne = "{id: " . "'pInterne',name: " . "'Permanent interne ".TXT_INFERIEUR2013."'," . "data: [";    
+    }else{
+        $_pInterne = "{id: " . "'pInterne',name: " . "'Permanent interne $anneeSelectionne'," . "data: [";    
+    }
     foreach ($centrale as $key => $cent) {
         $nbByYearPermanentInterne1 = $manager->getSinglebyArray("select count(idutilisateur) from utilisateur,centrale where idcentrale_centrale=idcentrale and idqualitedemandeuraca_qualitedemandeuraca = ? "
-                . "and libellecentrale=? and EXTRACT(YEAR from datecreation)<=?  ", array(PERMANENT, $cent[0], $_GET['anneeNouveauxPorteursProjet']));
-        $_pInterne .="{name: '" . $cent[0] . "', y: " . $nbByYearPermanentInterne1 . " , drilldown: '" . $cent[0] . 'int' . $_GET['anneeNouveauxPorteursProjet'] . "'},";
+                . "and libellecentrale=? and EXTRACT(YEAR from datecreation)<=?  ", array(PERMANENT, $cent[0], $_GET['anneeNouveauxPorteursProjet']));        
+            $_pInterne .="{name: '" . $cent[0] . "', y: " . $nbByYearPermanentInterne1 . " , drilldown: '" . $cent[0] . 'int' . $_GET['anneeNouveauxPorteursProjet'] . "'},";
     }$_pInterne .="]},";
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              NON PERMANENT ACADEMIQUE INTERNE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    $_npInterne = "{id: " . "'npInterne',name: " . "'Non Permanent Interne $anneeSelectionne'," . "data: [";    
+    if($anneeSelectionne==2013){
+        $_npInterne = "{id: " . "'npInterne',name: " . "'Non Permanent Interne ". TXT_INFERIEUR2013."',data: [";    
+    }else{
+        $_npInterne = "{id: " . "'npInterne',name: " . "'Non Permanent Interne $anneeSelectionne'," . "data: [";    
+    }
     foreach ($centrale as $key => $cent) {
         $nbByYearNonPermanentInterne1 = $manager->getSinglebyArray("select count(idutilisateur) from utilisateur,centrale where idcentrale_centrale=idcentrale and idqualitedemandeuraca_qualitedemandeuraca = ? "
                 . "and libellecentrale=? and EXTRACT(YEAR from datecreation)<=?  ", array(NONPERMANENT, $cent[0], $_GET['anneeNouveauxPorteursProjet']));
@@ -250,7 +286,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                               PERMANENT ACADEMIQUE EXTERNE
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    $_pExterne ="{id: " . "'pExterne',name: " . "'Permanent Externe $anneeSelectionne' ," . "data: [";  
+    if($anneeSelectionne==2013){
+        $_pExterne ="{id: " . "'pExterne',name: " . "'Permanent Externe ".TXT_INFERIEUR2013."' ," . "data: [";
+    }else{
+        $_pExterne ="{id: " . "'pExterne',name: " . "'Permanent Externe $anneeSelectionne' ," . "data: [";
+    }
     foreach ($centrale as $key => $cent) {
         $nbByYearPermanentExterneMois = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
                     . "AND cr.idprojet_projet = co.idprojet_projet and u.idcentrale_centrale is null and idqualitedemandeuraca_qualitedemandeuraca = ? and EXTRACT(YEAR from datecreation)<=? "
@@ -264,7 +304,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                               PERMANENT INDUSTRIEL
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    $_pIndustriel = "{id: " . "'pIndustriel',name: " . "'Permanent Industriel $anneeSelectionne'," . "data: [";    
+    if($anneeSelectionne==2013){
+        $_pIndustriel = "{id: " . "'pIndustriel',name: " . "'Permanent Industriel ".TXT_INFERIEUR2013."'," . "data: [";    
+    }else{
+        $_pIndustriel = "{id: " . "'pIndustriel',name: " . "'Permanent Industriel $anneeSelectionne'," . "data: [";    
+    }
     foreach ($centrale as $key => $cent) {
         $nbByYearPermanentIndustrielMois = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
             . "AND cr.idprojet_projet = co.idprojet_projet and idqualitedemandeurindust_qualitedemandeurindust=?  and u.idcentrale_centrale is null and extract(year from datecreation)<=? and co.idcentrale_centrale=?",
@@ -278,7 +322,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                               NON PERMANENT EXTERNE
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    $_npExterne = "{id: " . "'npExterne',name: " . "'Non Permanent Externe $anneeSelectionne'," . "data: [";    
+    if($anneeSelectionne==2013){
+        $_npExterne = "{id: " . "'npExterne',name: " . "'Non Permanent Externe ".TXT_INFERIEUR2013."'," . "data: [";    
+    }else{
+        $_npExterne = "{id: " . "'npExterne',name: " . "'Non Permanent Externe $anneeSelectionne'," . "data: [";    
+    }
     foreach ($centrale as $key => $cent) {
         $nbByYearNonPermanentExterneMois = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
             . "AND cr.idprojet_projet = co.idprojet_projet and u.idcentrale_centrale is null and idqualitedemandeuraca_qualitedemandeuraca = ? and extract(year from datecreation)<=? and co.idcentrale_centrale=?",
@@ -291,7 +339,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                               NON PERMANENT INDUSTRIEL
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    $_npIndustriel = "{id: " . "'npIndustriel',name: " . "'Non Permanent Industriel $anneeSelectionne'," . "data: [";   
+    if($anneeSelectionne==2013){
+        $_npIndustriel = "{id: " . "'npIndustriel',name: " . "'Non Permanent Industriel ".TXT_INFERIEUR2013."'," . "data: [";   
+    }else{
+        $_npIndustriel = "{id: " . "'npIndustriel',name: " . "'Non Permanent Industriel $anneeSelectionne'," . "data: [";   
+    }
     foreach ($centrale as $key => $cent) {
         $nbByYearNonPermanentIndustrielMois = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
                     . "AND cr.idprojet_projet = co.idprojet_projet and u.idcentrale_centrale is null and idqualitedemandeurindust_qualitedemandeurindust = ? and co.idcentrale_centrale=? and extract(year from datecreation)<=?",
@@ -301,7 +353,11 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
         }
         $_npIndustriel .="{name: '" . $cent[0] . "', y: " . $nbByYearNonPermanentIndustrielMois . " , drilldown: '" . 'indnp' . $anneeSelectionne . $cent[0] . "'},";
     }$_npIndustriel .="]},";
-    $title = TXT_ORIGINENOUVEAUPORTEURPROJETDATE.$_GET['anneeNouveauxPorteursProjet'];
+    if($anneeSelectionne==2013){
+           $title = TXT_ORIGINENOUVEAUPORTEURPROJETDATE.' '.TXT_INFERIEUR2013;
+    }else{
+        $title = TXT_ORIGINENOUVEAUPORTEURPROJETDATE.$anneeSelectionne;
+    }    
     $resultPermanent = $_pInterne . $_pExterne . $_pIndustriel;
     $resultNP0 = $_npInterne . $_npExterne . $_npIndustriel;
     $resultNonPermanent = substr($resultNP0, 0, -1);
@@ -310,7 +366,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeNouveauxPorteursProjet'])
 }
 
 
-if (IDTYPEUSER == ADMINLOCAL) { 
+if (IDTYPEUSER == ADMINLOCAL) {
     $nbPermanentIndustriel = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = co.idprojet_projet"
             . " and idqualitedemandeurindust_qualitedemandeurindust=?  and co.idcentrale_centrale=?",array(PERMANENTINDUST,IDCENTRALEUSER));
     $s_PermanentIndustriel = '{name: "' . TXT_PERMANENTINDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbPermanentIndustriel . ',drilldown: "' . 'pIndustriel' . '"}]},';
@@ -346,7 +402,11 @@ if (IDTYPEUSER == ADMINLOCAL) {
         $nbByYearPermanentInterne = $manager->getSinglebyArray("select count(idutilisateur) from utilisateur ,centrale WHERE idcentrale_centrale=idcentrale and idqualitedemandeuraca_qualitedemandeuraca = ?"
                 . " and idcentrale=?  and EXTRACT(YEAR from datecreation)<=?  ", 
                 array(PERMANENT, IDCENTRALEUSER,$value[0],));
-        $_pInterne .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentInterne . " , drilldown: '" . 'intper' . $value[0] . "'},";
+        if($value[0]==2013){
+            $_pInterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearPermanentInterne . " , drilldown: '" . 'intper' . $value[0] . "'},";
+        }else{
+            $_pInterne .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentInterne . " , drilldown: '" . 'intper' . $value[0] . "'},";
+        }
     }$_pInterne .="]},";
     
     foreach ($years as $key => $year) {
@@ -367,7 +427,11 @@ if (IDTYPEUSER == ADMINLOCAL) {
     foreach ($years as $key => $year) {
         $nbByYearNonPermanentInterne = $manager->getSinglebyArray("select count(idutilisateur) from utilisateur,centrale where idcentrale_centrale=idcentrale and idqualitedemandeuraca_qualitedemandeuraca = ? "
                     . "and idcentrale=? and EXTRACT(YEAR from datecreation)<=?  ", array(NONPERMANENT, IDCENTRALEUSER, $year[0]));
-        $_npInterne .="{name: '" . $year[0] . "', y: " . $nbByYearNonPermanentInterne . " , drilldown: '" . 'npInterne' . $year[0] . "'},";
+        if($year[0]==2013){
+            $_npInterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearNonPermanentInterne . " , drilldown: '" . 'npInterne' . $year[0] . "'},";
+        }else{
+            $_npInterne .="{name: '" . $year[0] . "', y: " . $nbByYearNonPermanentInterne . " , drilldown: '" . 'npInterne' . $year[0] . "'},";
+        }
     }$_npInterne .="]},";
     $_npInterne = str_replace("},]}", "}]}", $_npInterne);
     
@@ -394,7 +458,11 @@ if (IDTYPEUSER == ADMINLOCAL) {
         if (empty($nbByYearPermanentExterne)) {
             $nbByYearPermanentExterne = 0;
         }
-        $_pExterne .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentExterne . " , drilldown: '" . 'ext' . $value[0] . "'},";
+        if($value[0]==2013){
+            $_pExterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearPermanentExterne . " , drilldown: '" . 'ext' . $value[0] . "'},";
+        }else{
+            $_pExterne .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentExterne . " , drilldown: '" . 'ext' . $value[0] . "'},";
+        }
     }$_pExterne .="]},";
 
 
@@ -423,7 +491,11 @@ if (IDTYPEUSER == ADMINLOCAL) {
         if (empty($nbByYearPermanentIndustriel)) {
             $nbByYearPermanentIndustriel = 0;
         }
-        $_pIndustriel .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentIndustriel . " , drilldown: '" . $value[0] . 'ind' . "'},";
+        if($value[0]==2013){
+            $_pIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearPermanentIndustriel . " , drilldown: '" . $value[0] . 'ind' . "'},";
+        }else{
+            $_pIndustriel .="{name: '" . $value[0] . "', y: " . $nbByYearPermanentIndustriel . " , drilldown: '" . $value[0] . 'ind' . "'},";
+        }
     }$_pIndustriel .="]},";
     foreach ($years as $key => $year) {
         $_pIndustriel .= "{id: " . "'$year[0]ind',name: " . "'Permanent Industriel $year[0]'," . "data: [";
@@ -449,7 +521,11 @@ if (IDTYPEUSER == ADMINLOCAL) {
         if (empty($nbByYearNonPermanentExterne)) {
             $nbByYearNonPermanentExterne = 0;
         }
-        $_npExterne .="{name: '" . $value[0] . "', y: " . $nbByYearNonPermanentExterne . " , drilldown: '" . 'npext' . $value[0] . "'},";
+        if($value[0]==2013){
+            $_npExterne .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearNonPermanentExterne . " , drilldown: '" . 'npext' . $value[0] . "'},";
+        }else{
+            $_npExterne .="{name: '" . $value[0] . "', y: " . $nbByYearNonPermanentExterne . " , drilldown: '" . 'npext' . $value[0] . "'},";
+        }
     }$_npExterne .="]},";
     foreach ($years as $key => $value) {
         $_npExterne .= "{id: " . "'npext$value[0]',name: " . "'Non Permanent Externe $value[0]'," . "data: [";
@@ -474,7 +550,11 @@ if (IDTYPEUSER == ADMINLOCAL) {
         if (empty($nbByYearNonPermanentIndustriel)) {
             $nbByYearNonPermanentIndustriel = 0;
         }
-        $_npIndustriel .="{name: '" . $valueYear[0] . "', y: " . $nbByYearNonPermanentIndustriel . " , drilldown: '" . 'npIndustriel' . $valueYear[0] . "'},";
+        if($valueYear[0]==2013){
+            $_npIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYearNonPermanentIndustriel . " , drilldown: '" . 'npIndustriel' . $valueYear[0] . "'},";
+        }else{
+            $_npIndustriel .="{name: '" . $valueYear[0] . "', y: " . $nbByYearNonPermanentIndustriel . " , drilldown: '" . 'npIndustriel' . $valueYear[0] . "'},";
+        }
     }$_npIndustriel .="]},";
 
     foreach ($years as $key => $valueYear) {
