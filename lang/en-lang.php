@@ -843,6 +843,7 @@ define("TXT_EMAILAUTRE","Want to send the demand of realization of a technologic
 define('TXT_PROJETADMIN',"My Projects Administration");
 define('TXT_SAVEPROJECT',"Save");
 define('TXT_UPDATE',"Update");
+define('TXT_UPDATEBELOW3MONTH',"Update (date below 3 months)");
 define('TXT_ACADEMICPARTENARIAT','Academic partnership with an industrial');
 define('TXT_FORMATION','Training');
 define('TXT_DIVERS',"various");
@@ -1039,3 +1040,6 @@ define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","The partner type already exis
 define('TXT_MESSAGEAIDETYPEPARTENAIRE','Please observe the order of filling of the fields. below');
 define('TXT_MESSAGEAIDEEXPORTCENTRALEUSER',"Current projects are pending projects, ongoing projects and running projects");
 define("TXT_INFERIEUR2013","Less than or equal to 2013");
+define("TXT_EMAILRELANCE","Reminder e-mail");
+define("TXT_ERRMAILPJ","There was a problem with the attachment, the E-Mail was not sent!");
+define("TXT_MAILPJOK","The e-mail with the attachment has been sent!");

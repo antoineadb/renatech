@@ -1,0 +1,102 @@
+<?php
+$db = BD::connecter();
+$manager = new Manager($db);
+?>
+<script>
+    function enablenemailrelance() {
+        dijit.byId("modifemailrelance").setAttribute('disabled', false);
+    }
+</script>
+<?php
+if(isset($_GET['msgupdateemailrelance'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msgsiteweb' >
+                <?php echo TXT_MSGUPDATELIBELLE; ?>
+            </fieldset>
+
+        </td>
+    </tr>
+</table>
+<?php }?>
+
+<form data-dojo-type="dijit/form/Form" method="post" name="emailrelance" id="emailrelance"
+      action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updateemailrelance.php?lang=<?php echo $lang; ?>">
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+<?php
+$emailprojetvalide1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE1');
+$emailprojetvalide2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE2');
+$emailprojetvalide3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE3');
+$emailprojetvalide4 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE4');
+$emailprojetvalide5 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE5');
+$emailprojetvalide6 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE6');
+$emailprojetvalide7 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE7');
+$emailprojetvalide8 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE8');
+$emailprojetvalide9 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RELANCE9');
+
+?>
+    <fieldset id="gestionemailrelance" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">
+        
+<a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
+            <span style="text-align: left;padding:10px;width: 945px;height:280px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+                <input type="text" name="acceptecreationprojet" style="display: none">
+                <?php
+                if($lang=='fr'){
+                    echo  stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide1[0]['libellefrancais']))).'<br><br>'.
+                    stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide2[0]['libellefrancais']))).'<br><br>'.
+                    stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide3[0]['libellefrancais']))).'<br><br>'.
+                    stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide4[0]['libellefrancais']))).'<br>'.
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide5[0]['libellefrancais']))).'<br>'.
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide6[0]['libellefrancais']))).'<br>';
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide7[0]['libellefrancais']))).'<br>';
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide8[0]['libellefrancais']))).'<br>';
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide9[0]['libellefrancais']))).'<br>';
+                }elseif($lang=='en'){
+                    echo  	stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide1[0]['libelleanglais']))).'<br><br>'.
+                    stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide2[0]['libelleanglais']))).'<br><br>'.
+                    stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide3[0]['libelleanglais']))).
+                    stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide4[0]['libelleanglais']))).'<br>'.
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide5[0]['libelleanglais']))).'<br>'.
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide6[0]['libelleanglais']))).'<br>';
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide7[0]['libelleanglais']))).'<br>';
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide8[0]['libelleanglais']))).'<br>';
+                    '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$emailprojetvalide9[0]['libelleanglais']))).'<br>';
+                    }
+                ?>
+            </span>
+
+        </a><table>            
+    <?php for ($i=1;$i<10;$i++) {?>            
+            <tr>
+                <?php ${'libelleprojetvalide'.$i.'fr'} = stripslashes(removeDoubleQuote(str_replace("’’","'",${'emailprojetvalide'.$i}[0]['libellefrancais'])));?>
+                <td> <input data-dojo-type="dijit/form/ValidationTextBox"
+                    value="<?php echo ${'libelleprojetvalide'.$i.'fr'}; ?>" onfocus="enablenemailrelance()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="<?php echo 'emailrelancevalide'.$i.'fr';?>" name="<?php echo 'emailrelancevalide'.$i.'fr';?>"
+                    data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
+                
+                    <?php ${'libelleprojetvalide'.$i.'en'} = stripslashes(removeDoubleQuote(str_replace("’’","'",${'emailprojetvalide'.$i}[0]['libelleanglais'])));?>
+                
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="<?php echo 'emailrelancevalide'.$i.'en';?>" name="<?php echo 'emailrelancevalide'.$i.'en';?>"
+                    value="<?php echo ${'libelleprojetvalide'.$i.'en'}; ?>"	onfocus="enablenemailrelance()"
+                    data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
+                </td>
+            </tr> 
+<?php }?>
+
+
+            
+        </table>
+    </fieldset>
+    <table>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td>
+                <input style="text-align: left;margin-left: 10px"  type="submit" id ="modifemailrelance" name="modifemailrelance"
+                       label="<?php echo TXT_MODIFIER ;?>"   data-dojo-type="dijit/form/Button" disabled="disabled" >
+            </td>
+        </tr>
+        <tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
+    </table>
+</form>
+<?php BD::deconnecter(); ?>

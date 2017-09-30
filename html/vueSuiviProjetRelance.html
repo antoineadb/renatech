@@ -25,8 +25,8 @@
                 {name: "<?php echo TXT_DATEDEBUTPROJET; ?>", field: "datedebutprojet", width: "auto", formatter: formatDate, autoComplete: true},
                 {name: "<?php echo TXT_DATEFIN; ?>", field: "datefin", width: "auto", formatter: formatDate, autoComplete: true, dataTypeArgs: {datePattern: "d/M/yyyy"}},
                 {name: "<?php echo TXT_NOM; ?>", field: "nom", width: "auto", autoComplete: true},
-                {name: "<?php echo 'Date d\'envoi de l\'email'; ?>", field: "dateheureenvoiemail", width: "auto", autoComplete: true},
-                {name: "<?php echo TXT_UPDATE; ?>", field: "datemaj", width: "auto", formatter: formatDate, autoComplete: true}
+                {name: "<?php echo 'Date d\'envoi de l\'email'; ?>", field: "dateheureenvoiemail", width: "auto", autoComplete: true,formatter: formatDate},
+                {name: "<?php echo TXT_UPDATEBELOW3MONTH; ?>", field: "datemaj", width: "auto", formatter: formatDate, autoComplete: true}
             ]];
         var grid = new dojox.grid.EnhancedGrid({
             id: 'grid',
@@ -43,14 +43,14 @@
         function formatDate(datum) {
             var annee = datum.substring(0, 4);
             if (annee > 1970){
-            var dateprojet = new Date(datum);
-                    var options = {year: "numeric", month: "numeric", day: "numeric"};
-                    <?php if ($lang == 'en') { ?>
+                var dateprojet = new Date(datum);
+                var options = {year: "numeric", month: "numeric", day: "numeric"};
+                <?php if ($lang == 'en') { ?>
                     return new Intl.DateTimeFormat("en-US", options).format(dateprojet);
-                    <?php } else { ?>
+                <?php } else { ?>
                     return new Intl.DateTimeFormat("fr-FR", options).format(dateprojet);
-                    <?php } ?>
-        }
+                <?php } ?>
+            }
         }
         dojo.byId("gridDiv").appendChild(grid.domNode);
         grid.startup();

@@ -30,7 +30,7 @@ $objet=utf8_decode(affiche('TXT_DEMANDEFAISABILITERMAILENATECH'));
 
 
 if (isset($_POST['messageValeur']) && !empty($_POST['messageValeur'])) {
-    $message = htmlentities(strip_tags($_POST['messageValeur']), ENT_QUOTES, 'UTF-8');
+    $message = utf8_decode(clean($_POST['messageValeur']));
     $_SESSION['message']=$message;
 } elseif(empty($_POST['messageValeur'])) {
     $message = utf8_decode($_SESSION['message']);
@@ -58,7 +58,8 @@ if (!empty($_FILES['fichierProjet']['name'])) {
 }
 $body = affiche('TXT_BODYEMAILPROJET0').'<br>'. utf8_decode(affiche('TXT_DEMANDEFAISABILITE')).'<br><br>'.  affiche('TXT_NOMDEMANDEUR').':  '.$nom.'<br>'.
         affiche('TXT_MAILDEMANDEUR').':</u>  '.$mail.'<br>'.TXT_NOMLABOENTREPRISE.':  '.$entrepriselaboratoire.
-        '<br><br><u>Objet: </u><br>'.$objet . '<br><br>' . '<u>'.TXT_MESS.': </u><br>' . $message . '<br><br>'.utf8_decode(affiche('TXT_SINCERESALUTATION')).'<br><br>'.  utf8_decode(affiche('TXT_RESEAURENATECH')).'<br><br>'.utf8_decode(affiche('TXT_DONOTREPLY'));
+        '<br><br><u>Objet: </u><br>'.$objet . '<br><br>' . '<u>'.TXT_MESS.': </u><br>' . $message . '<br><br>'.utf8_decode(affiche('TXT_SINCERESALUTATION')).'<br><br>'
+        .  utf8_decode(affiche('TXT_RESEAURENATECH')).'<br><br>'.utf8_decode(affiche('TXT_DONOTREPLY'));
 
 $id=$manager->getSingle("select max(id_demande) from demande_faisabilite")+1;
 if (isset($erreur)) {
@@ -67,17 +68,48 @@ if (isset($erreur)) {
 } elseif (isset($erreur1)) {
     header('Location: /' . REPERTOIRE . '/new_request/' . $lang . '/' . "Err02");
     exit();
-}elseif (isset($path) && !empty($path)) {
-    if (envoieEmailAttachement($id,$body, $objet, $emailDemande,$cc ,$path, $fileName)) {
-        $dateDemande=  date('Y-m-d');
-        $demande = new DemandeFaisabilite($_POST['nomDemande'], $_POST['emailDemande'], $_POST['objetDemande'], $dateDemande);
-        $manager->addDemande($demande);
-        header('Location: /' . REPERTOIRE . '/home/' . $lang);
-        exit();
-    }else{    
-        header('Location: /' . REPERTOIRE . '/new_request/' . $lang . '/' . "Err99");
-        exit();
-    }
+} elseif (isset($path) && !empty($path)) {
+        $maxsize = "1024000";
+        if ($_FILES["fichierProjet"]["error"] > 0) {
+            header('Location: /' . REPERTOIRE . '/new_request/' . $lang . '/' . "Err01");
+        } else {            
+            if ($_FILES['fichierProjet']['size'] > $maxsize) {
+                header('Location: /' . REPERTOIRE . '/new_request/' . $lang . '/' . "Err02");
+            } else {
+                $extensions_valides = array('jpg', 'jpeg', 'png', 'pdf');
+                $extension_upload = strtolower(substr(strrchr($_FILES['fichierProjet']['name'], '.'), 1));
+                if (in_array($extension_upload, $extensions_valides)) {
+                    require_once '../PHPMailer_5.2.4/class.phpmailer.php';
+                    $mail = new PHPMailer;
+                    $mail->From = $emailDemande;
+                    $mail->IsMail();
+                    $mail->ClearAddresses();
+                    $ccs = "";
+                    foreach ($cc as $key => $value) {
+                        $ccs.=$value.',';
+                    }
+                    $copie = substr($ccs,0, -1);
+                    $mail->AddAddress($copie);
+                    $mail->isHTML(true); // Set email format to HTML                    
+                    $mail->Subject = $_POST['objetDemande'];                    
+                    $mail->From = 'projets@renatech.org';
+                    $mail->FromName = 'Renatech';
+                    $mail->Body = $body;
+                    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                    foreach ($_FILES as $photo) {
+                        $mail->AddAttachment($path, $fileName);
+                    }
+                    if (@!$mail->send()) {
+                        header('Location: /' . REPERTOIRE . '/new_request/' . $lang . '/' . "Err99");
+                    } else {
+                        header('Location: /' . REPERTOIRE . '/home/' . $lang.'/ok');
+                    }
+                } else {
+                    echo 'Erreur : Sélectionnez un fichier de type .jpg / .png / .pdf';
+                }
+            }
+        }
+
 } else {  
     envoieEmail($body, $objet, $emailDemande,$cc);
     $dateDemande=  date('Y-m-d');    

@@ -20,6 +20,7 @@ RewriteRule   Manage_label3/([a-z]+)				gestionlibelle.php?lang=$1&page_preceden
 RewriteRule   Manage_label4/([a-z]+)				gestionlibelle.php?lang=$1&msgupdateemailcontact        [L]
 RewriteRule   Manage_label5/([a-z]+)				gestionlibelle.php?lang=$1&msgupdateemailprojetphase1   [L]
 RewriteRule   Manage_label6/([a-z]+)				gestionlibelle.php?lang=$1&msgupdateemailprojetphase2	[L]
+RewriteRule   Manage_label7/([a-z]+)				gestionlibelle.php?lang=$1&msgupdateemailrelance	[L]
 #ADMINNATIONNAL PAYS AJOUT
 RewriteRule   insert_paysErr1/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysexiste=$2               [L]
 RewriteRule   insert_paysErr2/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysennonsaisie=$2          [L]
@@ -279,6 +280,7 @@ RewriteRule   enquete/([a-z]+)                                  exportEnquete.ph
 RewriteRule   exportreport/([a-z]+)                             exportDesRapports.php?lang=$1                           [L]
 
 #ACCUEIL
+RewriteRule   home/([a-z]+)/([a-z]+)                            indexchoix.php?lang=$1&message=$2                       [L]
 RewriteRule   home/([a-z]+)                                     indexchoix.php?lang=$1                                  [L]
 RewriteRule   index/([a-z]+)/([a-zA-Z]+)                        index.php?lang=$1&action=$2                             [L]
 RewriteRule   index/([a-z]+)					index.php?lang=$1                                       [L]
@@ -446,6 +448,8 @@ RewriteRule   videCache/([a-z]+)                                                
 RewriteRule   manuel/([a-z]+)                                                       manuel.php?lang=$1 [L]
 RewriteRule   log/([a-z]+)                                                          logs.php?lang=$1 [L]
 RewriteRule   req/([a-z]+)                                                          request.php?lang=$1 [L]
+RewriteRule   relance/([a-z]+)/([a-z]+)/([0-9]+)/([0-9]+)                           relance.php?lang=$1&ch=$2&chx=$3&cpt=$4 [L]
+RewriteRule   relance/([a-z]+)/([a-z]+)/([0-9]+)                                    relance.php?lang=$1&ch=$2&chx=$3 [L]
 RewriteRule   relance/([a-z]+)/([a-z]+)                                             relance.php?lang=$1&err=$2 [L]
 RewriteRule   relance/([a-z]+)/([0-9]+)                                             relance.php?lang=$1&cpt=$2 [L]
 RewriteRule   relance/([a-z]+)                                                      relance.php?lang=$1 [L]

@@ -20,6 +20,10 @@ if ($lang == 'fr') {
 } else {
     include_once('lang/en-lang.php');
 }
+if(isset($_GET['message'])&& $_GET['message']=='ok'){?>
+    <div  class="msgSendEmail"><?php echo TXT_MAILPJOK;?></div>
+<?php 
+}
 ?>
 <fieldset id="ident" style="border-color: #5D8BA2;width:100%;padding: 20px 40px 33px;">
     <legend style="color: #5D8BA2;font-size: 1.1em">

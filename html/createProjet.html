@@ -42,13 +42,14 @@
             <?php 
             if(isset($_GET['err'])){            
                 if($_GET['err']=='Err99'){
-                    echo  "Il y a eu un problème avec la pièce jointe, l'E-Mail n'as pas été envoyé! ";
+                    echo  TXT_ERRMAILPJ;
                 }elseif($_GET['err']=='Err01'){
                     echo TXT_ERREURUPLOAD;
                 }elseif($_GET['err']=='Err02'){
                     echo  TXT_ERREURTAILLEFICHIER;
                 }
-            }?></div>
+            }
+            ?></div>
         <fieldset class="formDemande">            
             <legend style="margin-bottom:10px;margin-top: 25px">Vos coordonnées</legend>                
                 <div style="padding-bottom: 10px">			

@@ -841,6 +841,7 @@ define("TXT_EMAILAUTRE","Voulez vous envoyer la demande de réalisation d'une é
 define('TXT_PROJETADMIN',"Mes projets en administration");
 define('TXT_SAVEPROJECT',"Sauvegarde");
 define('TXT_UPDATE',"Mise à jour");
+define('TXT_UPDATEBELOW3MONTH',"Mise à jour (date inférieur 3 mois)");
 define('TXT_ACADEMICPARTENARIAT','Académique en partenariat avec un industriel');
 define('TXT_FORMATION','Formation');
 define('TXT_DIVERS',"Divers");
@@ -1036,3 +1037,6 @@ define("TXT_MESSAGESERVEURTYPEPARTENAIRESEEXISTE","Le type de partenaire existe 
 define('TXT_MESSAGEAIDETYPEPARTENAIRE',"Attention respecter l'ordre de remplissage des champs voir l'aide au survole du picto ? ci dessous");
 define('TXT_MESSAGEAIDEEXPORTCENTRALEUSER',"Les projets en cours sont les projets en attente, en cours d'expertise et en cours de réalisation");
 define("TXT_INFERIEUR2013","Inférieur ou égale à 2013");
+define("TXT_EMAILRELANCE","E-Mail relance");
+define("TXT_ERRMAILPJ","Il y a eu un problème avec la pièce jointe, l'E-Mail n'as pas été envoyé!");
+define("TXT_MAILPJOK","L'E-Mail avec la pièce jointe a bien été envoyé! ");

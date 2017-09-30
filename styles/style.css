@@ -1243,8 +1243,7 @@ a.infoBulle:hover span{
     color: green;
     font-size: 13px;
     font-weight: bold;
-    margin-left: 198px;
-    margin-top: -34px;
+    margin-top: -3px;
     width: 500px;
 }
 #EnvoyerEmail{
@@ -1326,4 +1325,7 @@ a.infoBulle:hover span{
 
 .claro .dijitButton .dijitButtonNode, .claro .dijitDropDownButton .dijitButtonNode, .claro .dijitComboButton .dijitButtonNode, .claro .dijitToggleButton .dijitButtonNode {
     background-color: #00aea6;
+}
+.msgSendEmail{
+    color: darkblue;font-size: 14px;margin-bottom: 10px;margin-left: 350px;margin-top: 10px;
 }
