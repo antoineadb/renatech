@@ -22,24 +22,49 @@ if (isset($_SESSION['email'])) {
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                  PROJET REFUSES
+//                                                                  PROJET REFUSES DANS TOUTE LES CENTRALES
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-$rowprojetrefuse = $manager->getList2("SELECT ce.libellecentrale, s.libellestatutprojet, p.titre, p.idprojet, p.numero, p.dateprojet,   c.commentaireprojet FROM concerne c, projet p, centrale ce, statutprojet s 
-WHERE c.idprojet_projet = p.idprojet AND  ce.idcentrale = c.idcentrale_centrale AND   s.idstatutprojet = c.idstatutprojet_statutprojet   AND s.idstatutprojet =? ",REFUSE);
+$row = $manager->getList2("SELECT p.idprojet,s.idstatutprojet
+FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s
+WHERE p.idtypeprojet_typeprojet = t.idtypeprojet AND u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = p.idprojet AND
+ce.idcentrale = co.idcentrale_centrale AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet
+AND s.idstatutprojet=? AND trashed =FALSE", REFUSE);
+$arrayIdProjet = array();
+for ($i = 0; $i < count($row); $i++) {
+        array_push($arrayIdProjet, $row[$i]['idprojet']);
+}
+$test = array();
+foreach ($arrayIdProjet as $idprojet) {
+        array_push($test, $manager->getSingle2("select idprojet_projet from concerne where idprojet_projet=? AND idstatutprojet_statutprojet!=4", $idprojet));
+}
+$array = array_values(array_filter($test));
+$arrayIdprojetTouscentrale = array_diff($arrayIdProjet, $array);
+$arrayIdprojetTousCentrale = array_unique($arrayIdprojetTouscentrale);
+
+$rowprojetrefuse = array();
+foreach ($arrayIdprojetTousCentrale as $idprojet) {
+    array_push($rowprojetrefuse, $manager->getList2("SELECT p.numero ,co.commentaireprojet,p.acronyme,p.titre,p.idprojet,p.dateprojet,co.datestatutrefuser,
+            s.libellestatutprojet,p.idprojet,u.nom,u.nomentreprise,u.entrepriselaboratoire,p.refinterneprojet ,c.libellecentrale
+            FROM projet p,utilisateur u,creer cr,concerne co,typeprojet t,statutprojet s,centrale c
+            WHERE p.idtypeprojet_typeprojet = t.idtypeprojet AND u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = p.idprojet 
+            AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet AND c.idcentrale=co.idcentrale_centrale
+            AND p.idprojet=? ", $idprojet));
+}
 
 $fpprojet = fopen('../tmp/projetRefuseCentrales.json', 'w');
 $dataprojet = "";
 fwrite($fpprojet, '{"items": [');
 $nbrowprojetrefuse = count($rowprojetrefuse);
+
 for ($i = 0; $i < $nbrowprojetrefuse; $i++) {
         $dataprojet = "" .
-                '{"numero":' . '"' . $rowprojetrefuse[$i]['numero'] . '"'
-                . "," . '"idprojet":' . '"' . $rowprojetrefuse[$i]['idprojet'] . '"'
-                . "," . '"dateprojet":' . '"' . $rowprojetrefuse[$i]['dateprojet'] . '"'
-                . "," . '"titre":' . '"' . filtredonnee(strip_tags($rowprojetrefuse[$i]['titre'])) . '"'
-                . "," . '"libellecentrale":' . '"' . $rowprojetrefuse[$i]['libellecentrale'] . '"'
-                . "," . '"libellestatutprojet":' . '"' . $rowprojetrefuse[$i]['libellestatutprojet'] . '"'
-                . "," . '"commentaireprojet":' . '"' .stripslashes(strip_tags($rowprojetrefuse[$i]['commentaireprojet'])) . '"' . "},";
+                '{"numero":' . '"' . $rowprojetrefuse[$i][0]['numero'] . '"'
+                . "," . '"idprojet":' . '"' . $rowprojetrefuse[$i][0]['idprojet'] . '"'
+                . "," . '"dateprojet":' . '"' . $rowprojetrefuse[$i][0]['dateprojet'] . '"'
+                . "," . '"titre":' . '"' . filtredonnee(strip_tags($rowprojetrefuse[$i][0]['titre'])) . '"'
+                . "," . '"libellecentrale":' . '"' . $rowprojetrefuse[$i][0]['libellecentrale'] . '"'
+                . "," . '"libellestatutprojet":' . '"' . $rowprojetrefuse[$i][0]['libellestatutprojet'] . '"'
+                . "," . '"commentaireprojet":' . '"' .stripslashes(strip_tags($rowprojetrefuse[$i][0]['commentaireprojet'])) . '"' . "},";
         fputs($fpprojet, $dataprojet);
         fwrite($fpprojet, '');
 }
@@ -50,23 +75,32 @@ $jsonprojet = str_replace('},]}', '}]}', $jsonprojet1);
 file_put_contents($json_fileprojet, $jsonprojet);
 fclose($fpprojet);
 chmod('../tmp/projetRefuseCentrales.json', 0777);
-header('location:/' . REPERTOIRE . '/viewRefusedProject/' . $lang);
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                   PROJET REFUSES PAR TOUTES LES CENTRALES
+//                                                                   PROJET Transférés dans une autre centrale
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-$rowprojetrefuseAll = $manager->getList2("SELECT idprojet,libellecentrale,titre,dateprojet,numero,commentaireprojet,idcentrale_centrale FROM   projet,concerne,centrale WHERE idprojet_projet = idprojet and idcentrale_centrale = idcentrale
-and idprojet not in (select idprojet from projet,concerne WHERE idprojet_projet = idprojet and idstatutprojet_statutprojet !=? ) order by idprojet asc ",REFUSE);
+$rowprojetrefuseAll = $manager->getListbyArray("SELECT distinct idprojet,p.numero ,co.commentaireprojet,p.acronyme,p.titre,p.idprojet,p.dateprojet,co.datestatutrefuser,
+s.libellestatutprojet,p.idprojet,u.nom,u.nomentreprise,u.entrepriselaboratoire,p.refinterneprojet ,c.libellecentrale
+FROM projet p,utilisateur u,creer cr,concerne co,typeprojet t,statutprojet s,centrale c
+WHERE p.idtypeprojet_typeprojet = t.idtypeprojet AND u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = p.idprojet 
+AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet AND c.idcentrale=co.idcentrale_centrale
+AND p.idprojet  IN (SELECT idprojet FROM projet,concerne WHERE idprojet_projet=idprojet AND idstatutprojet_statutprojet = ? ) AND idstatutprojet_statutprojet !=?", array(REFUSE,REFUSE));
+
 $fpprojetAll = fopen('../tmp/projectRefusedAll.json', 'w');
 fwrite($fpprojetAll, '{"items": [');
 for ($i = 0; $i < count($rowprojetrefuseAll); $i++) {
+$centraleAffectation = $manager->getSinglebyArray("SELECT libellecentrale FROM centrale, concerne WHERE idcentrale_centrale =idcentrale AND idstatutprojet_statutprojet != 4 "
+        . " AND idprojet_projet=?",array($rowprojetrefuseAll[$i]['idprojet']));
+$centraleDepot = $manager->getSinglebyArray("SELECT libellecentrale FROM centrale, concerne WHERE idcentrale_centrale =idcentrale AND idstatutprojet_statutprojet = 4 "
+        . " AND idprojet_projet=?",array($rowprojetrefuseAll[$i]['idprojet']));
     $dataprojet = "" .
             '{"numero":' . '"' . $rowprojetrefuseAll[$i]['numero'] . '"'
                 . "," . '"idprojet":' . '"' . $rowprojetrefuseAll[$i]['idprojet'] . '"'
                 . "," . '"dateprojet":' . '"' . $rowprojetrefuseAll[$i]['dateprojet'] . '"'
                 . "," . '"titre":' . '"' . filtredonnee(strip_tags($rowprojetrefuseAll[$i]['titre'])) . '"'
-                . "," . '"libellecentrale":' . '"' . $rowprojetrefuseAll[$i]['libellecentrale'] . '"'
+                . "," . '"libellecentraledepot":' . '"' . $centraleDepot . '"'
+                . "," . '"libellecentralefinal":' . '"' . $centraleAffectation . '"'
                 . "," . '"libellestatutprojet":' . '"' . $rowprojetrefuseAll[$i]['libellestatutprojet'] . '"'
                 . "," . '"commentaireprojet":' . '"' .stripslashes(strip_tags($rowprojetrefuseAll[$i]['commentaireprojet'])) . '"' . "},";
     fputs($fpprojetAll, $dataprojet);

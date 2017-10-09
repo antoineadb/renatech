@@ -1040,3 +1040,6 @@ define("TXT_INFERIEUR2013","Inférieur ou égale à 2013");
 define("TXT_EMAILRELANCE","E-Mail relance");
 define("TXT_ERRMAILPJ","Il y a eu un problème avec la pièce jointe, l'E-Mail n'as pas été envoyé!");
 define("TXT_MAILPJOK","L'E-Mail avec la pièce jointe a bien été envoyé! ");
+define("TXT_PRJTRSOTHCENT","Projets transférés dans une autre centrale");
+define("TXT_CENTRALE_DEPOT","Centrale de dépôt");
+define("TXT_CENTRALE_FINAL","Centrale d'affectation");

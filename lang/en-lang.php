@@ -1043,3 +1043,6 @@ define("TXT_INFERIEUR2013","Less than or equal to 2013");
 define("TXT_EMAILRELANCE","Reminder e-mail");
 define("TXT_ERRMAILPJ","There was a problem with the attachment, the E-Mail was not sent!");
 define("TXT_MAILPJOK","The e-mail with the attachment has been sent!");
+define("TXT_PRJTRSOTHCENT","Projects transfered in an other Central");
+define("TXT_CENTRALE_DEPOT","Depository  Central");
+define("TXT_CENTRALE_FINAL","Assignment Central");

@@ -26,16 +26,44 @@ $data .= "------------------------";
 $data .= "\n";
 $data .= utf8_decode("Date de la demande;numéro;Titre du projet;Centrale;Commentaire;référence interne");
 $data .= "\n";
-$rowprojetrefuse = $manager->getList2("SELECT ce.libellecentrale, s.libellestatutprojet,p.refinterneprojet, p.titre, p.idprojet, p.numero, p.dateprojet,   c.commentaireprojet FROM concerne c, projet p, centrale ce, statutprojet s 
+/*$rowprojetrefuse = $manager->getList2("SELECT ce.libellecentrale, s.libellestatutprojet,p.refinterneprojet, p.titre, p.idprojet, p.numero, p.dateprojet,   c.commentaireprojet FROM concerne c, projet p, centrale ce, statutprojet s 
 WHERE c.idprojet_projet = p.idprojet AND  ce.idcentrale = c.idcentrale_centrale AND   s.idstatutprojet = c.idstatutprojet_statutprojet   AND s.idstatutprojet =? ", REFUSE);
+*/
+$row = $manager->getList2("SELECT p.idprojet,s.idstatutprojet
+FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s
+WHERE p.idtypeprojet_typeprojet = t.idtypeprojet AND u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = p.idprojet AND
+ce.idcentrale = co.idcentrale_centrale AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet
+AND s.idstatutprojet=? AND trashed =FALSE", REFUSE);
+$arrayIdProjet = array();
+for ($i = 0; $i < count($row); $i++) {
+        array_push($arrayIdProjet, $row[$i]['idprojet']);
+}
+$test = array();
+foreach ($arrayIdProjet as $idprojet) {
+        array_push($test, $manager->getSingle2("select idprojet_projet from concerne where idprojet_projet=? AND idstatutprojet_statutprojet!=4", $idprojet));
+}
+$array = array_values(array_filter($test));
+$arrayIdprojetTouscentrale = array_diff($arrayIdProjet, $array);
+$arrayIdprojetTousCentrale = array_unique($arrayIdprojetTouscentrale);
 
+$rowprojetrefuse = array();
+foreach ($arrayIdprojetTousCentrale as $idprojet) {
+    array_push($rowprojetrefuse, $manager->getList2("SELECT p.numero ,co.commentaireprojet,p.acronyme,p.titre,p.idprojet,p.dateprojet,co.datestatutrefuser,
+            s.libellestatutprojet,p.idprojet,u.nom,u.nomentreprise,u.entrepriselaboratoire,p.refinterneprojet ,c.libellecentrale
+            FROM projet p,utilisateur u,creer cr,concerne co,typeprojet t,statutprojet s,centrale c
+            WHERE p.idtypeprojet_typeprojet = t.idtypeprojet AND u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = p.idprojet 
+            AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet AND c.idcentrale=co.idcentrale_centrale
+            AND p.idprojet=? ", $idprojet));
+}
+/*echo '<pre>';
+print_r($rowprojetrefuse);die;*/
 if (count($rowprojetrefuse) != 0) {
 // ENREGISTREMENT DES RESULTATS LIGNE PAR LIGNE
     for ($i = 0; $i < count($rowprojetrefuse); $i++) {
-        $idprojet = $rowprojetrefuse[$i]['idprojet'];
+        $idprojet = $rowprojetrefuse[$i][0]['idprojet'];
 
-        if (!empty($rowprojetrefuse[$i]['refinterneprojet'])) {
-            $refinterne = $rowprojetrefuse[$i]['refinterneprojet'];
+        if (!empty($rowprojetrefuse[$i][0]['refinterneprojet'])) {
+            $refinterne = $rowprojetrefuse[$i][0]['refinterneprojet'];
         } else {
             $refinterne = "";
         }
@@ -44,11 +72,11 @@ if (count($rowprojetrefuse) != 0) {
         $originalDate = date('d-m-Y');
 
         $data .= "" .
-                $rowprojetrefuse[$i]['dateprojet'] . ";" .
-                $rowprojetrefuse[$i]['numero'] . ";" .
-                removeDoubleQuote(stripslashes(utf8_decode(trim($rowprojetrefuse[$i]['titre'])))) . ";" .
-                $rowprojetrefuse[$i]['libellecentrale'] . ";" .
-                strip_tags(removeDoubleQuote(stripslashes(utf8_decode(trim($rowprojetrefuse[$i]['commentaireprojet']))))) . ";" .
+                $rowprojetrefuse[$i][0]['dateprojet'] . ";" .
+                $rowprojetrefuse[$i][0]['numero'] . ";" .
+                removeDoubleQuote(stripslashes(utf8_decode(trim($rowprojetrefuse[$i][0]['titre'])))) . ";" .
+                $rowprojetrefuse[$i][0]['libellecentrale'] . ";" .
+                strip_tags(removeDoubleQuote(stripslashes(utf8_decode(trim($rowprojetrefuse[$i][0]['commentaireprojet']))))) . ";" .
                 removeDoubleQuote(stripslashes(utf8_decode(trim($refinterne)))) . "\n";
     }
 }
@@ -59,23 +87,25 @@ $data .= "------------------------";
 $data .= "\n";
 $data .= utf8_decode("Date de la demande;numéro;Titre du projet;Centrale;Commentaire;référence interne");
 $data .= "\n";
-$rowprojetrefuseAll = $manager->getList2("SELECT idprojet,libellecentrale,refinterneprojet,titre,dateprojet,numero,commentaireprojet,idcentrale_centrale FROM   projet,concerne,centrale WHERE idprojet_projet = idprojet and idcentrale_centrale = idcentrale
-and idprojet not in (select idprojet from projet,concerne WHERE idprojet_projet = idprojet and idstatutprojet_statutprojet !=? ) order by idprojet asc ", REFUSE);
+
+$rowprojetrefuseAll = $manager->getListbyArray("SELECT distinct idprojet,p.numero ,co.commentaireprojet,p.acronyme,p.titre,p.idprojet,p.dateprojet,co.datestatutrefuser,
+s.libellestatutprojet,p.idprojet,u.nom,u.nomentreprise,u.entrepriselaboratoire,p.refinterneprojet ,c.libellecentrale
+FROM projet p,utilisateur u,creer cr,concerne co,typeprojet t,statutprojet s,centrale c
+WHERE p.idtypeprojet_typeprojet = t.idtypeprojet AND u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = p.idprojet 
+AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet AND c.idcentrale=co.idcentrale_centrale
+AND p.idprojet  IN (SELECT idprojet FROM projet,concerne WHERE idprojet_projet=idprojet AND idstatutprojet_statutprojet = ? ) AND idstatutprojet_statutprojet !=?", array(REFUSE,REFUSE));
 
 if (count($rowprojetrefuseAll) != 0) {
 // ENREGISTREMENT DES RESULTATS LIGNE PAR LIGNE
     for ($i = 0; $i < count($rowprojetrefuseAll); $i++) {
         $idprojet = $rowprojetrefuseAll[$i]['idprojet'];
-
         if (!empty($rowprojetrefuseAll[$i]['refinterneprojet'])) {
             $refinterne = $rowprojetrefuseAll[$i]['refinterneprojet'];
         } else {
             $refinterne = "";
         }
-//numéro;Date de la demande;Titre du projet;Mise à jour;référence interne;statut du projet;demandeur du projet;Porteur du projet;Acronyme;Date de fin;Date de fin proche   
-
+//numéro;Date de la demande;Titre du projet;Mise à jour;référence interne;statut du projet;demandeur du projet;Porteur du projet;Acronyme;Date de fin;Date de fin proche
         $originalDate = date('d-m-Y');
-
         $data .= "" .
                 $rowprojetrefuseAll[$i]['dateprojet'] . ";" .
                 $rowprojetrefuseAll[$i]['numero'] . ";" .
@@ -90,7 +120,6 @@ if (count($rowprojetrefuseAll) != 0) {
     header("Content-disposition: attachment; filename=exportprojetrefusecentrale_" . time() . '_' . $originalDate . ".csv");
     print $data;
     exit;
-
 /*if ($bool && $bool1) {
     echo ' <script>alert("' . utf8_decode(TXT_PASDEPROJET) . '");window.location.replace("/' . REPERTOIRE . '/projet_centrale/' . $lang . '/' . $libellecentrale . '")</script>';
 }*/

@@ -36,7 +36,7 @@ include 'html/header.html';
             <?php require_once 'html/vueProjetRefuse.html'; ?>
         </div>
            
-        <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo 'Projet(s) refusés dans toutes les centrales' ?>" style="width: auto; height:500px;" >
+        <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PRJTRSOTHCENT ?>" style="width: auto; height:500px;" >
             <?php  require_once 'html/vueTousProjetRefuse.html'; ?>
         </div>      
        
