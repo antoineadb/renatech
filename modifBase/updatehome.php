@@ -15,8 +15,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'gestionlib
         array("libellefrancais" => $_POST['bienvenuefr'], "libelleanglais" => $_POST['bienvenueen'], "reflibelle" => 'TXT_BIENVENUE'),
         array("libellefrancais" => $_POST['acceuil1fr'], "libelleanglais" => $_POST['acceuil1en'], "reflibelle" => 'TXT_ACCUEIL1'),
         array("libellefrancais" => $_POST['acceuil2fr'], "libelleanglais" => $_POST['acceuil2en'], "reflibelle" => 'TXT_ACCUEIL2'),
-        array("libellefrancais" => $_POST['acceuil3fr'], "libelleanglais" => $_POST['acceuil3en'], "reflibelle" => 'TXT_ACCUEIL3'),
-        array("libellefrancais" => $_POST['aideCentralePfrValeur'], "libelleanglais" => $_POST['aideCentralePenValeur'], "reflibelle" => 'TXT_AIDECENTRALEPROXIMITE')
+        array("libellefrancais" => $_POST['acceuil3fr'], "libelleanglais" => $_POST['acceuil3en'], "reflibelle" => 'TXT_ACCUEIL3'),        
     );
         
     

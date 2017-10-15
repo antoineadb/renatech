@@ -27,12 +27,12 @@ if(isset($_GET['msgupdateaccueil'])){?>
 <form data-dojo-type="dijit/form/Form" method="post" name="home" id="home" 	action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updatehome.php?lang=<?php echo $lang; ?>">
     <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
     <fieldset id="gestionhome" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;">
+        <legend><?php echo TXT_MSG_HOME; ?></legend>
         <?php
         $bienvenue = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BIENVENUE');
         $acceuil1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL1');
         $acceuil2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL2');
-        $acceuil3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL3');
-        $aidecentraleproximite= $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_AIDECENTRALEPROXIMITE');
+        $acceuil3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL3');        
         ?>
         <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
             <span style="text-align: left;padding:10px;width: 945px;height:240px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
@@ -60,9 +60,9 @@ if(isset($_GET['msgupdateaccueil'])){?>
             </tr>
             <tr>
                 <td valign="middle" style="width:450px"> <input data-dojo-type="dijit/form/ValidationTextBox"
-                    value="<?php echo strip_tags($bienvenue[0]['libellefrancais']); ?>"				onfocus="enablemodifhome()"
-                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenuefr" name="bienvenuefr"
-                    data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
+                                                                value="<?php echo strip_tags($bienvenue[0]['libellefrancais']); ?>"				onfocus="enablemodifhome()"
+                                                                style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenuefr" name="bienvenuefr"
+                                                                data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
 
                 </td>
                 <td valign="middle" style="width:450px">
@@ -90,8 +90,8 @@ if(isset($_GET['msgupdateaccueil'])){?>
                     <input data-dojo-type="dijit/form/ValidationTextBox"
                            value='<?php echo strip_tags($libelleacceuil1en); ?>'	onfocus="enablemodifhome()"
                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil1en" name="acceuil1en"
-                            data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
-                                           
+                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
+
                 </td>
             </tr>
             <tr>
@@ -132,83 +132,148 @@ if(isset($_GET['msgupdateaccueil'])){?>
 
         </table>
     </fieldset>    
-<?php /* ?>
-    <fieldset id="gestionhome1" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;">
-        <legend><?php echo TXT_HELPCENTRALEPROXIMITE;  ;?></legend>
-        <table>           
-            <tr>
-                <td valign="middle">
-                    <label><div style="color: #5D8BA2;height:30px;font-weight: bold">
-                        <?php echo TXT_FRANCAIS;?></div></label>
-                    <?php $aidecentraleproximitefr= stripslashes(removeDoubleQuote(str_replace("’’","'",$aidecentraleproximite[0]['libellefrancais'])));?>
-                    <div id="aideCentralePfr" style="width: 1000px" >
-                        <?php echo removeDoubleQuote($aidecentraleproximitefr); ?>
-                    </div>
-                    
-                </td>
-                </tr>
-            <tr>
-                <td valign="middle">
-                    <?php $aidecentraleproximiteen= stripslashes(removeDoubleQuote(str_replace("’’","'",$aidecentraleproximite[0]['libelleanglais'])));?>
-                <label><div style="color: #5D8BA2;height:30px;font-weight: bold"> <?php echo TXT_ANGLAIS;?></div></label>                        
-                        <div id="aideCentralePen" style="width: 1000px" >
-                        <?php echo removeDoubleQuote($aidecentraleproximiteen); ?>
-                    </div>
-                    
-                </td>
-            </tr>
-        </table>
-        
-    </fieldset>
-<?php */ ?>
-    <table>
+      <table>
         <tr><td>&nbsp;</td></tr>
         <tr><td>
                 <input style="text-align: left;margin-left: 10px"  type="submit" id ="modifsitehome" name="modifsitehome"
                        label="<?php echo TXT_MODIFIER ;?>"   data-dojo-type="dijit/form/Button" disabled="disabled"				>
             </td>
         </tr>
-        <tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
+        
     </table>
     <input type="hidden" id="aideCentralePfrValeur" name="aideCentralePfrValeur" >
     <input type="hidden" id="aideCentralePenValeur" name="aideCentralePenValeur" >     
 </form>
 
- <script>
-        require(["dojo/parser", "dijit/Editor"]);
-        require(["dojo"], function(dojo) {
-        });
-        require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
-            ready(function() {
-                new Editor({
-                    plugins: ['bold','italic','underline','|','insertOrderedList', 'insertUnorderedList','justifyLeft', 'justifyCenter', 'justifyRight'] , height: "200px"
-                }, "aideCentralePfr");
-                new Editor({
-                    plugins: ['bold','italic','underline','|','insertOrderedList', 'insertUnorderedList','justifyLeft', 'justifyCenter', 'justifyRight'] , height: "200px"
-                }, "aideCentralePen");
 
-            });
+<form data-dojo-type="dijit/form/Form" method="post" name="modeEmploi" id="modeEmploi" 	action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updatehome.php?lang=<?php echo $lang; ?>"
+      enctype="multipart/form-data" >
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+    <fieldset id="gestionhome" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;">
+        <legend><?php echo "Mise à jour du mode d'emploi d'une demande de projet"; ?></legend>
+        <table>
             
-            dojo.addOnLoad(function() {
-                var editor1 = dijit.byId("aideCentralePfr");
-                var editor2 = dijit.byId("aideCentralePen");
-                dojo.connect(editor1, "onChange", this, function(event) {
-                    dojo.byId("aideCentralePfrValeur").value = editor1.get("value");
-                });
-                dojo.connect(editor2, "onChange", this, function(event) {
-                    dojo.byId("aideCentralePenValeur").value = editor2.get("value");
-                });
-                
-                dojo.connect(editor2, "onFocus", this, function(event) {                    
-                    enablemodifhome();
-                });
-                dojo.connect(editor1, "onFocus", this, function(event) {                    
-                    enablemodifhome();
-                });
-                
-                
-            });
-        });
-                
-</script>
+            <tr>
+                <td>
+                    <div style="margin-left:25px;margin-top: 30px">
+                        <?php
+                            $filename ="downloadManual/ModeEmploiDemandeProjetRENATECH.pdf";
+                            if (file_exists($filename)) {
+                                echo TXT_DATEDOC . date (" d/m/Y H:i:s.", filemtime($filename));
+                            }else{
+                                echo TXT_NODOC;
+                            }
+                        ?>
+                    </div>
+                </td>
+                <td>
+                    <div style="float: right;margin-top: 30px;margin-left:5px">                
+                        <a class="infoBulle" href="javascript:window.location.reload()">&nbsp;<img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/refresh.png' >
+                    <span style="width: 130px;border-radius: 4px;text-align:center; "><?php echo TXT_REFRESDOC ?></span></a>
+                    </div>
+                </td>
+            </tr>
+            <tr style="float: left">
+                <td>                    
+                    <input name='fileModeEmploi' type='file' id='fileModeEmploi'   size='20' style="display: none "  onchange="dijit.byId('modeemploi').set('value', document.getElementById('fileModeEmploi').files[0].name);">
+                </td>
+                <td>
+                    <button type="button" data-dojo-type="dijit/form/Button" style="margin-left:20px;margin-top: 30px;margin-right: 25px"  
+                            data-dojo-props="onClick:function(){document.getElementById('fileModeEmploi').click();}">
+                        <?php echo TXT_PARCOURIR; ?></button>
+                </td>
+                <td>
+                    <input type="text" data-dojo-type="dijit/form/ValidationTextBox" id='modeemploi' readonly="true" style="margin-top: 30px;width:250px">
+
+                </td>
+                <td>
+                    <button type="button" data-dojo-type="dijit/form/Button"   data-dojo-props="onClick:function(){uploadFichierModeEmploi('fileModeEmploi');}" style="margin-left: 25px;margin-top: 30px">
+                        <?php echo TXT_VALIDER; ?>
+                    </button>
+                </td>
+            </tr>
+            <tr style="float: left">
+                <td>
+                    <progress id="progressBar" value="0" max="100" style="width:290px;margin-left:20px;height: 20px;visibility: hidden;margin-top: 10px" ></progress>
+                    <div id="status" style="margin-left:20px;float: left;margin-top: 10px"></div>
+                    <br><div id="status_bytes" style="margin-left:20px;float: left;margin-top: 10px"></div>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+<table>
+    <tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
+</table>
 <?php BD::deconnecter(); ?>
+
+<script>
+    require(["dojo/parser", "dijit/Editor"]);
+    require(["dojo"], function (dojo) {
+    });
+    require(["dijit/Editor", "dojo/ready"], function (Editor, ready) {
+        ready(function () {
+            new Editor({
+                plugins: ['bold', 'italic', 'underline', '|', 'insertOrderedList', 'insertUnorderedList', 'justifyLeft', 'justifyCenter', 'justifyRight'], height: "200px"
+            }, "aideCentralePfr");
+            new Editor({
+                plugins: ['bold', 'italic', 'underline', '|', 'insertOrderedList', 'insertUnorderedList', 'justifyLeft', 'justifyCenter', 'justifyRight'], height: "200px"
+            }, "aideCentralePen");
+
+        });
+
+        dojo.addOnLoad(function () {
+            var editor1 = dijit.byId("aideCentralePfr");
+            var editor2 = dijit.byId("aideCentralePen");
+            dojo.connect(editor1, "onChange", this, function (event) {
+                dojo.byId("aideCentralePfrValeur").value = editor1.get("value");
+            });
+            dojo.connect(editor2, "onChange", this, function (event) {
+                dojo.byId("aideCentralePenValeur").value = editor2.get("value");
+            });
+
+            dojo.connect(editor2, "onFocus", this, function (event) {
+                enablemodifhome();
+            });
+            dojo.connect(editor1, "onFocus", this, function (event) {
+                enablemodifhome();
+            });
+
+
+        });
+    });
+
+    function uploadFichierModeEmploi(id) {
+        var file = document.getElementById(id).files[0];
+        var data = new FormData();
+        data.append('file', file);
+        var ajax = new XMLHttpRequest();
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/outils/uploadModeEmploi.php");
+        ajax.send(data);
+    }
+    function progressHandler(event) {
+        document.getElementById('progressBar').style.visibility = 'visible';
+        document.getElementById('status_bytes').innerHTML = event.loaded + ' bytes uploaded on ' + event.total;
+        var pourcentage = (event.loaded / event.total) * 100;
+        document.getElementById('progressBar').value = Math.round(pourcentage);
+        document.getElementById('status').innerHTML = Math.round(pourcentage) + '% uploaded... Wait';
+    }
+    function completeHandler(event) {
+        document.getElementById('status').innerHTML = event.target.responseText;
+        document.getElementById('progressBar').value = 0;
+        document.getElementById('progressBar').style.visibility = 'hidden';
+        document.getElementById('status_bytes').innerHTML = '';
+    }
+    function errorHandler() {
+        document.getElementById('status').innerHTML = "The upload failed !";
+    }
+    function abortHandler() {
+        document.getElementById('status').innerHTML = "The upload was canceled !";
+    }
+
+
+</script>

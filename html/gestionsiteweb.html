@@ -17,6 +17,7 @@ if(isset($_GET['msgupdatesiteweb'])){?>
 <?php }?>
 
     <fieldset id="gestionsiteweb" style="margin-top: 25px">
+        <legend><?php echo TXT_LBL_ADRSITEWEB;?></legend>
             <a id='aideGestionLibelle' href="<?php echo '/'.REPERTOIRE.'/downloadManual/aideContextuellegestionLibelle.pdf' ?>" target="_blank">
                 <img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/infoStat.png" title="<?php echo TXT_AIDEGESTIONLIBELLE; ?>"  >
             </a>
@@ -68,7 +69,7 @@ if(isset($_GET['msgupdatesiteweb'])){?>
             <td>
                 <label style="border: 1px solid #B5BCC7;width:100px;padding-left: 10px;margin-bottom: 10px;margin-left: 10px" ><?php echo $_GET['centrale']; ?></label>                    
                 <input type="text" style="display: none" value="<?php echo $_GET['centrale']; ?>" name="nomCentrale">
-                <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $centrale; ?>" onfocus="enablemodifacceuil()"
+                <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $centrale; ?>" onfocus="enablemodifacceuil('modifsiteweb')"
                        style="margin-left: 10px;text-align: left;width: 350px;" id="<?php echo 'site' . $_GET['centrale'] ?>" name="adresseSite"                      
                        data-dojo-props="regExp: dojox.validate.regexp.url, invalidMessage:'Invalid URL.',placeHolder:'<?php echo TXT_ADRESSWEB; ?>',required:true"  >
                         
@@ -105,18 +106,41 @@ if(isset($_GET['msgupdatesiteweb'])){?>
         </tr>
         <tr><td>&nbsp;</td></tr>
         <tr><td>
-                <input style="text-align: left;margin-left: 10px"  type="submit" id ="modifsiteweb" name="modifsiteweb"  label="<?php echo TXT_MODIFIER; ?>"   data-dojo-type="dijit/form/Button" disabled="disabled"				>
+                <input style="text-align: left;margin-left: 10px"  type="submit" id ="modifsiteweb" name="modifsiteweb"  label="<?php echo TXT_MODIFIER; ?>"   data-dojo-type="dijit/form/Button" disabled="disabled">
             </td>
         </tr>    
     </table>
 </form>
-        <?php } ?>
-            
-                <div id='cibleCentrale'></div>
-            
-    </fieldset>
+<?php } ?>
+    <div id='cibleCentrale'></div>            
+</fieldset>
+<fieldset id="gestionCentraleProximite" style="margin-top: 25px">
+    <legend><?php echo "Aide centrale de proximité";?></legend>
+    <div><u><?php echo TXT_FR_RELEASE ?></u></div><br>
+    <div id="aideCentraleProximiteFr" name="aideCentraleProximiteFr" >
+    <?php echo $manager->getSingle2("SELECT libelleFrancais from libelleapplication where reflibelle=?","TXT_AIDECENTRALEPROXIMITE"); ?>
+    </div>
+    <br>
+    <div><u><?php echo TXT_EN_RELEASE ?></u></div><br>
+    <div id="aideCentraleProximiteEn" name="aideCentraleProximiteEn" >
+        <?php echo $manager->getSingle2("SELECT libelleAnglais from libelleapplication where reflibelle=?","TXT_AIDECENTRALEPROXIMITE"); ?>
+    </div>
+    <form data-dojo-type="dijit/form/Form" method="post" name="centraleProximite" id="centraleProximite" 	action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updateLblCentraleP.php">
+        <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
+        <input type="hidden" name="modifcentraleProximiteValeurFr" id="modifcentraleProximiteValeurFr" />
+        <input type="hidden" name="modifcentraleProximiteValeurEn" id="modifcentraleProximiteValeurEn" />
+        <table>
+            <tr>
+                <td>
+                    <input style="text-align: left;margin-left: 10px"  type="submit" id ="modifcentraleProximite" name="modifcentraleProximite"  label="<?php echo TXT_MODIFIER; ?>"   
+                           data-dojo-type="dijit/form/Button" disabled="disabled">                    
+                </td>
+            </tr>
+        </table>
+    </form>
+</fieldset>
         <div style="font-size: x-small; margin-top: 10px;"><?php echo TXT_CHAMPSOBLIGATOIRES;?></div>
-
+        
 <script>
     function uploadFichier(id) {
         var file = document.getElementById(id).files[0];
@@ -129,7 +153,7 @@ if(isset($_GET['msgupdatesiteweb'])){?>
         ajax.addEventListener("abort", abortHandler, false);
         ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/outils/uploadLogoCentrales.php");
         ajax.send(data);
-        enablemodifacceuil();
+        enablemodifacceuil("modifsiteweb");
     }
     function progressHandler(event) {
         document.getElementById('progressBar').style.visibility = 'visible';
@@ -154,9 +178,45 @@ if(isset($_GET['msgupdatesiteweb'])){?>
         document.getElementById('status').innerHTML = "The upload was canceled !";
     }
     
-    function enablemodifacceuil() {
-        dijit.byId("modifsiteweb").setAttribute('disabled', false);
+    function enablemodifacceuil(id) {
+        dijit.byId(id).setAttribute('disabled', false);
     }
     require(["dijit/form/ValidationTextBox", "dojo/parser", "dojox/validate/regexp","dijit/form/Form","dijit/form/Button"]);
+    
+    
+    require(["dojo/parser", "dijit/Editor"]);
+    require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
+        ready(function() {    
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "300px",
+                width: "500px"
+            }, "aideCentraleProximiteFr");
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "300px",
+                width: "500px"
+            }, "aideCentraleProximiteEn");
+        });
+    });
+    dojo.addOnLoad(function() {
+        var editor1 = dijit.byId("aideCentraleProximiteFr");
+        var editor2 = dijit.byId("aideCentraleProximiteEn");
+        dojo.connect(editor1, "onClick", this, function(event) {
+            enablemodifacceuil("modifcentraleProximite");
+            dojo.byId("modifcentraleProximiteValeurFr").value = editor1.get("value");            
+        });
+        dojo.connect(editor1, "onChange", this, function(event) {
+            dojo.byId("modifcentraleProximiteValeurFr").value = editor1.get("value");        
+        });
+        dojo.connect(editor2, "onClick", this, function(event) {
+            enablemodifacceuil("modifcentraleProximite");            
+            dojo.byId("modifcentraleProximiteValeurEn").value = editor2.get("value");
+        });
+        dojo.connect(editor2, "onChange", this, function(event) {
+            dojo.byId("modifcentraleProximiteValeurEn").value = editor2.get("value");
+        });
+        
+    });
 </script>
 <?php BD::deconnecter(); ?>

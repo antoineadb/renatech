@@ -25,7 +25,7 @@ if(isset($_POST['annee'])&& !empty($_POST['annee'])){
  }
 
 $arrayIdProjet = $manager->getListbyArray("SELECT r.idprojet  FROM rapport r, projet p, concerne WHERE r.idprojet = p.idprojet and idstatutprojet_statutprojet!=? AND idprojet_projet = p.idprojet "
-            . "and idcentrale_centrale=? and EXTRACT(YEAR from datecreation)>=? order by thematics asc",array(REFUSE,$centrale,$annee));
+            . "and idcentrale_centrale=? and (EXTRACT(YEAR from datecreation)>=? or EXTRACT(YEAR from datemiseajour)>=?) order by thematics asc",array(REFUSE,$centrale,$annee,$annee));
 if(isset($_POST['ext'])&& $_POST['ext']=='.doc'){
     header("Content-type: application/vnd.ms-word");
     //header("Content-Type:application/vnd.openxmlformats-officedocument.wordprocessingml.document");

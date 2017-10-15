@@ -476,7 +476,7 @@ a.infoBulle:hover span{
 
 }
 
-#export,#gestionsiteweb{
+#export,#gestionsiteweb,#gestionCentraleProximite{
     padding:15px 15px 15px 15px;
     border:solid 1px #5D8BA2;
     color:midnightblue;
@@ -486,7 +486,7 @@ a.infoBulle:hover span{
     -webkit-border-radius: 5px;
     border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
-    width:580px;
+    width:1000px;
 
 }
 #projetNoDev{

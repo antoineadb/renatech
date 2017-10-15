@@ -726,19 +726,21 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
 
 
             $_SESSION['nbProjetSoustraitance'] = $nbrowProjetSoustraitance;
-            if (!$cache->read('rapport_'.LIBELLECENTRALEUSER)) {
+            if (!$cache->read('rapportEnCours_'.LIBELLECENTRALEUSER)) {
         //-----------------------------------------------------------------------------------------------------------------------------------------------
-        //                                                                  RAPPORTS PROJETS
+        //                                                                  RAPPORTS PROJETS ANNEE EN COURS
         //-----------------------------------------------------------------------------------------------------------------------------------------------
+                $anneeEnCours= date('Y');
                 $rowProjetRapport = $manager->getListbyArray("select c.idstatutprojet_statutprojet,r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet "
                         . "from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet and c.idprojet_projet=r.idprojet and cr.idprojet_projet=r.idprojet and c.idcentrale_centrale=? "
-                        . "and c.idstatutprojet_statutprojet!=?", array($idcentrale, REFUSE));                
-                $fpProjetRapport = fopen("../tmp/ProjetRapport".IDCENTRALEUSER.".json", 'w');
+                        . "and c.idstatutprojet_statutprojet!=? and (EXTRACT(YEAR from datecreation)>=? or EXTRACT(YEAR from datemiseajour)>=?)", 
+                        array($idcentrale, REFUSE,$anneeEnCours,$anneeEnCours));                
+                $fpProjetRapport = fopen("../tmp/ProjetRapportEnCours".IDCENTRALEUSER.".json", 'w');
                 $dataProjetRapport = "";
                 fwrite($fpProjetRapport, '{"items": [');
 
-                $nbrowProjetRapport = count($rowProjetRapport);
-                for ($i = 0; $i < $nbrowProjetRapport; $i++) {
+                $nbrowProjetRapportEnCours = count($rowProjetRapport);
+                for ($i = 0; $i < $nbrowProjetRapportEnCours; $i++) {
                     $idutilisateur = $rowProjetRapport[$i]['idutilisateur_utilisateur'];
                     $arraycreateur = $manager->getList2("select nom,prenom from utilisateur where idutilisateur=?", $idutilisateur);
                     $dataProjetRapport = ""
@@ -756,18 +758,68 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
                 }
 
                 fwrite($fpProjetRapport, ']}');
-                $json_fileRapport = "../tmp/ProjetRapport".IDCENTRALEUSER.".json";
+                $json_fileRapport = "../tmp/ProjetRapportEnCours".IDCENTRALEUSER.".json";
 
                 $jsonRapport = file_get_contents($json_fileRapport);
 
 
                 $jsonRapport1 = str_replace('},]}', '}]}', $jsonRapport);
                 file_put_contents($json_fileRapport, $jsonRapport1);
-                $cache->write('rapport_'.LIBELLECENTRALEUSER,$jsonRapport1);
+                $cache->write('rapportEnCours_'.LIBELLECENTRALEUSER,$jsonRapport1);
                 fclose($fpProjetRapport);
-                chmod("../tmp/ProjetRapport".IDCENTRALEUSER.".json", 0777);
-                $_SESSION['nbProjetRapport'] = $nbrowProjetRapport;
+                chmod("../tmp/ProjetRapportEnCours".IDCENTRALEUSER.".json", 0777);
+                $_SESSION['nbProjetRapportEncours'] = $nbrowProjetRapportEnCours;
             }
+           if (!$cache->read('rapportAutres_'.LIBELLECENTRALEUSER)) {
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+        //                                                                  RAPPORTS PROJETS AUTRES
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+                $anneeEnCours= date('Y');
+                $rowProjetRapportAutres = $manager->getListbyArray("select c.idstatutprojet_statutprojet,r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,
+                    r.datemiseajour,p.refinterneprojet from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet and c.idprojet_projet=r.idprojet 
+                    and cr.idprojet_projet=r.idprojet and c.idcentrale_centrale=? and c.idstatutprojet_statutprojet!=? and (EXTRACT(YEAR from datecreation)!=? and 
+                    EXTRACT(YEAR from datemiseajour)!=?) 
+                    union 
+                    select c.idstatutprojet_statutprojet,r.idprojet,cr.idutilisateur_utilisateur,p.numero,r.title, r.datecreation,r.datemiseajour,p.refinterneprojet 
+                    from projet p,rapport r, concerne c,creer cr where p.idprojet=r.idprojet and c.idprojet_projet=r.idprojet and cr.idprojet_projet=r.idprojet 
+                    and c.idcentrale_centrale=? and c.idstatutprojet_statutprojet!=? and datemiseajour isnull and EXTRACT(YEAR from datecreation)!=?", 
+                        array($idcentrale, REFUSE,$anneeEnCours,$anneeEnCours,$idcentrale,REFUSE,$anneeEnCours));
+                $fpProjetRapport = fopen("../tmp/ProjetRapportAutres".IDCENTRALEUSER.".json", 'w');
+                $dataProjetRapportAutres = "";
+                fwrite($fpProjetRapport, '{"items": [');
+
+                $nbrowProjetRapportAutres = count($rowProjetRapportAutres);
+                for ($i = 0; $i < $nbrowProjetRapportAutres; $i++) {
+                    $idutilisateur = $rowProjetRapportAutres[$i]['idutilisateur_utilisateur'];
+                    $arraycreateur = $manager->getList2("select nom,prenom from utilisateur where idutilisateur=?", $idutilisateur);
+                    $dataProjetRapportAutres = ""
+                            . '{"numero":' . '"' . $rowProjetRapportAutres[$i]['numero'] . '"' . ","
+                            . '"datecreation":' . '"' . $rowProjetRapportAutres[$i]['datecreation'] . '"' . ","
+                            . '"identite":' . '"' . $arraycreateur[0]['nom'] . ' - ' . $arraycreateur[0]['prenom'] . '"' . ","
+                            . '"datemiseajour":' . '"' . $rowProjetRapportAutres[$i]['datemiseajour'] . '"' . ","
+                            . '"title":' . '"' . filtredonnee($rowProjetRapportAutres[$i]['title']) . '"' . ","
+                            . '"idprojet":' . '"' . $rowProjetRapportAutres[$i]['idprojet'] . '"' . ","
+                            . '"idstatutprojet":' . '"' . $rowProjetRapportAutres[$i]['idstatutprojet_statutprojet'] . '"' . ","
+                            . '"refinterneprojet":' . '"' . filtredonnee($rowProjetRapportAutres[$i]['refinterneprojet']) . '"' . ","
+                            . '"imprime":' . '"' . TXT_PDF . '"' . "},";
+                    fputs($fpProjetRapport, $dataProjetRapportAutres);
+                    fwrite($fpProjetRapport, '');
+                }
+
+                fwrite($fpProjetRapport, ']}');
+                $json_fileRapport = "../tmp/ProjetRapportAutres".IDCENTRALEUSER.".json";
+
+                $jsonRapport = file_get_contents($json_fileRapport);
+
+
+                $jsonRapport1 = str_replace('},]}', '}]}', $jsonRapport);
+                file_put_contents($json_fileRapport, $jsonRapport1);
+                $cache->write('rapportAutres_'.LIBELLECENTRALEUSER,$jsonRapport1);
+                fclose($fpProjetRapport);
+                chmod("../tmp/ProjetRapportAutres".IDCENTRALEUSER.".json", 0777);
+                $_SESSION['nbProjetRapportAutres'] = $nbrowProjetRapportAutres;
+            }            
+            
         }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------

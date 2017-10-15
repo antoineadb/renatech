@@ -27,7 +27,8 @@ if(isset($_SESSION['nbprojet'])){
     $nbProjetFini = $_SESSION['nbFini'];
     $nbProjetCloturer = $_SESSION['nbprojetCloturer'];
     $nbProjetSoustraitance = $_SESSION['nbProjetSoustraitance'];
-    $nbRapportProjet = $_SESSION['nbProjetRapport'];
+    $nbRapportProjetEnCours = $_SESSION['nbProjetRapportEncours'];
+    $nbRapportProjetAutres = $_SESSION['nbProjetRapportAutres'];
 }else{
     $nbprojet = 0;
     $nbprojetEncoursRealisation = 0;
@@ -38,7 +39,8 @@ if(isset($_SESSION['nbprojet'])){
     $nbProjetFini = 0;
     $nbProjetCloturer = 0;
     $nbProjetSoustraitance = 0;
-    $nbRapportProjet =  0;
+    $nbRapportProjetEnCours =  0;
+    $nbRapportProjetAutres = 0;
 }
 ?>
 <div id="global" >
@@ -79,8 +81,11 @@ if(isset($_SESSION['nbprojet'])){
                 <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetFini . "'>" . TXT_PROJETFINI . "</div>"; ?>" style="height:500px;" >
                     <?php include_once 'html/vueSuiviProjetFiniCentrale.html'; ?>
                 </div>
-                <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbRapportProjet . "'>" . TXT_REPORT . "</div>"; ?>" style="height:500px;" >
-                    <?php include_once 'html/vueSuiviRapportProjet.html'; ?>
+                <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbRapportProjetEnCours . "'>" . TXT_CURRENTYEARREPORT . "</div>"; ?>" style="height:500px;" >
+                    <?php include_once 'html/vueSuiviRapportProjetEnCours.html'; ?>
+                </div>
+                <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbRapportProjetAutres . "'>" . TXT_OLDREPORT . "</div>"; ?>" style="height:500px;" >
+                    <?php include_once 'html/vueSuiviRapportProjetAutres.html'; ?>
                 </div>
                     <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo "<div title='" . TXT_NBPROJET . ': ' . $nbProjetSoustraitance . "'>" . TXT_PROJETSOUSTRAITANCE . "</div>"; ?>" style="height:500px;" >
                         <?php include_once 'html/vueSuiviProjetensoustaitance.html'; ?>

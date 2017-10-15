@@ -28,8 +28,8 @@ CENTRALES DE PROXIMITES
 </script>
 <input type='text' id='affiche_centrale_proximite' style='display: none' value='non'>
 <fieldset style="border: 1px solid #5d8ba2;border-radius: 5px;color: midnightblue;font-family: verdana;margin-top: 20px;padding: 10px 15px 15px;width: 949px;" >
-    <legend><?php echo TXT_CENTRALEPART; ?>&nbsp;<a class="infoBulle" href="#"><img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 700px">
-                <?php echo removeDoubleQuote(TXT_AIDECENTRALEPROXIMITE); ?></span></a></legend>
+    <legend><?php echo TXT_CENTRALEPART; ?>&nbsp;<a class="infoBulle" href="#"><img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: auto;min-width: 700px" >
+                <?php echo removeDoubleQuote(affiche('TXT_AIDECENTRALEPROXIMITE')); ?></span></a></legend>
     <?php 
     if (isset($_GET['numProjet'])) {
         $idprojet = $manager->getSingle2('select idprojet from projet where numero=?', $_GET['numProjet']);
