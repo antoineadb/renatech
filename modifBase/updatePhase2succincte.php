@@ -147,7 +147,7 @@ $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
             $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
         }
     }else{        
-            $descriptioncentraleproximite='';
+            $descriptioncentraleproximite='_';
             $manager->deletecentraleproximiteprojet($idprojet);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

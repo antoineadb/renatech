@@ -221,20 +221,20 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $idtypecentralepartenaire=null;
     }
     
-    if (!empty($_POST['desTechno'])) {
+    if (!empty(strip_tags($_POST['desTechno']))) {
         $descriptifTechnologique = clean($_POST['desTechno']);
     } else {
-        $descriptifTechnologique = '';
+        $descriptifTechnologique = '_';
     }
-    if (!empty($_POST['verrouide'])) {
+    if (!empty(strip_tags($_POST['verrouide']))) {
         $verrouidentifie = clean($_POST['verrouide']);
     } else {
-        $verrouidentifie = '';
-    }
-    if (!empty($_POST['reussit'])) {
+        $verrouidentifie = '_';
+    }    
+    if (!empty(strip_tags($_POST['reussit']))) {
         $reussite = clean($_POST['reussit']);
     } else {
-        $reussite = '';
+        $reussite = '_';
     }
     if (!empty($_POST['nbPlaque']) || $_POST['nbPlaque'] != 0) {
         $nbPlaque = Securite::bdd($_POST['nbPlaque']);
@@ -403,7 +403,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         }
     }else{
         $_SESSION['descriptioncentraleproximitemodif'] = '';
-        $descriptioncentraleproximite = '';
+        $descriptioncentraleproximite = '_';
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              FIN DES CENTRALES DE PROXIMITE

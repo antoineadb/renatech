@@ -877,7 +877,7 @@ if (isset($_POST['page_precedente'])) {
     }
 
 
-    if (!empty($_POST['desTechno'])) {
+    if (!empty(strip_tags($_POST['desTechno']))) {
         $descriptifTechnologique = clean($_POST['desTechno']);
         if ($descriptiftechnologiqueBDD != $descriptifTechnologique) {
             $_SESSION['descriptifTechnologiquemodif'] = $descriptifTechnologique;
@@ -888,7 +888,7 @@ if (isset($_POST['page_precedente'])) {
         $descriptifTechnologique = clean($manager->getSingle2("select descriptiftechnologique from projet where idprojet = ?", $idprojet));
         $_SESSION['descriptifTechnologiquemodif'] = '';
         if (empty($descriptifTechnologique)) {
-            $descriptifTechnologique = '';
+            $descriptifTechnologique = '_';
             $_SESSION['descriptifTechnologiquemodif'] = '';
         }
     }
@@ -897,7 +897,7 @@ if (isset($_POST['page_precedente'])) {
     } else {
         $verrouidentifieBDD = '';
     }
-    if (!empty($_POST['verrouide'])) {
+    if (!empty(strip_tags($_POST['verrouide']))) {
         $verrouidentifie = clean(trim($_POST['verrouide']));
         if ($verrouidentifieBDD != $verrouidentifie) {
             $_SESSION['verrouidentifiemodif'] = $verrouidentifie;
@@ -908,12 +908,12 @@ if (isset($_POST['page_precedente'])) {
         $_SESSION['verrouidentifiemodif'] = '';
         $verrouidentifie = clean($manager->getSingle2("select verrouidentifiee from projet where idprojet = ?", $idprojet));
         if (empty($verrouidentifie)) {
-            $verrouidentifie = '';
+            $verrouidentifie = '_';
             $_SESSION['verrouidentifiemodif'] = '';
         }
     }
     $reussiteBDD = $rowprojet[0]['reussite'];
-    if (!empty($_POST['reussit'])) {
+    if (!empty(strip_tags($_POST['reussit']))) {
         $reussite = clean($_POST['reussit']);
         if ($reussiteBDD != $reussite) {
             $_SESSION['reussitemodif'] = $reussite;
@@ -924,7 +924,7 @@ if (isset($_POST['page_precedente'])) {
         $reussite = clean($manager->getSingle2("select reussite from projet where idprojet =?", $idprojet));
         $_SESSION['reussitemodif'] = '';
         if (empty($reussite)) {
-            $reussite = '';
+            $reussite = '_';
             $_SESSION['reussitemodif'] = '';
         }
     }
