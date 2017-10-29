@@ -216,7 +216,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     
     
     if(isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])){
-        $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],-1);
+        $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],2,2);
     }else{
         $idtypecentralepartenaire=null;
     }
@@ -466,36 +466,25 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
 //------------------------------------------------------------------------------    
+    
     if (!empty($_POST['nombrePartenaire']) && $_POST['nombrePartenaire'] != 0) {//SI LE NOMBRE DE PARTENAIRE EST >0
-        //SUPPPRESSION DES PARTENAIRES DANS LA TABLE PROJETPARTENAIRE
-        $nombrePartenaire = $_POST['nombrePartenaire'];
-        $manager->deleteprojetpartenaire($idprojet);
-        //RECUPERATION DU PROJET DANS LA TABLE PARTENAIREPROJET QUI N'AS PAS DE REFERENCE DANS LA TABLE PROJETPARTENAIRE-->SUPPRESSION ENREGISTEMENT VIDE
-        $idpartenaire = $manager->getList("SELECT idpartenaire FROM  partenaireprojet where idpartenaire not in (select idpartenaire_partenaireprojet from projetpartenaire)");
-        //SUPPRESSION DES LIGNES CORRESPONDANTES
-        if (count($idpartenaire) > 0) {
-            for ($i = 0; $i < count($idpartenaire); $i++) {
-                $manager->deletepartenaireprojet($idpartenaire[$i]['idpartenaire']);
-            }
-        }
-        //$partenaires = '';        
+        $nombrePartenaire = $_POST['nombrePartenaire'];        
         for ($i = 0; $i < $nombrePartenaire - 1; $i++) {
-            $nomPartenaire = 'nomPartenaire' . $i;
-            $nomLaboEntreprise = 'nomLaboEntreprise' . $i;
-            if (!empty($_POST['' . $nomPartenaire . ''])) {
-                $nomPartenaire = stripslashes(Securite::bdd(($_POST['' . $nomPartenaire . ''])));
+            $nomLaboEntreprise = $_POST['nomLaboEntreprise' . $i];            
+            $idtypepartenaire = substr($_POST['tp'.$i], 2,2);
+            if (!empty($_POST[$_POST['nomLaboEntreprise' . $i]])) {
+                $nomLaboEntreprise = stripslashes(Securite::bdd(($_POST[$_POST['nomLaboEntreprise' . $i]])));                
             }
-            if (!empty($_POST['' . $nomLaboEntreprise . ''])) {
-                $nomLaboEntreprise = stripslashes(Securite::bdd(($_POST['' . $nomLaboEntreprise . ''])));
-            }
-            //TRAITEMENT AJOUT DANS LA TABLE PARTENAIREPROJET
-            $idpartenaire = $manager->getSingle("select max (idpartenaire) from partenaireprojet") + 1;
-            $newpartenaireprojet = new Partenaireprojet($idpartenaire, $nomPartenaire, $nomLaboEntreprise);
+            
+            $idpartenaire = $manager->getSingle("select max (idpartenaire) from partenaireprojet") + 1;             
+           
+            $newpartenaireprojet = new Partenaireprojet($idpartenaire,  $nomLaboEntreprise);
             $manager->addpartenaireprojet($newpartenaireprojet);
-            //$partenaires .=$nomPartenaire . ' - ' . $nomLaboEntreprise . ' - ';
-            //TRAITEMENT AJOUT DANS LA TABLE PROJETPARTENAIRE
-            $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet);
+            
+            
+            $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet, $idtypepartenaire);
             $manager->addprojetpartenaire($newprojetpartenaire);
+            
         }
     } else {
         //IL N'A PAS DE PARTENAIRE SELECTIONNE IL FAUT SUPPRIMER LES PARTENAIRES PROJET DANS LES TABLE PARTENAIREPROJET ET PROJETPARTENAIRE

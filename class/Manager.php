@@ -1792,11 +1792,13 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO projetpartenaire (idpartenaire_partenaireprojet,idprojet_projet)VALUES(?,?)');
+            $requete = $this->_db->prepare('INSERT INTO projetpartenaire (idpartenaire_partenaireprojet,idprojet_projet,idtypepartenaire_typepartenaire)VALUES(?,?,?)');
             $idpartenaire_partenaireprojet = $projetpartenaire->getIdpartenaire_partenaireprojet();
             $idprojet_projet = $projetpartenaire->getIdprojet_projet();
+            $idtypepartenaire_typepartenaire= $projetpartenaire->getIdtypepartenaire_typepartenaire();
             $requete->bindParam(1, $idpartenaire_partenaireprojet, PDO::PARAM_INT);
             $requete->bindParam(2, $idprojet_projet, PDO::PARAM_INT);
+            $requete->bindParam(3, $idtypepartenaire_typepartenaire, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -1827,13 +1829,11 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO partenaireprojet (idpartenaire,nompartenaire,nomlaboentreprise)VALUES(?,?,?) ');
-            $idpartenaire = $partenaireprojet->getIdpartenaire();
-            $nompartenaire = $partenaireprojet->getNompartenaire();
-            $nomlaboentreprise = $partenaireprojet->getNomlaboentreprise();
-            $requete->bindParam(1, $idpartenaire, PDO::PARAM_INT);
-            $requete->bindParam(2, $nompartenaire, PDO::PARAM_STR);
-            $requete->bindParam(3, $nomlaboentreprise, PDO::PARAM_STR);
+            $requete = $this->_db->prepare('INSERT INTO partenaireprojet (idpartenaire,nomlaboentreprise)VALUES(?,?) ');
+            $idpartenaire = $partenaireprojet->getIdpartenaire();            
+            $nomlaboentreprise = $partenaireprojet->getNomlaboentreprise();            
+            $requete->bindParam(1, $idpartenaire, PDO::PARAM_INT);            
+            $requete->bindParam(2, $nomlaboentreprise, PDO::PARAM_STR);            
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {

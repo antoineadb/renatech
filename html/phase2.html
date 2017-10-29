@@ -516,13 +516,7 @@ $date  = $date->format('d-m-Y');
                 <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 910px;margin-left:20px">
                     <?php echo TXT_MESSAGEAIDETYPEPARTENAIRE; ?>
                 <td>
-            </tr>
-            <tr>
-                <td>    
-                    <a  style="margin-left: 20px"  class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif'  height="13px" width="13px"/>
-                    <span style="text-align: left;padding:10px;width: 275px;border-radius:5px" ><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/aideTp.png'/></span></a>
-                </td>
-            </tr>
+            </tr>            
             </table>
             <table> 
                 <tr id="trcentralepartenaireprojet" style="display: none" >
@@ -536,10 +530,11 @@ $date  = $date->format('d-m-Y');
                         <input type="text" id="centralepartenaireprojet" autocomplete="on" name="centralepartenaireprojet" maxlength="100"
                                data-dojo-type="dijit/form/ValidationTextBox" disabled="<?php	echo	$bool;	?>"
                                value="<?php	echo $centralepartenaireprojet ?>"
-                               data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()*\0133\0135\+_ ,.-]+'">
+                               data-dojo-props="<?php echo REGEX_TYPE; ?>">
                     </td>
                     <td>
                     <?php 
+                  
                         if (!empty($idtypecentralepartenaire)){
                             $rowTypePartenaire =  $manager->getList2("select libelletypepartenairefr,libelletypepartenaireen ,idtypepartenaire from typepartenaire where  idtypepartenaire!=? and masquetypepartenaire!=TRUE order by idtypepartenaire asc",$idtypecentralepartenaire);
                         }else{
@@ -548,8 +543,7 @@ $date  = $date->format('d-m-Y');
                 $nbrowTypePartenaire=count($rowTypePartenaire);?>
                 <select name="typecentralepartenaire" id="typecentralepartenaire"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">          
                 <?php
-                if (!empty($idtypecentralepartenaire)){
-                    echo "<option value='tp-1'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
+                if (!empty($idtypecentralepartenaire)){                    
                     if($lang=='fr'){
                         echo "<option  selected='selected' value='".'tp'.$idtypecentralepartenaire."'>".removeDoubleQuote($typecentralepartenairefr)."</option>";    
                         for($i=0;$i<$nbrowTypePartenaire;$i++){			
@@ -563,7 +557,7 @@ $date  = $date->format('d-m-Y');
                     }
                     
                 }else{  
-                    echo "<option value='tp-1'>".TXT_SELECTTYPEPARTENAIRE.'</option>';
+                    
                     if($lang=='fr'){
                         for($j=0;$j<$nbrowTypePartenaire;$j++){			
                             echo "<option  value='".'tp'.$rowTypePartenaire[$j]['idtypepartenaire']."'>".removeDoubleQuote($rowTypePartenaire[$j]['libelletypepartenairefr'])."</option>";
@@ -643,8 +637,7 @@ $date  = $date->format('d-m-Y');
                             for (i = 0; i < nb - 1; i++) {
                                 document.getElementById('nom' + i).style.display = 'block';
                             }
-                            document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                            //document.getElementById('trnomPartenaire01').style.display = 'block';
+                            document.getElementById('trcentralepartenaireprojet').style.display = 'block';                            
                             for (i = nb - 1; i < 10; i++) {
                                 var nom = 'nom' + i;
                                 document.getElementById(nom).style.display = 'none';
@@ -662,7 +655,6 @@ $date  = $date->format('d-m-Y');
                                 document.getElementById('nom' + i).style.display = 'block';
                             }
                             document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                            //document.getElementById('trnomPartenaire01').style.display = 'block';
                             for (i = nb - 1; i < 10; i++) {
                                 var nom = 'nom' + i;
                                 document.getElementById(nom).style.display = 'none';
@@ -679,7 +671,6 @@ $date  = $date->format('d-m-Y');
                                 document.getElementById('nom' + i).style.display = 'block';
                             }
                             document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                            //document.getElementById('trnomPartenaire01').style.display = 'block';
                             for (i = nb - 1; i < 10; i++) {
                                 var nom = 'nom' + i;
                                 document.getElementById(nom).style.display = 'none';
@@ -696,7 +687,6 @@ $date  = $date->format('d-m-Y');
                                 document.getElementById('nom' + i).style.display = 'block';
                             }
                             document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                            //document.getElementById('trnomPartenaire01').style.display = 'block';
                             for (i = nb - 1; i < 10; i++) {
                                 var nom = 'nom' + i;
                                 document.getElementById(nom).style.display = 'none';
@@ -714,7 +704,6 @@ $date  = $date->format('d-m-Y');
                                 document.getElementById('nom' + i).style.display = 'block';
                             }
                             document.getElementById('trcentralepartenaireprojet').style.display = 'block';
-                            //document.getElementById('trnomPartenaire01').style.display = 'block';
                             for (i = nb - 1; i < 10; i++) {
                                 var nom = 'nom' + i;
                                 document.getElementById(nom).style.display = 'none';

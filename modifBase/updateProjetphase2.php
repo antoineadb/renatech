@@ -508,18 +508,7 @@ if (isset($_POST['page_precedente'])) {
             }
 //------------------------------------------------------------------------------------------------------------
 //                                       TRAITEMENT DES NOMS PARTENAIRE
-//------------------------------------------------------------------------------------------------------------
-            /*if (!empty($_POST['nomPartenaire01'])) {
-                $partenaire1 = stripslashes(Securite::bdd(($_POST['nomPartenaire01'])));
-                if ($partenaire1BDD != $partenaire1) {
-                    $_SESSION['partenaire1modif'] = $partenaire1;
-                } else {
-                    $_SESSION['partenaire1modif'] = '';
-                }
-            } else {
-                $partenaire1 = null;
-                $_SESSION['partenaire1modif'] = '';
-            }*/            
+//------------------------------------------------------------------------------------------------------------  
         } else {
             $nombrePartenaire = 0;
             $partenaire1 = null;
@@ -531,7 +520,7 @@ if (isset($_POST['page_precedente'])) {
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
 //------------------------------------------------------------------------------
-        if (!empty($_POST['nombrePartenaire']) && $_POST['nombrePartenaire'] != 0) {//SI LE NOMBRE DE PARTENAIRE EST >0
+        if (!empty($_POST['nombrePartenaire']) && $_POST['nombrePartenaire'] != 0 ) {//SI LE NOMBRE DE PARTENAIRE EST >0
             //SUPPPRESSION DES PARTENAIRES DANS LA TABLE PROJETPARTENAIRE
             $nombrePartenaire = $_POST['nombrePartenaire'];
             $manager->deleteprojetpartenaire($idprojet);
@@ -556,31 +545,20 @@ if (isset($_POST['page_precedente'])) {
                 for ($i = 0; $i < $nbidpartenaire; $i++) {
                     $manager->deletepartenaireprojet($idpartenaire[$i]['idpartenaire']);
                 }
-            } //EFFACAGE DU ER PARTENAIRE DANS LA TABLE PROJET           
-            $centralepartenaireprojet = $manager->getSingle2("select centralepartenaireprojet from projet where idprojet=?", $idprojet);
-            //$autrenomcentrale = $manager->getSingle2("select autrenomcentrale from projet where idprojet=?", $idprojet);
-           /* $partenaire1 = $manager->getSingle2("select partenaire1 from projet where idprojet=?", $idprojet);
-            $partenairefromprojet = new Partenairefromprojet($centralepartenaireprojet, $partenaire1);
-            $manager->updatepartenairefromprojet($partenairefromprojet, $idprojet);*/
+            }
         }
         if ($_POST['nombrePartenaire'] > 1) {
             for ($i = 0; $i < $_POST['nombrePartenaire'] - 1; $i++) {
-                if (!empty($_POST['' . 'nomPartenaire' . $i . ''])) {
-                    $nomPartenaire = stripslashes(Securite::bdd(($_POST['' . 'nomPartenaire' . $i . ''])));
-                } else {
-                    $nomPartenaire = '';
-                }
                 if (!empty($_POST['' . 'nomLaboEntreprise' . $i . ''])) {
                     $nomLaboEntreprise = stripslashes(Securite::bdd(($_POST['' . 'nomLaboEntreprise' . $i . ''])));
-                } else {
-                    $nomLaboEntreprise = '';
-                }//TRAITEMENT AJOUT DANS LA TABLE PARTENAIREPROJET
+                }                
                 $idpartenaire = $manager->getSingle("select max (idpartenaire) from partenaireprojet") + 1;
-                $newpartenaireprojet = new Partenaireprojet($idpartenaire, $nomPartenaire, $nomLaboEntreprise);
+                $idtypepartenaire = substr($_POST['tp'.$i], 2,2);                
+                $newpartenaireprojet = new Partenaireprojet($idpartenaire, $nomLaboEntreprise);
                 $manager->addpartenaireprojet($newpartenaireprojet);
-                $partenaires .= $nomPartenaire . ' - ' . $nomLaboEntreprise . ' - ';
-                //TRAITEMENT AJOUT DANS LA TABLE PROJETPARTENAIRE
-                $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet);
+                $partenaires .= $nomLaboEntreprise . ' - ';
+                //TRAITEMENT AJOUT DANS LA TABLE PROJETPARTENAIRE                
+                $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet, $idtypepartenaire);
                 $manager->addprojetpartenaire($newprojetpartenaire);
             }
             $Spartenaires = substr(trim($partenaires), 0, -1);
@@ -1097,22 +1075,18 @@ if (isset($_POST['page_precedente'])) {
             $_POST['tp'.($i-1)] = null;
         }
         
-        $arrayidtypepartenaire = array();
+        $arrayidtypepartenaire = array();        
         for ($i = 0; $i < 9; $i++) {
             $j=$i+1;
             if(!empty($_POST['tp'.$i])){
-                if(strlen($_POST['tp'.$i])==3){
-                    $tp = (int)substr($_POST['tp'.$i],-1);            
-                }else{
-                    $tp = (int)substr($_POST['tp'.$i],0);
-                }
+                $tp = (int)substr($_POST['tp'.$i],2,2);
                 $rang = (int)substr($_POST['rang'.$j],-1);           
                 if ($tp!=0) {
                     $arrayidtypepartenaire[$i]['typepartenaire'] = $tp;
                     $arrayidtypepartenaire[$j]['rang'] = $rang;               
                 }
             }
-        }        
+        }
         $arrayIdTypepartenaire = (array_values($arrayidtypepartenaire));   
         if(!empty($arrayIdTypepartenaire)){
             $manager->deleteProjetTypePartenaire($idprojet);
@@ -1126,7 +1100,7 @@ if (isset($_POST['page_precedente'])) {
         }
     }
     if(isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])){
-        $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],-1);
+        $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],2,2);
     }else{
         $idtypecentralepartenaire=null;
     }

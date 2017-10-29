@@ -22,22 +22,18 @@ if (!empty($_SESSION['pseudo'])) {
 }
 
 if (!empty($idprojet)) {
-    $arrayPartenaire =$manager->getList2("SELECT  nomlaboentreprise FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire AND idprojet_projet = idprojet and idprojet=?", $idprojet);
-    $aidpartenaire = $manager->getList2("select  idtypepartenaire_typepartenaire,rang from projettypepartenaire where idprojet_projet=?", $idprojet);
+    $arrayPartenaire =$manager->getList2("SELECT  nomlaboentreprise,idtypepartenaire_typepartenaire FROM projetpartenaire, projet, partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire "
+            . "AND idprojet_projet = idprojet and idprojet=?", $idprojet);
+    
 }else{
-    $arrayPartenaire =array();
-       $aidpartenaire =array();
+    $arrayPartenaire =array();    
 }
 
-
-
-
-
-
 for ($i = 0; $i < 11; $i++) {
-    $j = $i + 1;
+    
+    $j = $i + 1;     
     ?>
-    <table id="<?php echo 'nom' . $i; ?>" style="display:none">
+    <table id="<?php echo 'nom' . $i; ?>" style="display:none;float:right">
         <tr>
             <td ><label class="laboentreprise"  for="<?php echo 'nomLaboEntreprise' . $i; ?>"><?php echo TXT_NOMLABOENTREPRISE . '  ' . ($j + 1) . '*'; ?></label></td>
             <td>
@@ -50,21 +46,29 @@ for ($i = 0; $i < 11; $i++) {
             </td><td>
                 <input type="text" id="<?php echo 'rang' . $j; ?>"  name="<?php echo 'rang' . $j; ?>" style="display: none;width:10px" value="<?php echo $j; ?>" >
             </td>
-            <td><select name="<?php echo 'tp' . $i; ?>" id="<?php echo 'typepartenaire' . $i; ?>"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">
+            <td>
+                <select name="<?php echo 'tp' . $i; ?>" id="<?php echo 'typepartenaire' . $i; ?>"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">
                     <?php
-                    if (!empty($aidpartenaire[$i]['idtypepartenaire_typepartenaire'])) {
+                    if (!empty($arrayPartenaire[$i]['idtypepartenaire_typepartenaire'])) {
                         $rowtypepartenaire = $manager->getList2("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE "
-                                . " and idtypepartenaire <>? order by idtypepartenaire asc", $aidpartenaire[$i]['idtypepartenaire_typepartenaire']);
+                                . " and idtypepartenaire <>? order by idtypepartenaire asc", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
                         if ($lang == 'fr') {
-                            $libelle = $manager->getSingle2("select libelletypepartenairefr from typepartenaire where idtypepartenaire=?", $aidpartenaire[$i]['idtypepartenaire_typepartenaire']);
+                            $libelle = $manager->getSingle2("select libelletypepartenairefr from typepartenaire where idtypepartenaire=?", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
                         } else {
-                            $libelle = $manager->getSingle2("select libelletypepartenaireen from typepartenaire where idtypepartenaire=?", $aidpartenaire[$i]['idtypepartenaire_typepartenaire']);
+                            $libelle = $manager->getSingle2("select libelletypepartenaireen from typepartenaire where idtypepartenaire=?", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
                         }
-                        echo "<option  selected='selected' value='" . 'tp' . $aidpartenaire[$i]['idtypepartenaire_typepartenaire'] . "'>" . removeDoubleQuote($libelle) . "</option>";
-                        echo "<option value='tp-1' >" . TXT_SELECTTYPEPARTENAIRE . '</option>';
+                        echo "<option  selected='selected' value='" . 'tp' . $arrayPartenaire[$i]['idtypepartenaire_typepartenaire'] . "'>" . removeDoubleQuote($libelle) . "</option>";
+                       
                     } else {
-                        echo "<option value='tp-1'  >" . TXT_SELECTTYPEPARTENAIRE . '</option>';
-                        $rowtypepartenaire = $manager->getList("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE order by idtypepartenaire asc");
+                        $rowtypepartenaire = $manager->getList("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE "
+                                . "AND idtypepartenaire!=99 order by idtypepartenaire asc");
+                        if ($lang == 'fr') {
+                            $libelle = $manager->getSingle2("select libelletypepartenairefr from typepartenaire where idtypepartenaire=?", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
+                        } else {
+                            $libelle = $manager->getSingle2("select libelletypepartenaireen from typepartenaire where idtypepartenaire=?", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
+                        }
+                        echo "<option selected  value='tp99'>" . TXT_INCONNU . "</option>";
+                      
                     }
                     for ($k = 0; $k < count($rowtypepartenaire); $k++) {
                         if($lang=='fr'){

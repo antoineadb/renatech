@@ -99,7 +99,7 @@ if(IDTYPEUSER==ADMINLOCAL){
 }
 //récupération du type utilisateur
 //VERIFICATION QU'IL Y A BIEN DES PROJETS DANS LA BASE DE DONNEES
-$donnee = array($idcentrale, $datedebut, $datefin);
+$donnee = array($idcentrale, $datedebut, $datefin,REFUSE);
 $sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentraleproximite,p.centraleproximite,p.devtechnologique,p.etapeautrecentrale,p.porteurprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,p.attachement,p.attachementdesc,p.emailrespdevis,
             u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
             u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
@@ -109,7 +109,7 @@ $sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentr
             p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtechnologique,p.centralepartenaireprojet, co.idstatutprojet_statutprojet,p.nbeleve,p.nomformateur,p.idtypecentralepartenaire,p.datestatutfini
             FROM projet p,creer c,utilisateur u,concerne co 
             WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur AND
-            co.idcentrale_centrale =? and dateprojet between ? and ?   order by p.idprojet asc";
+            co.idcentrale_centrale =? and dateprojet between ? and ?  and co.idstatutprojet_statutprojet !=? order by p.idprojet asc";
 $row = $manager->getListbyArray($sql, $donnee);
 
 $nbrow = count($row);

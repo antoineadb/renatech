@@ -241,30 +241,25 @@
                 <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 910px;margin-left:20px">
                     <?php echo TXT_MESSAGEAIDETYPEPARTENAIRE; ?>
                 <td>
-            </tr>
-            <tr>
-                <td>    
-                    <a  style="margin-left: 20px"  class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif'  height="13px" width="13px"/>
-                    <span style="text-align: left;padding:10px;width: 275px;border-radius:5px" ><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/aideTp.png'/></span></a>
-                </td>
-            </tr>
+            </tr>            
         <table>
             
             <tr id="trcentralepartenaireprojet" style="display: none" >
                 <td>
                     <label style="margin-left: 18px;width:310px" for="<?php	echo 'nomLaboEntreprise'.$i;	?>">
-                        <?php echo TXT_NOMLABOENTREPRISE.'1 *';?>
+                        <?php echo TXT_NOMLABOENTREPRISE.' 1*';?>
                     </label>
                 </td>
                 <td><div id="centralelaboentreprise"></div>
-                    <input type="text" id="centralepartenaireprojet" autocomplete="on" name="centralepartenaireprojet" data-dojo-type="dijit/form/ValidationTextBox"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'’/=°()\0133\0135\+_ ,.-]+'" >
-                </td>
+                    <input type="text" id="centralepartenaireprojet" style="margin-left:-4px" autocomplete="on" name="centralepartenaireprojet" data-dojo-type="dijit/form/ValidationTextBox"
+                           data-dojo-props="<?php echo REGEX_TYPE; ?>" >
+                </td>            
+                <label style="float: right;margin-right: 36px;display: none" id="lblTp"><?php echo TXT_SELECTTYPEPARTENAIRE; ?></label>
                 <td>
-                <select name="typecentralepartenaire" id="typecentralepartenaire"   style="margin-left: 20px;width: 320px;" data-dojo-type="dijit/form/Select">
+                    <select name="typecentralepartenaire" id="typecentralepartenaire"   style="margin-left: 22px;width: 320px;" data-dojo-type="dijit/form/Select">
                 <?php 
-                        echo '<option value="tp-1">'.TXT_SELECTTYPEPARTENAIRE.'</option>';
-                        $rowtypepartenaire = $manager->getList("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE order by idtypepartenaire asc");                            
+                        $rowtypepartenaire = $manager->getList("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE AND idtypepartenaire!=99 order by idtypepartenaire asc");
+                            echo "<option value='tp99'  selected>".TXT_INCONNU."</option>";
                             for($k=0;$k<count($rowtypepartenaire);$k++){
                                 if($lang==fr){
                                     echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenairefr']."</option>";
@@ -285,12 +280,14 @@
                             dijit.byId('centralepartenaireprojet').set('required', '');
                             var nom = 'nom' + i;
                             document.getElementById(nom).style.display = 'none';
-                            document.getElementById('trcentralepartenaireprojet').style.display = 'none';                 
+                            document.getElementById('trcentralepartenaireprojet').style.display = 'none';
+                            document.getElementById('lblTp').style.display = 'none';
                             dijit.byId('nomLaboEntreprise' + i).set('required', '');
                         }
                         break;
                     case 1:
                         document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        document.getElementById('lblTp').style.display = 'block';
                         dijit.byId('centralepartenaireprojet').set('required', 'true');
                         for (i = 0; i < 11; i++) {
                             dijit.byId('nomLaboEntreprise' + i).set('required', '');
