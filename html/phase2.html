@@ -1364,6 +1364,7 @@ function masqueetapeautrecentrale(){
                                 <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" 
                                        data-dojo-props="
                                         onClick:function(){
+                                            ctrlPersonneCentrale();
                                             if(dijit.byId('modifProjet').validate()){
                                                 rep.show();
                                             }
@@ -1402,7 +1403,9 @@ function masqueetapeautrecentrale(){
                 <table>            
                     <tr>
                         <td id='btnSave'>
-                            <button data-dojo-type="dijit/form/Button" id='btnsave' type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){save();}}"  disabled="<?php echo $bool; ?>" 
+                            <button data-dojo-type="dijit/form/Button" id='btnsave' type="button" data-dojo-props="
+                                    onClick:function(){if(dijit.byId('modifProjet').validate()){save();}ctrlPersonneCentrale()}"  
+                                    disabled="<?php echo $bool; ?>" 
                                     style="margin-top:15px"><?php echo TXT_SAVEPROJECT ;?></button>
                         </td>
                         <td id="infoSave"><?php echo TXT_SAVEDATA;?></td>                        

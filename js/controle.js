@@ -295,3 +295,56 @@ function remplace(expr, a, b) {
     }
     return expr;
 }
+function ctrlPersonneCentrale(){
+var nb = dijit.byId('integerspinner').value;
+if(nb>0){
+    for(i=0;i<nb;i++){
+        j=i+1;
+        if(dijit.byId('nomaccueilcentrale'+i+'').value===""){
+            alert('le nom de la personne '+j +" n'est pas renseigné dans les personnes susceptible de travailler en salle blanche sur ce projet");
+            dijit.byId('nomaccueilcentrale'+i+'').focus();
+            return false;
+            exit();
+        }
+        if(dijit.byId('prenomaccueilcentrale'+i+'').value===""){
+            alert('le prénom de la personne '+j +" n'est pas renseigné dans les personnes susceptible de travailler en salle blanche sur ce projet");                            
+            dijit.byId('prenomaccueilcentrale'+i+'').focus();
+            return false;
+            exit();
+        }
+
+        if(dijit.byId('qualiteaccueilcentrale'+i+'').value===""){
+            alert('la qualité de la personne '+j +" n'est pas renseigné dans les personnes susceptible de travailler en salle blanche sur ce projet");                            
+            dijit.byId('qualiteaccueilcentrale'+i+'').focus();
+            return false;
+            exit();
+        }
+         if(dijit.byId('mailaccueilcentrale'+i+'').value===""){
+            alert("l'email de la personne "+j+" n'est pas renseigné dans les personnes susceptible de travailler en salle blanche sur ce projet");                            
+            dijit.byId('mailaccueilcentrale'+i+'').focus();
+            return false;
+            exit();
+        }
+    }
+}
+
+if(dijit.byId('typeProjet').value===null){
+    alert("Le type de projet n'est pas renseigné!");
+    dijit.byId('typeProjet').focus();
+    return false;
+    exit();
+}
+
+if(!dijit.byId('dureeprojet').value){
+    alert("La durée du projet n'est pas renseigné!");
+    dijit.byId('dureeprojet').focus();
+    return false;
+    exit();
+}
+if(!dijit.byId('dureeestimeprojet').value){
+    alert("L'estimation de la durée cumulée des travaux technologiques n'est pas renseigné!");
+    dijit.byId('dureeestimeprojet').focus();
+    return false;
+    exit();
+}
+}

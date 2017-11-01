@@ -9,52 +9,51 @@ if (isset($_SESSION['pseudo'])) {
 }
 ?>
 <script>
-function afficherAutreElement(id1, id2,id3,id4,id5,id6,id7,id8) {
-    if (dijit.byId(id1).value === 'libqualdemaca'+'<?php echo NONPERMANENT ?>') {
-        dijit.byId(id2).domNode.style.display = '';
-        document.getElementById(id3).style.display = '';
-        id7.style.display = '';
-        id8.style.display = '';
-    } else {
-        dijit.byId(id2).domNode.style.display = 'none';
-        document.getElementById(id3).style.display = 'none';
-        dijit.byId(id4).domNode.style.display = 'none';
-        document.getElementById(id5).style.display = 'none';
-        if(id6){
-            id6.style.display = 'none';
-        }
-        id7.style.display = 'none';
-        id8.style.display = 'none';
-    }
-}
-function afficherAutreQualite(id1,id2,id3){
-    if (dijit.byId(id1).value ==='qac'+'<?php echo IDAUTREQUALITE ?>') {
-        dijit.byId(id2).domNode.style.display = '';
-        id3.style.display = '';
-    } else {        
-        dijit.byId(id2).domNode.style.display = 'none';
-        id3.style.display = 'none';
-        if(dijit.byId('autresQualite')){
-            dijit.byId('autresQualite').domNode.style.display='none';
-            document.getElementById('libautresQualite').style.display = 'none';
+    function afficherAutreElement(id1, id2, id3, id4, id5, id6, id7, id8) {
+        if (dijit.byId(id1).value === 'libqualdemaca' + '<?php echo NONPERMANENT ?>') {
+            dijit.byId(id2).domNode.style.display = '';
+            document.getElementById(id3).style.display = '';
+            id7.style.display = '';
+            id8.style.display = '';
+        } else {
+            dijit.byId(id2).domNode.style.display = 'none';
+            document.getElementById(id3).style.display = 'none';
+            dijit.byId(id4).domNode.style.display = 'none';
+            document.getElementById(id5).style.display = 'none';
+            if (id6) {
+                id6.style.display = 'none';
+            }
+            id7.style.display = 'none';
+            id8.style.display = 'none';
         }
     }
-}
+    function afficherAutreQualite(id1, id2, id3) {
+        if (dijit.byId(id1).value === 'qac' + '<?php echo IDAUTREQUALITE ?>') {
+            dijit.byId(id2).domNode.style.display = '';
+            id3.style.display = '';
+        } else {
+            dijit.byId(id2).domNode.style.display = 'none';
+            id3.style.display = 'none';
+            if (dijit.byId('autresQualite')) {
+                dijit.byId('autresQualite').domNode.style.display = 'none';
+                document.getElementById('libautresQualite').style.display = 'none';
+            }
+        }
+    }
 
 </script>
 <div style="width: 860px; margin-top:15px;display: block;" id="personCent" >
-<!--<div style="width: 1200px; margin-top:15px;display: block;" id="personCent" >-->
+    <!--<div style="width: 1200px; margin-top:15px;display: block;" id="personCent" >-->
     <div data-dojo-type="dijit/layout/AccordionContainer" style="height:auto" >
         <?php
         if (isset($_GET['numProjet'])) {
             $numProjet = $_GET['numProjet'];
         } elseif (isset($_GET['idprojet'])) {
             $numProjet = $manager->getsingle2("select numero from projet where idprojet=?", $_GET['idprojet']);
-        }//rajouter //idpersonnequalite,//idautresqualite
+        }
         if (!empty($numProjet)) {
-            $arraypersonnecentrale = 
-                    $manager->getList2(
-                            "SELECT 
+            $arraypersonnecentrale = $manager->getList2(
+                    "SELECT 
                                 idqualitedemandeuraca,
                                 libellequalitedemandeuraca,
                                 libellequalitedemandeuracaen,
@@ -68,7 +67,7 @@ function afficherAutreQualite(id1,id2,id3){
                                 AND idprojet_projet = idprojet 
                                 AND idqualitedemandeuraca = idqualitedemandeuraca_qualitedemandeuraca 
                                 AND numero =?", $numProjet);
-        }        
+        }
         for ($i = 0; $i < 21; $i++) {
             $j = $i + 1;
             ?>
@@ -86,7 +85,7 @@ function afficherAutreQualite(id1,id2,id3){
                                 ?>
                                 <label for="<?php echo 'nomaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_NOM . '*'; ?></label>
                                 <input style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox"  name="<?php echo 'nomaccueilcentrale' . $i; ?>" id="<?php echo 'nomaccueilcentrale' . $i; ?>"  autocomplete="on"
-                                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"
+                                       data-dojo-props="<?php echo REGEX_ACCUEIL_CENTRALE; ?>'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"
                                        value="<?php echo $nomaccueilcentrale; ?>" disabled="<?php echo $bool; ?>" >
                             </td>
                         </tr>
@@ -101,138 +100,61 @@ function afficherAutreQualite(id1,id2,id3){
                                 }
                                 ?>
                                 <input style="width: 317px"  data-dojo-type="dijit/form/ValidationTextBox" name="<?php echo 'prenomaccueilcentrale' . $i; ?>" id="<?php echo 'prenomaccueilcentrale' . $i; ?>" autocomplete="on"
-                                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"
+                                       data-dojo-props="<?php echo REGEX_ACCUEIL_CENTRALE; ?>'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>"
                                        value="<?php echo $prenomaccueilcentrale ?>" disabled="<?php echo $bool; ?>" >
                             </td>
                         </tr>
                         <tr>
                             <td><label for="<?php echo 'qualiteaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_QUALITE . " *"; ?></label>                                
-                                    <select   id="<?php echo 'qualiteaccueilcentrale' . $i; ?>" data-dojo-type="dijit/form/Select" style="width:317px"  
-                                     data-dojo-props="name: '<?php echo 'qualiteaccueilcentrale' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'" >         
-                                   <!-- onchange="afficherAutreElement(this.id,'<?php /*echo 'autreQualite' . $i; ?>','<?php echo 'labelqualite' . $i; ?>','<?php echo 'autresqualite' . $i;  */ ?>',-->
-                                                <!--'<?php /*/*echo 'libautresqualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>,<?php echo 'autresQualite' . $i; ?>,<?php echo 'libautresQualite' . $i; */?>)"-->
-                                              
-                            <?php 
-                                        if (!empty($arraypersonnecentrale[$i]['idqualitedemandeuraca'])) {                                           
-                                            if($lang=='fr'){
-                                                echo "<option value='" . 'libqualdemaca' . $arraypersonnecentrale[$i]['idqualitedemandeuraca'] . "'>" . $arraypersonnecentrale[$i]['libellequalitedemandeuraca'] . '</option>';
-                                                $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca FROM qualitedemandeuraca where libellequalitedemandeuraca !=? and libellequalitedemandeuraca != ?", array('n/a', $arraypersonnecentrale[$i]['libellequalitedemandeuraca']));
-                                                $nbrow = count($row);
-                                                for ($k = 0; $k < $nbrow; $k++) {
-                                                    echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuraca'] . "</option>";
-                                                }
-                                            }else{
-                                                echo "<option value='" . 'libqualdemaca' . $arraypersonnecentrale[$i]['idqualitedemandeuraca'] . "'>" . $arraypersonnecentrale[$i]['libellequalitedemandeuracaen'] . '</option>';
-                                                $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where libellequalitedemandeuraca !=? and libellequalitedemandeuracaen != ?", array('n/a', $arraypersonnecentrale[$i]['libellequalitedemandeuracaen']));
-                                                $nbrow = count($row);
-                                                for ($k = 0; $k < $nbrow; $k++) {
-                                                    echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuracaen'] . "</option>";
-                                                }
-                                            }
-                                        } else {
-                                            if($lang=='fr'){
-                                                $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca FROM qualitedemandeuraca where libellequalitedemandeuraca !=? ", array('n/a'));
-                                                $nbrow = count($row);
-                                                for ($k = 0; $k < $nbrow; $k++) {
-                                                    echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuraca'] . "</option>";
-                                                }
-                                            }else{
-                                                $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where libellequalitedemandeuracaen !=? ", array('n/a'));
-                                                $nbrow = count($row);
-                                                for ($k = 0; $k < $nbrow; $k++) {
-                                                    echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuracaen'] . "</option>";
-                                                }
-                                            }
-                                        }
-                            ?>
-                                    </select>
-                            </td>
-                        </tr>
-                        <?php /* if (isset($arraypersonnecentrale[$i]['idpersonnequalite'])&& $arraypersonnecentrale[$i]['idpersonnequalite']==IDNAAUTRESQUALITE) {
-                            //CAS DE LA MODIFICATION D'UNE PERSONNE PERMANENTE    ?>
-                        <tr>
-                            <td><label for="<?php echo 'autreQualite' . $i; ?>" class="perCentrale" id="<?php echo 'labelqualite' . $i; ?>" style="display:none;" > <?php echo TXT_AUTRESQUALITE; ?></label>                                
-                                <select  style='display:none;width:317px' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/Select' name="<?php echo 'autreQualite' . $i; ?>"
-                                         onchange="afficherAutreQualite(this.id,'<?php echo 'autresqualite' . $i; ?>',<?php echo 'libautresqualite' . $i; ?>)" 
-                                         data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
-                                         >
-                                    <?php                                        
-                                        if ($lang == 'fr') {                                            
-                                            echo "<option value='' selected='selected'>" .TXT_AUTRESQUALITE. '</option>';
-                                            $row = $manager->getList2("SELECT idpersonnequalite,libellepersonnequalite FROM personnecentralequalite where libellepersonnequalite !=?", 'n/a');
-                                            $nbrow = count($row);
-                                            for ($k = 0; $k < $nbrow; $k++) {
-                                                echo "<option value='" . 'qac' . $row[$k]['idpersonnequalite'] . "'>" . $row[$k]['libellepersonnequalite'] . "</option>";
-                                            }
-                                        } else {                                            
-                                            echo "<option value='' selected='selected'>" . TXT_AUTRESQUALITE . '</option>';
-                                            $row = $manager->getList2("SELECT idpersonnequalite,libellepersonnequaliteen FROM personnecentralequalite where libellepersonnequalite !=?", 'n/a');
-                                            $nbrow = count($row);
-                                            for ($k = 0; $k < $nbrow; $k++) {
-                                                echo "<option value='" . 'qac' . $row[$k]['idpersonnequalite'] . "'>" . $row[$k]['libellepersonnequaliteen'] . "</option>";
-                                            }
-                                        }
-                                        ?>
+                                <select   id="<?php echo 'qualiteaccueilcentrale' . $i; ?>" data-dojo-type="dijit/form/Select" style="width:317px"  
+                                          data-dojo-props="name: '<?php echo 'qualiteaccueilcentrale' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'" >
+                                              <?php
+                                              if (!empty($arraypersonnecentrale[$i]['idqualitedemandeuraca'])) {
+                                                  if ($lang == 'fr') {
+                                                      echo "<option value='" . 'libqualdemaca' . $arraypersonnecentrale[$i]['idqualitedemandeuraca'] . "'>" . $arraypersonnecentrale[$i]['libellequalitedemandeuraca'] . '</option>';
+                                                      $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca FROM qualitedemandeuraca where libellequalitedemandeuraca !=? and libellequalitedemandeuraca != ?", array('n/a', $arraypersonnecentrale[$i]['libellequalitedemandeuraca']));
+                                                      $nbrow = count($row);
+                                                      for ($k = 0; $k < $nbrow; $k++) {
+                                                          echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuraca'] . "</option>";
+                                                      }
+                                                  } else {
+                                                      echo "<option value='" . 'libqualdemaca' . $arraypersonnecentrale[$i]['idqualitedemandeuraca'] . "'>" . $arraypersonnecentrale[$i]['libellequalitedemandeuracaen'] . '</option>';
+                                                      $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where libellequalitedemandeuraca !=? and libellequalitedemandeuracaen != ?", array('n/a', $arraypersonnecentrale[$i]['libellequalitedemandeuracaen']));
+                                                      $nbrow = count($row);
+                                                      for ($k = 0; $k < $nbrow; $k++) {
+                                                          echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuracaen'] . "</option>";
+                                                      }
+                                                  }
+                                              } else {
+                                                  if ($lang == 'fr') {
+                                                      $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuraca FROM qualitedemandeuraca where libellequalitedemandeuraca !=? ", array('n/a'));
+                                                      $nbrow = count($row);
+                                                      for ($k = 0; $k < $nbrow; $k++) {
+                                                          echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuraca'] . "</option>";
+                                                      }
+                                                  } else {
+                                                      $row = $manager->getListbyArray("SELECT idqualitedemandeuraca,libellequalitedemandeuracaen FROM qualitedemandeuraca where libellequalitedemandeuracaen !=? ", array('n/a'));
+                                                      $nbrow = count($row);
+                                                      for ($k = 0; $k < $nbrow; $k++) {
+                                                          echo "<option value='" . 'libqualdemaca' . $row[$k]['idqualitedemandeuraca'] . "'>" . $row[$k]['libellequalitedemandeuracaen'] . "</option>";
+                                                      }
+                                                  }
+                                              }
+                                              ?>
                                 </select>
                             </td>
                         </tr>
-                        <?php }else{//CAS OU LA PERSONNE A DEJA SELECTIONNE AUTRES ?>                        
-                                <tr>
-                            <td><label for="<?php echo 'autreQualite' . $i; ?>" class="perCentrale" id="<?php echo 'labelqualite' . $i; ?>"  > <?php echo TXT_AUTRESQUALITE; ?></label>                                
-                                <select  style='width:317px' id='<?php echo 'autreQualite' . $i; ?>' data-dojo-type='dijit/form/Select'                                       
-                                         onchange="afficherAutreQualite(this.id,'<?php echo 'autresQualite' . $i; ?>',<?php echo 'libautresQualite' . $i; ?>)" 
-                                         data-dojo-props="name: '<?php echo 'autreQualite' . $i; ?>',value: '',placeHolder: '<?php echo TXT_SELECTQUALITE; ?>'">
-                                    <?php                                         
-                                        if($lang == 'fr') {
-                                            $libellepersonnequalite = $manager->getSingle2("select libellepersonnequalite from personnecentralequalite where idpersonnequalite =?", $arraypersonnecentrale[$i]['idpersonnequalite']);
-                                            echo "<option value='" . 'qac' . $arraypersonnecentrale[$i]['idpersonnequalite'] . "' selected='selected'>" . $libellepersonnequalite . '</option>';                                             
-                                            $row = $manager->getListbyArray("SELECT idpersonnequalite,libellepersonnequalite FROM personnecentralequalite where libellepersonnequalite !=? "
-                                                    . "and libellepersonnequalite != ?", array('n/a', $libellepersonnequalite));
-                                            $nbrow = count($row);
-                                            for ($k = 0; $k < $nbrow; $k++) {
-                                                echo "<option value='" . 'qac' . $row[$k]['idpersonnequalite'] . "'>" . $row[$k]['libellepersonnequalite'] ."</option>";
-                                            }
-                                        } else {
-                                            $libellepersonnequalite = $manager->getSingle2("select libellepersonnequaliteen from personnecentralequalite where idpersonnequalite =?", $arraypersonnecentrale[$i]['idpersonnequalite']);
-                                            echo "<option value='" . 'qac' . $arraypersonnecentrale[$i]['idpersonnequalite'] . "' >" . $libellepersonnequalite . '</option>';
-                                            $row = $manager->getListbyArray("SELECT idpersonnequalite,libellepersonnequaliteen FROM personnecentralequalite where libellepersonnequalite !=? "
-                                                    . "and libellepersonnequaliteen != ?", array('n/a', $libellepersonnequalite));
-                                            $nbrow = count($row);
-                                            for ($k = 0; $k < $nbrow; $k++) {
-                                                echo "<option value='" . 'qac' . $row[$k]['idpersonnequalite'] . "'>" . $row[$k]['libellepersonnequaliteen'] . "</option>";
-                                            }
-                                        }
-                                        ?>
-                                </select>
-                            </td>
-                        </tr><?php  $libelleautrequalite = $manager->getSingle2("select libelleautresqualite from personneaccueilcentrale p,autresqualite a,projetpersonneaccueilcentrale pa where p.idautresqualite = a.idautresqualite and pa.idpersonneaccueilcentrale_personneaccueilcentrale= p.idpersonneaccueilcentrale and pa.idprojet_projet=?",$idprojet);?>
-                            <tr>
-                                <td><label for="<?php echo 'autresQualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresQualite' . $i; ?>" > <?php echo TXT_AUTRES; ?></label>   
-                                    <input id="<?php echo 'autresQualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresQualite' . $i; ?>" value="<?php echo $libelleautrequalite;?>"
-                                data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"  maxlength="100"
-                                style="width: 317px;" value="" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'">
-                            </td>
-                        </tr>
-                        
-                        <?php }?>
-                        <tr>
-                            <td><label for="<?php echo 'autresqualite' . $i; ?>" class="perCentrale" id="<?php echo 'libautresqualite' . $i; ?>" style="display:none;" > <?php echo TXT_AUTRES.' toto'; ?></label>   
-                                <input id="<?php echo 'autresqualite' . $i; ?>" type="text" autocomplete="on" name="<?php echo 'autresqualite' . $i; ?>" 
-                                data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRES;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"  maxlength="100"
-                                style="width: 317px;display:none" value="" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()+/_ ,.-]+'">
-                            </td>
-                        </tr>
-        <tr><?php  */ ?>
-                            <td>
-                                <label for="<?php echo 'mailaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_MAIL . " *"; ?></label>
-                                <input data-dojo-type="dijit/form/ValidationTextBox" style="width: 317px"  name="<?php echo 'mailaccueilcentrale' . $i; ?>" id="<?php echo 'mailaccueilcentrale' . $i; ?>"  regExpGen="dojox.validate.regexp.emailAddress"
-                                       invalidMessage="<?php echo TXT_EMAILNONVALIDE; ?>" autocomplete="on"  placeHolder ='<?php echo TXT_EMAIL; ?>'    disabled="<?php echo $bool; ?>"
-                                       value="<?php
-                                       if (isset($arraypersonnecentrale[$i]['mailaccueilcentrale'])) {
-                                           echo $arraypersonnecentrale[$i]['mailaccueilcentrale'];
-                                       } ?>" 
-                                >
-                            </td>
+                        <td>
+                            <label for="<?php echo 'mailaccueilcentrale' . $i; ?>" class="perCentrale" ><?php echo TXT_MAIL . " *"; ?></label>
+                            <input data-dojo-type="dijit/form/ValidationTextBox" style="width: 317px"  name="<?php echo 'mailaccueilcentrale' . $i; ?>" id="<?php echo 'mailaccueilcentrale' . $i; ?>"  regExpGen="dojox.validate.regexp.emailAddress"
+                                   invalidMessage="<?php echo TXT_EMAILNONVALIDE; ?>" autocomplete="on"  placeHolder ='<?php echo TXT_EMAIL; ?>'    disabled="<?php echo $bool; ?>"
+                                   value="<?php
+                                          if (isset($arraypersonnecentrale[$i]['mailaccueilcentrale'])) {
+                                              echo $arraypersonnecentrale[$i]['mailaccueilcentrale'];
+                                          }
+                                              ?>" 
+                                   >
+                        </td>
                         </tr>
                         <tr>
                             <td>
@@ -245,7 +167,7 @@ function afficherAutreQualite(id1,id2,id3){
                                            echo $arraypersonnecentrale[$i]['telaccueilcentrale'];
                                        }
                                        ?>"
-                                >
+                                       >
                             </td>
                         </tr><tr><td><br></td></tr>
                         <tr>

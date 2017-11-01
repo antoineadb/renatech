@@ -161,7 +161,7 @@ include 'html/header.html';
                 }else{
                     alert("<?php echo TXT_ERR; ?>");
                     return false;
-                } 
+                }
         </script>
         <input type="text" id='centraleselectionne' style="display: none" value="<?php if($nbcentraleselectionnees > 0){ echo $nbcentraleselectionnees;}else{echo 0;} ?>" >
             <div style="margin-top: 100px;color:red;font-size: 1.2em;width:1030px;text-align: center" >
