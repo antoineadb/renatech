@@ -7,7 +7,7 @@ $years = $manager->getList("select distinct EXTRACT(YEAR from dateprojet)as year
 $statutProjets = $manager->getList2("select libellestatutprojet,idstatutprojet from statutprojet where idstatutprojet!=? order by idstatutprojet  asc",TRANSFERERCENTRALE);
 $arraydate = $manager->getList("select distinct EXTRACT(YEAR from datecreation) as anneedatecreation from utilisateur order by anneedatecreation asc");
 $centrales = $manager->getList2("select libellecentrale,idcentrale from centrale where idcentrale!=? and masquecentrale!=TRUE order by idcentrale asc", IDAUTRECENTRALE);
-if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeProjetEncours'])) {  ?>
+if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeProjetEncours'])) {?>
     <table>
         <tr>
             <td>
@@ -99,7 +99,7 @@ foreach ($centrales as $key => $centrale) {
     $serie = "";
     foreach ($centrales as $key => $centrale) {
             $nbProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? and  trashed != ?"
-                    . "and idstatutprojet_statutprojet=?  ",array($centrale[1],TRUE,ENCOURSREALISATION));
+                    . "and idstatutprojet_statutprojet=?   AND idcentrale!=?",array($centrale[1],TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
             $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS .
                     '",y: ' . $nbProjet . ',drilldown: "' . $centrale[0] . '"}]},';
 
@@ -108,12 +108,12 @@ foreach ($centrales as $key => $centrale) {
         $serieX = substr($serie01, 0, -1);
     }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-$serie02 = '';    
+$serie02 = '';
 foreach ($centrales as $key => $centrale) {        
     $serie02 .="{id: '" . $centrale[0] . "',name: '" . $centrale[0] . "',data: [";
     foreach ($years as $key => $year) {
         $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
-                . "and extract(year from dateprojet)<=? and  trashed != ? and idstatutprojet_statutprojet=?  ", array($centrale[1],$year[0],TRUE,ENCOURSREALISATION));
+                . "and extract(year from dateprojet)<=? and  trashed != ? and idstatutprojet_statutprojet=?  AND idcentrale!=? ", array($centrale[1],$year[0],TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
         if (empty($nbByYear)) {$nbByYear = 0;}
         if($year[0]==2013){
             $serie02 .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year[0] . "'},";
@@ -126,7 +126,7 @@ $serie3 = '';
 foreach ($centrales as $key => $centrale) {
     foreach ($years as $key => $year) {
             $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet "
-                    . "and extract(year from dateprojet)<=? and  trashed != ? and idstatutprojet_statutprojet=? ", array($year[0],TRUE,ENCOURSREALISATION));
+                    . "and extract(year from dateprojet)<=? and  trashed != ? and idstatutprojet_statutprojet=?  and idcentrale!=?", array($year[0],TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
             if (empty($nbByYear)) {$nbByYear = 0;}
             if($year[0]==2013){
                 $serie3.="{id: '" . $centrale[0].$year[0] . "',name: '" .$centrale[0]. ' '.TXT_INFERIEUR2013 . "'" . ',data: [';

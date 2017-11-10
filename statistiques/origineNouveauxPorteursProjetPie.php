@@ -74,8 +74,8 @@ if (IDTYPEUSER == ADMINLOCAL) {
     $nbNonPermanentExterne = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
             . "AND cr.idprojet_projet = co.idprojet_projet and u.idcentrale_centrale is null and idqualitedemandeuraca_qualitedemandeuraca = ? and EXTRACT(YEAR from datecreation)<=? and co.idcentrale_centrale=?",
             array(NONPERMANENT,(date('Y')-1),IDCENTRALEUSER));
-    $nbNonPermanentIndustriel = $manager->getSinglebyArray("select count(u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = co.idprojet_projet "
-            . "and idqualitedemandeurindust_qualitedemandeurindust = ? and co.idcentrale_centrale=? and EXTRACT(YEAR from datecreation)<=?",array(NONPERMANENTINDUST,IDCENTRALEUSER,(date('Y')-1)));    
+    $nbNonPermanentIndustriel = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = co.idprojet_projet "
+            . "and idqualitedemandeurindust_qualitedemandeurindust = ? and co.idcentrale_centrale=? and EXTRACT(YEAR from datecreation)<=? ",array(NONPERMANENTINDUST,IDCENTRALEUSER,(date('Y')-1)));    
     $nbNonPermanentInterne = $manager->getSinglebyArray("select count(idutilisateur) from utilisateur where idqualitedemandeuraca_qualitedemandeuraca = ? and idcentrale_centrale is not null and EXTRACT(YEAR from datecreation)<=?"
             . "and idcentrale_centrale=?",array(NONPERMANENT,(date('Y')-1),IDCENTRALEUSER));
     $nbPermanentExterne= $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur  AND cr.idprojet_projet = co.idprojet_projet "

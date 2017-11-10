@@ -31,8 +31,8 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeRessources'])) {
     $serie = "";
     foreach ($centrales as $key => $centrale) {
         $nbressource = $manager->getSinglebyArray("SELECT count(rp.idressource_ressource) FROM ressourceprojet rp,projet p,concerne c,ressource r WHERE rp.idprojet_projet = p.idprojet "
-                . "AND rp.idressource_ressource = r.idressource AND c.idprojet_projet = p.idprojet  AND c.idcentrale_centrale=? and idstatutprojet_statutprojet=?"
-                , array($centrale[1], ENCOURSREALISATION));
+                . "AND rp.idressource_ressource = r.idressource AND c.idprojet_projet = p.idprojet  AND c.idcentrale_centrale=? and idstatutprojet_statutprojet=? AND c.idcentrale_centrale!=? and p.trashed !=?"
+                , array($centrale[1], ENCOURSREALISATION,IDCENTRALEAUTRE,TRUE));
         $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS .
                 '",y: ' . $nbressource . ',drilldown: "' . $centrale[0] . '"}]},';
     }
@@ -46,7 +46,8 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeRessources'])) {
         $serie02 .="{id: '" . $centrale[0] . "',name: '" . $centrale[0] . "',data: [";
         foreach ($years as $key => $year) {
             $nbByYear = $manager->getSinglebyArray("SELECT  count(r.idressource) FROM concerne co,projet p,ressourceprojet rp,ressource r WHERE co.idprojet_projet = p.idprojet AND rp.idprojet_projet = p.idprojet "
-                    . "AND rp.idressource_ressource = r.idressource AND extract(year from p.dateprojet)<=? and co.idcentrale_centrale=?  and idstatutprojet_statutprojet=?  ", array($year[0], $centrale[1], ENCOURSREALISATION));
+                    . "AND rp.idressource_ressource = r.idressource AND extract(year from p.dateprojet)<=? and co.idcentrale_centrale=?  and idstatutprojet_statutprojet=? and co.idcentrale_centrale!=? and p.trashed!=? ",
+                    array($year[0], $centrale[1], ENCOURSREALISATION,IDCENTRALEAUTRE,TRUE));
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
@@ -64,7 +65,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeRessources'])) {
     foreach ($centrales as $key => $centrale) {
         foreach ($years as $key => $year) {
             $nbByYear = $manager->getSinglebyArray("SELECT  count(r.idressource) FROM concerne co,projet p,ressourceprojet rp,ressource r WHERE co.idprojet_projet = p.idprojet AND rp.idprojet_projet = p.idprojet 
-                AND rp.idressource_ressource = r.idressource AND extract(year from p.dateprojet)=? and co.idcentrale_centrale=?  and idstatutprojet_statutprojet=?", array($year[0], $centrale[1], ENCOURSREALISATION));
+                AND rp.idressource_ressource = r.idressource AND extract(year from p.dateprojet)=? and co.idcentrale_centrale=?  and idstatutprojet_statutprojet=? and p.trashed!=?", array($year[0], $centrale[1], ENCOURSREALISATION,TRUE));
             if($year[0]==2013){
                    $serie3.="{id: '" . $centrale[0] . $year[0] . "',name: '" . $centrale[0] . ' ' . TXT_INFERIEUR2013 . "'" . ',data: [';
             }else{
@@ -72,7 +73,8 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeRessources'])) {
             }
             foreach ($ressources as $key => $ressource) {
                 $nbByYearMois = $manager->getSinglebyArray("SELECT  count(r.idressource) FROM concerne co,projet p,ressourceprojet rp,ressource r WHERE co.idprojet_projet = p.idprojet AND rp.idprojet_projet = p.idprojet 
-                AND rp.idressource_ressource = r.idressource AND  extract(year from p.dateprojet)<=? and r.idressource=?  and co.idcentrale_centrale=? and idstatutprojet_statutprojet=?", array($year[0], $ressource[1], $centrale[1], ENCOURSREALISATION));
+                AND rp.idressource_ressource = r.idressource AND  extract(year from p.dateprojet)<=? and r.idressource=?  and co.idcentrale_centrale=? and idstatutprojet_statutprojet=? and p.trashed!=?", 
+                        array($year[0], $ressource[1], $centrale[1], ENCOURSREALISATION,TRUE));
                 if (empty($nbByYearMois)) {
                     $nbByYearMois = 0;
                 }
@@ -102,7 +104,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeRessources'])) {
     foreach ($centrales as $key => $centrale) {
         $nbressource = $manager->getSinglebyArray("SELECT count(rp.idressource_ressource) FROM ressourceprojet rp,projet p,concerne c,ressource r WHERE rp.idprojet_projet = p.idprojet "
                 . "AND rp.idressource_ressource = r.idressource AND c.idprojet_projet = p.idprojet AND c.idcentrale_centrale=? and idstatutprojet_statutprojet=?"
-                . "AND extract(year from p.dateprojet)<=?", array($centrale[1], ENCOURSREALISATION, $_GET['anneeRessources']));
+                . "AND extract(year from p.dateprojet)<=? and p.trashed !=?", array($centrale[1], ENCOURSREALISATION, $_GET['anneeRessources'],TRUE));
         $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS .
                 '",y: ' . $nbressource . ',drilldown: "' . $centrale[0] . $_GET['anneeRessources'] . '"}]},';
     }
@@ -120,8 +122,8 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeRessources'])) {
         }
         foreach ($ressources as $key => $ressource) {
             $nbByYearMois = $manager->getSinglebyArray("SELECT  count(r.idressource) FROM concerne co,projet p,ressourceprojet rp,ressource r WHERE co.idprojet_projet = p.idprojet AND rp.idprojet_projet = p.idprojet 
-                AND rp.idressource_ressource = r.idressource AND  extract(year from p.dateprojet)<=? and r.idressource=?  and co.idcentrale_centrale=? and idstatutprojet_statutprojet=?  
-                ", array($_GET['anneeRessources'], $ressource[1], $centrale[1], ENCOURSREALISATION));
+                AND rp.idressource_ressource = r.idressource AND  extract(year from p.dateprojet)<=? and r.idressource=?  and co.idcentrale_centrale=? and idstatutprojet_statutprojet=? and p.trashed!=?
+                ", array($_GET['anneeRessources'], $ressource[1], $centrale[1], ENCOURSREALISATION,TRUE));
             if (empty($nbByYearMois)) {
                 $nbByYearMois = 0;
             }

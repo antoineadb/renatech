@@ -446,7 +446,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
     foreach ($years as $key => $value) {
         $nbByYearPermanentExterne = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
         . "AND cr.idprojet_projet = co.idprojet_projet and idqualitedemandeuraca_qualitedemandeuraca = ? and u.idcentrale_centrale is null and co.idstatutprojet_statutprojet=? and co.idcentrale_centrale=? "
-        . "and EXTRACT(YEAR from datecreation)=? ",array(PERMANENT,ENCOURSREALISATION,IDCENTRALEUSER,$value[0]));
+        . "and EXTRACT(YEAR from datecreation)<=? ",array(PERMANENT,ENCOURSREALISATION,IDCENTRALEUSER,$value[0]));
         if (empty($nbByYearPermanentExterne)) {
             $nbByYearPermanentExterne = 0;
         }

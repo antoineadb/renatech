@@ -33,7 +33,7 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeNouveauProjet'])) {?>
 <?php    
     $serie = "";
     foreach ($centrales as $key => $centrale) {
-            $nbProjet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? and  trashed != ? "
+            $nbProjet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? and  trashed != ? "
                     . "and EXTRACT(YEAR from dateprojet)<=?",array($centrale[1],TRUE,$_GET['anneeNouveauProjet']));
             $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS .
                     '",y: ' . $nbProjet . ',drilldown: "' . $centrale[0].$_GET['anneeNouveauProjet'] . '"}]},';
@@ -46,7 +46,7 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeNouveauProjet'])) {?>
 $serie3 = "";
 
 foreach ($centrales as $key => $centrale) {
-        $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
+        $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                 . "and extract(year from dateprojet)<=? and  trashed != ?", array($centrale[1],$_GET['anneeNouveauProjet'],TRUE));
         if (empty($nbByYear)) {$nbByYear = 0;}
         if($_GET['anneeNouveauProjet'] ==2013){
@@ -94,8 +94,8 @@ foreach ($centrales as $key => $centrale) {
     </table>
 <?php    
     $serie = "";
-    foreach ($centrales as $key => $centrale) {
-            $nbProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? and  trashed != ?",array($centrale[1],TRUE));
+    foreach ($centrales as $key => $centrale) {            
+            $nbProjet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? and  trashed != ?",array($centrale[1],TRUE));
             $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS .
                     '",y: ' . $nbProjet . ',drilldown: "' . $centrale[0] . '"}]},';
 
@@ -108,7 +108,7 @@ $serie02 = '';
 foreach ($centrales as $key => $centrale) {        
     $serie02 .="{id: '" . $centrale[0] . "',name: '" . $centrale[0] . "',data: [";
     foreach ($years as $key => $year) {
-        $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
+        $nbByYear = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                 . "and extract(year from dateprojet)<=? and  trashed != ?", array($centrale[1],$year[0],TRUE));
         if (empty($nbByYear)) {$nbByYear = 0;}
         if($year[0]==2013){
@@ -126,11 +126,11 @@ foreach ($centrales as $key => $centrale) {
     foreach ($years as $key => $year) {
         if (empty($nbByYear)) {$nbByYear = 0;}
         if($year[0]=='2013'){
-            $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
+            $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                     . "and extract(year from dateprojet)<=2013 and  trashed != ?", array($centrale[1],TRUE));            
             $serie3.="{id: '" . $centrale[0] . $year[0]."',name: '" .$centrale[0] . $year[0]. "'" . ',data: [';
         }else{
-            $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
+            $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                     . "and extract(year from dateprojet)<=? and  trashed != ?", array($centrale[1],$year[0],TRUE));            
             $serie3.="{id: '" . $centrale[0] . $year[0] . "',name: '" .$centrale[0] .' '. $year[0] . "'" . ',data: [';
         }
@@ -153,7 +153,7 @@ foreach ($centrales as $key => $centrale) {
 }if (IDTYPEUSER == ADMINLOCAL) {
     $serie = "";
     foreach ($years as $key => $year) {
-            $nbProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
+            $nbProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                     . "and extract(year from dateprojet)<=? and  trashed != ?", array(IDCENTRALEUSER,$year[0],TRUE));            
             if($nbProjet==0){$nbProjet=0;}
             if($year[0]=='2013'){
@@ -170,7 +170,7 @@ foreach ($centrales as $key => $centrale) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
 $serie3 = '';    
 foreach ($years as $key => $year) {
-        $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
+        $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                 . "and extract(year from dateprojet)<=? and  trashed != ?", array(IDCENTRALEUSER,$year[0],TRUE));
         if (empty($nbByYear)) {$nbByYear = 0;}
             if($year[0]=='2013'){

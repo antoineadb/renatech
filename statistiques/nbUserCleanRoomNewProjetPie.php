@@ -28,10 +28,14 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeUserCleanRoom'])) {
 if (IDTYPEUSER == ADMINLOCAL) {
     $title = TXT_CLEANROOMUSERNEWPROJECT;
     $totalUser = $manager->getList2("select annee,sum(nb) as nb from tmpUserCleanRoom where libellecentrale=? group by annee order by annee asc", LIBELLECENTRALEUSER);
-    
+    $nbTotaluser2013 = $manager->getSingle2("select sum(nb) as nb from tmpUserCleanRoom where libellecentrale=? and annee <=2013",LIBELLECENTRALEUSER);
     $nbTotaluser = $manager->getSingle2("select sum(nb) as nb from tmpUserCleanRoom where libellecentrale=?",LIBELLECENTRALEUSER);
     for ($i = 0; $i < count($totalUser); $i++) {
-        $string0 .= '["' . $totalUser[$i]['annee'] . '",' . $totalUser[$i]['nb']  . '],';
+        if($totalUser[$i]['annee'] <='2013'){               
+               $string0 = '["' . "Inférieur ou égale à 2013" . '",' . $nbTotaluser2013  . '],';
+        }else{
+            $string0 .= '["' . $totalUser[$i]['annee'] . '",' . $totalUser[$i]['nb']  . '],';
+        }
     }   
 } $string = substr($string0, 0, -1);
 $subtitle =TXT_NOMBREBUSER.' '.$nbTotaluser;
