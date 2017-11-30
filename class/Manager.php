@@ -3415,15 +3415,17 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('INSERT INTO centraleproximite (idcentraleproximite,libellecentraleproximite,masquecentraleproximite,idregion) VALUES (?,?,?,?)');
+            $requete = $this->_db->prepare('INSERT INTO centraleproximite (idcentraleproximite,libellecentraleproximite,masquecentraleproximite,idregion,id_responsable_centrale_proximite) VALUES (?,?,?,?,?)');
             $idcentraleproximite = $centraleProximite->getIdCentraleProximite();
             $libellecentraleproximite = $centraleProximite->getLibelleCentraleProximite();
             $masquecentraleproximite  = $centraleProximite->getMasqueCentraleProximite();
             $idregion  = $centraleProximite->getIdRegion();
+            $respCentraleP = $centraleProximite->getIdResponsableCentraleProximite();            
             $requete->bindParam(1, $idcentraleproximite, PDO::PARAM_INT);
             $requete->bindParam(2, $libellecentraleproximite, PDO::PARAM_STR);
             $requete->bindParam(3, $masquecentraleproximite, PDO::PARAM_BOOL);
-            $requete->bindParam(4, $idregion, PDO::PARAM_INT);
+            $requete->bindParam(4, $idregion, PDO::PARAM_INT);            
+            $requete->bindParam(5, $respCentraleP, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
@@ -3462,10 +3464,12 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('update centraleproximite set libellecentraleproximite=? where idcentraleproximite=?');
-            $libellecentraleproximite = $centraleProximite->getLibelleCentraleProximite();
-            $requete->bindParam(1, $libellecentraleproximite, PDO::PARAM_BOOL);
-            $requete->bindParam(2, $idcentraleproximite, PDO::PARAM_INT);
+            $requete = $this->_db->prepare('update centraleproximite set libellecentraleproximite=?,id_responsable_centrale_proximite=? where idcentraleproximite=?');
+            $libellecentraleproximite = $centraleProximite->getLibelleCentraleProximite();            
+            $idreponsablecentraleproximite = $centraleProximite->getIdResponsableCentraleProximite();
+            $requete->bindParam(1, $libellecentraleproximite, PDO::PARAM_STR);            
+            $requete->bindParam(2, $idreponsablecentraleproximite, PDO::PARAM_INT);
+            $requete->bindParam(3, $idcentraleproximite, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {

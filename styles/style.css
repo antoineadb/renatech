@@ -415,6 +415,16 @@ a.infoBulle:hover span{
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
 }
+.flstbrd{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
 
 #idexportUser{
     padding:20px 20px 20px 20px;
@@ -450,7 +460,7 @@ a.infoBulle:hover span{
     margin-left: 50px;
     margin-top: 30px;
 }
-#gestionlibelle, #gestionlibelleautres,#gestionlibellecommun,#gestionhome,#gestionhome1,#gestionemailcontact,#gestionemailprojetphase1cloture,#gestionemailprojetphase1fini,#gestionemailprojetrealisation,#gestionemaildemandeur,
+#gestionRapport,#gestionlibelle, #gestionlibelleautres,#gestionlibellecommun,#gestionhome,#gestionhome1,#gestionemailcontact,#gestionemailprojetphase1cloture,#gestionemailprojetphase1fini,#gestionemailprojetrealisation,#gestionemaildemandeur,
 #gestionemailprojetphase1,#gestionemailprojetphase2,#gestionemailprojetphase21,#gestionemailprojetphase1enattente,#gestionemailprojetphase1refuse,#gestionemailprojetphase1transfert, #gestionemailprojetphase1expertise, #gestionemailprojetvalide {
     padding:8px;
     border:solid 1px #5D8BA2;

@@ -175,7 +175,8 @@ if(isset($_GET['msgupdateaccueil'])){?>
             </tr>
             <tr style="float: left">
                 <td>                    
-                    <input name='fileModeEmploi' type='file' id='fileModeEmploi'   size='20' style="display: none "  onchange="dijit.byId('modeemploi').set('value', document.getElementById('fileModeEmploi').files[0].name);">
+                    <input name='fileModeEmploi' type='file' id='fileModeEmploi'   size='20' style="display: none "  
+                           onchange="dijit.byId('modeemploi').set('value', document.getElementById('fileModeEmploi').files[0].name);">
                 </td>
                 <td>
                     <button type="button" data-dojo-type="dijit/form/Button" style="margin-left:20px;margin-top: 30px;margin-right: 25px"  
@@ -187,7 +188,7 @@ if(isset($_GET['msgupdateaccueil'])){?>
 
                 </td>
                 <td>
-                    <button type="button" data-dojo-type="dijit/form/Button"   data-dojo-props="onClick:function(){uploadFichierModeEmploi('fileModeEmploi');}" style="margin-left: 25px;margin-top: 30px">
+                    <button type="button" data-dojo-type="dijit/form/Button"   data-dojo-props="onClick:function(){uploadFichierModeEmploi('fileModeEmploi',1);}" style="margin-left: 25px;margin-top: 30px">
                         <?php echo TXT_VALIDER; ?>
                     </button>
                 </td>
@@ -197,6 +198,59 @@ if(isset($_GET['msgupdateaccueil'])){?>
                     <progress id="progressBar" value="0" max="100" style="width:290px;margin-left:20px;height: 20px;visibility: hidden;margin-top: 10px" ></progress>
                     <div id="status" style="margin-left:20px;float: left;margin-top: 10px"></div>
                     <br><div id="status_bytes" style="margin-left:20px;float: left;margin-top: 10px"></div>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset id="gestionRapport" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;">
+        <legend><?php echo "Mise à jour du fichier d'aide de création d'un rapport"; ?></legend>
+        <table>
+            
+            <tr>
+                <td>
+                    <div style="margin-left:25px;margin-top: 30px">
+                        <?php
+                            $filenameR ="downloadManual/ModeEmploiRapportRENATECH.pdf";
+                            if (file_exists($filenameR)) {
+                                echo TXT_DATEDOCR . date (" d/m/Y H:i:s.", filemtime($filenameR));
+                            }else{
+                                echo TXT_NODOC;
+                            }
+                        ?>
+                    </div>
+                </td>
+                <td>
+                    <div style="float: right;margin-top: 30px;margin-left:5px">                
+                        <a class="infoBulle" href="javascript:window.location.reload()">&nbsp;<img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/refresh.png' >
+                    <span style="width: 130px;border-radius: 4px;text-align:center; "><?php echo TXT_REFRESDOC ?></span></a>
+                    </div>
+                </td>
+            </tr>
+            <tr style="float: left">
+                <td>                    
+                    <input name='fileModeEmploiRapport' type='file' id='fileModeEmploiRapport'   size='20' style="display: none "  
+                           onchange="dijit.byId('modeemploirapport').set('value', document.getElementById('fileModeEmploiRapport').files[0].name);">
+                </td>
+                <td>
+                    <button type="button" data-dojo-type="dijit/form/Button" style="margin-left:20px;margin-top: 30px;margin-right: 25px"  
+                            data-dojo-props="onClick:function(){document.getElementById('fileModeEmploiRapport').click();}">
+                        <?php echo TXT_PARCOURIR; ?></button>
+                </td>
+                <td>
+                    <input type="text" data-dojo-type="dijit/form/ValidationTextBox" id='modeemploirapport' readonly="true" style="margin-top: 30px;width:250px">
+
+                </td>
+                <td>
+                    <button type="button" data-dojo-type="dijit/form/Button"   data-dojo-props="onClick:function(){uploadFichierModeEmploi('fileModeEmploiRapport',2);}" style="margin-left: 25px;margin-top: 30px">
+                        <?php echo TXT_VALIDER; ?>
+                    </button>
+                </td>
+            </tr>
+            <tr style="float: left">
+                <td>
+                    <progress id="progressBar1" value="0" max="100" style="width:290px;margin-left:20px;height: 20px;visibility: hidden;margin-top: 10px" ></progress>
+                    <div id="status1" style="margin-left:20px;float: left;margin-top: 10px"></div>
+                    <br><div id="status_bytes1" style="margin-left:20px;float: left;margin-top: 10px"></div>
                 </td>
             </tr>
         </table>
@@ -243,16 +297,24 @@ if(isset($_GET['msgupdateaccueil'])){?>
         });
     });
 
-    function uploadFichierModeEmploi(id) {
+    function uploadFichierModeEmploi(id,param) {
         var file = document.getElementById(id).files[0];
         var data = new FormData();
         data.append('file', file);
         var ajax = new XMLHttpRequest();
-        ajax.upload.addEventListener("progress", progressHandler, false);
-        ajax.addEventListener("load", completeHandler, false);
-        ajax.addEventListener("error", errorHandler, false);
-        ajax.addEventListener("abort", abortHandler, false);
-        ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/outils/uploadModeEmploi.php");
+        if(param==1){
+            ajax.upload.addEventListener("progress", progressHandler, false);
+            ajax.addEventListener("load", completeHandler, false);
+            ajax.addEventListener("error", errorHandler, false);
+            ajax.addEventListener("abort", abortHandler, false);
+        }else if(param==2){
+            ajax.upload.addEventListener("progress", progressHandler1, false);
+            ajax.addEventListener("load", completeHandler1, false);
+            ajax.addEventListener("error", errorHandler1, false);
+            ajax.addEventListener("abort", abortHandler1, false);
+        }
+        
+        ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/outils/uploadModeEmploi.php?param="+param);        
         ajax.send(data);
     }
     function progressHandler(event) {
@@ -273,6 +335,25 @@ if(isset($_GET['msgupdateaccueil'])){?>
     }
     function abortHandler() {
         document.getElementById('status').innerHTML = "The upload was canceled !";
+    }
+    function progressHandler1(event) {
+        document.getElementById('progressBar1').style.visibility = 'visible';
+        document.getElementById('status_bytes1').innerHTML = event.loaded + ' bytes uploaded on ' + event.total;
+        var pourcentage = (event.loaded / event.total) * 100;
+        document.getElementById('progressBar1').value = Math.round(pourcentage);
+        document.getElementById('status1').innerHTML = Math.round(pourcentage) + '% uploaded... Wait';
+    }
+    function completeHandler1(event) {
+        document.getElementById('status1').innerHTML = event.target.responseText;
+        document.getElementById('progressBar1').value = 0;
+        document.getElementById('progressBar1').style.visibility = 'hidden';
+        document.getElementById('status_bytes1').innerHTML = '';
+    }
+    function errorHandler1() {
+        document.getElementById('status1').innerHTML = "The upload failed !";
+    }
+    function abortHandler1() {
+        document.getElementById('status1').innerHTML = "The upload was canceled !";
     }
 
 

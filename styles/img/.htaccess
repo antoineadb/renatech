@@ -169,7 +169,7 @@ RewriteRule   insert_nom_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msginsert
 RewriteRule   insert_nom_centraleErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCentExist=$2                [L]
 RewriteRule   insert_nom_centraleErr2/([a-z]+)/([a-z]+)		admin.php?lang=$1&msgErrCentrale=$2                 [L]
 #NOM CENTRALE		MODIF
-RewriteRule   update_nom_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCentupdate=$2               [L]
+RewriteRule   update_nom_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgServCentupdate=$2               [L]
 RewriteRule   update_nom_centraleErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCentselect=$2               [L]
 RewriteRule   update_nom_centraleErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCent=$2                     [L]
 #NOM CENTRALE		AFFICHE/MASQUE

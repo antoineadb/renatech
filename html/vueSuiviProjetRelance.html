@@ -23,10 +23,10 @@
                 {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "auto", autoComplete: true},
                 {name: "<?php echo TXT_REFINTERNE; ?>", field: "refinterneprojet", width: "auto", autoComplete: true, dataTypeArgs: {autoComplete: false}},
                 {name: "<?php echo TXT_DATEDEBUTPROJET; ?>", field: "datedebutprojet", width: "auto", formatter: formatDate, autoComplete: true},
-                {name: "<?php echo TXT_DATEFIN; ?>", field: "datefin", width: "auto", formatter: formatDate, autoComplete: true, dataTypeArgs: {datePattern: "d/M/yyyy"}},
-                {name: "<?php echo TXT_NOM; ?>", field: "nom", width: "auto", autoComplete: true},
-                {name: "<?php echo 'Date d\'envoi de l\'email'; ?>", field: "dateheureenvoiemail", width: "auto", autoComplete: true,formatter: formatDate},
-                {name: "<?php echo TXT_UPDATEBELOW3MONTH; ?>", field: "datemaj", width: "auto", formatter: formatDate, autoComplete: true}
+                {name: "<?php echo TXT_DATEFIN; ?>", field: "datefin", width: "80px", formatter: formatDate, autoComplete: true, dataTypeArgs: {datePattern: "d/M/yyyy"}},
+                {name: "<?php echo TXT_NOM.' '.strtolower(TXT_PRENOM); ?>", field: "nom", width: "auto", autoComplete: true},
+                {name: "<?php echo 'Date d\'envoi de l\'email'; ?>", field: "dateheureenvoiemail", width: "80px", autoComplete: true,formatter: formatDate},
+                {name: "<?php echo TXT_UPDATEABOVE3MONTH; ?>", field: "datemaj", width: "150px", formatter: formatDate, autoComplete: true}
             ]];
         var grid = new dojox.grid.EnhancedGrid({
             id: 'grid',

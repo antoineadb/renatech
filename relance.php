@@ -128,18 +128,24 @@ chmod("tmp/projetarelancer.json", 0777);
                     <div style="float: left;">
                         <input type="button" value="delete" label="<?php echo "Efface les dates d'envoi"; ?>" id="delete" name="delete"  data-dojo-type="dijit/form/Button" 
                                onclick="window.location.replace('<?php echo '/' . REPERTOIRE . '/modifBase/effaceDateEnvoiEmail.php?lang=' . $lang ?>')" />               
-                    </div>                
+                    </div>
                     <div style="margin-left:20px;float:left;margin-top: 7px">
                         <div style="float:left"><?php echo TXT_TYPEPROJET ?></div>
-                        <select name="interneExterne" id="interneExterne" data-dojo-type="dijit/form/FilteringSelect" style="width:120px;margin-left:20px;">
-                            <option  value='3' selectetd='selected' contenteditable="true"><?php echo TXT_TOUS; ?>  </option>
-                            <option  value='1' <?php if (isset($_GET['chx']) && $_GET['chx'] == 1) {echo 'selected = \'selected\'';} ?> contenteditable="true" ><?php echo TXT_INTERNE; ?>  </option>
-                            <option  value='2' <?php if (isset($_GET['chx']) && $_GET['chx'] == 2) {echo 'selected = \'selected\'';} ?> contenteditable="true" ><?php echo TXT_EXTERNE; ?>  </option>                    
+                        <select name="interneExterne" id="interneExterne" data-dojo-type="dijit/form/FilteringSelect" style="width:120px;margin-left:20px;"
+                                
+                                onChange="window.location.replace('<?php echo '/' . REPERTOIRE . '/relance/'.$lang.'/c/';?>'+this.value+'')" >
+                                
+                            <option  value='3' <?php if (isset($_GET['chx']) && $_GET['chx'] == 3) {echo 'selected = \'selected\'';} ?> contenteditable="true"><?php echo TXT_TOUS; ?>  </option>
+                            <option  value='1' <?php if (isset($_GET['chx']) && $_GET['chx'] == 1) {echo 'selected = \'selected\'';} ?> contenteditable="true" 
+                                     ><?php echo TXT_INTERNE; ?>  </option>
+                            <option  value='2' <?php if (isset($_GET['chx']) && $_GET['chx'] == 2) {echo 'selected = \'selected\'';} ?> contenteditable="true" 
+                                     > <?php echo TXT_EXTERNE; ?>  
+                            </option>
                         </select>
                     </div>
                     <div style="float: right;margin-right: 20px"><input type="submit" value="Envoyer" label="<?php echo TXT_ENVOYERMAIL; ?>" id="EnvoyerEmail" name="Envoyer"  data-dojo-type="dijit/form/Button" style="width: 157px"/></div>
                 </div>
-                
+                <input style="display:none" type="submit" value="" name="submit" id="submitId"/>
                 <input type="text" style="display: none" value='<?php if (!empty($_GET['cpt'])) {echo $_GET['cpt'];} ?>'  id='cpt' name='cpt'/>
 
                 <?php                

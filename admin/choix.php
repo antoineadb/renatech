@@ -78,4 +78,6 @@ if (isset($_GET['libellecentralenom'])) {
 }elseif (isset($_GET['idtypepartenaire']) || isset($_GET['msgserveurtypepartenaire']) || isset($_GET['msgErrtypepartenairenonsaisie']) || isset($_GET['msgErrtypepartenaireexiste']) 
 || isset($_GET['msgserveurtypepartenaireupdate'])|| isset($_GET['msgErrtypepartreselect'])|| isset($_GET['msgserveurtypepartenaireshow']) || isset($_GET['msgserveurtypepartenairehide']) ){
 $ongletliste2 = true;
+}elseif (isset($_GET['cpupdate'])) {
+    $ongletliste2 = true;
 }

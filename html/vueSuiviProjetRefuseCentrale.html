@@ -14,8 +14,8 @@
             handleAs: "json"}).then(function(data) {
             store = new Memory({data: data.items});
             dataStore = new ObjectStore({objectStore: store});
-            function formatDate(datum) {
-                var d = stamp.fromISOString(datum);
+            function formatDate(datum) {                
+                var d = stamp.fromISOString(datum);               
                 return locale.format(d, {selector: 'date', formatLength: 'long'});
             }
             function hrefFormatter(numero, idx) {

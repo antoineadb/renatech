@@ -467,6 +467,7 @@ RewriteRule   MasqueRegion/([a-z]+)/([0-9]+)                                    
 RewriteRule   insertCpErr/([a-z]+)/([a-z]+)                                     adminListe.php?lang=$1&cpns=$2   [L]
 RewriteRule   insertCpErr1/([a-z]+)/([a-z]+)                                    adminListe.php?lang=$1&rens=$2   [L]
 RewriteRule   insertCpErr2/([a-z]+)/([a-z]+)                                    adminListe.php?lang=$1&cpexist=$2   [L]
+RewriteRule   update_nom_centrale_p/([a-z]+)/([A-Z]+)                             admin.php?lang=$1&cpupdate=$2               [L]
 RewriteRule   insertCp/([a-z]+)/([a-z]+)                                        adminListe.php?lang=$1&cpadd=$2   [L]
 RewriteRule   nb_request/([a-z]+)                                               nbRequest.php?lang=$1   [L]
 RewriteRule   rechercheAvance/([a-z]+)                                          rechercheAvance.php?lang=$1   [L]

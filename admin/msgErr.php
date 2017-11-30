@@ -278,4 +278,6 @@ elseif (isset($_GET['msgserveursourcefinancementhide'])) {
     echo TXT_MESGERRCPEXISTE ;
 }elseif (isset($_GET['cpadd'])) {
     echo TXT_MESSAGESERVEURCP ;
+}elseif (isset($_GET['cpupdate'])) {
+    echo TXT_MESSAGESERVEURUPDATECENTRALEP ;
 }

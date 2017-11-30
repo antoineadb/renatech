@@ -129,10 +129,24 @@ $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
                 $idcentrale_proximite = substr($_POST['centrale_Proximite'][$i], 2);
                 $centraleproximite = new CentraleProximiteProjet($idcentrale_proximite, $idprojet);
                 $manager->addCentraleProximiteProjet($centraleproximite);
+                 //Controle si il y un email dans la centrale de proximité
+                $idresponsable = (int)$manager->getSingle2("SELECT id_responsable_centrale_proximite FROM centraleproximite WHERE idcentraleproximite=?", $idcentrale_proximite);
+                $emailCP=$manager->getSingle2("SELECT mail FROM utilisateur,loginpassword  WHERE idlogin=idlogin_loginpassword AND idutilisateur=?", $idresponsable);
+                if(null!=$emailCP){//AFFECTATION COMME ADMINISTRATEUR LE RESPONSABLE DE LA CENTRALE DE PROXIMITE
+                    //Vérification que l'id du reponsable n'as pas déjà été sété dans la BD
+                    $oldIdResponsableCP = (int)$manager->getSinglebyArray("SELECT idutilisateur FROM utilisateuradministrateur WHERE idprojet=? AND idutilisateur=?", array($idprojet,$idresponsable));
+                 
+                    if($oldIdResponsableCP != $idresponsable){
+                        $dateaffectation = date("Y-m-d");
+                        $utilisateuradminprojet = new UtilisateurAdmin($idresponsable, $idprojet, $dateaffectation);
+                        $manager->addUtilisateurAdmin($utilisateuradminprojet);
+                    }
+                }
+                
+                
             }
         } else {
             $_SESSION['centraleproximitemodif'] = '';
-             
         }
         if (!empty($_POST['centraleproximitevaleur'])) {
             $descriptioncentraleproximite = clean($_POST['centraleproximitevaleur']);
@@ -149,6 +163,7 @@ $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
     }else{        
             $descriptioncentraleproximite='_';
             $manager->deletecentraleproximiteprojet($idprojet);
+            $manager->deleteUtilisateurAdministrateur($idprojet);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              FIN DES CENTRALES DE PROXIMITE

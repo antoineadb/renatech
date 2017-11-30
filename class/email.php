@@ -62,7 +62,7 @@ function envoieEmail($body, $sujet, $email, $cc) {
         $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
         $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire
         $mail->AddEmbeddedImage('../styles/img/logo-renatech.jpg', 'logo', 'logo-renatech.jpg'); //envoie d'une image ou pièce jointe        
-        $mail->Send();
+        //$mail->Send();
         $mail->SmtpClose();
     } catch (phpmailerException $e) {
         echo 'Message not Sent</p>';
@@ -92,7 +92,7 @@ function sendEmail($body, $sujet, $email) { // envoi sans copie
         $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically        
         $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire
         $mail->AddEmbeddedImage('/' . REPERTOIRE . '/styles/img/logo-renatech.jpg', 'logo', 'logo-renatech.jpg'); //envoie d'une image ou pièce jointe
-        $mail->Send();
+        //$mail->Send();
         $mail->SmtpClose();
         return true;
     } catch (phpmailerException $e) {
@@ -138,7 +138,7 @@ function envoieEmailAttachement($body, $sujet, $email, $cc,$path,$filename) {
         $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
         $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire
         $mail->AddAttachment($path,$filename);        
-        $mail->Send();
+       // $mail->Send();
         return true;
         $mail->SmtpClose();
     } catch (phpmailerException $e) {

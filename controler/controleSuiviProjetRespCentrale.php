@@ -535,19 +535,31 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
     //-----------------------------------------------------------------------------------------------------------------------------------------------
     //                                                                  PROJET REFUSE ET TRANSFERE DANS UNE AUTRE CENTRALE
     //-----------------------------------------------------------------------------------------------------------------------------------------------
-            $row = $manager->getListbyArray("SELECT p.numero,co.commentaireprojet,p.titre,p.idprojet,co.datestatutrefuser,ce.libellecentrale,s.libellestatutprojet,p.idprojet,u.nom,
-                u.nomentreprise,u.entrepriselaboratoire,p.refinterneprojet
-                FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s
+            $row0 = $manager->getListbyArray("SELECT p.idprojet FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s
                 WHERE p.idtypeprojet_typeprojet = t.idtypeprojet AND u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = p.idprojet AND
-                ce.idcentrale = co.idcentrale_centrale AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet
-                AND s.idstatutprojet=? and ce.libellecentrale =? and co.commentaireprojet like ?", array(REFUSE, $libellecentrale,"%Transféré dans la centrale%"));
+                ce.idcentrale = co.idcentrale_centrale AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet AND s.idstatutprojet=? and ce.libellecentrale =?",array(REFUSE, $libellecentrale));
             
+            $arrayidprojet=array();
+            $sarrayidprojet="(";
+            foreach ($row0 as $key => $value) {
+                array_push($arrayidprojet, $value[0]);
+                $sarrayidprojet.=$value[0].",";
+            }
+            $s_arrayidprojet = substr($sarrayidprojet,0, -1);
+            $s_arrayidprojet.=")";
             
+            $row =$manager->getListbyArray("SELECT p.numero,co.commentaireprojet,p.titre,p.idprojet,ce.libellecentrale,s.libellestatutprojet,p.idprojet,u.nom,
+            u.nomentreprise,u.entrepriselaboratoire,p.refinterneprojet FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s
+            WHERE p.idtypeprojet_typeprojet = t.idtypeprojet AND u.idutilisateur = cr.idutilisateur_utilisateur AND cr.idprojet_projet = p.idprojet AND
+            ce.idcentrale = co.idcentrale_centrale AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet AND s.idstatutprojet<>?
+            AND idprojet in ".$s_arrayidprojet."", array(REFUSE));
+                       
             $fpProjetRefuseTransfert = fopen("../tmp/ProjetRefuseTransfert".IDCENTRALEUSER.".json", 'w');
             $dataProjetRefuseTransfert = "";
             fwrite($fpProjetRefuseTransfert, '{"items": [');
             $nbrowProjetRefuseTransfert = count($row);
             for ($i = 0; $i < $nbrowProjetRefuseTransfert; $i++) {
+                $datestaturefuser = $manager->getSinglebyArray("SELECT datestatutrefuser from concerne WHERE idprojet_projet=? AND idcentrale_centrale=? ", array($row[$i]['idprojet'],IDCENTRALEUSER));
                 $centraleAcceptation = $manager->getSinglebyArray("SELECT libellecentrale FROM concerne LEFT JOIN centrale on idcentrale= idcentrale_centrale where idprojet_projet=? "
                         . "and idstatutprojet_statutprojet<>?",array($row[$i]['idprojet'],REFUSE));
                 $s_Centrales = '';
@@ -558,7 +570,7 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
                 $sCentrale = substr($s_Centrales, 0,-1);
                 
                 if (!empty($row[$i]['numero'])) {
-                    $dataProjetRefuseTransfert = "" . '{"datestatutrefuser":' . '"' . $row[$i]['datestatutrefuser'] . '"' . ","                            
+                    $dataProjetRefuseTransfert = "" . '{"datestatutrefuser":' . '"' . $datestaturefuser . '"' . ","                            
                             . '"libellecentrale":' . '"' . $row[$i]['libellecentrale'] . '"' . ","
                             . '"numero":' . '"' . $row[$i]['numero'] . '"'                            
                             . "," . '"titre":' . '"' . filtredonnee($row[$i]['titre']) . '"'

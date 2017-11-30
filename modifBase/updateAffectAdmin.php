@@ -57,7 +57,6 @@ if (!empty($idutilisateur) && !empty($idprojet)) {
         //vider le cache
             effaceCache(LIBELLECENTRALEUSER);    
             header('Location:/' . REPERTOIRE . "/controler/controleSuiviProjetRespCentrale.php?lang=" . $lang . "&idprojet=".$idprojet."&idutilisateur=".$idutilisateur."&administrateur=ok");
-            //header('Location:/'.REPERTOIRE.'/projetCentraleAdmin/' . $lang . '/' . $idprojet.'/'.$idutilisateur.'/ok' );
         exit();            
         
     } else {

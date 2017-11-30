@@ -18,7 +18,11 @@ if (!empty($_FILES)) {
     $fichierModeEmploi = basename(nomFichierValidesansAccent($_FILES['file']['name']));
     if (move_uploaded_file($_FILES['file']['tmp_name'], REPERTOIREMANUEL . $fichierModeEmploi)) {
         chmod(REPERTOIREMANUEL . $fichierModeEmploi, 0777);
-        unlink(REPERTOIREMANUEL . "ModeEmploiDemandeProjetRENATECH.pdf");
-        rename (REPERTOIREMANUEL. $fichierModeEmploi ,REPERTOIREMANUEL."ModeEmploiDemandeProjetRENATECH.pdf");
+        //unlink(REPERTOIREMANUEL . "ModeEmploiDemandeProjetRENATECH.pdf");
+        if($_GET['param']==1){    
+            rename (REPERTOIREMANUEL. $fichierModeEmploi ,REPERTOIREMANUEL."ModeEmploiDemandeProjetRENATECH.pdf");
+        }elseif($_GET['param']==2){
+            rename (REPERTOIREMANUEL. $fichierModeEmploi ,REPERTOIREMANUEL."ModeEmploiRapportRENATECH.pdf");
+        }
     }
 }

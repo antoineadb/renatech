@@ -537,6 +537,7 @@ function supprDouble() {//SUPPRESSION DES DOUBLONS
         $manager->deleteUtilisateurPorteur($arraydoublon[$i][0]);
         $manager->deleteUtilisateurAdministrateur($arraydoublon[$i][0]);
         $manager->deletecentraleproximiteprojet($arraydoublon[$i][0]);
+        $manager->deleteProjetTypePartenaire($arraydoublon[$i][0]);
         $manager->deleteprojet($arraydoublon[$i][0]);
     }
     //Suppression des personneaccueilcentrale orpheline

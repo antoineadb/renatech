@@ -22,7 +22,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'formulaire
     }else{
         $idregion= $_POST['regionCorrespondante'];
     }
-    
+   
     $idCentraleProximite = $manager->getSingle2("select idcentraleproximite from centraleproximite where libellecentraleproximite=?", $libelleCentraleProximite);
     if (!empty($idCentraleProximite)) {
         header('location:/'.REPERTOIRE.'/insertCpErr2/' . $lang . '/cpexist');
@@ -31,7 +31,8 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'formulaire
         //AJOUT DE LA CENTRALE DE PROXIMITE DANS LA BASE DE DONNEE 
         $idNewCentraleProximite = $manager->getSingle("select max (idcentraleproximite) from centraleproximite") + 1;
         $masqueCentraleProximite = FALSE;
-        $CentraleProximite = new CentraleProximite($idNewCentraleProximite, $libelleCentraleProximite, $masqueCentraleProximite, $idregion);
+        $id_responsable_centrale_proximite=$_POST['idutilisateur'];
+        $CentraleProximite = new CentraleProximite($idNewCentraleProximite, $libelleCentraleProximite, $masqueCentraleProximite, $idregion, $id_responsable_centrale_proximite);
         $manager->addCentralProximite($CentraleProximite);
         header('location:/'.REPERTOIRE.'/insertCp/' . $lang . '/cpadd');
         exit;
