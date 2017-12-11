@@ -103,10 +103,11 @@ chmod('tmp/projetNoDev.json', 0777);
                         <select  id="anneerapport" data-dojo-type="dijit/form/FilteringSelect"  data-dojo-props="name: 'annee',value: '',required:false,placeHolder: '<?php echo TXT_SELECTYEAR; ?>'" 
                                  style="width: 220px; margin-left: 35px; font-size: 1.0em;margin-top: 10px;margin-right: 25px" >
                                      <?php
-                                     $row = $manager->getList("select distinct  EXTRACT(YEAR from datecreation) as anneeCreation  from rapport where EXTRACT(YEAR from datecreation)>2012");
+                                     $row = $manager->getList("select distinct  EXTRACT(YEAR from datecreation) as anneeCreation  from rapport where EXTRACT(YEAR from datecreation)>2012 ORDER BY anneeCreation desc");
+                                     echo '<option value=1>' . TXT_TOUS . '</option>';
                                      for ($i = 0; $i < count($row); $i++) {
                                          echo '<option value="' . $row[$i]['anneecreation'] . '">' . $row[$i]['anneecreation'] . '</option>';
-                                     }echo '<option value=1>' . TXT_TOUS . '</option>';
+                                     }
                                      ?>
                         </select>         
                     </td>                    

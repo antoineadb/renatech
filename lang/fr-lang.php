@@ -45,8 +45,8 @@ define("TXT_CENTRALE","Centrale Renatech");
 define("TXT_CENTRALS","Centrale(s) Renatech");
 define("TXT_CENTRALENONDEFINI","Centrale non défini");
 define("TXT_CENTRALEPARTENAIRE","Nom de la centrale partenaire");
-define("TXT_CENTRALEPART","Centrale de proximité/spécifique");
-define("TXT_CENTRALESPECIFIQUES","Centrales internationales");
+define("TXT_CENTRALEPART","Centrales de proximité/spécifique");
+define("TXT_CENTRALESPECIFIQUES","Centrale internationale");
 define("TXT_CENTRALERAT","Centrale de rattachement");
 define("TXT_CENTRALES","Centrales Renatech");
 define("TXT_CENTRALESELECTON","Centrale Renatech sélectionnée");
@@ -262,6 +262,7 @@ define("TXT_ERRUPDATETUTELLE","Problème de mise à jour dans la table tutelle")
 define("TXT_ERRUPDATETYPEPROJET","Problème de mise à jour de la table typeprojet");
 define("TXT_ERRUPDATEUSER","Problème de mise à jour dans la table Utilisateur");
 define("TXT_ERRUPDATESITEWEB","Problème de mise à jour dans la table sitewebapplication");
+define("TXT_ERRUPDATETABLE","Problème de mise à jour de la base de donnée ");
 define("TXT_ETAPESUIVANTE","Etape suivante");
 define("TXT_EXPORT","Export des projets");
 define("TXT_EXPORTDONNEBRUTE","Export des données brutes");
@@ -1056,3 +1057,4 @@ define("TXT_DATEDOCR",'La date du  document "ModeEmploiRapportRENATECH.pdf" en l
 define("TXT_NODOC","Impossible de trouver le document");
 define("TXT_REFRESDOC","Actualise la date du document");
 define("TXT_INCONNU","Inconnu");
+define("TXT_CUSTOMRELANCEEMAIL","Personnalisation E-mail de relance");

@@ -121,42 +121,6 @@ $jsonEncoursRealisation1 = str_replace('},]}', '}]}', $jsonEncoursRealisation);
 file_put_contents("../tmp/projetarelancer.json", $jsonEncoursRealisation1);
 fclose($fpProjetEncoursRealisation);
 chmod("../tmp/projetarelancer.json", 0777);
-//if (is_file('../tmp/projetarelancer.json')) {
-/*    $json0 = file_get_contents("../tmp/projetarelancer.json");
-    $json1 = str_replace('},]}', '}]}', $json0);
-    $json2 = str_replace('{"items": ', '', $json1);
-    $json = str_replace(']}', ']', $json2);
-    $parsed_json = json_decode($json, true);
-    $nblignes = count($parsed_json);*/
-// -----------------------------------------------------------------------------------
-//          CONSTRUCTION D'UN FICHIER JSON DES PROJETS A NE PAS RELANCER PAR EMAIL
-// -----------------------------------------------------------------------------------   
-/*    $fpProjetASupprimer = fopen('../tmp/projetASupprimer.json', 'w');
-    $dataProjetAsupprimer = "";
-    fwrite($fpProjetASupprimer, '[');
-    for ($i = 0; $i < count($jsonSupprParsed); $i++) {
-        $post = array_values($jsonSupprParsed[0]);
-        $dataProjetAsupprimer = '{"datedebutprojet"' . ':"' . $jsonSupprParsed[$i]['datedebutprojet'] .
-                '","datemaj":"' . $jsonSupprParsed[$i]['datemaj'] .
-                '","numero":"' . $jsonSupprParsed[$i]['numero'] .
-                '","idprojet":"' . $jsonSupprParsed[$i]['idprojet'] .
-                '","titre":"' . $jsonSupprParsed[$i]['titre'] .
-                '","mail":"' . $jsonSupprParsed[$i]['mail'] .
-                '","nom":"' . $jsonSupprParsed[$i]['nom'] .
-                '","idutilisateur":"' . $jsonSupprParsed[$i]['idutilisateur'] .
-                '","dateheureenvoiemail":"' . $jsonSupprParsed[$i]['dateheureenvoiemail'] .
-                '","datefin":"' . $jsonSupprParsed[$i]['datefin'] .
-                '","refinterneprojet":"' . $jsonSupprParsed[$i]['refinterneprojet'] . '"';
-        fputs($fpProjetASupprimer, $dataProjetAsupprimer);
-        fwrite($fpProjetASupprimer, '},');
-    }
-    fwrite($fpProjetASupprimer, ']');
-    $json_fileASupprimer0 = "../tmp/projetASupprimer.json";
-    $json_projetASupprimer1 = file_get_contents($json_fileASupprimer0);
-    $json_projetASupprimer = str_replace('},]', '}]', $json_projetASupprimer1);
-    file_put_contents($json_fileASupprimer0, $json_projetASupprimer);
-    fclose($fpProjetASupprimer);
-    chmod("../tmp/projetASupprimer.json", 0777);
 // -----------------------------------------------------------------------------------
 //                                    TRANSFORMATION  DU FICHIER JSON EN TABLEAU
 // -----------------------------------------------------------------------------------*/
@@ -173,7 +137,7 @@ chmod("../tmp/projetarelancer.json", 0777);
 // -----------------------------------------------------------------------------------
 //                                             PREPARATION DE L'ENVOI DE L'EMAIL
 // -----------------------------------------------------------------------------------
-    $body = htmlentities(affiche('TXT_RELANCE1'), ENT_QUOTES, 'UTF-8') . "<br><br>" .
+    /*$body = htmlentities(affiche('TXT_RELANCE1'), ENT_QUOTES, 'UTF-8') . "<br><br>" .
             htmlentities(removeDoubleQuote(affiche('TXT_RELANCE2'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
             htmlentities(removeDoubleQuote(affiche('TXT_RELANCE3'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
             htmlentities(removeDoubleQuote(affiche('TXT_RELANCE4'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
@@ -182,7 +146,16 @@ chmod("../tmp/projetarelancer.json", 0777);
             htmlentities(removeDoubleQuote(affiche('TXT_RELANCE7'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
             htmlentities(removeDoubleQuote(affiche('TXT_RELANCE8'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
             htmlentities(removeDoubleQuote(affiche('TXT_RELANCE9'), ENT_QUOTES, 'UTF-8')) . "<br><br>";
-
+    */
+    $bodyCorps = $manager->getList2("SELECT  libellefrancais,libelleanglais FROM libelleapplication WHERE reflibelle=?","TXT_RELANCEEMAIL_".IDCENTRALEUSER); 
+    if($bodyCorps==null){
+        $bodyCorps = $manager->getList2("SELECT libellefrancais,libelleanglais FROM libelleapplication WHERE reflibelle=?","TXT_RELANCEEMAIL"); 
+    }
+    if($lang=='fr'){
+        $body= $bodyCorps[0]['libellefrancais'];
+    }else{
+        $body= $bodyCorps[0]['libelleanglais'];
+    }
 
 // construction d'un tableau de numero de projet qui sont coché, on ne dois pas envoyer d'email à ces projets
     $arrayNumeroCoche = array();
@@ -198,8 +171,8 @@ chmod("../tmp/projetarelancer.json", 0777);
             if (isset($emailAEnvoyer['items'][$i]['numero'])) {//on vérifie que le numéro existe
                 $sujet = utf8_decode(TXT_NUMPROJET . ' ' . $emailAEnvoyer['items'][$i]['numero']); //on définis l'email
                 $envoiEmailUtilisateur = new ProjetDateEnvoiEmail(date("Y-m-d H:i:s"), $emailAEnvoyer['items'][$i]['idprojet']);
-                $manager->updateDateenvoiemail($envoiEmailUtilisateur, $emailAEnvoyer['items'][$i]['idprojet']); //on met à jour le champs date envoi de l'email de la table projet
-                //sendEmail($body, $sujet, $emailAEnvoyer[$i]['mail']);//on envoi l'email
+                $manager->updateDateenvoiemail($envoiEmailUtilisateur, $emailAEnvoyer['items'][$i]['idprojet']); //on met à jour le champs date envoi de l'email de la table projet                
+                sendEmail($body, $sujet, $emailAEnvoyer[$i]['mail']);//on envoi l'email
             }
         }
 
@@ -221,8 +194,8 @@ chmod("../tmp/projetarelancer.json", 0777);
             if (isset($emailAEnvoyer['items'][$i]['numero'])) {
                 $sujet = utf8_decode(TXT_NUMPROJET . ' ' . $emailAEnvoyer['items'][$i]['numero']);
                 $envoiEmailUtilisateur = new ProjetDateEnvoiEmail(date("Y-m-d H:i:s"), $emailAEnvoyer['items'][$i]['idprojet']);
-                $manager->updateDateenvoiemail($envoiEmailUtilisateur, $emailAEnvoyer['items'][$i]['idprojet']);
-                //sendEmail($body, $sujet, $emailAEnvoyer[$i]['mail']);
+                $manager->updateDateenvoiemail($envoiEmailUtilisateur, $emailAEnvoyer['items'][$i]['idprojet']);                
+                sendEmail($body, $sujet, $emailAEnvoyer[$i]['mail']);
             }
         }
     }

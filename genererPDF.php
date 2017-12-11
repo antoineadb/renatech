@@ -198,6 +198,20 @@ if($confidentiel != ucfirst(TXT_OUI)){
    $confidentiel=  ucfirst(TXT_NON); 
 }
 
+$centraleProximite = $manager->getList2("SELECT libellecentraleproximite,idregion FROM centraleproximiteprojet cp,centraleproximite c WHERE c.idcentraleproximite=cp.idcentraleproximite AND idprojet=?   ", $idprojet);
+$descriptionCentraleProximite= $manager->getSingle2("SELECT descriptioncentraleproximite FROM projet WHERE idprojet=?", $idprojet);
+
+$centraleInternationnal ="";
+$centraleSpecifique = "";
+for ($i = 0;$i < count($centraleProximite);$i++) {
+    if($centraleProximite[$i]['idregion']==IDCENTRALEINTERNATIONNAL){
+        $centraleInternationnal.= ' - '.$centraleProximite[$i]['libellecentraleproximite'].'; ';
+    }else{
+        $centraleSpecifique .= ' - '.$centraleProximite[$i]['libellecentraleproximite'].'<br> ';
+    }
+}
+$centraleSpecifique = substr($centraleSpecifique,0,-2);
+$centraleInternationnal = substr($centraleInternationnal,0,-2);
 
 ob_start();
 ?>
@@ -260,7 +274,19 @@ ob_start();
                     <?php } ?>                    
                     <tr><td><strong><?php echo TXT_PROJETCONFIDENTIEL.': ';?></strong><?php echo $confidentiel; ?></td></tr><tr><td></td></tr>
                      <tr><td><strong><?php echo TXT_CONTEXTESCIENTIFIQUE.': ';?></strong><?php echo '<br />'.$contexte; ?></td></tr><tr><td></td></tr>
-                     <tr><td><strong><?php echo TXT_DESCRIPTIFTRAVAIL.': ';?></strong><?php echo '<br />'.$description; ?></td></tr><tr><td></td></tr>
+                     <tr>
+                         <td>
+                             <strong><?php echo TXT_DESCRIPTIFTRAVAIL.': ';?></strong>
+                            <?php echo '<br />'.$description.'<br>'; ?>
+                         </td>
+                     </tr><tr><td></td></tr>
+                     
+                     <tr><td><strong><?php echo TXT_CENTRALEPART.': ';?></strong><?php echo '<br />'; ?></td></tr>
+                     <tr><td><?php  if(!empty($centraleSpecifique)){echo $centraleSpecifique;}?></td></tr>
+                     <tr><td><strong><?php  echo TXT_DESCRIPTCENTRALEROXIMITE; ?></strong><?php echo '<br />'.$descriptionCentraleProximite; ?></td></tr>
+                     <tr><td><strong><?php  echo TXT_CENTRALESPECIFIQUES; ?></strong></td></tr>
+                     <tr><td><?php  if(!empty($centraleInternationnal)){echo $centraleInternationnal;}?> </td></tr>                     
+                     
                       <?php if(!empty($attachement)){?>
                     <tr><td><strong><?php echo  TXT_PIECEJOINTE .': ';?></strong><?php echo $attachement; ?></td></tr><tr><td></td></tr>
                     <?php }  ?>

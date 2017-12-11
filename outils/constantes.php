@@ -84,6 +84,8 @@ define('IDAUTRESOURCEFINANCEMENT', $manager->getSingle2("select idsourcefinancem
 define('NBSOURCEDEFINACEMENT', $manager->getSingle("select count(idsourcefinancement) from sourcefinancement"));
 define('NBRESSOURCE', $manager->getSingle("select count(idressource) from ressource"));
 define('TXT_REGEXPASS', "regExp:'^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$");
+define('IDCENTRALEINTERNATIONNAL', $manager->getSingle2("select idregion from region where libelleregion=?",'Centrale internationale'));
+
 if (isset($_SESSION['pseudo'])) {
     define('IDCENTRALEUSER', $manager->getSingle2("select idcentrale_centrale from utilisateur, loginpassword where idlogin_loginpassword=idlogin and pseudo=? ", $_SESSION['pseudo']));
     define('LIBELLECENTRALEUSER', $manager->getSingle2("select libellecentrale from centrale,utilisateur, loginpassword where idlogin_loginpassword=idlogin and idcentrale_centrale=idcentrale and pseudo=? ", $_SESSION['pseudo']));

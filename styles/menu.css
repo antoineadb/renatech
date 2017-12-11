@@ -105,6 +105,6 @@
     border: none;
     border-bottom: 1px solid #00AEA6;
 }
-.documents, .messages, .signout{
+.documents,  .signout.messages{
     font-size: 1.1em;
 }

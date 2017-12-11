@@ -471,4 +471,5 @@ RewriteRule   update_nom_centrale_p/([a-z]+)/([A-Z]+)                           
 RewriteRule   insertCp/([a-z]+)/([a-z]+)                                        adminListe.php?lang=$1&cpadd=$2   [L]
 RewriteRule   nb_request/([a-z]+)                                               nbRequest.php?lang=$1   [L]
 RewriteRule   rechercheAvance/([a-z]+)                                          rechercheAvance.php?lang=$1   [L]
-
+RewriteRule   custom_email/([a-z]+)/([a-zA-Z]+)                                 emailRelanceCustom.php?lang=$1&&msgupdate=$2   [L]
+RewriteRule   custom_email/([a-z]+)                                             emailRelanceCustom.php?lang=$1   [L]

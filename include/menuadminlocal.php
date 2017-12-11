@@ -31,6 +31,7 @@ $requete = '/'.REPERTOIRE.'/req/'.$lang;
 $mail  = '/'.REPERTOIRE.'/relance/'.$lang;
 $faisabilite= '/'.REPERTOIRE.'/new_request/'.$lang;
 $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
+$custmEmail =  '/'.REPERTOIRE.'/custom_email/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -38,33 +39,33 @@ $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
         <li><a href="#" style="font-weight: bold"><?php echo '<u>' . TXT_PROJET . '</u>'; ?></a>
             <ul style="z-index: 5">                
                 <li><a href="<?php echo $creerprojetphase2; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_DEMANDEPROJET) . '<br>'; ?></a></li>
-                <li><a href="<?php echo $faisabilite; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_CREERPROJET); ?></a></li>
-                <li><a href="<?php echo $controleSuiviProjetRespCentrale; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_LOGINPROJETCENTRALE; ?></a></li>
-                <li><a href="<?php echo $projetSansDev; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PROJETSANSDEV; ?></a></li>
-                <li><a href="<?php echo $controleSuiviProjet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_SUIVIPROJET; ?></a></li>
-                <li><a href="<?php echo $deleteprojets; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_DELETEPROJET; ?></a></li>                
-                <li><a href="<?php echo $porteurprojet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONPORTEUR; ?></a></li>
-                <li><a href="<?php echo $userPorteurProjet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VUEUSERPROJET; ?></a></li>
-                <li><a href="<?php echo $adminprojet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONADMIN; ?></a></li>
-                <li><a href="<?php echo $useradminprojet; ?>" class="signout" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VUEADMINPROJET; ?></a></li>
+                <li><a href="<?php echo $faisabilite; ?>" class="signout"  ><?php echo ucfirst(TXT_CREERPROJET); ?></a></li>
+                <li><a href="<?php echo $controleSuiviProjetRespCentrale; ?>" class="signout"  ><?php echo TXT_LOGINPROJETCENTRALE; ?></a></li>
+                <li><a href="<?php echo $projetSansDev; ?>" class="signout"  ><?php echo TXT_PROJETSANSDEV; ?></a></li>
+                <li><a href="<?php echo $controleSuiviProjet; ?>" class="signout"  ><?php echo TXT_SUIVIPROJET; ?></a></li>
+                <li><a href="<?php echo $deleteprojets; ?>" class="signout"  ><?php echo TXT_DELETEPROJET; ?></a></li>                
+                <li><a href="<?php echo $porteurprojet; ?>" class="signout"  ><?php echo TXT_GESTIONPORTEUR; ?></a></li>
+                <li><a href="<?php echo $userPorteurProjet; ?>" class="signout"  ><?php echo TXT_VUEUSERPROJET; ?></a></li>
+                <li><a href="<?php echo $adminprojet; ?>" class="signout"  ><?php echo TXT_GESTIONADMIN; ?></a></li>
+                <li><a href="<?php echo $useradminprojet; ?>" class="signout"  ><?php echo TXT_VUEADMINPROJET; ?></a></li>
                 <li><a href="<?php echo $nbfaisabilite;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_REQUESTVIEW;?></a></li>
             </ul>
 
         </li>
         <li><a href="#" style="font-weight: bold"><?php echo '<u>' . TXT_EXPORTS . '</u>'; ?></a>
             <ul style="z-index: 5">
-                <li><a href="<?php echo $exportdesProjets; ?>" class="documents" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTDONNEBRUTE; ?></a></li>
-                <li><a href="<?php echo $exportBilanProjet; ?>" class="messages" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORT; ?></a></li>
-                <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTUTILISATEURCENTRALE; ?></a></li>
-                <li><a href="<?php echo $exportUtilisateurcentrale; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTTOUSUTILISATEUR; ?></a></li>
-                <li><a href="<?php echo $exportRapportWord; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTREPORT; ?></a></li>
-                <li><a href="<?php echo $exportSultan; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTAPPLISULTAN; ?></a></li>
+                <li><a href="<?php echo $exportdesProjets; ?>" class="documents" ><?php echo TXT_EXPORTDONNEBRUTE; ?></a></li>
+                <li><a href="<?php echo $exportBilanProjet; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" > ><?php echo TXT_EXPORT; ?></a></li>
+                <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" ><?php echo TXT_EXPORTUTILISATEURCENTRALE; ?></a></li>
+                <li><a href="<?php echo $exportUtilisateurcentrale; ?>" class="signout" ><?php echo TXT_EXPORTTOUSUTILISATEUR; ?></a></li>
+                <li><a href="<?php echo $exportRapportWord; ?>" class="signout" ><?php echo TXT_EXPORTREPORT; ?></a></li>
+                <li><a href="<?php echo $exportSultan; ?>" class="signout" ><?php echo TXT_EXPORTAPPLISULTAN; ?></a></li>
             </ul>
 
         </li>
         <li><a href="#" style="font-weight: bold"><?php echo '<u>' . TXT_COMPTES . '</u>'; ?></a>
             <ul style="z-index: 5">
-                <li><a href="<?php echo $moncompte; ?>" class="documents" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MONCOMPTE; ?></a></li>
+                <li><a href="<?php echo $moncompte; ?>" class="documents"  ><?php echo TXT_MONCOMPTE; ?></a></li>
                 <li><a href="<?php echo $gestioncompte; ?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_GESTIONCOMPTE); ?></a></li>
                 <li><a href="<?php echo $parametrage;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_PARAMETRAGE;?></a></li>
             </ul>
@@ -77,7 +78,8 @@ $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
             <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
             <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
             <li><a href="<?php echo $log;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Logs';?></a></li>
-            <li><a href="<?php echo $mail;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Relance par E-Mail';?></a></li>            
+            <li><a href="<?php echo $mail;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Relance par E-Mail';?></a></li>
+            <li><a href="<?php echo $custmEmail;?>" class="messages" style="font-size: 1.1em;font-weight: normal" > <?php echo TXT_CUSTOMRELANCEEMAIL;?></a></li>
             <?php /* ?><li><a href="<?php echo $requete;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Requetes paramétrables';?></a></li> <?php */ ?>
         </ul> 
     </li>

@@ -2979,11 +2979,31 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
-            echo TXT_ERRUPDATESITEWEB . '<br>' . $exc->getLine();
+            echo TXT_ERRUPDATETABLE . '<br>' . $exc->getLine();
             $this->_db->rollBack();
         }
     }
 
+    public function addLibelleApplication(Libelleapplication $libelleapplication) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO libelleapplication (reflibelle,libellefrancais,libelleanglais) values(?,?,?) ');
+            $reflibelle =  $libelleapplication->getReflibelle();
+            $libellefrancais = $libelleapplication->getLibellefrancais();
+            $libelleanglais = $libelleapplication->getLibelleanglais();
+            $requete->bindParam(1, $reflibelle, PDO::PARAM_STR);
+            $requete->bindParam(2, $libellefrancais, PDO::PARAM_STR);
+            $requete->bindParam(3, $libelleanglais, PDO::PARAM_STR);            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATETABLE . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+    
+    
     public function updatesitewebApplication(Sitewebapplication $sitewebapplication, $refsiteweb) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
