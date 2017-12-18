@@ -105,6 +105,15 @@
     border: none;
     border-bottom: 1px solid #00AEA6;
 }
-.documents,  .signout.messages{
+
+
+.messages{
+    font-size: 1.1em;font-weight: normal !important;
+}
+
+.signout{
+    font-size: 1.1em;
+}
+.documents{
     font-size: 1.1em;
 }
