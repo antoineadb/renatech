@@ -439,6 +439,7 @@ RewriteRule   param/([a-z]+)/([a-z]+)                                           
 RewriteRule   param/([a-z]+)/([0-9]+)                                               param.php?lang=$1&update=$2 [L]
 RewriteRule   param/([a-z]+)                                                        param.php?lang=$1   [L]
 #PROJETS SANS DEVELOPPMENT
+RewriteRule  noDevProject/([a-z]+)/([0-9]+)                                         projetSansDev.php?lang=$1&date=$2 [L]
 RewriteRule  noDevProject/([a-z]+)                                                  projetSansDev.php?lang=$1 [L]
 RewriteRule  view_trash_project/([a-z]+)                                            viewTrashProjet.php?lang=$1 [L]
 RewriteRule  empty_trash/([a-z]+)                                                   modifBase/videcorbeille.php?lang=$1 [L]

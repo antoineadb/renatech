@@ -16,19 +16,47 @@ include 'html/header.html';
 
 $arraycentrale= $manager->getList2("SELECT ce.libellecentrale,co.idstatutprojet_statutprojet,co.idcentrale_centrale FROM loginpassword l,concerne co,centrale ce,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale AND u.idcentrale_centrale = co.idcentrale_centrale and l.pseudo =? ", $_SESSION['pseudo']);
+if(isset($_GET['date']) && $_GET['date'] !=1){
+    $dateChx = (int) $_GET['date'];
+    $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
+                    FROM projet p
+                    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
+                    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
+                    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
+                    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
+                    WHERE co.idcentrale_centrale =? 
+                    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
+                    AND p.idprojet not in (select idprojet from rapport)
+                    AND EXTRACT(YEAR from dateprojet)=? ",    
+                    array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE, $dateChx));
+}elseif(isset($_GET['date']) && $_GET['date'] ==1){
+$arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
+                    FROM projet p
+                    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
+                    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
+                    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
+                    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
+                    WHERE co.idcentrale_centrale =? 
+                    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
+                    AND p.idprojet not in (select idprojet from rapport)                    ",    
+                    array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE));
+}else{
+    $dateChx = (int) $_GET['date'];
+    $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
+                    FROM projet p
+                    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
+                    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
+                    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
+                    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
+                    WHERE co.idcentrale_centrale =? 
+                    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
+                    AND p.idprojet not in (select idprojet from rapport)
+                    AND EXTRACT(YEAR from dateprojet)=? ",   
+                    array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE,date('Y'))); 
+}
 
-$arrayprojetnodev = $manager->getListbyArray("SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,"
-        . "concerne co WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet "
-        . "and co.idcentrale_centrale =? AND trashed =FALSE and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport) "
-        . "union "
-        . "SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co "
-        . "WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =? "
-        . "AND trashed =FALSE and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport) "
-        . "union "
-        . "SELECT p.idautrethematique_autrethematique,p.idprojet,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co "
-        . "WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =? "
-        . "AND trashed =FALSE and co.idstatutprojet_statutprojet =? AND p.idprojet not in (select idprojet from rapport) order by libellethematiqueen asc",
-        array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,$arraycentrale[0]['idcentrale_centrale'],FINI,$arraycentrale[0]['idcentrale_centrale'],CLOTURE)); 
+
+
 
 $fprow = fopen('tmp/projetNoDev.json', 'w');
 $projetnodev = "";
@@ -95,22 +123,51 @@ chmod('tmp/projetNoDev.json', 0777);
     </div>
     <form data-dojo-type="dijit/form/Form" name="exportProjetnoDEV" style="font-size:1.0em;" id="exportProjetnoDEV" method="post" action="<?php echo '/'.REPERTOIRE ?>/controler/controleTypeFile.php?lang=<?php echo $lang; ?>"  >        
     <fieldset id="projetNoDev" style="">
-        <legend style="color: #5D8BA2;"><b><?php echo TXT_PROJETSANSDEV; ?></b></legend>
-        <table>
-                <tr>                   
-                    <td>
-                        
-                        <select  id="anneerapport" data-dojo-type="dijit/form/FilteringSelect"  data-dojo-props="name: 'annee',value: '',required:false,placeHolder: '<?php echo TXT_SELECTYEAR; ?>'" 
-                                 style="width: 220px; margin-left: 35px; font-size: 1.0em;margin-top: 10px;margin-right: 25px" >
-                                     <?php
-                                     $row = $manager->getList("select distinct  EXTRACT(YEAR from datecreation) as anneeCreation  from rapport where EXTRACT(YEAR from datecreation)>2012 ORDER BY anneeCreation desc");
-                                     echo '<option value=1>' . TXT_TOUS . '</option>';
-                                     for ($i = 0; $i < count($row); $i++) {
-                                         echo '<option value="' . $row[$i]['anneecreation'] . '">' . $row[$i]['anneecreation'] . '</option>';
-                                     }
-                                     ?>
-                        </select>         
-                    </td>                    
+        <legend style="color: #5D8BA2;"><b>
+            <?php 
+            echo TXT_PROJETSANSDEV.' ';
+            if(isset($_GET['date']) && $_GET['date'] !=1){
+                echo 'Année  '.$_GET['date'];            
+            }else{
+                 echo 'Toutes les années ';
+            }
+               
+            ?></b>
+            <a class="infoBulle" href="#">
+                <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEAUTRESPROJETS');?></span>
+            </a>
+        </legend>
+        <table>           
+            <tr>                   
+                <td>                        
+                    <select  id="anneerapport" data-dojo-type="dijit/form/FilteringSelect"  
+                             onChange="window.location.replace('<?php echo '/' . REPERTOIRE . '/noDevProject/'.$lang.'/';?>'+this.value+'')"
+                             style="width: 220px; margin-left: 35px; font-size: 1.0em;margin-top: 10px;margin-right: 25px" >
+                                 <?php
+                                    if(!isset($_GET['date'])){
+                                        $row = $manager->getList2("select distinct  EXTRACT(YEAR from datecreation) as anneeCreation  from rapport where EXTRACT(YEAR from datecreation)>2012 "
+                                                . "AND EXTRACT(YEAR from datecreation) !=? ORDER BY anneeCreation desc",date('Y'));
+                                        echo '<option value="' . date('Y') . '" selected="selected">' . date('Y') . '</option>';
+
+                                    }else{
+                                        $row = $manager->getList("select distinct  EXTRACT(YEAR from datecreation) as anneeCreation  from rapport where EXTRACT(YEAR from datecreation)>2012 "
+                                                . " ORDER BY anneeCreation desc");
+                                    }
+                                    for ($i = 0; $i < count($row); $i++) {
+                                        if(isset($_GET['date'])){
+                                            if($_GET['date']==$row[$i]['anneecreation']){
+                                               echo '<option value="' . $row[$i]['anneecreation'] . '" selected="selected">' . $row[$i]['anneecreation'] . '</option>';
+                                            }else{
+                                                echo '<option value="' . $row[$i]['anneecreation'] . '" >' . $row[$i]['anneecreation'] . '</option>';
+                                            }
+                                        }else{
+                                            echo '<option value="' . $row[$i]['anneecreation'] . '" >' . $row[$i]['anneecreation'] . '</option>';
+                                        }
+                                    }
+                                 ?>
+                    </select>         
+                </td>                    
                     <td valign="middle" style="width: 150px; margin-left: 15px; height: 24px; font-size: 1.0em;padding-top: 20px;;padding-top: 1px">
                         <input type="radio" data-dojo-type="dijit/form/RadioButton" name="typefile" id="radioOne" checked  value="word" > <img src='<?php echo '/' . REPERTOIRE ?>/styles/img/word.png' width="25" height="25"  />
                         <input type="radio" data-dojo-type="dijit/form/RadioButton" name="typefile" id="radioTwo" value="excel" style="margin-left: 15px;"/> <img src='<?php echo '/' . REPERTOIRE ?>/styles/img/excel.png'  width="25" height="25"  />

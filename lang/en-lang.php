@@ -693,7 +693,7 @@ define("TXT_UTILISATEURINDUSTRIEL","Industrial user");
 define("TXT_VALIDER","validate");
 define("TXT_VERIFIER","Check");
 define("TXT_VERROUIDENTIFIEE","locks identified");
-define("TXT_VERSION","Renatech form,  Release 5.98 november 27, 2017");
+define("TXT_VERSION","Renatech form,  Release 5.99 December 18, 2017");
 define("TXT_VILLE","Town");
 define("TXT_VOSINFO","Your Informations");
 define("TXT_VOSPSEUDOS","Your logins");

@@ -280,13 +280,14 @@ ob_start();
                             <?php echo '<br />'.$description.'<br>'; ?>
                          </td>
                      </tr><tr><td></td></tr>
-                     
+                    
+                     <?php if ($scentraleProximite){?>
                      <tr><td><strong><?php echo TXT_CENTRALEPART.': ';?></strong><?php echo '<br />'; ?></td></tr>
                      <tr><td><?php  if(!empty($centraleSpecifique)){echo $centraleSpecifique;}?></td></tr>
                      <tr><td><strong><?php  echo TXT_DESCRIPTCENTRALEROXIMITE; ?></strong><?php echo '<br />'.$descriptionCentraleProximite; ?></td></tr>
                      <tr><td><strong><?php  echo TXT_CENTRALESPECIFIQUES; ?></strong></td></tr>
                      <tr><td><?php  if(!empty($centraleInternationnal)){echo $centraleInternationnal;}?> </td></tr>                     
-                     
+                     <?php } ?>
                       <?php if(!empty($attachement)){?>
                     <tr><td><strong><?php echo  TXT_PIECEJOINTE .': ';?></strong><?php echo $attachement; ?></td></tr><tr><td></td></tr>
                     <?php }  ?>

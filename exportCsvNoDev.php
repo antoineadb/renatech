@@ -29,12 +29,12 @@ if (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] != 1) {
     $stringSQL = " and EXTRACT(YEAR from datedebutprojet)=? ";
 }
 
-/*
+
 if (isset($_GET['annee']) && !empty($_GET['annee'])) {
     $annee = $_GET['annee'];
 } else {
     $annee = date('Y');
-}*/
+}
 //------------------------------------------------------------------------
 //-----RECUPERATION DU LIBELLE DE LA CENTRALE DU RESPONSABLE CENTRALE-----
 //------------------------------------------------------------------------
@@ -46,40 +46,36 @@ $data .= "\n";
 //SUPPRESSION DE LA TABLE TEMPORAIRE SI ELLE EXISTE
 $manager->exeRequete("drop table if exists tmpNoDev;");
 //CREATION DE LA TABLE TEMPORAIRE
-$manager->getRequete("CREATE TABLE tmpNoDev AS (
-    SELECT p.idprojet,p.idautrethematique_autrethematique,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-    WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =?
-    and co.idstatutprojet_statutprojet =? " . $stringSQL . " AND p.idprojet not in (select idprojet from rapport)
-    union
-    SELECT p.idprojet,p.idautrethematique_autrethematique,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-    WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =?
-    and co.idstatutprojet_statutprojet =? " . $stringSQL . " AND p.idprojet not in (select idprojet from rapport)
-    union
-    SELECT p.idprojet,p.idautrethematique_autrethematique,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-    WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =?
-    and co.idstatutprojet_statutprojet =? " . $stringSQL . " AND p.idprojet not in (select idprojet from rapport)
-    order by libellethematiqueen asc 
-)", $param);
+$dateChx = (int) $_GET['annee'];
+    $arrayNoDev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
+    FROM projet p
+    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
+    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
+    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
+    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
+    WHERE co.idcentrale_centrale =? 
+    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
+    AND p.idprojet not in (select idprojet from rapport)
+    AND EXTRACT(YEAR from dateprojet)=? ",    
+array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE, $dateChx));
 
-$arraNoDev = $manager->getList("select * from tmpNoDev");
-
-$nbarrayprojet = count($arraNoDev);
+$nbarrayprojet = count($arrayNoDev);
 $ressources = "";
 if ($nbarrayprojet != 0) {
     for ($i = 0; $i < $nbarrayprojet; $i++) {
-        $arrayRessources = $manager->getList2("SELECT  libelleressourceen FROM ressource,ressourceprojet WHERE idressource = idressource_ressource and idprojet_projet =?", $arraNoDev[$i]['idprojet']);
+        $arrayRessources = $manager->getList2("SELECT  libelleressourceen FROM ressource,ressourceprojet WHERE idressource = idressource_ressource and idprojet_projet =?", $arrayNoDev[$i]['idprojet']);
         for ($j = 0; $j < count($arrayRessources); $j++) {
             $ressources.=$arrayRessources[$j]['libelleressourceen'] . ' / ';
         }
         $ressources = substr($ressources, 0, -2);
         //Entity
         $arrayEntity = $manager->getList2("SELECT codeunite,libelleautrecodeunite FROM utilisateur,centrale,autrecodeunite WHERE idcentrale_centrale = idcentrale AND idautrecodeunite = idautrecodeunite_autrecodeunite "
-                . "and idutilisateur=?", $arraNoDev[$i]['idutilisateur']);
+                . "and idutilisateur=?", $arrayNoDev[$i]['idutilisateur']);
 
-        if ($arraNoDev[$i]['libellethematiqueen'] != 'Others') {
-            $thematic = $arraNoDev[$i]['libellethematiqueen'];
+        if ($arrayNoDev[$i]['libellethematiqueen'] != 'Others') {
+            $thematic = $arrayNoDev[$i]['libellethematiqueen'];
         } else {
-            $thematic = $manager->getSingle2("select libelleautrethematique from autrethematique where idautrethematique=?", $arraNoDev[$i]['idautrethematique_autrethematique']);
+            $thematic = $manager->getSingle2("select libelleautrethematique from autrethematique where idautrethematique=?", $arrayNoDev[$i]['idautrethematique_autrethematique']);
         }
         if (isset($arrayEntity[0]['libelleautrecodeunite']) && $arrayEntity[0]['libelleautrecodeunite'] != 'n/a') {
             $libelleEntity = ' / ' . $arrayEntity[0]['libelleautrecodeunite'];
@@ -89,13 +85,13 @@ if ($nbarrayprojet != 0) {
             $libelleEntity = ' / ' . "No entity";
         }
         $originalDate = date('d-m-Y');
-          $ville =$manager->getSingle2("SELECT ville FROM creer,utilisateur WHERE  idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $arraNoDev[$i]['idprojet']);
+          $ville =$manager->getSingle2("SELECT ville FROM creer,utilisateur WHERE  idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $arrayNoDev[$i]['idprojet']);
 
-        $projetLeader = removeDoubleQuote(stripslashes(trim($arraNoDev[$i]['nom']))) . ' - ' . removeDoubleQuote(stripslashes(trim($arraNoDev[$i]['prenom']))) . ' - ' . removeDoubleQuote(stripslashes(trim($libelleEntity))) .
+        $projetLeader = removeDoubleQuote(stripslashes(trim($arrayNoDev[$i]['nom']))) . ' - ' . removeDoubleQuote(stripslashes(trim($arrayNoDev[$i]['prenom']))) . ' - ' . removeDoubleQuote(stripslashes(trim($libelleEntity))) .
             ' / ' . $ville;
         
         $data .= "" .
-                removeDoubleQuote(stripslashes(utf8_decode(trim($arraNoDev[$i]['titre'])))) . ";" .
+                removeDoubleQuote(stripslashes(utf8_decode(trim($arrayNoDev[$i]['titre'])))) . ";" .
                 $libellecentrale . ";" .
                 removeDoubleQuote(stripslashes(utf8_decode(trim($projetLeader)))) . ";" .
                 $ressources . ";" .
