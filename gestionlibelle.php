@@ -48,11 +48,9 @@ if (isset($_GET['msgupdatesiteweb'])) {
     
     <?php include 'html/entete.html';?>
        <div style="margin-top: 70px;">           
-           <?php if(internetExplorer()=='false'){
-            $cache->inc(ROOT.'/outils/bandeaucentrale.php'); //RECUPERATION DU BANDEAU DEFILANT DANS LE CACHE CACHE
-        }else{
+           <?php 
             include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
-        } ?>    
+        ?>    
     </div>
     <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:50px;width: 1050px;font-size: 1.2em;" doLayout="false">
         <?php if ($ongletsite === true) { ?>

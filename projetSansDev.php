@@ -16,7 +16,7 @@ include 'html/header.html';
 
 $arraycentrale= $manager->getList2("SELECT ce.libellecentrale,co.idstatutprojet_statutprojet,co.idcentrale_centrale FROM loginpassword l,concerne co,centrale ce,utilisateur u
 WHERE l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale AND u.idcentrale_centrale = co.idcentrale_centrale and l.pseudo =? ", $_SESSION['pseudo']);
-if(isset($_GET['date']) && $_GET['date'] !=1){
+if(isset($_GET['date']) && $_GET['date'] !=-1){
     $dateChx = (int) $_GET['date'];
     $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
                     FROM projet p
@@ -29,19 +29,7 @@ if(isset($_GET['date']) && $_GET['date'] !=1){
                     AND p.idprojet not in (select idprojet from rapport)
                     AND EXTRACT(YEAR from dateprojet)=? ",    
                     array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE, $dateChx));
-}elseif(isset($_GET['date']) && $_GET['date'] ==1){
-$arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                    FROM projet p
-                    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                    WHERE co.idcentrale_centrale =? 
-                    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
-                    AND p.idprojet not in (select idprojet from rapport)                    ",    
-                    array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE));
-}else{
-    $dateChx = (int) $_GET['date'];
+}else{    
     $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
                     FROM projet p
                     LEFT JOIN thematique on idthematique = p.idthematique_thematique 
@@ -50,9 +38,8 @@ $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautret
                     LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
                     WHERE co.idcentrale_centrale =? 
                     AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
-                    AND p.idprojet not in (select idprojet from rapport)
-                    AND EXTRACT(YEAR from dateprojet)=? ",   
-                    array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE,date('Y'))); 
+                    AND p.idprojet not in (select idprojet from rapport)",   
+                    array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE)); 
 }
 
 
@@ -121,7 +108,8 @@ chmod('tmp/projetNoDev.json', 0777);
     <div style="margin-top: 70px;">
         <?php include_once 'outils/bandeaucentrale.php'; ?>
     </div>
-    <form data-dojo-type="dijit/form/Form" name="exportProjetnoDEV" style="font-size:1.0em;" id="exportProjetnoDEV" method="post" action="<?php echo '/'.REPERTOIRE ?>/controler/controleTypeFile.php?lang=<?php echo $lang; ?>"  >        
+    <form data-dojo-type="dijit/form/Form" name="exportProjetnoDEV" style="font-size:1.0em;" id="exportProjetnoDEV" method="post" 
+          action="<?php echo '/'.REPERTOIRE ?>/controler/controleTypeFile.php?lang=<?php echo $lang; ?>" >
     <fieldset id="projetNoDev" style="">
         <legend style="color: #5D8BA2;"><b>
             <?php 
@@ -138,22 +126,15 @@ chmod('tmp/projetNoDev.json', 0777);
                 <span style="text-align: left;padding:10px;width: 310px;border-radius:5px" ><?php echo affiche('TXT_AIDEAUTRESPROJETS');?></span>
             </a>
         </legend>
+    <input type="hidden" name='year' value='<?php if(isset($_GET['date'])){echo $_GET['date'];} ?>' name='year'>
         <table>           
             <tr>                   
                 <td>                        
                     <select  id="anneerapport" data-dojo-type="dijit/form/FilteringSelect"  
-                             onChange="window.location.replace('<?php echo '/' . REPERTOIRE . '/noDevProject/'.$lang.'/';?>'+this.value+'')"
+                             onChange="window.location.replace('<?php echo '/' . REPERTOIRE . '/noDevProject/'.$lang.'/';?>'+this.value+'');document.getElementById('year').value=this.value"
                              style="width: 220px; margin-left: 35px; font-size: 1.0em;margin-top: 10px;margin-right: 25px" >
                                  <?php
-                                    if(!isset($_GET['date'])){
-                                        $row = $manager->getList2("select distinct  EXTRACT(YEAR from datecreation) as anneeCreation  from rapport where EXTRACT(YEAR from datecreation)>2012 "
-                                                . "AND EXTRACT(YEAR from datecreation) !=? ORDER BY anneeCreation desc",date('Y'));
-                                        echo '<option value="' . date('Y') . '" selected="selected">' . date('Y') . '</option>';
-
-                                    }else{
-                                        $row = $manager->getList("select distinct  EXTRACT(YEAR from datecreation) as anneeCreation  from rapport where EXTRACT(YEAR from datecreation)>2012 "
-                                                . " ORDER BY anneeCreation desc");
-                                    }
+                                    $row = $manager->getList("select distinct  EXTRACT(YEAR from datecreation) as anneeCreation  from rapport where EXTRACT(YEAR from datecreation)>2012  ORDER BY anneeCreation desc");
                                     for ($i = 0; $i < count($row); $i++) {
                                         if(isset($_GET['date'])){
                                             if($_GET['date']==$row[$i]['anneecreation']){
@@ -163,8 +144,10 @@ chmod('tmp/projetNoDev.json', 0777);
                                             }
                                         }else{
                                             echo '<option value="' . $row[$i]['anneecreation'] . '" >' . $row[$i]['anneecreation'] . '</option>';
+                                            //
                                         }
                                     }
+                                    echo '<option value="-1" selected="selected">'.TXT_TOUS. '</option>';
                                  ?>
                     </select>         
                 </td>                    
@@ -248,6 +231,10 @@ dojo.ready(function(){
        dojo.byId("gridDiv").appendChild(grid.domNode);
     grid.startup();
     });
+    
+    
+    
+    
     </script>   
     </form>
 <?php include 'html/footer.html'; ?>

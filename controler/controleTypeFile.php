@@ -1,11 +1,11 @@
 <?php
 include_once '../outils/constantes.php';
-if(isset($_POST['annee'])&&!empty($_POST['annee'])){
-    $annee = $_POST['annee'];
+
+if(isset($_POST['year'])&&!empty($_POST['year'])){
+    $annee = $_POST['year'];
 }else{
-    $annee = date('Y');
+    $annee = -1;
 }
-       
 if(isset($_POST['typefile'])&& $_POST['typefile']=='excel'){
     header('Location: /' . REPERTOIRE . '/exportCsvNoDev.php?lang=' . $lang.'&annee='.$annee);
 }elseif(isset($_POST['typefile'])&&$_POST['typefile']=='word'){

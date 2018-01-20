@@ -21,57 +21,49 @@ include '../class/email.php';
 $dateMoins3mois = date('Y-m-d', strtotime('-3 month'));
 
 $sqlInterne ="
-    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,u.idutilisateur,p.dateenvoiemail
-    FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
-    WHERE u.idcentrale_centrale IS NOT NULL 
-    AND porteurprojet =TRUE 
-    AND  cr.idprojet_projet = p.idprojet 
-    AND cr.idprojet_projet = p.idprojet 
-    AND cr.idutilisateur_utilisateur = u.idutilisateur 
-    AND co.idcentrale_centrale = ce.idcentrale 
-    AND co.idprojet_projet = p.idprojet  
-    AND  t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword 
-    AND s.idstatutprojet = co.idstatutprojet_statutprojet 
-    AND ce.idcentrale = ?
-    AND s.idstatutprojet=?
-    AND p.datemaj <?
-    AND trashed =FALSE
-    AND p.devtechnologique=TRUE";
+    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, 
+    u.idutilisateur,p.dateenvoiemail , p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE u.idcentrale_centrale IS NOT NULL 
+    AND porteurprojet =TRUE AND cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale 
+    AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? 
+    AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne is null AND trashed =FALSE AND p.devtechnologique=TRUE
+    UNION
+    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail ,
+    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
+    WHERE  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale 
+    AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? 
+    AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne ='I' AND trashed =FALSE AND p.devtechnologique=TRUE";
 
 $sqlExterne ="
-    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,u.idutilisateur,p.dateenvoiemail 
-    FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
-    WHERE (u.idcentrale_centrale IS NULL  OR  p.porteurprojet =FALSE)
-    AND  cr.idprojet_projet = p.idprojet 
-    AND cr.idprojet_projet = p.idprojet 
-    AND cr.idutilisateur_utilisateur = u.idutilisateur 
-    AND co.idcentrale_centrale = ce.idcentrale 
-    AND co.idprojet_projet = p.idprojet  
-    AND t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword 
-    AND s.idstatutprojet = co.idstatutprojet_statutprojet 
-    AND ce.idcentrale = ?   
-    AND s.idstatutprojet=? 
-    AND p.datemaj <? 
-    AND trashed =FALSE 
-    AND p.devtechnologique=TRUE";
+   SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail , 
+    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE (u.idcentrale_centrale IS NULL OR p.porteurprojet =FALSE)  
+    AND cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet 
+    AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) 
+    AND p.datemaj <? AND p.interneexterne is null AND trashed =FALSE AND p.devtechnologique=TRUE
+    UNION
+    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail , 
+    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet 
+    AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet 
+    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne ='E'
+    AND trashed =FALSE AND p.devtechnologique=TRUE";
 
 $sqlExterneInterne  ="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,
     u.idutilisateur,p.dateenvoiemail   FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
     WHERE cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet 
     AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet  AND  t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ?   AND s.idstatutprojet=? AND p.datemaj <? AND trashed =FALSE AND p.devtechnologique=TRUE";
+    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ?   AND (s.idstatutprojet=? OR s.idstatutprojet=?)  AND p.datemaj <? AND trashed =FALSE AND p.devtechnologique=TRUE";
 
 if (isset($_POST['interneExterne']) && $_POST['interneExterne'] == 1) {
     $sql =$sqlInterne;
+    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois,IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
 } elseif (isset($_POST['interneExterne']) && $_POST['interneExterne'] == 2) {
     $sql =$sqlExterne;
+    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois,IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
 }else{    
     $sql =$sqlExterneInterne;
+    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
 }
 
-$projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION, $dateMoins3mois));//echo '<pre>';print_r($projetARelancer);die;
+
 $nbprojetARelancer = count($projetARelancer);
 // -----------------------------------------------------------------------------------
 //  RECUPERATION DU FICHIER JSON DE DE LA LISTE DES PROJETS EN COURS DE REALISATION
@@ -128,31 +120,12 @@ chmod("../tmp/projetarelancer.json", 0777);
         $emailATraiter = file_get_contents("../tmp/projetarelancer.json");
         $emailAEnvoyer = json_decode($emailATraiter, true);
     }
-/*// -----------------------------------------------------------------------------------
-//                                  CREATION D'UN TABLEAU D'ECART DES 2 TABLEAUX
-// -----------------------------------------------------------------------------------    
-    $emailAEnvoyer = arrayDiff2dim($arrayValeurASupprimer, $parsed_json);echo '<pre>';print_r($emailAEnvoyer);die;*/
-
-
-// -----------------------------------------------------------------------------------
-//                                             PREPARATION DE L'ENVOI DE L'EMAIL
-// -----------------------------------------------------------------------------------
-    /*$body = htmlentities(affiche('TXT_RELANCE1'), ENT_QUOTES, 'UTF-8') . "<br><br>" .
-            htmlentities(removeDoubleQuote(affiche('TXT_RELANCE2'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
-            htmlentities(removeDoubleQuote(affiche('TXT_RELANCE3'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
-            htmlentities(removeDoubleQuote(affiche('TXT_RELANCE4'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
-            htmlentities(removeDoubleQuote(affiche('TXT_RELANCE5'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
-            htmlentities(removeDoubleQuote(affiche('TXT_RELANCE6'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
-            htmlentities(removeDoubleQuote(affiche('TXT_RELANCE7'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
-            htmlentities(removeDoubleQuote(affiche('TXT_RELANCE8'), ENT_QUOTES, 'UTF-8')) . "<br><br>" .
-            htmlentities(removeDoubleQuote(affiche('TXT_RELANCE9'), ENT_QUOTES, 'UTF-8')) . "<br><br>";
-    */
     $bodyCorps = $manager->getList2("SELECT  libellefrancais,libelleanglais FROM libelleapplication WHERE reflibelle=?","TXT_RELANCEEMAIL_".IDCENTRALEUSER); 
     if($bodyCorps==null){
         $bodyCorps = $manager->getList2("SELECT libellefrancais,libelleanglais FROM libelleapplication WHERE reflibelle=?","TXT_RELANCEEMAIL"); 
     }
     if($lang=='fr'){
-        $body= $bodyCorps[0]['libellefrancais'];
+        $body= utf8_decode($bodyCorps[0]['libellefrancais']);
     }else{
         $body= $bodyCorps[0]['libelleanglais'];
     }
@@ -172,7 +145,7 @@ chmod("../tmp/projetarelancer.json", 0777);
                 $sujet = utf8_decode(TXT_NUMPROJET . ' ' . $emailAEnvoyer['items'][$i]['numero']); //on définis l'email
                 $envoiEmailUtilisateur = new ProjetDateEnvoiEmail(date("Y-m-d H:i:s"), $emailAEnvoyer['items'][$i]['idprojet']);
                 $manager->updateDateenvoiemail($envoiEmailUtilisateur, $emailAEnvoyer['items'][$i]['idprojet']); //on met à jour le champs date envoi de l'email de la table projet                
-                sendEmail($body, $sujet, $emailAEnvoyer[$i]['mail']);//on envoi l'email
+                sendEmail($body, $sujet, $emailAEnvoyer['items'][$i]['mail']);//on envoi l'email
             }
         }
 

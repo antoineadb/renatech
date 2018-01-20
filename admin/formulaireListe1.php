@@ -9,7 +9,7 @@
         exit();
         }
     </script>
-    <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<!--------------------------------------------------------------------------------------------------------------------------------------------------------------------
     PAYS
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------      -->
     <fieldset id="identpays" style="border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px">
@@ -47,7 +47,6 @@
                                  }
                                  ?>
                     </select>
-
                 </th>
                 <th>
                     <input id="modifpays" type="text" name="modifpays" class="long" data-dojo-type="dijit/form/ValidationTextBox"   placeholder="<?php echo TXT_PAYS; ?>" style="height:20px;margin-left:20px; width: 360px;vertical-align:middle;"
@@ -56,7 +55,7 @@
                                echo removeDoubleQuote($manager->getSingle2("select nompays from pays where idpays=?", $_GET['idpays']));
                            }
                            ?>"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -70,9 +69,7 @@
                                 }
                                 ?>
                     </select>
-
                 </th>
-
                 <th>
                     <input id="modifpaysen" type="text" name="modifpaysen" class="long" data-dojo-type="dijit/form/ValidationTextBox"   placeholder="<?php echo TXT_PAYSEN; ?>"
                            style="height:20px;margin-left:20px; width: 360px;vertical-align:middle;"
@@ -80,9 +77,8 @@
                            if (isset($_GET['idpays'])) {
                                echo $manager->getSingle2("select nompaysen from pays where idpays=?", $_GET['idpays']);
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
-
             </tr>
             <tr>
                 <th>
@@ -145,7 +141,6 @@
                                  }
                                  ?>
                     </select>
-
                 </th>
                 <th>
                     <input id="modifsecteuractivite" type="text" name="modifsecteuractivite" class="long" data-dojo-type="dijit/form/ValidationTextBox"   placeholder="<?php echo TXT_SECTEURACTIVITE; ?>"
@@ -154,7 +149,7 @@
                                echo removeDoubleQuote($manager->getSingle2("select libellesecteuractivite from secteuractivite where idsecteuractivite=?", $_GET['idsecteuractivite']));
                            }
                            ?>"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -166,11 +161,8 @@
                                echo $manager->getSingle2("select libellesecteuractiviteen from secteuractivite where idsecteuractivite=?", $_GET['idsecteuractivite']);
                            }
                            ?>"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
-
+                           data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </td>
-
-
             </tr>
             <tr>
                 <th>
@@ -197,7 +189,6 @@
     <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------
     TYPE ENTREPRISE
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------      -->
-
     <fieldset id="identte" style="border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px">
         <legend><?php echo TXT_TYPEENTREPRISE; ?></legend>
         <table>
@@ -242,7 +233,7 @@
                            if (isset($_GET['idtypeentreprise'])) {
                                echo removeDoubleQuote($manager->getSingle2("select libelletypeentreprise from typeentreprise where idtypeentreprise=?", $_GET['idtypeentreprise']));
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -253,7 +244,7 @@
                            if (isset($_GET['idtypeentreprise'])) {
                                echo $manager->getSingle2("select libelletypeentrepriseen from typeentreprise where idtypeentreprise=?", $_GET['idtypeentreprise']);
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -326,7 +317,7 @@
                            if (isset($_GET['iddiscipline'])) {
                                echo removeDoubleQuote($manager->getSingle2("select libellediscipline from disciplinescientifique where iddiscipline=?", $_GET['iddiscipline']));
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -337,7 +328,7 @@
                            if (isset($_GET['iddiscipline'])) {
                                echo $manager->getSingle2("select libelledisciplineen from disciplinescientifique where iddiscipline=?", $_GET['iddiscipline']);
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -410,7 +401,7 @@
                                echo removeDoubleQuote($manager->getSingle2("select libelleemployeur from nomemployeur where idemployeur=?", $_GET['idemployeur']));
                            }
                            ?>"
-                           data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -422,7 +413,7 @@
                            if (isset($_GET['idemployeur'])) {
                                echo $manager->getSingle2("select libelleemployeuren from nomemployeur where idemployeur=?", $_GET['idemployeur']);
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
                 </td>
             </tr>
@@ -495,7 +486,7 @@
                            if (isset($_GET['idtutelle'])) {
                                echo removeDoubleQuote($manager->getSingle2("select libelletutelle from tutelle where idtutelle=?", $_GET['idtutelle']));
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -506,7 +497,7 @@
                            if (isset($_GET['idtutelle'])) {
                                echo $manager->getSingle2("select libelletutelleen from tutelle where idtutelle=?", $_GET['idtutelle']);
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -578,7 +569,7 @@
                            if (isset($_GET['idtypeprojet'])) {
                                echo removeDoubleQuote($manager->getSingle2("select libelletype from typeprojet where idtypeprojet=?", $_GET['idtypeprojet']));
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -589,7 +580,7 @@
                            if (isset($_GET['idtypeprojet'])) {
                                echo $manager->getSingle2("select libelletypeen from typeprojet where idtypeprojet=?", $_GET['idtypeprojet']);
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -661,7 +652,7 @@
                            if (isset($_GET['idtypeformation'])) {
                                echo removeDoubleQuote($manager->getSingle2("select libelletypeformation from typeformation where idtypeformation=?", $_GET['idtypeformation']));
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -672,7 +663,7 @@
                            if (isset($_GET['idtypeformation'])) {
                                echo $manager->getSingle2("select libelletypeformationen from typeformation where idtypeformation=?", $_GET['idtypeformation']);
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -744,7 +735,7 @@
                            if (isset($_GET['idthematique'])) {
                                echo removeDoubleQuote($manager->getSingle2("select libellethematique from thematique where idthematique=?", $_GET['idthematique']));
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>
@@ -756,7 +747,7 @@
                            if (isset($_GET['idthematique'])) {
                                echo $manager->getSingle2("select libellethematiqueen from thematique where idthematique=?", $_GET['idthematique']);
                            }
-                           ?>" data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð/\'();_ ,.-]+'" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
+                           ?>" data-dojo-props="<?php echo REGEX_TYPESTRING;?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING; ?>" >
                 </th>
             </tr>
             <tr>

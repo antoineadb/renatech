@@ -83,8 +83,9 @@ if(isset($_GET['msgupdatesiteweb'])){?>
                 ?>
                 <input name='fileCentrale' type='file' id='fileCentrale'   size='20' style="display: none "  onchange="dijit.byId('<?php echo $fileName; ?>').set('value', document.getElementById('fileCentrale').files[0].name);">
             </td>
+            
             <td>
-                <button type="button" data-dojo-type="dijit/form/Button" style="margin-left:20px;margin-top: 30px;margin-right: 25px"  data-dojo-props="onClick:function(){document.getElementById('fileCentrale').click();}">
+                <button type="button" data-dojo-type="dijit/form/Button" style="margin-left:150px;margin-top: 30px;"  data-dojo-props="onClick:function(){document.getElementById('fileCentrale').click();}">
                     <?php echo TXT_PARCOURIR; ?></button>
             </td>
             <td>

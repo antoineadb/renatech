@@ -9,47 +9,35 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 $filename = './templateprojetNodev.html';
 $filename2 = './templateTitre.html';
 $arraycentrale = $manager->getList2("SELECT libellecentrale,idcentrale FROM centrale,loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword AND  idcentrale_centrale = idcentrale AND pseudo=?", $_SESSION['pseudo']);
-if (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] != 1) {
+if (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] != -1) {
     $annee = $_GET['annee'];
     $param = array($arraycentrale[0]['idcentrale'], ENCOURSREALISATION, $annee, $arraycentrale[0]['idcentrale'], FINI, $annee, $arraycentrale[0]['idcentrale'], CLOTURE, $annee);
     $stringSQL = " and EXTRACT(YEAR from datedebutprojet)=? ";
-} elseif (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] == 1) {
+} elseif (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] == -1) {
     $annee = "ALL";
     $stringSQL = "";
     $param = array($arraycentrale[0]['idcentrale'], ENCOURSREALISATION, $arraycentrale[0]['idcentrale'], FINI, $arraycentrale[0]['idcentrale'], CLOTURE);
-} else {
-    $annee = date('Y');
-    $param = array($arraycentrale[0]['idcentrale'], ENCOURSREALISATION, $annee, $arraycentrale[0]['idcentrale'], FINI, $annee, $arraycentrale[0]['idcentrale'], CLOTURE, $annee);
-    $stringSQL = " and EXTRACT(YEAR from datedebutprojet)=? ";
+} else {die;
+     $annee = "ALL";
+    $stringSQL = "";
+    $param = array($arraycentrale[0]['idcentrale'], ENCOURSREALISATION, $arraycentrale[0]['idcentrale'], FINI, $arraycentrale[0]['idcentrale'], CLOTURE);
 }
+
 header("Content-Type:application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 header('Content-Disposition: attachment; filename=rapport_' . time() . '_' . $arraycentrale[0]['libellecentrale'] . '.doc');
 header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-$dateChx = (int) $_GET['annee'];
-    $arrayNoDev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-    FROM projet p
-    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-    WHERE co.idcentrale_centrale =? 
-    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
-    AND p.idprojet not in (select idprojet from rapport)
-    AND EXTRACT(YEAR from dateprojet)=? ",    
-array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE, $dateChx));
-/*
-$arrayNoDev = $manager->getListbyArray(" SELECT p.idprojet,p.idautrethematique_autrethematique,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-    WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =?
-    and co.idstatutprojet_statutprojet =? " . $stringSQL . " AND p.idprojet not in (select idprojet from rapport)
-    union
-    SELECT p.idprojet,p.idautrethematique_autrethematique,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-    WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =?
-    and co.idstatutprojet_statutprojet =? " . $stringSQL . " AND p.idprojet not in (select idprojet from rapport)
-    union
-    SELECT p.idprojet,p.idautrethematique_autrethematique,p.titre,t.libellethematiqueen,u.prenom,u.idutilisateur,u.nom,p.numero FROM projet p,thematique t,creer cr,utilisateur u,concerne co
-    WHERE t.idthematique = p.idthematique_thematique AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND  co.idprojet_projet = p.idprojet and co.idcentrale_centrale =?
-    and co.idstatutprojet_statutprojet =? " . $stringSQL . " AND p.idprojet not in (select idprojet from rapport)
-    order by libellethematiqueen asc ", $param);*/
+
+$sql="SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero   FROM projet p
+    LEFT JOIN thematique on idthematique = p.idthematique_thematique  LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet  LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
+    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet WHERE co.idcentrale_centrale =?  AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?)  AND p.idprojet not in (select idprojet from rapport)";
+if(isset($_GET['annee']) && ($_GET['annee'])!=-1){
+    $dateChx = (int) $_GET['annee'];
+    $arrayNoDev =$manager->getListbyArray($sql." AND EXTRACT(YEAR from dateprojet)=? ", array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE, $dateChx));
+}elseif(isset($_GET['annee']) && ($_GET['annee'])==-1){
+    $arrayNoDev =$manager->getListbyArray($sql, array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE));
+}else{
+    $arrayNoDev =$manager->getListbyArray($sql, array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE));
+}
 $nbarraynoDEV = count($arrayNoDev);
 if (!file_exists($filename2)) {
     echo "Undefined file";

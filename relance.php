@@ -18,37 +18,48 @@ if (isset($_SESSION['pseudo'])) {
 }
 include 'html/header.html';
 $dateMoins3mois = date('Y-m-d', strtotime('-3 month'));
-$sqlInterne ="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,
-    u.idutilisateur,p.dateenvoiemail   
-    FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
-    WHERE u.idcentrale_centrale IS NOT NULL AND porteurprojet =TRUE AND  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet 
-    AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet  AND  t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND trashed =FALSE AND p.devtechnologique=TRUE 
-    ";
+$sql="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,
+    u.idutilisateur,p.dateenvoiemail , p.interneexterne
+    FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l   ";
+$sql1="AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet  AND  t.idtypeprojet = p.idtypeprojet_typeprojet 
+    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <?
+    AND trashed =FALSE AND p.devtechnologique=TRUE ";
+$sqlExterneInterne = $sql. " WHERE cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet  ".$sql1;
 
-$sqlExterne ="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,
-    u.idutilisateur,p.dateenvoiemail   
-    FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
-    WHERE (u.idcentrale_centrale IS NULL  OR  p.porteurprojet =FALSE) AND  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet 
-    AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet  AND  t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ?   AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND trashed =FALSE AND p.devtechnologique=TRUE";
-
-$sqlExterneInterne  ="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,
-    u.idutilisateur,p.dateenvoiemail   
-    FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
-    WHERE cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet 
-    AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet  AND  t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND trashed =FALSE AND p.devtechnologique=TRUE 
-    ";
+$sqlInterne="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, 
+    u.idutilisateur,p.dateenvoiemail , p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE u.idcentrale_centrale IS NOT NULL 
+    AND porteurprojet =TRUE AND cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale 
+    AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? 
+    AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne is null AND trashed =FALSE AND p.devtechnologique=TRUE
+    UNION
+    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail ,
+    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
+    WHERE  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale 
+    AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? 
+    AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne ='I' AND trashed =FALSE AND p.devtechnologique=TRUE";
+$sqlExterne="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail , 
+    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE (u.idcentrale_centrale IS NULL OR p.porteurprojet =FALSE)  
+    AND cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet 
+    AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) 
+    AND p.datemaj <? AND p.interneexterne is null AND trashed =FALSE AND p.devtechnologique=TRUE
+    UNION
+    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail , 
+    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet 
+    AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet 
+    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne ='E'
+    AND trashed =FALSE AND p.devtechnologique=TRUE";
 
 if (isset($_GET['chx']) && $_GET['chx'] == 1) {
-    $sql =$sqlInterne;    
+    $sql =$sqlInterne;
+    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois,IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
 } elseif (isset($_GET['chx']) && $_GET['chx'] == 2) {
     $sql =$sqlExterne;
+    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois,IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
 }else{
     $sql =$sqlExterneInterne;
+    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
 }
-$projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
+
 $nbprojetARelancer = count($projetARelancer);
 $_SESSION['nbprojet'] = $nbprojetARelancer;
 $fpProjetEncoursRealisation = fopen('tmp/projetarelancer.json', 'w');
@@ -60,8 +71,7 @@ for ($i = 0; $i < $nbprojetARelancer; $i++) {
     } else {
         $datemaj = '';
     }
-
-    if ($projetARelancer[$i]['idperiodicite_periodicite'] == JOUR) {
+   if ($projetARelancer[$i]['idperiodicite_periodicite'] == JOUR) {
         $datedepart = strtotime($projetARelancer[$i]['datedebutprojet']);
         $duree = ($projetARelancer[$i]['dureeprojet']);
         $dateFin = date('Y-m-d', strtotime('+' . $duree . 'day', $datedepart));
@@ -102,7 +112,7 @@ chmod("tmp/projetarelancer.json", 0777);
     ?>
     <div style="padding-top: 75px;">
         <?php include'outils/bandeaucentrale.php'; ?>
-    </div>
+    </div>   
     <script src='<?php echo '/' . REPERTOIRE; ?>/js/jquery-1.8.0.min.js'></script>
     <form  method="post"  id="formRelance" name="formRelance" 
            action="<?php
@@ -112,6 +122,7 @@ chmod("tmp/projetarelancer.json", 0777);
             echo '/' . REPERTOIRE . '/modifBase/modifRelance.php';
         }
         ?>" >
+        <input type='submit' id='btnOui' style="display: none" />
         <div style="margin-top:50px;width:1050px" >            
             <fieldset id="ident">
                 <legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 322px;">
@@ -120,7 +131,7 @@ chmod("tmp/projetarelancer.json", 0777);
                     <img src="<?php echo '/' . REPERTOIRE; ?>/styles/img/infoStat.png" title="<?php echo TXT_AIDERELANCE; ?>"  >
                 </a>
                 <div>
-                    <div style="float: left"><a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/exportEncoursjson.php?lang=' . $lang ?>">&nbsp;
+                    <div style="float: left"><a class="infoBulle" href="<?php echo '/' . REPERTOIRE . '/exportEncoursjson.php?lang='.$lang;?> <?php if(isset($_GET['chx'])){echo "&chx=".$_GET['chx'];} ?>">&nbsp;
                             <img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/export.png' ><span style="width: 375px"><?php echo TXT_EXPORTPROJETCIDESSOUS; ?></span></a></div>
                 </div>
                 <div id='post'></div>
@@ -143,7 +154,26 @@ chmod("tmp/projetarelancer.json", 0777);
                             </option>
                         </select>
                     </div>
-                    <div style="float: right;margin-right: 20px"><input type="submit" value="Envoyer" label="<?php echo TXT_ENVOYERMAIL; ?>" id="EnvoyerEmail" name="Envoyer"  data-dojo-type="dijit/form/Button" style="width: 157px"/></div>
+                    <div style="float: right;margin-right: 20px"><input type="button" value="Envoyer" label="<?php echo TXT_ENVOYERMAIL; ?>" id="EnvoyerEmail" name="Envoyer"  
+                                                                        data-dojo-type="dijit/form/Button" style="width: 157px" onclick="repSendMail.show();"   /></div>
+                </div>
+                <div data-dojo-type="dijit/Dialog" data-dojo-id="repSendMail" title="<?php echo TXT_SENDMAILCONFIRM;?>" style="width: 410px;margin-left: 20px;   ">
+                <table class="dijitDialogPaneContentArea">
+                    <tr>
+                        <td><button   data-dojo-type="dijit/form/Button"  id="delOui" data-dojo-props="onClick:function(){sendEmail();}"><?php echo TXT_OUI ;?></button></td><td>
+                        <td><button  data-dojo-type="dijit/form/Button"  id="delNon"  data-dojo-props="onClick:function(){cancelSend();}"><?php echo TXT_NON ;?></button></td>                                                           
+                    </tr>
+                </table>
+                    
+                    <script>
+                    function cancelSend(){
+                        repSendMail.hide();
+                    }
+                    function sendEmail(){
+                        document.getElementById("btnOui").click(); ;
+                    }
+                    
+                    </script>
                 </div>
                 <input style="display:none" type="submit" value="" name="submit" id="submitId"/>
                 <input type="text" style="display: none" value='<?php if (!empty($_GET['cpt'])) {echo $_GET['cpt'];} ?>'  id='cpt' name='cpt'/>

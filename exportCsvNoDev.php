@@ -15,26 +15,20 @@ if (isset($_SESSION['pseudo'])) {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
 $arraycentrale = $manager->getList2("SELECT libellecentrale,idcentrale FROM centrale,loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword AND  idcentrale_centrale = idcentrale AND pseudo=?", $_SESSION['pseudo']);
-if (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] != 1) {
+if (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] != -1) {
     $annee = $_GET['annee'];
     $param = array($arraycentrale[0]['idcentrale'], ENCOURSREALISATION, $annee, $arraycentrale[0]['idcentrale'], FINI, $annee, $arraycentrale[0]['idcentrale'], CLOTURE, $annee);
     $stringSQL = " and EXTRACT(YEAR from datedebutprojet)=? ";
-} elseif (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] == 1) {
+} elseif (isset($_GET['annee']) && !empty($_GET['annee']) && $_GET['annee'] == -1) {
     $annee = "ALL";
     $stringSQL = "";
     $param = array($arraycentrale[0]['idcentrale'], ENCOURSREALISATION, $arraycentrale[0]['idcentrale'], FINI, $arraycentrale[0]['idcentrale'], CLOTURE);
-} else {
-    $annee = date('Y');
-    $param = array($arraycentrale[0]['idcentrale'], ENCOURSREALISATION, $annee, $arraycentrale[0]['idcentrale'], FINI, $annee, $arraycentrale[0]['idcentrale'], CLOTURE, $annee);
-    $stringSQL = " and EXTRACT(YEAR from datedebutprojet)=? ";
+} else {die;
+     $annee = "ALL";
+    $stringSQL = "";
+    $param = array($arraycentrale[0]['idcentrale'], ENCOURSREALISATION, $arraycentrale[0]['idcentrale'], FINI, $arraycentrale[0]['idcentrale'], CLOTURE);
 }
 
-
-if (isset($_GET['annee']) && !empty($_GET['annee'])) {
-    $annee = $_GET['annee'];
-} else {
-    $annee = date('Y');
-}
 //------------------------------------------------------------------------
 //-----RECUPERATION DU LIBELLE DE LA CENTRALE DU RESPONSABLE CENTRALE-----
 //------------------------------------------------------------------------
@@ -43,21 +37,18 @@ $libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM centrale , 
 
 $data = utf8_decode("Project;BTR Platform;Project leader /Entity / Town;Activities supported;Thematics");
 $data .= "\n";
-//SUPPRESSION DE LA TABLE TEMPORAIRE SI ELLE EXISTE
-$manager->exeRequete("drop table if exists tmpNoDev;");
-//CREATION DE LA TABLE TEMPORAIRE
-$dateChx = (int) $_GET['annee'];
-    $arrayNoDev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-    FROM projet p
-    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-    WHERE co.idcentrale_centrale =? 
-    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
-    AND p.idprojet not in (select idprojet from rapport)
-    AND EXTRACT(YEAR from dateprojet)=? ",    
-array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE, $dateChx));
+$sql="SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero   FROM projet p
+    LEFT JOIN thematique on idthematique = p.idthematique_thematique  LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet  LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
+    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet WHERE co.idcentrale_centrale =?  AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?)  AND p.idprojet not in (select idprojet from rapport)";
+if(isset($_GET['annee']) && ($_GET['annee'])!=-1){
+    $dateChx = (int) $_GET['annee'];
+    $arrayNoDev =$manager->getListbyArray($sql." AND EXTRACT(YEAR from dateprojet)=? ", array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE, $dateChx));
+}elseif(isset($_GET['annee']) && ($_GET['annee'])==-1){
+    $arrayNoDev =$manager->getListbyArray($sql, array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE));
+}else{
+    $arrayNoDev =$manager->getListbyArray($sql, array(IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE));
+}
+
 
 $nbarrayprojet = count($arrayNoDev);
 $ressources = "";

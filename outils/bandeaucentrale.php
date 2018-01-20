@@ -13,9 +13,11 @@ $arrayLibelleCentrale = $manager->getListbyArray("select libellecentrale from ce
             if (!empty($arrayCentrale[0]['adressesitewebcentrale']) && !empty($arrayCentrale[0]['adresselogcentrale'])) {
                 $centrale = $arrayCentrale[0]['adressesitewebcentrale'];
                 $logocentrale = $arrayCentrale[0]['adresselogcentrale'];
+            //    var_dump($centrale);
             ?>
-                <div dojoType="dojox.widget.FisheyeListItem" label="<?php echo $centrale; ?> " onclick="window.open('<?php echo $centrale; ?>')" id="<?php echo $libellecentrale[0] ?>" iconSrc="<?php echo '/' . REPERTOIRE . '/' . $logocentrale; ?>"></div>
-            <?php }
+               <div dojoType="dojox.widget.FisheyeListItem" label="<?php echo $centrale; ?> " onclick="window.open('<?php echo $centrale; ?>')" id="<?php echo $libellecentrale[0] ?>" iconSrc="<?php echo '/' . REPERTOIRE . '/' . $logocentrale; ?>"></div>
+            
+                  <?php  }
         }
         ?>
     </div>

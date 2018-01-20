@@ -1,6 +1,7 @@
 <?php
 $idcentrale =$manager->getSingle2("SELECT idcentrale_centrale FROM  utilisateur,loginpassword  WHERE idlogin = idlogin_loginpassword and pseudo=?",$_SESSION['pseudo']);
 $row = $manager->getList2("select nom,prenom,mail,idutilisateur from utilisateur,loginpassword where idlogin = idlogin_loginpassword AND idqualitedemandeuraca_qualitedemandeuraca= ? ORDER BY nom ASC", NONPERMANENT);
+
 $fprow = fopen('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 'w');
 $datausercompte = "";
 for ($i = 0; $i < count($row); $i++) {

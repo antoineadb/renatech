@@ -77,7 +77,8 @@
                     </tr>
                                 <?php } ?>
                 <?php }else{
-                $infos = $manager->getList2("SELECT u.idcentrale_centrale,p.porteurprojet FROM  utilisateur u,creer cr,projet p WHERE cr.idprojet_projet=p.idprojet and  cr.idutilisateur_utilisateur = u.idutilisateur and idprojet_projet = ?", $idprojet);
+                $infos = $manager->getList2("SELECT u.idcentrale_centrale,p.porteurprojet FROM  utilisateur u,creer cr,projet p "
+                        . "WHERE cr.idprojet_projet=p.idprojet and  cr.idutilisateur_utilisateur = u.idutilisateur and idprojet_projet = ? ", $idprojet);
                 if (!empty($infos[0]['idcentrale_centrale']) && $infos[0]['porteurprojet'] == TRUE) {//Si l'utilisateur est académique interne et si il est porteur
                     $interneExterne =   TXT_PROJETINTERNE;
                 } else {
