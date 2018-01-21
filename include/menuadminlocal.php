@@ -32,6 +32,7 @@ $mail  = '/'.REPERTOIRE.'/relance/'.$lang;
 $faisabilite= '/'.REPERTOIRE.'/new_request/'.$lang;
 $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
 $custmEmail =  '/'.REPERTOIRE.'/custom_email/'.$lang;
+$gestionCentraleProximite = '/'.REPERTOIRE.'/admin_centrale_proximite/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -79,7 +80,8 @@ $custmEmail =  '/'.REPERTOIRE.'/custom_email/'.$lang;
             <li><a href="<?php echo $manual;?>" class="messages"  ><?php echo TXT_MANUAL;?></a></li>
             <li><a href="<?php echo $log;?>" class="messages"  ><?php echo 'Logs';?></a></li>
             <li><a href="<?php echo $mail;?>" class="messages"  ><?php echo 'Relance par E-Mail';?></a></li>
-            <li><a href="<?php echo $custmEmail;?>" class="messages"  > <?php echo TXT_CUSTOMRELANCEEMAIL;?></a></li>          
+            <li><a href="<?php echo $custmEmail;?>" class="messages"  > <?php echo TXT_CUSTOMRELANCEEMAIL;?></a></li>
+            <li><a href="<?php echo $gestionCentraleProximite;?>" class="messages"  > <?php echo 'Administration des centrales de proximités ';?></a></li>
         </ul> 
     </li>
         <li><a href="<?php echo $logout; ?>" style="font-weight: bold"><?php echo TXT_DECONNECTER; ?></a></li> 

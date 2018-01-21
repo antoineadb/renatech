@@ -8,7 +8,7 @@ include_once '../outils/toolBox.php';
 showError($_SERVER['PHP_SELF']);
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'formulaireListe2.php') {
+if (isset($_POST['page_precedente']) && ($_POST['page_precedente'] == 'formulaireListe2.php' || $_POST['page_precedente'] == 'gestionCentraleProximite.php')) {
     if (empty($_POST['idlibellecentraleProximiteactuel'])) {
         header('location:/' . REPERTOIRE . '/update_nom_centraleErr1/' . $lang . '/TXT_MESSAGEERREURCENTRALENONSELECT');
         exit;
@@ -33,7 +33,11 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'formulaire
         $id_responsable_centrale_proximite=$_POST['idutilisateur'];
         $centraleName = new CentraleProximite($idCentraleProximite, $libelleCentraleProximite, $masqueCentraleProximite,$idregion, $id_responsable_centrale_proximite);
         $manager->updateCentraleProximit($centraleName, $idCentraleProximite);
-        header('location:/'. REPERTOIRE.'/update_nom_centrale_p/'. $lang . '/TXT_MESSAGESERVEURUPDATECENTRALEP');
+        if($_POST['page_precedente'] == 'formulaireListe2.php'){
+            header('location:/'. REPERTOIRE.'/update_nom_centrale_p/'. $lang . '/TXT_MESSAGESERVEURUPDATECENTRALEP');
+        }elseif($_POST['page_precedente'] == 'gestionCentraleProximite.php'){
+            header('location:/'. REPERTOIRE.'/updateCentraleP/'. $lang . '/msgupdate');
+        }
         exit();
     }
 } else {

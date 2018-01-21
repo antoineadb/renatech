@@ -71,10 +71,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILPHASE2; ?>" >
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILRELANCE; ?>" >
-                <table><tr><td><?php include 'html/gestionemailrelance.html'; ?></td></tr></table>
-            </div>
+            </div>           
         <?php } elseif ($ongletconnexion == true) { ?>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
@@ -90,10 +87,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILPHASE2; ?>" >
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILRELANCE; ?>" >
-                <table><tr><td><?php include 'html/gestionemailrelance.html'; ?></td></tr></table>
-            </div>        
+            </div>                 
         <?php } elseif ($ongletemailcontact == true) { ?>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
@@ -112,10 +106,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILPHASE2; ?>" >
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILRELANCE; ?>" >
-                <table><tr><td><?php include 'html/gestionemailrelance.html'; ?></td></tr></table>
-            </div>        
+            </div>              
         <?php } elseif ($ongletemailprojetphase1 == true) { ?>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
@@ -134,10 +125,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
             </div>
             <div data-dojo-type="dijit/layout/ContentPane"title="<?php echo TXT_EMAILPHASE2; ?>" >
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILRELANCE; ?>" >
-                <table><tr><td><?php include 'html/gestionemailrelance.html'; ?></td></tr></table>
-            </div>        
+            </div>                    
         <?php } elseif ($ongletmsgupdateemailprojetphase2 == true) { ?>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
@@ -156,32 +144,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILPHASE2; ?>"  data-dojo-props="selected:true">
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILRELANCE; ?>" >
-                <table><tr><td><?php include 'html/gestionemailrelance.html'; ?></td></tr></table>
-            </div>        
-        <?php } elseif ($ongletemailrelance == true) { ?>
-                        <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" style="height: 1000px">
-                <?php include 'html/gestionlibelleHome.html'; ?>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEACCUEIL; ?>" >
-                <?php include 'html/gestionlibelleaccueil.html'; ?>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_ADRESSESITE; ?>" style="height:auto">
-                <table><tr><td><?php include 'html/gestionsiteweb.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane"  title="<?php echo TXT_EMAILCONTACT; ?>" >
-                <table><tr><td><?php include 'html/gestionemailcontact.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILPHASE1; ?>" >
-                <table><tr><td><?php include 'html/gestionemailprojetphase1.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILPHASE2; ?>"  >
-                <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILRELANCE; ?>" data-dojo-props="selected:true" >
-                <table><tr><td><?php include 'html/gestionemailrelance.html'; ?></td></tr></table>
-            </div>   
+            </div> 
         <?php } else { ?>
         <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_PAGEHOME; ?>" data-dojo-props="selected:true" style="height: 1000px">
                 <?php include 'html/gestionlibelleHome.html'; ?>
@@ -200,10 +163,7 @@ if (isset($_GET['msgupdatesiteweb'])) {
             </div>
             <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILPHASE2; ?>" >
                 <table><tr><td><?php include 'html/gestionemailprojetphase2.html'; ?></td></tr></table>
-            </div>
-            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo TXT_EMAILRELANCE; ?>" >
-                <table><tr><td><?php include 'html/gestionemailrelance.html'; ?></td></tr></table>
-            </div>        
+            </div>      
         <?php } ?>
     </div><div style="margin-left: 0px"><?php include 'html/footer.html'; ?></div>
 </div>

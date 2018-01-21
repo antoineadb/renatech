@@ -1357,3 +1357,15 @@ a.infoBulle:hover span{
 .msgSendEmail{
     color: darkblue;font-size: 14px;margin-bottom: 10px;margin-left: 350px;margin-top: 10px;
 }
+.msginfo {
+    color: darkblue;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 40px;
+    width: 1028px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.centraleProximite{
+    border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px;
+}

@@ -165,7 +165,7 @@ if (!empty($_POST['masquepays']) && !empty($_POST['idlibellepaysactuel']) && !em
 } elseif (!empty($_POST['addCentraleProximite']) && empty($_POST['libellecentraleProximite'])&& !empty($_POST['regionCorrespondante'])) {
     include '../modifBase/insertCentraleProximite.php';
 //--------------------------------------------------------------------------------------------------------------------------------------------
-// AJOUT CENTRALE DE PROXIMITE
+// Modif CENTRALE DE PROXIMITE
 //--------------------------------------------------------------------------------------------------------------------------------------------    
 }elseif (!empty($_POST['modifcentraleProximite']) && !empty($_POST['idlibellecentraleProximiteactuel']) && !empty($_POST['regioncorrespondante'])) {
     include '../modifBase/modifCentraleProximite.php';
