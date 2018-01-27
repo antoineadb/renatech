@@ -31,7 +31,11 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'formulaire
         //AJOUT DE LA CENTRALE DE PROXIMITE DANS LA BASE DE DONNEE 
         $idNewCentraleProximite = $manager->getSingle("select max (idcentraleproximite) from centraleproximite") + 1;
         $masqueCentraleProximite = FALSE;
-        $id_responsable_centrale_proximite=$_POST['idutilisateur'];
+        if($_POST['idutilisateur']=='non'){
+            $id_responsable_centrale_proximite=null;
+        }else{
+            $id_responsable_centrale_proximite=$_POST['idutilisateur'];
+        }
         $CentraleProximite = new CentraleProximite($idNewCentraleProximite, $libelleCentraleProximite, $masqueCentraleProximite, $idregion, $id_responsable_centrale_proximite);
         $manager->addCentralProximite($CentraleProximite);
         header('location:/'.REPERTOIRE.'/insertCp/' . $lang . '/cpadd');

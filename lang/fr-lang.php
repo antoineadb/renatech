@@ -991,6 +991,7 @@ define('TXT_DETAILS',"Cliquez pour les détails");
 define('TXT_AIDESTAT',"Télécharge l'aide sur les statistiques");
 define('TXT_AIDEGESTIONLIBELLE',"Télécharge l'aide sur la gestion des logos et adresses Web des centrales");
 define('TXT_AIDERELANCE',"Télécharge l'aide pour les envois d'email");
+define('TXT_AIDECENTRALPROXIMITE',"Télécharge l'aide pour les centrale de proximité");
 define('TXT_VOUSAVEZENVOYER','Vous avez envoyé');
 define("TXT_ERREURENOSELECTION","Vous n'avez envoyé aucun E-mail");
 define ("TXT_NONSPECIFIE","Non précisé");

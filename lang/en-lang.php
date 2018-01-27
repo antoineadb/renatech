@@ -993,6 +993,7 @@ define('TXT_DETAILS','Click for details');
 define('TXT_PORTEURPROJETS','Porteurs de projet ');
 define('TXT_AIDESTAT',"Download help on statistics");
 define('TXT_AIDEGESTIONLIBELLE',"Download help on the management of logos and web addresses of the central");
+define('TXT_AIDECENTRALPROXIMITE',"Download help on proximity Central");
 define('TXT_AIDERELANCE',"Download help for the email shipments");
 define('TXT_VOUSAVEZENVOYER','You sent');
 define("TXT_ERREURENOSELECTION","You did not send any E-MAIL");

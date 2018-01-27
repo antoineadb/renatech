@@ -29,8 +29,11 @@ if (isset($_POST['page_precedente']) && ($_POST['page_precedente'] == 'formulair
         }
         
         $idregion = $manager->getSingle2("select idregion from centraleproximite where idcentraleproximite=?", $idCentraleProximite);
-        
-        $id_responsable_centrale_proximite=$_POST['idutilisateur'];
+        if($_POST['idutilisateur']=='non'){
+            $id_responsable_centrale_proximite= null;
+        }else{
+            $id_responsable_centrale_proximite=$_POST['idutilisateur'];
+        }
         $centraleName = new CentraleProximite($idCentraleProximite, $libelleCentraleProximite, $masqueCentraleProximite,$idregion, $id_responsable_centrale_proximite);
         $manager->updateCentraleProximit($centraleName, $idCentraleProximite);
         if($_POST['page_precedente'] == 'formulaireListe2.php'){

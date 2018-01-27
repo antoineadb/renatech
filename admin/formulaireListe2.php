@@ -34,7 +34,10 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
     CENTRALE DE PROXIMITE
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------      -->
     <fieldset id="identcentraleProximite" style="border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px">
-        <legend><?php echo TXT_CENTRALEPROXIMITE; ?></legend>          
+        <legend><?php echo TXT_CENTRALEPROXIMITE; ?></legend>
+             <a id='aideGestionLibelle' href="<?php echo '/'.REPERTOIRE.'/downloadManual/Centrale de proximité.pdf' ?>" target="_blank">
+                <img src="<?php echo '/'.REPERTOIRE; ?>/styles/img/infoStat.png" title="<?php echo TXT_AIDECENTRALPROXIMITE; ?>"  >
+    </a>
         <table>
             <tr>
                 <th>                    
