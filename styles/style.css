@@ -1369,3 +1369,11 @@ a.infoBulle:hover span{
 .centraleProximite{
     border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px;
 }
+
+.filterDate{
+    margin-top: 13px;
+    margin-bottom: 66px;
+    float: left;
+    width: 50%;
+    margin-left: 25%;
+}

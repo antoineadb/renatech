@@ -10,7 +10,7 @@ $string3 = '';
 
 if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeUserCleanRoomRunninProject'])) { 
     $title = TXT_CLEANROOMUSERRUNNINGPROJECTDATE.(date('Y')-1);
-    $totalUser = $manager->getList2("select libellecentrale, sum(nb) as nb from tmpUserCleanRoom where annee<=? group by libellecentrale",(date('Y')-1));
+    $totalUser = $manager->getList2("select idcentrale,libellecentrale, sum(nb) as nb from tmpUserCleanRoom where annee<=? group by idcentrale,libellecentrale order by idcentrale asc",(date('Y')-1));
     $nbTotaluser = $manager->getSingle2("select sum(nb) as nb from tmpUserCleanRoom where annee<=?",(date('Y')-1));
     $nbTotaluser2013 = $manager->getSingle("select sum(nb) as nb from tmpUserCleanRoom where annee <=2013");
     for ($i = 0; $i < count($totalUser); $i++) {
@@ -18,7 +18,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeUserCleanRoomRunninProjec
     }
 }elseif (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeUserCleanRoomRunninProject'])) {
     $title = TXT_CLEANROOMUSERRUNNINGPROJECTDATE.$_GET['anneeUserCleanRoomRunninProject'];
-    $totalUser = $manager->getList2("select libellecentrale, sum(nb) as nb from tmpUserCleanRoom where annee<=? group by libellecentrale",$_GET['anneeUserCleanRoomRunninProject']);
+    $totalUser = $manager->getList2("select idcentrale,libellecentrale, sum(nb) as nb from tmpUserCleanRoom where annee<=? group by idcentrale, libellecentrale order by idcentrale asc",$_GET['anneeUserCleanRoomRunninProject']);
     $nbTotaluser = $manager->getSingle2("select sum(nb) as nb from tmpUserCleanRoom where annee<=?",$_GET['anneeUserCleanRoomRunninProject']);    
     for ($i = 0; $i < count($totalUser); $i++) {
         $string0 .= '["' . $totalUser[$i]['libellecentrale'] . '",' . $totalUser[$i]['nb']  . '],';

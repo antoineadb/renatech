@@ -9,48 +9,59 @@ $arraylibelle = array();
 $string0 = '';
 
 $arraystatutprojet = $manager->getList2("select libellestatutprojet,libellestatutprojeten,idstatutprojet from statutprojet where idstatutprojet!=? order by idstatutprojet asc", TRANSFERERCENTRALE);
-if (IDTYPEUSER == ADMINNATIONNAL && ! isset($_GET['anneeNouveauProjet'])) {
+if (IDTYPEUSER == ADMINNATIONNAL) {
     $nb=0;
     for ($i = 0; $i < count($arraylibellecentrale); $i++) {
-        $donneeProjet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=?  and extract(year from dateprojet)<=? and trashed !=?"
-                . "and idcentrale_centrale!=?",array($arraylibellecentrale[$i]['idcentrale'],(date('Y')-1),TRUE,IDCENTRALEAUTRE));
+        $donneeProjet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=?  "
+                . "and EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>=? and trashed !=?"
+                . "and idcentrale_centrale!=?",array($arraylibellecentrale[$i]['idcentrale'],$anneeFin,$anneeDepart,TRUE,IDCENTRALEAUTRE));
         $nb +=$donneeProjet; 
         if ($donneeProjet != 0) {            
             $string0.='["' . $arraylibellecentrale[$i]['libellecentrale'] . '",' . $donneeProjet . '],';            
         }
     }    
-    $title = TXT_PROJETDATESTATUTANNEE.(date('Y')-1);
-    $subtitle = TXT_NBPROJET . ' <b>' . $nb . '</b>';
-}elseif (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNouveauProjet'])) {
-    $nb=0;
-    for ($i = 0; $i < count($arraylibellecentrale); $i++) {
-        $donneeProjet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=?  and extract(year from dateprojet)<=? and trashed !=?"
-                . "and idcentrale_centrale!=?",array($arraylibellecentrale[$i]['idcentrale'],$_GET['anneeNouveauProjet'],TRUE,IDCENTRALEAUTRE));
-        $nb +=$donneeProjet; 
-        if ($donneeProjet != 0) {            
-            $string0.='["' . $arraylibellecentrale[$i]['libellecentrale'] . '",' . $donneeProjet . '],';
+    if($lang=='fr'){
+           if($anneeDepart==$anneeFin){
+                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
+           }else{
+                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
+           }
+    }else{
+        if($anneeDepart==$anneeFin){
+            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
+        }else{
+            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
         }
-    }    
-    $title = TXT_PROJETDATESTATUTANNEE.$_GET['anneeNouveauProjet'];
+    }
     $subtitle = TXT_NBPROJET . ' <b>' . $nb . '</b>';
 }
 
-
 if (IDTYPEUSER == ADMINLOCAL) {
+    
     $nb = 0;
-    for ($i = 0; $i < count($arraystatutprojet); $i++) {
+    
+    foreach ($annee as $key => $year) {
         $donneeProjet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale_centrale=? 
-            and idstatutprojet_statutprojet=? and extract(year from dateprojet)<=? and trashed !=?", array(IDCENTRALEUSER, $arraystatutprojet[$i]['idstatutprojet'],(date('Y')-1),TRUE));
+            and EXTRACT(YEAR from dateprojet)<=? and trashed !=?", array(IDCENTRALEUSER, $year,TRUE));
         if ($donneeProjet != 0) {
-            $nb +=$donneeProjet; 
-            if ($lang == 'fr') {
-                $string0.='["' . stripslashes(str_replace("''", "'", $arraystatutprojet[$i]['libellestatutprojet'])) . '",' . $donneeProjet  . '],';
-            } elseif ($lang == 'en') {
-                $string0.='["' . stripslashes(str_replace("''", "'", $arraystatutprojet[$i]['libellestatutprojeten'])) . '",' . $donneeProjet . '],';
-            }
+            $nb +=$donneeProjet;            
+                $string0.='["' .$year . '",' . $donneeProjet  . '],';
         }
-    }    
-    $title = TXT_PROJETDATESTATUTANNEE.(date('Y')-1);
+    }
+        
+    if($lang=='fr'){
+           if($anneeDepart==$anneeFin){
+                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
+           }else{
+                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
+           }
+    }else{
+        if($anneeDepart==$anneeFin){
+            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
+        }else{
+            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
+        }
+    }
     $subtitle = TXT_NBPROJET . ' <b>' . $nb . '</b>';
 }
 $string = substr($string0, 0, -1);

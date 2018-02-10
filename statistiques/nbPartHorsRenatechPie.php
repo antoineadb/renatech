@@ -10,14 +10,14 @@ $string3 = '';
 if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneePartenaireHorsRenatech'])) {
     $title=TXT_PARTHORSRENATECHDATE.(date('Y')-1);
     $nbTotaluser =$manager->getSingle2("select sum(nb)from tmpUserpartenairePorteurDate where extract(year from datedebutprojet)<=?",(date('Y')-1));
-    $totalUser = $manager->getList2("select sum(nb) as nb,libellecentrale from tmpUserpartenairePorteurDate where extract(year from datedebutprojet)<=? group by libellecentrale",(date('Y')-1));
+    $totalUser = $manager->getList2("select sum(nb) as nb,libellecentrale,idcentrale from tmpUserpartenairePorteurDate where extract(year from datedebutprojet)<=? group by idcentrale,libellecentrale order by idcentrale asc",(date('Y')-1));
     for ($i = 0; $i < count($totalUser); $i++) {
         $string0 .= '["' . $totalUser[$i]['libellecentrale'] . '",' . $totalUser[$i]['nb'] . '],';
     }
 } elseif (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneePartenaireHorsRenatech'])) {
     $title=TXT_PARTHORSRENATECHDATE.$_GET['anneePartenaireHorsRenatech'];
     $nbTotaluser =$manager->getSingle2("select sum(nb)from tmpUserpartenairePorteurDate where extract(year from datedebutprojet)<=?",$_GET['anneePartenaireHorsRenatech']);
-    $totalUser = $manager->getList2("select sum(nb) as nb,libellecentrale from tmpUserpartenairePorteurDate where extract(year from datedebutprojet)<=? group by libellecentrale",$_GET['anneePartenaireHorsRenatech']);
+    $totalUser = $manager->getList2("select sum(nb) as nb,libellecentrale,idcentrale from tmpUserpartenairePorteurDate where extract(year from datedebutprojet)<=? group by idcentrale,libellecentrale order by idcentrale asc",$_GET['anneePartenaireHorsRenatech']);
     for ($i = 0; $i < count($totalUser); $i++) {
         $string0 .= '["' . $totalUser[$i]['libellecentrale'] . '",' . $totalUser[$i]['nb']. '],';
     }

@@ -1,5 +1,6 @@
 <?php
 include_once 'class/Manager.php';
+include_once 'outils/constantes.php';
 $db = BD::connecter();
 $manager = new Manager($db);
 $years = $manager->getList("select distinct EXTRACT(YEAR from dateprojet)as year from projet where   EXTRACT(YEAR from dateprojet)>2012 order by year asc");
@@ -72,7 +73,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
             $nbByYearPermanentInterneCent = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
             . "AND cr.idprojet_projet = co.idprojet_projet and idqualitedemandeuraca_qualitedemandeuraca=?  and u.idcentrale_centrale is not null and co.idstatutprojet_statutprojet=? and EXTRACT(YEAR from u.datecreation)<=?"
             . "and u.idcentrale_centrale=?",array(PERMANENT,ENCOURSREALISATION, $year[0],$cent[1]));
-            $_pInterne .="{name: '" . $cent[0] . "', y: " . $nbByYearPermanentInterneCent . " , drilldown: '" . $cent[0] . 'int' . $year[0] . "'},";
+            $_pInterne .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y: " . $nbByYearPermanentInterneCent . " , drilldown: '" . $cent[0] . 'int' . $year[0] . "'},";
         }$_pInterne .="]},";
     }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -101,7 +102,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
             if (empty($nbByYearPermanentExterneCent)) {
                 $nbByYearPermanentExterneCent = 0;
             }
-            $_pExterne .="{name: '" . $cent[0] . "', y: " . $nbByYearPermanentExterneCent . " , drilldown: '" . 'ext' . $year[0] . $cent[0] . "'},";
+            $_pExterne .="{name: '" . $cent[0]. "',color:'". couleurGraphLib($cent[0])."', y: " . $nbByYearPermanentExterneCent . " , drilldown: '" . 'ext' . $year[0] . $cent[0] . "'},";
         }$_pExterne .="]},";
     }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -132,7 +133,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
             if (empty($nbByYearPermanentIndustrielCent)) {
                 $nbByYearPermanentIndustrielCent = 0;
             }
-            $_pIndustriel .="{name: '" . $cent[0] . "', y: " . $nbByYearPermanentIndustrielCent . " , drilldown: '" . 'indnp' . $value[0] . $cent[0] . "'},";
+            $_pIndustriel .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y:" . $nbByYearPermanentIndustrielCent . " , drilldown: '" . 'indnp' . $value[0] . $cent[0] . "'},";
         }$_pIndustriel .="]},";       
     }    
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -157,7 +158,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
             $nbByYearNonPermanentInterne1 = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
             . "AND cr.idprojet_projet = co.idprojet_projet and idqualitedemandeuraca_qualitedemandeuraca=? and u.idcentrale_centrale is not null and EXTRACT(YEAR from datecreation)<=? and co.idstatutprojet_statutprojet=?"
             . "and u.idcentrale_centrale=?", array(NONPERMANENT,$value[0],ENCOURSREALISATION,$cent[1]));
-            $_npInterne .="{name: '" . $cent[0] . "', y: " . $nbByYearNonPermanentInterne1 . " , drilldown: '" . $cent[0] . 'int' . $value[0] . "'},";
+            $_npInterne .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y:" . $nbByYearNonPermanentInterne1 . " , drilldown: '" . $cent[0] . 'int' . $value[0] . "'},";
         }$_npInterne .="]},";
     }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -186,7 +187,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
             if (empty($nbByYearNonPermanentExterneCent)) {
                 $nbByYearNonPermanentExterneCent = 0;
             }
-            $_npExterne .="{name: '" . $cent[0] . "', y: " . $nbByYearNonPermanentExterneCent . " , drilldown: '" . 'indnp' . $value[0] . $cent[0] . "'},";
+            $_npExterne .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y: " . $nbByYearNonPermanentExterneCent . " , drilldown: '" . 'indnp' . $value[0] . $cent[0] . "'},";
         }$_npExterne .="]},";
     }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -216,7 +217,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
             if (empty($nbByYearNonPermanentIndustrielCent)) {
                 $nbByYearNonPermanentIndustrielCent = 0;
             }
-            $_npIndustriel .="{name: '" . $cent[0] . "', y: " . $nbByYearNonPermanentIndustrielCent . " , drilldown: '" . 'indnp' . $valueYear[0] . $cent[0] . "'},";
+            $_npIndustriel .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y: " . $nbByYearNonPermanentIndustrielCent . " , drilldown: '" . 'indnp' . $valueYear[0] . $cent[0] . "'},";
         }$_npIndustriel .="]},";
     }
     $resultPermanent =  $_pInterne . $_pExterne. $_pIndustriel;
@@ -280,7 +281,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
         $nbByYearPermanentInterne1 = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
         . "AND cr.idprojet_projet = co.idprojet_projet and idqualitedemandeuraca_qualitedemandeuraca=?  and u.idcentrale_centrale is not null and co.idstatutprojet_statutprojet=? and extract(year from datecreation)<=?"
         . "and u.idcentrale_centrale=?",array(PERMANENT,ENCOURSREALISATION,$_GET['anneeOriginePorteurProjetEncours'],$cent[1]));
-        $_pInterne .="{name: '" . $cent[0] . "', y: " . $nbByYearPermanentInterne1 . " , drilldown: '" . $cent[0] . 'int' . $anneeSelectionne . "'},";
+        $_pInterne .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y: " . $nbByYearPermanentInterne1 . " , drilldown: '" . $cent[0] . 'int' . $anneeSelectionne . "'},";
     }$_pInterne .="]},";
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                               PERMANENT  EXTERNE
@@ -297,7 +298,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
         if (empty($nbByYearPermanentExterneCent)) {
             $nbByYearPermanentExterneCent = 0;
         }
-        $_pExterne .="{name: '" . $cent[0] . "', y: " . $nbByYearPermanentExterneCent . " , drilldown: '" . 'ext' . $anneeSelectionne . $cent[0] . "'},";
+        $_pExterne .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y: " . $nbByYearPermanentExterneCent . " , drilldown: '" . 'ext' . $anneeSelectionne . $cent[0] . "'},";
     }$_pExterne .="]},";
     $_pExterne = str_replace("},]}", "}]}", $_pExterne);    
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -315,7 +316,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
         if (empty($nbByYearPermanentIndustrielCent)) {
             $nbByYearPermanentIndustrielCent = 0;
         }
-        $_pIndustriel .="{name: '" . $cent[0] . "', y: " . $nbByYearPermanentIndustrielCent . " , drilldown: '" . 'ind' . $anneeSelectionne . $cent[0] . "'},";
+        $_pIndustriel .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y:" . $nbByYearPermanentIndustrielCent . " , drilldown: '" . 'ind' . $anneeSelectionne . $cent[0] . "'},";
     }$_pIndustriel .="]},";    
     $_pIndustriel = str_replace("},]}", "}]}", $_pIndustriel);    
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -330,7 +331,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
         $nbNonPermanentInterne = $manager->getSinglebyArray("select count(distinct u.idutilisateur) from utilisateur u,concerne co,creer cr WHERE u.idutilisateur = cr.idutilisateur_utilisateur "
         . "AND cr.idprojet_projet = co.idprojet_projet and idqualitedemandeuraca_qualitedemandeuraca=?  and u.idcentrale_centrale is not null and co.idstatutprojet_statutprojet=? and extract(year from datecreation)<=?"
         . "and u.idcentrale_centrale=?",array(NONPERMANENT,ENCOURSREALISATION,$_GET['anneeOriginePorteurProjetEncours'],$cent[1]));
-        $_npInterne .="{name: '" . $cent[0] . "', y: " . $nbNonPermanentInterne . " , drilldown: '" . $cent[0] . 'int' . $_GET['anneeOriginePorteurProjetEncours'] . "'},";
+        $_npInterne .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y: " . $nbNonPermanentInterne . " , drilldown: '" . $cent[0] . 'int' . $_GET['anneeOriginePorteurProjetEncours'] . "'},";
     }$_npInterne .="]},";
 
 
@@ -349,7 +350,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
         if (empty($nbNonPermanentExterne)) {
             $nbNonPermanentExterne = 0;
         }
-        $_npExterne .="{name: '" . $cent[0] . "', y: " . $nbNonPermanentExterne . " , drilldown: '" . 'indnp' . $anneeSelectionne . $cent[0] . "'},";
+        $_npExterne .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y: " . $nbNonPermanentExterne . " , drilldown: '" . 'indnp' . $anneeSelectionne . $cent[0] . "'},";
     }$_npExterne .="]},";
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                               NON PERMANENT INDUSTRIEL
@@ -366,7 +367,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeOriginePorteurProjetEncou
         if (empty($nbNonPermanentIndustrielCent)) {
             $nbNonPermanentIndustrielCent = 0;
         }
-        $_npIndustriel .="{name: '" . $cent[0] . "', y: " . $nbNonPermanentIndustrielCent . " , drilldown: '" . 'indnp' . $anneeSelectionne . $cent[0] . "'},";
+        $_npIndustriel .="{name: '" . $cent[0] . "',color:'". couleurGraphLib($cent[0])."', y: " . $nbNonPermanentIndustrielCent . " , drilldown: '" . 'indnp' . $anneeSelectionne . $cent[0] . "'},";
     }$_npIndustriel .="]},";
     if($anneeSelectionne==2013){
         $title = TXT_ORIGINEPORTEURPROJETENCOURSDATE." ".TXT_INFERIEUR2013; 

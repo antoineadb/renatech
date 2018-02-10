@@ -56,7 +56,7 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypoProjetEncours'])) {?>
             . "and EXTRACT(YEAR from dateprojet)<=? AND idstatutprojet_statutprojet=?", array(INDUSTRIEL, $_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));
     $formation = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
             . "and EXTRACT(YEAR from dateprojet)<=? AND idstatutprojet_statutprojet=?", array(FORMATION, $_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));
-      
+          
     $serieX .= '{name: "' . ucfirst(TXT_ACADEMIQUE) . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetacademique . ',drilldown: "' . "academic".$_GET['anneeTypoProjetEncours'] . '"}]},';
     $serieX .= '{name: "' . TXT_ACADEMICPARTENARIAT . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetAcademiquepartenariat . ',drilldown: "' . 'academicPartenariat'.$_GET['anneeTypoProjetEncours'] . '"}]},';
     $serieX .= '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetindustriel . ',drilldown: "' . 'industriel'.$_GET['anneeTypoProjetEncours'] . '"}]},';
@@ -91,10 +91,10 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypoProjetEncours'])) {?>
             $nbprojetAcademiquePartenariat = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMICPARTENARIAT, $centrale[1],$_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));
             $nbprojetIndustriel = $manager->getSinglebyArray($uneDateUneCentrale, array( INDUSTRIEL, $centrale[1],$_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));
             $nbprojetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION, $centrale[1],$_GET['anneeTypoProjetEncours'],ENCOURSREALISATION));         
-            $serieAcademique .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
-            $serieAcademiquePartenariat .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
-            $serieIndustriel .="{name: '" . $centrale[0] . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
-            $serieFormation .="{name: '" . $centrale[0] . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
+            $serieAcademique .="{name: '" . $centrale[0] ."',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
+            $serieAcademiquePartenariat .="{name: '" . $centrale[0] ."',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
+            $serieIndustriel .="{name: '" . $centrale[0] ."',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
+            $serieFormation .="{name: '" . $centrale[0] . "',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $_GET['anneeTypoProjetEncours'] . "'},";
     }
     $serieAcademique .="]},";
     $serieAcademiquePartenariat .="]},";
@@ -154,12 +154,12 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypoProjetEncours'])) {?>
         $nbprojetIndustriel += $manager->getSinglebyArray($touscentraleunedate, array($year[0], INDUSTRIEL,ENCOURSREALISATION));
         $nbprojetFormation += $manager->getSinglebyArray($touscentraleunedate, array($year[0], FORMATION,ENCOURSREALISATION));
          if($year[0]==2013){
-             $serieAcademique .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] .$year[0] . "'},";
-            $serieAcademiquePartenariat .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $year[0] . "'},";
-            $serieIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: ". $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $year[0] . "'},";
-            $serieFormation .="{name: '" . TXT_INFERIEUR2013 . "', y: ". $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $year[0] . "'},";
+             $serieAcademique .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $year[0] . "'},";
+            $serieAcademiquePartenariat .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' .  $year[0] . "'},";
+            $serieIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: ". $nbprojetIndustriel . " , drilldown: '" . 'industriel' .  $year[0] . "'},";
+            $serieFormation .="{name: '" . TXT_INFERIEUR2013 . "', y: ". $nbprojetFormation . " , drilldown: '" . 'formation' . $year[0] . "'},";
          }else{
-            $serieAcademique .="{name: '" . $year[0] . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $year[0] . "'},";
+            $serieAcademique .="{name: '" . $year[0] ."', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $year[0] . "'},";
             $serieAcademiquePartenariat .="{name: '" . $year[0] . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $year[0] . "'},";
             $serieIndustriel .="{name: '" . $year[0] . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $year[0] . "'},";
             $serieFormation .="{name: '" . $year[0] . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $year[0] . "'},";
@@ -171,11 +171,11 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypoProjetEncours'])) {?>
     $serieFormation.= "]},";
 
 
-    foreach ($years as $key => $year) {
-        $serieAcademique .= "{id: '" . 'academic' . $year[0] . "',name: '" . ucfirst(TXT_ACADEMIQUE).' '. $year[0] . "',data: [";
-        $serieAcademiquePartenariat.= "{id: '" . 'academicPartenariat' . $year[0] . "',name: '" . TXT_ACADEMICPARTENARIAT.' '. $year[0] . "',data: [";
-        $serieIndustriel.= "{id: '" . 'industriel' . $year[0] . "',name: '" . TXT_INDUSTRIEL.' '. $year[0] . "',data: [";
-        $serieFormation.= "{id: '" . 'formation' . $year[0] . "',name: '" . TXT_FORMATION.' '. $year[0] . "',data: [";
+    foreach ($years as $key => $year) {       
+            $serieAcademique .= "{id: '" . 'academic' . $year[0] . "',name: '" . ucfirst(TXT_ACADEMIQUE).' '. $year[0] . "',data: [";
+            $serieAcademiquePartenariat.= "{id: '" . 'academicPartenariat' . $year[0] . "',name: '" . TXT_ACADEMICPARTENARIAT.' '. $year[0] . "',data: [";
+            $serieIndustriel.= "{id: '" . 'industriel' . $year[0] . "',name: '" . TXT_INDUSTRIEL.' '. $year[0] . "',data: [";
+            $serieFormation.= "{id: '" . 'formation' . $year[0] . "',name: '" . TXT_FORMATION.' '. $year[0] . "',data: [";        
         
         foreach ($centrales as $key => $centrale) {
             $nbprojetAcademique = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMIC, $centrale[1],$year[0],ENCOURSREALISATION));
@@ -183,15 +183,15 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypoProjetEncours'])) {?>
             $nbprojetIndustriel = $manager->getSinglebyArray($uneDateUneCentrale, array(INDUSTRIEL, $centrale[1],$year[0],ENCOURSREALISATION));
             $nbprojetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION, $centrale[1],$year[0],ENCOURSREALISATION));
             if($year[0]==2013){
-                $serieAcademique .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $year[0] . "'},";
-                $serieAcademiquePartenariat .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $year[0] . "'},";
-                $serieIndustriel .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $year[0] . "'},";
-                $serieFormation .="{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $year[0] . "'},";
+                $serieAcademique .="{name: '" . $centrale[0] . "',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $year[0] . "'},";
+                $serieAcademiquePartenariat .="{name: '" . $centrale[0] ."',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $year[0] . "'},";
+                $serieIndustriel .="{name: '" . $centrale[0] ."',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $year[0] . "'},";
+                $serieFormation .="{name: '" . $centrale[0] . "',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $year[0] . "'},";
             }else{
-                $serieAcademique .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $year[0] . "'},";
-                $serieAcademiquePartenariat .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $year[0] . "'},";
-                $serieIndustriel .="{name: '" . $centrale[0] . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $year[0] . "'},";
-                $serieFormation .="{name: '" . $centrale[0] . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $year[0] . "'},";
+                $serieAcademique .="{name: '" . $centrale[0] . "',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $year[0] . "'},";
+                $serieAcademiquePartenariat .="{name: '" . $centrale[0] ."',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $year[0] . "'},";
+                $serieIndustriel .="{name: '" . $centrale[0] ."',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $year[0] . "'},";
+                $serieFormation .="{name: '" . $centrale[0] . "',color:'".couleurGraphLib($centrale[0])."', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $year[0] . "'},";
             }
         }
         $serieAcademique .="]},";

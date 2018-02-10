@@ -89,7 +89,7 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypo'])) {?>
     $serieIndustriel.= "]},";
     $serieFormation.= "]},";
     $serieNonDefini.= "]},";
-    
+
     $serieAcademique            .= "{id: '" . 'academic'            . $_GET['anneeTypo'] . "',name: '" . ucfirst(TXT_ACADEMIQUE) . "',data: [";
     $serieAcademiquePartenariat .= "{id: '" . 'academicPartenariat' . $_GET['anneeTypo'] . "',name: '" . TXT_ACADEMICPARTENARIAT . "',data: [";
     $serieIndustriel            .= "{id: '" . 'industriel'          . $_GET['anneeTypo'] . "',name: '" . TXT_INDUSTRIEL          . "',data: [";
@@ -102,11 +102,11 @@ if (IDTYPEUSER == ADMINNATIONNAL &&  isset($_GET['anneeTypo'])) {?>
         $nbprojetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION, $centrale[1],$_GET['anneeTypo'], TRUE));
         $nbprojetNonDefini = $manager->getSinglebyArray($uneDateUneCentrale, array(1, $centrale[1],$_GET['anneeTypo'], TRUE));
         
-        $serieAcademique .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $_GET['anneeTypo'] . "'},";
-        $serieAcademiquePartenariat .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $_GET['anneeTypo'] . "'},";
-        $serieIndustriel .="{name: '" . $centrale[0] . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $_GET['anneeTypo'] . "'},";
-        $serieFormation .="{name: '" . $centrale[0] . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $_GET['anneeTypo'] . "'},";
-        $serieNonDefini .="{name: '" . $centrale[0] . "', y: " . $nbprojetNonDefini . " , drilldown: '" . 'undefined' . $centrale[0] . $_GET['anneeTypo'] . "'},";
+        $serieAcademique .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . $_GET['anneeTypo'] . "'},";
+        $serieAcademiquePartenariat .="{name: '"     . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $_GET['anneeTypo'] . "'},";
+        $serieIndustriel .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . $_GET['anneeTypo'] . "'},";
+        $serieFormation .="{name: '" . $centrale[0]  . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . $_GET['anneeTypo'] . "'},";
+        $serieNonDefini .="{name: '" . $centrale[0]  . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetNonDefini . " , drilldown: '" . 'undefined' . $centrale[0] . $_GET['anneeTypo'] . "'},";
     }
     $serieAcademique .="]},";
     $serieAcademiquePartenariat .="]},";
@@ -209,11 +209,11 @@ $nbprojetAcademique = $manager->getSinglebyArray($touscentraletoutesdate, array(
             $nbprojetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION, $centrale[1],$year[0], TRUE));
             $nbprojetNonDefini = $manager->getSinglebyArray($uneDateUneCentrale, array(1, $centrale[1],$year[0], TRUE));
             
-            $serieAcademique            .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademique            . " , drilldown: '" . 'academic'            . $centrale[0] . $year[0] . "'},";
-            $serieAcademiquePartenariat .="{name: '" . $centrale[0] . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $year[0] . "'},";
-            $serieIndustriel            .="{name: '" . $centrale[0] . "', y: " . $nbprojetIndustriel            . " , drilldown: '" . 'industriel'          . $centrale[0] . $year[0] . "'},";
-            $serieFormation             .="{name: '" . $centrale[0] . "', y: " . $nbprojetFormation             . " , drilldown: '" . 'formation'           . $centrale[0] . $year[0] . "'},";
-            $serieNonDefini             .="{name: '" . $centrale[0] . "', y: " . $nbprojetNonDefini             . " , drilldown: '" . 'undefined'           . $centrale[0] . $year[0] . "'},";
+            $serieAcademique            .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademique            . " , drilldown: '" . 'academic'            . $centrale[0] . $year[0] . "'},";
+            $serieAcademiquePartenariat .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $year[0] . "'},";
+            $serieIndustriel            .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetIndustriel            . " , drilldown: '" . 'industriel'          . $centrale[0] . $year[0] . "'},";
+            $serieFormation             .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetFormation             . " , drilldown: '" . 'formation'           . $centrale[0] . $year[0] . "'},";
+            $serieNonDefini             .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetNonDefini             . " , drilldown: '" . 'undefined'           . $centrale[0] . $year[0] . "'},";
         }
         $serieAcademique .="]},";
         $serieAcademiquePartenariat .="]},";

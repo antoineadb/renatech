@@ -135,9 +135,9 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeDureeeProjet'])) {
             $nbprojetRang1 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=? and extract(year from datedebutprojet)<=?", array(1, $centrale[1], $year[0]));
             $nbprojetRang2 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=? and extract(year from datedebutprojet)<=?", array(2, $centrale[1], $year[0]));
             $nbprojetRang3 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=? and extract(year from datedebutprojet)<=?", array(3, $centrale[1], $year[0]));
-            $serieRang1 .="{name: '" . $centrale[0] . "', y: " . $nbprojetRang1 . " , drilldown: '" . 'rang 1' . $centrale[0] . $year[0] . "'},";
-            $serieRang2 .="{name: '" . $centrale[0] . "', y: " . $nbprojetRang2 . " , drilldown: '" . 'rang 2' . $centrale[0] . $year[0] . "'},";
-            $serieRang3 .="{name: '" . $centrale[0] . "', y: " . $nbprojetRang3 . " , drilldown: '" . 'rang 3' . $centrale[0] . $year[0] . "'},";
+            $serieRang1 .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetRang1 . " , drilldown: '" . 'rang 1' . $centrale[0] . $year[0] . "'},";
+            $serieRang2 .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetRang2 . " , drilldown: '" . 'rang 2' . $centrale[0] . $year[0] . "'},";
+            $serieRang3 .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetRang3 . " , drilldown: '" . 'rang 3' . $centrale[0] . $year[0] . "'},";
         }
         $serieRang1 .="]},";
         $serieRang2 .="]},";
@@ -197,9 +197,9 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeDureeeProjet'])) {
         $nbprojetRang1 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=? and extract(year from datedebutprojet)<=?", array(1, $centrale[1], $_GET['anneeDureeeProjet']));
         $nbprojetRang2 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=? and extract(year from datedebutprojet)<=?", array(2, $centrale[1], $_GET['anneeDureeeProjet']));
         $nbprojetRang3 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=? and extract(year from datedebutprojet)<=?", array(3, $centrale[1], $_GET['anneeDureeeProjet']));
-        $serieRang1 .="{name: '" . $centrale[0] . "', y: " . $nbprojetRang1 . " , drilldown: '" . 'rang 1' . $centrale[0] . $_GET['anneeDureeeProjet'] . "'},";
-        $serieRang2 .="{name: '" . $centrale[0] . "', y: " . $nbprojetRang2 . " , drilldown: '" . 'rang 2' . $centrale[0] . $_GET['anneeDureeeProjet'] . "'},";
-        $serieRang3 .="{name: '" . $centrale[0] . "', y: " . $nbprojetRang3 . " , drilldown: '" . 'rang 3' . $centrale[0] . $_GET['anneeDureeeProjet'] . "'},";
+        $serieRang1 .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y:" . $nbprojetRang1 . " , drilldown: '" . 'rang 1' . $centrale[0] . $_GET['anneeDureeeProjet'] . "'},";
+        $serieRang2 .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetRang2 . " , drilldown: '" . 'rang 2' . $centrale[0] . $_GET['anneeDureeeProjet'] . "'},";
+        $serieRang3 .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetRang3 . " , drilldown: '" . 'rang 3' . $centrale[0] . $_GET['anneeDureeeProjet'] . "'},";
     }
     $serieRang1 .="]},";
     $serieRang2 .="]},";

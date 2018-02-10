@@ -1,5 +1,6 @@
 <?php
 include_once 'class/Manager.php';
+include_once 'outils/constantes.php';
 $db = BD::connecter();
 $manager = new Manager($db);
 
@@ -37,9 +38,8 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeSF'])) {
                     . "ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
                     . "AND co.idcentrale_centrale=? AND co.idstatutprojet_statutprojet=?", array($centrale[1], ENCOURSREALISATION));
             $nbtotal+=$nbsource;
-            $serie .= '{name: "' . $centrale[0] . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbsource . ',drilldown: "' . $centrale[0] . '"}]},';
+            $serie .= '{name: "' . $centrale[0] . '",color:"'. couleurGraph($centrale['idcentrale']).'", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbsource . ',drilldown: "' . $centrale[0] . '"},]},';           
         }
-
         $serie1 = str_replace("},]}", "}]}", $serie);
         $serie01 = str_replace("},]", "}]", $serie1);
         $serieX = substr($serie01, 0, -1);

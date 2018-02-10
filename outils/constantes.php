@@ -86,6 +86,19 @@ define('NBRESSOURCE', $manager->getSingle("select count(idressource) from ressou
 define('TXT_REGEXPASS', "regExp:'^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$");
 define('IDCENTRALEINTERNATIONNAL', $manager->getSingle2("select idregion from region where libelleregion=?",'Centrale internationale'));
 
+define ('IDFEMTO',$manager->getSingle2("select idcentrale from centrale where libellecentrale=?", 'FEMTO-ST'));
+define ('IDIEMN',$manager->getSingle2("select idcentrale from centrale where libellecentrale=?", 'IEMN'));
+define ('IDLAAS',$manager->getSingle2("select idcentrale from centrale where libellecentrale=?", 'LAAS'));
+define ('IDLTM',$manager->getSingle2("select idcentrale from centrale where libellecentrale=?", 'LTM'));
+define ('IDC2N',$manager->getSingle2("select idcentrale from centrale where libellecentrale=?", 'C2N'));
+define ('FEMTO',$manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDFEMTO));
+define ('IEMN',$manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDIEMN));
+define ('LAAS',$manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDLAAS));
+define ('LTM',$manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDLTM));
+define ('C2N',$manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDC2N));
+
+
+
 if (isset($_SESSION['pseudo'])) {
     define('IDCENTRALEUSER', $manager->getSingle2("select idcentrale_centrale from utilisateur, loginpassword where idlogin_loginpassword=idlogin and pseudo=? ", $_SESSION['pseudo']));
     define('LIBELLECENTRALEUSER', $manager->getSingle2("select libellecentrale from centrale,utilisateur, loginpassword where idlogin_loginpassword=idlogin and idcentrale_centrale=idcentrale and pseudo=? ", $_SESSION['pseudo']));
@@ -93,6 +106,7 @@ if (isset($_SESSION['pseudo'])) {
     define('NOMUSER', $manager->getSingle2("select nom from utilisateur,loginpassword  where idlogin=idlogin_loginpassword and pseudo=? ", $_SESSION['pseudo']));
     define('PRENOMUSER', $manager->getSingle2("select prenom from utilisateur,loginpassword  where idlogin=idlogin_loginpassword and pseudo=? ", $_SESSION['pseudo']));
 }
+
 define('NOW', strtotime(date("d-m-Y H:i:s")));
 define('REGEX_TYPE', "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\\133\\134\\135\\042\'’/=°()_ ,.-]+'");
 define('REGEX_TYPESTRING', "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:\'’/=°()_ ,.-]+'");                            
@@ -101,4 +115,44 @@ define('REGEX_TEL', "regExp:'[a-zA-Z0-9àáâäãåèéêëìíîïòóôöõø�
 define('REGEX_ACCUEIL1',"regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$!\_\«\»\’’ ,\.\'\-\:\/]+'");                         
 define("REGEX_ACCUEIL","regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,\.\•\'\-\:\/]+'");
 define("REGEX_ACCUEIL_CENTRALE","regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-]+");
-                                
+
+function couleurGraph($idcentrale){
+    if ($idcentrale== IDFEMTO){
+        return $couleur='#7cb5ec';
+    }elseif ($idcentrale== IDIEMN){
+        return $couleur='#FFBC75';
+    }elseif ($idcentrale== IDLAAS){
+        return $couleur= '#A9FF97';
+    }elseif ($idcentrale== IDLTM){
+        return $couleur='#90B1D8';
+    }elseif ($idcentrale== IDC2N){                    
+        return $couleur='#C3FFFF';
+    }  
+}
+function couleurGraphLib($libcentrale){
+    if ($libcentrale== FEMTO || $libcentrale== FEMTO){
+        return $couleur='#7cb5ec';
+    }elseif ($libcentrale== IEMN){
+        return $couleur='#FFBC75';
+    }elseif ($libcentrale== LAAS){
+        return $couleur= '#A9FF97';
+    }elseif ($libcentrale== LTM){
+        return $couleur='#90B1D8';
+    }elseif ($libcentrale== C2N){                    
+        return $couleur='#C3FFFF';
+    }  
+}
+
+function anneeStatistique($d,$f){
+    $annee= array();
+    $depart = intval($d);
+    $fin = intval($f);
+    if($depart==$fin){
+        array_push($annee, $depart);
+    }else{                
+        for ($i = 0; $i < ($fin-$depart)+1; $i++) {
+            array_push($annee, ($depart+$i));
+        }
+    }
+    return $annee;
+}

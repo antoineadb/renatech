@@ -5,7 +5,7 @@ $db = BD::connecter();
 $manager = new Manager($db);
 $string0 = '';
 $lastYear = (date('Y') - 1);
-$arraylibellecentrale=$manager->getList2("select libellecentrale from centrale where idcentrale!=?", IDCENTRALEAUTRE);
+$arraylibellecentrale=$manager->getList2("select libellecentrale from centrale where idcentrale!=? order by idcentrale asc", IDCENTRALEAUTRE);
 $donneeUser='';
 if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
     $donneeuserindustriel = $manager->getSingle("SELECT count(distinct id) as nb FROM tmpnbnewUserIndust");

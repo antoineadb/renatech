@@ -17,10 +17,10 @@ $xaxis = '';
 $xasisTitle = TXT_NOMBREOCCURRENCE;
 $years = $manager->getList("select distinct EXTRACT(YEAR from datecreation)as year from utilisateur order by year asc");
 $manager->exeRequete("drop table if exists tmpUserCleanRoom");
-$manager->getRequete("create table tmpUserCleanRoom as (SELECT count(distinct pe.mailaccueilcentrale) as nb, ce.libellecentrale,extract(year from datedebutprojet) as annee,extract(month from datedebutprojet) as mois  
+$manager->getRequete("create table tmpUserCleanRoom as (SELECT count(distinct pe.mailaccueilcentrale) as nb, ce.idcentrale,ce.libellecentrale,extract(year from datedebutprojet) as annee,extract(month from datedebutprojet) as mois  
 FROM personneaccueilcentrale pe,projetpersonneaccueilcentrale pr,projet p,centrale ce,concerne co WHERE pr.idpersonneaccueilcentrale_personneaccueilcentrale = pe.idpersonneaccueilcentrale 
 AND p.idprojet = pr.idprojet_projet AND co.idprojet_projet = p.idprojet AND co.idcentrale_centrale = ce.idcentrale and ce.idcentrale != ?  and idstatutprojet_statutprojet=?
-group by ce.libellecentrale,annee,mois order by ce.libellecentrale)", array(IDCENTRALEAUTRE,ENCOURSREALISATION));
+group by ce.idcentrale,ce.libellecentrale,annee,mois order by ce.idcentrale asc)", array(IDCENTRALEAUTRE,ENCOURSREALISATION));
 if (IDTYPEUSER == ADMINNATIONNAL) {
     ?>
     <table>
@@ -43,7 +43,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
 if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeUserCleanRoomRunninProject'])) {
     $title = TXT_CLEANROOMUSERRUNNINGPROJECT;
     $_S_serie = '';
-    $totalUser = $manager->getList("select libellecentrale, sum(nb) as nb from tmpUserCleanRoom group by libellecentrale");
+    $totalUser = $manager->getList("select idcentrale,libellecentrale, sum(nb) as nb from tmpUserCleanRoom group by libellecentrale,idcentrale order by idcentrale asc");
     for ($i = 0; $i < count($totalUser); $i++) {
         if (empty($totalUser[$i]['nb'])) {
             $totalUser[$i]['nb'] = 0;
@@ -98,7 +98,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeUserCleanRoomRunninProjec
         $title = TXT_CLEANROOMUSERRUNNINGPROJECTDATE . $_GET['anneeUserCleanRoomRunninProject'];
     }
     $_S_serie = '';
-    $totalUser = $manager->getList2("select libellecentrale, sum(nb)as nb from tmpUserCleanRoom where annee<=? group by libellecentrale", $_GET['anneeUserCleanRoomRunninProject']);
+    $totalUser = $manager->getList2("select idcentrale,libellecentrale, sum(nb)as nb from tmpUserCleanRoom where annee<=? group by idcentrale, libellecentrale order by idcentrale asc", $_GET['anneeUserCleanRoomRunninProject']);
     for ($i = 0; $i < count($totalUser); $i++) {
         if (empty($totalUser[$i]['nb'])) {
             $totalUser[$i]['nb'] = 0;

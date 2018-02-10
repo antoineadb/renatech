@@ -62,7 +62,7 @@ $nbtotalprojet = $manager->getSinglebyArray("select count(idprojet_projet) from 
             $nbprojetExogeneExterne = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM creer cr,projet p,utilisateur u,concerne co WHERE cr.idprojet_projet = p.idprojet 
                         AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and p.idprojet not in(select idprojet_projet from projetpartenaire) 
                         and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet=? and co.idcentrale_centrale=?", array($year[0], ENCOURSREALISATION, $centrale[1]));
-            $serieExterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $libelleCentrale . $year[0] . "'},";
+            $serieExterneCentrale .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y:" . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $libelleCentrale . $year[0] . "'},";
         }$serieExterneCentrale .="]},";
     }
     //--------------------------------------------------------------------
@@ -84,7 +84,7 @@ $nbtotalprojet = $manager->getSinglebyArray("select count(idprojet_projet) from 
             $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and extract(year from dateprojet)<=? 
                      and idstatutprojet_statutprojet=? and co.idcentrale_centrale=?", array($year[0], ENCOURSREALISATION, $centrale[1]));
-            $serieCollaboratifCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $centrale[0] . $year[0] . "'},";
+            $serieCollaboratifCentrale .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $centrale[0] . $year[0] . "'},";
         }$serieCollaboratifCentrale .="]},";
     }
 
@@ -124,7 +124,7 @@ $nbtotalprojet = $manager->getSinglebyArray("select count(idprojet_projet) from 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and extract(year from dateprojet)<=? 
                      and idstatutprojet_statutprojet=? and co.idcentrale_centrale=?", array($year[0], ENCOURSREALISATION, $centrale[1]));
             $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);
-            $serieInterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $year[0] . "'},";
+            $serieInterneCentrale .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $year[0] . "'},";
         }$serieInterneCentrale .="]},";
     }
     $serieY0 = $serieExterne . $serieCollaboratif . $serieInterne . $serieExterneCentrale . $serieCollaboratifCentrale . $serieInterneCentrale;
@@ -176,9 +176,9 @@ $nbtotalprojet = $manager->getSinglebyArray("select count(idprojet_projet) from 
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and extract(year from dateprojet)<=? 
                      and idstatutprojet_statutprojet=? and co.idcentrale_centrale=?", array($_GET['anneerepartitionProjetEncoursParType'], ENCOURSREALISATION, $centrale[1]));
         $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);
-        $serieInterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $_GET['anneerepartitionProjetEncoursParType'] . "'},";
-        $serieExogeneExterne .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . TXT_PROJETEXOEXTERNE . $centrale[0] . $_GET['anneerepartitionProjetEncoursParType'] . "'},";
-        $serieExogeneCollaboratif .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . TXT_PROJETEXOCOLLABORATIF . $centrale[0] . $_GET['anneerepartitionProjetEncoursParType'] . "'},";
+        $serieInterneCentrale .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $_GET['anneerepartitionProjetEncoursParType'] . "'},";
+        $serieExogeneExterne .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetExogeneExterne . " , drilldown: '" . TXT_PROJETEXOEXTERNE . $centrale[0] . $_GET['anneerepartitionProjetEncoursParType'] . "'},";
+        $serieExogeneCollaboratif .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . TXT_PROJETEXOCOLLABORATIF . $centrale[0] . $_GET['anneerepartitionProjetEncoursParType'] . "'},";
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     }
     $serieInterneCentrale .="]},";

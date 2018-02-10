@@ -11,13 +11,13 @@ $years = $manager->getList("select distinct EXTRACT(YEAR from datecreation)as ye
 $centrale = $manager->getList2("select libellecentrale from centrale where idcentrale!=? and masquecentrale!=TRUE order by idcentrale asc", IDAUTRECENTRALE);
 if (IDTYPEUSER == ADMINNATIONNAL) {
     $manager->exeRequete("drop table if exists tmpUserpartenairePorteurDate");
-    $manager->getRequete("create table tmpUserpartenairePorteurDate as (SELECT p.datedebutprojet,c.libellecentrale,count(up.idutilisateur_utilisateur) as nb FROM utilisateur u,utilisateurporteurprojet up,centrale c,
+    $manager->getRequete("create table tmpUserpartenairePorteurDate as (SELECT c.idcentrale,p.datedebutprojet,c.libellecentrale,count(up.idutilisateur_utilisateur) as nb FROM utilisateur u,utilisateurporteurprojet up,centrale c,
         concerne co,projet p WHERE up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = c.idcentrale AND co.idprojet_projet = p.idprojet 
-        AND u.idcentrale_centrale is null group by p.datedebutprojet,c.libellecentrale 
+        AND u.idcentrale_centrale is null group by c.idcentrale,p.datedebutprojet,c.libellecentrale 
         union 
-        SELECT pr.datedebutprojet,libellecentrale,count(distinct(pap.nompartenaire))as nb FROM projetpartenaire ppr,partenaireprojet pap,projet pr,concerne co , centrale ce WHERE  ppr.idprojet_projet = pr.idprojet 
+        SELECT idcentrale,pr.datedebutprojet,libellecentrale,count(distinct(pap.nompartenaire))as nb FROM projetpartenaire ppr,partenaireprojet pap,projet pr,concerne co , centrale ce WHERE  ppr.idprojet_projet = pr.idprojet 
         AND pap.idpartenaire = ppr.idpartenaire_partenaireprojet AND co.idprojet_projet = pr.idprojet and co.idcentrale_centrale = ce.idcentrale and idcentrale_centrale !=? and pr.datedebutprojet is not null 
-         and co.idstatutprojet_statutprojet=? group by pr.datedebutprojet,ce.libellecentrale )", array(IDCENTRALEAUTRE,ENCOURSREALISATION));
+         and co.idstatutprojet_statutprojet=? group by idcentrale,pr.datedebutprojet,ce.libellecentrale )", array(IDCENTRALEAUTRE,ENCOURSREALISATION));
     ?>
     <table>
         <tr>
@@ -38,7 +38,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
 if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneePartenaireHorsRenatech'])) {
     $title= TXT_PARTHORSRENATECH;
     $_S_serie = '';
-    $totalUser = $manager->getList("select sum(nb) as nb,libellecentrale from tmpUserpartenairePorteurDate group by libellecentrale");
+    $totalUser = $manager->getList("select sum(nb) as nb,libellecentrale from tmpUserpartenairePorteurDate group by idcentrale,libellecentrale order by idcentrale");
     for ($i = 0; $i < count($totalUser); $i++) {
         if (empty($totalUser[$i]['nb'])) {
             $totalUser[$i]['nb'] = 0;
@@ -116,7 +116,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneePartenaireHorsRenatech'])
     </table> 
     <?php
      $_S_serie = '';
-    $totalUser = $manager->getList2("select sum(nb) as nb,libellecentrale from tmpUserpartenairePorteurDate where extract(YEAR from datedebutprojet)<=? group by libellecentrale",$_GET['anneePartenaireHorsRenatech']);
+    $totalUser = $manager->getList2("select sum(nb) as nb,libellecentrale,idcentrale from tmpUserpartenairePorteurDate where extract(YEAR from datedebutprojet)<=? group by idcentrale,libellecentrale order by idcentrale asc",$_GET['anneePartenaireHorsRenatech']);
     for ($i = 0; $i < count($totalUser); $i++) {
         if (empty($totalUser[$i]['nb'])) {
             $totalUser[$i]['nb'] = 0;

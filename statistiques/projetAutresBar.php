@@ -39,8 +39,8 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
     $nbprojetExogeneCollaboratif = $manager->getSinglebyArray("SELECT count(distinct co.idprojet_projet) FROM  projet p, projetpartenaire pr, utilisateur u, creer c,concerne co WHERE p.idprojet = c.idprojet_projet AND pr.idprojet_projet = p.idprojet
         AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?  and idstatutprojet_statutprojet!=? 
         and idstatutprojet_statutprojet!=? and p.trashed !=?", array(ACCEPTE, REFUSE, ENATTENTEPHASE2,TRUE));
-    $nbprojetInterne = $nbtotalprojet - $nbprojetExogeneExterne - $nbprojetExogeneCollaboratif;
-    $serieX = '{name: "' . TXT_PROJETINTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetInterne . ',drilldown: "' . TXT_PROJETINTERNE . '"}]},';
+    $nbprojetInterne = $nbtotalprojet - $nbprojetExogeneExterne - $nbprojetExogeneCollaboratif;//
+    $serieX = '{name: "' . TXT_PROJETINTERNE . '", data: [{name: "' . TXT_DETAILS .  '",y: ' . $nbprojetInterne . ',drilldown: "' . TXT_PROJETINTERNE . '"}]},';
     $serieX .= '{name: "' . TXT_PROJETEXOEXTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetExogeneExterne . ',drilldown: "' . "externe" . '"}]},';
     $serieX .= '{name: "' . TXT_PROJETEXOCOLLABORATIF . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetExogeneCollaboratif . ',drilldown: "' . 'collaboratif' . '"}]}';
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
@@ -66,7 +66,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
                         AND  u.idutilisateur = cr.idutilisateur_utilisateur  AND  u.idcentrale_centrale is null and  co.idprojet_projet = p.idprojet and idstatutprojet_statutprojet!=? and idstatutprojet_statutprojet!=? 
                         and p.idprojet not in(select idprojet_projet from projetpartenaire ) and extract(year from dateprojet)<=? 
                          and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? and trashed !=?", array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1],TRUE));
-            $serieExterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $libelleCentrale . $year[0] . "'},";
+            $serieExterneCentrale .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetExogeneExterne . " , drilldown: '" . 'externe' . $libelleCentrale . $year[0] . "'},";
         }$serieExterneCentrale .="]},";
     }
     //--------------------------------------------------------------------
@@ -90,7 +90,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
             AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?  
             and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? and trashed !=?", 
                     array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1],TRUE));
-            $serieCollaboratifCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $centrale[0] . $year[0] . "'},";
+            $serieCollaboratifCentrale .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . 'collaboratif' . $centrale[0] . $year[0] . "'},";
         }$serieCollaboratifCentrale .="]},";
     }
 
@@ -133,7 +133,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
                     and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? and trashed !=?", 
                     array(ACCEPTE, REFUSE, $year[0], ENATTENTEPHASE2, $centrale[1],TRUE));
             $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);
-            $serieInterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $year[0] . "'},";
+            $serieInterneCentrale .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $year[0] . "'},";
         }$serieInterneCentrale .="]},";
     }
     $serieY0 = $serieExterne . $serieCollaboratif . $serieInterne . $serieExterneCentrale . $serieCollaboratifCentrale . $serieInterneCentrale;
@@ -187,10 +187,10 @@ if (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneeType'])) {
                     AND pr.idprojet_projet = p.idprojet AND c.idutilisateur_utilisateur = u.idutilisateur and  co.idprojet_projet = p.idprojet And u.idcentrale_centrale IS NOT NULL and idstatutprojet_statutprojet!=?
                     and idstatutprojet_statutprojet!=? and extract(year from dateprojet)<=?  and idstatutprojet_statutprojet!=? and co.idcentrale_centrale=? and trashed !=?", 
                 array(ACCEPTE, REFUSE, $_GET['anneeType'], ENATTENTEPHASE2, $centrale[1],TRUE));
-        $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);
-        $serieInterneCentrale .="{name: '" . $centrale[0] . "', y: " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $_GET['anneeType'] . "'},";
-        $serieExogeneExterne .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneExterne . " , drilldown: '" . TXT_PROJETEXOEXTERNE . $centrale[0] . $_GET['anneeType'] . "'},";
-        $serieExogeneCollaboratif .="{name: '" . $centrale[0] . "', y: " . $nbprojetExogeneCollaboratif . " , drilldown: '" . TXT_PROJETEXOCOLLABORATIF . $centrale[0] . $_GET['anneeType'] . "'},";
+        $nbprojetInterne = $nbtotalprojet - ($nbprojetExogeneExterne + $nbprojetExogeneCollaboratif);            
+        $serieInterneCentrale .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0]). "', y:  " . $nbprojetInterne . " , drilldown: '" . TXT_PROJETINTERNE . $centrale[0] . $_GET['anneeType'] . "'},";
+        $serieExogeneExterne .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0]). "', y:" . $nbprojetExogeneExterne . " , drilldown: '" . TXT_PROJETEXOEXTERNE . $centrale[0] . $_GET['anneeType'] . "'},";
+        $serieExogeneCollaboratif .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0]). "', y:". $nbprojetExogeneCollaboratif . " , drilldown: '" . TXT_PROJETEXOCOLLABORATIF . $centrale[0] . $_GET['anneeType'] . "'},";
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     }
     $serieInterneCentrale .="]},";
