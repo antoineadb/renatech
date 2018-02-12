@@ -822,6 +822,7 @@ define('TXT_NBPORTEURPROJETENCOURSPOURANNEE','Number of running project holder f
 define('TXT_REPARTITIONPORTEURPROJETENCOURS',"Distribution of running projects holders");
 define('TXT_PROJETDATESTATUT','Accumulation of the number of projects submitted');
 define('TXT_PROJETDATESTATUTANNEE',"Accumulation of the number of projects from ");
+define('TXT_PROJETNOMBREDATESTATUTANNEE',"Number of projects from ");
 define('TXT_PROJETDATESTATUTANNEE2013',"Accumulation of the number of projects for the year up to and including 2013");
 define ('TXT_CADREPROJETSCIENTIFIQUE','Frame of the scientific project');
 define ('TXT_DUREETRAVAUXTECNO','Estimation of cumulative duration of technological work');

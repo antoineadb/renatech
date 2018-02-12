@@ -821,6 +821,7 @@ define('TXT_NBPORTEURPROJETENCOURSPOURANNEE',"Nombre de porteur de projet en cou
 define('TXT_REPARTITIONPORTEURPROJETENCOURS',"Répartition des porteurs de projet en cours");
 define('TXT_PROJETDATESTATUT','Cumul du nombre de projets déposés');
 define('TXT_PROJETDATESTATUTANNEE',"Cumul du nombre de projets de ");
+define('TXT_PROJETNOMBREDATESTATUTANNEE',"Nombre de projets de ");
 define('TXT_PROJETDATESTATUTANNEE2013',"Cumul du nombre de projets pour l'année inférieur ou égale à 2013");
 define ('TXT_CADREPROJETSCIENTIFIQUE','Cadre du projet scientifique');
 define ('TXT_DUREETRAVAUXTECNO','Estimation de la durée cumulée des travaux technologiques');

@@ -61,15 +61,12 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
         $serie02 .= "{id: '" . $centrale[0] . "',name: '" . $centrale[0] . "',data: [";
         foreach ($annee as $key => $year) {
             $nbByYear = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
-                    . " and EXTRACT(YEAR from dateprojet)<=?  and  trashed != ?", array($centrale[1], $year, TRUE));
+                    . " and EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>=?  and  trashed != ?", array($centrale[1], $year,$anneeDepart, TRUE));
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
-            if ($year == 2013) {
-                $serie02 .= "{name: '" . TXT_INFERIEUR2013 . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year . "'},";
-            } else {
-                $serie02 .= "{name: '" . $year . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year . "'},";
-            }
+            $serie02 .= "{name: '" . $year . "', y: " . $nbByYear . " , drilldown: '" . $centrale[0] . $year . "'},";
+           
         }$serie02 .= "]},";
     }
     $serie2 = str_replace("},]}", "}]}", $serie02);
@@ -81,17 +78,13 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
-            if ($year == '2013') {
-                $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
-                        . "and extract(year from dateprojet)<=2013 and  trashed != ?", array($centrale[1], TRUE));
-                $serie3 .= "{id: '" . $centrale[0] . $year . "',name: '" . $centrale[0] . $year . "'" . ',data: [';
-            } else {
-                $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
+
+                $nbByYear = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                         . "and extract(year from dateprojet)<=? and  trashed != ?", array($centrale[1], $year, TRUE));
                 $serie3 .= "{id: '" . $centrale[0] . $year . "',name: '" . $centrale[0] . ' ' . $year . "'" . ',data: [';
-            }
+            
             for ($i = 0; $i < count($statutProjets); $i++) {
-                $nbByYearByStatut = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet WHERE idprojet_projet = idprojet  AND idcentrale_centrale = ? AND  extract(year from dateprojet) =? "
+                $nbByYearByStatut = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM concerne,projet WHERE idprojet_projet = idprojet  AND idcentrale_centrale = ? AND  extract(year from dateprojet) =? "
                         . "and idstatutprojet_statutprojet=? and  trashed != ?", array($centrale[1], $year, $statutProjets[$i]['idstatutprojet'], TRUE));
                 if (empty($nbByYearByStatut)) {
                     $nbByYearByStatut = 0;
@@ -122,7 +115,8 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
 } elseif (IDTYPEUSER == ADMINLOCAL) {
     $serie = "";
     foreach ($annee as $key => $year) {
-        $nbProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=?  and EXTRACT(YEAR from dateprojet)<=? and  trashed != ?", array(IDCENTRALEUSER, $year, TRUE));
+        $nbProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=?  "
+                . "and EXTRACT(YEAR from dateprojet)<=? and  trashed != ? and EXTRACT(YEAR from dateprojet)>=?", array(IDCENTRALEUSER, $year, TRUE,$anneeDepart));
         if ($nbProjet == 0) {
             $nbProjet = 0;
         }
@@ -141,7 +135,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     $serie3 = '';
     foreach ($annee as $key => $year) {
         $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
-                . "and extract(year from dateprojet)<=? and  trashed != ?", array(IDCENTRALEUSER, $year, TRUE));
+                . "and extract(year from dateprojet)<=? and  trashed != ? and EXTRACT(YEAR from dateprojet)>=?" , array(IDCENTRALEUSER, $year, TRUE,$anneeDepart));
         if (empty($nbByYear)) {
             $nbByYear = 0;
         }
@@ -152,7 +146,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
         }
         for ($i = 0; $i < count($statutProjets); $i++) {
             $nbByYearByMonth = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet WHERE idprojet_projet = idprojet  AND idcentrale_centrale = ? "
-                    . "AND  extract(year from dateprojet)<=? AND idstatutprojet_statutprojet=? and  trashed != ?", array(IDCENTRALEUSER, $year, $statutProjets[$i]['idstatutprojet'], TRUE));
+                    . "AND  extract(year from dateprojet)=? AND idstatutprojet_statutprojet=? and  trashed != ?", array(IDCENTRALEUSER, $year, $statutProjets[$i]['idstatutprojet'], TRUE));
             if (empty($nbByYearByMonth)) {
                 $nbByYearByMonth = 0;
             }

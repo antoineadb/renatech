@@ -22,15 +22,15 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     }    
     if($lang=='fr'){
            if($anneeDepart==$anneeFin){
-                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
+                $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart;
            }else{
-                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
+                $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
            }
     }else{
         if($anneeDepart==$anneeFin){
-            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
+            $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart;
         }else{
-            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
+            $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
         }
     }
     $subtitle = TXT_NBPROJET . ' <b>' . $nb . '</b>';
@@ -42,7 +42,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
     
     foreach ($annee as $key => $year) {
         $donneeProjet = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale_centrale=? 
-            and EXTRACT(YEAR from dateprojet)<=? and trashed !=?", array(IDCENTRALEUSER, $year,TRUE));
+            and EXTRACT(YEAR from dateprojet)=? and EXTRACT(YEAR from dateprojet)>=? and trashed !=?", array(IDCENTRALEUSER,$year, $anneeDepart,TRUE));
         if ($donneeProjet != 0) {
             $nb +=$donneeProjet;            
                 $string0.='["' .$year . '",' . $donneeProjet  . '],';
@@ -51,15 +51,15 @@ if (IDTYPEUSER == ADMINLOCAL) {
         
     if($lang=='fr'){
            if($anneeDepart==$anneeFin){
-                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
+                $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart;
            }else{
-                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
+                $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
            }
     }else{
         if($anneeDepart==$anneeFin){
-            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
+            $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart;
         }else{
-            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
+            $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
         }
     }
     $subtitle = TXT_NBPROJET . ' <b>' . $nb . '</b>';
