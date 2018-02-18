@@ -10,7 +10,26 @@ $statutProjets = $manager->getList2("select libellestatutprojet,idstatutprojet f
 $arraydate = $manager->getList("select distinct EXTRACT(YEAR from datecreation) as anneedatecreation from utilisateur order by anneedatecreation asc");
 $centrales = $manager->getList2("select libellecentrale,idcentrale from centrale where idcentrale!=? and masquecentrale!= TRUE order by idcentrale asc", IDAUTRECENTRALE);
 ?>        
-<form  method="post" action="<?php echo '/' . REPERTOIRE; ?>/chxStatistique/<?php echo $lang . '/' . IDSTATNOUVEAUPROJET; ?>" id='filtreDuAu' name='filtreDuAu'   >
+<div  method="post" action="<?php echo '/' . REPERTOIRE; ?>/chxStatistique/<?php echo $lang . '/' . IDSTATNOUVEAUPROJET; ?>" id='filtreDuAu' name='filtreDuAu'   data-dojo-type="dijit/form/Form"  >
+<script type="dojo/on" data-dojo-event="submit">
+    var dateDebut =parseInt(dijit.byId("anneeDu").value);
+    var dateFin =parseInt(dijit.byId("anneeAu").value);
+    if (isNaN(dateDebut)) {
+        alert('Le format du champ "Date du:" est incorrecte');
+        return false;  
+        exit();
+    }else if(dateDebut<1980 && dateDebut>2099){
+        alert("L'année saisie n'est pas dans la plage autorisée ");
+        return false;  
+        exit();        
+    }else if (this.validate()){
+        return true;
+    }else{
+        alert("<?php echo "Valeur non autorisé!"; ?>");
+        return false;
+    }
+    </script>
+    
     <?php
     if (isset($_POST['anneeDu'])) {
         $anneeDepart = $_POST['anneeDu'];
@@ -163,4 +182,4 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
 
 include_once 'commun/scriptBar.php';
 ?>
-</form>        
+</div>        

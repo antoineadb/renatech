@@ -1296,3 +1296,15 @@ function effaceCache($libelleCentraleUser){
     $videCache->delete('cloture_'.$libelleCentraleUser);
     $videCache->delete('finis_'.$libelleCentraleUser);
 }
+
+function miseAnullStatutcloturerFin($idprojet,$manager,$datemodifstatut){
+    //Vérification que le projet n'est pas un projet qui a été réactivé
+    $dateStatutFini = $manager->getSingle2("SELECT datestatutfini FROM projet WHERE idprojet=? ", $idprojet);
+    if($dateStatutFini <=  $datemodifstatut){// la date du statut fini est antérieur à la date du statut en cours
+        $manager->updateNullStatutFini($idprojet);
+    }
+    $dateStatutCloturer = $manager->getSingle2("SELECT datestatutcloturer FROM projet WHERE idprojet=? ", $idprojet);
+    if($dateStatutCloturer <=  $datemodifstatut){// la date du statut fini est antérieur à la date du statut en cours
+        $manager->updateNullStatutCloturer($idprojet);
+    }
+}

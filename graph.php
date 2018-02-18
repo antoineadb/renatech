@@ -251,9 +251,9 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                 </tr>
             </table>
         </fieldset>
-<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATTYPOLOGIEPROJETENCOURS || isset($_GET['anneeTypoProjetEncours']) ) { ?>        
+<?php }elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATTYPOLOGIEPROJETENCOURS ) { ?>        
             <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
-            <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 750px;">        
+            <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 590px;">        
             <?php echo affiche('TXT_AIDETYPOLOGIEPROJETENCOURS'); ?></span></a></legend>            
             <?php }else{ ?>
             <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 580px;">

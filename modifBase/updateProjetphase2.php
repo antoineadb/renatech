@@ -1228,6 +1228,9 @@ if (isset($_POST['page_precedente'])) {
             $concerne1 = new Concerne(IDCENTRALEUSER, $idprojet, ENCOURSREALISATION, "");
             $manager->updateConcerne($concerne1, $idprojet);
             effaceCache(LIBELLECENTRALEUSER);
+          
+            miseAnullStatutcloturerFin($idprojet,$manager,$datemodifstatut);            
+            
             if($cas1 !='noEmail'){
                 include '../EmailProjetEncoursrealisation.php';
             }

@@ -13,14 +13,14 @@ if (!empty($_SESSION['pseudo'])) {
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 if(IDTYPEUSER==ADMINLOCAL){
-    $data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom labo1;Nom labo2;Nom labo3;Nom labo4;Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement;Administrateur des projets; Vue des projets");
+    $data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom labo1;Nom labo2;Nom labo3;Nom labo4;Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement;Administrateur des projets; Vue des projets;Rapport");
     $data .= "\n";
 }elseif(IDTYPEUSER==ADMINNATIONNAL){    
     $s_partenaire="";
     for ($c = 2; $c <= 10; $c++) {
         $s_partenaire .= "Nom du Laboratoire&Entreprise".$c.";Type d'entreprise".$c.";";
     }
-    $data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom du Laboratoire&Entreprise1;type d'Entreprise1;".$s_partenaire."Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement;Administrateur des projets; Vue des projets;");
+    $data = utf8_decode("Titre du projet;N° de référence interne;Développement technologique;Académique/ Industriel;Interne/Externe;Domaine d'application;Type d'entreprise;National/International;Acronyme du laboratoire;Ville;Organisme de tutelle;Centrale de proximité pour les académiques;Discipline / Origine scientifique;Nom contact1;Email contact1;Nom contact2;Email contact2;Nom du Laboratoire&Entreprise1;type d'Entreprise1;".$s_partenaire."Année de début;Durée estimée;Date de fin estimée;Date de fin réelle;Durée réelle;Thématique RTB;Ressource1;Ressource2;Ressource3;Ressource4;Ressource5;Ressource6;Type de projet;Sources de financement;Acronyme de financement;Administrateur des projets; Vue des projets;Rapport");
     $data .= "\n";
 }
 //Récupération de l'idcentrale de l'utilisateur
@@ -175,7 +175,15 @@ if ($nbrow != 0) {
             $typeentreprise1 = '';
         }
         
-        
+        //Gestion de la colonne  rapport oui/non
+        $rapport  = $manager->getSingle2("SELECT idprojet FROM rapport  WHERE idprojet=? ", $idprojet);
+
+        if($rapport!=null){
+            $rapport = 'oui';
+        }else{
+            $rapport = 'non';
+        }
+   
         include 'outils/communExport.php';
         if ($row[$i]['administrateur'] == TRUE) {
             $administrateur = 'Oui';
@@ -224,7 +232,9 @@ if ($nbrow != 0) {
                 utf8_decode($s_Sourcefinancement) . ";" .
                 utf8_decode($s_Acrosourcefinancement) . ";" .
                 utf8_decode($administrateur) . ";" .
-                utf8_decode($vueprojetcentrale) . ";"."\n";
+                utf8_decode($vueprojetcentrale) . ";" .                
+                utf8_decode($rapport) . ";"."\n";
+             
          }else if(IDTYPEUSER==ADMINNATIONNAL){
                 $data.= "" .
                 $laboentreprise1.";".
@@ -246,11 +256,12 @@ if ($nbrow != 0) {
                 utf8_decode($s_Sourcefinancement) . ";" .
                 utf8_decode($s_Acrosourcefinancement) . ";" .
                 utf8_decode($administrateur) . ";" .
-                utf8_decode($vueprojetcentrale) . ";"."\n";
+                utf8_decode($vueprojetcentrale) . ";" .                
+                utf8_decode($rapport) . ";"."\n";
          }
         
     }
-    
+ 
 // Déclaration du type de contenu
     if ($idtypeuser == ADMINNATIONNAL) {
         header("Content-type: application/vnd.ms-excel;charset=UTF-8");

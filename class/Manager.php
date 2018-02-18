@@ -2735,11 +2735,38 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
-
+    
+    
+    public function updateNullStatutFini($idprojet){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE projet SET  datestatutfini = null WHERE idprojet =?');            
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJET . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+     public function updateNullStatutCloturer($idprojet){
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE projet SET  datestatutcloturer = null WHERE idprojet =?');            
+            $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERRUPDATEPROJET . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
 //------------------------------------------------------------------------------------------------------------
 //                      METHODE PROJETDATEFINI
 //------------------------------------------------------------------------------------------------------------
-    public function updateDateStatutFini(DateStatutFiniProjet $datefini, $idprojet) {
+    public function updateDateStatutFini(DateStatutFiniProjet $datefini, $idprojet) {var_dump($datefini);die;
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();

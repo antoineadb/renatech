@@ -18,209 +18,157 @@ $arraycentrale= $manager->getList2("SELECT ce.libellecentrale,co.idstatutprojet_
 WHERE l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale AND u.idcentrale_centrale = co.idcentrale_centrale and l.pseudo =? ", $_SESSION['pseudo']);
 
 if(isset($_GET['date']) && $_GET['date'] !=-1){
-    $dateChx = (int) $_GET['date'];
-   /* $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                    FROM projet p
-                    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                    WHERE co.idcentrale_centrale =? 
-                    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
-                    AND p.idprojet not in (select idprojet from rapport)
-                    AND EXTRACT(YEAR from dateprojet)=? ",    
-                    array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE, $dateChx));*/
-    $tableau  = array(
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE)            
-            ;
+    $dateChx = (int) $_GET['date']; 
+    $arrayprojetnodev =$manager->getListbyArray("
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p 
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE  
+                co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is null  AND  datestatutcloturer is null
+                AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=?
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND p.idprojet not in (select idprojet from rapport)
+                UNION
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE 
+                co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is null
+                AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND p.idprojet not in (select idprojet from rapport)
+                 UNION
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is not null
+                AND  datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND p.idprojet not in (select idprojet from rapport)
+                 UNION                
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE co.idcentrale_centrale =? AND  datestatutfini is not null AND  datestatutcloturer is null 
+                AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND p.idprojet not in (select idprojet from rapport)
+                UNION
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE co.idcentrale_centrale =? AND  datestatutcloturer is not null
+                AND EXTRACT(YEAR from datestatutcloturer)=?
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND p.idprojet not in (select idprojet from rapport)
+                UNION                
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE co.idcentrale_centrale =? AND  datestatutrefuser is not null
+                AND EXTRACT(YEAR from datestatutrefuser)=? AND trashed =FALSE
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? 
+                AND p.idprojet not in (select idprojet from rapport)
+                        order by idprojet  asc",
+                array(IDCENTRALEUSER,$dateChx,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,$dateChx,$dateChx,REFUSE,ACCEPTE,CLOTURE, 
+                    IDCENTRALEUSER,$dateChx,$dateChx,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,$dateChx,$dateChx,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,$dateChx,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,$dateChx,REFUSE,ACCEPTE,CLOTURE));
 
-    $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
-                AND p.idprojet not in (select idprojet from rapport)
-                AND  datedebutprojet is not null AND  datestatutfini is null  AND  datestatutcloturer is null
-                AND datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=?  and EXTRACT(YEAR from datestatutfini) >=? 
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
-                AND p.idprojet not in (select idprojet from rapport)
-                AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is null
-                AND datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
-                AND p.idprojet not in (select idprojet from rapport)
-                AND datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is not null
-                AND datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
-                AND p.idprojet not in (select idprojet from rapport)
-                AND  datestatutfini is not null AND  datestatutcloturer is null 
-                AND datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
-                AND p.idprojet not in (select idprojet from rapport)
-                AND  datestatutcloturer is not null
-                AND datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
-                AND p.idprojet not in (select idprojet from rapport)
-                AND  datestatutrefuser is not null
-                AND datestatutrefuser is null AND EXTRACT(YEAR from datedebutprojet)<=? and EXTRACT(YEAR from datestatutfini) >=?
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                ORDER BY idprojet asc",array(
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,$dateChx,$dateChx,ENCOURSREALISATION,FINI,CLOTURE));
     
-    
-}else{    
-    /*$arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                    FROM projet p
-                    LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                    LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                    LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                    LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                    WHERE co.idcentrale_centrale =? 
-                    AND trashed =FALSE and co.idstatutprojet_statutprojet in(?,?,?) 
-                    AND p.idprojet not in (select idprojet from rapport)",   
-                    array($arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE,$arraycentrale[0]['idcentrale_centrale'],ENCOURSREALISATION,FINI,CLOTURE)); */
-    
-    $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
+}else{       
+    $arrayprojetnodev =$manager->getListbyArray("SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p 
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE  
+                co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is null  AND  datestatutcloturer is null
+                AND  datestatutrefuser is null
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
                 AND p.idprojet not in (select idprojet from rapport)
-                AND  datedebutprojet is not null AND  datestatutfini is null  AND  datestatutcloturer is null
-                AND datestatutrefuser is null 
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
                 UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
                 FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE  co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is null
+                AND  datestatutrefuser is null 
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
                 AND p.idprojet not in (select idprojet from rapport)
-                AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is null
-                AND datestatutrefuser is null 
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
+                 UNION
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE co.idcentrale_centrale =? AND  datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is not null
+                AND  datestatutrefuser is null 
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND p.idprojet not in (select idprojet from rapport)
+                 UNION                
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
+                FROM projet p
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE co.idcentrale_centrale =? AND  datestatutfini is not null AND  datestatutcloturer is null 
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
+                AND p.idprojet not in (select idprojet from rapport)
                 UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
                 FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE co.idcentrale_centrale =? AND  datestatutcloturer is not null
+
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND trashed =FALSE
                 AND p.idprojet not in (select idprojet from rapport)
-                AND datedebutprojet is not null AND  datestatutfini is not null  AND  datestatutcloturer is not null
-                AND datestatutrefuser is null 
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
+                UNION                
+                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero
                 FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
+                LEFT JOIN thematique  on idthematique =idthematique_thematique
+                LEFT JOIN concerne co  on p.idprojet = co.idprojet_projet
+                LEFT JOIN creer c  on p.idprojet = c.idprojet_projet
+                LEFT JOIN utilisateur u on u.idutilisateur = c.idutilisateur_utilisateur 
+                WHERE co.idcentrale_centrale =? AND  datestatutrefuser is not null
+                 AND trashed =FALSE
+                AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? AND idstatutprojet_statutprojet !=? 
                 AND p.idprojet not in (select idprojet from rapport)
-                AND  datestatutfini is not null AND  datestatutcloturer is null 
-                AND datestatutrefuser is null 
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
-                AND p.idprojet not in (select idprojet from rapport)
-                AND  datestatutcloturer is not null
-                AND datestatutrefuser is null 
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                UNION
-                SELECT distinct idprojet,p.idautrethematique_autrethematique,titre,libellethematiqueen,libellethematique,prenom,idutilisateur,nom,numero  
-                FROM projet p
-                LEFT JOIN thematique on idthematique = p.idthematique_thematique 
-                LEFT JOIN creer cr on cr.idprojet_projet = p.idprojet
-                LEFT JOIN utilisateur on idutilisateur_utilisateur = idutilisateur 
-                LEFT JOIN concerne co on co.idprojet_projet = p.idprojet
-                WHERE co.idcentrale_centrale =?
-                AND p.idprojet not in (select idprojet from rapport)
-                AND  datestatutrefuser is not null
-                AND datestatutrefuser is null 
-                AND idstatutprojet_statutprojet  in (?,?,?) 
-                AND trashed =FALSE
-                ORDER BY idprojet asc",array(
-                    IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE,
-                    IDCENTRALEUSER,ENCOURSREALISATION,FINI,CLOTURE));
+		order by idprojet  asc",array(
+                    IDCENTRALEUSER,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,REFUSE,ACCEPTE,CLOTURE,
+                    IDCENTRALEUSER,REFUSE,ACCEPTE,CLOTURE));
 }
 
 

@@ -55,7 +55,7 @@ define('STATUSERDATE', $manager->getSingle2("select idstatistique from statistiq
 define('IDSTATNOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de projets déposés'));
 define('IDSTATPROJETDATETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Répartition des nouveaux projets par type, cumul par année'));
 define('IDSTATTYPOLOGIENOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul des nouveaux projets par typologie'));
-define('IDSTATTYPOLOGIEPROJETENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul des projets en cours par typologie'));
+define('IDSTATTYPOLOGIEPROJETENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de projet en cours par typologie'));
 define('IDREPARTIONPROJETENCOURSTYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", "Répartition des projets en cours par type, cumul par année"));
 define('IDSTATPROJETCENTRALETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Projet par centrale et par type'));
 define('IDSTATSF', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Origine des financements des projets en cours'));
