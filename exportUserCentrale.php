@@ -20,14 +20,14 @@ $data .= "\n";
  
 if (IDTYPEUSER == ADMINLOCAL) {
     if($_POST['exportUser']=='enCours'){
-        $row = $manager->getList2("SELECT distinct on(pac.mailaccueilcentrale) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,
+        $row = $manager->getList2("SELECT distinct on(LOWER(pac.mailaccueilcentrale)) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,
         pac.connaissancetechnologiqueaccueil,pac.telaccueilcentrale,q.libellequalitedemandeuraca,pcq.libellepersonnequalite,aq.libelleautresqualite,p.numero,p.refinterneprojet
         FROM projet p,personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personnecentralequalite pcq,autresqualite aq,concerne c
         WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_personneaccueilcentrale = pac.idpersonneaccueilcentrale 
         AND q.idqualitedemandeuraca = pac.idqualitedemandeuraca_qualitedemandeuraca AND pcq.idpersonnequalite = pac.idpersonnequalite AND   aq.idautresqualite = pac.idautresqualite         
         AND  c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ? and c.idstatutprojet_statutprojet in (".ENATTENTE.",".ENCOURSANALYSE.",".ENCOURSREALISATION.")", $idcentrale);
     }else{
-    $row = $manager->getListbyArray("SELECT distinct on(pac.mailaccueilcentrale) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,
+    $row = $manager->getListbyArray("SELECT distinct on(LOWER(pac.mailaccueilcentrale)) pac.nomaccueilcentrale,pac.prenomaccueilcentrale,pac.mailaccueilcentrale,
         pac.connaissancetechnologiqueaccueil,pac.telaccueilcentrale,q.libellequalitedemandeuraca,pcq.libellepersonnequalite,aq.libelleautresqualite,p.numero,p.refinterneprojet
         FROM projet p,personneaccueilcentrale pac,projetpersonneaccueilcentrale ppac,qualitedemandeuraca q,personnecentralequalite pcq,autresqualite aq,concerne c
         WHERE ppac.idprojet_projet = p.idprojet AND ppac.idpersonneaccueilcentrale_personneaccueilcentrale = pac.idpersonneaccueilcentrale 

@@ -51,7 +51,7 @@ define('ANNEE', $manager->getSingle2("select idperiodicite from period where lib
 define('REP_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/' . REPERTOIRE);
 define('ABSPATH', dirname(__FILE__) . '/');
 define('STATCENTRALETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Projet par centrale et par type'));
-define('STATUSERDATE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de nouveaux porteurs de projets'));
+define('STATUSERDATE', $manager->getSingle2("select idstatistique from statistique where libellestatistiqueen=?", 'Number of users since the beginning by category'));
 define('IDSTATNOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de projets déposés'));
 define('IDSTATPROJETDATETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Répartition des nouveaux projets par type, cumul par année'));
 define('IDSTATTYPOLOGIENOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul des nouveaux projets par typologie'));
@@ -59,16 +59,16 @@ define('IDSTATTYPOLOGIEPROJETENCOURS', $manager->getSingle2("select idstatistiqu
 define('IDREPARTIONPROJETENCOURSTYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", "Répartition des projets en cours par type, cumul par année"));
 define('IDSTATPROJETCENTRALETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Projet par centrale et par type'));
 define('IDSTATSF', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Origine des financements des projets en cours'));
-define('IDDUREEPROJETENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Durée des projets en cours, cumul par année'));
+define('IDDUREEPROJETENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Durée des projets en cours'));
 define('IDNEWUSERBYDATE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Utilisateurs par date'));
 define('IDPERMANENTNONPERMANENTBYDATE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Origine des nouveaux porteurs de projet, cumul par année'));
 define('IDNEWUSERBYTYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Utilisateurs par type'));
-define('IDSTATRESSOURCE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Répartition des ressources technologiques, cumul des projets en cours'));
+define('IDSTATRESSOURCE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Répartition par ressources technologiques des projets en cours'));
 define('IDORIGINEPORTPORTEURPROJETENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Origine des porteurs de projet en cours, cumul par année'));
-define('IDPARTHORSRENATECH', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de partenaires hors RENATECH intéréssés par les projets en cours'));
-define('IDNBUSERCLEANROOMNEWPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de personne autorisées à travailler en salle blanche sur les nouveaux projets, cumul par année'));
-define('IDNBUSERCLEANROOMRUNNINGPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de personne autorisées à travailler en salle blanche sur les projets en cours, cumul par année'));
-define('IDNBRUNNINGPROJECT', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de projet en cours'));
+    define('IDPARTHORSRENATECH', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de partenaires hors RENATECH intéréssés par les projets en cours'));
+define('IDNBUSERCLEANROOMNEWPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de personnes ayant travaillé en salle blanche depuis 2014'));
+define('IDNBUSERCLEANROOMRUNNINGPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de personnes travaillant en salle blanche'));
+define('IDNBRUNNINGPROJECT', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de projet en cours'));
 define('IDNBPORTEURRUNNINGPROJECT', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de porteur de projet en cours'));
 define('IDCENTRALEAUTRE', $manager->getSingle2("select idcentrale from centrale where libellecentrale=?", 'Autres'));
 define('ACADEMIC', $manager->getSingle2("select idtypeprojet  from typeprojet where libelletype=?", 'Académique'));
@@ -97,6 +97,12 @@ define ('LAAS',$manager->getSingle2("select libellecentrale from centrale where 
 define ('LTM',$manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDLTM));
 define ('C2N',$manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDC2N));
 
+define('IDINTEGRATION',$manager->getSingle2("select idressource from ressource where libelleressource=?", TXT_INTEGRATION));
+define('IDCARACTERISATION',$manager->getSingle2("select idressource from ressource where libelleressource=?", TXT_CHARACTERISATIONMETROLOGY));
+define('IDGRAVURE',$manager->getSingle2("select idressource from ressource where libelleressource=?", TXT_GRAVURE));
+define('IDDEPOT',$manager->getSingle2("select idressource from ressource where libelleressource=?", TXT_DEPOT));
+define('IDCROISSANCE',$manager->getSingle2("select idressource from ressource where libelleressource=?", TXT_CROISSANCE));
+define('IDLITHOGRAPHY',$manager->getSingle2("select idressource from ressource where libelleressource=?", TXT_LITHOGRAPHY));
 
 
 if (isset($_SESSION['pseudo'])) {
@@ -141,6 +147,23 @@ function couleurGraphLib($libcentrale){
     }elseif ($libcentrale== C2N){                    
         return $couleur='#C3FFFF';
     }  
+}
+
+function couleurRessource($idressource){
+    if ($idressource== IDINTEGRATION){
+        return $couleur='#ff0000';
+    }elseif ($idressource== IDCARACTERISATION){
+        return $couleur='#dd33dd';
+    }elseif ($idressource== IDGRAVURE){
+        return $couleur= '#050e5e';
+    }elseif ($idressource== IDDEPOT){
+        return $couleur='#edef4f';
+    }elseif ($idressource== IDCROISSANCE){          
+        return $couleur='#0f7a0d';
+    }elseif ($idressource== IDLITHOGRAPHY){
+        return $couleur='#00ffc3';
+    }
+        
 }
 
 function anneeStatistique($d,$f){

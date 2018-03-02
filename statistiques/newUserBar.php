@@ -52,8 +52,10 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
         $nbUserCentrale = $manager->getSinglebyArray("SELECT   count(distinct id) as nb FROM tmpnbnewUserIndust WHERE libellecentrale=? and datecreation=?", array($centrale[0], $_GET['anneeNewUserHolder']));
         if (empty($nbUserCentrale)) {
             $nbUserCentrale = 0;
-        }
-        $serie_0Industriel .= "['" . $centrale[0] . "'," . $nbUserCentrale . "],";
+        }        
+        $serie_0Industriel .= "{name: '" . $centrale[0]. "',color:'". couleurGraphLib($centrale[0]) . "', y: " . $nbUserCentrale . " , drilldown: '" . TXT_INDUSTRIEL . $centrale[0] . "'},";
+        
+        
     }$serie_0Industriel .= ']},';
 
     /* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
@@ -91,7 +93,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
         if (empty($nbUserCentrale)) {
             $nbUserCentrale = 0;
         }
-        $serie_0AcademiqueExterne .= "['" . $centrale[0] . "'," . $nbUserCentrale . "],";
+        $serie_0AcademiqueExterne .= "{name: '" . $centrale[0]. "',color:'". couleurGraphLib($centrale[0]) . "', y: " . $nbUserCentrale . " , drilldown: '" . TXT_ACADEMIQUEEXTERNE . $centrale[0] . "'},";
     }$serie_0AcademiqueExterne .= ']},';
     /* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
     /*                                                                              ACADEMIQUE INTERNE                                                                                                           */
@@ -183,14 +185,15 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
             . "utilisateurporteurprojet up,creer c,concerne co, centrale ce "
             . "WHERE u.idutilisateur = up.idutilisateur_utilisateur AND  ce.idcentrale= co.idcentrale_centrale AND   up.idutilisateur_utilisateur = co.idprojet_projet "
             . "AND u.idqualitedemandeuraca_qualitedemandeuraca is not null "
-            . "and u.idcentrale_centrale is null AND co.idcentrale_centrale!=? and ce.masquecentrale!=TRUE  group by libellecentrale,datecreation,mois,id order by libellecentrale,datecreation,mois,id )", array(IDAUTRECENTRALE, IDAUTRECENTRALE, IDAUTRECENTRALE));
+            . "and u.idcentrale_centrale is null AND co.idcentrale_centrale!=? and ce.masquecentrale!=TRUE  group by libellecentrale,datecreation,mois,id order by libellecentrale,datecreation,mois,id )", 
+            array(IDAUTRECENTRALE, IDAUTRECENTRALE, IDAUTRECENTRALE));
     $nbAcaexterne = $manager->getSingle("SELECT count(distinct id) FROM tmpnbnewUserExterne");
     $academiqueExterne = '{name: "' . TXT_ACADEMIQUEEXTERNE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbAcaexterne . ',drilldown: "' . TXT_ACADEMIQUEEXTERNE . '"}]},';
     $serieAcademiqueExterne = "";
     foreach ($years as $key => $year) {
         $serieAcademiqueExterne .= "{id: '" . TXT_ACADEMIQUEEXTERNE . "',name: '" . TXT_ACADEMIQUEEXTERNE . "',data: [";
         foreach ($years as $key => $year) {
-            $NbAcademiqueExterne = $manager->getSingle2("SELECT count(distinct id) as nb FROM tmpnbnewUserExterne WHERE datecreation <=?", $year[0]);
+            $NbAcademiqueExterne = $manager->getSingle2("SELECT count(distinct id) as nb FROM tmpnbnewUserExterne WHERE datecreation =?", $year[0]);
             $serieAcademiqueExterne .= "{name: '" . $year[0] . "', y: " . $NbAcademiqueExterne . " , drilldown: '" . TXT_ACADEMIQUEEXTERNE . $year[0] . "'},";
         }$serieAcademiqueExterne .= "]},";
     }
@@ -209,7 +212,8 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
             }
             if (empty($nbUser)) {
                 $nbUser = 0;
-            }$serie_0AcademiqueExterne .= "['" . $centrale[0] . "'," . $nbUser . "],";
+            }
+            $serie_0AcademiqueExterne .= "{name: '" . $centrale[0]. "',color:'". couleurGraphLib($centrale[0]) . "', y: " . $nbUser . " , drilldown: '" . TXT_ACADEMIQUEEXTERNE . $centrale[0] . "'},";
         }$serie_0AcademiqueExterne .= ']},';
     }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -220,19 +224,20 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
             . "FROM utilisateur,creer c, concerne co, centrale ce WHERE idutilisateur = idutilisateur_utilisateur AND co.idprojet_projet = c.idprojet_projet AND  ce.idcentrale= co.idcentrale_centrale "
             . "and idqualitedemandeurindust_qualitedemandeurindust is not null and ce.masquecentrale!=TRUE group by libellecentrale,idutilisateur ,datecreation,mois);");
     $Nbindustriel = $manager->getSingle("SELECT count(distinct id) as nb FROM tmpnbnewUserIndust");
+    
     $industriel = '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $Nbindustriel . ',drilldown: "' . TXT_INDUSTRIEL . '"}]},';
+    
     $serieIndustriel = "";
-    foreach ($years as $key => $year) {
-        $serieIndustriel .= "{id: '" . TXT_INDUSTRIEL . "',name: '" . TXT_INDUSTRIEL . "',data: [";
+    
+        $serieIndustriel .= "{id: '" . TXT_INDUSTRIEL . "',name: '" . TXT_INDUSTRIEL . "',data: [";        
         foreach ($years as $key => $year) {
-            $Nbindustriel = $manager->getSingle2("SELECT count(distinct id) FROM tmpnbnewUserIndust where datecreation <=?", $year[0]);
+            $Nbindustriel = $manager->getSingle2("SELECT count(distinct id) FROM tmpnbnewUserIndust where datecreation =?", $year[0]);
             if ($year[0] == 2013) {
                 $serieIndustriel .= "{name: '" . TXT_INFERIEUR2013 . "', y: " . $Nbindustriel . " , drilldown: '" . TXT_INDUSTRIEL . $year[0] . "'},";
             } else {
                 $serieIndustriel .= "{name: '" . $year[0] . "', y: " . $Nbindustriel . " , drilldown: '" . TXT_INDUSTRIEL . $year[0] . "'},";
             }
         }$serieIndustriel .= "]},";
-    }
     $serie_0Industriel = "";
     foreach ($years as $key => $year) {
         if ($year[0] == 2013) {
@@ -242,14 +247,15 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
         }
         foreach ($centrales as $key => $centrale) {
             if ($year[0] == 2013) {
-                $nbUser = $manager->getSinglebyArray("SELECT count(distinct id) as nb FROM tmpnbnewUserIndust where datecreation<=? and libellecentrale=?", array($year[0], $centrale[0]));
+                $nbUser = $manager->getSinglebyArray("SELECT count(distinct id) as nb FROM tmpnbnewUserIndust where datecreation=? and libellecentrale=?", array($year[0], $centrale[0]));
             } else {
                 $nbUser = $manager->getSinglebyArray("SELECT count(distinct id) as nb FROM tmpnbnewUserIndust where datecreation=? and libellecentrale=?", array($year[0], $centrale[0]));
             }
             if (empty($nbUser)) {
                 $nbUser = 0;
             }
-            $serie_0Industriel .= "['" . $centrale[0] . "'," . $nbUser . "],";
+            $serie_0Industriel .= "{name: '" . $centrale[0]. "',color:'". couleurGraphLib($centrale[0]) . "', y: " . $nbUser . " , drilldown: '" . TXT_INDUSTRIEL . $centrale[0] . "'},";
+            
         }$serie_0Industriel .= ']},';
     }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
@@ -287,7 +293,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
     foreach ($centrales as $key => $centrale) {
         $serie0 .= "{id: '" . $centrale[0] . "',name: '" . $centrale[0] . "',data: [";
         foreach ($years as $key => $year) {
-            $nbByYear = $manager->getSinglebyArray("SELECT count(idutilisateur) FROM  tmpnbnewUserInterne  WHERE libellecentrale=? and datecreation<=?", array($centrale[0], $year[0]));
+            $nbByYear = $manager->getSinglebyArray("SELECT count(idutilisateur) FROM  tmpnbnewUserInterne  WHERE libellecentrale=? and datecreation=?", array($centrale[0], $year[0]));
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
@@ -347,7 +353,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
     foreach ($years as $key => $year) {
         $serieAcademiqueExterne .= "{id: '" . TXT_ACADEMIQUEEXTERNE . "',name: '" . TXT_ACADEMIQUEEXTERNE . "',data: [";
         foreach ($years as $key => $year) {
-            $NbAcademiqueExterne = $manager->getSingle2("SELECT count(distinct id) as nb FROM tmpnbnewUserExterne WHERE datecreation<=?", $year[0]);
+            $NbAcademiqueExterne = $manager->getSingle2("SELECT count(distinct id) as nb FROM tmpnbnewUserExterne WHERE datecreation=?", $year[0]);
             if ($year[0] == 2013) {
                 $serieAcademiqueExterne .= "{name: '" . TXT_INFERIEUR2013 . "', y: " . $NbAcademiqueExterne . " , drilldown: '" . TXT_ACADEMIQUEEXTERNE . $year[0] . "'},";
             } else {
@@ -384,7 +390,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
     foreach ($years as $key => $year) {
         $serieIndustriel .= "{id: '" . TXT_INDUSTRIEL . "',name: '" . TXT_INDUSTRIEL . "',data: [";
         foreach ($years as $key => $year) {
-            $Nbindustriel = $manager->getSingle2("SELECT count(distinct id) FROM tmpnbnewUserIndust where datecreation <=?", $year[0]);
+            $Nbindustriel = $manager->getSingle2("SELECT count(distinct id) FROM tmpnbnewUserIndust where datecreation =?", $year[0]);
             if ($year[0] == 2013) {
                 $serieIndustriel .= "{name: '" . TXT_INFERIEUR2013 . "', y: " . $Nbindustriel . " , drilldown: '" . TXT_INDUSTRIEL . $year[0] . "'},";
             } else {
@@ -441,7 +447,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------   
     $serie0 = "{id: '" . TXT_ACADEMIQUEINTERNE . "',name: '" . TXT_ACADEMIQUEINTERNE . "',data: [";
     foreach ($years as $key => $year) {
-        $nbByYear = $manager->getSinglebyArray("select count(distinct idutilisateur) from tmpnbnewUserinterne where libellecentrale=? and datecreation<=?", array($libellecentrale, $year[0]));
+        $nbByYear = $manager->getSinglebyArray("select count(distinct idutilisateur) from tmpnbnewUserinterne where libellecentrale=? and datecreation =?", array($libellecentrale, $year[0]));
         if (empty($nbByYear)) {
             $nbByYear = 0;
         }

@@ -2766,7 +2766,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
 //------------------------------------------------------------------------------------------------------------
 //                      METHODE PROJETDATEFINI
 //------------------------------------------------------------------------------------------------------------
-    public function updateDateStatutFini(DateStatutFiniProjet $datefini, $idprojet) {var_dump($datefini);die;
+    public function updateDateStatutFini(DateStatutFiniProjet $datefini, $idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
