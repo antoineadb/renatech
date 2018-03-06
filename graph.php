@@ -97,8 +97,8 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                 </tr>
             </table>
         </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPROJETDATETYPE || isset($_GET['anneeType'])) { ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 590px;">
+    <?php } elseif (isset($_GET['statistique'])&& $_GET['statistique'] == IDSTATPROJETDATETYPE){ ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_PROJET; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 800px;">
             <?php echo TXT_AIDECALCULTYPEPROJET; ?></span></a></legend>
             <table>
                 <tr>
@@ -109,7 +109,7 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                 </tr>
             </table>
         </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATSF || !empty($_GET['anneeSF'])) { ?>        
+    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATSF ) { ?>        
         <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
         <fieldset id ="statprojet"><legend><?php echo TXT_ORIGINEFINANCEMENT; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 630px;">        
         <?php echo affiche('TXT_AIDESF'); ?></span></a></legend>        
@@ -126,7 +126,7 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                 </tr>
             </table>
         </fieldset>
-    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATRESSOURCE || isset($_GET['anneeRessources']) ) { ?>        
+    <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATRESSOURCE ) { ?>        
         <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
         <fieldset id ="statprojet"><legend><?php echo TXT_RESSOURCE.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 840px;">        
         <?php echo affiche('TXT_AIDERESSOURCE'); ?></span></a></legend>       
@@ -140,6 +140,24 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                     <td>
                         <?php include 'statistiques/projetRessourceBar.php'; ?>
                         <?php include 'statistiques/projetRessourcePIE.php'; ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+<?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPARTINDUSENCOURS ) { ?>        
+        <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_RESSOURCE.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 840px;">        
+        <?php echo affiche('TXT_AIDERESSOURCE'); ?></span></a></legend>       
+        <?php }else{ ?>
+        <fieldset id ="statprojet"><legend><?php echo TXT_RESSOURCE.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 735px;">
+        <?php echo affiche('TXT_AIDERESSOURCELOCAL'); ?></span></a></legend>
+        
+        <?php } ?>
+            <table>
+                <tr>
+                    <td>
+                        <?php include 'statistiques/partenaireIndustProjetEncoursBar.php'; ?>
+                        <?php include 'statistiques/partenaireIndustProjetEncoursPIE.php'; ?>
                     </td>
                 </tr>
             </table>

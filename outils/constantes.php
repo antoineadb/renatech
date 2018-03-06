@@ -53,7 +53,7 @@ define('ABSPATH', dirname(__FILE__) . '/');
 define('STATCENTRALETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Projet par centrale et par type'));
 define('STATUSERDATE', $manager->getSingle2("select idstatistique from statistique where libellestatistiqueen=?", 'Number of users since the beginning by category'));
 define('IDSTATNOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de projets déposés'));
-define('IDSTATPROJETDATETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Répartition des nouveaux projets par type, cumul par année'));
+define('IDSTATPROJETDATETYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de projets déposés entre 2014 et 2017 par type'));
 define('IDSTATTYPOLOGIENOUVEAUPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul des nouveaux projets par typologie'));
 define('IDSTATTYPOLOGIEPROJETENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de projet en cours par typologie'));
 define('IDREPARTIONPROJETENCOURSTYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", "Répartition des projets en cours par type, cumul par année"));
@@ -64,6 +64,9 @@ define('IDNEWUSERBYDATE', $manager->getSingle2("select idstatistique from statis
 define('IDPERMANENTNONPERMANENTBYDATE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Origine des nouveaux porteurs de projet, cumul par année'));
 define('IDNEWUSERBYTYPE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Utilisateurs par type'));
 define('IDSTATRESSOURCE', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Répartition par ressources technologiques des projets en cours'));
+
+define('IDSTATPARTINDUSENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Origine des partenaires industriels des projets en cours'));
+
 define('IDORIGINEPORTPORTEURPROJETENCOURS', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Origine des porteurs de projet en cours, cumul par année'));
     define('IDPARTHORSRENATECH', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Cumul du nombre de partenaires hors RENATECH intéréssés par les projets en cours'));
 define('IDNBUSERCLEANROOMNEWPROJET', $manager->getSingle2("select idstatistique from statistique where libellestatistique=?", 'Nombre de personnes ayant travaillé en salle blanche depuis 2014'));
