@@ -145,14 +145,13 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
             </table>
         </fieldset>
 <?php } elseif (isset($_GET['statistique']) && $_GET['statistique'] == IDSTATPARTINDUSENCOURS ) { ?>        
-        <?php if(IDTYPEUSER == ADMINNATIONNAL){?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_RESSOURCE.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 840px;">        
-        <?php echo affiche('TXT_AIDERESSOURCE'); ?></span></a></legend>       
-        <?php }else{ ?>
-        <fieldset id ="statprojet"><legend><?php echo TXT_RESSOURCE.'s'; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 735px;">
-        <?php echo affiche('TXT_AIDERESSOURCELOCAL'); ?></span></a></legend>
         
-        <?php } ?>
+        <fieldset id ="statprojet">
+                <legend>
+                    <?php echo TXT_INFO; ?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' ><span style="width: 280px;">        
+                    <?php echo TXT_AIDEORIGINEPARTEAIREINDUSTRIEL; ?></span></a>
+                </legend>       
+        
             <table>
                 <tr>
                     <td>

@@ -315,3 +315,19 @@ function callbackModifDateDebutProjet(reponse) {
         document.getElementById('majDateDebutProjet').style.display='block';      
     }    
 }
+
+function effaceFigure(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function() {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            callbackEffaceFigure(xhr2.responseText);
+        }
+    };
+
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+/* fonction de traitement de la réponse Ajax*/
+function callbackEffaceFigure(reponse) {
+    document.getElementById('response').style.display='block';
+}

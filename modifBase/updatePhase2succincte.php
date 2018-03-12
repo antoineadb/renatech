@@ -163,7 +163,6 @@ $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
     }else{        
             $descriptioncentraleproximite='_';
             $manager->deletecentraleproximiteprojet($idprojet);
-            $manager->deleteUtilisateurAdministrateur($idprojet);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              FIN DES CENTRALES DE PROXIMITE

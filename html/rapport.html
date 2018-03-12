@@ -179,8 +179,16 @@ if(isset($_GET['statut'])){
                     alert("<?php echo 'The number of characters for the Project objectives  must be less than 1200, please correct'; ?>");
                     return false;                    
                     exit();                
+                }else if(nbcontexte==0){
+                    alert("<?php echo 'The Project objectives must not be empty, please correct'; ?>");
+                    return false;                    
+                    exit();                
                 }else if(nbresults>1200){
-                    alert("<?php echo 'The number of characters for the Rsults must be less than 1200, please correct'; ?>");
+                    alert("<?php echo 'The number of characters for the Results must be less than 1200, please correct'; ?>");
+                    return false;                    
+                    exit();                
+                }else if(nbresults==0){
+                    alert("<?php echo 'The Results must not be empty, please correct'; ?>");
                     return false;                    
                     exit();                
                 }else if(nbvalorization>820){
@@ -705,10 +713,15 @@ if(isset($figure) && $figure!=''){
             <input type="text" data-dojo-type="dijit/form/ValidationTextBox" id='fileName' readonly="true">            
             <button type="button" data-dojo-type="dijit/form/Button"   data-dojo-props="onClick:function(){uploadFichier();}" style="margin-left: 25px;"><?php echo 'Validate'; ?></button>
         </td>
+        <td  class="eraseDigitValorization">
+                <input type="button"  label="<?php echo 'Delete Figure' ;?>" data-dojo-type="dijit/form/Button" 
+                data-dojo-props="onClick:function(){menuConfirmationDeleteFigure('repEmptyFigure',this.id)}" id="delFig">
+        </td>
         </tr>
         <tr>
         <td style="float: left" id="cibleFigure">
-            <img src=" <?php echo  '/' . REPERTOIRE . '/uploadlogo/' . nomFichierValidesansAccent($figure) ?>" width='<?php echo $width; ?>' height='<?php echo $height; ?>' style="margin-bottom: 5px;margin-top: 15px;margin-left:20px"></td>
+            <img src=" <?php echo  '/' . REPERTOIRE . '/uploadlogo/' . nomFichierValidesansAccent($figure) ?>" width='<?php echo $width; ?>' height='<?php echo $height; ?>' 
+                 style="margin-bottom: 5px;margin-top: 15px;margin-left:20px"></td>
         </tr><tr><td><div style="margin-left:20px" id='ratio2'><?php echo 'ratio: 1 : '.round($height/$width,2); ?></div></td></tr>
         <?php }else{?>
         <td>
@@ -716,9 +729,10 @@ if(isset($figure) && $figure!=''){
             <button type="button" data-dojo-type="dijit/form/Button"  style="margin-left:20px" data-dojo-props="onClick:function(){document.getElementById('file').click();}"><?php echo 'Browse..'; ?></button>
             <input type="text" data-dojo-type="dijit/form/ValidationTextBox" id='fileName' readonly="true">
             <button type="button" data-dojo-type="dijit/form/Button"   data-dojo-props="onClick:function(){uploadFichier();}" style="margin-left: 25px;"><?php echo 'Validate'; ?></button> 
-        </td>
-        <?php }?>         
+        </td>       
+        <?php }?>
     </tr>
+    <tr id='response' style="display: none;margin-left:20px"><td>The image has been removed from the database, it will disappear after saving the report</td></tr>
     <tr><td><progress id="progressBar" value="0" max="100" style="width:290px;margin-left:20px;height: 20px;visibility: hidden;margin-top: 10px" ></progress>
             <div id="status" style="margin-left:20px;float: left;margin-top: 10px"></div><div id="status_bytes" style="padding-right: 240px;float: right;margin-top: 10px"></div>
         </td></tr>
@@ -793,6 +807,11 @@ function menuConfirmationEmptyTrash(e,id){
         document.getElementById('currentInput').value=id;
 	repEmptyTrash.show();
 }
+function menuConfirmationDeleteFigure(e,id){
+	dijit.byId(e).set('title', 'Thanks to confirm the deletion of the figure!');
+        document.getElementById('currentInput').value=id;
+	repEmptyFigure.show();
+}
 
 function deleteCurrentInput(){
     if( document.getElementById('currentInput').value === 'contextDialog' ){
@@ -817,6 +836,16 @@ style="width: 400px;margin-left: 20px;   ">
    <tr>
 	   <td><button type="submit" data-dojo-type="dijit/form/Button"   id="sOui" onclick="deleteCurrentInput()">Yes</button></td>
 	   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="sNon" data-dojo-props="onClick:function(){rep.hide();}">No</button></td>	   
+   </tr>
+</table>
+</div>
+<div data-dojo-type="dijit/Dialog" data-dojo-id="repEmptyFigure" id ='repEmptyFigure'  title="<?php echo TXT_CONFIRMATIONDELPROJET; ?>" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconCut', showLabel: true"
+style="width: 400px;margin-left: 20px;   ">
+<table class="dijitDialogPaneContentArea" >
+   <tr>
+       <td><button type="button" data-dojo-type="dijit/form/Button"   id="sFigOui" 
+                   onclick="effaceFigure('/<?php echo REPERTOIRE; ?>/modifBase/ajaxDeleteFigure.php?idprojet=<?php echo $idprojet; ?>');repEmptyFigure.hide()">Yes</button></td>
+       <td><button type="button" data-dojo-type="dijit/form/Button"  id="sFigNon" data-dojo-props="onClick:function(){repEmptyFigure.hide();}">No</button></td>	   
    </tr>
 </table>
 </div>
@@ -1005,10 +1034,8 @@ style="width: 400px;margin-left: 20px;   ">
                 dojo.byId("valorisation").value = editor3.get("value");
                 document.getElementById('cptvalorisation').innerHTML = "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;                
                 if (trim(strip_tags(editor3.get("value")),'').length > 820) {
-                    document.getElementById('msgerrvalorization').style.display = 'block';                    
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
+                    document.getElementById('msgerrvalorization').style.display = 'block';
                 } else {
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2600px";});
                     document.getElementById('msgerrvalorization').style.display = 'none';
                 }                 
             });												
@@ -1017,9 +1044,7 @@ style="width: 400px;margin-left: 20px;   ">
                 document.getElementById('cptvalorisation').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;
                 if (trim(strip_tags(editor3.get("value")),'').length > 820) {
                     document.getElementById('msgerrvalorization').style.display = 'block';
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2600px";});
                     document.getElementById('msgerrvalorization').style.display = 'none';
                 }                
             });
@@ -1028,9 +1053,7 @@ style="width: 400px;margin-left: 20px;   ">
                 document.getElementById('cptvalorisation').innerHTML =  "<?php echo 'Number of characters entered '.' : '; ?>" + strip_tags(trim(dojo.byId("valorisation").value),'').length;
                 if (trim(stripTags(editor3.get("value"))).length > 820) {
                     document.getElementById('msgerrvalorization').style.display = 'block';
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2900px";});
                 } else {
-                    require(["dojo/dom"], function(dom){dom.byId("reportDiv").style.height = "2600px";}); 
                     document.getElementById('msgerrvalorization').style.display = 'none';
                 }            
             });
@@ -1147,7 +1170,6 @@ style="width: 400px;margin-left: 20px;   ">
             function abortHandler1() {
                 document.getElementById('status1').innerHTML = "The upload was canceled !";
             }
-           
-        </script>
+</script>
 <?php BD::deconnecter();?>
 </form>

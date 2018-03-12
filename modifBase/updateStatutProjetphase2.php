@@ -19,7 +19,7 @@ if (!empty($_POST['page_precedente']) && $_POST['page_precedente'] == 'modifProj
         $commentaire = $_POST['comment'];
     }else{
         $commentaire = TXT_NOCOMMENT;
-    }  
+    }
 //Récupération de l'idcentrale --> L'utilisateur qui peut changer le statut est forcément un responsable de centrale
     $_SESSION['idcentrale'] = $idcentrale;
     $idstatutprojet = (int) $_POST['statutProjet'];

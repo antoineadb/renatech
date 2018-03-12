@@ -24,16 +24,16 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     $subtitle = TXT_NBPROJET . ' <b>' . $nbtotalprojet . '</b>';
 }
 if (IDTYPEUSER == ADMINLOCAL) {
-    
+  $years = $manager->getList("select distinct EXTRACT(YEAR from dateprojet)as year from projet where   EXTRACT(YEAR from dateprojet)>2012 order by year asc");  
     $serie = "";
     $nbtotalprojet=0;
-    
-            $nbProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
-                    . " and  trashed != ? and idstatutprojet_statutprojet=? ", array(IDCENTRALEUSER,TRUE,ENCOURSREALISATION));                        
-            if($nbProjet==0){$nbProjet=0;}            
-            $string0.='["' . $year[0] . '",' . $nbProjet. '],';
-           $nbtotalprojet+=$nbProjet;
-
+    foreach ($years as $key => $value) {
+        $nbProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
+                . " and  trashed != ? and idstatutprojet_statutprojet=? and EXTRACT(YEAR from dateprojet)=? ", array(IDCENTRALEUSER,TRUE,ENCOURSREALISATION,$value[0]));                        
+        if($nbProjet==0){$nbProjet=0;}            
+        $string0.='["' . $value[0] . '",' . $nbProjet. '],';
+        $nbtotalprojet+=$nbProjet;        
+    }
        
     $title = TXT_NBRUNNINGPROJET;
     $subtitle = TXT_NBPROJET . ' <b>' . $nbtotalprojet . '</b>';

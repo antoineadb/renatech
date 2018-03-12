@@ -9,7 +9,7 @@ include_once 'outils/toolBox.php';
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
     $pseudo = $_SESSION['pseudo'];
-    $idcentrale_centrale = $manager->getSingle2("SELECT idcentrale_centrale FROM loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $pseudo);
+    
 } else {
     header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);
 }
@@ -22,7 +22,7 @@ if (isset($_POST['nom'])) {
                     union
                     select nom,prenom,idutilisateur,datecreation from utilisateur where lower(nom) like ? and idcentrale_centrale is null";
 
-        $param = array('%' . strtolower($nom) . '%', $idcentrale_centrale, '%' . strtolower($nom) . '%', '%' . strtolower($nom) . '%');
+        $param = array('%' . strtolower($nom) . '%', IDCENTRALEUSER, '%' . strtolower($nom) . '%', '%' . strtolower($nom) . '%');
     } else {
         $req = "
                 select nom,prenom,idutilisateur,datecreation from utilisateur where  idcentrale_centrale=?
@@ -30,7 +30,7 @@ if (isset($_POST['nom'])) {
                 select nom,prenom,idutilisateur,datecreation from utilisateur where  idqualitedemandeurindust_qualitedemandeurindust is not null
                 union
                 select nom,prenom,idutilisateur,datecreation from utilisateur where idcentrale_centrale is null ";
-        $param = array($idcentrale_centrale);
+        $param = array(IDCENTRALEUSER);
     }
 }
 if (isset($_POST['prenom'])) {
@@ -42,7 +42,7 @@ if (isset($_POST['prenom'])) {
                     union
                     select nom,prenom,idutilisateur,datecreation from utilisateur where lower(prenom) like ? and idcentrale_centrale is null 
                     ";
-        $param = array('%' . strtolower($prenom) . '%', $idcentrale_centrale, '%' . strtolower($prenom) . '%', '%' . strtolower($prenom) . '%');
+        $param = array('%' . strtolower($prenom) . '%', IDCENTRALEUSER, '%' . strtolower($prenom) . '%', '%' . strtolower($prenom) . '%');
     }
 }
 
@@ -57,7 +57,7 @@ if (isset($_POST['nom']) && isset($_POST['prenom'])) {
                     select nom,prenom,idutilisateur,datecreation from utilisateur where lower(nom) like ? and lower(prenom) like ? and idqualitedemandeuraca_qualitedemandeuraca is null 
                 ";
         $param = array(
-            '%' . strtolower($nom) . '%', '%' . strtolower($prenom) . '%', $idcentrale_centrale, '%' . strtolower($nom) . '%', '%' . strtolower($prenom) . '%','%' . strtolower($nom) . '%', '%' . strtolower($prenom) . '%');
+            '%' . strtolower($nom) . '%', '%' . strtolower($prenom) . '%', IDCENTRALEUSER, '%' . strtolower($nom) . '%', '%' . strtolower($prenom) . '%','%' . strtolower($nom) . '%', '%' . strtolower($prenom) . '%');
     }
 }
 
