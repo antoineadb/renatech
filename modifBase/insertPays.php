@@ -6,10 +6,11 @@ showError($_SERVER['PHP_SELF']);
 include '../decide-lang.php';
 include_once '../class/Securite.php';
 include_once '../outils/constantes.php';
-if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'adminListe.php') {
+if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'formulaireListe1.php') {
     include_once '../class/Manager.php';
     $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
     $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+
     if (empty($_POST['modifpays'])) {
         header('location:/'.REPERTOIRE.'/insert_paysErr3/' . $lang . '/TXT_MESSAGEERREURPAYSNONSAISIE');
         exit;

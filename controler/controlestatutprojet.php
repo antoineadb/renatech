@@ -39,6 +39,7 @@ if (!empty($_GET['numProjet'])) {
 //                                                                  SI PROJET EN SOUS TRAITANCE
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 $idprojetsoustraitance=$manager->getList2("SELECT  pa.idcentrale,co.idstatutprojet_statutprojet FROM  projetautrecentrale pa,projet p,creer c,concerne co WHERE  pa.idprojet = p.idprojet AND c.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet and p.idprojet =?", $idprojet);
+
 if(!empty($idprojetsoustraitance[0]['idcentrale'])){
     $idcentralesoustraitance =$idprojetsoustraitance[0]['idcentrale'];
 }else{

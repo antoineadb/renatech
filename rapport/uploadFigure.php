@@ -11,9 +11,9 @@ if (!empty($_FILES)) {
         echo '<div id="errExtensionFigure" style="  color: red;font-weight: bold;width: 360px;margin-left:20px">Error!The file must be jpg, jpeg or png</b></div>';
         exit();
     } 
-    $folder = '../uploadlogo/' . nomFichierValidesansAccent($_FILES['file']['name']);
+    $folder = '../uploadlogo/' . nomFichierValidesansAccent($_FILES['file']['name']);    
     if (strrchr($_FILES['file']['name'], '.') == '.jpg' || strrchr($_FILES['file']['name'], '.') == '.JPG' || strrchr($_FILES['file']['name'], '.') == '.jpeg' || strrchr($_FILES['file']['name'], '.') == '.JPEG') {
-        $my_img = $_FILES['file']['tmp_name'];        
+        $my_img = $_FILES['file']['tmp_name'];
         $src_im = imagecreatefromjpeg($my_img);
         $size = GetImageSize($my_img);
         $src_w = $size[0];
@@ -68,7 +68,7 @@ if (!empty($_FILES)) {
             $size = GetImageSize($my_img);
             $src_w = $size[0];
             $src_h = $size[1];
-            $dst_w = 440; //$dst_w = 629;
+            $dst_w = 440;
             $dst_h = round(($dst_w / $src_w) * $src_h);
             $dst_im = imagecreatetruecolor($dst_w, $dst_h);
             imagecopyresampled($dst_im, $src_im, 0, 0, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
@@ -98,6 +98,7 @@ if (!empty($_FILES)) {
             }
         } else {
             $dossier = '../uploadlogo/';
+            
             $fichierlogo = basename(nomFichierValidesansAccent($_FILES['file']['name']));
             if (move_uploaded_file($_FILES['file']['tmp_name'], $dossier . $fichierlogo)) {
                 chmod($dossier . $fichierlogo, 0777);

@@ -10,7 +10,7 @@ if (!empty($_POST['masquepays']) && !empty($_POST['idlibellepaysactuel']) && !em
     include '../modifBase/insertPays.php';
     
 } elseif (!empty($_POST['modifpays']) && !empty($_POST['idlibellepaysactuel'])) {
-    include '../modifBase/updatePays.php';die;
+    include '../modifBase/updatePays.php';
 //--------------------------------------------------------------------------------------------------------------------------------------------
 //SECTEUR ACTIVITE
 //--------------------------------------------------------------------------------------------------------------------------------------------

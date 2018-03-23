@@ -138,7 +138,7 @@ function envoieEmailAttachement($body, $sujet, $email, $cc,$path,$filename) {
         $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
         $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire
         $mail->AddAttachment($path,$filename);        
-       // $mail->Send();
+        $mail->Send();
         return true;
         $mail->SmtpClose();
     } catch (phpmailerException $e) {

@@ -845,7 +845,7 @@ function nomFichierValidesansAccent($chaineNonValide) {
     $chaineNonValide1 = preg_replace('`\s+`', '_', trim($chaineNonValide0));
     $chaineNonValide2 = str_replace("'", "_", $chaineNonValide1);
     $chaineNonValide3 = preg_replace('`_+`', '_', trim($chaineNonValide2));
-    $chaineValide = strtr($chaineNonValide3, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+    $chaineValide = strtr($chaineNonValide3, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñé", "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynne");    
     return $chaineValide;
 }
 
