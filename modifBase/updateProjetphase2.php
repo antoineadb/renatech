@@ -1304,8 +1304,8 @@ if (isset($_POST['page_precedente'])) {
         } elseif ($idstatutprojet == REFUSE) {//PROJET REFUSER            
             $datejour = date('Y-m-d');
             //RECUPERATION DE L'EVENTUEL PREMIER COMMENTAIRE
-            if (!empty($_POST['commentairephase2Valeur'])) {
-                $commentaireProjet = $_POST['commentairephase2Valeur'];
+            if (!empty($_POST['commentaireRefusValeur'])) {
+                $commentaireProjet = $_POST['commentaireRefusValeur'];
             } else {
                 $commentaireProjet = '';
             }

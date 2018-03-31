@@ -279,7 +279,7 @@ class Manager {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('delete  FROM logs where id NOT IN (select id from logs order by id desc limit 500);');            
+            $requete = $this->_db->prepare('delete  FROM logs where id NOT IN (select id from logs order by id desc limit 2500);');            
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {

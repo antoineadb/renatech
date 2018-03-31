@@ -1664,13 +1664,13 @@ if($idstatut!=ENATTENTEPHASE2){
 <table style="display: none" id="commentphase2">
 <tr>
     <td>
-        <label for="commentairephase2" style="width:450px;margin-top: 20px;margin-bottom: 10px; "> <?php echo TXT_COMMENTAIREPROJET.' :'; ?> 
+        <label for="commentaireRefus" style="width:450px;margin-top: 20px;margin-bottom: 10px; "> <?php echo TXT_COMMENTAIREPROJET.' :'; ?> 
             <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                 <span style="text-align: left;padding:10px;width: 470px;border-radius:5px" ><?php echo affiche('TXT_AIDECOMMENTAIREPROJET');?>
                 </span>
             </a>
         </label>
-        <div  id="commentairephase2" name="commentairephase2" style="width:988px;" height="100px" ></div>
+        <div  id="commentaireRefus" name="commentaireRefus" style="width:988px;" height="100px" ></div>
     </td>
 </tr>   
 </table>                        
@@ -1679,7 +1679,7 @@ if($idstatut!=ENATTENTEPHASE2){
 <input type="hidden" id="verrouide" name="verrouide" >
 <input type="hidden" id="reussit" name="reussit" >
 <input type="hidden" id="etautrecentrale" name="etautrecentrale" >
-<input type="hidden" id="commentairephase2Valeur" name="commentairephase2Valeur" >
+<input type="hidden" id="commentaireRefusValeur" name="commentaireRefusValeur" >
 
 <input type="hidden" id="rb_oui" name="rb_oui" >
 
@@ -1695,7 +1695,7 @@ if($idstatut!=ENATTENTEPHASE2){
                                 ready(function() {
                                     new Editor({
                                         plugins: ["undo", "redo"],height: "100px",disabled: "", display: 'none'
-                                    }, "commentairephase2");
+                                    }, "commentaireRefus");
                                     new Editor({
                                         plugins: ["undo", "redo"],
                                         height: "150px", disabled: '<?php echo $bool1;?>'
@@ -1716,11 +1716,11 @@ if($idstatut!=ENATTENTEPHASE2){
                                 });
 
                                 function modiProjetPhase2OnSubmit() {}
-                                dojo.addOnLoad(function() {                                 
+                                dojo.addOnLoad(function() {
                                     var editor1 = dijit.byId("descriptifTechnologique");
                                     var editor2 = dijit.byId("verrouidentifie");
                                     var editor3 = dijit.byId("reussite");
-                                    var editor4 = dijit.byId("commentairephase2");
+                                    var editor4 = dijit.byId("commentaireRefus");
                                     var editor5 = dijit.byId("descriptionautrecentrale");
                                     var editor6 = dijit.byId("descriptioncentraleproximite");
                                     var formElements = dojo.query("input:checked");
@@ -1748,8 +1748,8 @@ if($idstatut!=ENATTENTEPHASE2){
                                     dojo.connect(editor3, "onChange", this, function(event) {
                                         dojo.byId("reussit").value = editor3.get("value");
                                     });
-                                    dojo.connect(editor4, "onChange", this, function() {
-                                        dojo.byId("commentairephase2Valeur").value = editor4.get("value");
+                                    dojo.connect(editor4, "onChange", this, function(event) {
+                                        dojo.byId("commentaireRefusValeur").value = editor4.get("value");
                                     });
                                     dojo.connect(editor5, "onChange", this, function() {
                                         dojo.byId("etautrecentrale").value = editor5.get("value");

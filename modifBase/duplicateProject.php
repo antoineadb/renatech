@@ -101,7 +101,14 @@ if (isset($_GET['idprojet']) && !empty($_GET['idprojet'])) {
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              Rappport
 //  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------         
-    $projetPhase2 = new Projetphase2($arrayProjet[0]['contactscentraleaccueil'], $arrayProjet[0]['idtypeprojet_typeprojet'], $arrayProjet[0]['nbheure'], $arrayProjet[0]['datedebutprojet'], $arrayProjet[0]['dureeprojet'], $arrayProjet[0]['idperiodicite_periodicite'], $arrayProjet[0]['centralepartenaireprojet'], $arrayProjet[0]['idthematique_thematique'], $arrayProjet[0]['idautrethematique_autrethematique'], $arrayProjet[0]['descriptiftechnologique'], $arrayProjet[0]['attachementdesc'], $arrayProjet[0]['verrouidentifiee'], $arrayProjet[0]['nbplaque'], $arrayProjet[0]['nbrun'], $arrayProjet[0]['envoidevis'], $arrayProjet[0]['emailrespdevis'], $arrayProjet[0]['reussite'], $arrayProjet[0]['refinterneprojet'], $arrayProjet[0]['devtechnologique'], $arrayProjet[0]['nbeleve'], $arrayProjet[0]['nomformateur'], $arrayProjet[0]['partenaire1'], $arrayProjet[0]['porteurprojet'], $arrayProjet[0]['dureeestime'], $arrayProjet[0]['periodestime'], $arrayProjet[0]['descriptionautrecentrale'], $arrayProjet[0]['etapeautrecentrale'], $arrayProjet[0]['centraleproximite'], $arrayProjet[0]['descriptioncentraleproximite'], $arrayProjet[0]['interneexterne'], $arrayProjet[0]['internationalnational']);
+    $projetPhase2 = new Projetphase2($arrayProjet[0]['contactscentraleaccueil'], $arrayProjet[0]['idtypeprojet_typeprojet'], $arrayProjet[0]['nbheure'], $arrayProjet[0]['datedebutprojet'], $arrayProjet[0]['dureeprojet'], 
+            $arrayProjet[0]['idperiodicite_periodicite'], $arrayProjet[0]['centralepartenaireprojet'], $arrayProjet[0]['idthematique_thematique'], $arrayProjet[0]['idautrethematique_autrethematique'], 
+            $arrayProjet[0]['descriptiftechnologique'], $arrayProjet[0]['attachementdesc'], $arrayProjet[0]['verrouidentifiee'], $arrayProjet[0]['nbplaque'], $arrayProjet[0]['nbrun'], $arrayProjet[0]['envoidevis'],
+            $arrayProjet[0]['emailrespdevis'], $arrayProjet[0]['reussite'], $arrayProjet[0]['refinterneprojet'], $arrayProjet[0]['devtechnologique'], $arrayProjet[0]['nbeleve'], $arrayProjet[0]['nomformateur'], 
+            $arrayProjet[0]['partenaire1'], $arrayProjet[0]['porteurprojet'], $arrayProjet[0]['dureeestime'], $arrayProjet[0]['periodestime'], $arrayProjet[0]['descriptionautrecentrale'], $arrayProjet[0]['etapeautrecentrale'],
+            $arrayProjet[0]['centraleproximite'], $arrayProjet[0]['descriptioncentraleproximite'], $arrayProjet[0]['interneexterne'], $arrayProjet[0]['internationalnational'], $arrayProjet[0]['idtypecentralepartenaire']);   
+    
+   
     $manager->updateProjetphase2($projetPhase2, $newIdProjet);
 }
 $videCache->clear();

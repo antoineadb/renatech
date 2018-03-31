@@ -58,7 +58,8 @@ include 'html/header.html';
                 var nbdureeestimeprojet = dojo.byId("dureeestimeprojet").value.length;
                 if(dijit.byId("statutProjet")){
                     var statutProjet = dijit.byId("statutProjet").value;
-                    var commentaireprojet = stripTags (document.getElementById("commentairephase2Valeur").value);
+                    
+                    var commentaireprojet = document.getElementById("commentaireRefus").value;
                     if(statutProjet==='st4' && commentaireprojet ==''){
                         alert("<?php echo TXT_COMMENTREFUS; ?>");
                         return false;    

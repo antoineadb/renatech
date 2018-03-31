@@ -3,8 +3,8 @@ include_once '../class/Manager.php';
 include_once '../class/email.php';
 $db = BD::connecter();
 $manager = new Manager($db);
-if(isset($_POST['commentairephase2Valeur'])){  
- $commentaire  = utf8_decode($_POST['commentairephase2Valeur']);
+if(isset($_POST['commentaireRefusValeur'])){  
+ $commentaire  = utf8_decode($_POST['commentaireRefusValeur']);
 }elseif(isset($_POST['comment'])){  
  $commentaire  =  utf8_decode($_POST['comment']);
 }else{
