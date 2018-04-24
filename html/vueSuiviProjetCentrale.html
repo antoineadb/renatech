@@ -165,7 +165,8 @@ dojo.ready(function(){
 <?php
 $idcentrale =$manager->getSingle2("SELECT idcentrale_centrale FROM  utilisateur,loginpassword  WHERE idlogin = idlogin_loginpassword and pseudo=?",$_SESSION['pseudo']);
 $row = $manager->getListbyArray("select nom,prenom,idutilisateur,datecreation from utilisateur where  idcentrale_centrale=?  union select nom,prenom,idutilisateur,datecreation from utilisateur
-    where  idqualitedemandeurindust_qualitedemandeurindust is not null union select nom,prenom,idutilisateur,datecreation from utilisateur where idcentrale_centrale is null AND idtypeutilisateur_typeutilisateur != ?", array($idcentrale,ADMINNATIONNAL));
+    where  idqualitedemandeurindust_qualitedemandeurindust is not null union select nom,prenom,idutilisateur,datecreation from utilisateur where idcentrale_centrale is null AND idtypeutilisateur_typeutilisateur != ?", 
+array($idcentrale,ADMINNATIONNAL));
 $fprow = fopen('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 'w');
 $datausercompte = "";
 for ($i = 0; $i < count($row); $i++) {
@@ -215,12 +216,14 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
         var myGrid = dijit.byId('myGrid');
         if(!myGrid){
             myGrid= new dojox.grid.DataGrid({
+                queryOptions: {ignoreCase: true},
                 id:'myGrid',
                 store:myObjectStore ,
-                structure:myStructure,
-                style:'width:610px;height:450px;margin-left:20px'
+                structure:myStructure,                
+                style:'width:610px;height:450px;margin-left:20px'                
             });
         }
+       
 //---------------------------------------------------------------------------------------------------------------------------------------
 //                    EVENEMENT SUR LE LOAD DE LA BOITE DE DIALOGUE
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -279,17 +282,15 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
             dijit.byId(grid).filter({param: ''+id.value+''+'*'});
             document.getElementById('filtreNom').value='oui';
             document.getElementById('filtrePrenom').value='non';
-        }
-        function capitalize(s) {
-            return s[0].toUpperCase() + s.slice(1);
-        }
+        }      
     </script>
     <input type="hidden"  id="filtreNom" value="non">
     <input type="hidden"  id="filtrePrenom" value="non">
 
     <table>
         <tr>
-            <td><input data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:150px;margin-left:5px" onfocus="dijit.byId('prenom').set('value','');" onchange="filtrenom('myGrid','nom','nom')" placeholder="<?php echo TXT_NOM; ?>"></td>
+            <td><input data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:150px;margin-left:5px" onfocus="dijit.byId('prenom').set('value','');" 
+                onchange="filtrenom('myGrid','nom','nom')" placeholder="<?php echo TXT_NOM; ?>"></td>
             <td><div style="margin-left: 10px;margin-right: 10px;"><?php echo TXT_OU;?></div></td>
             <td><input data-dojo-type='dijit/form/ValidationTextBox' name='prenom' id='prenom' style="width:150px;margin-right: 5px;margin-left:5px" onfocus="dijit.byId('nom').set('value','');" onchange="filtreprenom('myGrid','prenom','prenom')" placeholder="<?php echo TXT_PRENOM; ?>"></td>
             <td>
@@ -297,12 +298,12 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
                 <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
                     if(document.getElementById('filtreNom').value=='oui'){
                         dijit.byId('prenom').set('value','');
-                        dijit.byId('myGrid').filter({nom: ''+(dijit.byId('nom').value)+''+'*'});
+                        dijit.byId('myGrid').filter({nom: ''+dijit.byId('nom').value+''+'*'});
                     }else if(document.getElementById('filtrePrenom').value=='oui'){
                         dijit.byId('nom').set('value','');
-                        dijit.byId('myGrid').filter({prenom: ''+dijit.byId('prenom').value+''+'*'});
+                        dijit.byId('myGrid').filter({prenom: ''+ dijit.byId('prenom').value+''+'*'});
                     }
-                </script>           
+                </script>  
                 </div>
             </td>
             <td>

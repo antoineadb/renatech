@@ -25,8 +25,17 @@ include 'html/header.html';
         }else{
             include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
         }
-        ?>       
-        
+        ?>
+        <?php /* ?>
+        <div data-dojo-type="dijit/layout/TabContainer" style="margin-top:25px;width: 1050px;font-size: 1.2em;" doLayout="false" selected="true" >    
+            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo "<div title=''>" . TXT_PROJETS_DES_CENTRALES . "</div>"; ?>" style="height:550px;white-space: normal" >                
+                    <?php include_once 'html/vueSuiviProjetTousCentrales.html'; ?>
+                </div>
+            <div data-dojo-type="dijit/layout/ContentPane" title="<?php echo "<div title=''>" . TXT_PROJETS_DES_CENTRALES_ADMIN . "</div>"; ?>" style="height:550px;white-space: normal" >
+                    <?php include_once 'html/vueSuiviProjetTousCentralesAdminl.html'; ?>
+                </div>
+        </div>
+        <?php */ ?>
             <div style="height:500px;margin-top: 25px" ><?php require_once 'html/vueSuiviProjetTousCentrales.html'; ?></div>
     </div>
     <table>

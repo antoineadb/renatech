@@ -30,6 +30,11 @@ if(!check_URL($_SESSION['pseudo'], $idprojet)){
 BD::deconnecter();
 /* FIN DE LA VERIFICATION EN CAS DE MODIFICATION MANUEL D'URL */
 
+if(isset($_SESSION['idTypeUser'])){
+    $typeUser =$_SESSION['idTypeUser']; 
+}elseif(isset($_SESSION['typeutilisateur'])){
+    $typeUser =$_SESSION['typeutilisateur'];
+}
 include 'html/header.html';
 ?>
 <script src="<?php echo '/'.REPERTOIRE ?>/js/ajaxefface.js"></script>

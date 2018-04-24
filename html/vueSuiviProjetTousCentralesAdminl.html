@@ -33,13 +33,11 @@
                 structure: [
                     {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px"},
                     {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet", width: "130px", formatter: formatDate},
-                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "220px  "},
-                    {name: " ", field: "imprime", width: "34px", formatter: hrefFormatterPDF},                 
-                    {name: "<?php echo TXT_STATUTPROJET?>", field: "libellestatutprojet", width: "110px"},
-                    {name: "<?php echo TXT_NOMDEMANDEUR?>", field: "nom", width: "110px"},
-                    {name: "<?php echo TXT_NOMLABORATOIRE?>", field: "entrepriselaboratoire", width: "110px"},
-                    {name: "<?php echo TXT_NOMENTREPRISE ?>", field: "nomentreprise", width: "110px"},
-                    {name: "<?php echo TXT_CENTRALE ?>", field: "libellecentrale", width: "50px"}
+                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "280px"},
+                    {name: " ", field: "imprime", width: "34px", formatter: hrefFormatterPDF},
+                    {name: "<?php echo TXT_ADMINPROJET; ?>", field: "administrateurprojet", width: "auto "},
+                    {name: "<?php echo TXT_PORTEUR; ?>", field: "porteurprojet", width: "auto"},                    
+                    {name: "<?php echo TXT_CENTRALE ?>", field: "libellecentrale", width: "auto"}
                 ]
             }, "gridAn");
             grid.startup();

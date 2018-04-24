@@ -40,11 +40,24 @@ if (!empty($_SESSION['idutilisateur'])) {
 //                                                                  PROJET CENTRALE TOUS
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 $manager->exeRequete("drop table if exists tmptouscentrale;");
-$manager->exeRequete("CREATE TABLE tmptouscentrale AS (SELECT p.numero,p.datemaj,p.dureeprojet,p.idperiodicite_periodicite,p.datedebutprojet,p.titre,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,p.idprojet,u.nom,u.nomentreprise,u.entrepriselaboratoire
-FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s
-WHERE cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND
-  co.idprojet_projet = p.idprojet AND  t.idtypeprojet = p.idtypeprojet_typeprojet
-  AND s.idstatutprojet = co.idstatutprojet_statutprojet  order by p.idprojet)");
+$manager->exeRequete("CREATE TABLE tmptouscentrale AS (
+    SELECT distinct p.idprojet, p.numero,p.datemaj,p.dureeprojet,p.idperiodicite_periodicite,p.datedebutprojet,p.titre,p.dateprojet,ce.libellecentrale,s.idstatutprojet,s.libellestatutprojet,s.libellestatutprojeten,u.nom,u.nomentreprise,u.entrepriselaboratoire,
+    CASE WHEN ua.idutilisateur IS NOT NULL THEN (SELECT CONCAT(nom,' - ',prenom) FROM utilisateur WHERE idutilisateur=ua.idutilisateur) ELSE ''
+    END AS  administrateurprojet,
+    CASE WHEN up.idutilisateur_utilisateur IS NOT NULL THEN (SELECT CONCAT(nom,' - ',prenom) FROM utilisateur WHERE idutilisateur=up.idutilisateur_utilisateur) ELSE ''
+    END AS  porteurprojet
+    FROM  projet p
+    LEFT JOIN creer cr ON  p.idprojet = cr.idprojet_projet
+    LEFT JOIN concerne co ON  p.idprojet = co.idprojet_projet
+    LEFT JOIN utilisateur u ON  cr.idutilisateur_utilisateur = u.idutilisateur
+    LEFT JOIN centrale ce ON  co.idcentrale_centrale = ce.idcentrale
+    LEFT JOIN statutprojet s ON  co.idstatutprojet_statutprojet = s.idstatutprojet
+    LEFT JOIN typeprojet t on p.idtypeprojet_typeprojet = t.idtypeprojet
+    LEFT JOIN  utilisateuradministrateur ua on u.idutilisateur = ua.idutilisateur
+    LEFT JOIN  utilisateurporteurprojet up on u.idutilisateur = up.idutilisateur_utilisateur
+    ORDER BY p.idprojet)
+    
+");
 $manager->exeRequete("ALTER TABLE tmptouscentrale ADD COLUMN calcfinprojet date;");
 $manager->exeRequete("ALTER TABLE tmptouscentrale ADD COLUMN finprojetproche date;");
 $rowprojet=$manager->getList("select * from tmptouscentrale");
@@ -90,7 +103,6 @@ for ($i = 0; $i < $nbarrayprojet; $i++) {
     }
 }
 
-
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  FIN REMPLISSAGE DES DATE DE FIN DE PROJET ET DE PROJET PROCHE
 //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -119,6 +131,10 @@ for ($i = 0; $i < count($rowproject); $i++) {
             . "," . '"calcfinprojet":' . '"' . $rowproject[$i]['calcfinprojet'] . '"'
             . "," . '"nomentreprise":' . '"' . filtredonnee($rowproject[$i]['nomentreprise']) . '"'
             . "," . '"entrepriselaboratoire":' . '"' . filtredonnee($rowproject[$i]['entrepriselaboratoire']) . '"'
+            
+           . "," . '"porteurprojet":' . '"' . filtredonnee($rowproject[$i]['porteurprojet']) . '"'
+            . "," . '"administrateurprojet":' . '"' . filtredonnee($rowproject[$i]['administrateurprojet']) . '"'
+            
             . "," . '"libellecentrale":' . '"' . $rowproject[$i]['libellecentrale'] . '"' . "},";
     fputs($fpprojet, $dataprojet);
     fwrite($fpprojet, '');

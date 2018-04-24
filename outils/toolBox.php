@@ -1020,6 +1020,13 @@ function showMonth($id, $lang) {
 }
 
 function createLogInfo($dateHeure, $infos, $nomPrenom, $statutProjet, $manager, $idcentrale) {
+    if (is_file('../class/Manager.php')) {
+        include_once '../class/Manager.php';
+    } else {
+        include_once 'class/Manager.php';
+    }
+    $db = BD::connecter();
+    $manager = new Manager($db);
     $id = $manager->getSingle("select max(id) from logs") + 1;
     $logs = new Logs($id, $dateHeure, $infos, $nomPrenom, $statutProjet, $idcentrale);
     $manager->addlogs($logs);
@@ -1308,4 +1315,40 @@ function miseAnullStatutcloturerFin($idprojet,$manager,$datemodifstatut){
     if($dateStatutCloturer <=  $datemodifstatut){// la date du statut fini est antérieur à la date du statut en cours
         $manager->updateNullStatutCloturer($idprojet);
     }
+}
+
+function recupMailAdminProjet($idprojet) {
+    if (is_file('../class/Manager.php')) {
+        include_once '../class/Manager.php';
+    } else {
+        include_once 'class/Manager.php';
+    }
+    $db = BD::connecter();
+    $manager = new Manager($db);
+    $nbAdminProjet = $manager->getSingle2("SELECT count(idutilisateur) FROM utilisateuradministrateur WHERE idprojet=? ", $idprojet);
+    if ($nbAdminProjet > 0) {
+        if ($nbAdminProjet == 1) {
+            $idAdminProjet = $manager->getSingle2("SELECT idutilisateur FROM utilisateuradministrateur WHERE idprojet=? ", $idprojet);
+            if ($idAdminProjet != null) {
+                $emailAdminProjet = $manager->getSinglebyArray("SELECT l.mail FROM loginpassword l "
+                        . "LEFT JOIN utilisateur u ON  u.idlogin_loginpassword = l.idlogin "
+                        . "LEFT JOIN utilisateuradministrateur ua ON  ua.idutilisateur = u.idutilisateur "
+                        . "WHERE u.idutilisateur = ? AND ua.idprojet=?", array($idAdminProjet, $idprojet));
+                return array($emailAdminProjet);
+            }
+        }else{// traitement du  cas ou il y a plusieur admùinistrateur de projet
+                $emailAdminProjet = $manager->getList2("SELECT l.mail FROM loginpassword l "
+                        . "LEFT JOIN utilisateur u ON  u.idlogin_loginpassword = l.idlogin "
+                        . "LEFT JOIN utilisateuradministrateur ua ON  ua.idutilisateur = u.idutilisateur "
+                        . "WHERE  ua.idprojet=?",$idprojet);
+                $arrayMailAdmin = array();
+                foreach ($emailAdminProjet as $key=>$value) {
+                    array_push($arrayMailAdmin,$value['mail']);
+                }
+                return $arrayMailAdmin;
+        }
+    }else{
+        return null;
+    }
+    $db = BD::deconnecter();
 }

@@ -164,10 +164,10 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
     
     
     function hideDialog() {
-        dijit.byId("myDialogCP").hide();
+        dijit.byId("myDialog").hide();
     }
 </script>
-        <div id='divNodeID' style="display:none;padding: 10px;margin-left:10px">
+<div id='divNodeID' style="display:none;padding: 10px;margin-left:10px">
     <script>
         function filtreprenom(grid,param,id){
             dijit.byId('nom').set('value','');
@@ -178,53 +178,50 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
         function filtrenom(grid,param,id){
             dijit.byId('prenom').set('value','');
             dijit.byId(grid).filter({param: ''+id.value+''+'*'});
-            document.getElementById('filtrePrenom').value='nom';
             document.getElementById('filtreNom').value='oui';
-        
-        }
+            document.getElementById('filtrePrenom').value='non';
+        }       
     </script>
     <input type="hidden"  id="filtreNom" value="non">
     <input type="hidden"  id="filtrePrenom" value="non">
-    
-        <table>
-            <tr>
-                <td><input data-dojo-type='dijit/form/ValidationTextBox' name='nom' id="nom" style="width:150px;margin-left:5px" onfocus="dijit.byId('prenom').set('value','');"  onchange="filtrenom('myGrid','nom','nom')" placeholder="<?php echo TXT_NOM; ?>"></td>
-                <td><div style="margin-left: 10px;margin-right: 10px;"><?php echo TXT_OU;?></div></td>
-                <td>
-                    <input data-dojo-type='dijit/form/ValidationTextBox' name='prenom' id='prenom' style="width:150px;margin-right: 5px;margin-left:5px" onfocus="dijit.byId('nom').set('value','');"  onchange="filtreprenom('myGrid','prenom','prenom')" 
-                           placeholder="<?php echo TXT_PRENOM; ?>">
-                </td>
-                <td>
-                    <div data-dojo-type="dijit.form.Button" style="margin-right: 10px;margin-left: 10px;"><?php echo TXT_FILTER;  ?>
-                    <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">                                              
-                            if(document.getElementById('filtreNom').value=='oui'){
-                                dijit.byId('prenom').set('value','');
-                                dijit.byId('myGrid').filter({nom: ''+(dijit.byId('nom').value)+''+'*'});
-                            }else if(document.getElementById('filtrePrenom').value=='oui'){
-                                dijit.byId('nom').set('value','');
-                                dijit.byId('myGrid').filter({prenom: ''+dijit.byId('prenom').value+''+'*'});
-                            }
-                    </script>           
-                    </div>
-                </td>
-                <td>
-                    <div data-dojo-type="dijit.form.Button" ><?php echo TXT_ANNULE;?>
-                    <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt" >
-                        dijit.byId("nom").set('value','');
-                        dijit.byId("prenom").set('value','');
-                    </script>
-                    </div>
-                </td>
-                <td>
-                    <div data-dojo-type="dijit.form.Button" style="margin-left: 10px;"><?php echo TXT_FERMER;?>
-                    <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt" >
-                        hideDialog();
-                    </script>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        </div>
+
+    <table>
+        <tr>
+            <td><input data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:150px;margin-left:5px" onfocus="dijit.byId('prenom').set('value','');" 
+                onchange="filtrenom('myGrid','nom','nom')" placeholder="<?php echo TXT_NOM; ?>"></td>
+            <td><div style="margin-left: 10px;margin-right: 10px;"><?php echo TXT_OU;?></div></td>
+            <td><input data-dojo-type='dijit/form/ValidationTextBox' name='prenom' id='prenom' style="width:150px;margin-right: 5px;margin-left:5px" onfocus="dijit.byId('nom').set('value','');" onchange="filtreprenom('myGrid','prenom','prenom')" placeholder="<?php echo TXT_PRENOM; ?>"></td>
+            <td>
+                <div data-dojo-type="dijit.form.Button" style="margin-right: 10px;margin-left: 10px;"><?php echo TXT_FILTER;  ?>
+                <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+                    if(document.getElementById('filtreNom').value=='oui'){
+                        dijit.byId('prenom').set('value','');
+                        dijit.byId('myGrid').filter({nom: ''+dijit.byId('nom').value+''+'*'});
+                    }else if(document.getElementById('filtrePrenom').value=='oui'){
+                        dijit.byId('nom').set('value','');
+                        dijit.byId('myGrid').filter({prenom: ''+dijit.byId('prenom').value+''+'*'});
+                    }
+                </script>  
+                </div>
+            </td>
+            <td>
+                <div data-dojo-type="dijit.form.Button" ><?php echo TXT_ANNULE;?>
+                <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt" >
+                    dijit.byId("myGrid").filter({nom: "*"});
+                    dijit.byId("nom").set('value','');
+                    dijit.byId("prenom").set('value','');
+                </script>
+                </div>
+            </td>
+            <td>
+                <div data-dojo-type="dijit.form.Button" style="margin-left: 10px;"><?php echo TXT_FERMER;?>
+                <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt" >
+                    hideDialog();
+                </script>
+                </div>
+            </td>
+        </tr></table>
+</div>
     </fieldset>
     <input type="hidden" id="input_affecte_responsable" value="non">
     <input style="display:none" type="submit" value="" name="submit" id="submitId"/>
@@ -246,16 +243,16 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
         if( dijit.byId("modifCentraleProximite")){
             enabledmodif('modifCentraleProximite');
         }
-        var myDialogCP = dijit.byId('myDialogCP');
-        if(!myDialogCP){
-            myDialogCP = new dijit.Dialog({
-                id:'myDialogCP',
+        var myDialog = dijit.byId('myDialog');
+        if(!myDialog){
+            myDialog = new dijit.Dialog({
+                id:'myDialog',
                 title:"<?php echo TXT_VALIDEUSER;?>",
                 style:'width:650px;height:560px;font-size:1.2em;',
                 content:dojo.byId("divNodeID")
             });
         }
-        myDialogCP.show();
+        myDialog.show();
         var myMemoryStore = new dojo.store.Memory(
             {data:[
                <?php include 'tmp/compteUtilisateur'.IDCENTRALEUSER.'.json'   ;?>
@@ -269,6 +266,7 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
         var myGrid = dijit.byId('myGrid');
         if(!myGrid){
             myGrid= new dojox.grid.DataGrid({
+                queryOptions: {ignoreCase: true},
                 id:'myGrid',
                 store:myObjectStore ,
                 structure:myStructure,
@@ -303,7 +301,7 @@ chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
             
         })
             
-        dojo.place(myGrid.domNode, myDialogCP.containerNode, 'last');
+        dojo.place(myGrid.domNode, myDialog.containerNode, 'last');
             myGrid.startup();
 }
 </script>

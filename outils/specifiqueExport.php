@@ -1,4 +1,4 @@
-<?php if ($_SESSION['idTypeUser'] == ADMINLOCAL) { ?>            
+<?php if ($typeUser == ADMINLOCAL) { ?>            
     <fieldset id="identsf" style="border-color: blue;width:952px; margin-left: 20px;padding-left: 10px;margin-top:20px;padding-top: 5px">                
         <legend style="font-style: italic;color: blue;"><?php echo TXT_PARTIEEXPORT; ?></legend>
         <table>

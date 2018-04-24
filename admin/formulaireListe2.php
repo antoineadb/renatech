@@ -589,7 +589,7 @@ TYPE PARTENAIRE
         if(!myDialogCP){
             myDialogCP = new dijit.Dialog({
                 id:'myDialogCP',
-                title:"<?php echo TXT_VALIDEUSER;?>",
+                title:"<?php echo TXT_VALIDEUSER; ?>",
                 style:'width:650px;height:560px;font-size:1.2em;',
                 content:dojo.byId("divNodeID")
             });
@@ -611,6 +611,7 @@ TYPE PARTENAIRE
                 id:'myGrid',
                 store:myObjectStore ,
                 structure:myStructure,
+                queryOptions: {ignoreCase: true},
                 style:'width:610px;height:450px;margin-left:20px'
             });
         }

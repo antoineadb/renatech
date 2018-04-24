@@ -156,7 +156,7 @@ $date  = $date->format('d-m-Y');
         </tr>
         
         </table>
-        <?php if($_SESSION['idTypeUser']==ADMINLOCAL){?>
+        <?php if($typeUser==ADMINLOCAL){?>
         <table style="border-collapse:collapse;width:210px;margin-top:10px;">
             <tr>
                 <th style="border: 1px solid gray;padding-left:5px;background-color: #E4F0FC;text-align: center"><?php echo TXT_NOMLABO;?> <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
@@ -1352,10 +1352,19 @@ function masqueetapeautrecentrale(){
                             $porteur=array();
                             for ($i=0;$i<count($pseudoPorteur);$i++){
                                 array_push($porteur,$pseudoPorteur[$i]['pseudo']);
-                            }                           
+                            }
+                            if(!empty($pseudoPorteur)){
+                                if(in_array($_SESSION['pseudo'],$pseudoPorteur[0])){
+                                    $pseudo =1;
+                                }else{
+                                   $pseudo =0;
+                                }
+                            }else{
+                                $pseudo =0;
+                            }
                             ?>     
                             
-                <?php if($_SESSION['pseudo'] == $pseudo || in_array($_SESSION['pseudo'],$admin) ||$_SESSION['pseudo'] == $pseudoPorteur ||  $idtypeutilisateur == ADMINLOCAL) {?>            
+                <?php if($_SESSION['pseudo'] == $pseudo || in_array($_SESSION['pseudo'],$admin) || $pseudo = 1 ||  $idtypeutilisateur == ADMINLOCAL) {?>            
                 <table>                     
                     <tr>
                         <td>
@@ -1466,7 +1475,7 @@ function masqueetapeautrecentrale(){
 
         </script>
      <input type='text' value='non' name='save' id='save' style='display:none'>
- <?php if ($_SESSION['idTypeUser']==ADMINLOCAL || in_array($_SESSION['pseudo'],$admin)){;?>    
+ <?php if ($typeUser==ADMINLOCAL || in_array($_SESSION['pseudo'],$admin)){;?>    
 <?php
 if(!empty($_GET['statut'])){
     $idstatutencours=$_GET['statut'];

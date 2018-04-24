@@ -247,7 +247,7 @@ class Manager {
      * 
      * @param Logs $logs
      */
-    public function addlogs(Logs $logs) {
+    public function addlogs(Logs $logs) {//echo '<pre>';var_dump($logs);die;
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();

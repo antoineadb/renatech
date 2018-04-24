@@ -294,6 +294,9 @@ FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword
 and idcentrale_centrale is null and u.idqualitedemandeurindust_qualitedemandeurindust is null and lower(nom) like lower(?) and lower(prenom) like lower(?)";
         $industrielnomprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword  and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL and lower(nom) like lower(?) and lower(prenom) like lower(?)";
+$admin_national_local_user ="SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
+FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword AND idtypeutilisateur_typeutilisateur=?
+";
 //------------------------------------------------------------------------------------------------------------------------------
 //									CAS OU ON SAISIE UN NOM
 //------------------------------------------------------------------------------------------------------------------------------
@@ -508,11 +511,24 @@ FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword  an
             } elseif (!empty($_POST['academiqueinterne'])) {
 //------------------------------------------------------------------------------------------------------------------------------
 //									CAS OU ON A COCHE ACADEMIQUE INTERNE 
-//------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------            
                 $req = $interne . " order by datecreation asc ";
                 //$param = array(ADMINNATIONNAL);
                 $param = array('');
-            } elseif (empty($_POST['academiqueexterne']) && empty($_POST['academiqueinterne']) && empty($_POST['industriel'])) {
+            } elseif (!empty($_POST['admin_national'])) {
+                $req = $admin_national_local_user . " order by datecreation asc ";
+                $param = array(ADMINNATIONNAL);
+            }elseif (!empty($_POST['admin_local'])) {
+                $req = $admin_national_local_user . " order by datecreation asc ";
+                $param = array(ADMINLOCAL);
+            }elseif (!empty($_POST['user'])) {
+                $req = $admin_national_local_user . " order by datecreation asc ";
+                $param = array(UTILISATEUR);
+            }
+            
+            
+            
+            elseif (empty($_POST['academiqueinterne']) && empty($_POST['academiqueexterne']) && empty($_POST['industriel'])&&empty($_POST['admin_national']) && empty($_POST['admin_local']) && empty($_POST['user'])) {
                 echo $msgerreur = TXT_TYPENONSELECTIONNE;
                 exit();
             }
@@ -524,13 +540,18 @@ if (!empty($_GET['iduser'])) {
     $param = array($_GET['iduser'], $idcentrale_centrale);
 }
 
-if (empty($_POST['academiqueinterne']) && empty($_POST['academiqueexterne']) && empty($_POST['industriel'])) {
+if (empty($_POST['academiqueinterne']) && empty($_POST['academiqueexterne']) && empty($_POST['industriel'])&&empty($_POST['admin_national']) && empty($_POST['admin_local']) && empty($_POST['user'])) {
     echo TXT_TYPENONSELECTIONNE;
     exit();
 }
 //CREATION D'UN NOMBRE ALMEATOIRE
 $aleatoire = rand(0,10000000);
-$row = $manager->getListbyArray($req, $param);
+if($param==array('')){
+    $row = $manager->getList($req);
+}else{
+    $row = $manager->getListbyArray($req, $param);
+}
+
 
 $fprow = fopen('tmp/userCompte'.$aleatoire.'.json', 'w');
 $datausercompte = "";
@@ -541,9 +562,6 @@ for ($i = 0; $i < count($row); $i++) {
     } else {
         $actif = TXT_NONACTIF;
     }
-    if (!empty($row[$i]['idtypeutilisateur_typeutilisateur'])) {
-        
-    }
     if (!empty($row[$i]['idqualitedemandeuraca_qualitedemandeuraca']) && !empty($row[$i]['idcentrale_centrale'])) {
         $libelletypeuser = TXT_ACADEMIQUEINTERNE;
     } elseif (!empty($row[$i]['idqualitedemandeurindust_qualitedemandeurindust'])) {
@@ -551,6 +569,7 @@ for ($i = 0; $i < count($row); $i++) {
     } else {
         $libelletypeuser = TXT_ACADEMIQUEEXTERNE;
     }
+    $typecompte = $manager->getSingle2("select libelletype from typeutilisateur where idtypeutilisateur =?", $row[$i]['idtypeutilisateur_typeutilisateur']);;
     $datausercompte = "" . '{"pseudo":' . '"' . $row[$i]['pseudo'] . '"' . "," . '"datecreation":' . '"' . $row[$i]['datecreation'] . '"' . "," .
             '"idqualitedemandeurindust_qualitedemandeurindust":' . '"' . $row[$i]['idqualitedemandeurindust_qualitedemandeurindust'] . '"' . "," .
             '"idqualitedemandeuraca_qualitedemandeuraca":' . '"' . $row[$i]['idqualitedemandeuraca_qualitedemandeuraca'] . '"' . "," .
@@ -558,6 +577,8 @@ for ($i = 0; $i < count($row); $i++) {
             '"nom":' . '"' . trim(stripslashes(str_replace("''", "'", trim($row[$i]['nom'])))) . '"' . "," .
             '"prenom":' . '"' . trim(stripslashes(str_replace("''", "'", $row[$i]['prenom']))) . '"' . "," .
             '"actif":' . '"' . $actif . '"' . "," .
+            '"typecompte":' . '"' . $typecompte . '"' . "," .
+            
             '"libelletypeuser":' . '"' . $libelletypeuser . '"' . "},";
     fputs($fprow, $datausercompte);
     fwrite($fprow, '');
@@ -632,7 +653,8 @@ if ($i == 0) {
                         {name: "<?php echo TXT_CREATEDATE; ?>", field: "datecreation", width: "auto", formatter: hrefFormatterDate},
                         {name: "<?php echo TXT_NOM; ?>", field: "nom", width: "auto", formatter: hrefFormatterNom},
                         {name: "<?php echo TXT_PRENOM; ?>", field: "prenom", width: "auto", formatter: hrefFormatterPrenom},
-                        {name: "<?php echo TXT_COMPTE; ?>", field: "actif", width: "auto"},
+                        {name: "<?php echo TXT_TYPE_COMPTE; ?>", field: "typecompte", width: "auto"},
+                        {name: "<?php echo TXT_COMPTE; ?>", field: "actif", width: "auto"},                        
                         {name: "<?php echo TXT_TYPEUTILISATEUR; ?>", field: "libelletypeuser", width: "auto"}
                     ]
                 }, "grideusercompte");

@@ -134,8 +134,7 @@ $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
                 $emailCP=$manager->getSingle2("SELECT mail FROM utilisateur,loginpassword  WHERE idlogin=idlogin_loginpassword AND idutilisateur=?", $idresponsable);
                 if(null!=$emailCP){//AFFECTATION COMME ADMINISTRATEUR LE RESPONSABLE DE LA CENTRALE DE PROXIMITE
                     //Vérification que l'id du reponsable n'as pas déjà été sété dans la BD
-                    $oldIdResponsableCP = (int)$manager->getSinglebyArray("SELECT idutilisateur FROM utilisateuradministrateur WHERE idprojet=? AND idutilisateur=?", array($idprojet,$idresponsable));
-                 
+                    $oldIdResponsableCP = (int)$manager->getSinglebyArray("SELECT idutilisateur FROM utilisateuradministrateur WHERE idprojet=? AND idutilisateur=?", array($idprojet,$idresponsable));                 
                     if($oldIdResponsableCP != $idresponsable){
                         $dateaffectation = date("Y-m-d");
                         $utilisateuradminprojet = new UtilisateurAdmin($idresponsable, $idprojet, $dateaffectation);

@@ -78,30 +78,68 @@ include 'html/header.html';
                 <table>
                     <tr><td><br></td></tr>
                     <tr><td>
+                      
+                      
                             <?php if (isset($_POST['academiqueinterne'])) { ?>
-                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueinterne' name='academiqueinterne' value="true" checked />
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueinterne' name='academiqueinterne' value="true" checked  onclick="disableOher(0)"  />
                                 <label for='academiqueinterne' class='opt' ><?php echo TXT_ACADEMIQUEINTERNE; ?></label>
                             <?php } else { ?>
-                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueinterne' name='academiqueinterne' value="true"  checked />
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueinterne' name='academiqueinterne' value="true"  onclick="disableOher(0)" />
                                 <label for='academiqueinterne' class='opt' ><?php echo TXT_ACADEMIQUEINTERNE; ?></label>
                             <?php }
                             if (isset($_POST['academiqueexterne'])) { ?>
-                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne' value="true"  checked />
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne' value="true" checked   onclick="disableOher(0)"  />
                                 <label for='academiqueexterne' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
                             <?php } else { ?>
-                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne' value="true"   checked />
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne' value="true"  onclick="disableOher(0)"  />
                                 <label for='academiqueexterne' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
                             <?php }
                             if (isset($_POST['industriel'])) { ?>
-                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true"  checked checked />
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true" checked   onclick="disableOher(0)"  />
                                 <label for='industriel' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
                             <?php } else { ?>
-                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true"   checked />
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true"  onclick="disableOher(0)"  />
                                 <label for='industriel' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
                             <?php } ?>
+                            <?php if($_SESSION['idTypeUser']==ADMINNATIONNAL){ ?>
+                            <?php echo '<br><br>';
+                            if (isset($_POST['admin_national'])) { ?>
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_national' name='admin_national' value="true" checked  onclick="disableOher(1)"  />
+                                <label for='admin_national' class='opt' ><?php echo TXT_ADMINNATIONAL; ?></label>
+                            <?php } else { ?>
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_national' name='admin_national' value="true"  onclick="disableOher(1)"  />
+                                <label for='admin_national' class='opt' ><?php echo TXT_ADMINNATIONAL; ?></label>
+                            <?php }
+                                if (isset($_POST['admin_local'])) { ?>
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_local' name='admin_local' value="true" checked onclick="disableOher(2)"/>
+                                <label for='admin_local' class='opt' ><?php echo TXT_ADMINLOCAL; ?></label>
+                            <?php } else {  ?>
+                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_local' name='admin_local' value="true" onclick="disableOher(2)"   />
+                                <label for='admin_local' class='opt' ><?php echo TXT_ADMINLOCAL; ?></label>
+                            <?php }?>                            
+                        <?php }?>                                
                         </td></tr>
                 </table>
-            </fieldset>
+            </fieldset>            
+            <script>
+            function disableOher(id){
+                if(id==1){//NATIONAL
+                    dijit.byId('academiqueinterne').set("checked",false);
+                    dijit.byId('academiqueexterne').set("checked",false);
+                    dijit.byId('industriel').set("checked",false);
+                    dijit.byId('admin_local').set("checked",false);
+                }else if(id==2){//LOCAL
+                    dijit.byId('academiqueinterne').set("checked",false);
+                    dijit.byId('academiqueexterne').set("checked",false);
+                    dijit.byId('industriel').set("checked",false);                    
+                    dijit.byId('admin_national').set("checked",false);
+                }else if(id==0){//AUTRES                      
+                    dijit.byId('admin_local').set("checked",false);
+                    dijit.byId('admin_national').set("checked",false);
+                    
+                }
+            }
+            </script>
             <?php
             if (!isset($_POST['nom']) || !isset($_POST['prenom'])) {
                 if (!isset($_GET['iduser'])) {
@@ -125,7 +163,7 @@ include 'html/header.html';
 /**------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  *          CAS ACADEMIQUE
  * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
- */           
+ */ 
             if (!empty($_GET['iduser']) && !empty($_GET['idqualiteaca']) && empty($_GET['idqualiteindust'])) {
                 $iduser = $_GET['iduser'];
                 $row = $manager->getList2("

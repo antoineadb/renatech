@@ -86,7 +86,15 @@ if (!empty($infodemandeur[0][0]['mailresponsable'])) {
 } else {
     $CC = $arrayemailCC;
 }
+//Récupération des emaoil des administrateur de projet copie
+$mailRespCentrale  =  recupMailAdminProjet($idprojet); 
+if($mailRespCentrale != NULL){
+    $emailcc = array_merge($mailRespCentrale, $CC);
+}
 $emailcc = array_merge($emailcentrales, $CC);
+
+
+ 
 $mailCC = array_unique($emailcc);
 
 $sMailCc='';

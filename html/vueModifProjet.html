@@ -233,12 +233,13 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
             </td>
         </tr>
         <tr><td>&nbsp;</td></tr>
+        <tr><td><?php include_once 'centraleProximite/centraleProximite.php'; ?></td></tr>
         <tr>
             <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 625px;margin-top:2px;margin-left:5px">
                     <?php echo TXT_ERREURUPLOAD;?>
             </td>
         </tr>
-        <tr><td><?php include_once 'centraleProximite/centraleProximite.php'; ?></td></tr>
+        
         <tr>
             <td>
                 <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader" 
