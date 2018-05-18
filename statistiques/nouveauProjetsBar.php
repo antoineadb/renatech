@@ -115,7 +115,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     }
 
     $serie03 = substr($serie2 . $serie3, 0, -1);
-    $serieY = str_replace("],]}", "]]}", $serie03); //var_dump($serieY);die;
+    $serieY = str_replace("],]}", "]]}", $serie03);
     $subtitle = TXT_CLICDETAIL;
     if ($lang == 'fr') {
         if ($anneeDepart == $anneeFin) {

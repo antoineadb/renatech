@@ -1,6 +1,6 @@
 <?php
 include_once 'decide-lang.php';
-include 'class/email.php';
+include_once 'class/email.php';
 include_once 'class/Manager.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
@@ -131,7 +131,7 @@ if ($typeuser == "academique") {
 " . htmlentities(TXT_QUALITEDEMANDEURMAIL, ENT_QUOTES, 'UTF-8') . " : " . htmlentities($qualiteDemandeuraca, ENT_QUOTES, 'UTF-8') . "<br>
 " . $nomemployeur . "" . $Tutelle . $codeUnite . "
 " . $nomlabo . "" . $Discipline . "<br>
-" . "<br><a href='https://www.renatech.org/projet'>" . TXT_RETOUR . "</a></div><br><br>
+" . "<br><a href=".ADRESSESITE.">" . TXT_RETOUR . "</a></div><br><br>
     <div>" . htmlentities(stripslashes(str_replace("''","'",affiche('TXT_NB'))), ENT_QUOTES, 'UTF-8') . "</div><br>" . htmlentities(stripslashes(str_replace("''","'",affiche('TXT_NB1'))), ENT_QUOTES, 'UTF-8') . "<div><br>" .
             htmlentities(affiche('TXT_DONOTREPLY'), ENT_QUOTES, 'UTF-8') . "</div>";
     "
@@ -155,7 +155,7 @@ if ($typeuser == "academique") {
 " . TXT_NOMENTREPRISE . " : " . htmlentities(stripslashes($_POST['nomEntreprise']), ENT_QUOTES, 'UTF-8') . "<br>
 " . utf8_decode(TXT_SECTEURACTIVITE) . " : " . htmlentities(stripslashes($secteurActivite), ENT_QUOTES, 'UTF-8') . "<br>
 " . $nomresponsable . "" . $mailResponsable . "<br>
-" . "<br><a href='https://www.renatech.org/projet'>" . TXT_RETOUR . "</a></div>";
+" . "<br><a href=".ADRESSESITE.">" . TXT_RETOUR . "</a></div>";
 }
 $sujet = TXT_CONFIRMINSCRIPT . ' :';
 
@@ -185,7 +185,7 @@ if (!empty($arraymailresponsable)) {
     } else {
         $bodyResponsable1 = '<br><br>';
     }
-    $bodyResponsable2 = "<a href='https://www.renatech.org/projet'>" . TXT_RETOUR . '</a>' . '<br>' . htmlentities(affiche('TXT_DONOTREPLY'), ENT_QUOTES, 'UTF-8');
+    $bodyResponsable2 = "<a href=".ADRESSESITE.">" . TXT_RETOUR . '</a>' . '<br>' . htmlentities(affiche('TXT_DONOTREPLY'), ENT_QUOTES, 'UTF-8');
     sendEmail($bodyResponsable . $bodyResponsable1 . $bodyResponsable2, $sujetresponsable, $mailresponsable);
 }
 

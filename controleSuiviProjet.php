@@ -2,7 +2,7 @@
 
 session_start();
 include '../decide-lang.php';
-include_once '../class/Chiffrement.php';
+
 include '../class/Manager.php';
 include_once '../outils/toolBox.php';
 $db = BD::connecter();

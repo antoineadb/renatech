@@ -62,12 +62,14 @@ for ($i = 0; $i < 11; $i++) {
                     } else {
                         $rowtypepartenaire = $manager->getList("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE "
                                 . "AND idtypepartenaire!=99 order by idtypepartenaire asc");
-                        if ($lang == 'fr') {
-                            $libelle = $manager->getSingle2("select libelletypepartenairefr from typepartenaire where idtypepartenaire=?", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
-                        } else {
-                            $libelle = $manager->getSingle2("select libelletypepartenaireen from typepartenaire where idtypepartenaire=?", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
+                        if (!empty($rowtypepartenaire[$i]['idtypepartenaire_typepartenaire'])) {
+                            if ($lang == 'fr') {
+                                $libelle = $manager->getSingle2("select libelletypepartenairefr from typepartenaire where idtypepartenaire=?", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
+                            } else {
+                                $libelle = $manager->getSingle2("select libelletypepartenaireen from typepartenaire where idtypepartenaire=?", $arrayPartenaire[$i]['idtypepartenaire_typepartenaire']);
+                            }
                         }
-                        echo "<option selected  value='tp99'>" . TXT_INCONNU . "</option>";
+                            echo "<option selected  value='tp99'>" . TXT_INCONNU . "</option>";
                       
                     }
                     for ($k = 0; $k < count($rowtypepartenaire); $k++) {

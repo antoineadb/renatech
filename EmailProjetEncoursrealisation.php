@@ -1,7 +1,7 @@
 <?php
 
 include_once 'decide-lang.php';
-include 'class/email.php';
+include_once 'class/email.php';
 include_once 'class/Manager.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
@@ -57,7 +57,7 @@ $body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR'))), ENT
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILREALISATION1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILREALISATION2'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RAPPEL'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_EMAILADDRESSCENTRAL'))), ENT_QUOTES, 'UTF-8') . ' ' . htmlentities($centrale, ENT_QUOTES, 'UTF-8') . ' <br> ' . $emailCentrale . '<br>' .
-        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>'."<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>'."<a href=".ADRESSESITE." >" . TXT_RETOUR . '</a><br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 $infodemandeur = array($manager->getList2('SELECT mail, mailresponsable FROM creer,loginpassword,utilisateur WHERE idutilisateur_utilisateur = idutilisateur
             AND idlogin_loginpassword = idlogin and idprojet_projet=?', $idprojet));
@@ -78,6 +78,8 @@ if (!empty($mailcentrales)) {
         }
     }
 }
+//Récupération des autres centrale si elles existent
+$emailAutresCentrales  = mailAutresCentrale($manager,$idprojet);
 //AJOUT DE L'EMAIL DU RESPONSABLE SI IL EXISTE
 $arrayemailCC = array();
 if (!empty($infodemandeur[0][0]['mailresponsable'])) {
@@ -92,7 +94,9 @@ if($mailRespCentrale != NULL){
     $emailcc = array_merge($mailRespCentrale, $CC);
 }
 $emailcc = array_merge($emailcentrales, $CC);
-
+if(!empty($emailAutresCentrales && $_POST['majcentrale']=='oui')){
+    $emailcc = array_merge($emailAutresCentrales, $CC);
+}
 
  
 $mailCC = array_unique($emailcc);

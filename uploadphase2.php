@@ -52,7 +52,8 @@ if ($cas == 'miseAJourEmail') {
         header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
         exit();
     }
-}elseif($cas=='miseAJourEmailAutreCentrale'){
+}elseif($cas==''
+        . ''){
     header('Location: /' . REPERTOIRE . '/EmailProjetphase2Session.php?lang=' . $lang . '&idprojet=' . $idprojet . '&idautrecentrale=' . $idAutrecentrale . '&statut=' . $idstatutprojet 
             . '&nbpersonne=' . $_POST['nombrePersonneCentrale'] . '&etautrecentrale=' . $etautrecentrale.'&majcentrale=oui');
 }elseif($cas=='miseAJourEmailautreEmailpremierefois'){

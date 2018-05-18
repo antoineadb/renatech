@@ -1,7 +1,6 @@
 <?php
 session_start();
 include_once '../outils/toolBox.php';
-include_once '../class/Chiffrement.php';
 include '../decide-lang.php';
 include '../class/Manager.php';
 include '../outils/constantes.php';

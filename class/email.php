@@ -1,11 +1,25 @@
 <?php
 
-include_once 'Chiffrement.php';
+if (is_file('../class/secure/Cryptage.php')) {
+    include_once '../class/secure/Cryptage.php';
+} elseif (is_file('class/secure/Cryptage.php')) {
+    include_once 'class/secure/Cryptage.php';
+}
+
+if (is_file('../class/secure/configMail.php')) {
+    include_once '../class/secure/configMail.php';
+} elseif (is_file('class/secure/configMail.php')) {
+    include_once 'class/secure/configMail.php';
+}
+
+
 if (is_file('../outils/constantes.php')) {
     include_once '../outils/constantes.php';
 } elseif (is_file('outils/constantes.php')) {
     include_once 'outils/constantes.php';
 }
+
+
 if (is_file('../outils/toolBox.php')) {
     include_once '../outils/toolBox.php';
 } elseif (is_file('outils/toolBox.php')) {
@@ -20,12 +34,6 @@ if (!is_file('PHPMailer_5.2.4/class.phpmailer.php')) {
 
 showError($_SERVER['PHP_SELF']);
 
-define('HOST', Chiffrement::decrypt('YDzU5SLlxlKBCtClyVtIBnArw9Lf+Xrf85gZh8kUt+E=')); // SMTP server'
-define('SMTPAUTH', true);
-define('SMTPSECURE', 'ssl');
-define('PORT', Chiffrement::decrypt('p9T+WHQqGP9FmcWWGqGyWw=='));
-define('USERNAME', Chiffrement::decrypt('kvwqIXYTEkx5pEROS9i5Rw=='));
-define('PASSWORD', Chiffrement::decrypt('rGGUOsDRwshC2hbkKYuowA=='));
 /**
  * 
  * @param type $body  string
@@ -57,7 +65,7 @@ function envoieEmail($body, $sujet, $email, $cc) {
                 $mail->AddCC($cc[$i]);
             }
         }
-        $mail->SetFrom('projets@renatech.org', 'RENATECH');
+        $mail->SetFrom(ADRESSEMAILPROJET, 'RENATECH');
         $mail->Subject = $sujet;
         $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
         $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire
@@ -87,7 +95,7 @@ function sendEmail($body, $sujet, $email) { // envoi sans copie
         $mail->Username = USERNAME;
         $mail->Password = PASSWORD;
         $mail->AddAddress($email);
-        $mail->SetFrom('projets@renatech.org', 'RENATECH');
+        $mail->SetFrom(ADRESSEMAILPROJET, 'RENATECH');
         $mail->Subject = $sujet;
         $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically        
         $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire
@@ -133,7 +141,7 @@ function envoieEmailAttachement($body, $sujet, $email, $cc,$path,$filename) {
                 $mail->AddCC($cc[$i]);
             }
         }
-        $mail->SetFrom('projets@renatech.org', 'RENATECH');
+        $mail->SetFrom(ADRESSEMAILPROJET, 'RENATECH');
         $mail->Subject = $sujet;
         $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
         $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire

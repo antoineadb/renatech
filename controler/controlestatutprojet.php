@@ -50,7 +50,7 @@ if(!empty($idprojetsoustraitance[0]['idcentrale'])){
 //-----------------------------------------------------------------------------------------------------------------------------------------------    
     switch ($idstatutprojet) {     
         case ACCEPTE:// ACCEPTE
-            if(!empty($idcentralesoustraitance) && $idcentralesoustraitance==IDCENTRALEUSER){                
+            if(!empty($idcentralesoustraitance) && $idcentralesoustraitance==IDCENTRALEUSER){
                 header('location: /' . REPERTOIRE . '/Run_projectsoustraitance/' . $lang . '/' . $numProjet . '/'.ACCEPTE.'');
             }else{                
                 header('location: /' . REPERTOIRE . '/Run_project/' . $lang . '/' . $numProjet . '/'.ACCEPTE.'');

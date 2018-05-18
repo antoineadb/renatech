@@ -478,3 +478,5 @@ RewriteRule   custom_email/([a-z]+)                                             
 RewriteRule   admin_centrale_proximite/([a-z]+)/([0-9]+)                        gestionCentraleProximite.php?lang=$1&idcentraleproximitemodif=$2   [L]
 RewriteRule   updateCentraleP/([a-z]+)/([a-z]+)                                 gestionCentraleProximite.php?lang=$1&cpupdate=$2       [L]
 RewriteRule   admin_centrale_proximite/([a-z]+)                                 gestionCentraleProximite.php?lang=$1   [L]
+
+RewriteRule   updateprojet/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)                      modifBase/updateProjetphase2.php?lang=$1&idprojet=$2&numProjet=$3   [L]

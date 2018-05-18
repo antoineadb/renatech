@@ -1,7 +1,7 @@
 <?php
 
 include_once 'decide-lang.php';
-include 'class/email.php';
+include_once 'class/email.php';
 include_once 'class/Manager.php';
 include_once 'outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
@@ -30,7 +30,7 @@ $sujet = utf8_decode(TXT_AFFECTPROJET) . $infoprojet[0]['numero'];
 $body = htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_PROJETNUM'))), ENT_QUOTES, 'UTF-8') . $infoprojet[0]['numero'] . TXT_DELACENTRALE . $libellecentrale .' '. htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_AFFECTPROJET1'))), ENT_QUOTES, 'UTF-8') . '<br>' .
         htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_BODYEMAILPHASE231'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
-        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . '<a href="https://www.renatech.org/projet">' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>' .
+        htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . '<a href='.ADRESSESITE.'>' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 
 sendEmail($body, $sujet, $emailaffecte);

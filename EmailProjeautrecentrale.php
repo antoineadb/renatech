@@ -3,7 +3,7 @@
 session_start();
 include_once 'class/Securite.php';
 include_once 'decide-lang.php';
-include 'class/email.php';
+include_once 'class/email.php';
 include_once 'class/Manager.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
@@ -85,7 +85,7 @@ $body =utf8_decode(htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_MAIL
         htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_MAILCONTACTFIN'))), ENT_QUOTES, 'UTF-8'). '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_ADRESSEEMAILPART'))), ENT_QUOTES, 'UTF-8') .
         $semailcentrale.'<br><br><br><br>'.        
-        "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br><br>' .        
+        "<a href=".ADRESSESITE." >" . TXT_RETOUR . '</a><br><br><br>' .        
         htmlentities(stripslashes(removeDoubleQuote(affiche('TXT_NORESPONSE1'))), ENT_QUOTES, 'UTF-8');
 
 $sujet = utf8_decode(TXT_PROJETNUM) . $numero;

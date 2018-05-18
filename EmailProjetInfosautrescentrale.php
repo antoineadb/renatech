@@ -1,7 +1,7 @@
 <?php
 
 include_once 'decide-lang.php';
-include 'class/email.php';
+include_once 'class/email.php';
 include_once 'class/Manager.php';
 include_once 'outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
@@ -47,7 +47,7 @@ if (!empty($nbemail)) {
     $sujet = TXT_INFOSUR . utf8_decode(affiche('TXT_PROJETNUM0')) . ' ' . $numero;
     $body = htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .htmlentities(affiche('TXT_PROJETNUM0'), ENT_QUOTES, 'UTF-8') . $numero . '  ' . htmlentities(affiche('TXT_PROJETACCEPTECENTRALE'), ENT_QUOTES, 'UTF-8') . '  ' . $libellecentrale . '<br><br>' .
             htmlentities(affiche('TXT_SINCERESALUTATION'), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(affiche('TXT_RESEAURENATECH'), ENT_QUOTES, 'UTF-8') . '<br><br>'
-            . '<a href="https://www.renatech.org/projet">' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>' .
+            . '<a href='.ADRESSESITE.'>' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>' .
             htmlentities(affiche('TXT_DONOTREPLY'), ENT_QUOTES, 'UTF-8');
     envoieEmail($body, $sujet, $arrayEmail, null);
 }
@@ -102,14 +102,14 @@ $sujet1 = TXT_DEMANDEPROJET . ' : ' . $titre . ' ' . $txtbodyref . ' ' . $numpro
 $body1 = htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_MRSMR'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . 
         htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE20'))), ENT_QUOTES, 'UTF-8') . '<br>' .
         htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE21'))), ENT_QUOTES, 'UTF-8') .
-        "<a href='https://www.renatech.org/projet'>" . str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE22'))) . "</a>" . '<br><br>' .
+        "<a href=".ADRESSESITE." >" . str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE22'))) . "</a>" . '<br><br>' .
         htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_BODYEMAILPHASE23'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_RAPPELINSERTLOGO'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . 
         htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . 
         htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_RESPONSABLEBODYTEMAIL10'))), ENT_QUOTES, 'UTF-8') . ' ' .
         htmlentities($centrale, ENT_QUOTES, 'UTF-8') . '<br>' . $emailCentrale . '<br><br>' .
-        '<a href="https://www.renatech.org/projet">' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>      ' .
+        '<a href='.ADRESSESITE.'>' . htmlentities(TXT_RETOUR, ENT_QUOTES, 'UTF-8') . '<a>' . '<br><br>      ' .
         htmlentities(str_replace("''", "'", stripslashes(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8') . '<br><br>';
 envoieEmail($body1, $sujet1, $maildemandeur, $mailCC); //envoie de l'email au responsable centrale et au copiste
 //------------------------------------------------------------------------------------------------------------------------------------------------

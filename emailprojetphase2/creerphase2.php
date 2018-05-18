@@ -5,6 +5,11 @@ if(is_file('../class/email.php')){
 }elseif (is_file('class/email.php')) {
     include_once 'class/email.php';
 }
+if(is_file('../outils/constantes.php')){
+    include_once '../outils/constantes.php';
+}elseif (is_file('outils/constantes.php')) {
+    include_once 'outils/constantes.php';
+}
 
 if(is_file('../emailprojetphase2/emailCentrale.php')){//INFORMATION QUI SERT A COMPLETER L'EMAIL
     include_once '../emailprojetphase2/emailCentrale.php';
@@ -40,7 +45,7 @@ $body = affiche('TXT_MRSMR6') .'<br>'.affiche('TXT_BODYEMAILPROJET0') . '<br>' .
         '<br>' . utf8_decode(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION')))) .
         '<br>' . utf8_decode(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH')))) .
         '<br>' . $centraleaccueil . '<br>' . $emailCentrale . '<br>' .
-        "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br>    ' .
+        "<a href=".ADRESSESITE." >" . TXT_RETOUR . '</a><br>    ' .
         '<br><br>' . utf8_decode(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))));
 
 $sMailCc='';

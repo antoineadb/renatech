@@ -17,6 +17,7 @@ if (!empty($_GET['idprojet'])) {
 } elseif (!empty($_SESSION['idprojet'])) {
     $idprojet = $_SESSION['idprojet'];
 }
+
 $numprojet = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
 //récupération des adresses mail et nom des centrale
 //CENTRALE SOURCE      

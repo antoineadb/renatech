@@ -1,7 +1,7 @@
 <?php
 
 include_once 'decide-lang.php';
-include 'class/email.php';
+include_once 'class/email.php';
 include_once 'class/Manager.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
@@ -62,7 +62,7 @@ $sujet = html_entity_decode(TXT_MAJPROJET, ENT_QUOTES, 'UTF-8') . ' : ' . $titre
 $body = utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_MRSMR')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_BODYEMAILCLOTURE')))) . '<br><br>' .
         utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_REMERCIEMENT')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_SINCERESALUTATION')))) . '<br><br>' . utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_RESEAURENATECH')))) .
         '<br><br>' . utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_EMAILADDRESSCENTRAL')))) . ' ' . utf8_decode($centrale) . ' <br> ' . $emailCentrale . '<br>' .
-        "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br>' .
+        "<a href=".ADRESSESITE." >" . TXT_RETOUR . '</a><br><br>' .
         utf8_decode(stripslashes(str_replace("''", "'", affiche('TXT_DONOTREPLY'))));
 $infodemandeur = array($manager->getList2('SELECT mail, mailresponsable FROM creer,loginpassword,utilisateur WHERE idutilisateur_utilisateur = idutilisateur
             AND idlogin_loginpassword = idlogin and idprojet_projet=?', $idprojet));
@@ -84,7 +84,7 @@ if (!empty($mailcentrales)) {
         }
     }
 }
-
+$emailAutresCentrales  = mailAutresCentrale($manager,$idprojet);
 
 //AJOUT DE L'EMAIL DU RESPONSABLE SI IL EXISTE
 $arrayemailCC = array();
@@ -95,12 +95,16 @@ if (!empty($infodemandeur[0][0]['mailresponsable'])) {
     $CC = $arrayemailCC;
 }
 $emailcc = array_merge($emailcentrales, $CC);
+if(!empty($emailAutresCentrales && $_POST['majcentrale']=='oui')){
+    $emailcc = array_merge($emailAutresCentrales, $CC);
+}
 $mailCC = array_unique($emailcc);
 
 $sMailCc = '';
 for ($i = 0; $i < count($mailCC); $i++) {
     $sMailCc.=$mailCC[$i] . ',';
 }
+
 $sMailCC = substr($sMailCc, 0, -1);
 $idcentrale = $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?", $idprojet);
 $nomPrenomDemandeur = $manager->getList2("SELECT nom, prenom FROM creer,utilisateur WHERE idutilisateur_utilisateur = idutilisateur and idprojet_projet = ?", $idprojet);

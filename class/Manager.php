@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 /*                                                                            */
 /*                                                                            */
 /* * ************************************************tat********************* */
-include_once 'BD.php';
+include_once 'secure/BD.php';
 include_once 'Pays.php';
 include_once 'Login.php';
 include_once 'Autrestutelle.php';
@@ -247,7 +247,7 @@ class Manager {
      * 
      * @param Logs $logs
      */
-    public function addlogs(Logs $logs) {//echo '<pre>';var_dump($logs);die;
+    public function addlogs(Logs $logs) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();

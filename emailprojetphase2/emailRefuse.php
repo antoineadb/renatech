@@ -1,6 +1,7 @@
 <?php
 include_once '../class/Manager.php';
 include_once '../class/email.php';
+include_once '../outils/constantes.php';
 $db = BD::connecter();
 $manager = new Manager($db);
 if(isset($_POST['commentaireRefusValeur'])){  
@@ -28,7 +29,7 @@ $emailCentrale = $arrayCentrale[0]['email1'];
 $body = htmlentities(removeDoubleQuote(stripslashes(affiche('TXT_MRSMR8'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_BODYEMAILREFUSEPHASE20'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . $commentaire . '<br><br>' .
         htmlentities(removeDoubleQuote(stripslashes(affiche('TXT_BODYEMAILREFUSEPHASE21'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' . htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_RESPONSABLEBODYTEMAIL10'))), ENT_QUOTES, 'UTF-8') . '' . htmlentities($centrale, ENT_QUOTES, 'UTF-8') . ' <br> ' . $emailCentrale . '<br>' .
-        htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . "<br><br><a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br>    '
+        htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . "<br><br><a href=".ADRESSESITE." >" . TXT_RETOUR . '</a><br><br>    '
         . htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8') . '<br><br>';
 
 $txtbodyref =  removeDoubleQuote(utf8_decode(affiche('TXT_BOBYREF')));

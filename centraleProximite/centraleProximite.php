@@ -155,7 +155,8 @@ CENTRALES DE PROXIMITES
                                 $idcentraleProjet='';
                             }
                             if(empty($idcentraleProjet)){
-                               if (!empty(IDCENTRALEUSER)){
+                                $idcentraleUser =  IDCENTRALEUSER;
+                               if (!empty($idcentraleUser)){
                                    $centraleSelectionne = IDCENTRALEUSER;
                                }else{
                                    $centraleSelectionne='';

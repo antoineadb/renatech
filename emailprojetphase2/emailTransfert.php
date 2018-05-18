@@ -1,5 +1,5 @@
 <?php
-
+include_once '../outils/constantes.php';
 if (isset($_POST['centraletrs'])) {
     $libellecentraledestination = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", $_POST['centraletrs']);
     //CENTRALE DESTINATION
@@ -49,11 +49,11 @@ $CC = array_merge($arrayemailCC, $emailcentraledestinations); //CENTRALE DESTINA
 $cc = array_merge($mailCC, $CC); //CENTRALE SOURCE
 $mailCC = array_unique($cc);
 $body = utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_MRSMR7')))) . '<br><br>' . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_BODYEMAILTRSFPHASE20')))) . '<br><br>' .
-        utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_BODYEMAILPHASE21')))) . " <a href='https://www.renatech.org/projet'>" . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_FINSUJETMAILRESPONSABLE')))) . "</a>" .
+        utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_BODYEMAILPHASE21')))) . " <a href=".ADRESSESITE." >" . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_FINSUJETMAILRESPONSABLE')))) . "</a>" .
         '<br><br>' . htmlentities(removeDoubleQuote( stripslashes(affiche('TXT_BODYEMAILTRSFPHASE22')))) . '<br><br>' .
         utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_RAPPELINSERTLOGO1')))) . '<br><br>' . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_SINCERESALUTATION')))) . '<br><br>' . utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_RESEAURENATECH')))) .
         '<br><br>' . utf8_decode(affiche('TXT_EMAILADDRESSCENTRAL')) . ' ' . utf8_decode($libellecentraledestination) . ' <br> ' . $emailCentrale . '<br><br>' .
-        '<br><br><a href="https://www.renatech.org/projet">' . utf8_decode(TXT_RETOUR) . '<a>' . '<br><br>' .
+        '<br><br><a href='.ADRESSESITE.'>' . utf8_decode(TXT_RETOUR) . '<a>' . '<br><br>' .
         utf8_decode(removeDoubleQuote( stripslashes(affiche('TXT_DONOTREPLY'))));
 $EmailCC = array_values($mailCC); //Renumérotation des index
 envoieEmail($body,  $sujet, $maildemandeur, $EmailCC); //envoie de l'email au responsable centrale et au copiste

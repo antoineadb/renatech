@@ -3,6 +3,7 @@
 session_start();
 include_once '../outils/constantes.php';
 include '../decide-lang.php';
+include_once'../outils/requeteRelance.php';
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
 } else {
@@ -20,47 +21,12 @@ $jsonSupprParsed = json_decode($jsonSuppr, true);
 include '../class/email.php';
 $dateMoins3mois = date('Y-m-d', strtotime('-3 month'));
 
-$sqlInterne ="
-    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, 
-    u.idutilisateur,p.dateenvoiemail , p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE u.idcentrale_centrale IS NOT NULL 
-    AND porteurprojet =TRUE AND cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale 
-    AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? 
-    AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne is null AND trashed =FALSE AND p.devtechnologique=TRUE
-    UNION
-    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail ,
-    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
-    WHERE  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale 
-    AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? 
-    AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne ='I' AND trashed =FALSE AND p.devtechnologique=TRUE";
-
-$sqlExterne ="
-   SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail , 
-    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE (u.idcentrale_centrale IS NULL OR p.porteurprojet =FALSE)  
-    AND cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet 
-    AND t.idtypeprojet = p.idtypeprojet_typeprojet AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) 
-    AND p.datemaj <? AND p.interneexterne is null AND trashed =FALSE AND p.devtechnologique=TRUE
-    UNION
-    SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail, u.idutilisateur,p.dateenvoiemail , 
-    p.interneexterne FROM projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l WHERE  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet 
-    AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet AND t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? AND p.interneexterne ='E'
-    AND trashed =FALSE AND p.devtechnologique=TRUE";
-
-$sqlExterneInterne  ="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,
-    u.idutilisateur,p.dateenvoiemail   FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l 
-    WHERE cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet 
-    AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet  AND  t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ?   AND (s.idstatutprojet=? OR s.idstatutprojet=?)  AND p.datemaj <? AND trashed =FALSE AND p.devtechnologique=TRUE";
-
 if (isset($_POST['interneExterne']) && $_POST['interneExterne'] == 1) {
-    $sql =$sqlInterne;
-    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois,IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
-} elseif (isset($_POST['interneExterne']) && $_POST['interneExterne'] == 2) {
-    $sql =$sqlExterne;
-    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois,IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
-}else{    
-    $sql =$sqlExterneInterne;
-    $projetARelancer = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
+    $projetARelancer = $manager->getListbyArray(SQLINTERNE, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
+} elseif (isset($_POST['interneExterne']) && $_POST['interneExterne'] == 2) {    
+    $projetARelancer = $manager->getListbyArray(SQLEXTERNE, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
+}else{
+    $projetARelancer = $manager->getListbyArray(SQLINTERNEEXTERNE, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
 }
 
 

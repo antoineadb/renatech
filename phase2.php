@@ -43,7 +43,8 @@ include 'html/header.html';
             <?php include 'html/entete.html';
              $nbcentraleselectionnees = count($centraleselectionnees);
             ?>
-            <div name="modifProjet" data-dojo-type="dijit/form/Form" id="modifProjet" data-dojo-id="modifProjet"  method="post" action="<?php echo '/'.REPERTOIRE; ?>/modifBase/updateProjetphase2.php?lang=<?php echo $lang; ?>&idprojet=<?php echo $idprojet ;?>&numProjet=<?php echo $numProjet;?>" enctype="multipart/form-data" >
+            <div name="modifProjet" data-dojo-type="dijit/form/Form" id="modifProjet" data-dojo-id="modifProjet"  method="post" 
+                  action="<?php echo '/'.REPERTOIRE; ?>/updateprojet/<?php echo $lang; ?>/<?php echo $idprojet ;?>/<?php echo $numProjet;?>" enctype="multipart/form-data" >
                 <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">
                 <script type="dojo/on" data-dojo-event="submit">
                 var nbdescript=stripTags(trim(dojo.byId("descriptifValeur").value)).length;

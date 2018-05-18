@@ -1,5 +1,7 @@
 <?php
 
+include_once 'class/email.php';
+include_once 'outils/constantes.php';
 if(isset($_GET['numProjet'])){
     $numprojet = $_GET['numProjet'];
 }
@@ -48,7 +50,7 @@ $body = utf8_decode(htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MR
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_ADRESSEEMAILPART'))), ENT_QUOTES, 'UTF-8') .$semailcentrale . '<br><br><br><br>' .
-        "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br><br><br>' .
+        "<a href=".ADRESSESITE." >" . TXT_RETOUR . '</a><br><br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 $sujet = utf8_decode(TXT_PROJETNUM) . $numprojet;
 

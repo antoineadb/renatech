@@ -4,6 +4,7 @@ include_once '../class/email.php';
 include_once '../class/Securite.php';
 include_once '../decide-lang.php';
 include_once '../class/Manager.php';
+include_once '../outils/constantes.php';
 $db = BD::connecter();
 $manager = new Manager($db);
 
@@ -92,7 +93,7 @@ if (isset($erreur)) {
                     $mail->AddAddress($copie);
                     $mail->isHTML(true); // Set email format to HTML                    
                     $mail->Subject = $_POST['objetDemande'];                    
-                    $mail->From = 'projets@renatech.org';
+                    $mail->From = ADRESSEMAILPROJET;
                     $mail->FromName = 'Renatech';
                     $mail->Body = $body;
                     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';

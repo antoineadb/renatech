@@ -1152,7 +1152,7 @@ function emailclotureProjet($manager, $idprojet, $idcentrale) {
     $body = utf8_decode(affiche('TXT_MRSMR') . '<br><br>' . affiche('TXT_CLOTUREAUTO')
             . '<br>' . affiche('TXT_NOINFOPROJECT') . "<br><br>" . affiche('TXT_REACTPROJECT') . "<br><br>"
             . '' . affiche('TXT_REMERCIEMENT') . '.<br><br>'
-            . '' . affiche('TXT_SINCERESALUTATION') . '<br><br>' . affiche('TXT_RESEAURENATECH') . '<br><br><br><a href="https://www.renatech.org/projet" >' . TXT_RETOUR . '</a>'
+            . '' . affiche('TXT_SINCERESALUTATION') . '<br><br>' . affiche('TXT_RESEAURENATECH') . '<br><br><br><a href='.ADRESSESITE.' >' . TXT_RETOUR . '</a>'
             . '<br><br>' . affiche('TXT_DONOTREPLY') . '<br><br>');
     /*
      *  Madame, Monsieur,
@@ -1351,4 +1351,16 @@ function recupMailAdminProjet($idprojet) {
         return null;
     }
     $db = BD::deconnecter();
+}
+
+function mailAutresCentrale($manager,$idprojet){
+    //Récupération des autres centrale si elles existent
+    $autresCentralesMail = $manager->getList2("SELECT  email1,email2,email3,email4,email5 from projetautrecentrale pa LEFT JOIN centrale c ON c.idcentrale=pa.idcentrale WHERE pa.idprojet=?", $idprojet);
+    $emailAutresCentrales = array();
+    for ($i = 0; $i <= 5; $i++) {
+        if (!empty($autresCentralesMail[0][$i])) {
+            array_push($emailAutresCentrales, $autresCentralesMail[0][$i]); //construction d'un tableau d'email des responsable de la centrale
+        }
+    }
+    return $emailAutresCentrales;
 }

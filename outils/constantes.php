@@ -88,6 +88,7 @@ define('NBSOURCEDEFINACEMENT', $manager->getSingle("SELECT count(idsourcefinance
 define('NBRESSOURCE', $manager->getSingle("SELECT count(idressource) FROM ressource"));
 define('TXT_REGEXPASS', "regExp:'^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$");
 define('IDCENTRALEINTERNATIONNAL', $manager->getSingle2("SELECT idregion FROM region WHERE libelleregion=?",'Centrale internationale'));
+define('ADRESSEMAILPROJET','projets@renatech.org');
 
 define ('IDFEMTO',$manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'FEMTO-ST'));
 define ('IDIEMN',$manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'IEMN'));
@@ -196,3 +197,7 @@ function anneeStatistique($d,$f){
     }
     return $annee;
 }
+$string = $_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
+ $domain = explode("/", $string)[0];
+$url = "https://".$domain.'/'.explode("/", $string)[1];
+define('ADRESSESITE',$url);

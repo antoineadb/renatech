@@ -238,7 +238,7 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
                 <tr>
                     <td>
                         <?php include 'statistiques/nbProjetPorteurBarEncours.php'; ?>
-                        <?php  include 'statistiques/nIDNBUSERCLEANROOMNEWPROJETbProjetPorteurPieEncours.php'; ?>
+                        <?php  include 'statistiques/nbProjetPorteurPieEncours.php'; ?>
                     </td>
                 </tr>
             </table>

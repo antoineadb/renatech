@@ -508,14 +508,14 @@ $body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR5'))), EN
         $verrouIdentifiee.$autrecentrale.$descriptionautrecentrale.$scentraleProximite.$descriptioncentraleproximite.$nbplaque.$nbRun.$emailrespdevis.$reussite.$refinterne.
         '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') .
         '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') .
-        "<a href='https://www.renatech.org/projet' ><br><br>" . TXT_RETOUR . '</a><br>    ' .
+        "<a href=".ADRESSESITE." ><br><br>" . TXT_RETOUR . '</a><br>    ' .
         '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 }else{
     $body = htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_MRSMR5'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF0'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .
         htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_BODYEMAILMODIF1'))), ENT_QUOTES, 'UTF-8') . '<br><br>' .  utf8_decode(TXT_MESSAGEERREURENODATA).'<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_SINCERESALUTATION'))), ENT_QUOTES, 'UTF-8') .
         '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_RESEAURENATECH'))), ENT_QUOTES, 'UTF-8') .
-        "<a href='https://www.renatech.org/projet' ><br><br>" . TXT_RETOUR . '</a><br>    ' .
+        "<a href=".ADRESSESITE." ><br><br>" . TXT_RETOUR . '</a><br>    ' .
         '<br><br>' . htmlentities(stripslashes(removeDoubleQuote( affiche('TXT_DONOTREPLY'))), ENT_QUOTES, 'UTF-8');
 }
 $sujet = utf8_decode(TXT_MODIFPROJETNUM) . $numero;

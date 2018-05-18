@@ -49,7 +49,7 @@ if (isset($_POST['page_precedente'])) {
             //CHANGEMENT DE STATUT ON A CLIQUER SUR OUI POUR RENVOYER L'EMAIL AUX AUTRES CENTRALES QU'ON A DEJA ENVOYE
             $cas = 'chgstatutAutCentraleEmailDejaEnvoye';
         } elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'TRUE' && $_POST['majcentrale'] == 'non' && $sendmail == TRUE) {
-            //CHANGEMENT DE STATUT ON A CLIQUER SUR ON POUR  NE PAS RENVOYER L'EMAIL AUX AUTRES CENTRALES QU'ON A DEJA ENVOYE
+            //CHANGEMENT DE STATUT ON A CLIQUER SUR NON POUR  NE PAS RENVOYER L'EMAIL AUX AUTRES CENTRALES QU'ON A DEJA ENVOYE
             $cas = 'chgstatutAutCentraleEmailDejaEnvoyeNon';
         } elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'TRUE' && $_POST['majcentrale'] == 'non' && $sendmail == FALSE) {
             //CHANGEMENT DE STATUT AVEC AJOUT D'UNE ETAPE DANS UNE AUTRES CENTRALE POUR LA 1ER FOIS  
@@ -1212,6 +1212,8 @@ if (isset($_POST['page_precedente'])) {
             $_SESSION['idstatutprojet'] = $idstatutprojet;
         }
     }
+    
+    
     if ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' || $cas == 'chgstatutAutCentraleEmailDejaEnvoye' || $cas == 'chgstatut' || $cas == 'chgstatutAutCentraleEmailDejaEnvoyeNon') {        
         if(!empty(IDCENTRALEUSER)){
                $idcentrale = IDCENTRALEUSER;
@@ -1248,12 +1250,7 @@ if (isset($_POST['page_precedente'])) {
             if($cas1 !='noEmail'){
                 include '../EmailProjetEncoursrealisation.php';
             }
-            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail') {
-                include '../emailAutreCentrales.php';
-            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' && $cas1 !='noEmail') {
-                include '../outils/envoiEmailAutreCentrale.php';
-            }
-            header('Location: /' . REPERTOIRE . '/myproject/' . $lang . '/' . $idprojet);
+             header('Location: /' . REPERTOIRE . '/myproject/' . $lang . '/' . $idprojet);
         } elseif ($idstatutprojet == FINI) {//PROJET FINI
             //VERIFICATION QUE LE PROJET A BIEN UNE DATE DE DEBUT DE PROJET,AFFECTATION DE LA DATE STAUTFINI DANS LE CAS CONTRAIRE
             $datedebutduprojet = $manager->getSingle2("select datedebutprojet from projet where idprojet=?", $idprojet);
@@ -1271,15 +1268,7 @@ if (isset($_POST['page_precedente'])) {
             // ENVOI D'UN EMAIL
             if($cas1 !='noEmail'){
                 include '../EmailProjetfini.php';
-            }
-            //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
-            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail') {
-                include '../emailAutreCentrales.php';
-            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' && $cas1 !='noEmail') {
-                include '../outils/envoiEmailAutreCentrale.php';
-            }
-            //vide le cache
-            
+            }            
             header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
             exit();            
         } elseif ($idstatutprojet == CLOTURE) {//PROJET CLOTURER
@@ -1300,19 +1289,12 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateDateStatutCloturer($datecloturer, $idprojet);
             $concerne = new Concerne($idcentrale, $idprojet, CLOTURE, "");
             $manager->updateConcerne($concerne, $idprojet);
-            effaceCache(LIBELLECENTRALEUSER);
+
             if($cas1!='noEmail'){
                 include '../EmailProjetcloture.php';
             }
-
-            //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
-            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1!='noEmail') {
-                include '../emailAutreCentrales.php';
-            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye'&& $cas1!='noEmail') {
-                include '../outils/envoiEmailAutreCentrale.php';
-            }
             //vide le cache
-            
+            effaceCache(LIBELLECENTRALEUSER);
             header('Location: /' . REPERTOIRE . '/closed_project/' . $lang . '/' . $idprojet . '/' . $idstatutprojet);
             exit();
         } elseif ($idstatutprojet == REFUSE) {//PROJET REFUSER            

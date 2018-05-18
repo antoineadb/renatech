@@ -5,7 +5,7 @@ if(isset($_GET['lang'])){
 }else{
     include 'decide-lang.php';
 }
-include 'class/email.php';
+include_once 'class/email.php';
 include_once 'class/Manager.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
@@ -40,7 +40,7 @@ $body = affiche('TXT_BODYEMAILPROJET0') . '<br><br>' . htmlentities(stripslashes
         '<br><br>' . utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_SINCERESALUTATION')))) .
         '<br><br>' . utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_RESEAURENATECH')))) .
         '<br><br>' . utf8_decode(stripslashes(str_replace("''","'",affiche('TXT_BODYEMAILPROJET4')))) . ' <br>' . $emailCentrale . '<br>' .
-        "<a href='https://www.renatech.org/projet' >" . TXT_RETOUR . '</a><br>    ' .
+        "<a href=".ADRESSESITE." >" . TXT_RETOUR . '</a><br>    ' .
          '<br><br>' .utf8_decode(str_replace("!","", affiche('TXT_DONOTREPLY')));
 
 //---------------------------TRAITEMENT DES EMAIL DES CENTRALES COPIES----------------------------------------------------------------------//

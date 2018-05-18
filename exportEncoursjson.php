@@ -3,7 +3,11 @@ session_start();
 include 'decide-lang.php';
 include 'class/Manager.php';
 include_once 'outils/toolBox.php';
-include_once 'outils/constantes.php';
+include_once 'outils/constantes.php';   
+include_once 'outils/requeteRelance.php';
+
+
+
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 if (isset($_SESSION['pseudo'])) {    
@@ -14,22 +18,16 @@ if (isset($_SESSION['pseudo'])) {
 }
 $libellecentrale = $manager->getSingle2("SELECT libellecentrale FROM centrale , utilisateur ,loginpassword  WHERE idcentrale_centrale = idcentrale AND idlogin_loginpassword = idlogin AND pseudo=?", $pseudo);
 $dateMoins3mois = date('Y-m-d', strtotime('-3 month'));
-$sql="SELECT distinct on (p.numero) p.idprojet,p.datemaj,p.dureeprojet,p.refinterneprojet,p.numero,p.titre,p.datedebutprojet,u.nom,u.prenom,p.idperiodicite_periodicite,l.mail,
-    u.idutilisateur,p.dateenvoiemail 
-    FROM  projet p,utilisateur u,creer cr,centrale ce,concerne co,typeprojet t,statutprojet s, loginpassword l   ";
-$sql1="AND cr.idutilisateur_utilisateur = u.idutilisateur AND co.idcentrale_centrale = ce.idcentrale AND co.idprojet_projet = p.idprojet  AND  t.idtypeprojet = p.idtypeprojet_typeprojet 
-    AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = co.idstatutprojet_statutprojet and ce.idcentrale = ? AND (s.idstatutprojet=? OR s.idstatutprojet=?) AND p.datemaj <? 
-    AND trashed =FALSE AND p.devtechnologique=TRUE ";
-$sqlInterne =        $sql. " WHERE u.idcentrale_centrale IS NOT NULL AND porteurprojet =TRUE AND  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet ".$sql1;
-$sqlExterne =        $sql. " WHERE (u.idcentrale_centrale IS NULL  OR  p.porteurprojet =FALSE) AND  cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet  ".$sql1;
-$sqlExterneInterne = $sql. " WHERE cr.idprojet_projet = p.idprojet AND cr.idprojet_projet = p.idprojet  ".$sql1;
+
 if (isset($_GET['chx']) && $_GET['chx'] == 1) {
-    $sql =$sqlInterne;
+    $sql =SQLINTERNE;
 } elseif (isset($_GET['chx']) && $_GET['chx'] == 2) {
-    $sql =$sqlExterne;
+    $sql =SQLEXTERNE;
 }else{
-    $sql =$sqlExterneInterne;
+    $sql =SQLINTERNEEXTERNE;
 }
+
+
 $row = $manager->getListbyArray($sql, array(IDCENTRALEUSER, ENCOURSREALISATION,ENCOURSANALYSE, $dateMoins3mois));
 $data = utf8_decode("numéro;Date de début de projet;Titre du projet;Mise à jour;référence interne;E-mail;Nom prénom du demandeur;Date de fin du projet");
 $data .= "\n";

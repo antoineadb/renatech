@@ -1636,7 +1636,7 @@ if($idstatut!=ENATTENTEPHASE2){
      <div data-dojo-type="dijit/Dialog" data-dojo-id="repstatut" title="<?php echo TXT_RESULTMESSAGECONFIRMAUTRECENTRALE;?>" style="width: 500px;margin-left: 20px;   ">
           <table class="dijitDialogPaneContentArea">
               <tr>
-                  <td><button type="submit" data-dojo-type="dijit/form/Button"  id="yes3" data-dojo-props="onClick:function(){repStatut();}"><?php echo TXT_OUI ;?></button></td><td>
+                  <td><button type="submit" data-dojo-type="dijit/form/Button"  id="yes3" data-dojo-props="onClick:function(){repStatut();}"><?php echo TXT_OUI;?></button></td><td>
                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="no3"  data-dojo-props="onClick:function(){repStatutNon();}"><?php echo TXT_NON ;?></button></td>                               
                   <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){repstatut.hide();}" id="submitCancel5"><?php echo TXT_ANNULE;?></button></td>
               </tr>
@@ -1647,7 +1647,7 @@ if($idstatut!=ENATTENTEPHASE2){
         function repStatut(){
             document.getElementById('save').value='non';
             document.getElementById('maj').value = 'non';   
-            //document.getElementById('majcentrale').value = 'oui';
+            document.getElementById('majcentrale').value = 'oui';
             document.getElementById('emailNon').value='oui';
             modifProjet.submit();
         }

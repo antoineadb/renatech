@@ -2,7 +2,6 @@
 
 session_start();
 
-include_once '../class/Chiffrement.php';
 include '../class/Manager.php';
 include_once '../decide-lang.php';
 include_once '../outils/constantes.php';
