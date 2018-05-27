@@ -1,0 +1,42 @@
+<?php 
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+include_once 'outils/constantes.php';
+include_once 'decide-lang.php';
+?>
+
+<p id="footer" style="font-size: 11px; font-style: italic;width: 570px;">
+    <?php
+    echo TXT_VERSION.'<br>';    
+    if(!empty($_SESSION['pseudo'])){        
+        $row =$manager->getList2("SELECT idutilisateur,idtypeutilisateur_typeutilisateur,idqualitedemandeuraca_qualitedemandeuraca,idqualitedemandeurindust_qualitedemandeurindust,libelletype 
+        FROM loginpassword,utilisateur,typeutilisateur WHERE idlogin =idlogin_loginpassword AND idtypeutilisateur = idtypeutilisateur_typeutilisateur and pseudo = ?",$_SESSION['pseudo']);
+        if(!empty($row)){
+            $libelletype = $row[0]['libelletype'];
+            $libellecentraleuser=LIBELLECENTRALEUSER;
+            if(!empty($row[0]['idqualitedemandeuraca_qualitedemandeuraca'])){
+                switch ($row[0]['idtypeutilisateur_typeutilisateur']){
+                case ADMINNATIONNAL:
+                echo TXT_CONNECT.' '.$libelletype;
+                break;
+                case ADMINLOCAL:
+                echo TXT_CONNECT.' '.$libelletype.TXT_DELACENTRALE.LIBELLECENTRALEUSER;
+                break;    
+                case UTILISATEUR:            
+                if(!empty($libellecentraleuser) && $libellecentraleuser!= 'Autres'){
+                    echo TXT_CONNECTACADEM.TXT_DELACENTRALE.LIBELLECENTRALEUSER;
+                }else{
+                    echo TXT_CONNECTACADEM;
+                }
+                break;
+                default:
+                break;
+                }
+            }elseif(!empty($row[0]['idqualitedemandeurindust_qualitedemandeurindust'])){
+                echo TXT_CONNECTINDUST;
+            }
+        }
+    }
+    ?>
+</p>
+<div id="bip" class="display"></div>

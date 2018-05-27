@@ -1,0 +1,96 @@
+<?php
+unset($_SESSION['numProjet']);
+if(isset($_SESSION['idTypeUser'])){
+    $typeuser=$_SESSION['idTypeUser'];
+}else{
+    include_once 'class/Manager.php';
+    $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+    $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+    $typeuser=$manager->getSingle2("select idtypeutilisateur_typeutilisateur from utilisateur,loginpassword where idlogin = idlogin_loginpassword and pseudo=?",$_SESSION['pseudo']);
+    $db = BD::deconnecter();
+}
+if (isset($_GET['lang'])) {
+    $lang = $_GET['lang'];
+} else {// si aucune langue n'est déclarée on tente de reconnaitre la langue par défaut du navigateur
+    $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+}
+
+if ($lang == 'fr') {
+    include_once('lang/fr-lang.php');
+} else {
+    include_once('lang/en-lang.php');
+}
+if(isset($_GET['message'])&& $_GET['message']=='ok'){?>
+    <div  class="msgSendEmail"><?php echo TXT_MAILPJOK;?></div>
+<?php 
+}
+?>
+<fieldset id="ident" style="border-color: #5D8BA2;width:100%;padding: 20px 40px 33px;">
+    <legend style="color: #5D8BA2;font-size: 1.1em">
+        <?php if($typeuser==ADMINLOCAL){?>
+            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviProjetRespCentrale.php?lang='.$_GET['lang'] ?>" style="text-decoration:none;" title="<?php echo TXT_LOGINPROJETCENTRALE; ?>" > <?php echo TXT_PROJET; ?></a>
+        <?php }elseif($typeuser==UTILISATEUR){?>
+            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviProjet.php?lang='.$_GET['lang'] ?>" style="text-decoration:none;" title="<?php echo TXT_SUIVIPROJET; ?>" > <?php echo TXT_PROJET; ?></a>
+        <?php }else{?>
+            <a href="<?php echo '/'.REPERTOIRE.'/controler/controleSuiviTousLesProjets.php?lang='.$_GET['lang'] ?>" style="text-decoration:none;" title="<?php echo TXT_TOUSLESPROJETS; ?>" > <?php echo TXT_PROJET; ?></a>
+        <?php }?>
+    </legend>
+    <div style="font-size: 1.2em">
+        <?php if($typeuser!=ADMINNATIONNAL){ ?>    
+        <p>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET0'))).
+            '<br>'.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET1'))) ;?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/new_project/<?php echo $lang;?>" style="text-decoration: none">
+                <?php echo html_entity_decode(stripslashes(removeDoubleQuote(TXT_DEMANDEPROJET))); ?></a>
+            , <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/ModeEmploiDemandeProjetRENATECH.pdf' ?>" download="ModeEmploiDemandeProjetRENATECH" style="text-decoration: none">
+                <?php echo '('.TXT_DOWNLOADUSERMANUAL; ?> <?php echo TXT_DOWNLOADUSERMANUAL1.')'; ?></a>
+        </p>
+        <p>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_PROJETREALISABLE')));?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/new_request/<?php echo $lang?>" style="text-decoration: none">
+                <?php echo html_entity_decode(stripslashes(removeDoubleQuote(TXT_CREERPROJET))); ?></a>
+        </p>
+        <p>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETSOUMIS0'))).' '.affiche('TXT_ACCUEILPROJETSOUMIS1');?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/controler/controleSuiviProjet.php?lang=<?php echo $lang;?>" style="text-decoration: none">
+                <?php echo strtolower(TXT_CONSULTERPROJET); ?></a>
+        </p>        
+        <?php
+        if(isset ($_SESSION['responsableCentrale'])){
+            if($_SESSION['responsableCentrale']=='true'){
+                echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETUSER0'))).' '
+                .stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETUSER1'))).
+                '<a href="/'.REPERTOIRE.'/controler/controleSuiviProjetRespCentrale.php?lang='.$_GET['lang'].'"
+                style="text-decoration: none">'." ".stripslashes(removeDoubleQuote(strtolower(TXT_VUESUIVIPROJETCENTRALE))).'</a>';
+            }
+        }
+        ?>
+        <p><?php echo stripslashes(removeDoubleQuote(affiche('TXT_MODIFPROFIL'))).
+            ' '.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETUSER1'))) ;?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/moncompte/<?php echo $lang;?>" style="text-decoration: none">
+                <?php echo strtolower(stripslashes(removeDoubleQuote(TXT_MONCOMPTE))); ?></a>
+        </p>
+        <?php }elseif($typeuser==ADMINNATIONNAL){ ?> 
+        <p><?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN'))).', '. stripslashes(removeDoubleQuote(affiche('TXT_PROJETADMIN')));?></p>
+        <p>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN0'))) ;?>
+            <a href="liste/<?php echo $lang;?>" style="text-decoration: none">
+                <?php echo stripslashes(removeDoubleQuote(TXT_LISTE)).' ,';?></a>
+
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN1'))) ;?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/graph/<?php echo $lang;?>/ok" style="text-decoration: none">
+                <?php echo stripslashes(removeDoubleQuote(TXT_STATISTIQUE)).', ';?></a>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN2'))) ;?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/compteadmin/<?php echo $lang;?>" style="text-decoration: none">
+                <?php echo stripslashes(removeDoubleQuote(TXT_GESTIONCOMPTE));?></a>
+            <?php echo ' '.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN3'))).' '; ?>
+        </p>
+        <p>
+            <?php echo stripslashes(removeDoubleQuote(affiche('TXT_MODIFPROFILADMIN'))) ;?>
+            <a href="moncompte/<?php echo $lang ?>" style="text-decoration: none">
+                <?php echo strtolower(stripslashes(removeDoubleQuote(TXT_MONCOMPTE))); ?></a>
+        </p>
+        <?php }?>   
+    </div>
+</fieldset>
+<br>

@@ -1,0 +1,38 @@
+<?php include_once 'outils/constantes.php'; ?>
+<div id="gridrefusedAll" ></div>
+<script>
+    var gridrefusedAll, dataStore, store;
+    require([
+        "dojox/grid/DataGrid",
+        "dojo/store/Memory",
+        "dojo/data/ObjectStore",
+        "dojo/request",
+        "dojo/date/stamp",
+        "dojo/date/locale",
+        "dojo/domReady!"
+    ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
+        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/projectRefusedAll.json", {
+            handleAs: "json"
+        }).then(function(data) {
+            store = new Memory({data: data.items});
+            dataStore = new ObjectStore({objectStore: store});            
+            function formatDate(datum) {
+                var d = stamp.fromISOString(datum);
+                return locale.format(d, {selector: 'date', formatLength: 'short'});
+            }
+            gridrefusedAll = new DataGrid({
+                store: dataStore,
+                query: {id: "*"},
+                structure: [                        
+                        {"name": "<?php echo TXT_DATEPROJET; ?>", "field": "dateprojet", "width": "120px", formatter: formatDate},
+                        {"name": "<?php echo TXT_NUMPROJECT; ?>", "field":"numero", "width": "100px"},                        
+                        {"name": "<?php echo TXT_TITREPROJET; ?>", "field": "titre", "width": "200px"},
+                        {"name": "<?php echo TXT_CENTRALE_DEPOT; ?>", "field": "libellecentraledepot", "width": "80px"},
+                        {"name": "<?php echo TXT_CENTRALE_FINAL; ?>", "field": "libellecentralefinal", "width": "100px"},
+                        {"name": "<?php echo TXT_COMMENTAIREPROJET; ?>", "field": "commentaireprojet", "width": "auto"}
+                ]
+            }, "gridrefusedAll");
+            gridrefusedAll.startup();
+        });
+    });
+</script>

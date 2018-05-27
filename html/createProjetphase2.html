@@ -1,0 +1,1066 @@
+
+<script src="<?php echo '/'.REPERTOIRE ?>/js/ajax.js"></script>
+<script>require(["dojo/parser", "dijit/form/NumberTextBox"]);</script>
+<script>    
+    function cacher(id) {
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+    <fieldset id="identre">
+            <legend style="margin-left: 20px;font-weight: bold"><?php echo TXT_CADREPROJETSCIENTIFIQUE;?></legend>
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+    <table style='width:1010px'>
+    <tr>
+        <td style='float: left;'>
+            <label for="contactCentralAccueil" id='lblContactCentraleAccueil'  style="margin-left: 20px">
+                    <?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
+                <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
+                <input data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  id="contactCentralAccueil" autocomplete="on"  maxlength="100" style="margin-left:20px"
+                       data-dojo-props="<?php echo REGEX_TYPE; ?>"	 data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
+                <?php }else{?>
+                <input style="margin-left:20px" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on" maxlength="100" 
+                       data-dojo-props="<?php echo REGEX_TYPE; ?>"	data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
+                <?php }?>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <label for="typeProjet" style="width: 260px;margin-left: 20px;;margin-top:15px" ><?php echo TXT_TYPEPROJET.'*';?><?php echo ' :';?></label>
+               <select name="typeProjet" id="typeProjet" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;"
+                        onchange="afficheGrpFormation(this.id)" onreadystatechange="afficheGrpFormation(this.id)" required="true">
+                    <?php
+                    if($lang=='fr'){                    
+                        $rowTypeprojet =$manager->getListbyArray("select libelletype,libelletypeen,idtypeprojet from typeprojet where  libelletype!=? and masquetypeprojet!=?  order by idtypeprojet asc",array('n/a','TRUE'));
+                        echo '<option>'.TXT_SELECTTYPEPROJET.'</option>';
+                        for($i=0;$i<count($rowTypeprojet);$i++){
+                            echo "<option value='".'tp'.$rowTypeprojet[$i]['idtypeprojet']."'>".str_replace("''","'",$rowTypeprojet[$i]['libelletype'])."</option>";
+                        }
+                    }elseif($lang=='en'){                    
+                        $rowTypeprojet =$manager->getListbyArray("select libelletype,libelletypeen,idtypeprojet from typeprojet where libelletype!=? and masquetypeprojet!=?  order by idtypeprojet asc",array('n/a','TRUE'));
+                            echo '<option style="color:#AAAAAA;font-style=italic;">'.TXT_SELECTTYPEPROJET.'</option>';
+                            for($i=0;$i<count($rowTypeprojet);$i++){
+                                echo "<option value='".'tp'.$rowTypeprojet[$i]['idtypeprojet']."'>".str_replace("''","'",$rowTypeprojet[$i]['libelletypeen'])."</option>";
+                            }
+                    }
+                    ?>
+                </select>
+            </td>         
+            <td  id="grpTypeFormation" style="display: none">
+                <label for="typeFormation" style="width: 260px;margin-left: 20px;margin-top:15px" ><?php echo TXT_TYPEFORMATION;?><?php echo ' :*';?>
+                </label>
+                <select name="typeFormation" id="typeFormation" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 20px;" >
+                    <?php
+                    if($lang=='fr'){
+                        if(!empty($_GET['idtypeformation'])&& $_GET['idtypeformation']!=1){
+                            $rowTypeformation = $manager->getListbyArray("select libelletypeformation,idtypeformation from typeformation where
+                            libelletypeformation !=? and idtypeformation!= ? and masquetypeformation!=? ",array('n/a',$_GET['idtypeformation'],'TRUE'));
+                            $nbrowtypeformation=count($rowTypeformation);
+                    $libelletypeformation = $manager->getSingle2("select libelletypeformation from typeformation where idtypeformation = ?",
+                    $_GET['idtypeformation']);
+                            echo "<option value='".'tf'.$_GET['idtypeformation']."'>".str_replace("''","'",$libelletypeformation)."</option>";
+                            for($i=0;$i<$nbrowtypeformation;$i++){
+                    echo "<option value='".'tf'.$rowTypeformation[$i]['idtypeformation']."'>".str_replace("''","'",
+                    $rowTypeformation[$i]['libelletypeformation'])."</option>";
+                            }
+                        }else{
+                    $rowTypeformation = $manager->getListbyArray("select libelletypeformation,idtypeformation from typeformation where
+                    libelletypeformation !=? and masquetypeformation!=? ",array('n/a','TRUE'));
+                            echo '<option>'.TXT_SELECTTYPEFORMATION.'</option>';
+                            $nbrowtypeformation=count($rowTypeformation);
+                            for($i=0;$i<$nbrowtypeformation;$i++){
+                                echo "<option value='".'tf'.$rowTypeformation[$i]['idtypeformation']."'>".str_replace("''","'",
+                                $rowTypeformation[$i]['libelletypeformation'])."</option>";
+                            }
+                        }
+                    }elseif($lang=='en'){                        
+                        if(!empty($_GET['idtypeformation'])&& $_GET['idtypeformation']!=1){
+                        $rowTypeformation = $manager->getListbyArray("select libelletypeformationen,idtypeformation from typeformation where
+                        libelletypeformationen !=? and idtypeformation!= ? and masquetypeformation!=? ",array('n/a',$_GET['idtypeformation'],'TRUE'));
+                        $nbrowtypeformation=count($rowTypeformation);
+                    $libelletypeformation = $manager->getSingle2("select libelletypeformationen from typeformation where idtypeformation = ?",
+                    $_GET['idtypeformation']);
+                            echo "<option value='".'tf'.$_GET['idtypeformation']."'>".str_replace("''","'",$libelletypeformation)."</option>";
+                            for($i=0;$i<$nbrowtypeformation;$i++){
+                    echo "<option value='".'tf'.$rowTypeformation[$i]['idtypeformation']."'>".str_replace("''","'",
+                    $rowTypeformation[$i]['libelletypeformationen'])."</option>";
+                            }
+                        }else{
+                    $rowTypeformation = $manager->getListbyArray("select libelletypeformationen,idtypeformation from typeformation where
+                    libelletypeformation !=? and masquetypeformation!=? ",array('n/a','TRUE'));
+                            echo '<option>'.TXT_SELECTTYPEFORMATION.'</option>';
+                            $nbrowtypeformation=count($rowTypeformation);
+                            for($i=0;$i<$nbrowtypeformation;$i++){
+                    echo "<option value='".'tf'.$rowTypeformation[$i]['idtypeformation']."'>".str_replace("''","'",
+                    $rowTypeformation[$i]['libelletypeformationen'])."</option>";
+                            }
+                        }
+                    }
+                    ?>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <script>        
+        function afficheGrpFormation(id) {
+            if ((dijit.byId(id).value) === 'tp5' || dijit.byId(id).get('displayedValue') === 'Formation') {//Formation
+                document.getElementById('grpTypeFormation').style.display = 'block';
+                document.getElementById('blocnbHeureEleve').style.display = 'block';
+                dijit.byId('nbHeure').set('required', 'true');
+                dijit.byId('nbeleve').set('required', 'true');
+                dijit.byId('typeFormation').set('required', 'true');
+            } else {
+                document.getElementById('grpTypeFormation').style.display = 'none';
+                document.getElementById('blocnbHeureEleve').style.display = 'none';
+                dijit.byId('nbHeure').set('required', '');
+                dijit.byId('nbeleve').set('required', '');
+                dijit.byId('typeFormation').set('required', '');
+            }
+        }
+    </script>   
+    <table id="blocnbHeureEleve" style="display: none;margin-top: 20px">        
+        <tr>
+            <td>
+                <label for="nbHeure" style="width: 260px;margin-left: 20px;" ><?php echo TXT_NBHEURE;?><?php echo ' *:';?></label>
+                <input type="text" name="nbHeure" id="nbHeure"  data-dojo-type="dijit/form/NumberTextBox" style="margin-left: 20px;"
+                       autocomplete="on" value="<?php if(!empty($_GET['nbHeure'])){echo $_GET['nbHeure'];} ?>" >
+            </td><td>
+                <label for="nbeleve" style="width: 260px;margin-left: 20px;" ><?php echo TXT_NBELEVE;?><?php echo ' *:';?></label>
+                <input type="text" name="nbeleve" id="nbeleve"  data-dojo-type="dijit/form/NumberTextBox" style="margin-left: 20px;" autocomplete="on"
+                       value="<?php if(!empty($_GET['nbeleve'])){echo $_GET['nbeleve'];} ?>"						>
+            </td>
+        </tr>
+        <tr><td>
+                <label for="nomformateur" style="width: 260px;margin-left: 20px;" ><?php echo TXT_NOMFORMATEUR.' :';?></label>
+                <?php if(!empty($_GET['nomformateur'])){$nomformateur= stripslashes(str_replace("''","'",$_GET['nomformateur']));} ?>
+                <input id="nomformateur"  type="text" data-dojo-type="dijit/form/ValidationTextBox" name= "nomformateur"  autocomplete="on" 
+                       style="margin-left: 20px;" value="<?php if(!empty($_GET['nomformateur'])){echo $nomformateur;} ?>">
+            </td></tr>
+    </table>    
+    <table>
+        <tr>            
+            <td>
+                <label for="dureeprojet" style="width: 200px;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.':*'; ?></label>
+                <input id="dureeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeprojet"  autocomplete="on"
+                       required="required" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;" >
+                <select name="choix" id="choix" data-dojo-type="dijit/form/Select" >
+                    <?php
+                    $rowperiodicite=$manager->getList2("select idperiodicite,libelleperiodicite,libelleperiodiciteen from period WHERE idperiodicite!=?",MOIS);
+                    if($lang=='fr'){
+                        echo "<option value='pe".MOIS."'  selected='selected' >".TXT_MOIS."</option>";
+                        for($i=0;$i<count($rowperiodicite);$i++){
+                            echo "<option value='".'pe'.$rowperiodicite[$i]['idperiodicite']."'>".$rowperiodicite[$i]['libelleperiodicite']."</option>";
+                        }
+                    }elseif($lang=='en'){
+                        echo "<option value='pe".MOIS."'  selected='selected' >".TXT_MOIS."</option>";
+                        for($i=0;$i<count($rowperiodicite);$i++){
+                            echo "<option value='".'pe'.$rowperiodicite[$i]['idperiodicite']."'>".$rowperiodicite[$i]['libelleperiodiciteen']."</option>";
+                        }
+                    }
+                    ?>
+                </select>
+            </td>
+        </tr>							
+        <tr>
+            <td>
+                <?php include 'outils/sourceFinancement.php'; ?>
+            </td>
+        </tr>
+    </table>
+    <table style="margin-top: 10px">
+        <tr>
+            <td>
+                <label for="porteurProjet"  style="width: 450px;margin-left: 20px;"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?>
+                </label>
+            </td>           
+            <td>
+                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet"  value="TRUE" class="btRadio" checked="checked" 
+                       onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '')">
+                <?php echo TXT_OUI; ?>
+                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet" value="FALSE"  class="btRadio"
+                       onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '')">
+                <?php echo TXT_NON; ?>
+            </td>            
+        </tr>
+        <tr>
+            <td>
+                <label id='msgporteurProjet' style="width: 350px;margin-left:20px;display: block;"  ><?php echo TXT_MSGPORTEURPROJET; ?>
+                </label>
+            </td>            
+        </tr>
+    </table>
+    <input id="reponsenomlabo" value='' style="display: none" >
+  
+    <script>
+        dojo.ready(function() {
+            var spinner = dijit.byId("integerspinner2");
+            var spinner1 = dijit.byId("integerspinner");
+            var currentValue = spinner.get('value');
+            var currentValue1 = spinner1.get('value');
+            dojo.connect(spinner, "onChange", function(value) {
+                currentValue = value;
+            });
+            dojo.connect(spinner1, "onChange", function(value) {
+                currentValue1 = value;
+            });
+            dojo.connect(spinner.domNode, (!dojo.isMozilla ? "onmousewheel" : "DOMMouseScroll"), function(e) {
+                spinner.set('value', currentValue);
+            });
+
+            dojo.connect(spinner1.domNode, (!dojo.isMozilla ? "onmousewheel" : "DOMMouseScroll"), function(e) {
+                spinner1.set('value', currentValue1);
+            });
+        });
+    </script>
+    <fieldset id="dev" style="border-color: #5D8BA2;width:966px;padding-top: 0px;margin-top:20px;margin-left: 20px;padding-left:0px;">
+        <legend style="margin-left: 20px;"><?php echo TXT_PARTENAIRE;?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+            <span style="text-align: left;padding:10px;width: 270px;border-radius:5px" >
+                 <?php //MISE EN CACHE DES AIDES
+                            if(!$aidepartenaireprojet=$Cache->read('aidepartenaireprojet')){
+                                $aidepartenaireprojet=affiche('TXT_AIDEPARTENAIREPROJET') ;
+                                $Cache->write('aidepartenaireprojet',$aidepartenaireprojet);
+                            }?><?= $aidepartenaireprojet; ?></span></a>
+            </legend>
+        <table>           
+            <tr>
+                <td>
+                    <label style="width: 400px;margin-left: 20px;"><?php echo TXT_NBPARTENAIRE_PROJET.' : '.'( 0 - 10 )'; ?></label>
+                </td>
+                <td>
+                    <input data-dojo-type="dijit/form/NumberSpinner" id="integerspinner2"
+                           value="<?php echo 0;?>"
+                           data-dojo-props="smallDelta:1, constraints:{min:0,max:10,places:0}" name="nombrePartenaire" style="width:50px;"
+                           onchange="addnom(dijit.byId(this.value))" onclick="addnom(dijit.byId(this.value))" >
+                </td>
+            </tr>
+            
+        </table> 
+        <table>
+            <tr>
+                <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 910px;margin-left:20px">
+                    <?php echo TXT_MESSAGEAIDETYPEPARTENAIRE; ?>
+                <td>
+            </tr>            
+        <table>
+            
+            <tr id="trcentralepartenaireprojet" style="display: none" >
+                <td>
+                    <label style="margin-left: 18px;width:310px" for="<?php	echo 'nomLaboEntreprise'.$i;	?>">
+                        <?php echo TXT_NOMLABOENTREPRISE.' 1*';?>
+                    </label>
+                </td>
+                <td><div id="centralelaboentreprise"></div>
+                    <input type="text" id="centralepartenaireprojet" style="margin-left:-4px" autocomplete="on" name="centralepartenaireprojet" data-dojo-type="dijit/form/ValidationTextBox"
+                           data-dojo-props="<?php echo REGEX_TYPE; ?>" >
+                </td>            
+                <label style="float: right;margin-right: 36px;display: none" id="lblTp"><?php echo TXT_SELECTTYPEPARTENAIRE; ?></label>
+                <td>
+                    <select name="typecentralepartenaire" id="typecentralepartenaire"   style="margin-left: 22px;width: 320px;" data-dojo-type="dijit/form/Select">
+                <?php 
+                        $rowtypepartenaire = $manager->getList("select idtypepartenaire,libelletypepartenairefr,libelletypepartenaireen from typepartenaire where masquetypepartenaire!=TRUE AND idtypepartenaire!=99 order by idtypepartenaire asc");
+                            echo "<option value='tp99'  selected>".TXT_INCONNU."</option>";
+                            for($k=0;$k<count($rowtypepartenaire);$k++){
+                                if($lang==fr){
+                                    echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenairefr']."</option>";
+                                }else{
+                                    echo "<option value='".'tp'.$rowtypepartenaire[$k]['idtypepartenaire']."'>".$rowtypepartenaire[$k]['libelletypepartenaireen']."</option>";
+                                }
+                            }
+                ?>
+                </select>
+                    </td>
+            </tr>            
+        </table>        
+        <script>
+            function addnom(nb) {
+                switch (nb) {
+                    case 0:
+                        for (i = 0; i < 10; i++) {
+                            dijit.byId('centralepartenaireprojet').set('required', '');
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                            document.getElementById('trcentralepartenaireprojet').style.display = 'none';
+                            document.getElementById('lblTp').style.display = 'none';
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        break;
+                    case 1:
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        document.getElementById('lblTp').style.display = 'block';
+                        dijit.byId('centralepartenaireprojet').set('required', 'true');
+                        for (i = 0; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 2:
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                            dijit.byId('nomLaboEntreprise' + i).set('required', 'true');
+                        }
+                        dijit.byId('nomLaboEntreprise0').set('required', 'required');
+                        for (i = 1; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        break;
+                    case 3:
+                        dijit.byId('nomLaboEntreprise0').set('required', 'required');
+                        dijit.byId('nomLaboEntreprise1').set('required', 'required');
+                        for (i = 2; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 4:
+                        dijit.byId('nomLaboEntreprise0').set('required', 'required');
+                        dijit.byId('nomLaboEntreprise1').set('required', 'required');
+                        dijit.byId('nomLaboEntreprise2').set('required', 'required');
+                        for (i = 3; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 5:
+                        dijit.byId('nomLaboEntreprise0').set('required', 'required');
+                        dijit.byId('nomLaboEntreprise1').set('required', 'required');
+                        dijit.byId('nomLaboEntreprise2').set('required', 'required');
+                        dijit.byId('nomLaboEntreprise3').set('required', 'required');
+                        for (i = 4; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 6:
+                        for (i = 0; i < 5; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', 'required');
+                        }
+                        for (i = 5; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 7:
+                        for (i = 0; i < 6; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', 'required');
+                        }
+                        for (i = 6; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 8:
+                        for (i = 0; i < 6; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', 'required');
+                        }
+
+                        for (i = 7; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 9:
+                        for (i = 0; i < 7; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', 'required');
+                        }
+                        for (i = 8; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 10:
+                        for (i = 0; i < 9; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', 'required');
+                        }
+                        for (i = 9; i < 11; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', '');
+                        }
+
+                        for (i = 0; i < nb - 1; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';                        
+                        for (i = nb - 1; i < 10; i++) {
+                            var nom = 'nom' + i;
+                            document.getElementById(nom).style.display = 'none';
+                        }
+                        break;
+                    case 11:
+                        for (i = 0; i < 10; i++) {
+                            dijit.byId('nomLaboEntreprise' + i).set('required', 'required');
+                        }
+                        for (i = 0; i < 9; i++) {
+                            document.getElementById('nom' + i).style.display = 'block';
+                        }
+                        document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                        break;
+                    default:
+                        break;
+                }
+            }
+        </script>
+        <div class="partenaire">
+            <?php $bool='false'; include 'partenaire.php';?>
+        </div>
+    </fieldset>    
+    <table>
+        <tr>
+            <td>
+                <label for="thematique" style="width: 350px;margin-left: 20px;margin-top: 20px;" ><?php echo TXT_NATUREPROJET.' :';?></label>
+                <select name="thematique" id="thematique"   style="margin-left: 20px;width: 320px;"
+                        onchange="afficherAutre(this.id, 'autreThematique')"  data-dojo-type="dijit/form/Select"			>
+                    <?php
+                    if($lang =='fr'){
+                        echo '<option>'.TXT_SELECTNATURE.'</option>';
+                        $rowthematique = $manager->getList("select idthematique,libellethematique from thematique where masquethematique!=TRUE order by idthematique asc");
+                        for($i=0;$i<count($rowthematique);$i++){
+                            echo "<option value='".'th'.$rowthematique[$i]['idthematique']."'>".$rowthematique[$i]['libellethematique']."</option>";
+                        }
+                    }elseif($lang =='en'){
+                        $rowthematique = $manager->getList("select idthematique,libellethematiqueen from thematique where masquethematique!=TRUE order by idthematique asc");
+                        echo '<option>'.TXT_SELECTNATURE.'</option>';
+                        for($i=0;$i<count($rowthematique);$i++){
+                            echo "<option value='".'th'.$rowthematique[$i]['idthematique']."'>".$rowthematique[$i]['libellethematiqueen']."</option>";
+                        }
+                    }
+                    ?>
+                </select><div>&nbsp;</div>
+                <input id="autreThematique" type="text" autocomplete="on" name="autreThematique" 
+                       data-dojo-type="dijit/form/ValidationTextBox" placeholder="<?php echo TXT_AUTRETHEMATIQUE;?>"
+                       style="margin-left: 20px;display:none;width: 320px;"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>"
+                       data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-]+'">
+            </td>
+        </tr>    
+        <tr>            
+            
+        <script>
+            function affiche(id) {
+                if (document.getElementById(id).style.display === 'none') {
+                    document.getElementById(id).style.display = '';
+                } else {
+                    document.getElementById(id).style.display = 'none';
+                }
+            }
+        </script>
+    </table>
+    </fieldset>
+<fieldset id="identsa" style="background-color:#F9FCFC;border-color: #5D8BA2;width:960px;padding-top: 0px;margin-top:5px;padding-left:0px;border-width:2px;padding-right: 0px;margin-left:-3px ">        
+            <legend style="margin-left: 20px;font-weight: bold"><?php echo TXT_DEROULPROJETSALLE ;?></legend>
+    <table>
+        <tr>
+            <td>
+                <label for="dateDebutTravaux" style="width: 330px;margin-left: 20px;margin-top:20px"><?php echo TXT_DATEDEBUTTRAVAUX.' * :'; ?></label>
+                <input type="text" name="dateDebutTravaux" id="dateDebutTravaux"  data-dojo-type="dijit/form/DateTextBox" required="true"
+                       style="margin-left: 20px;width:320px" autocomplete="on" value="<?php echo date('Y-m-d');?>" >
+            </td>
+        </tr>
+        <tr><td>
+                <label for="dureeestimeprojet" style="margin-bottom: 5px; margin-left: 20px;width: 600px;margin-top: 15px;"><?php echo TXT_DUREETRAVAUXTECNO.':*'; ?></label>
+                <input id="dureeestimeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeestimeprojet"  autocomplete="on"
+                       value=""  required="true" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;margin-bottom: 20px" disabled="<?php echo $bool; ?>" />
+                <?php
+                    $libelleperiodestime=TXT_MOIS;
+                ?>
+                <select name="choix2" id="choix2" data-dojo-type="dijit/form/Select"  disabled="<?php echo $bool; ?>" style="margin-bottom: 20px;" >
+                    <?php
+                        $rowperiodicite=$manager->getList2("select idperiodicite,libelleperiodicite,libelleperiodiciteen from period WHERE idperiodicite!=?",MOIS);
+                    if($lang=='fr'){
+                        echo "<option value='pe".MOIS."'  selected='selected' >".TXT_MOIS."</option>";
+                        for($i=0;$i<count($rowperiodicite);$i++){
+                            echo "<option value='".'pe'.$rowperiodicite[$i]['idperiodicite']."'>".$rowperiodicite[$i]['libelleperiodicite']."</option>";
+                        }
+                    }elseif($lang=='en'){
+                        echo "<option value='pe".MOIS."'  selected='selected' >".TXT_MOIS."</option>";
+                        for($i=0;$i<count($rowperiodicite);$i++){
+                            echo "<option value='".'pe'.$rowperiodicite[$i]['idperiodicite']."'>".$rowperiodicite[$i]['libelleperiodiciteen']."</option>";
+                        }
+                    }
+                    ?>
+                </select>
+            </td></tr>
+        <tr>
+        <td>
+            <fieldset id="ident" style="border-color: #5D8BA2;width:960px;padding-top: 0;margin-top:20px;margin-left: 20px;padding-left: 15px;padding-right: 15px  ;">
+                <legend style="color: #5D8BA2;"><?php echo TXT_PERSONNECENTRALE; ?></legend><br>                
+                <div style="width: 272px;margin-left:75px;margin-right: 75px;">
+                    <p style="width: 500px;">&nbsp;<?php echo TXT_SELECTNBPERSONE;?><a class="infoBulle" href="#">
+                            <img src='<?php echo "/".REPERTOIRE ?>/styles/img/help.gif' height="13px" width="13px"/>
+                            <span style="text-align: left;padding:10px;width: 540px;border-radius:5px" >
+                                <?php echo affiche('TXT_AIDEPERSONNECENTRALE');?></span></a>
+                        <input data-dojo-type="dijit/form/NumberSpinner" id="integerspinner" name="integerspinner"
+                               value="<?php echo 0; ?>"
+                               data-dojo-props="smallDelta:1, constraints:{min:0,max:9,places:0}" name="nombrePersonneCentrale"
+                               style="width:60px;margin-left: 20px"	onchange="addnomCentrale(dijit.byId(this.value))"
+                               onclick="addnomCentrale(dijit.byId(this.value))" >
+                    </p>
+                    <div id="personCentrale"><?php include 'personneCentrale/personneCentrale.php';  ?></div><br>
+                    </fieldset>
+                    </td>
+        </tr>
+        <tr><td><div style="margin-top: 15px" class='check' ><?php include 'outils/ressourceCheck.php';?></div></td></tr>
+                    <tr>
+                        <td>
+                            <label for="descriptifTechnologique" style="width: auto;margin-left: 20px;margin-top:15px">
+                                <?php echo TXT_DESCRIPTIFTECHNOLOGIQUE.' :'; ?>
+                                <a class="infoBulle" href="#">
+                                    <img src='<?php echo "/".REPERTOIRE ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                    <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >
+                                        <?php echo affiche('TXT_AIDEDESCRIPTIFTECHNOLOGIQUE');?></span></a>
+                            </label>
+                            <div class="phase2ta" id="descriptifTechnologique" name="descriptifTechnologique"  ></div>
+                        </td>
+                    </tr>
+                    <tr><td><label id="cptdescriptechno" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
+                    <tr style="display: none" id="msgerrdescriptechno">
+                        <td>
+                            <fieldset class='msgerrdescriptechno' ><legend><?php echo TXT_INFO;?></legend>
+                                <?php 	echo stripslashes(TXT_LIMITEDITEURDESCTECHNO).'<br>';?>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 625px;margin-left:20px">
+                            <?php echo TXT_ERREURUPLOAD;?>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td>
+                            <input name="fichierphase2" type="file" data-dojo-type="dojox/form/Uploader" id="uploaderPhase2"
+                                   style="margin-left: 20px;margin-bottom: 15px;margin-top: 5px" data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'/>                            
+                            <div id="filePhase2" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploaderPhase2"'
+                                 name='file' style="margin-left: 20px;"></div>                           
+                            <div id='reponsedesc'></div>
+                        </td>                        
+                    </tr>
+                    <tr>
+                    <tr><td>
+                            <label for="devTechnologique" style="width:695px;margin-left: 20px;"><?php echo TXT_QUESTIONETAPE.'* :';?>
+                                <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 330px;border-radius:5px" >
+                                        <?php echo affiche('TXT_AIDEDESCRIPTIFTECHNO');?></span></a></label>                            
+                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="devTechnologique"   value="TRUE"  class="btRadio" checked="checked"
+                                   onclick="document.getElementById('verrou').style.display = 'block'" style="margin-left: 20px;"> 
+                            <?php echo TXT_OUI; ?>
+                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="devTechnologique"  value="FALSE" 
+                                   class="btRadio" onclick="document.getElementById('verrou').style.display = 'none'" style="margin-left: 20px;">
+                            <?php echo TXT_NON; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  id="verrou" style="display:block">
+                            <label for="verrouidentifie" style="width: auto;margin-left: 20px"><?php echo TXT_VERROUIDENTIFIEE.' :'; ?>
+                                <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 250">
+                                        <?php echo affiche('TXT_AIDEVERROUIDENTIFIEE');?></span></a>
+                            </label>
+                            <div class="phase2ta" id="verrouidentifie"  name="verrouidentifie"  ></div>
+                        </td>
+                    </tr>
+                    <tr><td><label id="cptverrou" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
+                    <tr style="display: none" id="msgerrverrou">
+                        <td>
+                            <fieldset class='msgerrverrou' ><legend><?php echo TXT_INFO;?></legend>
+                                <?php 	echo stripslashes(TXT_LIMITEDITEURVERROU).'<br>';?>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    </table>
+                    <!--AUTRE CENTRALE-->
+                        <script>
+                            function afficheetapeautrecentrale(){
+                                document.getElementById('cptetapeautrecentrale').style.display = 'block';
+                                document.getElementById('etapeautre').style.display = 'block';
+                                document.getElementById('etapeautre1').style.display = 'block';
+                                document.getElementById('affichautrecentrale').value = 'oui';
+                            }
+                            function masqueetapeautrecentrale(){
+                                document.getElementById('cptetapeautrecentrale').style.display = 'none';
+                                document.getElementById('etapeautre').style.display = 'none';
+                                document.getElementById('etapeautre1').style.display = 'none';
+                                document.getElementById('affichautrecentrale').value = 'non';
+                            }
+                            
+                        </script>
+                    <input type='text' id='affichautrecentrale' style='display: none' value='non'>
+                            <fieldset style="padding:10px 15px 15px; border:solid 1px #5D8BA2; margin-right: 20px;margin-top: 15px;width:958px;
+                                          margin-bottom: 15px;margin-left: 20px;color:midnightblue;font-family:verdana;border-radius: 5px;border-radius: 5px 5px 5px 5px;border-color: #5D8BA2;" >
+                                <legend><?php echo TXT_AUTRESCENTRALES; ?></legend>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label for="etapeautrecentrale" style="width:695px;margin-left: 20px;"><?php echo TXT_ETAPEAUTRECENTRALE.'* :';?></label>
+                                            
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="etapeautrecentrale"   value="TRUE"  class="btRadio"
+                                                   onclick="afficheetapeautrecentrale()" style="margin-left: 20px;">
+                                            <?php echo TXT_OUI; ?>
+                                            <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="etapeautrecentrale"  value="FALSE" checked="checked"
+                                                   class="btRadio" onclick="masqueetapeautrecentrale()" style="margin-left: 20px;">
+                                            <?php echo TXT_NON; ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td  id="etapeautre" style="display:none;float: left">
+                                            <label for="descriptionautrecentrale" style="width: auto;margin-left: 20px;margin-top:15px">
+                                                <?php echo TXT_DESCRIPTETAPE." :"; ?>
+                                            </label>
+                                            <div id="descriptionautrecentrale"  name="descriptionautrecentrale" disabled="<?php echo $bool; ?>" 
+                                                 style="margin-right: 0px;color:midnightblue;font-family:verdana;margin-left:0px;width:960px;margin-bottom: 20px" >
+                                            </div>
+                                        </td>
+                                    </tr><tr>    
+                                        <td style="float: left;display:none" id="etapeautre1">
+                                            <fieldset style="font-size: 1.1em;font-style: italic;width: 520px">
+                                                <legend><?php echo TXT_SELECTCENTRALES; ?></legend>                                              
+                                                <div id='chckautrecentrale' style="float: left;margin-bottom: 15px"></div>                                                
+                                                <?php                                                  
+                                                    $row = $manager->getList("SELECT libelleCentrale,villeCentrale FROM centrale where libellecentrale != 'Autres' and masquecentrale!=TRUE order by libelleCentrale asc");
+                                                    for ($i = 0; $i < count($row); $i++) {
+                                                        $libellecentrale = str_replace('-','',$row[$i][0]);
+                                                        $villecentrale = $row[$i][1];
+                                                        
+                                                ?>
+                                                <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id="<?php echo $libellecentrale ?>"  data-dojo-id="<?php echo $libellecentrale ?>" 
+                                                         name='autrecentrale[]'
+                                                        value='<?php echo $libellecentrale ?>'  >
+                                                        <label for = "<?php  echo $libellecentrale; ?>" class='opt' id="<?php  echo 'lbl'.$libellecentrale; ?>">
+                                                            <?php echo ($row[$i][0]).' (<i>' . removeDoubleQuote($villecentrale) . '</i>)'?>
+                                                        </label>
+                                                <br>
+                                                <?php }
+                                                ?>
+                                            </div>
+                                            </fieldset>
+                                        </td> 
+                                    </tr>              
+                        <tr>
+                            <td><label id="cptetapeautrecentrale" style="width:450px;color:#B71701;margin-bottom: 10px;display: none "></label></td>
+                        </tr>
+                        <tr style="display: none" id="msgerretapeautrecentrale">
+                            <td>
+                                <fieldset class='msgerrdes' ><legend><?php echo TXT_INFO;?></legend>
+                                    <?php 	echo stripslashes(TXT_LIMITEDITEURVERROU).'<br>';?>
+                                </fieldset>
+                            </td>                            
+                        </tr>
+                        </table>
+                </fieldset>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="nbPlaque" style="width: auto;margin-left: 20px;"><?php echo TXT_NBPLAQUE.':'; ?></label>
+                                <input type="text" id="nbPlaque"  name="nbPlaque"  data-dojo-type="dijit/form/NumberTextBox"
+                                       data-dojo-invalidMessage="valeur non valide." style="margin-left: 20px;width:160px" autocomplete="on"  >
+                                &nbsp;<?php echo TXT_OU; ?>&nbsp;
+                            </td>
+                            <td>
+                                <label for="nbRun" style="width: auto;margin-left: 20px;" ><?php echo TXT_NBRUN.' :';?>
+                                </label>
+                                <input id="nbRun" type="text" name="nbRun" data-dojo-type="dijit/form/NumberTextBox" 
+                                       style="width: 160px;margin-left: 20px;"  data-dojo-invalidMessage="valeur non valide." autocomplete="on" >
+                            </td>
+                        <tr><td>&nbsp;</td></tr>
+                    </table><input id="reponsedevis" value='' style="display: none" >
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="devis" style="width: auto;margin-left: 20px;"><?php echo TXT_ENVOIDEVIS.'* ?';?></label>
+                                
+                                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="devis"   value="TRUE" class="btRadio"
+                                       onclick="disabledevis('/<?php echo REPERTOIRE;?>/outils/disabledevis.php?lang=<?php echo $lang;?>&devis=' + this.value + '')"
+                                       style="margin-left: 20px;"
+                                       > <?php echo TXT_OUI; ?>
+                                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="devis" checked="checked" value="FALSE"
+                                       class="btRadio"  style="margin-left: 20px;"
+                                       onclick="disabledevis('/<?php echo REPERTOIRE;?>/outils/disabledevis.php?lang=<?php echo $lang;?>&devis=' + this.value + '')">
+                                <?php echo TXT_NON; ?>
+                            </td>
+                            <td id="mailResp" style="display:  none">
+                                <label for="mailresp" style="margin-left: 20px;width: 300px" ><?php echo TXT_EMAILRESPDEVIS;?></label>
+                                <input id="mailresp" type="text" name="mailresp" class="long" data-dojo-type="dijit/form/ValidationTextBox" placeHolder ="<?php echo TXT_EMAIL; ?>"
+                                       regExpGen="dojox.validate.regexp.emailAddress"      style="margin-left: 20px;"  invalidMessage="<?php echo TXT_EMAILNONVALIDE ?>" autocomplete="on" >
+                            </td>
+                        </tr><tr><td>&nbsp;</td></tr>
+                    </table>
+                    <table style="width: 525px">
+                        <tr>
+                            <td>
+                                <label for="reussite" style="width: 1011px;margin-left: 20px"><?php echo TXT_REUSSITEESCOMPTE.' :'; ?>
+                                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE ;?>/styles/img/help.gif' height="13px" width="13px"/>
+                                        <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >
+                                            <?php echo affiche('TXT_AIDEREUSSITEESCOMPTE');?></span></a>
+                                </label>
+                                <div class="phase2ta" id="reussite" name="reussite"	 ></div>
+                            </td>
+                        </tr><tr><td><br></td></tr>
+                        <tr><td><label id="cptreussite" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
+                        <tr style="display: none" id="msgerrreussite">
+                            <td>
+                                <fieldset class='msgerrreussite' ><legend><?php echo TXT_INFO;?></legend>
+                                    <?php 	echo stripslashes(TXT_LIMITEDITEURREUSSITE).'<br>';?>
+                                </fieldset>
+                            </td>
+                        </tr>
+                    </table>
+                    </fieldset>
+                    <table>
+                        <tr>
+                            <?php $statutaccepte = $manager->getSingle2("select libellestatutprojet from statutprojet where idstatutprojet =?",ACCEPTE);
+                            ?>
+                            <td style="width:250px">
+                                <?php $statut=str_replace("''","'", $statutaccepte); ?>
+                                <label for="statutProjet" style="width: 200px;margin-left: 20px;"><?php echo TXT_STATUTPROJET.'* :'; ?> </label>
+                                <input name="statutProjet" id="statutProjet" type="text" data-dojo-type="dijit/form/ValidationTextBox"
+                                       style="width: 220px;margin-left: 20px;"
+                                       value="<?php if(!empty($statutaccepte))echo $statut; ?>" disabled="true">                                
+                            </td>
+                        </tr>
+                    </table>                    
+                    <table style='margin-top:35px;width:1030px'>
+                        <tr>
+                            <td style='margin-right: 20px;float: left;margin-top:15px'>
+                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" 
+                                       data-dojo-props="onClick:function(){ctrlPersonneCentrale();afficheMenu();}">
+                                <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                <span style="text-align: left;padding:7px;width: 430px;border-radius:5px" ><?php echo TXT_VALIDETRANSMISSION;?></span>
+                            </a>
+                            </td>                            
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td id='btnSave'>
+                            <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){save()}"  disabled="<?php echo $bool; ?>" 
+                                    style="margin-top:15px"><?php echo TXT_SAVEPROJECT ;?></button>
+                            </td>
+                            <td id="infoSave"><?php echo TXT_SAVEDATA;?></td>                        
+                        </tr>
+                        
+                    <tr><td><p class='champobligatoire'><?php echo TXT_CHAMPSOBLIGATOIRES; ?></p></td></tr>
+                    </table>
+                    <input type="text"  id="enregistre" name="enregistre" style='display: none' value='non' >
+                    <input type="text"  id="creerprojetphase2" name="creerprojetphase2" style='display: none' value='non' >
+                    <div data-dojo-type="dijit/Dialog" data-dojo-id="rep" title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;" execute="">
+                        <table class="dijitDialogPaneContentArea">
+                            <tr>
+                                <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui"  data-dojo-props="onClick:function(){valide();}">
+                                        <?php echo TXT_OUI ;?></button></td>                                      
+                                <td><button data-dojo-type="dijit/form/Button" type="button" data-dojo-props="onClick:function(){rep.hide();}" id="submitcancel"><?php echo TXT_ANNULE;?></button></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <script>
+                        function afficheMenu(){
+                            addnomCentrale(dijit.byId('integerspinner').value);
+                            if(dijit.byId('modifProjet').validate()){rep.show();}
+                        }                                                    
+                        function valide(){
+                            document.getElementById('creerprojetphase2').value='oui'
+                            document.getElementById('enregistre').value='non';
+                            modifProjet.submit();
+                        }
+                        function save() {
+                            var nbdescript=stripTags(trim(dojo.byId("descriptifValeur").value)).length;
+                            var nbcontexte=stripTags(trim(dojo.byId("contextValeur").value)).length;
+                            var nbtitre=stripTags(trim(dijit.byId("titreProjet").value)).length;
+                            document.getElementById('creerprojetphase2').value='oui';
+                            document.getElementById('enregistre').value='oui';
+                            if(nbtitre===0){
+                                dijit.byId('titreProjet').set('value', '<?php echo TXT_UNDEFINETITLE; ?>');
+                            }
+                            if(nbcontexte===0){
+                                dojo.byId("contextValeur").value='<?php echo TXT_UNDEFINECONTEXTE; ?>';
+                            }
+                            if(nbdescript===0){
+                                dojo.byId('descriptifValeur').value='<?php echo TXT_UNDEFINEDESCRIPTION; ?>';
+                            }   
+                            modifProjet.submit();
+                        }
+                    </script>
+            <script>
+                require(["dojo/parser", "dijit/Editor"]);
+                require(["dojo"], function(dojo) {
+                });
+                require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
+                    ready(function() {
+                        new Editor({
+                            plugins: ["undo", "redo"],
+                            height: "150px"
+                        }, "descriptifTechnologique");
+                        new Editor({
+                            plugins: ["undo", "redo"],
+                            height: "150px"
+                        }, "verrouidentifie");
+                        new Editor({
+                            plugins: ["undo", "redo"],
+                            height: "150px"
+                        }, "reussite");
+                        new Editor({
+                            plugins: ["undo", "redo"],
+                            height: "150px"
+                        }, "descriptionautrecentrale");                       
+                    });
+
+                    function modiProjetPhase2OnSubmit() {
+                    }
+                    dojo.addOnLoad(function() {
+                        var editor1 = dijit.byId("descriptifTechnologique");
+                        var editor2 = dijit.byId("verrouidentifie");
+                        var editor3 = dijit.byId("reussite");
+                        var editor4 = dijit.byId("descriptionautrecentrale");
+                        var editor6 = dijit.byId("descriptioncentraleproximite");
+                        dojo.connect(editor1, "onChange", this, function(event) {
+                            dojo.byId("desTechno").value = editor1.get("value");
+                        });
+                        dojo.connect(editor2, "onChange", this, function(event) {
+                            dojo.byId("verrouide").value = editor2.get("value");
+                        });
+                        dojo.connect(editor3, "onChange", this, function(event) {
+                            dojo.byId("reussit").value = editor3.get("value");
+                        });
+                        dojo.connect(editor4, "onChange", this, function(event) {
+                            dojo.byId("etautrecentrale").value = editor4.get("value");
+                        });
+                        dojo.connect(editor6, "onChange", this, function() {
+                            dojo.byId("centraleproximitevaleur").value = editor6.get("value");
+                        });
+                        
+                        var nbpartenaire = 0;//IDEM POUR LES PARTENAIRES
+                        addnom(nbpartenaire);
+                        dojo.connect(dojo.byId("phase2"), "onsubmit", modiProjetPhase2OnSubmit);
+                        
+                        if (dijit.byId('integerspinner2').value > 0) {
+                            document.getElementById('trcentralepartenaireprojet').style.display = 'block';
+                            document.getElementById('trnomPartenaire01').style.display = 'block';
+                        }
+                        if (dijit.byId('integerspinner2').value > 1) {
+                            for (i = 0; i < dijit.byId('integerspinner2').value - 1; i++) {
+                                document.getElementById('nom' + i).style.display = 'block';
+                            }
+                        }
+                        if (dijit.byId('integerspinner').value > 0) {
+                            for (i = 0; i < dijit.byId('integerspinner').value; i++) {
+                                document.getElementById('divpersonne' + i + '').style.display = 'block';
+                            }
+                        }
+                        ;
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                              DESCIPTIF TECHNOLOGIQUE
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+                        dojo.connect(editor1, "onKeyPress", this, function(event) {
+                            dojo.byId("desTechno").value = editor1.get("value");
+                            document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" +  strip_tags(trim(dojo.byId("desTechno").value),'').length;                            
+                            if (trim(strip_tags(editor1.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrdescriptechno').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrdescriptechno').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor1, "onMouseOut", this, function(event) {
+                            dojo.byId("desTechno").value = editor1.get("value");
+                            document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" +  strip_tags(trim(dojo.byId("desTechno").value),'').length;                            
+                            if (trim(strip_tags(editor1.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrdescriptechno').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrdescriptechno').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor1, "onClick", this, function(event) {
+                            dojo.byId("desTechno").value = editor1.get("value");
+                            document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("desTechno").value),'').length; 
+                            if (trim(strip_tags(editor1.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrdescriptechno').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrdescriptechno').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor1, "onBlur", this, function(event) {
+                            dojo.byId("desTechno").value = editor1.get("value");
+                            document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("desTechno").value),'').length; 
+                            if (trim(strip_tags(editor1.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrdescriptechno').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrdescriptechno').style.display = 'none';
+                            }
+                        });
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                              VERROU
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+                        dojo.connect(editor2, "onKeyPress", this, function(event) {
+                            dojo.byId("verrouide").value = editor2.get("value");
+                            document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("verrouide").value),'').length;
+                            if (trim(strip_tags(editor2.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrverrou').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrverrou').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor2, "onMouseOut", this, function(event) {
+                            dojo.byId("verrouide").value = editor2.get("value");
+                            document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("verrouide").value),'').length;
+                            if (trim(strip_tags(editor2.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrverrou').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrverrou').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor2, "onClick", this, function(event) {
+                            dojo.byId("verrouide").value = editor2.get("value");
+                            document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("verrouide").value),'').length;
+                            if (trim(strip_tags(editor2.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrverrou').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrverrou').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor2, "onBlur", this, function(event) {
+                            dojo.byId("verrouide").value = editor2.get("value");
+                            document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("verrouide").value),'').length;
+                            if (trim(strip_tags(editor2.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrverrou').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrverrou').style.display = 'none';
+                            }
+                        });                        
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                              REUSSITE
+//---------------------------------------------------------------------------------------------------------------------------------------------------
+                        dojo.connect(editor3, "onKeyPress", this, function(event) {
+                            dojo.byId("reussit").value = editor3.get("value");
+                            document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("reussit").value),'').length;
+                            if (trim(strip_tags(editor3.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrreussite').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrreussite').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor3, "onMouseOut", this, function(event) {
+                            dojo.byId("reussit").value = editor3.get("value");
+                            document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("reussit").value),'').length;
+                            if (trim(strip_tags(editor3.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrreussite').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrreussite').style.display = 'none';
+                            }
+                        });        
+                        dojo.connect(editor3, "onClick", this, function(event) {
+                            dojo.byId("reussit").value = editor3.get("value");
+                            document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("reussit").value),'').length;
+                            if (trim(strip_tags(editor3.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrreussite').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrreussite').style.display = 'none';
+                            }
+                        });        
+                        dojo.connect(editor3, "onBlur", this, function(event) {
+                            dojo.byId("reussit").value = editor3.get("value");
+                            document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("reussit").value),'').length;
+                            if (trim(strip_tags(editor3.get("value")),'').length > 3000) {
+                                document.getElementById('msgerrreussite').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerrreussite').style.display = 'none';
+                            }
+                        });
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+//                                                                              AUTRES CENTRALE
+//---------------------------------------------------------------------------------------------------------------------------------------------------
+                        dojo.connect(editor4, "onKeyPress", this, function(event) {
+                            dojo.byId("etautrecentrale").value = editor4.get("value");
+                            document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
+                            if (trim(strip_tags(editor4.get("value")),'').length > 3000) {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'none';
+                            }
+                        });
+                        dojo.connect(editor4, "onClick", this, function(event) {
+                            dojo.byId("etautrecentrale").value = editor4.get("value");
+                            document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
+                            if (trim(strip_tags(editor4.get("value")),'').length > 3000) {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'none';
+                            }
+                        }); 
+                        dojo.connect(editor4, "onMouseOut", this, function(event) {
+                            dojo.byId("etautrecentrale").value = editor4.get("value");
+                            document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
+                            if (trim(strip_tags(editor4.get("value")),'').length > 3000) {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'none';
+                            }
+                        });                        
+                        dojo.connect(editor4, "onBlur", this, function(event) {
+                            dojo.byId("etautrecentrale").value = editor4.get("value");
+                            document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
+                            if (trim(strip_tags(editor4.get("value")),'').length > 3000) {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'block';
+                            } else {
+                                document.getElementById('msgerretapeautrecentrale').style.display = 'none';
+                            }
+                        });
+                    }
+                    );
+                });
+            </script>
+            <input type="hidden" id="desTechno" name="desTechno" >
+            <input type="hidden" id="verrouide" name="verrouide" >
+            <input type="hidden" id="reussit" name="reussit" >
+            <input type="hidden" id="etautrecentrale" name="etautrecentrale" >
+            <input type="hidden" name="creer_phase2" >

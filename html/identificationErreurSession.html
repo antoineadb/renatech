@@ -1,0 +1,22 @@
+<div>
+    <label id="erreurLogin" style="color: red;display:block;font-size: medium;width:1050px; text-align: center;font-weight: bold;padding-top: 16px;">
+        <?php echo TXT_ERRSESSION;?>&nbsp;&nbsp;
+        <button id="progButtonNode" type="button"></button></label>
+</div>
+<script>
+    function verifjs() {
+        return confirm("<?php echo 'Vous allez supprimer toutes les sessions ouvertes sur ce navigateur, vous confirmez?'; ?>", 'toto');
+    }
+</script>
+<script>require(["dojo/ready", "dijit/form/Button", "dojo/dom"], function(ready, Button, dom) {
+        ready(function() {
+            var myButton = new Button({
+                label: "<?php echo 'Suppression des sessions'; ?>", id: "supprSession",size:"small",
+                onClick: function() {if (verifjs()) {window.location.replace('<?php echo "/" . REPERTOIRE; ?>/index/<?php echo $lang ?>/logout')}
+                }}, "progButtonNode");
+        });
+    });
+</script>
+
+<?php  include  'identification.html';?>
+

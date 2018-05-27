@@ -1,0 +1,24 @@
+<div style="display: block;" id="erreurcontact">
+ <?php 
+    if(!empty($_GET['erreurqualitedemandeur'])||!empty($_GET['erreurnomentreprise'])||!empty($_GET['erreurtypeentreprise'])||!empty($_GET['erreursecteuractivite'])){
+        echo '<label style="color:red;width:300px;">'.TXT_ERREURINSERTCONTACT.'</label>';
+        $erreurqualitedemandeur = $_GET['erreurqualitedemandeur'];                      
+        $erreurtypeentreprise = stripslashes($_GET['erreurtypeentreprise']);            
+        $erreursecteuractivite = stripslashes($_GET['erreursecteuractivite']);      
+             
+        echo'<ol>';
+         if(!empty($erreurqualitedemandeur)){
+            echo'<li style="color: red;width:512px;">'.$erreurqualitedemandeur.'</li>';
+        }
+        if(!empty($erreurtypeentreprise)){
+            echo' <li style="color: red;width:512px;">'.stripslashes($erreurtypeentreprise).'</li>';
+        }
+        if(!empty($erreursecteuractivite)){
+            echo'<li style="color: red;width:512px;">'.$erreursecteuractivite.'</li>';
+        }            
+        echo'</ol>';
+    }
+ ?>   
+</div>
+<?php include 'html/createContact.html';?>
+	

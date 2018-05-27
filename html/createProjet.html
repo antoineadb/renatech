@@ -1,0 +1,114 @@
+<div class='bdeCentrale'>
+    <?php 
+    if(internetExplorer()=='false'){
+    $Cache->inc(ROOT.'/outils/bandeaucentrale.php'); //RECUPERATION DU BANDEAU DEFILANT DANS LE CACHE CACHE
+    }else{
+    include 'outils/bandeaucentrale.php'; //RECUPERATION DU BANDEAU DEFILANT DANS LE CAS D'INTERNET EXPLORER
+    }
+    ?>   
+</div>
+<div>
+    <fieldset id="identcreateprojet"  style="margin-top: 50px">
+        <legend><b><?php echo TXT_DEFINITIONPROJET;?></b></legend>
+        <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+        <form data-dojo-type="dijit/form/Form" id="contact" name="contact"  method="post" action="<?php echo '/'.REPERTOIRE.'/emailprojetphase2/traitementDemandeProjet.php?lang='.$lang; ?>"  enctype="multipart/form-data" >
+        <script type="dojo/method" data-dojo-event="onSubmit">
+                var nbdescript=stripTags(trim(dojo.byId("descriptifValeur").value)).length;
+                var nbcontexte=stripTags(trim(dojo.byId("contextValeur").value)).length;
+                var nbNom=stripTags(trim(dijit.byId("nomDemande").value)).length;
+                var nbMail=stripTags(trim(dijit.byId("emailDemande").value)).length;
+                var nbMessage=stripTags(trim(dijit.byId("message").value)).length;
+                if(nbNom==0){
+                    alert("<?php echo TXT_ERRNOMVIDE;?>");
+                    dijit.byId('nomDemande').focus();
+                    return false;                    
+                    exit();
+                }else if(nbMail==0){
+                    alert("<?php echo TXT_ERRMAILVIDE;?>");
+                    dijit.byId('emailDemande').focus();
+                    return false;                    
+                    exit();
+                }else if(nbMessage==0){
+                    alert("<?php echo TXT_ERRMESSAGEVIDE;?>");
+                    dijit.byId('message').focus();
+                    return false;                    
+                    exit();
+                }else if (this.validate()){
+                       return true;
+                }
+            </script>
+        <input type="hidden" id="messageValeur" name="messageValeur" >
+        <div id="msgerrpiecejointe">
+            <?php 
+            if(isset($_GET['err'])){            
+                if($_GET['err']=='Err99'){
+                    echo  TXT_ERRMAILPJ;
+                }elseif($_GET['err']=='Err01'){
+                    echo TXT_ERREURUPLOAD;
+                }elseif($_GET['err']=='Err02'){
+                    echo  TXT_ERREURTAILLEFICHIER;
+                }
+            }
+            ?></div>
+        <fieldset class="formDemande">            
+            <legend style="margin-bottom:10px;margin-top: 25px">Vos coordonnées</legend>                
+                <div style="padding-bottom: 10px">			
+                    <label style="padding-right: 20px"><?php echo TXT_NOM.'* :'  ; ?></label>
+                    <input id="nomDemande" type="text" name="nomDemande" data-dojo-type="dijit/form/ValidationTextBox"  required="required" value="<?php if(isset($defaulNom)){echo $defaulNom;} ?>"    
+                           placeHolder ="<?php echo TXT_NOM; ?>"/>
+                </div>
+                <div style="padding-bottom: 10px">
+                    <label style="padding-right: 20px"><?php echo TXT_EMAIL.'* :' ?></label>
+                    <input id="emailDemande" type="text" name="emailDemande" class="long" data-dojo-type="dijit/form/ValidationTextBox"  regExpGen="dojox.validate.regexp.emailAddress" required="required"                    
+                           invalidMessage="<?php echo TXT_EMAILNONVALIDE ?>" value="<?php if(isset($defaultMail)){echo $defaultMail;} ?>"  placeHolder ="<?php echo TXT_EMAIL; ?>"/>
+                </div>                
+        </fieldset>
+
+            <fieldset class="formDemande"><legend style="padding-bottom: 10px;margin-top: 20px">Votre message :</legend>
+                <div style="padding-bottom: 10px">			
+                    <label style="padding-right: 20px"><?php echo 'Objet:'  ; ?></label>
+                    <input id="objetDemande" type="text" name="objetDemande" data-dojo-type="dijit/form/ValidationTextBox"  placeHolder ="<?php echo TXT_OBJET; ?>"  
+                           value="<?php if(isset($_SESSION['objet'])){echo $_SESSION['objet'];} ?>"/>
+                </div>                
+                <label for="message" style="width: 330px"><?php echo 'Message* :'; ?></label>
+                <div id="message" name="message" style="width:960px;margin-bottom: 20px" ><?php if(isset($_SESSION['message'])){echo $_SESSION['message'];}?></div>     
+                    <div id="errUpload">
+                        <?php echo TXT_ERREURUPLOAD;?>
+                    </div>
+                    <div id="pieceJointeDemandeFaisabilite">
+                        <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader"   data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"'>
+                        <a class="infoBulle" href="#">
+                            <img src='<?php echo "/".REPERTOIRE;?>/styles/img/help.gif' height="13px" width="13px"/><span style="text-align: left;padding:10px;width: 370px;border-radius:5px" ><?php echo TXT_ERREURUPLOAD;?></span>
+                        </a>
+                        <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file'></div>                        
+                    </div>
+            </fieldset>
+            <div style="text-align:center;margin-bottom: 10px;margin-top: 10px">
+            <input type="submit"   label="<?php echo TXT_SENDREQUEST; ?>" data-dojo-Type="dijit.form.Button" data-dojo-props="" />
+            </div>
+        </form>
+
+    </fieldset>
+</div>
+<p style="font-size: x-small">
+    <?php echo TXT_CHAMPSOBLIGATOIRES;?>
+</p>
+
+<script>
+    require(["dojo/parser", "dijit/Editor"]);
+    require(["dojo"], function(dojo) { });    
+    require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
+        ready(function() {
+            new Editor({
+                plugins: ["undo", "redo", ],
+                height: "350px"
+            }, "message");           
+        });
+        dojo.addOnLoad(function() {
+            var editor1 = dijit.byId("message");
+                dojo.connect(editor1, "onChange", this, function(event) {
+                    dojo.byId("messageValeur").value = editor1.get("value");                   
+            }); 
+        });
+    })
+</script>

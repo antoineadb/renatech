@@ -1,0 +1,16 @@
+<?php include 'indexchoix.html'?>
+<div style="height: 35px;">
+    <label id="messageupdate" style="color: midnightblue;display:block;font-size: 14px;width:730px; text-align: center">
+        <?php
+        $centrale =$manager->getSingle2("SELECT libellecentrale	FROM loginpassword,centrale,utilisateur WHERE idlogin = idlogin_loginpassword AND idcentrale_centrale = idcentrale AND pseudo =?",$_SESSION['pseudo']);
+        if(isset($_GET['idprojet'])){
+        $numero = $manager->getSingle2("select numero from projet where idprojet =?",$_GET['idprojet']);
+        echo TXT_STATUTUPDATEPROJETPHASE2.' '.'numéro = '?><a style="text-decoration: none"
+href='<?php echo "/".REPERTOIRE;?>/controler/controlestatutprojet.php?lang=<?php echo $_GET["lang"];?>&numProjet=<?php echo $numero;?>&centrale=<?php echo $centrale;?>'><?php echo $numero?></a><?php
+        }else{
+        echo TXT_STATUTUPDATEPROJETPHASE2;
+        }
+        ?>
+
+    </label>
+</div>

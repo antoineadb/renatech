@@ -1,0 +1,250 @@
+<?php
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+$_SESSION['typeutilisateur']='';
+//SUPPRESSION DE LA VARIABLE DE SESSION DU MOT DE PASSE
+if(!empty($_SESSION['mot_de_passe_1'])){
+unset($_SESSION['mot_de_passe_1']);
+}else{
+unset($_SESSION['passe']);
+}
+if(!empty($_SESSION['pseudo'])){
+$pseudo=$_SESSION['pseudo'];
+}
+?>
+<div id="radioType" style="display: none"></div>
+<fieldset id="ident" style="border-color: #5D8BA2;width: 980px;margin-top:50px;font-size:1.2em;padding-left: 50px;" >
+    <legend style="color: #5D8BA2"><b> <?php echo TXT_CREERCONTACT;?></b></legend>
+    <form data-dojo-type="dijit/form/Form" id="createcontact" method="post" action="<?php echo '/'.REPERTOIRE; ?>/modifBase/insertContact.php?lang=<?php echo $lang;?>"  >
+        <script type="dojo/method" data-dojo-event="onSubmit">
+            if(dijit.byId('academ').checked){
+            var qualiteDemandeur = dijit.byId("qualiteDemandeuraca").value;															
+            var nomEmployeur = dijit.byId("nomEmployeur").value;															
+            var tutelle = dijit.byId("tutelle").value;															
+            var codeUnite = dijit.byId("codeUnite").value;
+            var nbnomlabo = stripTags(trim(dojo.byId("nomlabo").value)).length;
+            var disciplineScientifique = dijit.byId("disciplineScientifique").value;
+            if(qualiteDemandeur=='qa0'){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_MESSAGEERREURQUALITEDEMANDEUR);?>");
+            dijit.byId('qualiteDemandeuraca').focus();
+            return false;
+            exit();
+            }else if(nomEmployeur=='ne0'){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_MESSAGEERREURNOMEMPLOYEUR);?>");
+            dijit.byId('nomEmployeur').focus();
+            return false;
+            exit();
+            }else if(tutelle=='tu0'){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_MESSAGEERREURTUTELLE);?>");
+            dijit.byId('tutelle').focus();
+            return false;
+            exit();
+            }else if(codeUnite==' * '){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_CODEUNITE);?>");
+            dijit.byId('codeUnite').focus();
+            return false;
+            exit();
+            }else if(nbnomlabo==0){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_NOMLABO);?>");
+            dijit.byId('nomlabo').focus();
+            return false;
+            exit();
+            }else if(disciplineScientifique=='di0'){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_MESSAGEERREURDISCIPLINE);?>");
+            dijit.byId('disciplineScientifique').focus();
+            return false;
+            exit();
+            }
+            }else if(dijit.byId('indust').checked){
+            var qualiteDemandeur = dijit.byId("qualiteDemandeurindust").value;
+            var nbnomemtreprise = stripTags(trim(dojo.byId("ind").value)).length;
+            var typeEntreprise = dijit.byId("typeEntreprise").value;
+            var secteurActivite = dijit.byId("secteurActivite").value;
+            if(qualiteDemandeur=='qi0'){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_MESSAGEERREURQUALITEDEMANDEUR);?>");
+            dijit.byId('qualiteDemandeurindust').focus();
+            return false;
+            exit();
+            }else if(nbnomemtreprise==1){
+            alert("<?php echo TXT_NONSELECT.strtolower('nom de entreprise');?>");
+            dojo.byId('ind').focus();
+            return false;
+            exit();
+            }else if(typeEntreprise=='te0'){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_MESSAGEERREURTYPEENTREPRISE);?>");
+            dijit.byId('typeEntreprise').focus();
+            return false;
+            exit();
+            }else if(secteurActivite=='se0'){
+            alert("<?php echo TXT_NONSELECT.strtolower(TXT_MESSAGEERREURSECTEUR);?>");
+            dijit.byId('secteurActivite').focus();
+            return false;
+            exit();
+            }
+            }
+            if(this.validate()&& checkRadio('academ','indust',"<?php echo TXT_ERREURACAINDUST; ?>")){
+            return true;
+            }else{
+            alert("<?php echo TXT_MESSAGEERREURCONTACT;?>");
+            return false;
+            }
+        </script>
+        <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+        <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 8.0') !== FALSE) {?>
+        <table style="margin-top:30px" >
+            <?php }else{?>
+            <table>
+                <?php }?>
+                <tr>
+                    <td valign="top" style="width: 300px"><?php echo TXT_NOM.' *:'; ?> </td>
+                    <?php	if(!empty($_SESSION['nom'])){$nom = 
+removeDoubleQuote(	stripslashes($_SESSION['nom']));} ?>
+                    <td><input type="text" required="required" name="nom" id="nom" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" 
+                               style="width: 317px"  value="<?php if(!empty($_SESSION['nom'])){echo $nom;};?>"
+                               data-dojo-props="maxLength:'30',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top"><?php echo TXT_PRENOM.' *:';  ?></td>
+                    <?php	if(!empty($_SESSION['prenom'])){$prenom = 
+removeDoubleQuote(	stripslashes($_SESSION['prenom']));} ?>
+                    <td><input type="text" required="required" name="prenom" id="prenom" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"  value="<?php if(!empty($_SESSION['prenom'])){echo $prenom;};?>"
+                               data-dojo-props="maxLength:'30',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '" >
+                               
+                    </td>                  
+                </tr>
+                <tr>
+                    <td valign="top"><?php echo TXT_NOMENTELABO. ' *:';  ?></td>
+                    <?php	if(!empty($_SESSION['entrepriselaboratoire'])){$entrepriselaboratoire = 
+removeDoubleQuote(	stripslashes($_SESSION['entrepriselaboratoire']));} ?>
+                    <td><input type="text" name="entrepriselaboratoire" id="entrepriselaboratoire" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on"   
+                               value="<?php if(!empty($_SESSION['entrepriselaboratoire'])){echo $entrepriselaboratoire;};?>" required="required" 
+                               data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '" >
+                               
+                    </td>                  
+                </tr>	
+                <tr>	
+                    <td valign="top"><?php echo TXT_ADRESSE.' *:';  ?></td>
+                    <?php	if(!empty($_SESSION['adresse'])){$adresse = 
+removeDoubleQuote(	stripslashes($_SESSION['adresse']));} ?>
+                    <td><input type="text" required="required" name="adresse" id="adresse" style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox"  value="<?php if(!empty($_SESSION['adresse'])){echo $adresse;};?>"
+                               data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '" autocomplete="on" >
+                               
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top"><?php echo TXT_CP.' *:'; ?></td>
+                    <td><input type="text" required="required" name="cp" id="cp" placeholder="" style="width: 317px"
+                               value="<?php if(!empty($_SESSION['cp'])){echo $_SESSION['cp'];};?>" data-dojo-type="dijit/form/ValidationTextBox" 
+                               data-dojo-props="maxLength:'25',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '"autocomplete="on" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top"><?php echo TXT_VILLE.' *:'; ?></td>
+                    <?php	if(!empty($_SESSION['ville'])){$ville = 
+removeDoubleQuote(	stripslashes($_SESSION['ville']));} ?>
+                    <td><input type="text" required="required" name="ville" id="ville"  style="width: 317px" data-dojo-type="dijit/form/ValidationTextBox" autocomplete="on" value="<?php if(!empty($_SESSION['ville'])){echo $ville;};?>"                               
+                                data-dojo-props="maxLength:'30',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '"  >
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: left"><?php echo TXT_PAYS.' *:'; ?></th>
+                    <td>	
+                        <?php   
+                        if($lang=='fr'){
+                            $nomPays  =  $manager->getList('select nompays,idpays from pays where masquepays =false order by nompays asc');
+                        }elseif($lang=='en'){
+                            $nomPays  =  $manager->getList('select nompaysen,idpays from pays where masquepays =false order by nompaysen asc'); 
+                        }
+                        ?>
+
+                        <?php 
+                            if(!empty($_SESSION['pays'])){
+                                $pays =$_SESSION['pays'];
+                                if($lang=='fr'){
+                                    $idpays=$manager->getSingle2("select idpays from pays where nompays=?",$_SESSION['pays']);
+                                }elseif($lang=='en'){    
+                                    $idpays=$manager->getSingle2("select idpays from pays where nompaysen =?",$_SESSION['pays']);
+                                }
+                            }?>
+                        <select id="pays" name="pays" data-dojo-type="dijit/form/FilteringSelect"  style="width: 317px" 
+                                data-dojo-props=" value:'', placeHolder: '<?php echo TXT_CHOIXPAYS; ?>'" required="required" >
+                            <?php
+                            if(!empty($idpays)){
+                                echo "<option value='".$idpays."'>".$_SESSION['pays']."</option>";
+                            }
+                            if($lang=='fr'){                                
+                                for ($i = 0; $i < count($nomPays); $i++) {
+                                    echo "<option value='".'pa'.$nomPays[$i]['idpays']."'>".str_replace("''","'",$nomPays[$i]['nompays'])."</option>";
+                                }
+                            }elseif($lang=='en'){
+                                for ($i = 0; $i < count($nomPays); $i++) {
+                                    echo "<option value='".'pa'.$nomPays[$i]['idpays']."'>".str_replace("''","'",$nomPays[$i]['nompaysen'])."</option>";
+                                }
+                            }
+                            BD::deconnecter();
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top"><?php echo TXT_TELEPHONE.' *:'; ?>
+                        <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' >
+                            <span style="width: 450px"><?php echo TXT_TELINVALIDE;?></span>
+                        </a>
+                    </td>
+                    <td><input type="text" name="tel" id="tel"  required="required" data-dojo-type="dijit/form/ValidationTextBox" style="width: 317px"
+                               value="<?php if(!empty($_SESSION['tel'])){echo $_SESSION['tel'];};?>"
+                               data-dojo-props="maxLength:'20',<?php echo REGEX_TEL;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '" autocomplete="on" >
+                    </td>			
+                </tr>
+                <tr>
+                    <td valign="top"><?php echo TXT_FAX.' :';?>
+                        <a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' >
+                            <span style="width: 450px"><?php echo TXT_FAXINVALIDE;?></span>
+                        </a>
+                    </td>
+                    <td><input type="text" name="fax" id="fax" value="<?php if(!empty($_SESSION['fax'])){echo $_SESSION['fax'];};?>" style="width: 317px"
+                               data-dojo-type="dijit/form/ValidationTextBox"
+                               data-dojo-props="maxLength:'20',<?php echo REGEX_TEL;?>,
+                               invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '"
+                               autocomplete="on" >
+                    </td>		
+                </tr>
+                <tr>
+                    <td valign="top"><?php echo TXT_NOMEQUIPE.' :';?></td>
+                    <td><input type="text" name="nomequipe" id="nomequipe" value="" style="width: 317px"
+                               data-dojo-type="dijit/form/ValidationTextBox"
+                               data-dojo-props="maxLength:'20',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '"autocomplete="on" >
+                    </td>		
+                </tr>
+                <tr>
+                    <td><label for="typeuser" ><?php echo TXT_TYPEUTILISATEUR .' *:'; ?></label></td>
+                    <td>
+                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="typeuser" id ="academ" value="academique"  class="btRadio"
+                               onclick="unhide('academic', 'industriel')" > <?php echo TXT_ACADEMIQUE; ?>
+                        <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="typeuser" id="indust" value="industriel" class="btRadio"
+                               onclick="unhide('industriel', 'academic')" > <?php echo TXT_INDUSTRIEL; ?>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <div id ='academic' style="display: none;">
+                <?php 
+                $_SESSION['typeutilisateur']='academic';
+                include 'contactAcademique.html' ;
+                ?>
+            </div>
+            <div id='industriel' style="display: none;">
+                <?php 
+                $_SESSION['typeutilisateur']='industriel';
+                include 'contactIndustriel.html' ;                                                                   
+                ?>
+            </div>
+            <br>
+            <p style="font-size: x-small;">
+                <?php echo TXT_CHAMPSOBLIGATOIRES;?>
+            </p>                                
+            <input type="submit" value="Envoyer" label="<?php echo TXT_ENVOYER ;?>" id="Envoyer"  data-dojo-type="dijit/form/Button" />
+    </form>		
+</fieldset>

@@ -1,0 +1,124 @@
+<?php include_once 'outils/constantes.php'; ?>
+<style type="text/css">
+    #grid {
+        width: 65em;
+        height: 350em;
+    }
+</style>
+<script>
+    dojo.require("dojox.grid.EnhancedGrid");
+    dojo.require("dojox.data.CsvStore");
+    dojo.require("dojox.grid.enhanced.plugins.Menu");
+    dojo.require("dojo.data.ItemFileWriteStore");
+    dojo.require("dijit.Menu");
+    dojo.require("dijit.MenuItem");
+    dojo.require("dojo.domReady!");
+    dojo.require("dojo.request");
+    dojo.require("dojox.grid.enhanced.plugins.Pagination");
+dojo.ready(function(){
+    /*set up data store*/
+    var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetCentraleUser.json"});
+    /*set up layout*/    
+    var layout = [[
+       {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px"},//, formatter: hrefFormatterNumero},
+        {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet",width: "80px",formatter:formatDate},
+        {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "210px"},
+        {name: "<?php echo TXT_UPDATE; ?>", field: "datemaj",width: "80px",formatter:formatDate},
+        {name: "<?php echo TXT_REFINTERNE.' - '.TXT_ACRONYME; ?>", field: "refinterneprojet"},
+        {name: "<?php echo TXT_STATUTPROJETS; ?>", field: "libellestatutprojet"},
+        {name: "<?php echo TXT_DEMANDEUR; ?>", field: "demandeur"},
+        {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
+        {name: "<?php echo TXT_PORTEURS; ?>", field: "porteur"}
+                    
+    ]];
+    var grid = new dojox.grid.EnhancedGrid({
+        id: 'gridcentraleUser',
+        store: store,
+        structure: layout,
+        autoHeight:true,
+        rowSelector: '20px',
+        plugins: {menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"},
+            pagination: {
+            pageSizes: ["5", "10", "50","100", "All"],
+            description: true,
+            sizeSwitch: true,
+            pageStepper: true,
+            gotoButton: true,
+            /*page step to be displayed*/
+            maxPageStep: 5,
+            /*position of the pagination bar*/
+            position: "top"
+        }}
+    },document.createElement('div'));
+//----------------------------------------------------------------------------------------------------------------------
+//                                              FONCTIONS DE FORMATAGE
+//----------------------------------------------------------------------------------------------------------------------
+            function hrefFormatterPDF(index, idx) {
+                var item = grid.getItem(idx);
+                var numero = item.numero;
+                 var idprojet=item.idprojet;
+                return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/pdf_project/<?php echo $lang; ?>/" + numero + "\" target='_blank'>" + '<img title="<?php echo TXT_GENERERPDF; ?>" src="<?php echo '/'.REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
+            }            
+            
+              function formatterLibelle(index, idx) {
+                var item = grid.getItem(idx);
+                var statut = item.idstatutprojet;
+                var academiqueinterne = item.academiqueinterne;
+                if(academiqueinterne==='FALSE'){                    
+                    var encours =item.libellecentraleencours;
+                    var accepte =item.libellecentraleaccepte;
+                    var refuse =item.libellecentralerefuse;
+                    var enattente =item.libellecentraleenattente;
+                    var encoursrealisation = item.libellecentraleencoursrealisation;
+                    if(!empty(encours)){
+                        return encours;
+                    }else if(!empty(accepte)){
+                        return accepte;
+                    }else if(!empty(refuse)){
+                        return refuse;
+                    }else if(!empty(enattente)){
+                        return enattente;
+                    }else if(!empty(encoursrealisation)){
+                        return encoursrealisation;
+                    }
+                    
+                }else{
+                    return item.libellecentrale;
+                }
+                
+                 if(statut === '<?php echo ACCEPTE ?>'){
+                     return accepte;
+                 }else if(statut === '<?php echo REFUSE ?>'){
+                     return refuse;
+                 }else if(statut === '<?php echo ENATTENTEPHASE2 ?>'){
+                     return enattente;
+                 }else if(statut === '<?php echo ENCOURSREALISATION ?>'){
+                     return encoursrealisation;
+                 }
+            }
+           
+        dojo.connect(grid, 'onRowContextMenu', function(e){//GESTION DU MENU CONTEXTUELLE
+            var rowIndex = e.rowIndex;
+            var item = grid.getItem(rowIndex);
+            var idprojet = item.idprojet;
+            document.getElementById('idprojet').value=idprojet;            
+        })
+        function formatDate(datum) {
+            var annee =  datum.substring(0,4);
+            if(annee>1970){
+                var dateprojet= new Date(datum);
+                    var options = {year: "numeric", month: "numeric", day: "numeric"};
+                <?php if ($lang == 'en') { ?>
+                    return new Intl.DateTimeFormat("en-US",options).format(dateprojet);
+                <?php } else { ?>
+                    return new Intl.DateTimeFormat("fr-FR",options).format(dateprojet);
+                <?php } ?>
+                }
+        }
+
+    /* append the new grid to the div */
+    dojo.byId("gridCentraleDiv").appendChild(grid.domNode);
+    grid.startup();
+});
+</script>
+<div id="gridCentraleDiv"></div>

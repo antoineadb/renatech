@@ -1,0 +1,346 @@
+<?php $db = BD::connecter();$manager = new Manager($db);?>
+<script>
+    function enabledmodif() {
+        dijit.byId("modif").setAttribute('disabled', false);
+    }
+</script>
+<div style="padding-top: 75px;">
+    <?php include'outils/bandeaucentrale.php'; ?>
+</div>
+<br>
+<?php if(isset($_GET['erreur'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msgerrdescriptechno' >
+                <legend><?php echo TXT_ERR;?></legend>
+                <?php 	echo TXT_ERREURPEUDOEXISTE;?>
+            </fieldset>
+
+        </td>
+    </tr>            
+</table>
+<?php }elseif(isset($_GET['msgupdate'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msginfoUpdate' >
+                <legend><?php echo TXT_INFO;?></legend>
+                <?php 	echo TXT_MESSAGEUPDATE;?>
+            </fieldset>
+
+        </td>
+    </tr>
+</table>
+<?php }elseif(isset($_GET['erreurnom'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msgerrdescriptechno' >
+                <legend><?php echo TXT_ERR;?></legend>
+                <?php 	echo 'Problème de mise à jour sur le nom';?>
+            </fieldset>
+
+        </td>
+    </tr>
+</table>
+<?php }?>
+<fieldset id="ident" style="border-color: #5D8BA2;width: 1003px;margin-top: 0px;"  >
+    <legend style="color: #5D8BA2;font-size: 1.2em"><b><?php echo TXT_MONCOMPTE ;?></b></legend>
+    <form data-dojo-type="dijit/form/Form" method="post" name="moncompte"   action="<?php echo '/'.REPERTOIRE ?>/modifBase/updatemoncompte.php"
+          onsubmit="document.getElementById('messageUpdate').style.display = 'block';" >
+        <input style="font-size:1.1em;height:30px;"   name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+        <script type="dojo/method" data-dojo-event="onSubmit">
+            if(this.validate()){
+            return true;
+            }else{
+            alert("<?php echo TXT_MESSAGEERREURCONTACT; ?>");
+            return false;
+            }
+            return true;
+        </script>								
+        <?php
+        if(isset($_SESSION['email'])){
+        $mail =$_SESSION['email'];
+        }else{
+        $mail=$_SESSION['mail'];
+        }
+        if(isset($_SESSION['pseudo'])){
+        $pseudo =$_SESSION['pseudo'];
+        }
+        $param=array($mail,$pseudo);
+        $identite = $manager->getListbyArray("SELECT u.idutilisateur,u.nom,u.prenom,u.adresse,u.ville, u.telephone, u.fax, u.codepostal,u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.nomresponsable,
+        u.mailresponsable,u.idqualitedemandeuraca_qualitedemandeuraca,u.entrepriselaboratoire,u.idqualitedemandeurindust_qualitedemandeurindust,u.idemployeur_nomemployeur,u.iddiscipline_disciplinescientifique
+        ,u.nomentreprise,u.idautrenomemployeur_autrenomemployeur,l.nomequipe   FROM loginpassword l, utilisateur u WHERE u.idlogin_loginpassword = l.idlogin AND   l.mail =? AND l.pseudo =?",$param);
+
+        $nom = $identite[0]['nom'];
+        $prenom = $identite[0]['prenom'];
+        $adresse = $identite[0]['adresse'];
+        $ville = $identite[0]['ville'];
+        $tel = $identite[0]['telephone'];
+        $fax = $identite[0]['fax'];
+        $cp = $identite[0]['codepostal'];
+        $utilisateurType = $identite[0]['idtypeutilisateur_typeutilisateur'];
+        $idpays_pays = $identite[0]['idpays_pays'];
+        $nomresponsable = $identite[0]['nomresponsable'];
+        $mailresponsable = $identite[0]['mailresponsable'];
+        $entrepriselaboratoire = $identite[0]['entrepriselaboratoire'];
+        $nomequipe = $identite[0]['nomequipe'];
+        $idqualitedemandeuraca= $identite[0]['idqualitedemandeuraca_qualitedemandeuraca'];
+        $idqualitedemandeurindust =$identite[0]['idqualitedemandeurindust_qualitedemandeurindust'];
+        $nomentreprise = $identite[0]['nomentreprise'];
+        $idutilisateur=$identite[0]['idutilisateur'];
+        $idemployeur=$identite[0]['idemployeur_nomemployeur'];
+        if(!empty($identite[0]['idtutelle_tutelle'])){
+            $idtutelle=$identite[0]['idtutelle_tutelle'];
+        }
+        $libelleautrenomemployeur = $manager->getSingle2("select libelleautrenomemployeur from autrenomemployeur where idautrenomemployeur=?",$identite[0]['idautrenomemployeur_autrenomemployeur']);
+        $iddiscipline = $identite[0]['iddiscipline_disciplinescientifique'];
+        //Récupération du pays
+        if(!empty($idpays_pays)){
+        $pays =$manager->getSingle2("SELECT nompays FROM pays WHERE idpays =?",$idpays_pays);
+        }
+        ?>
+        <div>
+            <table id="moncompte">
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px" ><?php echo TXT_PSEUDO; ?></td><td></td>
+                    <td>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px" id="pseudo" type="text" name="pseudo"
+                               value="<?php if(!empty($pseudo)){echo $pseudo;}else{echo $_SESSION['pseudo'];}?>"
+                               data-dojo-type="dijit/form/ValidationTextBox"  required="required"
+                               autocomplete="on" onfocus="enabledmodif()"  promptMessage ="<?php echo TXT_MAUVAISPSEUDO;?>"
+                               data-dojo-props="regExp:'^[a-zA-Z0-9._&-]{6,}',invalidMessage:'<?php echo TXT_MAUVAISPSEUDO;?>'">
+                    </td>
+                </tr><tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_MAIL; ?></div>
+                    </td>
+                    <td style="width:250px"></td>
+                    <td>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  id="email" type="text" name="email"
+                               value="<?php if(!empty($mail)){echo $mail;}else{echo $_SESSION['email'];}?>"
+                               data-dojo-type="dijit/form/ValidationTextBox" regExpGen="dojox.validate.regexp.emailAddress" required="required"
+                               invalidMessage="Email non valide." autocomplete="on" onfocus="enabledmodif()"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_NOM; ?> </div>
+                    </td><td></td>
+                    <td>
+                        <?php
+                        if(!empty($nom)){$nom =stripslashes(removeDoubleQuote($nom));}else{
+                        $nom =stripslashes(removeDoubleQuote($_SESSION['nom']));
+                        }
+                        ?>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="nom" id="nom"
+                               data-dojo-type="dijit/form/ValidationTextBox" value="<?php if(!empty($nom)){echo $nom;}else{echo $_SESSION['nom'];}?>"
+                               data-dojo-props="<?php echo REGEX_TYPESTRING; ?>" onfocus="enabledmodif()" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_PRENOM; ?> </div>
+                    </td><td>
+                    </td>
+                    <td>
+                        <?php
+                        if(!empty($prenom)){$prenom =stripslashes(
+removeDoubleQuote($prenom));}else{
+                        $prenom =stripslashes(removeDoubleQuote($_SESSION['prenom']));
+                        }
+                        ?>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="prenom"
+                               id="prenom" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $prenom;?>"
+                               data-dojo-props="<?php echo REGEX_TYPESTRING; ?>" onfocus="enabledmodif()" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_ADRESSE;?></div>
+                    </td><td></td>
+                    <td>
+                        <?php
+                        if(!empty($adresse)){
+                            $adresse =stripslashes(removeDoubleQuote($adresse));
+                        }else{
+                            $adresse =stripslashes(removeDoubleQuote($_SESSION['adresse']));
+                        }
+                        ?>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="adresse"
+                               id="adresse" data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $adresse;?>"
+                               data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '"                               
+                               onfocus="enabledmodif()" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_CP;?></div>
+                    </td>
+                    <td>
+                    <td>
+                        <?php
+                        if(!empty($cp)){
+                        $cp =stripslashes(removeDoubleQuote($cp));
+                        }else{
+                        $cp= stripslashes(removeDoubleQuote($_SESSION['cp']));
+                        }
+                        ?>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="cp" id="cp"
+                               placeholder="" data-dojo-type="dijit/form/ValidationTextBox"
+                               value="<?php if(!empty($cp)){echo $cp;	}?>"  onfocus="enabledmodif()" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_VILLE; ?></div>
+                    </td><td></td>
+                    <td>
+                        <?php
+                        if(!empty($ville)){$ville =stripslashes(removeDoubleQuote($ville));}else{
+                            $ville =stripslashes(removeDoubleQuote($_SESSION['ville']));
+                        }
+                        ?>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" required="required" name="ville" id="ville"	data-dojo-type="dijit/form/ValidationTextBox"  value="<?php echo $ville; ?>"
+                               onfocus="enabledmodif()">
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: left;font-size: 1.2em;height:30px">
+                <div><?php echo TXT_PAYS; ?></div>
+                </th><td></td>
+                <td>
+                    <?php   $nomPays  =  $manager->getList('select nomPays from pays'); ?>
+                    <select class="monCompte" name="pays" id="pays" data-dojo-type="dijit/form/Select" style="height:30px;font-size: 1.2em;width:340px" onfocus="enabledmodif()">
+                        <option value="<?php if(!empty($pays)){echo $pays;}else{echo $_SESSION['pays'];}?>" >
+                            <?php if(!empty($pays)){echo $pays;}else{echo $_SESSION['pays'];}?></option>
+                        <?php
+                        for ($i = 0; $i < count($nomPays); $i++) {
+                        echo "<option value='".$nomPays[$i]['nompays']."'>".utf8_decode($nomPays[$i]['nompays'])."</option>";
+                        }
+                        ?>
+                    </select>
+                </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_TELEPHONE;?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                <span style="width: 350px;border-radius: 5px"><?php echo TXT_TELINVALIDE;?></span></a></div>
+                    </td><td></td>
+                    <td><input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="tel" id="tel"  required="required"
+                               data-dojo-type="dijit/form/ValidationTextBox"
+                               value="<?php if(!empty($tel)){echo $tel;}else{echo $_SESSION['tel'];} ?>"  onfocus="enabledmodif()"
+                               data-dojo-props="maxLength:'20',<?php echo REGEX_TEL;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '" autocomplete="on" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_FAX;?><a class="infoBulle" href="#">&nbsp;<img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                                <span style="width: 350px;border-radius: 5px"><?php echo TXT_FAXINVALIDE;?></span></a></div>
+                    </td><td></td>
+                    <td>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="fax" id="fax"
+                               value="<?php if(!empty($fax)){echo $fax;}elseif(isset($_SESSION['fax'])){echo $_SESSION['fax'];} ?>"
+                               data-dojo-props="maxLength:'20',<?php echo REGEX_TEL;?>,invalidMessage:'<?php echo TXT_ERRSTRINGTEL; ?> '" autocomplete="on"
+                               data-dojo-type="dijit/form/ValidationTextBox"onfocus="enabledmodif()"/> 
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_NOMENTELABO;?></div>
+                    </td>
+                    <td></td>
+                    <td>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="entrepriselaboratoire" id="entrepriselaboratoire" data-dojo-type="dijit/form/ValidationTextBox" 
+                               autocomplete="on" value="<?php echo $entrepriselaboratoire;?>" required="required" onfocus="enabledmodif()"
+                               data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '"  >
+                    </td>
+                </tr>
+                   <tr>
+                    <td valign="middle" style="text-align: left;font-size: 1.2em;height:30px">
+                        <div><?php echo TXT_NOMEQUIPE;?></div>
+                    </td>
+                    <td></td>
+                    <td>
+                        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="text" name="nomequipe" id="nomequipe" data-dojo-type="dijit/form/ValidationTextBox" 
+                               autocomplete="on" value="<?php echo $nomequipe;?>"  onfocus="enabledmodif()"
+                               data-dojo-props="maxLength:'100',<?php echo REGEX_TYPE;?>,invalidMessage:'<?php echo TXT_ERRSTRING; ?> '"  >
+                    </td>
+                </tr>
+                <script>
+                    function afficheAutre(id1, id2) {
+                        document.getElementById(id1).style.display = 'table-row';
+                        document.getElementById(id2).style.display = 'table-row';
+                        if(dijit.byId('nomresponsable')){
+                            dijit.byId('nomresponsable').set("required", 'true');
+                        }
+                        if(dijit.byId('nomresponsable1')){
+                            dijit.byId('nomresponsable1').set("required", 'true');
+                        }
+                        if(dijit.byId('mailresponsable')){
+                            dijit.byId('mailresponsable').set("required", 'true');
+                        }
+                        if(dijit.byId('mailresponsable1')){
+                            dijit.byId('mailresponsable1').set("required", 'true');
+                        }
+                        enabledmodif();
+                    }
+                    function masqueAutre(id1, id2) {
+                        document.getElementById(id1).style.display = 'none';
+                        document.getElementById(id2).style.display = 'none';                         
+                        if(dijit.byId('nomresponsable')){
+                            dijit.byId('nomresponsable').set("required", '');
+                        }
+                        if(dijit.byId('nomresponsable1')){
+                            dijit.byId('nomresponsable1').set("required", '');
+                        }
+                        if(dijit.byId('mailresponsable')){
+                            dijit.byId('mailresponsable').set("required", '');
+                        }
+                        if(dijit.byId('mailresponsable1')){
+                            dijit.byId('mailresponsable1').set("required", '');
+                        }
+                        enabledmodif();
+                    }
+                    function afficheAutreAcademique(id,id1,id2) {
+                        document.getElementById(id).style.display = 'table-row';
+                        if (dijit.byId(id1)) {
+                            dijit.byId(id1).set("required", 'true');
+                        }
+                        if (dijit.byId(id2)) {
+                            dijit.byId(id2).set("required", 'true');
+                        }                        
+                        enabledmodif();
+                    }
+                    function masqueAutreAcademique(id,id1,id2) {
+                        document.getElementById(id).style.display = 'none';
+                        if (dijit.byId(id1)) {
+                            dijit.byId(id1).set("required", '');
+                        }
+                         if (dijit.byId(id2)) {
+                            dijit.byId(id2).set("required", '');
+                        }                       
+                        enabledmodif();
+                    }
+                </script>
+            </table>            
+            <!--                                                            FIN DES PARTIE COMMUNE                                      -->
+            <?php 
+            if(!empty($idqualitedemandeuraca)) {
+            include_once 'moncompte/moncompteacademique.php';
+            }elseif(!empty($idqualitedemandeurindust)){
+            include_once 'moncompte/moncompteindustriel.php';
+            }
+            ?>
+            <?php ?>
+        </div>
+        <br>
+        <p style="font-size: x-small;">
+            <?php echo TXT_CHAMPSOBLIGATOIRES;?>
+        </p>
+        <input style="text-align: left;font-size: 1.2em;height:30px;width:340px"  type="submit" id ="modif" name="modif"
+               label="<?php echo TXT_MODIFIER ;?>"  data-dojo-type="dijit/form/Button" disabled="disabled" >
+    </form>
+</fieldset>
+<?php BD::deconnecter(); ?>

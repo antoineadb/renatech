@@ -1,0 +1,97 @@
+<?php include_once 'outils/constantes.php'; ?>
+<div id="gridencours" ></div>
+<script>
+    var gridencours, dataStore, store;
+    require([
+        "dojox/grid/DataGrid",
+        "dojo/store/Memory",
+        "dojo/data/ObjectStore",
+        "dojo/request",
+        "dojo/date/stamp",
+        "dojo/date/locale",
+        "dojo/domReady!"
+    ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
+        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/projetEncours.json", {
+            handleAs: "json"
+        }).then(function(data) {
+            store = new Memory({data: data.items});
+            dataStore = new ObjectStore({objectStore: store});
+            function hrefFormatter(numero, idx) {
+                var item = gridencours.getItem(idx);//idx = index
+                var centrale = item.nomcentrale;//libelle centrale
+                var statut=+ item.idstatutprojet;//id statut
+                if (statut ===+ '<?php echo REFUSE; ?>' || statut ===+'<?php echo CLOTURE; ?>') {
+                    return numero;
+                }else{
+                    return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $lang;?>&statut="+statut+"&numProjet=" + numero + "&centrale=" + centrale+ "\">" + numero + "</a>";
+                }                        
+            }
+            function hrefFormatterPDF(index, idx) {
+                var item = gridencours.getItem(idx);
+                var numero = item.numero;
+                 var idprojet=item.idprojet;
+                return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/pdf_project/<?php echo $lang; ?>/" + numero + "\" target='_blank'>" + '<img title="<?php echo TXT_GENERERPDF; ?>" src="<?php echo '/'.REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
+            }            
+            function formatDate(datum) {
+                var d = stamp.fromISOString(datum);
+                return locale.format(d, {selector: 'date', formatLength: 'long'});
+            }
+              function formatterLibelle(index, idx) {
+                var item = gridencours.getItem(idx);
+                var statut = item.idstatutprojet;
+                var academiqueinterne = item.academiqueinterne;
+                if(academiqueinterne==='FALSE'){                    
+                    var encours =item.libellecentraleencours;
+                    var accepte =item.libellecentraleaccepte;
+                    var refuse =item.libellecentralerefuse;
+                    var enattente =item.libellecentraleenattente;
+                    var encoursrealisation = item.libellecentraleencoursrealisation;
+                    if(!empty(encours)){
+                        return encours;
+                    }else if(!empty(accepte)){
+                        return accepte;
+                    }else if(!empty(refuse)){
+                        return refuse;
+                    }else if(!empty(enattente)){
+                        return enattente;
+                    }else if(!empty(encoursrealisation)){
+                        return encoursrealisation;
+                    }
+                    
+                }else{
+                    return item.libellecentrale;
+                }
+                
+                 if(statut === '<?php echo ACCEPTE ?>'){
+                     return accepte;
+                 }else if(statut === '<?php echo ENCOURSANALYSE ?>'){
+                     return encours;
+                 }else if(statut === '<?php echo REFUSE ?>'){
+                     return refuse;
+                 }else if(statut === '<?php echo ENATTENTE ?>'){
+                     return enattente;
+                 }else if(statut === '<?php echo ENATTENTEPHASE2 ?>'){
+                     return enattente;
+                 }else if(statut === '<?php echo ENCOURSREALISATION ?>'){
+                     return encoursrealisation;
+                 }
+            }
+            
+            gridencours = new DataGrid({
+                store: dataStore,
+                query: {id: "*"},
+                structure: [
+                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "auto", formatter: hrefFormatter},
+                    {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet", width: "auto", formatter: formatDate},
+                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "auto"},
+                    {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
+                    {name: "<?php echo TXT_ACRONYME; ?>", field: "acronyme", width: "auto"},
+                    {name: "<?php echo TXT_STATUTPROJET;?>", field: "libellestatutprojet", width: "auto"},
+                    {name: "<?php echo TXT_CENTRALS; ?>", field: "", width: "auto", formatter: formatterLibelle}
+                    
+                ]
+            }, "gridencours");
+            gridencours.startup();
+        });
+    });
+</script>

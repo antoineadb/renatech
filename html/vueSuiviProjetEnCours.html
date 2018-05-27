@@ -1,0 +1,44 @@
+<div id="grid_encours" ></div>
+<script>
+    var grid_encours, dataStore, store;
+    require([
+        "dojox/grid/DataGrid",
+        "dojo/store/Memory",
+        "dojo/data/ObjectStore",
+        "dojo/request",
+        "dojo/date/stamp",
+        "dojo/date/locale",
+        "dojo/domReady!"
+    ], function(DataGrid, Memory, ObjectStore, request, stamp, locale) {
+        request.get("<?php echo '/'.REPERTOIRE; ?>/tmp/projetAnalyse.json", {
+            handleAs: "json"
+        }).then(function(data) {
+            store = new Memory({data: data.items});
+            dataStore = new ObjectStore({objectStore: store});
+            function hrefFormatter(numero, idx) {
+                var item = grid_encours.getItem(idx);//idx = index
+                var centrale = item.libellecentrale;//libelle centrale
+                var idstatut=item.idstatutprojet;
+                return "<a  href=\"<?php echo '/'.REPERTOIRE; ?>/controler/controlestatutprojet.php?lang=<?php echo $lang;?>&statut="+idstatut+"&numProjet=" + numero + "&centrale="
+                        + centrale + "\">" + numero + "</a>";
+            }
+            function formatDate(datum) {
+                var d = stamp.fromISOString(datum);
+                return locale.format(d, {selector: 'date', formatLength: 'long'});
+            }
+            grid_encours = new DataGrid({
+                store: dataStore,
+                query: {id: "*"},
+                structure: [
+                    {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "auto", formatter: hrefFormatter},
+                    {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateProjet", width: "auto", formatter: formatDate},
+                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "auto"},
+                    {name: "<?php echo TXT_ACRONYME; ?>", field: "acronyme", width: "auto"}
+                ]
+            }, "grid_encours");
+            grid_encours.startup();
+        });
+    });
+</script>
+
+

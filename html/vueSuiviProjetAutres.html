@@ -1,0 +1,46 @@
+<?php include 'outils/lang.php'; ?>
+<div id="grid1" style="height: 400px;"></div>
+
+<script>
+    var grid1, dataStore, store;
+    require([
+	"dojox/grid/DataGrid",
+	"dojo/store/Memory",
+	"dojo/data/ObjectStore",
+	"dojo/request",
+	"dojo/domReady!"
+    ], function(DataGrid, Memory, ObjectStore, request){
+	request.get("tmp/projetEncours.json", {
+	    handleAs: "json"
+	}).then(function(data){
+	    store = new Memory({ data: data.items });
+	    dataStore = new ObjectStore({ objectStore: store });
+
+	    function hrefFormatter(value){
+		return "<a href=\"modifProjet.php?lang="+"<?php echo $lang; ?>&idprojet=" + value + "\" target=\"_blank\">"+value+"</a>";
+	    }
+																
+	    function formatDate(datum){
+		// Format the value in store, so as to be displayed.
+		var d = dojo.date.stamp.fromISOString(datum);
+		return dojo.date.locale.format(d, {selector: 'datedemandeprojet', formatLength: 'long'});
+	    }
+	
+						
+	    grid1 = new DataGrid({
+		store: dataStore,
+		query: { id: "*" },
+		structure: [
+		    { name: "ID", field: "idprojet", width: "40px" },
+		    { name: "Date", field: "dateprojet", width: "70px" },
+		    { name: "Titre", field: "titre", width: "165px" },
+		    { name: "Status", field: "libellestatusdemande", width: "70px" },
+		    { name: "Centrale", field: "libellecentrale", width: "60px" }
+		]
+	    }, "grid1");
+	    grid1.startup();
+	});
+    });
+</script>
+
+

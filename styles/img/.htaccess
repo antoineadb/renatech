@@ -1,0 +1,360 @@
+# Fichier de configuration pour le répertoire / 
+RewriteEngine On
+# Permet de récupéréer les valiableGET
+Options -MultiViews
+RewriteRule   login/([a-z]+)                                    createLogin.php?lang=$1                             [L]
+RewriteRule   securite/([a-z]+)                                 indexcaptcha.php?lang=$1                            [L]
+RewriteRule   contact/([a-z]+)                                  createContact.php?lang=$1                           [L]
+RewriteRule   loginDblErr/([a-z]+)                              createLoginDoublon.php?lang=$1                      [L]
+RewriteRule   loginadmnErr/([a-z]+)/([0-9]+)			createLoginAdminErreur.php?lang=$1&idcentrale=$2    [L]
+RewriteRule   contactadmnErr/([a-z]+)/([a-z]+)			createContact.php?lang=$1&msgerreuradmlocal=$2	    [L]
+#ADMINNATIONNAL
+RewriteRule   liste/([a-z]+)                                    adminListe.php?lang=$1                              [L]
+RewriteRule   libelle/([a-z]+)                                  gestionlibelle.php?lang=$1                          [L]
+RewriteRule   Manage_label1/([a-z]+) 				gestionlibelle.php?lang=$1&msgupdateaccueil         [L]
+RewriteRule   Manage_label2/([a-z]+)				gestionlibelle.php?lang=$1&msgupdateconnexion       [L]
+RewriteRule   Manage_label3/([a-z]+)				gestionlibelle.php?lang=$1&page_precedente=updatesiteweb.php&msgupdatesiteweb	[L]
+RewriteRule   Manage_label4/([a-z]+)				gestionlibelle.php?lang=$1&msgupdateemailcontact        [L]
+RewriteRule   Manage_label5/([a-z]+)				gestionlibelle.php?lang=$1&msgupdateemailprojetphase1   [L]
+RewriteRule   Manage_label6/([a-z]+)				gestionlibelle.php?lang=$1&msgupdateemailprojetphase2	[L]
+#ADMINNATIONNAL PAYS AJOUT
+RewriteRule   insert_paysErr1/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysexiste=$2               [L]
+RewriteRule   insert_paysErr2/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysennonsaisie=$2          [L]
+RewriteRule   insert_paysErr3/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysnonsaisie=$2            [L]
+RewriteRule   insert_paysErr4/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrsituationselect=$2          [L]
+RewriteRule   insert_pays/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurpays=$2                 [L]
+#ADMINNATIONNAL PAYS UPDATE
+RewriteRule   Manage_pays/([a-z]+)/([0-9]+) 			adminListe.php?lang=$1&idpays=$2                    [L]
+RewriteRule   update_pays/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgpaysupdate=$2                  [L]
+RewriteRule   update_paysErr1/([a-z]+)				adminListe.php?lang=$1&erreurctrladmin              [L]
+RewriteRule   update_paysErr2/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysselect=$2               [L]
+RewriteRule   update_paysErr3/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysennonsaisie=$2          [L]
+RewriteRule   update_paysErr4/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysnonsaisie=$2            [L]
+#ADMINNATIONNAL PAYS AFFICHE/MASQUE
+RewriteRule   hide_pays/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurpayshide=$2             [L]
+RewriteRule   show_pays/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurpaysshow=$2             [L]
+RewriteRule   hide_paysErr1/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysselect=$2               [L]
+RewriteRule   hide_paysErr2/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysnonsaisie=$2            [L]
+RewriteRule   hide_paysErr3/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrpaysexiste=$2               [L]
+
+#ADMINNATIONNAL SECTEUR D'ACTIVITE AJOUT
+RewriteRule   insert_sector/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveursecteur=$2              [L]
+RewriteRule   insert_sectorErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrSecteurnonsaisie=$2         [L]
+RewriteRule   insert_sectorErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrSecteurennonsaisie=$2       [L]
+RewriteRule   insert_sectorErr3/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrSecteurexiste=$2            [L]
+#ADMINNATIONNAL SECTEUR D'ACTIVITE MODIF
+RewriteRule   Manage_sector/([a-z]+)/([0-9]+) 			adminListe.php?lang=$1&idsecteuractivite=$2         [L]
+RewriteRule   update_sector/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgsecteurupdate=$2               [L]
+RewriteRule   update_sectorErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrsecteurselect=$2            [L]
+RewriteRule   update_sectorErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrSecteurnonsaisie=$2         [L]
+RewriteRule   update_sectorErr3/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrSecteurnonsaisie=$2         [L]
+#ADMINNATIONNAL SECTEUR D'ACTIVITE AFFICHE/MASQUE
+RewriteRule   show_sector/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveursecteuractiviteshow=$2  [L]
+RewriteRule   hide_sector/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveursecteuractivitehide=$2  [L]
+RewriteRule   hide_sectorErr1/([a-z]+)/([A-Z]+)			admin.php?lang=$1&=msgErrtypeentreselect$2          [L]
+RewriteRule   hide_sectorErr2/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrtypeEntreprisenonsaisie=$2  [L]
+RewriteRule   hide_sectorErr3/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgErrsecteuractiviteexiste=$2    [L]
+#ADMINNATIONNAL TYPE ENTREPRISE AJOUT
+RewriteRule   Manage_typeent/([a-z]+)/([0-9]+) 			adminListe.php?lang=$1&idtypeentreprise=$2          [L]
+RewriteRule   insert_typeent/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypeentreprise=$2       [L]
+RewriteRule   insert_typeentErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeEntreprisenonsaisie=$2  [L]
+RewriteRule   insert_typeentErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeEntreprisenonsaisie=$2  [L]
+RewriteRule   insert_typeentErr3/([a-z]+)/([A-Z]+)              admin.php?lang=$1&msgErrtypeentrepriseexiste=$2     [L]
+#ADMINNATIONNAL TYPE ENTREPRISE MODIF
+RewriteRule   update_typeent/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypeentrepriseupdate=$2 [L]
+RewriteRule   update_typeentErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeentreselect=$2          [L]
+RewriteRule   update_typeentErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeEntreprisenonsaisie=$2  [L]
+#ADMINNATIONNAL TYPE ENTREPRISE AFFICHE/MASQUE
+RewriteRule   show_typeent/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypeentrepriseshow=$2   [L]
+RewriteRule   hide_typeent/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypeentreprisehide=$2   [L]
+RewriteRule   hide_typeentErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeentreselect=$2          [L]
+RewriteRule   hide_typeentErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeEntreprisenonsaisie=$2  [L]
+RewriteRule   hide_typeentErr3/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeentrepriseexiste=$2     [L]
+
+#DISCIPLINE SCIENTIFIQUE AJOUT
+RewriteRule   Manage_discipline/([a-z]+)/([0-9]+) 		adminListe.php?lang=$1&iddiscipline=$2              [L]
+RewriteRule   insert_discipline/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurdiscipline=$2           [L]
+RewriteRule   insert_disciplineErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrdisciplinenonsaisie=$2      [L]
+RewriteRule   insert_disciplineErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrdisciplineexiste=$2         [L]
+#DISCIPLINE SCIENTIFIQUE MODIF
+RewriteRule   update_discipline/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgdisciplineupdate=$2            [L]
+RewriteRule   update_disciplineErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrdisciplineselect=$2         [L]
+RewriteRule   update_disciplineErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrdisciplinenonsaisie=$2      [L]
+#DISCIPLINE SCIENTIFIQUE AFFICHE/MASQUE
+RewriteRule   show_discipline/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypedisciplineshow=$2   [L]    
+RewriteRule   hide_discipline/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurdisciplinehide=$2       [L]
+RewriteRule   hide_disciplineErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrdisciplineeselect=$2        [L]
+RewriteRule   hide_disciplineErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrdisciplinenonsaisie=$2      [L]
+
+#NOM EMPLOYEUR AJOUT
+RewriteRule   Manage_employeur/([a-z]+)/([0-9]+)		adminListe.php?lang=$1&idemployeur=$2               [L]
+RewriteRule   insert_employeur/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurnomemployeur=$2         [L]
+RewriteRule   insert_employeurErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrnomemployeurnonsaisie=$2    [L]
+RewriteRule   insert_employeurErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrnomemployeurexiste=$2       [L]
+#NOM EMPLOYEUR	MODIF
+RewriteRule   update_employeur/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgemployeurupdate=$2             [L]
+RewriteRule   update_employeurErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErremployeurselect=$2          [L]
+RewriteRule   update_employeurErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErremployeurnonsaisie=$2       [L]
+#NOM EMPLOYEUR	AFFICHE/MASQUE
+RewriteRule   show_employeur/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurnomemployeurshow=$2     [L]
+RewriteRule   hide_employeur/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurnomemployeurhide=$2     [L]
+RewriteRule   hide_employeurErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErremployeurselect=$2          [L]
+RewriteRule   hide_employeurErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErremployeurnonsaisie=$2       [L]
+RewriteRule   hide_employeurErr3/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErremployeurnonsaisie=$2       [L]
+
+#TUTELLE AJOUT
+RewriteRule   Manage_tutelle/([a-z]+)/([0-9]+)			adminListe.php?lang=$1&idtutelle=$2                 [L]
+RewriteRule   insert_tutelle/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtutelle=$2              [L]
+RewriteRule   insert_tutelleErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtutellenonsaisie=$2         [L]
+RewriteRule   insert_tutelleErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtutelleexiste=$2            [L]
+#TUTELLE MODIF
+RewriteRule   update_tutelle/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgTutelleupdate=$2               [L]
+RewriteRule   update_tutelleErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtutelleselect=$2            [L]
+RewriteRule   update_tutelleErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtutellenonsaisie=$2         [L]
+#TUTELLE AFFCIHE/MASQUE
+RewriteRule   show_tutelle/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtutelleshow=$2          [L]
+RewriteRule   hide_tutelle/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtutellehide=$2          [L]
+RewriteRule   hide_tutelleerr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtutelleselect=$2            [L]
+RewriteRule   hide_tutelleerr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtutellenonsaisie=$2         [L]
+
+#TYPE DE PROJET AJOUT
+RewriteRule   Manage_typeprojet/([a-z]+)/([0-9]+)		adminListe.php?lang=$1&idtypeprojet=$2              [L]
+RewriteRule   insert_typeprojet/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurtypeprojet=$2           [L]
+RewriteRule   insert_typeprojetErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeProjetnonsaisie=$2      [L]
+RewriteRule   insert_typeprojetErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeexiste=$2               [L]
+#TYPE DE PROJET MODIF
+RewriteRule   update_typeprojet/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgtypeprojetupdate=$2            [L]
+RewriteRule   update_typeprojetErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeprojetselect=$2         [L]
+RewriteRule   update_typeprojetErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeProjetnonsaisie=$2      [L]
+#TYPE DE PROJET AFFICHA/MASQUE
+RewriteRule   show_typeprojet/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypeprojetshow=$2       [L]
+RewriteRule   hide_typeprojet/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurtypeprojethide=$2       [L]
+RewriteRule   hide_typeprojetErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeprojetselect=$2         [L]
+RewriteRule   hide_typeprojetErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeProjetnonsaisie=$2      [L]
+
+#TYPE DE FORMATION AJOUT
+RewriteRule   Manage_typeformation/([a-z]+)/([0-9]+)		adminListe.php?lang=$1&idtypeformation=$2           [L]
+RewriteRule   insert_typeformation/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurtypeformation=$2        [L]
+RewriteRule   insert_typeformationErr1/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrtypeformationnonsaisie=$2   [L]
+RewriteRule   insert_typeformationErr2/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrtypeformationexiste=$2      [L]
+#TYPE DE FORMATION MODIF
+RewriteRule   update_typeformation/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgtypeformationupdate=$2         [L]
+RewriteRule   update_typeformationErr1/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrtypeformationselect=$2      [L]
+RewriteRule   update_typeformationErr2/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrtypeformationnonsaisie=$2   [L]
+#TYPE DE FORMATION AFFICHE/MASQUE
+RewriteRule   show_typeformation/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurtypeformationshow=$2    [L]
+RewriteRule   hide_typeformation/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurtypeformationhide=$2    [L]
+RewriteRule   hide_typeformationErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeformationselect=$2      [L]
+RewriteRule   hide_typeformationErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrtypeformationnonsaisie=$2   [L]
+
+#THEMATIQUE AJOUT
+RewriteRule   Manage_thematique/([a-z]+)/([0-9]+)		adminListe.php?lang=$1&idthematique=$2              [L]
+RewriteRule   insert_thematique/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurthematique=$2           [L]
+RewriteRule   insert_thematiqueErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrthematiquenonsaisie=$2      [L]
+RewriteRule   insert_thematiqueErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrthematiqueexiste=$2         [L]
+#THEMATIQUE MODIF
+RewriteRule   update_thematique/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgthematiqueupdate=$2            [L]
+RewriteRule   update_thematiqueErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrthematiqueselect=$2         [L]
+RewriteRule   update_thematiqueErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrthematiquenonsaisie=$2      [L]
+#THEMATIQUE AFFICHE/MASQUE
+RewriteRule   show_thematique/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurthematiqueshow=$2       [L]
+RewriteRule   hide_thematique/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurthematiquehide=$2       [L]
+RewriteRule   hide_thematiqueErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrthematiqueselect=$2         [L]
+RewriteRule   hide_thematiqueErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrthematiquenonsaisie=$2      [L]
+
+#NOM CENTRALE
+RewriteRule   Manage_nom_centrale/([a-z]+)/([A-Za-z\-]+)	adminListe.php?lang=$1&libellecentralenom=$2        [L]
+#NOM CENTRALE		AJOUT
+RewriteRule   insert_nom_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msginsertcentrale=$2              [L]
+RewriteRule   insert_nom_centraleErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCentExist=$2                [L]
+RewriteRule   insert_nom_centraleErr2/([a-z]+)/([a-z]+)		admin.php?lang=$1&msgErrCentrale=$2                 [L]
+#NOM CENTRALE		MODIF
+RewriteRule   update_nom_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCentupdate=$2               [L]
+RewriteRule   update_nom_centraleErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCentselect=$2               [L]
+RewriteRule   update_nom_centraleErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCent=$2                     [L]
+#NOM CENTRALE		AFFICHE/MASQUE
+RewriteRule   show_nom_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurtypecentraleshow=$2     [L]
+RewriteRule   hide_nom_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurcentralehide=$2         [L]
+RewriteRule   hide_nom_centraleErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCentselect=$2               [L]
+RewriteRule   hide_nom_centraleErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrCent=$2                     [L]
+
+#VILLE CENTRALE
+RewriteRule   Manage_ville_centrale/([a-z]+)/([A-Za-z\-]+)	adminListe.php?lang=$1&libecentrale=$2              [L]
+RewriteRule   update_ville_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgVilleupdate=$2                 [L]
+RewriteRule   update_ville_centraleErr1/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrvilleselect=$2              [L]
+RewriteRule   update_ville_centraleErr2/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrvillenonsaisie=$2           [L]
+RewriteRule   update_ville_centraleErr3/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrvilleexiste=$2              [L]
+
+#EMAIL CENTRALE
+RewriteRule   Manage_mail_centrale/([a-z]+)/([A-Za-z\-]+)	adminListe.php?lang=$1&libellecentrale=$2           [L]
+RewriteRule   update_mail_centrale/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgEmailcentralupdate=$2          [L]
+RewriteRule   update_mail_centraleErr1/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrcentralemaileselect=$2      [L]
+RewriteRule   update_mail_centraleErr2/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrcentralemailenomsaisie=$2   [L]
+
+#CODE UNITE CENTRALE
+RewriteRule   Manage_codeunite/([a-z]+)/([A-Za-z\-]+)		adminListe.php?lang=$1&libecentral=$2               [L]
+#CODE UNITE UPDATE
+RewriteRule   update_codeunite/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgCodeunitecentralupdate=$2       [L]
+RewriteRule   update_codeuniteErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrcentralcodeuniteselect=$2    [L]
+RewriteRule   update_codeuniteErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrcentralcodeunitenomsaisie=$2 [L]
+
+#RESSOURCE
+RewriteRule   Manage_ressource_centrale/([a-z]+)/([0-9]+)	adminListe.php?lang=$1&idressource=$2               [L]
+#RESSOURCE AJOUT
+RewriteRule   insert_ressource/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurressource=$2            [L]
+RewriteRule   insert_ressourceErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrressourcenonsaisie=$2       [L]
+RewriteRule   insert_ressourceErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrressourceexiste=$2          [L]
+#RESSOURCE MODIF
+RewriteRule   update_ressource/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgRessourceupdate=$2             [L]
+RewriteRule   update_ressourceErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrressourceselect=$2          [L]
+RewriteRule   update_ressourceErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrressourcenonsaisie=$2       [L]
+#RESSOURCE AFFICHE/MASQUE
+RewriteRule   show_ressource/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurressourceshow=$2        [L]
+RewriteRule   hide_ressource/([a-z]+)/([A-Z]+)			admin.php?lang=$1&msgserveurressourcehide=$2        [L]
+RewriteRule   hide_ressourceErr1/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrressourceselect=$2          [L]
+RewriteRule   hide_ressourceErr2/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgErrressourcenonsaisie=$2       [L]
+
+#SOURCE DE FINANCEMENT
+RewriteRule   Manage_source_financement/([a-z]+)/([0-9]+)	adminListe.php?lang=$1&idsourcefinancement=$2       [L]
+#SOURCE DE FINANCEMENT AJOUT
+RewriteRule   insert_sourcefinancement/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgserveursourcefinancement=$2	[L]
+RewriteRule   insert_sourcefinancementErr1/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrsourcefinancementnonsaisie=$2	[L]
+RewriteRule   insert_sourcefinancementErr2/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErr$idsourcefinancementexiste=$2	[L]
+#SOURCE DE FINANCEMENT MODIF
+RewriteRule   update_sourcefinancement/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgsourcefinancementupdate=$2	[L]
+RewriteRule   update_sourcefinancementErr1/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrtsourcefinancementselect=$2	[L]
+RewriteRule   update_sourcefinancementErr2/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrsourcefinancementnonsaisie=$2	[L]
+#SOURCE DE FINANCEMENT AFFICHE/MASQUE
+RewriteRule   show_sourcefinancement/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveurtypesourcefinancementshow=$2 [L]
+RewriteRule   hide_sourcefinancement/([a-z]+)/([A-Z]+)		admin.php?lang=$1&msgserveursourcefinancementhide=$2	 [L]
+RewriteRule   hide_sourcefinancementErr1/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrtsourcefinancementselect=$2	 [L]
+RewriteRule   hide_sourcefinancementErr2/([a-z]+)/([A-Z]+)	admin.php?lang=$1&msgErrsourcefinancementnonsaisie=$2	 [L]
+
+#COMPTES
+RewriteRule   compteadmin/([a-z]+)                                      gestioncompte.php?lang=$1                                           [L]
+RewriteRule   compteadminindust/([a-z]+)/([0-9]+)/([0-9]+)              gestioncompte.php?lang=$1&iduser=$2&idqualiteindust=$3              [L]
+RewriteRule   updatecompteindust/([a-z]+)/([0-9]+)/([0-9]+)/([a-z]+)    gestioncompte.php?lang=$1&iduser=$2&idqualiteindust=$3&update=$4    [L]
+RewriteRule   compteadminaca/([a-z]+)/([0-9]+)/([0-9]+)                 gestioncompte.php?lang=$1&iduser=$2&idqualiteaca=$3                 [L]
+RewriteRule   updatecompteaca/([a-z]+)/([0-9]+)/([0-9]+)/([a-z]+)       gestioncompte.php?lang=$1&iduser=$2&idqualiteaca=$3&update=$4       [L]
+RewriteRule   moncompte/([a-z]+)                                        moncompte.php?lang=$1                                               [L]
+RewriteRule   compte/([a-z]+)                                           indexchoix.php?lang=$1                                              [L]
+RewriteRule   comptes/([a-z]+)                                          ctrlcompte.php?lang=$1                                              [L]
+RewriteRule   gestionCompte/([a-z]+)/([0-9]+)/([a-z]+)			gestioncompte.php?lang=$1&iduser=$2&msgerrcentrale=$3               [L]
+RewriteRule   updatemoncompteErr/([a-z]+)/([a-z]+)      		moncompte.php?lang=$1&erreur=$2                                     [L]
+RewriteRule   updateMonCompte/([a-z]+)/([a-z]+)                         moncompte.php?lang=$1&msgupdate=$2                                  [L]
+
+#EXPORTS
+RewriteRule   exportTousutilisateur/([a-z]+)                    exportTousUtilisateur.php?lang=$1                       [L]
+RewriteRule   exportutilisateur/([a-z]+)                        exportUtilisateur.php?lang=$1                           [L]
+RewriteRule   exportprojet/([a-z]+)                             exportBilanProjet.php?lang=$1                           [L]
+RewriteRule   exportdonneebrute/([a-z]+)                        exportdesProjetsBrute?lang=$1                            [L]
+
+#ACCUEIL
+RewriteRule   home/([a-z]+)                                     indexchoix.php?lang=$1                                  [L]
+RewriteRule   index/([a-z]+)/([a-zA-Z]+)                        index.php?lang=$1&action=$2                             [L]
+RewriteRule   index/([a-z]+)					index.php?lang=$1                                       [L]
+RewriteRule   index_Erreur/([a-z]+)				indexErreur.php?lang=$1                                 [L]
+RewriteRule   Erreur_Mot_de_passe/([a-z]+)/([a-zA-Z\-0-9]+)	indexErreurMotdepasse.php?lang=$1&pseudo=$2             [L]
+RewriteRule   Login_Erreur/([a-z]+)				indexLoginErreur.php?lang=$1                            [L]
+RewriteRule   Login_Error/([a-z]+)				erreurlogin.php?lang=$1                                 [L]
+RewriteRule   Login_Timeout/([a-z]+)				erreurtimeout.php?lang=$1                                 [L]
+RewriteRule   Session_Error/([a-z]+)                            indexErreurSessionactive.php?lang=$1                    [L]
+RewriteRule   VersionIE_Error/([a-z]+)                          indexErreurVersionIE.php?lang=$1                    [L]
+
+RewriteRule   Upload_Error/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)  modifProjet.php?lang=$1&erreurupload=$2&idprojet=$3&statut=$4   [L]
+RewriteRule   Upload_Error_Size/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)  modifProjet.php?lang=$1&erreurtaille=$2&idprojet=$3&statut=$4   [L]
+RewriteRule   Upload_Errorphase2/([a-z]+)/([0-9]+)/([0-9]+)     phase2.php?lang=$1&erreurupload=$2&idprojet=$3          [L]
+RewriteRule   Upload_Errorsizephase2/([a-z]+)/([0-9]+)/([0-9]+) phase2.php?lang=$1&erreuruploadsize=$2&idprojet=$3      [L]
+RewriteRule   Upload_Errorphase1/([a-z]+)/([0-9]+)/([0-9]+)        phase2.php?lang=$1&erreuruploadphase1=$2&idprojet=$3    [L]
+RewriteRule   Upload_Errorsizephase1/([a-z]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&erreuruploadsizephase1=$2&idprojet=$3 [L]
+
+#ONGLET PHASE1 DANS LA PHASE2
+RewriteRule   Err1_contDesc/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&idprojet=$2&msgerrtaillecontextedescriptif=$3&statut=$4 [L]
+RewriteRule   Err1_contexte/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&idprojet=$2&msgerrtaillecontexte=$3&statut=$4 [L]
+RewriteRule   Err1_Descript/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)    phase2.php?lang=$1&idprojet=$2&msgerrtailledescriptif=$3&statut=$4 [L]
+
+#PROJET
+RewriteRule   new_request/([a-z]+)                              createProjet.php?lang=$1                                    [L]
+RewriteRule   new_project/([a-z]+)                              creerprojetphase2.php?lang=$1                               [L]
+RewriteRule   projet_centrale/([a-z]+)/([A-Z]+)                 VueSuiviProjetCentrale.php?lang=$1&centrale=$2              [L]
+RewriteRule   mes_projets/([a-z]+)                              vueSuiviProjet.php?lang=$1                                  [L]
+RewriteRule   mes_projets_admin/([a-z]+)                        vueSuiviProjetAdmin.php?lang=$1                             [L]    
+RewriteRule   myproject/([a-z]+)/([0-9]+)			phase2.php?lang=$1&idprojet=$2                              [L]
+RewriteRule   project/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)       phase2.php?lang=$1&idprojet=$2&nbpersonne=$3&idcentrale=$4  [L]
+RewriteRule   update_project_phase2/([a-z]+)/([0-9]+)/([0-9]+)  phase2.php?lang=$1&idprojet=$2&statut=$3                    [L]
+RewriteRule   waitingproject/([a-z]+)/([0-9]+)                  resultProjet.php?lang=$1&idprojet=$2                        [L]
+
+RewriteRule   resultats/([a-z]+)                                controlerecherche.php?lang=$1                           [L]
+RewriteRule   projet_centrale/([a-z]+)                          VueSuiviProjetTousCentrales.php?lang=$1                 [L]
+
+RewriteRule   validation_projet/([a-z]+)                        VueSuiviTousProjet.php?lang=$1&centrale=$2              [L]
+RewriteRule   delete_projet/([a-z]+)                            deleteprojets.php?lang=$1                               [L]
+RewriteRule   recherche_projet/([a-z]+)                         porteurprojet.php?lang=$1                               [L]
+RewriteRule   projet_porteur/([a-z]+)                           ctrlporteur.php?lang=$1                                 [L]
+RewriteRule   projet_admin/([a-z]+)                             ctrladminuser.php?lang=$1                               [L]
+RewriteRule   recherche_projetadmin/([a-z]+)/([0-9]+)           administrateurprojet.php?lang=$1&idprojet=$2            [L]
+RewriteRule   affecte_AdminProjet/([a-z]+)/([0-9]+)             ctrladminuser.php?lang=$1&idutilisateur=$2              [L]
+RewriteRule   projet_adminaffecte/([a-z]+)/([0-9]+)/([a-z]+)    administrateurprojet.php?lang=$1&idutilisateur=$2&messagedejaaffecte=$3    [L]
+
+#PORTEUR
+RewriteRule   recherche_porteur/([a-z]+)/([0-9]+)               porteurprojet.php?lang=$1&idprojet=$2                               [L]
+RewriteRule   projet_affecte/([a-z]+)/([0-9]+)/([a-z]+)         porteurprojet.php?lang=$1&idutilisateur=$2&messagedejaaffecte=$3    [L]
+RewriteRule   projet_affecteerreur/([0-9]+)                     porteurprojet.php?lang=$1&messageerreur                             [L]
+RewriteRule   affecte_projet/([a-z]+)/([0-9]+)                  ctrlporteur.php?lang=$1&idutilisateur=$2                            [L]
+RewriteRule   delete_projet/([a-z]+)				deleteprojets.php?lang=$1                                           [L]
+RewriteRule   porteur_projet/([a-z]+)/([0-9]+)			porteurprojet.php?lang=$1&idutilisateur=$2                          [L]
+RewriteRule   porteur_Projet/([a-z]+)                           porteurprojet.php?lang=$1                         [L]
+
+#MOT DE PASSE
+RewriteRule   change_password/([a-z]+)				changermotpasse.php?lang=$1                             [L]
+RewriteRule   change_messagepassword/([a-z]+)			changermotpassemessage.php?lang=$1                      [L]
+RewriteRule   forgot_password/([a-z]+)				motpasseoublie.php?lang=$1                              [L]
+RewriteRule   forgot_password/([a-z]+)/([a-zA-Z]+)		motpasseoublie.php?lang=$1&msgnoaccount=$2              [L]
+RewriteRule   pseudos/([a-z]+)                                  motpasseoublie.php?lang=$1&pseudos                      [L]
+RewriteRule   message_password/([a-z]+)				motdepassemessage.php?lang=$1                           [L]
+RewriteRule   message_noselect/([a-z]+)                         motpasseoublie.php?lang=$1&msgnoselect                  [L]
+RewriteRule   msg_nologinaccount/([a-z]+)                       motpasseoublie.php?lang=$1&msg_nologinaccount           [L]
+RewriteRule   msg_noemailaccount/([a-z]+)                       motpasseoublie.php?lang=$1&msg_noemailaccount           [L]
+RewriteRule   msg_nolink/([a-z]+)                               motpasseoublie.php?lang=$1&msg_nolink                   [L]
+RewriteRule   comptedesactive/([a-z]+)                          indexCptdesactive.php?lang=$1                           [L]
+RewriteRule   indexmessage/([a-z]+)                             indexmessage.php?lang=fr                                [L]
+
+RewriteRule   Run_project/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+) phase2.php?lang=$1&numProjet=$2&statut=$3&report=$4	[L]
+RewriteRule   Run_project/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)               phase2.php?lang=$1&numProjet=$2&statut=$3	[L]
+RewriteRule   Refused_project/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)  phase2.php?lang=$1&idprojet=$2&numProjet=$3&idcentrale=$4	[L]
+RewriteRule   Analyse_project/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)	modifProjetRespCentrale.php?lang=$1&numProjet=$2&statut=$3&idcentrale=$4    [L]
+RewriteRule   Waiting_project/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)  modifProjet.php?lang=$1&numProjet=$2&statut=$3&idcentrale=$4    [L]
+RewriteRule   Waiting_project1/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+) modifProjet.php?lang=$1&idprojet=$2&numprojet=$3&statut=$4      [L]
+RewriteRule   Waiting_project2/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)          modifProjet.php?lang=$1&numProjet=$2&statut=$3                  [L]
+
+RewriteRule   update_project/([a-z]+)/([0-9]+)                                      modifProjetValide.php?lang=$1&idprojet=$2		[L]
+RewriteRule   update_Waiting_projectE/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)    modifProjet.php?lang=$1&idprojet=$2&numProjet=$3&statut=$4&t=$5  [L]
+RewriteRule   update_Waiting_projectI/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)/([0-9]+)    modifProjet.php?lang=$1&idprojet=$2&numProjet=$3&statut=$4&idcentrale=$5&t=$6   [L]
+RewriteRule   pdf_project/([a-z]+)/([A-Z\-0-9]+)                                                    genererPDF.php?lang=$1&numProjet=$2 [L]
+RewriteRule   pdf_report/([a-z]+)/([A-Z\-0-9]+)                                                    reportPDF.php?lang=$1&idprojet=$2 [L]
+RewriteRule   RefusedProject/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)    modifProjetRespCentralevalide.php?lang=$1&idprojet=$2&numprojet=$3&idcentrale=$4&t=$5 [L]
+RewriteRule   accepted_project/([a-z]+)/([0-9]+)/([0-9]+)/([A-Z\-0-9]+)             modifProjetRespCentralevalide.php?lang=$1&idprojet=$2&statut=$3&numprojet=$4    [L]
+RewriteRule   closed_project/([a-z]+)/([0-9]+)                                      modifProjetCloturer.php?lang=$1&idprojet=$2   [L]
+RewriteRule   transfered_project/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)           modifProjetRespCentraleTransfert.php?lang=$1&idprojet=$2&numprojet=$3&idcentrale=$4  [L]
+RewriteRule   refused_project2/([a-z]+)/([A-Z\-0-9]+)/([0-9]+)/([0-9]+)/([a-z]+)    modifProjetRespCentrale.php?lang=$1&numprojet=$2&idcentrale=$3&statut=$4&msgerrRefus=$5    [L]
+RewriteRule   update_project2/([a-z]+)/([0-9]+)/([0-9]+)/([0-9]+)                   phase2.php?lang=$1&idprojet=$2&statut=$3&nbpersonne=$4	[L]
+RewriteRule   update_project3/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)/([0-9]+)              phase2.php?lang=$1&idprojet=$2&numprojet=$3&nbpersonne=$4 [L]
+#STATISTIQUE
+RewriteRule   graph/([a-z]+)/([a-z]+)                                               graph.php?lang=$1&statistique=$2	[L]
+RewriteRule   statistiqueUser/([a-z]+)/([0-9]+)                                     graph.php?lang=$1&anneeuser=$2 [L]
+RewriteRule   statistiqueProjet/([a-z]+)/([0-9]+)                                   graph.php?lang=$1&anneeprojet=$2 [L]
+RewriteRule   traffic/([a-z]+)                                                      traffic.php?lang=$1 [L]
+RewriteRule   statutProjet/([a-z]+)/([0-9]+)                                        graph.php?lang=$1&statut=$2 [L]
+#RewriteRule   statAnneeStatutProjet/([a-z]+)/([0-9]+)/([0-9]+)                      graph.php?lang=$1&anneeprojet=$2&statut=$3 [L]
+RewriteRule   statistiqueProjetAutres/([a-z]+)/([0-9]+)                             graph.php?lang=$1&anneeprojetautres=$2 [L]
+RewriteRule   statistiqueProjetAutresCentrale/([a-z]+)/([0-9]+)                     graph.php?lang=$1&idcentrale=$2 [L]
+RewriteRule   statistiqueSF/([a-z]+)/([0-9]+)                                       graph.php?lang=$1&anneeprojetsf=$2 [L]
+RewriteRule   statistiqueRessource/([a-z]+)/([0-9]+)                                graph.php?lang=$1&anneeprojetRessource=$2 [L]
+RewriteRule   chxStatistique/([a-z]+)/([0-9]+)                                      graph.php?lang=$1&statistique=$2 [L]
+RewriteRule   userPorteurProjet/([a-z]+)                                            userPorteurProjet.php?lang=$1 [L]
+RewriteRule   useradminprojet/([a-z]+)                                              useradminprojet.php?lang=$1 [L]
+
+RewriteRule   traceProjet/([a-z]+)/([0-9]+)                                         traceProjet.php?lang=$1&idprojet=$2 [L]
+RewriteRule   traceProjet/([a-z]+)                                                  traceProjet.php?lang=$1 [L]
+RewriteRule   trace/([a-z]+)                                                        ctrltrace.php?lang=$1   [L]
+RewriteRule   oldProject/([a-z]+)                                                   oldproject.php?lang=$1   [L]

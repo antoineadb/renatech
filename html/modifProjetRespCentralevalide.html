@@ -1,0 +1,25 @@
+<?php include 'indexchoix.html'?>
+<div style="height: 35px;">
+    <label id="messageupdate" style="color: midnightblue;display:block;font-size: 14px;width:1050px; text-align: center;">
+        <?php 
+        if(!empty($_GET['numprojet'])){
+            $idprojet=$manager->getSingle2("select idprojet from projet where numero=?",$_GET['numprojet']);
+        if(!empty($_GET['idcentrale'])){
+            $idcentrale = $_GET['idcentrale'];
+        }else{
+            $idcentrale = $manager->getSinglebyArray("select idcentrale_centrale from concerne where idprojet_projet =? and idstatutprojet_statutprojet=?",array($idprojet,ACCEPTE));
+        }            
+        $centrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale =?",$idcentrale);
+        echo TXT_STATUTPROJETVALIDE.' '.'numéro = ';
+        ?><a style="text-decoration: none"
+             href='<?php echo "/".REPERTOIRE;?>/controler/controlestatutprojet.php?lang=<?php echo $_GET["lang"];?>&numProjet=<?php echo $_GET["numprojet"]?>&idcentrale = <?php echo $idcentrale;?>&centrale=<?php echo $centrale; ?>'>
+            <?php echo $_GET['numprojet']; ?></a>
+        <?php
+        }else{
+            echo TXT_STATUTPROJETVALIDE;
+        }
+        ?>
+
+    </label>
+</div>
+

@@ -1,0 +1,400 @@
+<?php
+include_once 'outils/toolBox.php';
+include_once 'outils/constantes.php';
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+$_SESSION['soumission']= '';
+//récupération de l'id projet et des values à intégrer dans les champs input
+if (isset($_GET['numProjet'])){
+$numProjet=$_GET['numProjet'];
+$idprojet = $manager->getSingle2("select idprojet from projet where numero =?",$numProjet);//récupération de l'idprojet à l'aide de $numProjet
+}elseif(isset($_SESSION['numProjet'])){
+$numProjet=$_SESSION['numProjet'];
+$idprojet = $manager->getSingle2("select idprojet from projet where numero =?",$numProjet);//récupération de l'idprojet à l'aide de $numProjet
+}elseif(isset($_GET['idprojet'])){
+$idprojet =$_GET['idprojet'];
+}
+$row = $manager->getListbyArray( "SELECT DISTINCT p.titre, p.description,p.contexte,p.acronyme FROM projet p,typeprojet t WHERE idprojet =?",array($idprojet));
+$titre =$row[0]['titre'];
+$description =$row[0]['description'];
+$contexte =$row[0]['contexte'];
+$acronyme =$row[0]['acronyme'];
+//Récupération de idcentrale
+if(isset($_GET['idcentrale'])){
+$idcentrale = $_GET['idcentrale'];
+}elseif(isset($_SESSION['idutilisateur'])){
+$idcentrale = $manager->getSingle2("select idcentrale_centrale from utilisateur where idutilisateur =?",$_SESSION['idutilisateur']);
+}
+if(!empty($idcentrale)){
+$param = array($idprojet,$idcentrale);
+$rowidstatutprojet = $manager->getListbyArray("SELECT c.idstatutprojet_statutprojet FROM  concerne c where c.idprojet_projet=? and idcentrale_centrale=?",$param);
+if(!empty($rowidstatutprojet[0]['idstatutprojet_statutprojet'])){
+$idstatutprojet = $rowidstatutprojet[0]['idstatutprojet_statutprojet'];
+}
+}else{
+$idstatutprojet='';
+}
+
+//RECUPERATION DE L'ID DU STATUT DU PROJET
+//1ER RECUPERATION DE L'ID DU DEMANDEUR
+$idDemandeur= $manager->getSingle2("select idutilisateur_utilisateur from creer where idprojet_projet =?",$idprojet);
+//RECUPERATION DES INFOS DU DEMANDEUR
+$rowResultInfodemandeur = $manager->getListbyArray("select nom, prenom,entrepriselaboratoire from utilisateur where idutilisateur =?",array($idDemandeur));
+$demandeur =$rowResultInfodemandeur[0]['nom'].' '.$rowResultInfodemandeur[0]['prenom'];
+$entrepriselaboratoireo=$rowResultInfodemandeur[0]['entrepriselaboratoire'];
+$bool ='true';
+?>
+<div style="margin-top: 70px;">
+    <?php include_once 'outils/bandeaucentrale.php'; ?>
+</div>
+<fieldset id="identcreateprojet">
+    <?php     
+    if (isset($_SESSION['idTypeUser'])&& $_SESSION['idTypeUser']!='1'){ 
+    switch ($idstatutprojet) {   
+    case ACCEPTE:
+    echo '<legend><b>'.TXT_PROJETACCEPTE.'</b></legend>';//projet Acceptée
+    $bool ='true';
+    $bool1='true';
+    break;
+    case REFUSE:
+    echo '<legend><b>'.TXT_PROJETREFUSE.'</b></legend>';//projet refusé
+    $bool ='true';
+    $bool1='true';
+    break;
+    case FINI:
+    echo '<legend><b>'.TXT_PROJETFINI.'</b></legend>';//projet fini
+    $bool ='false';
+    $bool1='';
+    break;
+    case CLOTURE:
+    echo '<legend><b>'.TXT_PROJETCLOTURE.'</b></legend>';//projet cloturé
+    $bool ='true';
+    $bool1='true';
+    break;
+    default:
+    }
+    }
+    ?>
+
+    <form data-dojo-type="dijit/form/Form" name="modifProjet" id="modifProjet" method="post"  
+          action="<?php echo '/'.REPERTOIRE; ?>/modifBase/updateStatutProjetphase2.php?lang=<?php echo $lang;?>&idprojet=<?php echo $idprojet;?>" enctype="multipart/form-data" >
+        <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+        <script type="dojo/method" data-dojo-event="onSubmit">
+          var nbcomment=stripTags(trim(dojo.byId("commentaire").value)).length;  
+          if(nbcomment>200){
+                alert("<?php echo TXT_LIMITEDITEURCOMMENT;?>");
+                return false;
+                exit();
+            }else if(this.validate()){
+                return true;
+            }else{
+                alert("<?php echo TXT_MESSAGEERREURCONTACT;?>");
+                return false;
+                exit();
+            }
+        </script>
+        <table>
+            <tr><td></td></tr>
+            <tr>
+                <td><label><?php echo TXT_DEMANDEUR.' : '.$demandeur; ?></label></td>
+            <div class='pdfmodifrespcentrale'>
+                <a href="<?php echo '/'.REPERTOIRE;?>/pdf_project/<?php echo $lang?>/<?php echo $numProjet; ?>"
+                   target="_blank" ><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/pdf_icon.png'  /></a>
+            </div>
+            </td>
+            </tr>
+            <tr>
+                <td><label  style="width: auto"><?php echo TXT_NOMENTELABO.' : '.stripslashes(
+removeDoubleQuote($entrepriselaboratoireo)); ?></label></td>
+            </tr>
+        </table>
+        <table style="width: 550px;">
+            <tr><td><br></td></tr>
+            <tr>
+                <td>
+                    <label for="titreProjet" ><?php echo TXT_TITREPROJET.'* :'; ?>
+                    </label>
+                    <?php $titre = stripslashes(
+removeDoubleQuote(	$titre)) ?>
+                    <input id="titreProjet" type="text" name="titreProjet" value="<?php echo $titre ;?>"  required="required"    
+                           value="<?php echo $titre ;?>" disabled="<?php echo $bool; ?>"  data-dojo-type="dijit.form.ValidationTextBox"
+                           data-dojo-invalidMessage="Titre non valide." style="width: 550px;height:22px;" />
+                </td></tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr><td><?php $acronyme = stripslashes(
+removeDoubleQuote(	$acronyme)) ?>
+                    <label for="acronyme"  ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?></label>
+                    <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>" disabled="<?php echo $bool; ?>"
+                           data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide." />
+                </td></tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td>
+                    <?php
+                    //récupération de la valeur confidentiel
+                    $confid = $manager->getSingle2("SELECT confidentiel  FROM projet WHERE idprojet=?",$idprojet);
+                    $_SESSION['confid']=$confid;
+                    if ($confid== 't'){
+                    ?>
+                    <label for="confid" style="width:200px"><?php echo TXT_PROJETCONFIDENTIEL.' *:';?></label>
+                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" checked="checked"  value="TRUE" class="btRadio" disabled="<?php echo $bool; ?>"  > <?php echo TXT_OUI; ?>
+                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE"  class="btRadio" disabled="<?php echo $bool; ?>" > <?php echo TXT_NON; ?>
+                    <?php } else { ?>
+                    <label for="confid" style="width:200px"><?php echo TXT_PROJETCONFIDENTIEL.' *:';?></label>
+                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"   value="TRUE" class="btRadio" disabled="<?php echo $bool; ?>"  > <?php echo TXT_OUI; ?>
+                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE" checked="checked" class="btRadio" disabled="<?php echo $bool; ?>" > <?php echo TXT_NON; ?>
+                    <?php }?>
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td><?php $contexte = stripslashes(
+removeDoubleQuote(	$contexte)) ?>
+                    <label for="contexte" ><?php echo TXT_OBJECTIF.'/'.TXT_CONTEXTESCIENTIFIQUE;?><?echo ':' ?>
+                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 700px"><?php echo affiche('TXT_AIDECONTEXTE');?></span></a>
+                    </label>
+                    <div id="contexte" name="contexte"  height="100px" data-dojo-type="dijit/Editor" disabled="<?php echo $bool; ?>"><?php echo $contexte;?></div>
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td><?php $description = stripslashes(
+removeDoubleQuote(	$description)) ?>
+                    <label for="descriptif" style="width: 270px"><?php echo TXT_DESCRIPTIFTRAVAIL.' :'; ?>
+                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/><span style="width: 700px"><?php echo affiche('TXT_AIDEDESCRIPTIF');?></span></a>
+                    </label>
+                    <div id="descriptif" name="descriptif"  height="100px" data-dojo-type="dijit/Editor" disabled="<?php echo $bool; ?>" ><?php echo $description;?></div>
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td>
+                    <?php
+                    $attachement  = $manager->getSingle2("select attachement from projet where idprojet =?",$idprojet);
+                    $monUrl = "http://".$_SERVER['HTTP_HOST'];
+                    echo '<div>'.TXT_PIECEJOINTE.' : '.'<a href="'.$monUrl.dirname($_SERVER['PHP_SELF']).'/upload/'.$attachement.'" target="_blank"  id="attachement">'.$attachement.'</a>
+                    </div><div id=\'btnsuppr\'></div>';
+                    ?>
+                </td>
+            </tr>
+            <tr><td>
+                    <?php
+                    if(!empty($_GET['statut'])){
+                    $idstatut=$_GET['statut'];
+                    echo '<br>'.TXT_CENTRALESELECTONNEE.' : '.'<br>';
+                    $libellecentraleprojet = $manager->getListbyArray("SELECT DISTINCT libellecentrale FROM  concerne,centrale WHERE
+                    idcentrale_centrale = idcentrale and  idprojet_projet =? and idstatutprojet_statutprojet !=? and idstatutprojet_statutprojet=?",array($idprojet,REFUSE,$idstatut));
+                    $string='';
+                    $nbcentrale=count($libellecentraleprojet);
+                    for ($j = 0; $j < $nbcentrale; $j++) {
+                    $string .=$libellecentraleprojet[$j]['libellecentrale'] . ' - ';
+                    }
+                    echo substr($string, 0, -2); //ENLEVE LE DERNIER CARACTERE
+
+                    }else{
+                    echo '<br>'.TXT_CENTRALESELECTONNEE.' : '.'<br>';
+                    $libellecentraleprojet = $manager->getListbyArray("SELECT DISTINCT libellecentrale FROM  concerne,centrale WHERE
+                    idcentrale_centrale = idcentrale and  idprojet_projet =? and idstatutprojet_statutprojet !=?",array($idprojet,REFUSE));
+                    $string='';
+                    $nbcentrale=count($libellecentraleprojet);
+                    for ($j = 0; $j < $nbcentrale; $j++) {
+                    $string .=$libellecentraleprojet[$j]['libellecentrale'] . ' - ';
+                    }
+                    echo substr($string, 0, -2); //ENLEVE LE DERNIER CARACTERE
+                    }
+                    ?>
+                </td></tr>
+        </table>
+        <table style="width: 550px;">
+            <?php if(!empty($_GET['msgerrRefus'])){?>
+            <tr>
+                <td>
+                    <fieldset id='droit' style="color:red;border-color: #5D8BA2;width:510px;padding-top: 10px;margin-top:20px;padding-left: 15px;">
+                        <legend><?php echo TXT_ERR;?></legend>
+                        <?php 	echo TXT_COMMENTREFUS.'<br>';?>
+                    </fieldset>
+
+                </td>
+            </tr>
+            <?php } ?>
+            <tr><td><br></td></tr>
+            <tr>
+                <td>
+                    <label for="commentaire" ><?php echo TXT_COMMENTAIREPROJET.' :'; ?>
+                        <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                            <span style="width: 280px"><?php echo affiche('TXT_AIDECOMMENTAIREPROJET');?></span>
+                        </a>
+                    </label>
+                    <?php
+                    $commentaire = $manager->getSinglebyArray("select commentaireprojet  from concerne where idprojet_projet =?
+                    and idcentrale_centrale=?",array($idprojet,$idcentrale));
+                    ?>
+                    <div id="commentaire" name="commentaire" style="width:980px"  ><?php echo stripslashes(str_replace("''","'", $commentaire));?></div>
+                    <div id='msgerrcomment'></div>
+                </td>
+            </tr>
+            <tr><td><label id="cptcomment" style="width:450px;color:#B71701;margin-left: 20px;margin-bottom: 10px; "></label></td></tr>
+            <tr style="display: none" id="msgErrcomment">
+                <td>
+                    <fieldset class='errcomment' ><legend><?php echo TXT_INFO;?></legend>
+                        <?php 	echo stripslashes(TXT_LIMITEDITEURCOMMENT).'<br>';?>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;
+                    <input type="hidden" id="comment" name="comment" >
+                </td>
+            </tr>
+        </table>
+        <table style="width: 550px;">
+            <?php            
+            $idcentraledemandeur = $manager->getSingle2("select idcentrale_centrale from utilisateur where idutilisateur=?",$_SESSION['idutilisateur']);
+            if(!empty($_GET['idcentrale'])){
+            if ($_SESSION['idTypeUser']==ADMINLOCAL && $_GET['idcentrale'] == $idcentraledemandeur ){ ?>
+            <tr><td><br></td></tr>
+            <tr>
+                <td style="width:250px">
+                    <label for="statutProjet" ><?php echo TXT_STATUTPROJET.'* :'; ?> </label>
+                    <?php 
+                    $param=array(FINI,CLOTURE,ENCOURSREALISATION);
+                    $rowstatut = $manager->getListbyArray("select idstatutprojet,libellestatutprojet,libellestatutprojeten from statutprojet
+                    where idstatutprojet!=? and idstatutprojet!=? and idstatutprojet!=?  order by ordre asc",$param) ;?>
+                    <select name="statutProjet" id="statutProjet" data-dojo-type="dijit/form/FilteringSelect" style="width: 220px"
+                            data-dojo-props="  value: '', placeHolder: '<?php echo TXT_CHOIXSTATUTPROJET; ?>',required:'required',
+                            onChange: function(value){
+                            if(value==<?php echo TRANSFERERCENTRALE; ?>){
+                            document.getElementById('central').style.display='block';
+                            dijit.byId('valid').setAttribute('disabled', true);
+                            }else {
+                            document.getElementById('central').style.display='none';
+                            dijit.byId('valid').setAttribute('disabled', false);
+                            }
+                            }
+                            " >
+                        <?php
+                        if($lang=='fr'){
+                        for ($i = 0;$i < count($rowstatut);$i++) {
+                        echo "<option value='".$rowstatut[$i]['idstatutprojet']."'>".
+                        str_replace("''","'",$rowstatut[$i]['libellestatutprojet'])."</option>";
+                        }
+                        }elseif($lang=='en'){
+                        for ($i = 0;$i < count($rowstatut);$i++) {
+                        echo "<option value='".$rowstatut[$i]['idstatutprojet']."'>".str_replace("''","'",
+                        $rowstatut[$i]['libellestatutprojeten'])."</option>";
+                        }
+                        }
+                        ?>
+                    </select>
+                </td>
+                <td id="central" style="display: none">
+                    <label for="centrale" ><?php echo TXT_CENTRALE.'* :'; ?> </label>
+                    <?php 
+                    $idcentrale = $_GET['idcentrale'];                    
+                    $libellecentrale = $manager->getListbyArray("select idcentrale,libellecentrale from centrale where idcentrale!=? and masquecentrale!=? 
+                    and idcentrale!=? order by libellecentrale asc",array(IDCENTRALEAUTRE,TRUE,$idcentrale)); 
+                    ?>
+                    <select id="centrale" name="centrale" data-dojo-type="dijit/form/Select" style="width: 220px"
+                            data-dojo-props="  value: '' , placeHolder: '<?php echo TXT_SELECTCENTRALE;?>',
+                            onChange: function(value){
+                            if(value=='0'){
+                            dijit.byId('valid').setAttribute('disabled', true);
+                            }else {
+                            dijit.byId('valid').setAttribute('disabled', false);
+                            }
+                            }
+                            " >
+                        <?php
+                        echo "<option value='0'>".TXT_SELECTCENTRALE."</option>";
+                        for ($i = 0;$i < count($libellecentrale);$i++) {                        
+                        echo "<option value='".$libellecentrale[$i]['idcentrale']."'>".str_replace("''","'",$libellecentrale[$i]['libellecentrale'])."</option>";
+                        }?>
+                    </select>
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td>
+                    <input type="submit"  id="valid" label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" />
+                    <p style="font-size: x-small;"><?php echo TXT_CHAMPSOBLIGATOIRES; ?></p>
+                </td>
+            </tr>
+            <?php }
+            }
+            BD::deconnecter();?>
+        </table>
+    </form>
+</fieldset>
+<script>
+    require(["dojo/parser", "dijit/Editor"]);
+    require(["dojo"], function(dojo) {
+    });
+    // Load the editor resource
+    require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
+        ready(function() {
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull"], height: "100px"
+            }, "commentaire");
+        }
+        );
+
+        dojo.addOnLoad(function() {
+            var editor1 = dijit.byId("commentaire");            
+            
+            //POUR CHROME
+            dojo.byId("comment").value = editor1.get("value");
+            document.getElementById('cptcomment').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + stripTags(trim(dojo.byId("comment").value)).length;
+
+            dojo.connect(editor1, "onChange", this, function(event) {
+                dojo.byId("comment").value = editor1.get("value");
+            });
+      
+            dojo.connect(editor1, "onKeyPress", this, function(event) {
+                dojo.byId("comment").value = editor1.get("value");
+                document.getElementById('cptcomment').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
+                        + stripTags(trim(dojo.byId("comment").value)).length;
+                if (trim(stripTags(editor1.get("value"))).length > 200) {
+                    document.getElementById('msgErrcomment').style.display = 'block';
+                } else {
+                    document.getElementById('msgErrcomment').style.display = 'none';
+                }
+            });
+            dojo.connect(editor1, "onClick", this, function(event) {
+                dojo.byId("comment").value = editor1.get("value");
+                document.getElementById('cptcomment').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
+                        + stripTags(trim(dojo.byId("comment").value)).length;
+                if (trim(stripTags(editor1.get("value"))).length > 200) {
+                    document.getElementById('msgErrcomment').style.display = 'block';
+                } else {
+                    document.getElementById('msgErrcomment').style.display = 'none';
+                }
+            });
+            dojo.connect(editor1, "onChange", this, function(event) {
+                dojo.byId("comment").value = editor1.get("value");
+                document.getElementById('cptcomment').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
+                        + stripTags(trim(dojo.byId("comment").value)).length;
+                if (trim(stripTags(editor1.get("value"))).length > 200) {
+                    document.getElementById('msgErrcomment').style.display = 'block';
+                } else {
+                    document.getElementById('msgErrcomment').style.display = 'none';
+                }
+            });            
+            dojo.connect(editor1, "onBlur", this, function(event) {
+                dojo.byId("comment").value = editor1.get("value");
+                document.getElementById('cptcomment').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"
+                        + stripTags(trim(dojo.byId("comment").value)).length;
+                if (trim(stripTags(editor1.get("value"))).length > 200) {
+                    document.getElementById('msgErrcomment').style.display = 'block';
+                } else {
+                    document.getElementById('msgErrcomment').style.display = 'none';
+                }
+            });
+            dojo.connect(editor1, "onLoad", this, function(event) {
+                dojo.byId("comment").value = editor1.get("value");
+                document.getElementById('cptcomment').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + stripTags(trim(dojo.byId("comment").value)).length;
+            });
+        }
+        );
+    });
+</script>
+

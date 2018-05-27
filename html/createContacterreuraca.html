@@ -1,0 +1,27 @@
+<div style="display: block;" id="erreurcontact">
+ <?php
+    if(!empty($_GET['erreurqualitedemandeur'])||!empty($_GET['erreurnomemployeur'])||!empty($_GET['erreurtutelle'])||!empty($_GET['erreurdiscipline'])){
+        echo '<label style="color:red;width:300px;">'.TXT_ERREURINSERTCONTACT.'</label>';
+        $erreurqualitedemandeur = $_GET['erreurqualitedemandeur'];            
+        $erreurnomemployeur = $_GET['erreurnomemployeur'];            
+        $erreurtutelle = $_GET['erreurtutelle'];            
+        $erreurdiscipline = $_GET['erreurdiscipline'];
+        echo'<ol>';
+        if(!empty($erreurqualitedemandeur)){
+            echo'<li style="color: red;width:512px;">'.$erreurqualitedemandeur.'</li>';
+        }
+        if(!empty($erreurnomemployeur)){
+            echo' <li style="color: red;width:512px;">'.stripslashes($erreurnomemployeur).'</li>';
+        }
+        if(!empty($erreurtutelle)){
+            echo'<li style="color: red;width:512px;">'.$erreurtutelle.'</li>';
+        }
+        if(!empty($erreurdiscipline)){
+            echo'<li style="color: red;width:512px;">'.$erreurdiscipline.'</li>';
+        }
+    echo'</ol> ';
+    }
+ ?>   
+</div>
+<?php include 'html/createContact.html';?>
+	

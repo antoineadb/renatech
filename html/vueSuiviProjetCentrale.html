@@ -1,0 +1,441 @@
+<style type="text/css">
+    #grid {
+        width: 65em;
+        height: 350em;
+    }
+</style>
+<script>
+    dojo.require("dojox.grid.EnhancedGrid");
+    dojo.require("dojox.data.CsvStore");
+    dojo.require("dojox.grid.enhanced.plugins.Menu");
+    dojo.require("dojo.data.ItemFileWriteStore");
+    dojo.require("dijit.Menu");
+    dojo.require("dijit.MenuItem");
+    dojo.require("dojo.domReady!");
+    dojo.require("dojo.request");
+    dojo.require("dojox.grid.enhanced.plugins.Pagination");
+dojo.ready(function(){
+    /*set up data store*/
+    var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetCentrale<?php echo IDCENTRALEUSER?>.json"});
+    /*set up layout*/    
+    var layout = [[
+        {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "100px", formatter: hrefFormatterNumero},
+        {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet",width: "80px",formatter:formatDate},
+        {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "210px"},
+        {name: "<?php echo TXT_UPDATE; ?>", field: "datemaj",width: "80px",formatter:formatDate},
+        {name: "<?php echo TXT_REFINTERNE.' - '.TXT_ACRONYME; ?>", field: "refinterneprojet"},
+        {name: "<?php echo TXT_STATUTPROJETS; ?>", field: "libellestatutprojet"},
+        {name: "<?php echo TXT_DEMANDEUR; ?>", field: "demandeur"},
+        {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
+        {name: "<?php echo TXT_PORTEURS; ?>", field: "porteur"}
+    ]];
+    var grid = new dojox.grid.EnhancedGrid({
+        id: 'grid',
+        store: store,
+        structure: layout,
+        autoHeight:true,
+        rowSelector: '20px',
+        plugins: { <?php if($_SESSION["idTypeUser"]==ADMINLOCAL){;?>menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}, <?php }?>          
+            pagination: {
+            pageSizes: ["5", "10", "50","100", "All"],
+            description: true,
+            sizeSwitch: true,
+            pageStepper: true,
+            gotoButton: true,            
+            maxPageStep: 5,            
+            position: "top"
+        }},
+    },
+      document.createElement('div'));
+//----------------------------------------------------------------------------------------------------------------------
+//                                              FONCTIONS DE FORMATAGE
+//----------------------------------------------------------------------------------------------------------------------
+        function hrefFormatterNumero(numero,idx) {
+            var item = grid.getItem(idx);
+            var centrale = item.libellecentrale;
+            var statut = +item.idstatutprojet;
+            return "<a  href=\"<?php echo '/'.REPERTOIRE;?>/controler/controlestatutprojet.php?lang=<?php echo $lang; ?>&statut=" + statut + "&numProjet=" + numero +"&centrale=" + centrale + "\">"+ numero + "</a>";
+        }
+        function hrefFormatterPDF(index, idx) {
+            var item = grid.getItem(idx);
+            var numero = item.numero;
+            return "<a  href=\"<?php echo '/'.REPERTOIRE;?>/pdf_project/<?php echo $lang; ?>/" + numero + "\" target='_blank'>" +
+                    '<img title="<?php echo TXT_GENERERPDF; ?>" src="<?php echo "/".REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
+        }
+       dojo.connect(grid, 'onRowContextMenu', function(e){//GESTION DU MENU CONTEXTUELLE
+            var rowIndex = e.rowIndex;
+            var item = grid.getItem(rowIndex);
+            var idprojet = item.idprojet;
+            document.getElementById('idprojet').value=idprojet;            
+        })
+        function formatDate(datum) {
+            var annee =  datum.substring(0,4);
+            if(annee>1970){
+                var dateprojet= new Date(datum);
+                    var options = {year: "numeric", month: "numeric", day: "numeric"};
+                <?php if ($lang == 'en') { ?>
+                    return new Intl.DateTimeFormat("en-US",options).format(dateprojet);
+                <?php } else { ?>
+                    return new Intl.DateTimeFormat("fr-FR",options).format(dateprojet);
+                <?php } ?>
+                }
+        }
+
+    /* append the new grid to the div */
+    dojo.byId("gridDiv").appendChild(grid.domNode);
+//----------------------------------------------------------------------------------------------------------------------
+//                                        TEST METHODE
+//----------------------------------------------------------------------------------------------------------------------
+                    dojo.connect(dijit.byId('grid'), 'onStyleRow', this, function(row) {
+                        var item = grid.getItem(row.index);
+                        if (item) {
+                            var datefin = grid.store.getValue(item, "calcfinprojet", null);
+                            var datefinProche = grid.store.getValue(item, "calcfinproche", null);
+                            if(!empty(datefin)){
+                                var now = new Date();
+                                var curr_month = now.getMonth();
+                                if(curr_month<10){
+                                    curr_month="0"+curr_month;
+                                }
+                                var maintenant = new Date (now.getFullYear() ,curr_month , now.getDate());
+                                var dateFin = new Date(datefin);
+                                var datefinproche = new Date(datefinProche);
+                                var maint = maintenant;
+                                var fin = dateFin;
+                                var finp =datefinproche;
+
+                                if(maint>fin){
+                                    row.customStyles += "color:red";
+                                }else  if(maint >=finp){
+                                    row.customStyles += "color:darkgoldenrod";
+                                }else{
+                                    row.customStyles += "color:darkgreen";
+                                }
+                            }
+                        grid.focus.styleRow(row);
+                        grid.edit.styleRow(row);
+                    }
+                    });
+    grid.startup();
+});
+</script>
+<div id="gridDiv">
+   
+        <div data-dojo-type="dijit.Menu" id="cellMenu"  style="display: none;">
+        <div data-dojo-type="dijit.MenuItem"  data-dojo-props="onClick:function(){affecterporteur()}"><?php echo TXT_AFFECTERPORTEUR;?></div>
+        <div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick:function(){affecterAdmin()}"><?php echo TXT_AFFECTERADMINISTRATEUR;?></div>
+        <div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick:function(){dupliquerProjet()}"><?php echo TXT_DUPLIQUERPROJET;?></div>
+        <div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick:function(){changerDemandeur()}"><?php echo TXT_CHANGERDEMANDEUR;?></div>
+    
+    </div>
+</div>
+
+<input type="text" id="idprojet" value="" style="display: none">
+<script>
+    function affecterAdmin(){
+        document.getElementById('input_affecte_admin').value='oui';
+        document.getElementById('input_affecte_porteur').value='non';
+        document.getElementById('change_demandeur').value='non';
+        document.getElementById('duplicate_project').value='non';
+        affecterProjet();
+    }
+    function affecterporteur(){
+        document.getElementById('input_affecte_admin').value='non';
+        document.getElementById('input_affecte_porteur').value='oui';
+        document.getElementById('change_demandeur').value='non';
+        document.getElementById('duplicate_project').value='non';
+        affecterProjet();
+    }
+    function dupliquerProjet(){
+        document.getElementById('input_affecte_porteur').value='non';
+        document.getElementById('input_affecte_admin').value='non';
+        document.getElementById('change_demandeur').value='non';    
+        document.getElementById('duplicate_project').value='oui';
+        reponseDuplicate.show();
+    }
+    function changerDemandeur(){
+        document.getElementById('input_affecte_admin').value='non';
+        document.getElementById('input_affecte_porteur').value='non';
+        document.getElementById('duplicate_project').value='non';
+        document.getElementById('change_demandeur').value='oui';
+        affecterProjet();
+    }
+</script>
+<?php //CREATION DU FICHIER compteUtilisateur.json QUE L'ON VA UTILISER PAR LA SUITE?>
+<?php
+$idcentrale =$manager->getSingle2("SELECT idcentrale_centrale FROM  utilisateur,loginpassword  WHERE idlogin = idlogin_loginpassword and pseudo=?",$_SESSION['pseudo']);
+$row = $manager->getListbyArray("select nom,prenom,idutilisateur,datecreation from utilisateur where  idcentrale_centrale=?  union select nom,prenom,idutilisateur,datecreation from utilisateur
+    where  idqualitedemandeurindust_qualitedemandeurindust is not null union select nom,prenom,idutilisateur,datecreation from utilisateur where idcentrale_centrale is null AND idtypeutilisateur_typeutilisateur != ?", 
+array($idcentrale,ADMINNATIONNAL));
+$fprow = fopen('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 'w');
+$datausercompte = "";
+for ($i = 0; $i < count($row); $i++) {
+    $datausercompte = "" . '{"datecreation":' . '"' . $row[$i]['datecreation'] . '"' . "," .
+            '"idutilisateur":' . '"' . $row[$i]['idutilisateur'] . '"' . "," .
+            '"nom":' . '"' . trim(stripslashes(str_replace("''", "'", trim($row[$i]['nom'])))) . '"' . "," . '"prenom":' . '"' . $row[$i]['prenom'] . '"' . "},";
+    fputs($fprow, $datausercompte);
+    fwrite($fprow, '');
+}
+$json_filecompteUtilisateur = 'tmp/compteUtilisateur'.IDCENTRALEUSER.'.json';
+$jsonusercompte1 = file_get_contents($json_filecompteUtilisateur);
+$jsonUsercompte = substr($jsonusercompte1,0,-1 );
+file_put_contents($json_filecompteUtilisateur, $jsonUsercompte);
+fclose($fprow);
+chmod('tmp/compteUtilisateur'.IDCENTRALEUSER.'.json', 0777);
+?>
+<input type="hidden" id="input_affecte_porteur" value="non">
+<input type="hidden" id="input_affecte_admin"  value="non">
+<input type="hidden" id="duplicate_project"  value="non">
+<input type="hidden" id="change_demandeur"  value="non">
+
+<input type="hidden" id="iduser" value="non">
+<input type="hidden" id="idprojet" value="non">
+<script>
+    function affecterProjet(){
+        document.getElementById('divNodeID').style.display='block';
+        var myDialog = dijit.byId('myDialog');
+        if(!myDialog){
+            myDialog = new dijit.Dialog({
+                id:'myDialog',
+                title:"<?php echo TXT_VALIDEUSER;?>",
+                style:'width:650px;height:560px;font-size:1.2em;',
+                content:dojo.byId("divNodeID")
+            });
+        }
+        myDialog.show();
+        var myMemoryStore = new dojo.store.Memory(
+            {data:[
+               <?php include 'tmp/compteUtilisateur'.IDCENTRALEUSER.'.json'   ;?>
+            ]});
+        var myObjectStore = new dojo.data.ObjectStore({objectStore:myMemoryStore });
+        var myStructure = [
+            {name: "<?php echo TXT_CREATEDATE;?>", field: "datecreation", width: "auto"},
+            {name: "<?php echo TXT_NOM;?>", field: "nom", width: "auto"},
+            {name: "<?php echo TXT_PRENOM;?>", field: "prenom", width: "auto"}
+        ]
+        var myGrid = dijit.byId('myGrid');
+        if(!myGrid){
+            myGrid= new dojox.grid.DataGrid({
+                queryOptions: {ignoreCase: true},
+                id:'myGrid',
+                store:myObjectStore ,
+                structure:myStructure,                
+                style:'width:610px;height:450px;margin-left:20px'                
+            });
+        }
+       
+//---------------------------------------------------------------------------------------------------------------------------------------
+//                    EVENEMENT SUR LE LOAD DE LA BOITE DE DIALOGUE
+//---------------------------------------------------------------------------------------------------------------------------------------
+            dijit.byId("myGrid").filter({nom: "*"});
+            dijit.byId('nom').set('value','');
+            dijit.byId('prenom').set('value','');
+            document.getElementById('filtrePrenom').value='non';
+            document.getElementById('filtreNom').value='non';
+
+//---------------------------------------------------------------------------------------------------------------------------------------
+//                    SELECTION DE L'AFFECTATION D'UN PORTEUR OU D'UN ADMINISTRATEUR
+//                    Gestion de l'évenement click sur le menu
+//---------------------------------------------------------------------------------------------------------------------------------------
+         dojo.connect(myGrid, 'onRowClick', function(e){
+            var rowIndex = e.rowIndex;
+            var item = myGrid.getItem(rowIndex);
+            var idutilisateur = item.idutilisateur;
+            var idprojet =document.getElementById('idprojet').value;            
+            document.getElementById('iduser').value=idutilisateur;
+            document.getElementById('idprojet').value=idprojet;
+            var idstatutprojet = item.idstatutprojet;
+            
+            if(document.getElementById('input_affecte_porteur').value=='oui'){
+                reponseporteur.show();
+            }else if(document.getElementById('input_affecte_admin').value=='oui'){
+                reponseadmin.show();
+            }else if(document.getElementById('duplicate_project').value=='oui'){                
+                duplicateProject.show();
+            }else if(document.getElementById('change_demandeur').value=='oui'){                
+                reponsechangedemandeur.show();
+            }
+        })
+//---------------------------------------------------------------------------------------------------------------------------------------
+//                  FIN SELECTION DE L'AFFECTATION D'UN PORTEUR OU D'UN ADMINISTRATEUR
+//---------------------------------------------------------------------------------------------------------------------------------------
+        dojo.place(myGrid.domNode, myDialog.containerNode, 'last');
+            myGrid.startup();
+        }
+</script>
+<script>
+    dojo.require("dijit.Dialog");
+    function hideDialog() {
+        dijit.byId("myDialog").hide();
+    }
+</script>
+<div id='divNodeID' style="display:none;padding: 10px;margin-left:10px">
+    <script>
+        function filtreprenom(grid,param,id){
+            dijit.byId('nom').set('value','');
+            dijit.byId(grid).filter({param: ''+id.value+''+'*'});
+            document.getElementById('filtrePrenom').value='oui';
+            document.getElementById('filtreNom').value='non';
+        }
+        function filtrenom(grid,param,id){
+            dijit.byId('prenom').set('value','');
+            dijit.byId(grid).filter({param: ''+id.value+''+'*'});
+            document.getElementById('filtreNom').value='oui';
+            document.getElementById('filtrePrenom').value='non';
+        }      
+    </script>
+    <input type="hidden"  id="filtreNom" value="non">
+    <input type="hidden"  id="filtrePrenom" value="non">
+
+    <table>
+        <tr>
+            <td><input data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:150px;margin-left:5px" onfocus="dijit.byId('prenom').set('value','');" 
+                onchange="filtrenom('myGrid','nom','nom')" placeholder="<?php echo TXT_NOM; ?>"></td>
+            <td><div style="margin-left: 10px;margin-right: 10px;"><?php echo TXT_OU;?></div></td>
+            <td><input data-dojo-type='dijit/form/ValidationTextBox' name='prenom' id='prenom' style="width:150px;margin-right: 5px;margin-left:5px" onfocus="dijit.byId('nom').set('value','');" onchange="filtreprenom('myGrid','prenom','prenom')" placeholder="<?php echo TXT_PRENOM; ?>"></td>
+            <td>
+                <div data-dojo-type="dijit.form.Button" style="margin-right: 10px;margin-left: 10px;"><?php echo TXT_FILTER;  ?>
+                <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+                    if(document.getElementById('filtreNom').value=='oui'){
+                        dijit.byId('prenom').set('value','');
+                        dijit.byId('myGrid').filter({nom: ''+dijit.byId('nom').value+''+'*'});
+                    }else if(document.getElementById('filtrePrenom').value=='oui'){
+                        dijit.byId('nom').set('value','');
+                        dijit.byId('myGrid').filter({prenom: ''+ dijit.byId('prenom').value+''+'*'});
+                    }
+                </script>  
+                </div>
+            </td>
+            <td>
+                <div data-dojo-type="dijit.form.Button" ><?php echo TXT_ANNULE;?>
+                <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt" >
+                    dijit.byId("myGrid").filter({nom: "*"});
+                    dijit.byId("nom").set('value','');
+                    dijit.byId("prenom").set('value','');
+                </script>
+                </div>
+            </td>
+            <td>
+                <div data-dojo-type="dijit.form.Button" style="margin-left: 10px;"><?php echo TXT_FERMER;?>
+                <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt" >
+                    hideDialog();
+                </script>
+                </div>
+            </td>
+        </tr></table>
+</div>
+<?php 
+if(isset($_GET['idprojet']) && isset($_GET['idutilisateur'])){
+$numero=$manager->getSingle2("select numero from projet where idprojet=?",$_GET['idprojet']);
+$nomutilisateur=$manager->getSingle2("select nom from utilisateur where idutilisateur=?",$_GET['idutilisateur']);    
+?>
+<script>//AFFICHAGE DU MESSAGE D'INFORMATION EN BAS EN BLANC SUR FOND VERT
+    require(["dojox/widget/Toaster", "dijit/registry", "dojo/parser", "dojo/on", "dojo/dom", "dojo/domReady!"],
+    function(Toaster, registry, parser, on, dom){
+      var surpriseMe = function(){
+<?php if(isset($_GET['porteur']) && !empty($_GET['porteur'])){?>
+        registry.byId('first_toaster').setContent("<?php echo TXT_AFFECTPROJET .' '. $numero.' ' . TXT_TOTHEUSER.' '. $nomutilisateur; ?>", 'message');
+<?php }else if(isset($_GET['administrateur']) && !empty($_GET['administrateur'])){?>
+        registry.byId('first_toaster').setContent("<?php echo TXT_PROJETNUM .' '. $numero.' ' .TXT_ADMINBY. $nomutilisateur; ?>", 'message');
+<?php }else if(isset($_GET['changeApplicant'])){?>
+        registry.byId('first_toaster').setContent("<?php echo TXT_PROJETNUM .' '. $numero.' ' .TXT_CHANGEAPPLICANT. $nomutilisateur; ?>", 'message');
+<?php }?>
+        registry.byId('first_toaster').show();
+      }
+      on(dom.byId("surprise"), "click", surpriseMe);
+    });
+    require(["dojo"], function(dojo) {});
+        dojo.addOnLoad(function() {
+            vueprojetcentrale.surprise.click();
+            document.getElementById('surprise').style.display='block';
+        })
+</script>
+    <div data-dojo-type="dojox/widget/Toaster" data-dojo-props="positionDirection:'br-left'" id="first_toaster"></div>
+<?php }elseif(isset($_GET['messageprojetdejaaffecte'])){?>
+<script>
+    require(["dojox/widget/Toaster", "dijit/registry", "dojo/parser", "dojo/on", "dojo/dom", "dojo/domReady!"],
+    function(Toaster, registry, parser, on, dom){
+      var surpriseMe = function(){
+        registry.byId('first_toaster').setContent("<?php echo TXT_PROJETDEJAAFFECTE; ?>", 'message');
+        registry.byId('first_toaster').show();
+      }
+      on(dom.byId("surprise"), "click", surpriseMe);
+    });
+    require(["dojo"], function(dojo) {});
+        dojo.addOnLoad(function() {
+        vueprojetcentrale.surprise.click();
+        document.getElementById('surprise').style.display='block';
+        })
+</script>
+
+<div data-dojo-type="dojox/widget/Toaster" data-dojo-props="positionDirection:'br-left'" id="first_toaster"></div>
+<?php }elseif(isset($_GET['messageadmindejaaffecte'])){?>
+<script>
+    require(["dojox/widget/Toaster", "dijit/registry", "dojo/parser", "dojo/on", "dojo/dom", "dojo/domReady!"],
+    function(Toaster, registry, parser, on, dom){
+      var surpriseMe = function(){
+        registry.byId('first_toaster').setContent("<?php echo TXT_PROJETADMINDEJAAFFECTE; ?>", 'message');
+        registry.byId('first_toaster').show();
+      }
+      on(dom.byId("surprise"), "click", surpriseMe);
+    });
+    require(["dojo"], function(dojo) {});
+        dojo.addOnLoad(function() {
+        vueprojetcentrale.surprise.click();
+        document.getElementById('surprise').style.display='block';
+        })
+</script>
+<div data-dojo-type="dojox/widget/Toaster" data-dojo-props="positionDirection:'br-left'" id="first_toaster"></div>
+<?php }?>
+<div data-dojo-type="dijit/Dialog" data-dojo-id="reponseporteur" id ='reponseporteur'
+     title="<?php echo TXT_CONFIRMPROJECTPORTEUR; ?>" style="width: 380px;margin-left: 20px;display:none"  >
+    <table class="dijitDialogPaneContentArea">
+        <tr>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitOui"
+                        data-dojo-props="onClick:function(){window.location.replace('<?php echo '/'.REPERTOIRE.'/';?>modifBase/updateAffectProjet.php?lang=<?php echo $lang ?>&idutilisateur='+document.getElementById('iduser').value+'&idprojet='+document.getElementById('idprojet').value+'');}" >
+                    <?php echo TXT_OUI; ?></button></td>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitNon" data-dojo-props="onClick:function(){reponseporteur.hide();}">
+                    <?php echo TXT_NON; ?></button></td>
+            <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){reponseporteur.hide();}" id="cancel"><?php echo TXT_ANNULE; ?></button></td>
+        </tr>
+    </table>
+</div>
+<div data-dojo-type="dijit/Dialog" data-dojo-id="reponseadmin" id ='reponseadmin'
+     title="<?php echo TXT_CONFIRMPROJECTPORTEUR; ?>" style="width: 380px;margin-left: 20px;display:none"  >
+    <table class="dijitDialogPaneContentArea">
+        <tr>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitOui1"
+                        data-dojo-props="onClick:function(){window.location.replace('<?php echo '/'.REPERTOIRE.'/';?>modifBase/updateAffectAdmin.php?lang=<?php echo $lang ?>&idutilisateur='+document.getElementById('iduser').value+'&idprojet='+document.getElementById('idprojet').value+'');}" >
+                    <?php echo TXT_OUI; ?></button></td>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitNon1" data-dojo-props="onClick:function(){reponseadmin.hide();}">
+                    <?php echo TXT_NON; ?></button></td>
+            <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){reponseadmin.hide();}" id="cancel1"><?php echo TXT_ANNULE; ?></button></td>
+        </tr>
+    </table>
+</div>
+<div data-dojo-type="dijit/Dialog" data-dojo-id="reponseDuplicate" id ='reponseDuplicate'
+     style="width: 410px;margin-left: 20px;display:none"  title="<?php echo TXT_CONFIRMDUPLICATEPROJECT;?>  ">
+    <table class="dijitDialogPaneContentArea">
+        <tr>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitOuiDuplicate"
+                        data-dojo-props="onClick:function(){window.location.replace('<?php echo '/'.REPERTOIRE.'/';?>modifBase/duplicateProject.php?lang=<?php echo $lang ?>&idprojet='+document.getElementById('idprojet').value+'');}" >
+                    <?php echo TXT_OUI; ?></button></td>
+            <td>
+                <button type="submit" data-dojo-type="dijit/form/Button"  id="submitNonDuplicate" data-dojo-props="onClick:function(){reponseDuplicate.hide();}"><?php echo TXT_NON; ?></button>
+            </td>            
+        </tr>
+    </table>
+</div>
+<div data-dojo-type="dijit/Dialog" data-dojo-id="reponsechangedemandeur" id ='reponsechangedemandeur'
+     title="<?php echo TXT_CONFIRMCHANGEMENTDEMANDEUR; ?>" style="width: 380px;margin-left: 20px;display:none"  >
+    <table class="dijitDialogPaneContentArea">
+        <tr>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitOui2"
+                        data-dojo-props="onClick:function(){window.location.replace('<?php echo '/'.REPERTOIRE.'/';?>modifBase/changeDemandeur.php?lang=<?php echo $lang ?>&idutilisateur='+document.getElementById('iduser').value+'&idprojet='+document.getElementById('idprojet').value+'');}" >
+                    <?php echo TXT_OUI; ?></button></td>
+            <td><button type="submit" data-dojo-type="dijit/form/Button"  id="submitNon2" data-dojo-props="onClick:function(){reponsechangedemandeur.hide();}">
+                    <?php echo TXT_NON; ?></button></td>
+            <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){reponsechangedemandeur.hide();}" id="cancel2"><?php echo TXT_ANNULE; ?></button></td>
+        </tr>
+    </table>
+</div>

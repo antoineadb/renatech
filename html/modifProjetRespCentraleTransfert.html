@@ -1,0 +1,25 @@
+<?php
+if(isset ($_GET['idprojet'])){
+    $idprojet=$_GET['idprojet'];
+}
+
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+$numero = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+include 'indexchoix.html';
+
+?>
+<div style="height: 35px;">
+<label style="color: midnightblue;display:block;font-size: 14px;width:1050px; text-align: center;">
+	<?php
+        $idcentrale=$manager->getSinglebyArray("select idcentrale_centrale from concerne where idprojet_projet=? and idstatutprojet_statutprojet!=?",array($idprojet,REFUSE));
+        
+        if(isset($idcentrale)){
+         $libelleCentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?",$idcentrale);
+                echo TXT_STATUTTRANSFERTDEB.$numero.' '.TXT_STATUTTRANSFERTFIN.' '.$libelleCentrale;
+        }else{
+            echo TXT_STATUTPROJETVALIDE;
+        }
+        ?>
+</label>
+</div>

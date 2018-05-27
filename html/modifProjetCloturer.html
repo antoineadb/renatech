@@ -1,0 +1,13 @@
+<?php include 'indexchoix.html'?>
+<div style="height: 35px;">
+    <label id="messageupdate" style="color: midnightblue;display:block;font-size: 14px;width:1050px; text-align: center;">
+        <?php 
+            if(!empty($_GET['idprojet'])){
+                $numero = $manager->getSingle2("select numero from projet where idprojet=?",$_GET['idprojet']);
+                echo TXT_STATUTPROJETCLOTURER.$numero;
+            }            
+        ?>
+
+    </label>
+</div>
+

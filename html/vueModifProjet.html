@@ -1,0 +1,550 @@
+<?php
+include_once 'class/Manager.php';
+$db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
+$manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
+//r�cup�ration de l'idprojet et des valeurs � int�grer dans les champs input
+
+if(!empty($_GET['idprojet'])){
+    $idprojet=$_GET['idprojet'];
+    $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+}elseif(isset($_GET['numProjet'])){
+    $numProjet=$_GET['numProjet'];
+    $idprojet = $manager->getSingle2("select idprojet from projet where numero =?",$numProjet);//r�cup�ration de l'idprojet � l'aide de $numProjet
+}else{
+    $idprojet =$_GET['idprojet'];
+    $numProjet = $manager->getSingle2("select numero from projet where idprojet=?",$idprojet);
+}
+$rowModif = $manager->getList2("SELECT description,titre,libellecentrale,contexte,acronyme FROM projet,concerne,centrale WHERE idprojet = idprojet_projet AND idcentrale_centrale = idcentrale and idprojet =?",$idprojet);
+
+$titre =stripslashes(str_replace("''","'",$rowModif[0]['titre']));
+$description =stripslashes(str_replace("''","'",$rowModif[0]['description']));
+$contexte =stripslashes(str_replace("''","'",$rowModif[0]['contexte']));
+$acronyme =stripslashes(str_replace("''","'",$rowModif[0]['acronyme']));
+
+$bool = 'false';
+$bool1 = '';
+
+if(isset($_SESSION['idcentrale'])){
+    $commentaire = $manager->getSinglebyArray("select commentaireprojet  from concerne where idprojet_projet =? and idcentrale_centrale=?",array($idprojet,$_SESSION['idcentrale']));
+    if(empty($commentaire)){
+        $commentaire ='';
+    }
+}else{
+    $idcentrale= $manager->getSingle2("select idcentrale_centrale from concerne where idprojet_projet=?",$idprojet);
+    $commentaire = $manager->getSinglebyArray("select commentaireprojet  from concerne where idprojet_projet =? and idcentrale_centrale=?",array($idprojet,$idcentrale));
+    if(empty($commentaire)){
+        $commentaire ='';
+    }
+}
+$idlocal= $manager->getSingle2("SELECT idutilisateur FROM loginpassword, utilisateur WHERE idlogin = idlogin_loginpassword AND  pseudo =?", $_SESSION['pseudo']);
+$iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, projet, creer WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=?", $idprojet);
+?>
+<?php
+    $rowResult = $manager->getListbyArray("SELECT idutilisateur,nom, prenom, entrepriselaboratoire FROM utilisateur, projet, creer WHERE idutilisateur_utilisateur = idutilisateur AND idprojet_projet = idprojet and idprojet=?",array($idprojet));
+    $demandeur =$rowResult[0]['nom'].' '.$rowResult[0]['prenom'];
+    $idutilisateur=$rowResult[0]['idutilisateur'];
+    $entrepriselaboratoireo=stripslashes(removeDoubleQuote($rowResult[0]['entrepriselaboratoire']));
+    ?>
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__) ; ?>">
+    <table>
+        <tr><td></td></tr>
+        <tr>
+            <td><?php echo TXT_DEMANDEUR.' : '?><input type="text"  data-dojo-type="dijit/form/ValidationTextBox" id='demandeur' value='<?php echo $demandeur; ?>' readonly="true"> </td>
+        </tr>
+        <tr>
+            <td><label  style="width: 500px"><?php echo stripslashes(removeDoubleQuote(TXT_NOMENTELABO)).' : '.$entrepriselaboratoireo; ?></label></td>
+        </tr>
+    </table>
+    <?php 
+        $arrayentity = $manager->getList2("select libellecentrale,codeunite from concerne,centrale where idcentrale_centrale = idcentrale and idprojet_projet=?",$idprojet); 
+        $arrayvillepays=$manager->getList2("select ville,nompays from pays,utilisateur where idpays_pays=idpays and idutilisateur=?",$idutilisateur);
+    ?>
+    <input  type="hidden" value="<?php echo $arrayentity[0]['libellecentrale'].', '.$arrayentity[0]['codeunite']; ?>" id="entityCNRSCode">
+    <input  type="hidden" value="<?php echo $arrayvillepays[0]['ville'].', '.$arrayvillepays[0]['nompays']; ?>" id="townCountry">
+    <table>
+        <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+        <?php
+        if(!empty($_GET['msgerrtaillecontextedescriptif'])){;?>
+        <tr>
+            <td>
+                <fieldset class='msgerrContexte'>
+                    <legend><?php echo TXT_ERR;?></legend>
+                    <?php 	echo TXT_LIMITEDITEURCONTEXTE.'<br>'.TXT_LIMITEDITEURDESCRIPTION;?>
+                </fieldset>
+            </td>
+        </tr>
+        <?php }elseif(!empty($_GET['msgerrtaillecontexte'])){;?>
+        <tr>
+            <td>
+                <fieldset class='msgerrContexte'>
+                    <legend><?php echo TXT_ERR;?></legend>
+                    <?php 	echo TXT_LIMITEDITEURCONTEXTE;?>
+                </fieldset>
+            </td>
+        </tr>
+        <?php }elseif(!empty($_GET['msgerrtailledescriptif'])){;?>
+        <tr>
+            <td>
+                <fieldset class='msgerrContexte'>
+                    <legend><?php echo TXT_ERR;?></legend>
+                    <?php echo TXT_LIMITEDITEURDESCRIPTION;?>
+                </fieldset>
+            </td>
+        </tr>
+        <?php }?>
+        <tr>
+        <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+        <tr>
+            <td>
+                <label for="titreProjet" ><?php echo TXT_TITREPROJET.'* :'; ?>
+                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                        <span id="aideTitre" >
+                        <?php //MISE EN CACHE DES AIDES
+                            if(!$aidetitreprojet=$Cache->read('aidetitreprojet')){
+                                $aidetitreprojet=affiche('TXT_AIDETITREPROJET') ;
+                                $Cache->write('aidetitreprojet',$aidetitreprojet);
+                            }?><?= $aidetitreprojet; ?>
+                        </span>
+                    </a>
+                </label>
+                <input id="titreProjet" type="text" name="titreProjet" value="<?php echo $titre ;?>"  required="required"   data-dojo-type="dijit.form.ValidationTextBox"  
+                       onclick="this.focus = true" data-dojo-invalidMessage="Titre non valide."  disabled="<?php echo $bool; ?>" />
+            </td>
+        </tr>
+        <tr> <td>&nbsp;</td></tr>
+        <tr><td>
+                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo ' ('.TXT_DISPO.')'.' :';?>
+                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                        <span id="aideAcronyme" >
+                            <?php //MISE EN CACHE DES AIDES
+                            if(!$aideacronyme=$Cache->read('aideacronyme')){
+                                $aideacronyme=affiche('TXT_AIDEACRONYME') ;
+                                $Cache->write('aideacronyme',$aideacronyme);
+                            }?><?= $aideacronyme; ?>
+                        </span></a>
+                </label>
+                <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>" disabled="<?php echo $bool; ?>"
+                       data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide." />
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td>
+                <?php
+                $confid = $manager->getSingle2("SELECT confidentiel  FROM projet WHERE idprojet=?",$idprojet);
+                $_SESSION['confid']=$confid;
+                if ($confid== TRUE){
+                ?>
+                <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.' *:';?>
+                    <a class="infoBulle" href="#">&nbsp;
+                        <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                        <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >                            
+                            <?php //MISE EN CACHE DES AIDES
+                            if(!$aideconfidentiel=$Cache->read('aideconfidentiel')){
+                                $aideconfidentiel=affiche('TXT_AIDECONFIDENTIEL') ;
+                                $Cache->write('aideconfidentiel',$aideconfidentiel);
+                            }?><?= $aideconfidentiel; ?>
+                        </span>
+                    </a>
+                </label>
+                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  checked="checked" value="TRUE" class="btRadio" onclick="start();" > <?php echo TXT_OUI; ?>
+                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="FALSE" class="btRadio" onclick="non()" >                     
+                <?php echo TXT_NON; ?>
+                <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
+            <label id='donneeConfid' style="width: 450px;display: none;"  ><?php echo TXT_DONNECONFID;?></label>            
+                <?php } else { ?>
+                <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.' *:';?><a class="infoBulle" href="#">&nbsp;
+                        <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                        <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >
+                            <?php //MISE EN CACHE DES AIDES
+                            if(!$aideconfidentiel=$Cache->read('aideconfidentiel')){
+                                $aideconfidentiel=affiche('TXT_AIDECONFIDENTIEL') ;
+                                $Cache->write('aideconfidentiel',$aideconfidentiel);
+                            }?><?= $aideconfidentiel; ?>
+                        </span></a></label>
+                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE" class="btRadio" onclick="start();">  <?php echo TXT_OUI; ?>                
+                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="FALSE" checked="checked" class="btRadio"  onclick="non()" >  <?php echo TXT_NON; ?>
+                <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
+            <label id='donneeConfid' style="width: 450px;display: none;"  ><?php echo TXT_DONNECONFID;?></label>
+                <?php }?>
+            </td>
+        </tr>
+        <tr><td>
+        <input type="hidden" id="commentaireValeur" name="commentaireValeur" >
+        <input type="hidden" id="contextValeur" name="contextValeur" >
+        <input type="hidden" id="descriptifValeur" name="descriptifValeur" >
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td>
+<!---------------------------------------------------------------------------------------------------------------------------------
+                CONTEXTE
+------------------------------------------------------------------------------------------------------------------------------------->
+                <label for="contexte" ><?php echo TXT_OBJECTIF.'/'.TXT_CONTEXTESCIENTIFIQUE.' :' ?>
+                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                        <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >
+                            <?php //MISE EN CACHE DES AIDES
+                            if(!$aidecontexte=$Cache->read('aidecontexte')){
+                                $aidecontexte=affiche('TXT_AIDECONTEXTE') ;
+                                $Cache->write('aidecontexte',$aidecontexte);
+                            }?><?= $aidecontexte; ?></span>
+                    </a>
+                </label>
+                <div id="contexte" name="contexte"  height="100px" ><?php echo $contexte;?></div>
+            </td>
+        </tr>
+        <tr><td><label id="cptcontext" style="width:450px;color:#B71701"></label></td></tr>
+        <tr style="display: none" id="msgerrcontexte">
+            <td>
+                <fieldset class='msgerrcontexte' >
+                    <legend><?php echo TXT_INFO;?></legend>
+                    <?php 	echo stripslashes(TXT_LIMITEDITEURCONTEXTE).'<br>';?>
+                </fieldset>
+
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td>
+<!--------------------------------------------------------------------------------------------------------------------------------------
+                DESCRIPTIF
+-------------------------------------------------------------------------------------------------------------------------------------->
+                <label for="descriptif"  ><?php echo TXT_DESCRIPTIFTRAVAIL.' :'; ?>
+                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                        <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >
+                            <?php //MISE EN CACHE DES AIDES
+                            if(!$aidedescriptif=$Cache->read('aidedescriptif')){
+                                $aidedescriptif=affiche('TXT_AIDEDESCRIPTIF') ;
+                                $Cache->write('aidedescriptif',$aidedescriptif);
+                            }?><?= $aidedescriptif; ?>
+                            </span>
+                    </a>
+                </label>
+                <div id="descriptif" name="descriptif" height="100px"  width="55px" ><?php echo $description;?></div>
+        </tr>
+        <tr><td><label id="cptdescript" style="width:450px;color:#B71701"></label></td></tr>
+        <tr style="display: none" id="msgerrdescription">
+            <td>
+                <fieldset class='msgerrdescription' >
+                    <legend><?php echo TXT_INFO;?></legend>
+                    <?php 	echo stripslashes(TXT_LIMITEDITEURDESCRIPTION).'<br>';?>
+                </fieldset>
+
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td><?php include_once 'centraleProximite/centraleProximite.php'; ?></td></tr>
+        <tr>
+            <td style="float:left;background: none no-repeat scroll 15px 50% #529ab7;color: white;font-size: 0.9em;padding: 7px;text-align: center;width: 625px;margin-top:2px;margin-left:5px">
+                    <?php echo TXT_ERREURUPLOAD;?>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                <input name="fichierProjet" type="file" data-dojo-type="dojox/form/Uploader" id="uploader" 
+                           data-dojo-props='label:"<?php echo TXT_ATTACHEMENT;?>"' >               
+                <div id="files" data-dojo-type="dojox/form/uploader/FileList" data-dojo-props='uploaderId:"uploader"' name='file' ></div>
+                    <?php
+                    $attachement  =str_replace("''","'",stripslashes($manager->getSingle2("select attachement from projet where idprojet = ?",$idprojet)));
+                    $monUrl = "http://".$_SERVER['HTTP_HOST'];
+                    $attachementdesc  = str_replace("''","'",stripslashes($manager->getSingle2("select attachementdesc from projet where idprojet =?",$idprojet)));
+                    $monUrl = "http://".$_SERVER['HTTP_HOST'];
+                    if(isset($_GET['erreuruploadphase1'])){//SI ERREUR SUR L'ATTACHEMENT ON L'EFFACE
+                        $projetattachementdesc = new Projetattachementdesc($idprojet, '');
+                        $manager->updateProjetattachementdesc($projetattachementdesc,$idprojet);
+                        echo '<label style="color: red;display:block;font-size: small; width: auto;">'.TXT_ERREURUPLOAD.'</label>';
+                    }elseif(isset($_GET['erreuruploadsizephase1'])){//SI ERREUR SUR L'ATTACHEMENT ON L'EFFACE
+                        $projetattachementdesc = new Projetattachementdesc($idprojet, '');
+                        $manager->updateProjetattachementdesc($projetattachementdesc,$idprojet);
+                        echo '<label style="color: red;display:block;font-size: small; width: auto;">'.TXT_ERREURTAILLEFICHIER.'</label>';
+                    }else{
+                        $attachement = addslashes($attachement);
+                        echo '<div id=\'pieceJointe\'><a href="'.$monUrl.dirname($_SERVER['PHP_SELF']).'/upload/'.$attachement.'" target="_blank" id="attachement">'.$attachement.'</a></div><div id=\'btnsuppr\'></div>';
+                    }
+                    if(!empty($attachement)&&!isset($_GET['erreur'])){
+                    ?>
+                    <script>
+                       if(dojo.byId('attachement')!==''){
+                           document.getElementById('btnsuppr').innerHTML =
+               "<br><button class='admin' onClick='effaceAttachement(\"<?php echo '/'.REPERTOIRE;?>/outils/effaceAttachementphase1.php?idprojet=<?php echo $idprojet; ?>\");' type='button' ><?php echo TXT_SUPPRPIECE?> </button>";               
+                       }else{
+                           document.getElementById('btnsuppr').innerHTML ='';
+                       }
+                    </script>
+                    <?php }?>
+
+                    <div id='reponse'></div>
+            </td>           
+        </tr>
+        <tr>
+             <td style="float: right;margin-top: -37px;">
+                <input type="button"  label="<?php echo 'Page suivante' ;?>" data-dojo-type="dijit/form/Button"
+                data-dojo-props="onClick:function(){require(['dijit/registry', 'dijit/layout/ContentPane'], function(registry, ContentPane){var tabs = registry.byId('MyTabContainer');tabs.selectChild('vuePhase2');});}">
+            </td>
+        </tr><tr><td>&nbsp;</td></tr>
+        <tr><td>
+                <?php 
+                 if(!empty($_GET['statut'])){
+                        $idstatut=$_GET['statut'];
+                        if($idstatut==REFUSE){
+                            $libellecentraleprojet = $manager->getListbyArray("SELECT DISTINCT libellecentrale,idcentrale FROM  concerne,centrale WHERE idcentrale_centrale = idcentrale and  idprojet_projet =? and idstatutprojet_statutprojet =? ",array($idprojet,REFUSE));
+                        }else{
+                            $libellecentraleprojet = $manager->getListbyArray("SELECT DISTINCT libellecentrale,idcentrale FROM  concerne,centrale WHERE idcentrale_centrale = idcentrale and  idprojet_projet =? and idstatutprojet_statutprojet !=? and idstatutprojet_statutprojet=?",array($idprojet,REFUSE,$idstatut));
+                        }
+                        if(empty($libellecentraleprojet)){
+                                $libellecentraleprojet = $manager->getListbyArray("SELECT DISTINCT libellecentrale,idcentrale FROM  concerne,centrale WHERE
+                                idcentrale_centrale = idcentrale and  idprojet_projet =? and idstatutprojet_statutprojet !=?",array($idprojet,REFUSE));
+                            }
+                        if($libellecentraleprojet[0]['idcentrale']==AUTRECENTRALE){
+                        ?>                        
+                        <select name="centrale" id="centrale" data-dojo-type="dijit/form/FilteringSelect" style="margin-left: 20px;" required="required"  onchange="disableCheckBoxAutrecentrale1(this.id)" 
+                    data-dojo-props="name: 'centrale',value: '',required:true, placeHolder: '<?php echo TXT_SELECTCENTRALE; ?>'"
+                    >
+                            <?php
+                                $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=?
+                                and masquecentrale!=TRUE order by idcentrale asc",'Autres');
+                                echo "<option>".TXT_SELECTCENTRALE."</option>";
+                                for($i=0;$i<count($rowcentrale);$i++){
+                                    echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
+                                }
+                                ?>
+                        </select>
+                        
+                        <?php }else{
+                            echo '<br>'.TXT_CENTRALESELECTONNEE.' : '.'<br>';
+                            echo    $libellecentraleprojet[0]['libellecentrale'];
+                            ?>
+                            <?php
+                        }
+                    }else{                        
+                        $libellecentraleprojet = $manager->getListbyArray("SELECT DISTINCT libellecentrale,idcentrale FROM  concerne,centrale WHERE
+                        idcentrale_centrale = idcentrale and  idprojet_projet =? and idstatutprojet_statutprojet !=?",array($idprojet,REFUSE));
+                        if($libellecentraleprojet[0]['idcentrale']==AUTRECENTRALE){
+                            ?>
+                            <select name="centrale" id="centrale" data-dojo-type="dijit/form/FilteringSelect" style="margin-left: 20px;" required="required"  onchange="disableCheckBoxAutrecentrale1(this.id)" 
+                    data-dojo-props="name: 'centrale',value: '',required:true, placeHolder: '<?php echo TXT_SELECTCENTRALE; ?>'"
+                    >
+                            <?php
+                                $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=?
+                                and masquecentrale!=TRUE order by idcentrale asc",'Autres');
+                                echo "<option >".TXT_SELECTCENTRALE."</option>";
+                                for($i=0;$i<count($rowcentrale);$i++){
+                                    echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
+                                }
+                                ?>
+                        </select>
+                        <?php
+                        }else{
+                            echo '<br>'.TXT_CENTRALESELECTONNEE.' : '.'<br>';
+                            echo    $libellecentraleprojet[0]['libellecentrale'];
+                            ?>
+                            <input type="text" style='display: none' id='centrale' name='centrale' value="<?php echo    'ce'.$libellecentraleprojet[0]['idcentrale'] ?>" >
+                            <?php
+                        }
+                        
+                    }                
+                ?>
+            </td></tr>                               
+        <tr><td><input type="text" style='display: none' id='idstatut' name='idstatut' value="<?php if(isset($_GET['statut'])){echo $_GET['statut'];} ?>" >
+                
+<!-----------------------------------------------------------------------------------------------------------------------------------
+                COMMENTAIRE
+-------------------------------------------------------------------------------------------------------------------------------------->
+                <label for="commentaire" ><?php echo TXT_COMMENTAIREPROJET.' :'; ?>
+                    <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                        <span id='aidecomment' >
+                             <?php //MISE EN CACHE DES AIDES
+                            if(!$aidecommentaire=$Cache->read('aidecommentaire')){
+                                $aidecommentaire=affiche('TXT_AIDECOMMENTAIREPROJET') ;
+                                $Cache->write('aidecommentaire',$aidecommentaire);
+                            }?><?= $aidecommentaire; ?>
+                            
+                        </span>
+                    </a>
+                </label>
+                <div  id="commentaire" name="commentaire"  height="100px" ><?php echo stripslashes(removeDoubleQuote($commentaire)); ?>
+                </div>
+            </td>
+        </tr>        
+    </table>
+<?php BD::deconnecter();?>
+<script>
+    function disableCheckBoxAutrecentrale(id){
+        enableCheckBoxAutrecentrale(id);
+        var selectObject = dijit.byId(id);
+        var selectedCentrale =dijit.byId(id).get('displayedValue').replace('-','');
+        var libellecentrale = 'lbl'+selectedCentrale;
+        for (var i = 0; i < selectObject.options.length; i++) {
+            if (selectObject.options[i].selected) {
+                dijit.byId(selectedCentrale).set('disabled',true);
+                document.getElementById(libellecentrale).style.textDecoration  ='line-through';
+            }
+        }
+        modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+        afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+    }
+    function enableCheckBoxAutrecentrale(id){        
+        var selectObject = dijit.byId(id);            
+        for (var i = 0; i < selectObject.options.length; i++) {
+            var select = dijit.byId(id);
+            var idallcentrale =  select.options[i].label.replace('-','');
+            document.getElementById('lbl'+idallcentrale).style.textDecoration ='none';
+            dijit.byId(idallcentrale).set('disabled',false);
+            dijit.byId(idallcentrale).set('checked',false);
+        }
+    }
+    function disableCheckBoxAutrecentrale1(id){
+        enableCheckBoxAutrecentrale1(id);
+        var nbCentrale = parseInt('<?php echo $manager->getSingle2("select count(idcentrale) from centrale where masquecentrale!=TRUE and idcentrale!=?",IDAUTRECENTRALE) ?>');
+        var selectedCentrale =dijit.byId(id).attr('displayedValue').replace("-",'');;
+        var libellecentrale = 'lbl'+selectedCentrale;
+        for (var i = 0; i < nbCentrale; i++) {
+           dijit.byId(selectedCentrale).set('disabled',true);
+           document.getElementById(libellecentrale).style.textDecoration  ='line-through';
+        }
+        modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+        afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+    }    
+    
+     function enableCheckBoxAutrecentrale1(id){        
+        var nbCentrale = parseInt('<?php echo $manager->getSingle2("select count(idcentrale) from centrale where masquecentrale!=TRUE and idcentrale!=?",IDAUTRECENTRALE) ?>');        
+        for (var i = 0; i < nbCentrale; i++) {            
+            var idallcentrale =  dijit.byId(id).attr('displayedValue').replace("-",'');
+            document.getElementById('lbl'+idallcentrale).style.textDecoration ='none';
+            dijit.byId(idallcentrale).set('disabled',false);
+            dijit.byId(idallcentrale).set('checked',false);
+        }
+    }
+    </script>
+<script>
+    require(["dojo/parser", "dijit/Editor"]);
+    require(["dijit/Editor", "dojo/ready"], function(Editor, ready) {
+        ready(function() {
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "100px",
+                disabled: "true", display: 'none'
+            }, "commentaire");
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "100px", disabled: '<?php echo $bool1;?>'
+            }, "contexte");
+            new Editor({
+                plugins: ["undo", "redo", "|", "bold", "italic", "|", "underline", "strikethrough", "|", "indent", "outdent", "|", "justifyRight", "justifyLeft", "justifyCenter", "justifyFull" ],
+                height: "100px", disabled: '<?php echo $bool1;?>'
+            }, "descriptif");
+        });
+        dojo.addOnLoad(function() {             
+            var editor1 = dijit.byId("commentaire");
+            dojo.connect(editor1, "onChange", this, function(value) {
+                dojo.byId("commentaireValeur").value = editor1.get("value");
+            });
+            var editor2 = dijit.byId("contexte");
+            dojo.connect(editor2, "onChange", this, function(event) {
+                dojo.byId("contextValeur").value = editor2.get("value");
+            });
+            var editor3 = dijit.byId("descriptif");
+            dojo.connect(editor3, "onChange", this, function(event) {
+                dojo.byId("descriptifValeur").value = editor3.get("value");
+            });
+                //CAS POUR CHROME
+                dojo.byId("descriptifValeur").value = editor3.get("value");
+                document.getElementById('cptdescript').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;
+                dojo.byId("contextValeur").value = editor2.get("value");
+                document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;                
+            /* --------------------------------------------------------------------------------------------------------------------
+                                                                                CONTEXTE
+             --------------------------------------------------------------------------------------------------------------------*/
+            dojo.connect(editor2, "onKeyPress", this, function(event) {
+                dojo.byId("contextValeur").value = editor2.get("value");
+                document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + 
+                        strip_tags(trim(dojo.byId("contextValeur").value),'').length;
+                if (trim(strip_tags(editor2.get("value")),'').length > 5000) {
+                    document.getElementById('msgerrcontexte').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrcontexte').style.display = 'none';
+                }                
+            });												
+            dojo.connect(editor2, "onBlur", this, function(event) {
+                dojo.byId("contextValeur").value = editor2.get("value");
+                document.getElementById('cptcontext').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;
+                if (trim(strip_tags(editor2.get("value"),'')).length > 5000) {
+                    document.getElementById('msgerrcontexte').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrcontexte').style.display = 'none';
+                }                
+            });
+            dojo.connect(editor2, "onClick", this, function(event) {
+                dojo.byId("contextValeur").value = editor2.get("value");
+                document.getElementById('cptcontext').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;
+                if (trim(strip_tags(editor2.get("value")),'').length > 5000) {
+                    document.getElementById('msgerrcontexte').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrcontexte').style.display = 'none';
+                }            
+            });
+           dojo.connect(editor2, "onLoad", this, function(event) {
+                dojo.byId("contextValeur").value = editor2.get("value");
+                document.getElementById('cptcontext').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("contextValeur").value),'').length;                
+            });	
+            
+            /* --------------------------------------------------------------------------------------------------------------------
+                                                                                DESCRIPTIF
+             --------------------------------------------------------------------------------------------------------------------*/
+             dojo.connect(editor3, "onLoad", this, function(event) {
+                dojo.byId("descriptifValeur").value = editor3.get("value");
+                document.getElementById('cptdescript').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;                
+            });
+            dojo.connect(editor3, "onKeyPress", this, function(event) {
+                dojo.byId("descriptifValeur").value = editor3.get("value");
+                document.getElementById('cptdescript').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;
+                if (trim(strip_tags(editor3.get("value")),'').length > 800) {
+                    document.getElementById('msgerrdescription').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrdescription').style.display = 'none';
+                }                
+            });
+            dojo.connect(editor3, "onBlur", this, function(event) {
+                dojo.byId("descriptifValeur").value = editor3.get("value");
+                document.getElementById('cptdescript').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;
+                if (trim(strip_tags(editor3.get("value")),'').length > 800) {
+                    document.getElementById('msgerrdescription').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrdescription').style.display = 'none';
+                }               
+            });
+            
+            dojo.connect(editor3, "onClick", this, function(event) {
+                dojo.byId("descriptifValeur").value = editor3.get("value");
+                document.getElementById('cptdescript').innerHTML =  "<?php echo TXT_NBCARACT.' : '; ?>" + strip_tags(trim(dojo.byId("descriptifValeur").value),'').length;
+                if (trim(strip_tags(editor3.get("value")),'').length > 800) {
+                    document.getElementById('msgerrdescription').style.display = 'block';
+                } else {
+                    document.getElementById('msgerrdescription').style.display = 'none';
+                }                
+            });
+        });
+    });
+</script>
+<script>
+    var counter = 5;
+    var intervalId = null;
+    function action() {
+        document.getElementById('donneeConfid').style.display = 'block';
+        clearInterval(intervalId);
+        document.getElementById('nda').style.display = 'none';
+    }
+    function decompte() {
+        counter--;
+    }
+    function start() {
+        document.getElementById('nda').style.display = 'block';        
+        intervalId = setInterval(decompte, 1000);
+        setTimeout(action, 2000);
+    }
+    function non() {
+        document.getElementById('nda').style.display = 'none';
+        document.getElementById('donneeConfid').style.display = 'none';
+    }
+</script>

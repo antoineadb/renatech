@@ -1,0 +1,1398 @@
+html {
+    font-size: 100%; /* Voir -> Note 1 Ã© la fin de la feuille de styles. */
+}
+
+body {
+
+    font-family: Lucida Sans, Lucida Grande, Arial !important;
+    font-size: 13px !important;
+    background: white;
+    width:100%;
+    margin:auto;
+    min-width:400px;
+    max-width:2000px;
+
+}
+label {
+    display: block;
+    width: 300px;
+}
+button:hover {
+    background-color: #AFD9FF;
+    color: #000000;
+}
+h1,h2,h3,h4,h5,h6 {
+    margin: 1em 0 .5em 0;
+}
+
+h1,h2 {
+    font-family: Georgia, "Bitstream Vera Serif", Norasi, serif;
+    font-weight: normal;
+}
+h1 {
+    font-size: 3em;
+    font-style: italic;
+}
+h2 {
+    font-size: 1.8em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+h4 {
+    font-size: 1em;
+}
+ul,ol {
+    margin: .75em 0 .75em 24px;
+    padding: 0;
+}
+ul {
+    list-style: square;
+}
+li {
+    margin: 0;
+    padding: 0;
+}
+table tr td input {
+    width: 195px;
+}
+p {
+    margin: .75em 0;
+}
+li p,blockquote p {
+    margin: .5em 0;
+}
+
+form textarea {
+    border: solid 1px midnightblue;
+    padding: 2px 0 0 4px;
+}
+blockquote,q {
+    font-size: 1.1em;
+    font-style: italic;
+    font-family: Georgia, "Bitstream Vera Serif", Norasi, serif;
+}
+blockquote {
+    margin: .75em 0 .75em 24px;
+}
+cite {
+    font-style: italic;
+}
+a {
+    color: mediumblue;
+    text-decoration: underline;
+}
+a:hover,a:focus {
+    color: crimson;
+}
+a img {
+    border: none;
+}
+em {
+    font-style: italic;
+}
+strong {
+    font-weight: bold;
+    color: dimgray;
+}
+#copyright {
+    margin: 20px 0 5px 0;
+    text-align: right;
+    font-size: .8em;
+    color: #848F63;
+}
+th {
+    font-weight : normal;
+}
+.claro .dijitSelect .dijitButtonText {
+    text-align: left;
+}
+
+.claro .dijitSelectLabel {
+    width: 295px;
+    overflow: hidden;
+}
+.claro .dijitSelectLabel .phase2  {
+    width: 100px;
+    overflow: hidden;
+}
+.claro .dijitValidationTextBox{
+    vertical-align: middle;
+    width: 17em;
+}
+
+.opt {
+    display: inline;
+    float: none;
+    padding-right: 20px;
+    width: 60px;
+}
+.centraleP {
+    display: inline;
+    float: none;
+    margin-left: 7px;
+    width: 5px;
+}
+
+.centPrx {
+    margin-left: 20px;
+    width: 60px;
+}
+
+select {
+    width: 200px;
+}
+a {
+    color: #5D8BA2;
+}
+a:hover, a:focus {
+    color: #FF4C00;
+}
+#majProjet{
+    width: 592px;
+    padding:6px;
+    border:solid 1px black;
+    color:midnightblue;
+    font-family:verdana;
+}  
+.login{
+    font-family: verdana;
+    font-size: 1em;
+    margin-left: 500px;
+    margin-top: -80px;
+    padding: 2px 3px 8px 20px;
+    text-align: left;
+    width: 50%;
+    color:midnightblue;
+}
+.accueil{
+    font-family: verdana;
+    padding: 3% 3% 3% 6%;
+    width: 100%;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    border-radius: 5px 5px 5px 5px;
+    text-align:left;
+    font-size:1.2em;
+}
+
+.loginlegend{
+    color: midnightblue;
+}
+
+.loginlabel{    
+    font-size:14px;
+    width:65px;
+    color:midnightblue;
+    alignment-baseline: middle;
+    margin-bottom: 25px;
+}
+.passelabel{
+    font-size:14px;
+    width:120px;
+    color:#5D8BA2;
+    alignment-baseline: middle;
+}
+
+#identcreateprojet{
+    border:1px solid #5D8BA2;
+    border-radius: 5px;
+    color:midnightblue;
+    font-family:verdana;
+    padding-left:30px;
+    margin-top: 15px;
+    font-size:1.2em;
+    width:1015px;
+}
+#createprojet{
+    padding:20px;
+    margin-left:50px;
+    border:solid 1px black;
+    color:midnightblue;
+    font-family:verdana;
+}
+#createprojet label{
+    width: 200px;
+}
+#identcreateprojet tr td{
+    width:250px;
+}
+.admin{
+    cursor:pointer;
+    background-color: white;
+    background-image: none;
+    border:0;
+    padding:0;
+    margin:0;
+    color:#5D8BA2;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding-bottom:3px;
+    background-position:top left;
+    font-size:13px;
+    vertical-align: middle;
+}
+#btnOption{
+    cursor: pointer;
+    border: 0;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    background-color: #00AEA6;
+    color: white;
+    width: 50px;
+}
+.rechAvance{
+    font-size: 16px;
+    width: 300px;
+    height: 27px;
+    border-color: grey;
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding-left: 5px;
+}
+.btnSuppr{
+    cursor:pointer;
+    background-color: transparent;
+    background-image: none;
+    border:0;
+    padding:0;
+    margin:0;
+    color:#5D8BA2;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding-bottom:3px;
+    background-position:top left;
+    font-size:13px;
+    vertical-align: middle;
+}
+
+.btnSuppr:hover {
+    background-position:bottom left;
+    background-color: white;
+    background-image: none;
+    color:red;
+}
+.admin:hover {
+    background-position:bottom left;
+    background-color: white;
+    background-image: none;
+    color:red;
+}
+
+.affectprojet{
+    cursor:pointer;
+    background-color: #EDEFED;
+    background-image: none;
+    border:0;
+    padding:0;
+    margin:0;
+    color:#5D8BA2;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding-bottom:3px;
+    background-position:top left;
+    font-size:13px;
+    vertical-align: middle;
+}
+
+.affectprojet:hover {
+    background-position:bottom left;
+    background-color: #EDEFED;
+    background-image: none;
+    color:red;
+}
+
+.role{
+    cursor:pointer;
+    background-color: #EDEFED;
+    background-image: none;
+    border:0;
+    padding:0;
+    margin:0;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding-bottom:3px;
+    background-position:top left;
+    font-size:13px;
+    vertical-align: middle;
+}
+.role:hover {
+    background-position:bottom left;
+    color:red;
+}
+a.infoBulle{
+    position:relative;
+    z-index:24;
+    color:#000;
+    text-decoration:none
+}
+a.infoBulle:hover{
+    z-index:25;
+    background-color:#FFF
+}
+a.infoBulle span{
+    display: none
+}
+
+a.infoBulle:hover span{
+    display:block;
+    position:absolute;
+    top:2em; left:2em; width:18em;
+    border:1px solid #000;
+    background-color:#FFF;
+    color:#000;
+    text-align: justify;
+    font-weight:none;
+    padding:5px;
+    -moz-border-radius: 8px;
+    -khtml-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-top-left-radius: 8px 8px 8px 8px;
+
+
+    text-align: left;
+}
+#traduction input {
+    width: 240px;
+}
+/*
+#global {
+    width: 752px;
+    overflow: hidden;
+}*/
+#global {
+    width: 960px; /* -> 3 */
+    margin: -8px auto; /* -> 4 */
+}
+
+#globalfinduser {
+    width: 860px;
+}
+
+.btRadio{
+    width:auto;
+}
+.but{
+    width:80px;
+}
+#entete {
+    padding: 0px 20px 20px 0;
+}
+#entete h1 {
+    margin: 0;
+}
+#entete h1 img {
+    float: left;
+    margin: 7px 20px 10px 0;
+}
+#entete .sous-titre {
+    margin: 4px 0 15px 0;
+}
+#navigation {
+    width: 160px;
+    float: left;
+}
+#navigation ul,#navigationmodifprojet ul, #navigationcreateprojet ul {
+    margin: 0;
+    padding: 30px 0;
+    list-style: none;
+}
+#navigation a,#navigationmodifprojet a , #navigationcreateprojet a{
+    display: block;
+    height: 1%;
+    padding: 0 0 10px;
+    line-height: 1.5;
+    font-size: .9em;
+    text-decoration: none;
+}
+#new, #ident, #droit, #compte, #compteuser, #compteuserindust, #msg, #dev, #identpays, #identsa, #identte, #identds, #identne, #identtu, #identtp,#identtf,
+#identth, #identsf, #identac, #identvc, #identce, #identco,#identres,#identre,#identcentraleProximite{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+#identre{
+    padding:10px 10px 10px 10px;
+}
+.identre{
+    padding:10px 10px 10px 10px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    width:500px;
+}
+.flstbrd{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+#idexportUser{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    border-color: #5d8ba2;
+    font-size: 1em;
+    height: 142px;
+    margin-left: 50px;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    padding-top: 10px;
+    width: 490px;
+}
+#idExportUser{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;    
+    margin-top: 70px;
+}
+#tbexportUser{
+    margin-bottom: 70px;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+#gestionRapport,#gestionlibelle, #gestionlibelleautres,#gestionlibellecommun,#gestionhome,#gestionhome1,#gestionemailcontact,#gestionemailprojetphase1cloture,#gestionemailprojetphase1fini,#gestionemailprojetrealisation,#gestionemaildemandeur,
+#gestionemailprojetphase1,#gestionemailprojetphase2,#gestionemailprojetphase21,#gestionemailprojetphase1enattente,#gestionemailprojetphase1refuse,#gestionemailprojetphase1transfert, #gestionemailprojetphase1expertise, #gestionemailprojetvalide {
+    padding:8px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+#droit fieldset{
+    color: red;
+    border-color: red;
+    width:616px;
+    padding-top: 10px;
+    margin-top:20px;
+    padding-left: 15px;
+}
+#bandeauentete {
+    padding-right: 10px;
+    padding-top: 10px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+#recherche{
+    /*width: 43%;*/
+    padding:20px 5px 10px 5px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+
+
+}
+
+#export,#gestionsiteweb,#gestionCentraleProximite{
+    padding:15px 15px 15px 15px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    width:1000px;
+
+}
+#projetNoDev{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;    
+    margin-top: 20px;
+    padding: 10px;
+    width: 1026px;
+    margin-top: 20px;
+    border-color: #5D8BA2;
+    height:44em;
+
+}
+#param{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 130px;
+    margin-top: 40px;
+    padding: 45px 20px 0 10px;
+    width: 1017px;
+
+}
+#requetparam{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: auto;
+    margin-top: 40px;
+    padding: 45px 20px 0 10px;
+    width: 1017px;
+
+}
+.userTable{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    padding: 15px 10px 0 20px;
+    width: auto;
+
+
+}
+#projetTable{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 430px;
+    padding: 15px 10px 0 20px;
+    width: auto;
+
+
+}
+#stat{
+    border: 1px solid #5D8BA2;
+    border-radius: 5px 5px 5px 5px;
+    color: #191970;
+    font-family: verdana;
+    font-size: 1.2em;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 30px;
+    padding-left: 15px;
+    width: 1027px;
+}
+
+.phase2 {
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    margin-right: 20px;
+    margin-left: 20px;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    border-color: #5D8BA2;
+
+}
+.phase2ta{    
+    margin-right: 20px;
+    color:midnightblue;
+    font-family:verdana;
+    margin-left:20px;
+
+}
+
+#navigationmodifprojet{     
+    float: left;
+}
+
+#contenu,contenurecherche {
+    padding: 3px;
+}
+#contenu > :first-child {
+    margin-top: 10px;
+}
+#contenu p, #contenu li {
+    line-height: 1.5;
+}
+#rech {    
+    padding: 10px 35px;
+}
+#rech > :first-child {
+    margin-top: 10px;
+}
+#rech p, #rech li {
+    line-height: 1.5;
+}
+
+#site{
+    position: relative;
+    margin-top: 10px;
+    width: auto;
+    z-index: 10;
+}
+#contenucreateprojet {
+    margin-left: 10%;
+    padding: 10px 0px;
+    width: 30%;
+}
+#navigationcreateprojet{     
+    float: left;
+    max-width:10%;
+    height:800px;
+}
+
+.dojoTabular th,.dojoTabular td { 
+    padding: 0.25em 0.5em;
+}
+.dojoxFisheyeListItemLabel {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #eee;
+    border: 2px solid #666;
+    padding: 2px;
+    text-align: center;
+    position: absolute;
+    display: none;
+    white-space:pre;
+}
+.dojoxFisheyeListItemLabel.dojoxFishSelected {
+    display: block;
+}
+.dojoxFisheyeListItemImage {
+    border: 0px;
+    position: absolute;
+}
+.dojoxFisheyeListItem {
+    position: absolute;
+    z-index: 2;
+}
+.dojoxFisheyeListBar {
+    position: relative;
+}
+.dojoxFisheyeListBar {
+    margin: 0 auto;
+    text-align: center;
+}
+.outerbar {
+    position: relative;
+    width: 1050px;
+}
+.outerbar2 {
+    position: relative;
+    width: 972px;
+    height:98px;
+    margin-left: -30px;
+}
+.page {
+    padding: 50px 20px 20px 20px;
+}
+.perCentrale{
+    display:inline-block;
+    width:220px;
+}
+.perCentrale input{
+    width:200px;
+}
+.msgerr{
+    /*display:block;*/
+    text-align: center;
+    width: 492px;
+    color:#BF002C;
+    font-family:verdana;
+    font-size: 17px;
+    height: 35px;
+
+}
+.textfield{   
+    border: 1px solid #B5BCC7;
+    font-size: 13px;
+    height: 20px;
+    padding-right: 10px;
+    width: 211px;
+}
+.textfieldhidden{   
+    border: 1px solid #B5BCC7;
+    font-size: 13px;
+    height: 20px;
+    padding-right: 10px;
+    width: 308px;
+    background-color: white;
+}
+
+.dojoxUploaderFileListHeader {
+    display:none;
+}
+.dojoxUploaderIndex{
+    display:none;
+} 
+.dojoxUploaderIcon{
+    display:none;
+}
+.maj{
+    width:30px;
+    height:30px;
+    border-style: solid;
+    border-color: white;
+    background-color: white;
+    background-repeat: no-repeat;
+    color:transparent;
+    background-image:url(img/loupe.png);
+    cursor:pointer;
+}
+.rech{
+    width:20px;
+    height:20px;
+    margin-left: 70px;
+    border-style: none;
+    border-color: #00AEA6;
+    background-color: #00AEA6;
+    background-repeat: no-repeat;
+    background-position: top right;
+    color:transparent;
+    background-image:url(img/loupe2.png);
+    cursor:pointer;
+}
+#menu{
+    width:840px;
+    height:25px;
+}#resultprojet{
+    margin-left:25px;
+    font-size: 1.2em;
+    margin-top: 50px;
+}
+#modifProjet{
+    width:1009px;
+}
+#modifProjet label,createProjet label{
+    width:305px;
+}
+#modifProjet #contexte{
+    width:980px;
+}
+.champobligatoire{
+    font-size: x-small;
+}
+#gridrechercheglobale{
+    height: 500px;
+    width:1028px;
+}
+.pdf{
+    padding-left: 665px;
+}
+.word{
+    padding-left: 930px;
+    margin-top:-29px;
+}
+
+.pdfmp{
+    padding-left: 972px;
+    margin-top:-38px;
+}
+#divMajus{
+    visibility:hidden;
+    font-family: verdana;
+    font-size: 12px;
+    color: #D8081A;
+}
+#erreurLogin{
+    color: red;
+    display:block;
+    font-size: medium;
+    width:1000px;
+    text-align: center;
+    margin-top: -10px;
+}
+
+.msgerrpersoncentrale{ 
+    width:952px;
+    margin-top:20px;
+    margin-left: 20px;
+    padding: 15px;
+    border-style: double;
+    color:red;
+    border:solid 1px red;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+
+}
+.msgerrdescription,.msgerrcontexte{ 
+    width:950px;
+    margin-top:20px;
+    padding: 15px;
+    border-style: double;
+    color:red;
+    border:solid 1px red;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+
+}
+.msgerrContexte{
+    width:950px;
+    padding-bottom:  15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-style: double;
+    color:red;
+    border:solid 1px red;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    margin-bottom: 25px;
+
+}
+.msgerrcontexteph1, .msgerrdescriptionph1{
+    width:927px;
+    padding-bottom:  15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-style: double;
+    color:red;
+    border:solid 1px red;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    margin-bottom: 25px;
+
+}
+.msgerrdescriptechno, .msgerrverrou, .msgerrreussite,.errcomment{
+    border: 1px solid #FF0000;
+    border-radius: 5px;
+    color: #FF0000;
+    font-family: verdana;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 15px;
+    width: 960px;
+
+}
+
+.msgerrdes{
+    border: 1px solid #FF0000;
+    border-radius: 5px;
+    color: #FF0000;
+    font-family: verdana;
+    margin-bottom: 10px;    
+    margin-top: 20px;
+    padding: 15px;
+    width: 900px;
+
+}
+
+
+.errcomment {
+    border: 1px solid #ff0000;
+    border-radius: 5px;
+    color: #ff0000;
+    font-family: verdana;
+    margin-left: 0;
+    padding: 15px;
+    width: 945px;
+}
+.msginfoUpdate{
+    border: 1px solid #2C59B9;
+    border-radius: 3px 3px 3px 3px;
+    color: #2C59B9;
+    font-family: verdana;
+    margin-bottom: 15px;
+    margin-top: 5px;
+    padding-bottom: 11px;
+    padding-left: 15px;
+    padding-top: 5px;
+    width: 1025px;
+
+}
+
+.msgencours{
+    color: #D8081A;
+    font-family: verdana;
+    margin-bottom: -20px;
+    margin-top: 5px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    text-align: center;
+    width: 1035px;
+
+}
+.msgsiteweb{
+    color: #D8081A;
+    font-family: verdana;
+    margin-bottom: 4px;
+    margin-top: 5px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    text-align: center;
+    width: 1035px;
+
+}
+
+.partenaire{
+    width:944px;
+}
+
+.partenaire label{
+    width:320px;
+    margin-left:25px;
+}
+
+#createProjet #contexte #descriptif{
+    width:970px;
+
+}
+#pdfmodifprojet{
+    padding-left: 636px;
+}
+.pdfmodifrespcentrale{
+    padding-left:960px;
+    margin-top: 5px;
+}
+#menuprojetadminlocal, #menuexportadminlocal, #menucompteadminlocal,#menuexportadminnationnal,#menucompteadminnationnal,#menuadministrationadminnationnal{
+    border-radius: 5px;
+    padding-left:15px;
+    font-size:14px;
+}
+
+#motpasseoublie{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    width: 1007px;
+    margin-top: 35px;
+    font-size: 1.2em;
+}
+#motpasseoublie legend{
+    color: #5D8BA2;
+}
+#motpasseoublie label{
+    width:450px;
+}
+#motpassemessage{
+    color: red;
+}
+#fielmotpassemessage{
+    padding:20px 20px 20px 20px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    width: 1007px;
+    margin-top: 35px;
+    font-size: 1.2em;
+
+}
+#motpassemessage{
+    color:red;
+    padding-bottom: 15px;
+}
+
+#statprojet{
+    border: 1px solid #5D8BA2;
+    border-radius: 5px 5px 5px 5px;
+    color: #191970;
+    font-family: verdana;
+    padding: 20px;
+    font-size: 1.2em;
+    width:1005px;
+}
+.statut{
+    border: 1px solid red;
+    border-radius: 5px;
+    color: red;
+    margin-bottom: 20px; 
+    font-family: verdana;
+    margin-top: 13px;
+    margin-left:20px;
+    padding-bottom:5px;
+    padding-top:5px;
+    width: 600px;
+    text-align: center;
+}
+.claro .dijitToasterContainer{
+    width:22em;
+}
+.arrondi {
+    background:url(img/edition.png);
+    border:none;
+    width: 20px; /* largeur Ã  spÃ©cifier */
+    height: 20px; /* longueur Ã  spÃ©cifier */
+    cursor: pointer;
+    background-repeat: no-repeat;
+    margin-left: 5px;
+    usemap:"#carte1" ;
+}
+.eraseDigitObj {
+    border: medium none;
+    float: right;
+    font-size: 12px;
+    margin: 0 20px 0 0;
+    padding: 0;
+    width: 144px;
+}
+.eraseDigit {
+    border: medium none;
+    float: right;
+    font-size: 12px;
+    margin-bottom: 5px;
+    margin-top: -5px;
+    width: 110px;
+}
+
+.eraseDigitValorization {
+    border: medium none;
+    float: right;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    width: 133px;
+}
+
+.datedebutprojet{
+    border: 1px solid #3380BE;
+    border-radius: 5px;
+    color: #3380BE;
+    margin-bottom: 20px; 
+    font-family: verdana;
+    margin-top: 13px;
+    margin-left:20px;
+    padding-bottom:5px;
+    padding-top:5px;
+    width: 600px;
+    text-align: center;
+}
+
+#emailExiste{
+    padding: 3px;
+    margin-top:10px;
+    color: midnightblue;
+}
+
+#createLoginemail{
+    border:solid 1px #5D8BA2;
+    border-color: #5D8BA2;
+    width: 966px; 
+    padding: 40px;
+    font-size:1.1em;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    margin-top:40px;
+    color: #5D8BA2;
+}
+
+#infoSave{
+    background: #529ab7 none no-repeat scroll 15px 50%;
+    color: white;
+    float: left;
+    font-size: 0.9em;
+    margin-left: 10px;
+    margin-top: 14px;
+    padding: 7px;
+    text-align: center;
+    width: 625px;
+}
+.bdeCentrale{
+    margin-top: 70px;
+}
+.demandeur{
+    margin-left:15px;
+}
+#tbProjetphase1{
+    margin-left:15px;
+    padding-top: 25px;
+}
+#titreProjet #acronyme{
+    width: 550px;
+    height:22px;
+}
+#aideTitre{
+    text-align: left;
+    padding:10px;
+    width: 250px;
+    border-radius:5px;
+}
+#aideAcronyme{
+    text-align: left;
+    padding:10px;
+    width: 690px;
+    border-radius:5px;
+}
+#aideconfidentiel{
+    text-align: left;
+    padding:10px;
+    width: 650px;
+    border-radius:5px;
+}
+#donneeConfid{
+    width: 450px;
+}
+#nda{
+    width: 400px;
+    display: none;
+}
+
+#aideCtx, #aideDescriptif{
+    width: 580px;border-radius: 5px;
+}
+#cptcontext, #cptdescript{
+    width:450px;
+    color:#B71701;
+}
+#aideUpload{
+    text-align: left;width: 370px;border-radius: 5px
+}
+#lblErrUpload{
+    color: red;display:block;font-size: small; width: auto;
+}
+#msgerrcentrale{
+    width: 350px;display: none;color: #c00;
+}
+#lblcommentaire{
+    width:360px;
+}
+#aidecomment{
+    text-align: left;padding:10px;width: 470px;border-radius:5px;
+}
+#downloadProgress{
+    width:300px; visibility:hidden;
+}
+#succinct{
+    width: auto;height:901px 
+}
+#detail{
+    width: auto; 
+}
+#tabcont{
+    margin-top:15px;
+    width: 1050px;
+    font-size: 1.2em;
+}
+.zoneText{
+    width: 982px;
+    height: 480px;
+    text-align: left;
+    border: 1px solid black;
+    overflow: auto;
+    background-color:black;
+    color:white;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+#requete{
+    margin-top: 50px;
+    padding:5px 5px 10px 5px;
+    border:solid 1px #5D8BA2;
+    color:midnightblue;
+    font-family:verdana;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+
+
+}
+
+.academicIndust{
+    border: 1px solid #5d8ba2;
+    border-radius: 4px;
+    float: left;
+    margin-left: 20px;
+    margin-top: -6px;
+    padding: 10px;    
+    visibility: hidden;
+    width: 346px;
+}
+
+.tblRelance {
+        border-collapse:collapse;width:100%;
+    }
+.thRelance , tdRelance {
+        border:1px solid black;width:20%;
+    }
+.tdRelance td{
+        text-align:center;
+    }
+
+.thRelance th{
+        background-color:#BBC4CC;color:midnightblue;
+    }
+#aideStatNouveauProjet {
+    background-color: white;
+    float: right;
+    font-size: 12px;
+    font-style: italic;
+    margin-right: 10px;
+    margin-top: -20px;
+    padding-left: 3px;
+    padding-right: 3px;
+    text-decoration: none;
+}
+#aideGestionLibelle {
+    background-color: white;
+    float: right;
+    font-size: 12px;
+    font-style: italic;
+    margin-right: 10px;
+    margin-top: -30px;
+    padding-left: 3px;
+    padding-right: 3px;
+    text-decoration: none;
+}
+#post{margin: 20px;}
+
+#msginfo {
+    color: green;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: -3px;
+    width: 500px;
+}
+#EnvoyerEmail{
+    width:167px;
+}
+
+#aideRelance {
+    background-color: white;
+    float: right;
+    font-size: 12px;
+    font-style: italic;
+    margin-right: 10px;
+    margin-top: -43px;
+    padding-left: 3px;
+    padding-right: 3px;
+    text-decoration: none;
+}
+
+.formDemande {
+    margin-left: 20px;    
+    width: 500px;
+}
+#pieceJointeDemandeFaisabilite{
+    margin-top: 20px;
+    float: left;
+    width:150px;
+}
+
+
+#msgerrpiecejointe {
+    color: red;
+    font-family: verdana;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    padding: 5px;
+    text-align: center;
+    width: 600px;
+}
+#errUpload{
+    background: #529ab7 none no-repeat scroll 15px 50%;
+    color: white;
+    float: right;
+    font-size: 0.9em;
+    margin-right: 150px;
+    margin-top: 20px;
+    padding: 7px;
+    text-align: center;
+    width: 625px;
+}
+#emailFaisabilite{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 130px;
+    margin-top: 40px;
+    padding: 45px 20px 0 10px;
+    width: 1017px;
+
+}
+
+.enteteProjet{
+    border: 1px solid gray;padding-left: 10px;padding-right:10px;
+}
+.titreEnteteProjet{
+    border: 1px solid gray;padding-left: 10px;padding-right:10px;background-color: #E4F0FC;
+}
+
+#date_debut_projet {
+    padding: 1px;
+    color:#3380be;
+    text-align: center;
+}
+
+.errDeleteUser{
+    color: red;text-align: center; font-weight: lighter
+}
+
+.claro .dijitButton .dijitButtonNode, .claro .dijitDropDownButton .dijitButtonNode, .claro .dijitComboButton .dijitButtonNode, .claro .dijitToggleButton .dijitButtonNode {
+    background-color: #00aea6;
+}
+.msgSendEmail{
+    color: darkblue;font-size: 14px;margin-bottom: 10px;margin-left: 350px;margin-top: 10px;
+}
+.msginfo {
+    color: darkblue;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 40px;
+    width: 1028px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.centraleProximite{
+    border-color: #5D8BA2; margin-right: 20px;margin-left: 6px;padding-left: 20px;padding-top: 5px;
+}
+
+.filterDate{
+    margin-top: 13px;
+    margin-bottom: 66px;
+    float: left;
+    width: 50%;
+    margin-left: 25%;
+}
+.msgtext{
+    color: darkblue;
+    font-size: 18px;
+    text-align: center;
+}

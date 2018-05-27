@@ -1,0 +1,58 @@
+<style type="text/css">
+    #grid {
+        width: 78em;
+        height: 38em;
+        margin-top: 25px;
+    }
+</style>
+<div id="gridDiv"></div>
+<script>
+    var dojo;
+    dojo.require("dojox.grid.EnhancedGrid");
+    dojo.require("dojox.data.CsvStore");
+    dojo.require("dojox.grid.enhanced.plugins.Menu");
+    dojo.require("dojo.data.ItemFileWriteStore");
+    dojo.require("dijit.Menu");
+    dojo.require("dijit.MenuItem");
+    dojo.require("dojo.domReady!");
+    dojo.require("dojo.request");
+    dojo.require("dojox.grid.enhanced.plugins.Pagination");
+    dojo.ready(function () {
+        var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetarelancer.json"});
+        var layout = [[
+                {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "auto", autoComplete: true},
+                {name: "<?php echo TXT_REFINTERNE; ?>", field: "refinterneprojet", width: "auto", autoComplete: true, dataTypeArgs: {autoComplete: false}},
+                {name: "<?php echo TXT_DATEDEBUTPROJET; ?>", field: "datedebutprojet", width: "auto", formatter: formatDate, autoComplete: true},
+                {name: "<?php echo TXT_DATEFIN; ?>", field: "datefin", width: "80px", formatter: formatDate, autoComplete: true, dataTypeArgs: {datePattern: "d/M/yyyy"}},
+                {name: "<?php echo TXT_NOM.' '.strtolower(TXT_PRENOM); ?>", field: "nom", width: "auto", autoComplete: true},
+                {name: "<?php echo 'Date d\'envoi de l\'email'; ?>", field: "dateheureenvoiemail", width: "80px", autoComplete: true},                
+                {name: "<?php echo TXT_UPDATEABOVE3MONTH; ?>", field: "datemaj", width: "150px", formatter: formatDate, autoComplete: true}
+            ]];
+        var grid = new dojox.grid.EnhancedGrid({
+            id: 'grid',
+            store: store,
+            structure: layout,
+            autoHeight: true,
+            rowSelector: '20px',
+            plugins: {
+                menus: {headerMenu: "headerMenu", rowMenu: "rowMenu", cellMenu: "cellMenu", selectedRegionMenu: "selectedRegionMenu"}
+                , pagination: {pageSizes: ["25", "50", "100", "All"], description: true, sizeSwitch: true, pageStepper: true, gotoButton: true, maxPageStep: 5, defaultPageSize: "50", position: "top"}
+            }
+        },
+        document.createElement('div'));
+        function formatDate(datum) {
+            var annee = datum.substring(0, 4);
+            if (annee > 1970){
+                var dateprojet = new Date(datum);
+                var options = {year: "numeric", month: "numeric", day: "numeric"};
+                <?php if ($lang == 'en') { ?>
+                    return new Intl.DateTimeFormat("en-US", options).format(dateprojet);
+                <?php } else { ?>
+                    return new Intl.DateTimeFormat("fr-FR", options).format(dateprojet);
+                <?php } ?>
+            }
+        }
+        dojo.byId("gridDiv").appendChild(grid.domNode);
+        grid.startup();
+    });
+</script>  

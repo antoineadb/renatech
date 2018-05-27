@@ -1,0 +1,697 @@
+<?php
+$db = BD::connecter();
+$manager = new Manager($db);
+?>
+<script>
+    function enablenemailprojetphase2() {
+        dijit.byId("enablenemailprojetphase2").setAttribute('disabled', false);
+    }
+</script>
+<?php
+if(isset($_GET['msgupdateemailprojetphase2'])){?>
+<table>
+    <tr>
+        <td>
+            <fieldset class='msgsiteweb' >
+                <?php echo TXT_MSGUPDATELIBELLE; ?>
+            </fieldset>
+
+        </td>
+    </tr>
+</table>
+<?php }?>
+
+
+<form data-dojo-type="dijit/form/Form" method="post" name="emailprojetphase2" id="emailprojetphase2" action="<?php echo '/'.REPERTOIRE.'/'; ?>modifBase/updateemailprojetphase2.php?lang=<?php echo $lang; ?>">
+    <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">				    
+    <fieldset id="gestionemailprojetrealisation" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">
+<?php
+$emailprojetEncours0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MRSMR');
+$emailprojetEncours1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BODYEMAILREALISATION4');
+$emailprojetEncours2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BODYEMAILREALISATION1');
+$emailprojetEncours3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BODYEMAILREALISATION2');
+$emailprojetEncours4 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RAPPEL');
+$emailprojetEncours5 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_SINCERESALUTATION');
+$emailprojetEncours6 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESEAURENATECH');
+?>
+        <legend><b><?php echo "Email projet En cours de réalisation" ;?></b></legend>
+<a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
+<span style="text-align: left;padding:10px;width: 945px;height:350px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+				<?php
+				if($lang=='fr'){
+                                    echo stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours0[0]['libellefrancais']))).'<br><br>'.
+                                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours1[0]['libellefrancais']))).'<br><br>'.
+                                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours2[0]['libellefrancais']))).'<br><br>'.
+                                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours3[0]['libellefrancais']))).'<br><br>'.
+                                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours4[0]['libellefrancais']))).'<br>'.
+                                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours5[0]['libellefrancais']))).'<br><br>'.
+                                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours6[0]['libellefrancais'])));
+                                }elseif($lang=='en'){
+                                    echo stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours0[0]['libelleanglais']))).'<br><br>'.
+                                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours1[0]['libelleanglais']))).'<br><br>'.
+                                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours2[0]['libelleanglais']))).'<br><br>'.
+                                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours3[0]['libelleanglais']))).'<br><br>'.
+                                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours4[0]['libelleanglais']))).'<br>'.
+                                    '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours5[0]['libelleanglais']))).'<br><br>'.
+                                    stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours6[0]['libelleanglais'])));
+				}
+				?>
+</span>
+</a>
+        <table>   
+             <tr>
+                <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                        <?php echo TXT_FRANCAIS;?></div></td>
+                <td><div style="color: #5D8BA2;text-align: center;width:340px;height:30px;margin-left:40px;font-weight: bold">
+                        <?php echo TXT_ANGLAIS;?></div></td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours0fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours0[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                            value="<?php echo $libelleprojetencours0fr; ?>"			onfocus="enablenemailprojetphase2()"
+                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours0fr"
+                            name="emailprojetencours0fr"
+                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours0en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours0[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                            value='<?php echo $libelleprojetencours0en; ?>'	onfocus="enablenemailprojetphase2()"
+                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours0en"
+                            name="emailprojetencours0en"
+                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours1fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours1[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetencours1fr; ?>"    onfocus="enablenemailprojetphase2()"    id="emailprojetencours1fr" name="emailprojetencours1fr"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px" 
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours1en = stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours1[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value='<?php echo $libelleprojetencours1en; ?>'	onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours1en"
+                        name="emailprojetencours1en"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr><tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours2fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours2[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value="<?php echo $libelleprojetencours2fr; ?>"			onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours2fr"
+                        name="emailprojetencours2fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours2en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours2[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value='<?php echo $libelleprojetencours2en; ?>'	onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours2en"
+                        name="emailprojetencours2en"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												<tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours3fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours3[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value="<?php echo $libelleprojetencours3fr; ?>"			onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours3fr"
+                        name="emailprojetencours3fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours3en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours3[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value='<?php echo $libelleprojetencours3en; ?>'	onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours3en"
+                        name="emailprojetencours3en"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+												<tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours4fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours4[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value="<?php echo $libelleprojetencours4fr; ?>"			onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours4fr"
+                        name="emailprojetencours4fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours4en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours4[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value='<?php echo $libelleprojetencours4en; ?>'	onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours4en"
+                        name="emailprojetencours4en"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours5fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours5[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value="<?php echo $libelleprojetencours5fr; ?>"			onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours5fr"
+                        name="emailprojetencours5fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours5en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours5[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value='<?php echo $libelleprojetencours5en; ?>'	onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours5en"
+                        name="emailprojetencours5en"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours6fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours6[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value="<?php echo $libelleprojetencours6fr; ?>"			onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours6fr"
+                        name="emailprojetencours6fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetencours6en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetEncours6[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value='<?php echo $libelleprojetencours6en; ?>'	onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetencours6en"
+                        name="emailprojetencours6en"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+<?php
+$emailprojetFini0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MRSMR');
+$emailprojetFini1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BODYEMAILFINI');
+$emailprojetFini2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RAPPEL');
+$emailprojetFini3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_SINCERESALUTATION');
+$emailprojetFini4 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESEAURENATECH');
+$emailprojetFini5 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_EMAILADDRESSCENTRAL');
+?>
+    <fieldset id="gestionemailprojetphase1fini" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">    
+        <legend><b><?php echo "Email projet Fini" ;?></b></legend>
+            <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
+                    <span style="text-align: left;padding:10px;width: 905px;height:300px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+                        <?php
+                            if($lang=='fr'){
+                                echo stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini0[0]['libellefrancais']))).'<br><br>'.
+                                stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini1[0]['libellefrancais']))).'<br><br>'.
+                                stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini2[0]['libellefrancais']))).'<br><br>'.
+                                '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini3[0]['libellefrancais']))).'<br><br>'.
+                                '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini4[0]['libellefrancais']))).'<br>'.
+                                '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini5[0]['libellefrancais'])));
+                            }elseif($lang=='en'){
+                                  echo stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini0[0]['libelleanglais']))).'<br><br>'.
+                                stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini1[0]['libelleanglais']))).'<br><br>'.
+                                stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini2[0]['libelleanglais']))).'<br><br>'.
+                                '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini3[0]['libelleanglais']))).'<br><br>'.
+                                '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini4[0]['libelleanglais']))).'<br>'.
+                                '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini5[0]['libelleanglais'])));
+                            }
+                        ?>
+                    </span>
+            </a>
+            <table>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php $libelleprojetfini0fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini0[0]['libellefrancais'])));?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetfini0fr; ?>" onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini0fr" name="emailprojetfini0fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <?php $libelleprojetfini0en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini0[0]['libelleanglais'])));?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"    value='<?php echo $libelleprojetfini0en; ?>'	onfocus="enablenemailprojetphase2()"
+                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini0en"
+                            name="emailprojetfini0en"
+                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php $libelleprojetfini1fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini1[0]['libellefrancais']))); ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetfini1fr; ?>" onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini1fr"   name="emailprojetfini1fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <?php $libelleprojetfini1en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini1[0]['libelleanglais'])));?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value='<?php echo $libelleprojetfini1en; ?>'	onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini1en"
+                        name="emailprojetfini1en"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="width:450px">
+                        <?php $libelleprojetfini2fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini2[0]['libellefrancais'])));?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetfini2fr; ?>"   onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini2fr" name="emailprojetfini2fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                    </td>
+                    <td valign="middle" style="width:450px">
+                        <?php $libelleprojetfini2en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini2[0]['libelleanglais'])));?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox"
+                        value='<?php echo $libelleprojetfini2en; ?>'	onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini2en" name="emailprojetfini2en"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                    </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" style="width:450px">
+                            <?php $libelleprojetfini3fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini3[0]['libellefrancais'])));?>
+                            <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetfini3fr; ?>"   onfocus="enablenemailprojetphase2()"
+                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini3fr" name="emailprojetfini3fr"
+                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                        </td>
+                        <td valign="middle" style="width:450px">
+                            <?php $libelleprojetfini3en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini3[0]['libelleanglais'])));?>
+                            <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetfini3en; ?>'	onfocus="enablenemailprojetphase2()"
+                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini3en" name="emailprojetfini3en"
+                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" style="width:450px">
+                            <?php $libelleprojetfini4fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini4[0]['libellefrancais'])));?>
+                            <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetfini4fr; ?>"	onfocus="enablenemailprojetphase2()"
+                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini4fr" name="emailprojetfini4fr"
+                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                        </td>
+                        <td valign="middle" style="width:450px">
+                            <?php $libelleprojetfini4en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini4[0]['libelleanglais'])));?>
+                            <input data-dojo-type="dijit/form/ValidationTextBox"
+                            value='<?php echo $libelleprojetfini4en; ?>'	onfocus="enablenemailprojetphase2()"
+                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini4en"  name="emailprojetfini4en"
+                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" style="width:450px">
+                        <?php $libelleprojetfini5fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini5[0]['libellefrancais']))); ?>
+                        <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetfini5fr; ?>" onfocus="enablenemailprojetphase2()"
+                        style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini5fr"  name="emailprojetfini5fr"
+                        data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                        </td>
+                        <td valign="middle" style="width:450px">
+                            <?php $libelleprojetfini5en = stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetFini5[0]['libelleanglais'])));?>
+                            <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetfini5en; ?>'	onfocus="enablenemailprojetphase2()"
+                            style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetfini5en"  name="emailprojetfini5en"
+                            data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                        </td>
+                    </tr>
+                   
+                </table>
+    </fieldset>
+<?php
+$emailprojetCloture0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MRSMR');
+$emailprojetCloture1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BODYEMAILCLOTURE');
+$emailprojetCloture2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RAPPEL');
+$emailprojetCloture3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_SINCERESALUTATION');
+$emailprojetCloture4 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESEAURENATECH');
+$emailprojetCloture5 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_EMAILADDRESSCENTRAL');
+?>
+<fieldset id="gestionemailprojetphase1cloture" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">    
+        <legend><b><?php echo "Email projet clôturé" ;?></b></legend>
+            <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
+                <span style="text-align: left;padding:10px;width: 905px;height:300px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+                    <?php
+                        if($lang=='fr'){
+                            echo stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture0[0]['libellefrancais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture1[0]['libellefrancais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture2[0]['libellefrancais']))).'<br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture3[0]['libellefrancais']))).'<br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture4[0]['libellefrancais']))).'<br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture5[0]['libellefrancais'])));
+                    }elseif($lang=='en'){
+                        echo stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture0[0]['libelleanglais']))).'<br><br>'.
+                        stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture1[0]['libelleanglais']))).'<br><br>'.
+                        stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture2[0]['libelleanglais']))).'<br><br>'.
+                        '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture3[0]['libelleanglais']))).'<br><br>'.
+                        '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture4[0]['libelleanglais']))).'<br>'.
+                        '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture5[0]['libelleanglais'])));
+                    }
+                    ?>
+                </span>
+            </a>
+        <table>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture0fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture0[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"  value="<?php echo $libelleprojetcloture0fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture0fr" name="emailprojetcloture0fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture0en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture0[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"  value='<?php echo $libelleprojetcloture0en; ?>'	onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture0en" name="emailprojetcloture0en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture1fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture1[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetcloture1fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture1fr" name="emailprojetcloture1fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture1en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture1[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetcloture1en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture1en" name="emailprojetcloture1en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture2fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture2[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetcloture2fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture2fr" name="emailprojetcloture2fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture2en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture2[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"  value='<?php echo $libelleprojetcloture2en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture2en" name="emailprojetcloture2en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture3fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture3[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetcloture3fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture3fr" name="emailprojetcloture3fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture3en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture3[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetcloture3en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture3en" name="emailprojetcloture3en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture4fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture4[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetcloture4fr; ?>"    onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture4fr" name="emailprojetcloture4fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture4en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture4[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetcloture4en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture4en" name="emailprojetcloture4en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture5fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture5[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetcloture5fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture5fr" name="emailprojetcloture5fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetcloture5en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetCloture5[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetcloture5en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetcloture5en" name="emailprojetcloture5en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+            </tr>            
+            </tr>
+        </table>
+    </fieldset> 
+<?php
+$emailprojetaffecte0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_PROJETNUM');
+$emailprojetaffecte1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_AFFECTPROJET1');
+$emailprojetaffecte2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BODYEMAILPHASE231');
+$emailprojetaffecte3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_SINCERESALUTATION');
+$emailprojetaffecte4 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESEAURENATECH');
+$emailprojetaffecte5 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_DONOTREPLY');
+?>
+<fieldset id="gestionemailprojetphase1affecte" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">    
+        <legend><b><?php echo "Email projet Affecté" ;?></b></legend>
+            <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
+                <span style="text-align: left;padding:10px;width: 905px;height:200px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+                    <?php
+                        if($lang=='fr'){
+                            echo 
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte0[0]['libellefrancais']))).'  P-1xxxxxxxx '.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte1[0]['libellefrancais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte2[0]['libellefrancais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte3[0]['libellefrancais']))).'<br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte4[0]['libellefrancais']))).'<br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte5[0]['libellefrancais'])));
+                    }elseif($lang=='en'){
+                            echo
+                        stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte0[0]['libelleanglais']))).'  P-1xxxxxxxx '.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte1[0]['libelleanglais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte2[0]['libelleanglais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte3[0]['libelleanglais']))).'<br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte4[0]['libelleanglais']))).'<br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte5[0]['libelleanglais'])));
+                    }
+                    ?>
+                </span>
+            </a>
+        <table>            
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte0fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte0[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetaffecte0fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte0fr" name="emailprojetaffecte0fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte0en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte0[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetaffecte0en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte0en" name="emailprojetaffecte0en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte1fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte1[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetaffecte1fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte1fr" name="emailprojetaffecte1fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte1en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte1[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetaffecte1en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte1en" name="emailprojetaffecte1en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>            
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte2fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte2[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetaffecte2fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte2fr" name="emailprojetaffecte2fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte2en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte2[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"  value='<?php echo $libelleprojetaffecte2en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte2en" name="emailprojetaffecte2en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte3fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte3[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetaffecte3fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte3fr" name="emailprojetaffecte3fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte3en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte3[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetaffecte3en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte3en" name="emailprojetaffecte3en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte4fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte4[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetaffecte4fr; ?>"    onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte4fr" name="emailprojetaffecte4fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte4en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte4[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetaffecte4en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte4en" name="emailprojetaffecte4en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>      
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte5fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte5[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetaffecte5fr; ?>"    onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte5fr" name="emailprojetaffecte5fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetaffecte5en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetaffecte5[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetaffecte5en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetaffecte5en" name="emailprojetaffecte5en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>      
+        </table>
+    </fieldset> 
+<?php
+$emailprojetmaj0 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_MRSMR5');
+$emailprojetmaj1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BODYEMAILMODIF0');
+$emailprojetmaj2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_BODYEMAILMODIF1');
+$emailprojetmaj3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_TITREPROJETEMAIL');
+$emailprojetmaj4 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_SINCERESALUTATION');
+$emailprojetmaj5 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_RESEAURENATECH');
+$emailprojetmaj6 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_DONOTREPLY');
+?>
+<fieldset id="gestionemailprojetphase1maj" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;width:1015px">    
+        <legend><b><?php echo "Email Mise à jour projet " ;?></b></legend>
+            <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
+                <span style="text-align: left;padding:10px;width: 905px;height:300px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
+                    <?php
+                        if($lang=='fr'){
+                            echo 
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj0[0]['libellefrancais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj1[0]['libellefrancais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj2[0]['libellefrancais']))).'<br><br>'.
+                            stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj3[0]['libellefrancais']))).' xxxxxxxxxxxx <br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj4[0]['libellefrancais']))).'<br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj5[0]['libellefrancais']))).'<br><br>'.
+                            '<br>'.stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj6[0]['libellefrancais'])));
+                    }elseif($lang=='en'){
+                            
+                    }
+                    ?>
+                </span>
+            </a>
+        <table>            
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj0fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj0[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetmaj0fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj0fr" name="emailprojetmaj0fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj0en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj0[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetmaj0en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj0en" name="emailprojetmaj0en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj1fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj1[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetmaj1fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj1fr" name="emailprojetmaj1fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj1en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj1[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetmaj1en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj1en" name="emailprojetmaj1en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>            
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj2fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj2[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetmaj2fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj2fr" name="emailprojetmaj2fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj2en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj2[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"  value='<?php echo $libelleprojetmaj2en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj2en" name="emailprojetmaj2en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj3fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj3[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetmaj3fr; ?>" onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj3fr" name="emailprojetmaj3fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj3en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj3[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetmaj3en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj3en" name="emailprojetmaj3en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj4fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj4[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetmaj4fr; ?>"    onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj4fr" name="emailprojetmaj4fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj4en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj4[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetmaj4en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj4en" name="emailprojetmaj4en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>      
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj5fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj5[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetmaj5fr; ?>"    onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj5fr" name="emailprojetmaj5fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj5en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj5[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetmaj5en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj5en" name="emailprojetmaj5en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>      
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj6fr= stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj6[0]['libellefrancais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo $libelleprojetmaj6fr; ?>"    onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj6fr" name="emailprojetmaj6fr"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleprojetmaj6en=stripslashes(str_replace("''","'",str_replace("’’","'",$emailprojetmaj6[0]['libelleanglais'])));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo $libelleprojetmaj6en; ?>' onfocus="enablenemailprojetphase2()"
+                    style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="emailprojetmaj6en" name="emailprojetmaj6en"
+                    data-dojo-props="regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€!$_\«\»\’’\ ,\°\.\'\-\:\/]+'" >
+                </td>
+            </tr>      
+        </table>
+    </fieldset> 
+    <table>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td>
+                <input style="text-align: left;margin-left: 10px"  type="submit" id ="enablenemailprojetphase2" name="enablenemailprojetphase2"
+                       label="<?php echo TXT_MODIFIER ;?>"   data-dojo-type="dijit/form/Button" disabled="disabled" >
+            </td>
+        </tr>
+        <tr style="font-size: x-small;"><td><?php echo TXT_CHAMPSOBLIGATOIRES;?></td></tr>
+    </table>
+</form>
+<?php BD::deconnecter(); ?>

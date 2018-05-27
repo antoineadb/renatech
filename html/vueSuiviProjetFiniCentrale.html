@@ -1,0 +1,124 @@
+<style type="text/css">
+    #grid {
+        width: 65em;
+        height: 350em;
+    }
+</style>
+<script>
+    dojo.require("dojox.grid.EnhancedGrid");
+    dojo.require("dojox.data.CsvStore");
+    dojo.require("dojox.grid.enhanced.plugins.Menu");
+    dojo.require("dojo.data.ItemFileWriteStore");
+    dojo.require("dijit.Menu");
+    dojo.require("dijit.MenuItem");
+    dojo.require("dojo.domReady!");
+    dojo.require("dojo.request");
+    dojo.require("dojox.grid.enhanced.plugins.Pagination");
+dojo.ready(function(){
+    /*set up data store*/
+    var store = new dojo.data.ItemFileWriteStore({url: "<?php echo '/'.REPERTOIRE;?>/tmp/projetFiniCentrale<?php echo IDCENTRALEUSER; ?>.json"});
+    /*set up layout*/    
+    var layout = [[{
+                    name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "110px", formatter: hrefFormatterNumero},
+                    {name: "<?php echo TXT_DATEDEBUTPROJET; ?>", field: "datedebutprojet", width: "auto"},
+                    {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "auto"},
+                    {name: "<?php echo TXT_REFINTERNE;?>", field: "refinterneprojet", width: "auto"},
+                    {name: "<?php echo TXT_ACRONYME.' - '.TXT_REFINTERNE; ?>", field: "acronyme", width: "auto"},
+                    {name: "<?php echo TXT_DATESTATUTFIN;?>", field: "datestatutfini", width: "auto", formatter: formatDate}
+                    
+    ]];
+    var gridFiniCentrale = new dojox.grid.EnhancedGrid({
+        id: 'gridFiniCentrale',
+        store: store,
+        structure: layout,
+        autoHeight:true,
+        rowSelector: '20px',
+        plugins: {menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"},
+            pagination: {
+            pageSizes: ["5", "10", "50","100", "All"],
+            description: true,
+            sizeSwitch: true,
+            pageStepper: true,
+            gotoButton: true,
+                    /*page step to be displayed*/
+            maxPageStep: 5,
+                    /*position of the pagination bar*/
+            position: "top"
+        }}
+    },
+      document.createElement('div'));
+//----------------------------------------------------------------------------------------------------------------------
+//                                              FONCTIONS DE FORMATAGE
+//----------------------------------------------------------------------------------------------------------------------
+        function hrefFormatterNumero(numero,idx) {
+            var item = gridFiniCentrale.getItem(idx);
+            var centrale = item.libellecentrale;
+            var statut = +item.idstatutprojet;
+            return "<a  href=\"<?php echo '/'.REPERTOIRE;?>/controler/controlestatutprojet.php?lang=<?php echo $lang; ?>&statut=" + statut + "&numProjet=" + numero +"&centrale=" + centrale + "\">"+ numero + "</a>";
+        }
+        function hrefFormatterPDF(index, idx) {
+            var item = gridFiniCentrale.getItem(idx);
+            var numero = item.numero;
+            return "<a  href=\"<?php echo '/'.REPERTOIRE;?>/pdf_project/<?php echo $lang; ?>/" + numero + "\" target='_blank'>" +
+                    '<img title="<?php echo TXT_GENERERPDF; ?>" src="<?php echo "/".REPERTOIRE; ?>/styles/img/pdf_icongrid.png" />' + "</a>";
+        }
+       dojo.connect(gridFiniCentrale, 'onRowContextMenu', function(e){
+            var rowIndex = e.rowIndex;
+            var item = gridFiniCentrale.getItem(rowIndex);
+            var idprojet = item.idprojet;
+            document.getElementById('idprojet').value=idprojet;
+        })
+        dojo.connect(gridFiniCentrale, 'onRowMouseOver', function(e){
+        })
+        function formatDate(datum) {
+            var annee =  datum.substring(0,4);
+            if(annee>1970){
+                var dateprojet= new Date(datum);
+                    var options = {year: "numeric", month: "numeric", day: "numeric"};
+                <?php if ($lang == 'en') { ?>
+                    return new Intl.DateTimeFormat("en-US",options).format(dateprojet);
+                <?php } else { ?>
+                    return new Intl.DateTimeFormat("fr-FR",options).format(dateprojet);
+                <?php } ?>
+                }
+        }
+
+    /* append the new grid to the div */
+    dojo.byId("gridDiv2").appendChild(gridFiniCentrale.domNode);
+//----------------------------------------------------------------------------------------------------------------------
+//                                        TEST METHODE
+//----------------------------------------------------------------------------------------------------------------------
+                    dojo.connect(dijit.byId('gridFiniCentrale'), 'onStyleRow', this, function(row) {
+                        var item = gridFiniCentrale.getItem(row.index);
+                        if (item) {
+                            var datefin = gridFiniCentrale.store.getValue(item, "calcfinprojet", null);
+                            var datefinProche = gridFiniCentrale.store.getValue(item, "calcfinproche", null);
+                            if(!empty(datefin)){
+                                var now = new Date();
+                                var curr_month = now.getMonth();
+                                if(curr_month<10){
+                                    curr_month="0"+curr_month;
+                                }
+                                var maintenant = new Date (now.getFullYear() ,curr_month , now.getDate());
+                                var dateFin = new Date(datefin);
+                                var datefinproche = new Date(datefinProche);
+                                var maint = maintenant;
+                                var fin = dateFin;
+                                var finp =datefinproche;
+
+                                if(maint>fin){
+                                    row.customStyles += "color:red";
+                                }else  if(maint >=finp){
+                                    row.customStyles += "color:darkgoldenrod";
+                                }else{
+                                    row.customStyles += "color:darkgreen";
+                                }
+                            }
+                        gridFiniCentrale.focus.styleRow(row);
+                        gridFiniCentrale.edit.styleRow(row);
+                    }
+                    });
+    gridFiniCentrale.startup();
+});
+</script>
+<div id="gridDiv2"></div>
