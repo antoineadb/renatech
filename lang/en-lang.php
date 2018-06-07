@@ -930,6 +930,7 @@ define ('TXT_TOUTCACHEVIDE',"All the cache is empty");
 define ('TXT_VIDETOUSCACHE',"Empty all the cache");
 define ("TXT_VIDECACHEDONNEE","Empty only the data cache");
 define ("TXT_VIDECACHE","Empty The cache");
+define ("TXT_ADMINAPPLI","Application Administration");
 define("TXT_DUPLIQUERPROJET","Duplicate a project");
 define("TXT_ACRONYMEMODIFIER","The acronym is modified");
 define("TXT_MANUAL","User manuals");

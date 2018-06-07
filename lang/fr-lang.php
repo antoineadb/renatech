@@ -928,6 +928,7 @@ define ('TXT_TOUTCACHEVIDE',"Tous le cache est vide");
 define ('TXT_VIDETOUSCACHE',"Videz tous le cache");
 define ("TXT_VIDECACHEDONNEE","Videz uniquement le cache des données");
 define ("TXT_VIDECACHE","Vider le cache");
+define ("TXT_ADMINAPPLI","Administration de l'application");
 define("TXT_DUPLIQUERPROJET","Dupliquer un projet");
 define("TXT_ACRONYMEMODIFIER","L'acronyme est  modifié");
 define("TXT_MANUAL","Manuels utilisateur");

@@ -142,6 +142,8 @@ include_once 'DescriptionCentraleProximiteProjet.php';
 include_once 'DemandeFaisabilite.php';
 include_once 'TypePartenaire.php';
 include_once 'ProjetTypePartenaire.php';
+include_once 'Params.php';
+
 showError($_SERVER['PHP_SELF']);
 
 class Manager {
@@ -151,7 +153,61 @@ class Manager {
     public function __construct($db) {            
         $this->setDb($db);
     }
-
+    
+ /**
+     * 
+     * @param Login $login
+     */
+    public function addParams(Params $param) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO params (description,login,motdepasse,host,port,datemaj)VALUES(?,?,?,?,?,?)');
+            $description = $param->getDescription();
+            $login = $param->getLogin();
+            $mdp = $param->getMdp();
+            $host = $param->getHost();
+            $port = $param->getPort();            
+            $datemaj = $param->getDatemaj();
+            $requete->bindParam(1, $description, PDO::PARAM_STR);
+            $requete->bindParam(2, $login, PDO::PARAM_STR);
+            $requete->bindParam(3, $mdp, PDO::PARAM_STR);
+            $requete->bindParam(4, $host, PDO::PARAM_STR);
+            $requete->bindParam(5, $port, PDO::PARAM_STR);
+            $requete->bindParam(6, $datemaj, PDO::PARAM_STR);
+            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_MANAERRLOGIN . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
+    
+public function updateParams(Params $param, $idparams) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('update params set description=? , login=?,motdepasse=?, host=?,port=? WHERE id=? ');
+            $login = $param->getLogin();
+            $mdp = $param->getMdp();
+            $host = $param->getHost();
+            $port = $param->getPort();            
+            $description = $param->getDescription();
+            $requete->bindParam(1, $description, PDO::PARAM_STR);
+            $requete->bindParam(2, $login, PDO::PARAM_STR);
+            $requete->bindParam(3, $mdp, PDO::PARAM_STR);
+            $requete->bindParam(4, $host, PDO::PARAM_STR);
+            $requete->bindParam(5, $port, PDO::PARAM_STR);
+            $requete->bindParam(6, $idparams, PDO::PARAM_INT);
+            
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_MANAERRLOGIN . '<br>' . $exc->getLine();
+            $this->_db->rollBack();
+        }
+    }
 //------------------------------------------------------------------------------------------------------------
 //                                       LOGIN
 //------------------------------------------------------------------------------------------------------------
@@ -183,6 +239,8 @@ class Manager {
             $this->_db->rollBack();
         }
     }
+    
+    
  //------------------------------------------------------------------------------------------------------------
 //                                       SUPPRESSION D'UN UTILISATEUR
 //------------------------------------------------------------------------------------------------------------

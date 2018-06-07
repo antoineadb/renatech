@@ -22,6 +22,7 @@ $log= '/'.REPERTOIRE.'/log/'.$lang;
 $viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
 $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
 $exportdesProjets = '/' . REPERTOIRE . "/exportDonneeBruteNation/" . $lang;
+$adminAppli  = '/' . REPERTOIRE . "/adminApplication/" . $lang;
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -58,9 +59,10 @@ $exportdesProjets = '/' . REPERTOIRE . "/exportDonneeBruteNation/" . $lang;
             <li><a href="<?php echo $libelle;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_GESTIONLIBELLE;?></a></li>
             <li><a href="<?php echo $statistique;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo ucfirst(TXT_STATISTIQUE);?></a></li>
             <li><a href="<?php echo $traffic;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_TRAFFIC;?></a></li>            
-             <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
+            <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
             <li><a href="<?php echo $log;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Logs';?></a></li>
-             <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
+            <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
+            <li><a href="<?php echo $adminAppli;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_ADMINAPPLI;?></a></li>
         </ul>
  
     </li>

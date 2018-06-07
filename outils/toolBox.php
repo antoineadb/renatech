@@ -1026,7 +1026,7 @@ function createLogInfo($dateHeure, $infos, $nomPrenom, $statutProjet, $manager, 
         include_once 'class/Manager.php';
     }
     $db = BD::connecter();
-    $manager = new Manager($db);
+    $manager = new Manager($db);    
     $id = $manager->getSingle("select max(id) from logs") + 1;
     $logs = new Logs($id, $dateHeure, $infos, $nomPrenom, $statutProjet, $idcentrale);
     $manager->addlogs($logs);

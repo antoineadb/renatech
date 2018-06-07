@@ -7,6 +7,7 @@ include '../class/Manager.php';
 include '../class/Securite.php';
 include_once '../outils/toolBox.php';
 include_once '../outils/constantes.php';
+include_once '../outils/gestionCas.php';
 
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
@@ -15,6 +16,7 @@ if (isset($_GET['statut'])) {
 } elseif (isset($_POST['idstatut'])) {
     $idstatutprojet = $_POST['idstatut'];
 }
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              TRAITEMENT DES DONNEES NON AFFECTEES DANS LA TABLE AUTRESQUALITE
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -35,67 +37,42 @@ if (isset($_POST['page_precedente'])) {
         }
 
         $sendmail = $manager->getSingle2("select sendmail from projetautrecentrale where idprojet =?", $idprojet);
-
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        //                                            SAUVEGARDE
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        if ($_POST['save'] == 'oui' && $_POST['maj'] == 'non') {//ENREGISTREMENT AVEC OU SANS AUTRE CENTRALE 
-            $cas = 'enregistrement';
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        //                                            CHANGEMENT DE STATUT
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'TRUE' && $_POST['majcentrale'] == 'oui') {
-            //CHANGEMENT DE STATUT ON A CLIQUER SUR OUI POUR RENVOYER L'EMAIL AUX AUTRES CENTRALES QU'ON A DEJA ENVOYE
-            $cas = 'chgstatutAutCentraleEmailDejaEnvoye';
-        } elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'TRUE' && $_POST['majcentrale'] == 'non' && $sendmail == TRUE) {
-            //CHANGEMENT DE STATUT ON A CLIQUER SUR NON POUR  NE PAS RENVOYER L'EMAIL AUX AUTRES CENTRALES QU'ON A DEJA ENVOYE
-            $cas = 'chgstatutAutCentraleEmailDejaEnvoyeNon';
-        } elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'TRUE' && $_POST['majcentrale'] == 'non' && $sendmail == FALSE) {
-            //CHANGEMENT DE STATUT AVEC AJOUT D'UNE ETAPE DANS UNE AUTRES CENTRALE POUR LA 1ER FOIS  
-            $cas = 'chgstatutAutCentraleEmailJammaisEnvoye';
-        } elseif (isset($_POST['chgstatut']) && $_POST['chgstatut'] == 'oui' && $_POST['etapeautrecentrale'] == 'FALSE' && $_POST['majcentrale'] == 'non') {
-            //CHANGEMENT DE STATUT, PAS D'ETAPE DANS UNE AUTRE CENTRALE
-            $cas = 'chgstatut';
-        }
-     
-        if(isset($_POST['emailNon'])&& $_POST['emailNon']=='non'){
-            $cas1 = 'noEmail';
+        if(isset($_POST['save'])){
+            $save=$_POST['save'];
         }else{
-            $cas1 = '';
+            $save=null;
+        }        
+        if(isset($_POST['chgstatut'])){
+            $chgstatut=$_POST['chgstatut'];
+        }else{
+            $chgstatut=null;
         }
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        //                                            MISE A JOUR
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        if ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'oui') {
-            //MISE A JOUR avec autre centrale déja envoyé
-            $cas = 'miseAJourEmailAutreCentrale';
-        } elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'non' && $_POST['etapeautrecentrale'] == 'TRUE' && $sendmail == FALSE) {
-            //MISE A JOUR AVEC AUTRE CENTRALE 1ER FOIS 
-            $cas = 'miseAJourEmailautreEmailpremierefois'; //--> TO BE DONE
-        } elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'non' && $sendmail == TRUE) {
-            //REPONDU NON A L'ENVOI D'UN EMAIL AUX AUTRES CENTRALES
-            $cas = 'miseAJourEmail';
-        } elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'oui' && $_POST['majcentrale'] == 'non' && $_POST['etapeautrecentrale'] == 'FALSE') {
-            //MISE A JOUR SANS AUTRE CENTRALE
-            $cas = 'miseAJourEmail';
+        if(isset($_POST['etapeautrecentrale'])){
+            $etapeautrecentrale=$_POST['etapeautrecentrale'];
+        }else{
+            $etapeautrecentrale=null;
         }
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        //                                            VALIDATION 
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        elseif ($_POST['save'] == 'non' && $_POST['maj'] == 'non' & !isset($_POST['chgstatut'])) {//VALIDATION APRES UNE SAUVEGARDE
-            if ($_POST['etapeautrecentrale'] == 'TRUE') {//VALIDATION AVEC UNE ETAPE AUTRE CENTRALE --> OK VERIFER
-                $cas = 'creationprojetphase2etape';
-            } elseif ($_POST['etapeautrecentrale'] == 'FALSE' && !isset($_POST['chgstatut'])) {//VALIDATION SANS UNE ETAPE AUTRE CENTRALE --> OK VERIFER
-                $cas = 'creerprojetphase2';
-            }
+        if(isset($_POST['majcentrale'])){
+            $majcentrale=$_POST['majcentrale'];
+        }else{
+            $majcentrale=null;
+        }        
+        if(isset($_POST['sendmail'])){
+            $sendmail=$_POST['sendmail'];
+        }else{
+            $sendmail=null;
         }
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        //  CAS PARTICULIER DE LA VALIDATION, SI ON VALIDE UN PROJET AVEC UNE AUTRE CENTRALE SUR LEQUEL L'ADMINLOCAL ENLEVE L'AUTRE CENTRALE
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------        
-        elseif ($_POST['etapeautrecentrale'] == 'FALSE' && $_POST['majcentrale'] == 'oui') {//on envoi pas le message au autres centrales            
-            $cas = 'miseAJourEmail';
-        } 
+        if(isset($_POST['emailNon'])){
+            $emailNon=$_POST['emailNon'];
+        }else{
+            $emailNon=null;
+        }
+        if(isset($_POST['maj'])){
+            $maj=$_POST['maj'];
+        }else{
+            $maj=null;
+        }
+        $cas = gestionCas::choixCas($save, $chgstatut, $etapeautrecentrale, $majcentrale, $sendmail, $emailNon, $maj);
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 //                            FIN AFFECTATION D'UNE VARIABLE $CAS
 //----------------------------------------------------------------------------------------------------------------------------------------------------------            
@@ -169,17 +146,21 @@ if (isset($_POST['page_precedente'])) {
             $partenaire1BDD = '';
         }
         //RECUPERATION DU NOMBRE DE PARTENAIRE A PARTIR DE LA TABLE PROJETPARTENAIRE        
-        $arraypartenaireBDD = $manager->getList2("SELECT nomlaboentreprise,nompartenaire FROM  projetpartenaire,partenaireprojet WHERE idpartenaire_partenaireprojet = idpartenaire and  idprojet_projet=?", $idprojet);
+        $arraypartenaireBDD = $manager->getList2("SELECT nomlaboentreprise FROM  projetpartenaire
+                        LEFT JOIN partenaireprojet ON idpartenaire_partenaireprojet = idpartenaire 
+                        WHERE   idprojet_projet=?",$idprojet);
+        $partenaire1 = $manager->getSingle2("SELECT  centralepartenaireprojet FROM PROJET WHERE   idprojet=?", $idprojet);
+        
         $nombrePartenaireBDD = count($arraypartenaireBDD);
         $partenairesBDD = '';
         if (!empty($nombrePartenaireBDD)) {
             for ($i = 0; $i < count($arraypartenaireBDD); $i++) {
-                $partenairesBDD .= $arraypartenaireBDD[$i]['nompartenaire'] . ' - ' . $arraypartenaireBDD[$i]['nomlaboentreprise'] . ' - ';
+                $partenairesBDD .= $arraypartenaireBDD[$i]['nomlaboentreprise'].' - ';
             }
-            $sPartenairesBDD = substr(trim($partenairesBDD), 0, -1);
+            $sPartenairesBDD = trim($partenaire1) . " - ".substr(trim($partenairesBDD), 0, -1);
         } else {
             $sPartenairesBDD = '';
-        }
+        }        
         if (!empty($rowprojet[0]['idthematique_thematique'])) {
             $idthematiqueBDD = $rowprojet[0]['idthematique_thematique'];
         } else {
@@ -547,6 +528,7 @@ if (isset($_POST['page_precedente'])) {
                 }
             }
         }
+        
         if ($_POST['nombrePartenaire'] > 1) {
             for ($i = 0; $i < $_POST['nombrePartenaire'] - 1; $i++) {
                 if (!empty($_POST['' . 'nomLaboEntreprise' . $i . ''])) {
@@ -561,7 +543,8 @@ if (isset($_POST['page_precedente'])) {
                 $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet, $idtypepartenaire);
                 $manager->addprojetpartenaire($newprojetpartenaire);
             }
-            $Spartenaires = substr(trim($partenaires), 0, -1);
+            
+            $Spartenaires = $_POST['centralepartenaireprojet'].' - '.substr(trim($partenaires), 0, -1);
             if ($Spartenaires != $sPartenairesBDD) {
                 $_SESSION['partenairesmodif'] = TXT_AUTRESPARTENAIRE . '  ' . $Spartenaires;
             } else {
@@ -1250,7 +1233,12 @@ if (isset($_POST['page_precedente'])) {
             if($cas1 !='noEmail'){
                 include '../EmailProjetEncoursrealisation.php';
             }
-             header('Location: /' . REPERTOIRE . '/myproject/' . $lang . '/' . $idprojet);
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail') {
+                include '../emailAutreCentrales.php';
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' && $cas1 !='noEmail') {
+                include '../outils/envoiEmailAutreCentrale.php';
+            }
+            header('Location: /' . REPERTOIRE . '/myproject/' . $lang . '/' . $idprojet);
         } elseif ($idstatutprojet == FINI) {//PROJET FINI
             //VERIFICATION QUE LE PROJET A BIEN UNE DATE DE DEBUT DE PROJET,AFFECTATION DE LA DATE STAUTFINI DANS LE CAS CONTRAIRE
             $datedebutduprojet = $manager->getSingle2("select datedebutprojet from projet where idprojet=?", $idprojet);
@@ -1268,7 +1256,15 @@ if (isset($_POST['page_precedente'])) {
             // ENVOI D'UN EMAIL
             if($cas1 !='noEmail'){
                 include '../EmailProjetfini.php';
-            }            
+            }
+            //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail') {
+                include '../emailAutreCentrales.php';
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' && $cas1 !='noEmail') {
+                include '../outils/envoiEmailAutreCentrale.php';
+            }
+            //vide le cache
+            
             header('Location: /' . REPERTOIRE . '/update_project2/' . $lang . '/' . $idprojet . '/' . $idstatutprojet . '/' . $_POST['nombrePersonneCentrale']);
             exit();            
         } elseif ($idstatutprojet == CLOTURE) {//PROJET CLOTURER
@@ -1289,12 +1285,19 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateDateStatutCloturer($datecloturer, $idprojet);
             $concerne = new Concerne($idcentrale, $idprojet, CLOTURE, "");
             $manager->updateConcerne($concerne, $idprojet);
-
+            effaceCache(LIBELLECENTRALEUSER);
             if($cas1!='noEmail'){
                 include '../EmailProjetcloture.php';
             }
+
+            //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1!='noEmail') {
+                include '../emailAutreCentrales.php';
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye'&& $cas1!='noEmail') {
+                include '../outils/envoiEmailAutreCentrale.php';
+            }
             //vide le cache
-            effaceCache(LIBELLECENTRALEUSER);
+            
             header('Location: /' . REPERTOIRE . '/closed_project/' . $lang . '/' . $idprojet . '/' . $idstatutprojet);
             exit();
         } elseif ($idstatutprojet == REFUSE) {//PROJET REFUSER            

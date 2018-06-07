@@ -1371,6 +1371,9 @@ a.infoBulle:hover span{
 .msgSendEmail{
     color: darkblue;font-size: 14px;margin-bottom: 10px;margin-left: 350px;margin-top: 10px;
 }
+.msgMajBdd{
+    color: darkblue;font-size: 14px;margin-bottom: 10px;margin-left: 250px;margin-top: 10px;
+}
 .msginfo {
     color: darkblue;
     font-size: 13px;
@@ -1390,4 +1393,9 @@ a.infoBulle:hover span{
     float: left;
     width: 50%;
     margin-left: 25%;
+}
+.msgtext{
+    color: darkblue;
+    font-size: 18px;
+    text-align: center;
 }
