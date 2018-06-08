@@ -23,6 +23,7 @@ $viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
 $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
 $exportdesProjets = '/' . REPERTOIRE . "/exportDonneeBruteNation/" . $lang;
 $adminAppli  = '/' . REPERTOIRE . "/adminApplication/" . $lang;
+$exportLims  = '/' . REPERTOIRE . "/exportLims/" . $lang;
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -44,6 +45,8 @@ $adminAppli  = '/' . REPERTOIRE . "/adminApplication/" . $lang;
             <li><a href="<?php echo $exportenquete; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTENQUETE;?></a></li>
             <li><a href="<?php echo $exportRapportWord; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTREPORT; ?></a></li>
             <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
+            <li><a href="<?php echo $exportLims;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo "Export LIMS pour MyFab";?></a></li>            
+            
         </ul> 
     </li>
     <li><a href="#" style="font-weight: bold"><?php echo '<u>'.TXT_COMPTES.'</u>'; ?></a>

@@ -482,3 +482,4 @@ RewriteRule   admin_centrale_proximite/([a-z]+)                                 
 RewriteRule   updateprojet/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)                      modifBase/updateProjetphase2.php?lang=$1&idprojet=$2&numProjet=$3   [L]
 RewriteRule   adminApplication/([a-z]+)/([a-z]+)                                adminApplication.php?lang=$1&t=$2   [L]
 RewriteRule   adminApplication/([a-z]+)                                         adminApplication.php?lang=$1   [L]
+RewriteRule   exportLims/([a-z]+)                                               exportLims.php?lang=$1   [L]
