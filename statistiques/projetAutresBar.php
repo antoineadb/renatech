@@ -137,7 +137,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
         if ($anneeDepart == $anneeFin) {
             $title = TXT_PROJETPARDATETYPE . ' in' . $anneeDepart;
         } else {
-            $title = TXT_PROJETDATESTATUTANNEE . ' between' . $anneeDepart . " and " . $anneeFin;
+            $title = TXT_PROJETPARDATETYPE . ' between' . $anneeDepart . " and " . $anneeFin;
         }
     }
 } 

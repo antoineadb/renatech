@@ -750,7 +750,7 @@ define('TXT_TOUSCENTRALE','Toutes les centrales');
 define ('TXT_PROJETINTERNE','Interne');
 define ('TXT_PROJETEXOEXTERNE','Exogène externe');
 define ('TXT_PROJETEXOCOLLABORATIF','Exogène collaboratif');
-define ('TXT_PROJETPARDATETYPE',"Nombre de projets déposés par type");
+define ('TXT_PROJETPARDATETYPE',"Nombre de projets déposés par typologie");
 define ('TXT_PROJETPARDATETYPEPOURANNEE',"Répartition des nouveaux projets par type pour l'année ");
 define ('TXT_REPARTITIONPROJETENCOURS',"Répartition des projets en cours par type, cumul par année");
 define ('TXT_REPARTITIONPROJETENCOURSANNEE',"Répartition des projets en cours par type pour l'année ");

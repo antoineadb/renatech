@@ -53,7 +53,7 @@ define('ABSPATH', dirname(__FILE__) . '/');
 define('STATCENTRALETYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Projet par centrale et par type'));
 define('STATUSERDATE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistiqueen=?", 'Number of users since the beginning by category'));
 define('IDSTATNOUVEAUPROJET', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Cumul du nombre de projets déposés'));
-define('IDSTATPROJETDATETYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de projets déposés entre 2014 et 2017 par type'));
+define('IDSTATPROJETDATETYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de projets déposés de 2014 à 2017 par typologie'));
 define('IDSTATTYPOLOGIENOUVEAUPROJET', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Cumul des nouveaux projets par typologie'));
 define('IDSTATTYPOLOGIEPROJETENCOURS', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de projet en cours par typologie'));
 define('IDREPARTIONPROJETENCOURSTYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", "Répartition des projets en cours par type, cumul par année"));

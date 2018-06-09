@@ -751,7 +751,7 @@ define('TXT_TOUSCENTRALE','All the Central');
 define ('TXT_PROJETINTERNE','Internal');
 define ('TXT_PROJETEXOEXTERNE','Exogenous external');
 define ('TXT_PROJETEXOCOLLABORATIF','Exogenous collaborative');
-define ('TXT_PROJETPARDATETYPE',"Number of projects submitted between by type");
+define ('TXT_PROJETPARDATETYPE',"Number of projects submitted between by typology");
 define ('TXT_PROJETPARDATETYPEPOURANNEE',"Distribution of new projects by type  for the year, cumulative by year ");
 define ('TXT_REPARTITIONPROJETENCOURS',"Distribution of the running projects by type, cumulative by year");
 define ('TXT_REPARTITIONPROJETENCOURSANNEE',"Distribution of the running projects by type for the year ");
