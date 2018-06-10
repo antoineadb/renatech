@@ -23,8 +23,11 @@ $typeUser = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM 
     } elseif (isset($_GET['anneeuser'])) {
         $ongletutilisateur = true;
     }
-    
-    $arraystat = $manager->getList("select * from statistique");
+    if(IDTYPEUSER == ADMINNATIONNAL){
+        $arraystat = $manager->getList("select * from statistique");
+    }elseif(IDTYPEUSER == ADMINLOCAL){
+        $arraystat = $manager->getList2("select * from statistique where idstatistique!=?",IDNBUSERCLEANROOMRUNNINGPROJET);
+    }
     $nbstat = count($arraystat);
     ?>    
 <script src='<?php echo '/'.REPERTOIRE; ?>/js/jquery-1.8.0.min.js'></script>

@@ -46,43 +46,6 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     $serie_0 = "";    
     $serieY = substr($serie_0, 0, -1);
 }
-if (IDTYPEUSER == ADMINLOCAL) {
-    $title = TXT_CLEANROOMUSERRUNNINGPROJECT.' '.date('Y');
-    $_S_serie = '';
-    $totalUser = $manager->getList2("select annee,count(nb) as nb from tmpUserCleanRoom where libellecentrale=? and annee>2012 group by annee order by annee asc", LIBELLECENTRALEUSER);
-    $nb=0;
-    for ($i = 0; $i < count($totalUser); $i++) {
-        if (empty($totalUser[$i]['nb'])) {
-            $totalUser[$i]['nb'] = 0;
-        }
-        if($totalUser[$i]['annee']==2013){
-            $nb = $manager->getSingle2("select count(nb) as nb from tmpUserCleanRoom where libellecentrale=? and annee<=2013", LIBELLECENTRALEUSER);
-        }else{
-            $nb+=$totalUser[$i]['nb'];
-        }
-        if($totalUser[$i]['annee']==2013){
-            $_S_serie .= '{name: "' . TXT_INFERIEUR2013 . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nb . ',drilldown: "' . LIBELLECENTRALEUSER . $totalUser[$i]['annee'] . '"}]},';
-        }else{
-            $_S_serie .= '{name: "' . $totalUser[$i]['annee'] . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nb . ',drilldown: "' . LIBELLECENTRALEUSER . $totalUser[$i]['annee'] . '"}]},';
-        }
-    }$serie_1 = str_replace("},]}", "}]}", $_S_serie);
-    $serie_01 = str_replace("},]", "}]", $serie_1);
-    $serieX = substr($serie_01, 0, -1);
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//                                                                              AXE DES Y
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-    $nbUsercentraleYear = $manager->getList2("select annee,mois,count(nb) as nb from tmpUserCleanRoom where libellecentrale=? group by annee,mois order by annee asc", LIBELLECENTRALEUSER);
-    $_S_serie3 = "";
-    foreach ($nbUsercentraleYear as $key => $year) {
-        $_S_serie3 .="{id: '" . LIBELLECENTRALEUSER . $year[0] . "',name: '" . LIBELLECENTRALEUSER . ' ' . $year[0] . "'" . ',data: [';
-        for ($mois = 1; $mois < 13; $mois++) {
-            $nbUsercentraleYearMonth = $manager->getSinglebyArray("select count(nb) as nb from tmpUserCleanRoom where annee=?  and mois=? and libellecentrale=?", array($year[0], $mois, LIBELLECENTRALEUSER));
-            $_S_serie3.= "['" . showMonth($mois,$lang) . "'," . $nbUsercentraleYearMonth . "],";
-        }$_S_serie3.=']},';
-    }
-    $serieY = substr($_S_serie3, 0, -1);
-}
-
 $subtitle = TXT_CLICDETAIL;
 include_once 'commun/scriptBar.php';
 BD::deconnecter();

@@ -3,7 +3,6 @@
 session_start();
 include 'decide-lang.php';
 include 'class/Manager.php';
-include 'class/Securite.php';
 include_once 'outils/toolBox.php';
 include_once 'outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE

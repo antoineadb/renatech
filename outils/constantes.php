@@ -72,7 +72,7 @@ define('IDORIGINEPORTPORTEURPROJETENCOURS', $manager->getSingle2("SELECT idstati
 define('IDNBUSERCLEANROOMNEWPROJET', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de personnes ayant travaillé en salle blanche depuis 2014'));
 define('IDNBUSERCLEANROOMRUNNINGPROJET', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de personnes travaillant en salle blanche'));
 define('IDNBRUNNINGPROJECT', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de projet en cours'));
-define('IDNBPORTEURRUNNINGPROJECT', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Cumul du nombre de porteur de projet en cours'));
+define('IDNBPORTEURRUNNINGPROJECT', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de porteur de projet en cours'));
 define('IDCENTRALEAUTRE', $manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'Autres'));
 define('ACADEMIC', $manager->getSingle2("SELECT idtypeprojet  FROM typeprojet WHERE libelletype=?", 'Académique'));
 define('FORMATION', $manager->getSingle2("SELECT idtypeprojet FROM typeprojet WHERE libelletype=?", 'Formation'));

@@ -37,7 +37,7 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
     $manager->exeRequete("drop table if exists tmpnbnewUserIndust");
     $manager->getRequete("create table tmpnbnewUserIndust as (SELECT distinct idutilisateur as id,libellecentrale, extract (year from datecreation) as datecreation,extract (month from datecreation) as mois  "
             . "FROM utilisateur,creer c, concerne co, centrale ce WHERE idutilisateur = idutilisateur_utilisateur AND co.idprojet_projet = c.idprojet_projet AND  ce.idcentrale= co.idcentrale_centrale "
-            . "and idqualitedemandeurindust_qualitedemandeurindust is not null AND extract(year from datecreation)<=? group by libellecentrale,idutilisateur ,datecreation,mois)", array($_GET['anneeNewUserHolder']));
+            . "and idqualitedemandeurindust_qualitedemandeurindust is not null AND extract(year from datecreation)=? group by libellecentrale,idutilisateur ,datecreation,mois)", array($_GET['anneeNewUserHolder']));
     $nbIndustriel = $manager->getSingle("SELECT count(distinct id) as nb FROM tmpnbnewUserIndust");
     $industriel = '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y:' . $nbIndustriel . ',drilldown: "' . TXT_INDUSTRIEL . $_GET['anneeNewUserHolder'] . '"}]},';
     $serieIndustriel = "{id: '" . TXT_INDUSTRIEL . "',name: '" . TXT_INDUSTRIEL . "',data: [";
@@ -64,18 +64,18 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
     $manager->exeRequete("drop table if exists tmpnbnewUserExterne");
     $manager->getRequete("create table tmpnbnewUserExterne as (SELECT distinct u.idutilisateur as id,libellecentrale,idcentrale, extract (year from datecreation) as datecreation,extract (month from datecreation) as mois "
             . "FROM utilisateur u,creer c,concerne co, centrale ce WHERE idutilisateur = idutilisateur_utilisateur AND co.idprojet_projet = c.idprojet_projet AND  ce.idcentrale= co.idcentrale_centrale "
-            . "and idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is null AND co.idcentrale_centrale!=? and extract (year from datecreation)<=? "
+            . "and idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is null AND co.idcentrale_centrale!=? and extract (year from datecreation)=? "
             . "and ce.masquecentrale!=TRUE group by idcentrale,libellecentrale,datecreation,mois,id "
             . "union "
             . "SELECT distinct u.idutilisateur as id,libellecentrale, extract (year from datecreation) as datecreation,idcentrale,extract (month from datecreation) as mois FROM utilisateur u,utilisateuradministrateur ua,creer c,"
             . "concerne co, centrale ce WHERE u.idutilisateur = idutilisateur_utilisateur AND co.idprojet_projet = c.idprojet_projet AND  ce.idcentrale= co.idcentrale_centrale AND ua.idutilisateur = u.idutilisateur "
-            . "AND idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is null AND co.idcentrale_centrale!=? and extract (year from datecreation)<=? "
+            . "AND idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is null AND co.idcentrale_centrale!=? and extract (year from datecreation)=? "
             . "and ce.masquecentrale!=TRUE group by idcentrale,libellecentrale,datecreation,mois,id "
             . "union "
             . "SELECT distinct u.idutilisateur as id,libellecentrale, extract (year from datecreation) as datecreation,idcentrale,extract (month from datecreation) as mois FROM utilisateur u,utilisateurporteurprojet up,creer c,"
             . "concerne co, centrale ce  WHERE u.idutilisateur = up.idutilisateur_utilisateur AND  ce.idcentrale= co.idcentrale_centrale AND   up.idutilisateur_utilisateur = co.idprojet_projet "
-            . "AND u.idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is null AND co.idcentrale_centrale!=? and extract (year from datecreation)<=? "
-            . "and ce.masquecentrale!=TRUE group by idcentrale,libellecentrale,datecreation,mois,id order by libellecentrale,"
+            . "AND u.idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is null AND co.idcentrale_centrale!=? and extract (year from datecreation)=? "
+            . "and ce.masquecentrale!=TRUE group by idcentrale,libellecentrale,datecreation,mois,id order by idcentrale,"
             . "datecreation,mois,id )", array(IDAUTRECENTRALE, $_GET['anneeNewUserHolder'], IDAUTRECENTRALE, $_GET['anneeNewUserHolder'], IDAUTRECENTRALE, $_GET['anneeNewUserHolder']));
     $nbAcaexterne = $manager->getSingle("SELECT count(distinct id) FROM tmpnbnewUserExterne");
 
@@ -99,21 +99,21 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
     /*                                                                              ACADEMIQUE INTERNE                                                                                                           */
     /* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
     $manager->exeRequete("drop table if exists tmpnbnewUser");
-    $manager->getRequete("create table tmpnbnewUser as (SELECT distinct idutilisateur ,libellecentrale,extract (year from datecreation) as datecreation,"
+    $manager->getRequete("create table tmpnbnewUser as (SELECT distinct idutilisateur ,libellecentrale,idcentrale,extract (year from datecreation) as datecreation,"
             . "extract (month from datecreation) as mois  FROM utilisateur,creer,centrale WHERE idutilisateur = idutilisateur_utilisateur AND idcentrale_centrale = idcentrale "
             . "and idqualitedemandeuraca_qualitedemandeuraca  is not null and idcentrale_centrale is not null AND idcentrale_centrale!=? and extract (year from datecreation)<=? "
-            . " and masquecentrale!=TRUE group by idutilisateur,datecreation,libellecentrale,mois "
+            . " and masquecentrale!=TRUE group by idutilisateur,datecreation,libellecentrale,idcentrale,mois "
             . " union "
-            . "SELECT distinct  u.idutilisateur ,libellecentrale,extract (year from datecreation) as datecreation,extract (month from datecreation) as mois  "
+            . "SELECT distinct  u.idutilisateur ,libellecentrale,idcentrale,extract (year from datecreation) as datecreation,extract (month from datecreation) as mois  "
             . "FROM utilisateur u,utilisateuradministrateur ua,centrale WHERE ua.idutilisateur = u.idutilisateur AND idcentrale_centrale = idcentrale AND idqualitedemandeuraca_qualitedemandeuraca is not null "
-            . "and idcentrale_centrale is not null AND idcentrale_centrale!=? and extract (year from datecreation) <=? and masquecentrale!=TRUE group by u.idutilisateur,datecreation,libellecentrale,mois"
+            . "and idcentrale_centrale is not null AND idcentrale_centrale!=? and extract (year from datecreation) <=? and masquecentrale!=TRUE group by u.idutilisateur,datecreation,libellecentrale,idcentrale,mois"
             . " union "
-            . "SELECT distinct  idutilisateur ,libellecentrale,extract (year from datecreation) as datecreation,extract (month from datecreation) as mois FROM utilisateur,utilisateurporteurprojet,centrale "
+            . "SELECT distinct  idutilisateur ,libellecentrale,idcentrale,extract (year from datecreation) as datecreation,extract (month from datecreation) as mois FROM utilisateur,utilisateurporteurprojet,centrale "
             . "WHERE idutilisateur = idutilisateur_utilisateur AND idcentrale_centrale = idcentrale AND idqualitedemandeuraca_qualitedemandeuraca is not null and idcentrale_centrale is not null AND idcentrale_centrale!=? "
-            . "and extract (year from datecreation) <=? and masquecentrale!=TRUE group by idutilisateur,datecreation,libellecentrale order by datecreation asc)", array(IDAUTRECENTRALE, $_GET['anneeNewUserHolder'], IDAUTRECENTRALE, $_GET['anneeNewUserHolder'], IDAUTRECENTRALE, $_GET['anneeNewUserHolder']));
+            . "and extract (year from datecreation) <=? and masquecentrale!=TRUE group by idutilisateur,datecreation,libellecentrale,idcentrale order by datecreation asc)", array(IDAUTRECENTRALE, $_GET['anneeNewUserHolder'], IDAUTRECENTRALE, $_GET['anneeNewUserHolder'], IDAUTRECENTRALE, $_GET['anneeNewUserHolder']));
 
 
-    $totalUser = $manager->getList("select libellecentrale,count(idutilisateur)as nb from tmpnbnewUser group by libellecentrale order by libellecentrale asc;");
+    $totalUser = $manager->getList("select libellecentrale,count(idutilisateur)as nb from tmpnbnewUser group by idcentrale,libellecentrale order by idcentrale asc;");
     $nbInterne = $manager->getSingle("select count(idutilisateur) from tmpnbnewUser");
     $serie = "";
     for ($i = 0; $i < count($totalUser); $i++) {
@@ -127,13 +127,13 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------   
     $serie_01 = "";
     foreach ($centrales as $key => $centrale) {
-        if ($_GET['anneeNewUserHolder']) {
+        if ($_GET['anneeNewUserHolder']==2013) {
             $serie_01 .= "{id: '" . $centrale[0] . $_GET['anneeNewUserHolder'] . "',name: '" . $centrale[0] . ' ' . TXT_INFERIEUR2013 . "'" . ',data: [';
         } else {
             $serie_01 .= "{id: '" . $centrale[0] . $_GET['anneeNewUserHolder'] . "',name: '" . $centrale[0] . ' ' . $_GET['anneeNewUserHolder'] . "'" . ',data: [';
         }
 
-        for ($mois = 1; $mois < 13; $mois++) {
+        for ($mois = 1; $mois < 13; $mois++) {                
             $nbUsercentrale = $manager->getSinglebyArray("select count(idutilisateur) from tmpnbnewUser  WHERE libellecentrale=? and datecreation=? and mois=?", array($centrale[0], $_GET['anneeNewUserHolder'], $mois));
             if (empty($nbUsercentrale)) {
                 $nbUsercentrale = 0;
@@ -263,18 +263,19 @@ if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneeNewUserHolder'])) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     $serie = "";
     $manager->exeRequete("drop table if exists tmpnbnewUserInterne");
-    $manager->getRequete("create table tmpnbnewUserInterne as (SELECT distinct idutilisateur ,libellecentrale,idcentrale,extract (year from datecreation) as datecreation,extract (month from datecreation) as mois  "
+    $manager->getRequete("create table tmpnbnewUserInterne as (SELECT distinct idutilisateur ,libellecentrale,idcentrale,extract (year from datecreation) as datecreation,extract (month from datecreation) as mois,masquecentrale  "
             . "FROM utilisateur,creer,centrale WHERE idutilisateur = idutilisateur_utilisateur AND idcentrale_centrale = idcentrale and idqualitedemandeuraca_qualitedemandeuraca  is not null "
-            . "and idcentrale_centrale is not null AND idcentrale_centrale!=? and masquecentrale!=TRUE group by idcentrale,idutilisateur,datecreation,libellecentrale,mois "
+            . "and idcentrale_centrale is not null AND idcentrale_centrale!=? and masquecentrale!=TRUE group by idcentrale,idutilisateur,datecreation,libellecentrale,mois,masquecentrale "
             . " union "
             . "SELECT distinct  u.idutilisateur ,libellecentrale,idcentrale,"
-            . "extract (year from datecreation) as datecreation,extract (month from datecreation) as mois  FROM utilisateur u,utilisateuradministrateur ua,centrale WHERE ua.idutilisateur = u.idutilisateur "
+            . "extract (year from datecreation) as datecreation,extract (month from datecreation) as mois,masquecentrale  FROM utilisateur u,utilisateuradministrateur ua,centrale WHERE ua.idutilisateur = u.idutilisateur "
             . "AND idcentrale_centrale = idcentrale AND idqualitedemandeuraca_qualitedemandeuraca is not null and idcentrale_centrale is not null AND idcentrale_centrale!=? and masquecentrale!=TRUE "
-            . "group by idcentrale,u.idutilisateur,datecreation,libellecentrale,mois "
+            . "group by idcentrale,u.idutilisateur,datecreation,libellecentrale,mois,masquecentrale "
             . " union "
-            . "SELECT distinct  idutilisateur ,libellecentrale,idcentrale,extract (year from datecreation) as datecreation,extract (month from datecreation) as mois "
+            . "SELECT distinct  idutilisateur ,libellecentrale,idcentrale,extract (year from datecreation) as datecreation,extract (month from datecreation) as mois,masquecentrale "
             . "FROM utilisateur,utilisateurporteurprojet,centrale WHERE idutilisateur = idutilisateur_utilisateur AND idcentrale_centrale = idcentrale AND idqualitedemandeuraca_qualitedemandeuraca is not null "
-            . "and idcentrale_centrale is not null AND idcentrale_centrale!=? group by idcentrale,idutilisateur,datecreation,libellecentrale order by datecreation asc);", array(IDAUTRECENTRALE, IDAUTRECENTRALE, IDAUTRECENTRALE));
+            . "and idcentrale_centrale is not null AND idcentrale_centrale!=? group by idcentrale,idutilisateur,datecreation,libellecentrale,masquecentrale order by datecreation asc);", 
+            array(IDAUTRECENTRALE, IDAUTRECENTRALE, IDAUTRECENTRALE));
     $totalUser = $manager->getList("select libellecentrale,count(idutilisateur)as nb from tmpnbnewUserInterne group by idcentrale,libellecentrale order by idcentrale asc;");
 
 
@@ -432,7 +433,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
             . "and idcentrale_centrale is not null AND idcentrale_centrale=? and masquecentrale!=TRUE group by idutilisateur,datecreation,libellecentrale order by datecreation asc);", array(IDAUTRECENTRALE, IDAUTRECENTRALE, IDCENTRALEUSER));
     $nbInterne = $manager->getSingle2("select count(distinct idutilisateur) from tmpnbnewUserinterne where libellecentrale=?", LIBELLECENTRALEUSER);
     $totalUser = $manager->getList2("select libellecentrale,count(idutilisateur)as nb from tmpnbnewUserInterne where libellecentrale=? group by libellecentrale order by libellecentrale asc;", LIBELLECENTRALEUSER);
-    $libellecentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", IDCENTRALEUSER);
+    $libellecentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=? ", IDCENTRALEUSER);
     $serie = "";
     for ($i = 0; $i < count($totalUser); $i++) {
         if (empty($totalUser[$i]['nb'])) {

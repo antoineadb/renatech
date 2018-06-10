@@ -816,7 +816,7 @@ define('TXT_REPARTITIONRESSOURCEPROJETENCOURSPIE',"Répartition des ressources t
 define('TXT_NBRESSOURCE',"Nombre de ressource");
 define('TXT_NBRESSOURCEAU',"Nombre de ressource pour l'année");
 define('TXT_NBPROJETCENTRALE','Nombre de projet pour la centrale');
-define('TXT_NBPORTEURPROJETENCOURS','Cumul du nombre de porteur de projet en cours');
+define('TXT_NBPORTEURPROJETENCOURS','Nombre de porteur de projet en cours');
 define('TXT_NBPORTEURPROJETENCOURSPOURANNEE',"Nombre de porteur de projet en cours pour l'année ");
 define('TXT_REPARTITIONPORTEURPROJETENCOURS',"Répartition des porteurs de projet en cours");
 define('TXT_PROJETDATESTATUT','Cumul du nombre de projets déposés');

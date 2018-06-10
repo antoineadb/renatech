@@ -817,7 +817,7 @@ define('TXT_REPARTITIONRESSOURCEPROJETENCOURSPIE',"Allocation of technology reso
 define('TXT_NBRESSOURCE',"Number of resource");
 define('TXT_NBRESSOURCEAU',"Number of resource for the year");
 define('TXT_NBPROJETCENTRALE','Number of project for the Central');
-define('TXT_NBPORTEURPROJETENCOURS','Cumulative of the number of projects holders');
+define('TXT_NBPORTEURPROJETENCOURS','Number of projects holders');
 define('TXT_NBPORTEURPROJETENCOURSPOURANNEE','Number of running project holder for the year ');
 define('TXT_REPARTITIONPORTEURPROJETENCOURS',"Distribution of running projects holders");
 define('TXT_PROJETDATESTATUT','Accumulation of the number of projects submitted');

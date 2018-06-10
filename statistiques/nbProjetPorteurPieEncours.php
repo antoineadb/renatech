@@ -7,27 +7,14 @@ $arraylibellecentrale = $manager->getList("select libellecentrale,idcentrale fro
 $datay = array();
 $arraylibelle = array();
 $string0 = '';
-
+$curentYear=date('Y');
 $arraystatutprojet = $manager->getList2("select libellestatutprojet,libellestatutprojeten,idstatutprojet from statutprojet where idstatutprojet!=? order by idstatutprojet asc", TRANSFERERCENTRALE);
-if (IDTYPEUSER == ADMINNATIONNAL && isset($_GET['anneePorteurProjetEncours'])) {  
-    $nbtotalprojet = 0;
-    for ($i = 0; $i < count($arraylibellecentrale); $i++) {        
-       $nbByYearByStatut=$manager->getSinglebyArray("SELECT count(distinct idutilisateur) FROM concerne co,loginpassword,utilisateur,creer cr,projet WHERE idlogin = idlogin_loginpassword AND "
-                    . "idutilisateur = idutilisateur_utilisateur AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? "
-                    . "and EXTRACT(YEAR from datecreation)<=?  and  trashed != ?", array( $arraylibellecentrale[$i]['idcentrale'],ENCOURSREALISATION,$_GET['anneePorteurProjetEncours'],TRUE));
-       $nbtotalprojet+=$nbByYearByStatut;
-        if ($nbtotalprojet != 0) {
-            $string0.='["' . $arraylibellecentrale[$i]['libellecentrale'] . '",' . $nbByYearByStatut . '],';
-            
-        }
-    }$title = TXT_NBPORTEURPROJETENCOURSPOURANNEE.' '.$_GET['anneePorteurProjetEncours'];
-    $subtitle = TXT_NBPROJET . ' <b>' . $nbtotalprojet . '</b>';
-}elseif (IDTYPEUSER == ADMINNATIONNAL && !isset($_GET['anneePorteurProjetEncours'])) {      
+if (IDTYPEUSER == ADMINNATIONNAL) {      
     $nbtotalprojet=0;
     for ($i = 0; $i < count($arraylibellecentrale); $i++) {
         $nbByYearByStatut=$manager->getSinglebyArray("SELECT count(distinct idutilisateur) FROM concerne co,loginpassword,utilisateur,creer cr,projet WHERE idlogin = idlogin_loginpassword AND "
                     . "idutilisateur = idutilisateur_utilisateur AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? "
-                    . "and EXTRACT(YEAR from datecreation)<=?  and  trashed != ?", array( $arraylibellecentrale[$i]['idcentrale'],ENCOURSREALISATION,$year[0]-1,TRUE));
+                    . "and EXTRACT(YEAR from datecreation)<=?  and  trashed != ?", array( $arraylibellecentrale[$i]['idcentrale'],ENCOURSREALISATION,$curentYear,TRUE));
         $nbtotalprojet+=$nbByYearByStatut;
         if ($nbtotalprojet != 0) {
             $string0.='["' . $arraylibellecentrale[$i]['libellecentrale'] . '",' . $nbByYearByStatut . '],';
