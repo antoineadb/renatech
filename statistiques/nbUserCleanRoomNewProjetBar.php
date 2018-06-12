@@ -17,25 +17,28 @@ $xaxis = '';
 $xasisTitle = TXT_NOMBREOCCURRENCE;
 $years = $manager->getList("select distinct EXTRACT(YEAR from dateprojet)as year from projet where   EXTRACT(YEAR from dateprojet)>2013 order by year asc");
 $manager->exeRequete("drop table if exists tmpUserCleanRoom");
-/*$manager->getRequete("create table tmpUserCleanRoom as (SELECT count(distinct LOWER(pe.mailaccueilcentrale)) as nb, ce.idcentrale, ce.libellecentrale,extract(year from datedebutprojet) as annee,extract(month from datedebutprojet) as mois  
-FROM personneaccueilcentrale pe,projetpersonneaccueilcentrale pr,projet p,centrale ce,concerne co WHERE pr.idpersonneaccueilcentrale_personneaccueilcentrale = pe.idpersonneaccueilcentrale 
-AND p.idprojet = pr.idprojet_projet AND co.idprojet_projet = p.idprojet AND co.idcentrale_centrale = ce.idcentrale and ce.idcentrale != ?  AND extract(year from datedebutprojet) >=2014
-group by ce.idcentrale,ce.libellecentrale,annee,mois order by ce.idcentrale asc)", array(IDCENTRALEAUTRE));*/
 
-$manager->getRequete("create table tmpUserCleanRoom as (SELECT distinct LOWER(pe.mailaccueilcentrale) as mailaccueilcentrale, ce.idcentrale, ce.libellecentrale,extract(year from datedebutprojet) as annee,extract(month from datedebutprojet) as mois  
-FROM personneaccueilcentrale pe,projetpersonneaccueilcentrale pr,projet p,centrale ce,concerne co WHERE pr.idpersonneaccueilcentrale_personneaccueilcentrale = pe.idpersonneaccueilcentrale 
-AND p.idprojet = pr.idprojet_projet AND co.idprojet_projet = p.idprojet AND co.idcentrale_centrale = ce.idcentrale and ce.idcentrale != ?  AND extract(year from datedebutprojet) >=2014
-group by mailaccueilcentrale,ce.idcentrale,ce.libellecentrale,annee,mois order by ce.idcentrale asc)", array(IDCENTRALEAUTRE));
+$manager->getRequete("create table tmpUserCleanRoom as (SELECT distinct on (LOWER(pac.mailaccueilcentrale)) pac.mailaccueilcentrale , ce.libellecentrale as libelle,ce.idcentrale, EXTRACT (YEAR FROM datedebutprojet) as annee
+FROM projet p
+LEFT JOIN concerne c ON  c.idprojet_projet = p.idprojet 
+JOIN centrale ce ON cE.idcentrale = c.idcentrale_centrale
+LEFT JOIN projetpersonneaccueilcentrale  ppac ON ppac.idprojet_projet = p.idprojet
+LEFT JOIN personneaccueilcentrale pac ON pac.idpersonneaccueilcentrale = ppac.idpersonneaccueilcentrale_personneaccueilcentrale
+WHERE   c.idcentrale_centrale != ? and EXTRACT (YEAR FROM datedebutprojet)>=2014
+)", array(IDCENTRALEAUTRE));
 
+$array = "SELECT COUNT(mailaccueilcentrale) AS nb,libelle from tmpusercleanroom GROUP BY libelle ORDER BY idcentrale asc" ;
+    
 if (IDTYPEUSER == ADMINNATIONNAL) {
     $title = TXT_CLEANROOMUSERNEWPROJECT;
-    $_S_serie = '';
-    $totalUser = $manager->getList("select libellecentrale,idcentrale, count(distinct(mailaccueilcentrale)) as nb from tmpUserCleanRoom group by idcentrale,libellecentrale order by idcentrale asc");
+    $_S_serie = '';    
+    $totalUser = $manager->getList("SELECT COUNT(mailaccueilcentrale) AS nb,libelle from tmpusercleanroom GROUP BY libelle,idcentrale ORDER BY idcentrale");
+                                    
     for ($i = 0; $i < count($totalUser); $i++) {
         if (empty($totalUser[$i]['nb'])) {
             $totalUser[$i]['nb'] = 0;
         }
-        $_S_serie .= '{name: "' . $totalUser[$i]['libellecentrale'] . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $totalUser[$i]['nb'] . ',drilldown: "' . $totalUser[$i]['libellecentrale'] . '"}]},';
+        $_S_serie .= '{name: "' . $totalUser[$i]['libelle'] . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $totalUser[$i]['nb'] . ',drilldown: "' . $totalUser[$i]['libelle'] . '"}]},';
     }$serie_1 = str_replace("},]}", "}]}", $_S_serie);
     $serie_01 = str_replace("},]", "}]", $serie_1);
     $serieX = substr($serie_01, 0, -1);
@@ -46,7 +49,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     foreach ($centrales as $key => $centrale) {
         $_S_serie2 .="{id: '" . $centrale[0] . "',name: '" . $centrale[0] . "',data: [";
         foreach ($years as $key => $year) {
-            $nbByYear = $manager->getSinglebyArray("select sum(nb) as nb from tmpUsercleanroom where annee=? and libellecentrale =?", array($year[0], $centrale[0]));
+            $nbByYear = $manager->getSinglebyArray("select COUNT(mailaccueilcentrale) AS nb from tmpUsercleanroom where annee=? and libelle =?", array($year[0], $centrale[0]));
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
@@ -65,8 +68,9 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
 }
 if (IDTYPEUSER == ADMINLOCAL) {
     $title = TXT_CLEANROOMUSERNEWPROJECT;
-    $_S_serie = '';
-    $totalUser = $manager->getList2("select libellecentrale,annee,idcentrale, count(distinct(mailaccueilcentrale)) as nb from tmpUserCleanRoom where idcentrale=?  group by libellecentrale,idcentrale,annee order by annee asc", IDCENTRALEUSER);    
+    $_S_serie = '';    
+    $totalUser = $manager->getList2("SELECT COUNT(mailaccueilcentrale) AS nb,libelle,annee,idcentrale from tmpusercleanroom WHERE idcentrale =? GROUP BY libelle,idcentrale,annee ORDER BY annee asc", IDCENTRALEUSER);
+    
     $nb=0;
     for ($i = 0; $i < count($totalUser); $i++) {
         if (empty($totalUser[$i]['nb'])) {
@@ -80,8 +84,8 @@ if (IDTYPEUSER == ADMINLOCAL) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              AXE DES Y
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
-    $totalUser = $manager->getList2("select annee ,count(distinct(mailaccueilcentrale)) as nb from tmpUserCleanRoom where idcentrale=? group by annee order by annee asc", IDCENTRALEUSER);
-    $nbTotaluser = $manager->getSingle2("select count(distinct(mailaccueilcentrale)) as nb  from tmpUserCleanRoom where idcentrale=?",IDCENTRALEUSER);
+    $totalUser = $manager->getList2("select annee ,count(mailaccueilcentrale) as nb from tmpUserCleanRoom where idcentrale=? group by annee order by annee asc", IDCENTRALEUSER);
+    $nbTotaluser = $manager->getSingle2("select count(mailaccueilcentrale) as nb  from tmpUserCleanRoom where idcentrale=?",IDCENTRALEUSER);
     $_S_serie3 = "";
     for ($i = 0; $i < count($totalUser); $i++) {
         $_S_serie3 .="{id: '" . $totalUser[$i]['annee']  . "',name: '" . LIBELLECENTRALEUSER . ' ' . $totalUser[$i]['nb']  . "'" . ',data: []},';
