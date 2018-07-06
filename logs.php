@@ -24,7 +24,7 @@ include 'html/header.html';
     <?php
         if($_SESSION['idTypeUser']==ADMINLOCAL){
             $logs = $manager->getList2("select id,dateheure,infos,nomprenom,statutprojet  from logs where idcentrale=? order by dateheure desc",IDCENTRALEUSER);    
-        }elseif($_SESSION['idTypeUser']==ADMINNATIONNAL){
+        }elseif($_SESSION['idTypeUser']==ADMINNATIONNAL||$_SESSION['idTypeUser']==ADMINSYSTEM){
             $logs = $manager->getList("select id,dateheure,infos,nomprenom,statutprojet  from logs order by dateheure desc");
         }
     ?>

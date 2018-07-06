@@ -17,13 +17,11 @@ $Refusedprojects ='/'.REPERTOIRE."/controler/controleProjetRefuser.php?lang=".$l
 $parametrage= '/'.REPERTOIRE.'/param/'.$lang;
 $vueCentraleAN = '/'.REPERTOIRE.'/vueCentraleAN/'.$lang;
 $manual= '/'.REPERTOIRE.'/manuel/'.$lang;
-$manual= '/'.REPERTOIRE.'/manuel/'.$lang;
 $log= '/'.REPERTOIRE.'/log/'.$lang;
 $viderCache = '/'.REPERTOIRE.'/videCache/'.$lang;
 $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
 $exportdesProjets = '/' . REPERTOIRE . "/exportDonneeBruteNation/" . $lang;
-$adminAppli  = '/' . REPERTOIRE . "/adminApplication/" . $lang;
-$exportLims  = '/' . REPERTOIRE . "/exportLims/" . $lang;
+//$adminAppli  = '/' . REPERTOIRE . "/adminApplication/" . $lang;
 ?>
 <div style="z-index: 5">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -44,8 +42,7 @@ $exportLims  = '/' . REPERTOIRE . "/exportLims/" . $lang;
             <li><a href="<?php echo $exportUtilisateur; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTUTILISATEUR;?></a></li>
             <li><a href="<?php echo $exportenquete; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTENQUETE;?></a></li>
             <li><a href="<?php echo $exportRapportWord; ?>" class="signout" style="font-size: 1.1em;font-weight: normal"><?php echo TXT_EXPORTREPORT; ?></a></li>
-            <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
-            <li><a href="<?php echo $exportLims;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo "Export LIMS pour MyFab";?></a></li>            
+            <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>            
             
         </ul> 
     </li>
@@ -65,7 +62,7 @@ $exportLims  = '/' . REPERTOIRE . "/exportLims/" . $lang;
             <li><a href="<?php echo $manual;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_MANUAL;?></a></li>
             <li><a href="<?php echo $log;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo 'Logs';?></a></li>
             <li><a href="<?php echo $viderCache;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_VIDECACHE;?></a></li>
-            <li><a href="<?php echo $adminAppli;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_ADMINAPPLI;?></a></li>
+           <!-- <li><a href="<?php /*echo $adminAppli;?>" class="messages" style="font-size: 1.1em;font-weight: normal" ><?php echo TXT_ADMINAPPLI;*/?></a></li>-->
         </ul>
  
     </li>

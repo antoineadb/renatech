@@ -440,7 +440,7 @@ define("TXT_MODIFIER","Modifier");
 define("TXT_MODIFPROJETNUM","Demande de mise à jour du projet numéro:");
 define("TXT_MOIS","mois");
 define("TXT_MONCOMPTE","Mon compte");
-define("TXT_MOTDEPASSEERREUR","Vous avez saisie un mauvais mot de passe");
+define("TXT_MOTDEPASSEERREUR","Vous avez saisi un mauvais mot de passe");
 define("TXT_MOTPASSE","Mot de passe");
 define("TXT_MOTPASSEIDENTIQUE","Vous devez saisir un nouveau mot de passe:");
 define("TXT_MOTPASSEMAIL","Vous recevez ce courriel suite à votre demande de récupération de votre mot de passe, lors de votre prochaine connexion sur le site,sur chaque pseudo il vous sera demandé de changer le mot de passe");

@@ -100,6 +100,6 @@ if (isset($_GET['idprojet'])) {
 } elseif (isset($_SESSION['idprojet'])) {
     $idprojet = $_SESSION['idprojet'];
 }
-
+var_dump($idprojet);die;
 envoieEmail($body, $sujet, $maildestinataire, $mailCC); //envoie de l'email au responsable centrale et au copiste
 header('Location:/'.REPERTOIRE.'/update_project/' . $lang . '/' . $idprojet);

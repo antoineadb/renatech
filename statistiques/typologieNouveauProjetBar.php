@@ -151,8 +151,9 @@ $touscentraletoutesdate = "SELECT count(idprojet) FROM concerne,projet,typeproje
             $serieAcademique            .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademique            . " , drilldown: '" . 'academic'            . $centrale[0] . $year . "'},";
             $serieAcademiquePartenariat .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . $year . "'},";
             $serieIndustriel            .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetIndustriel            . " , drilldown: '" . 'industriel'          . $centrale[0] . $year . "'},";
-            $serieFormation             .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetFormation             . " , drilldown: '" . 'formation'           . $centrale[0] . $year . "'},";
+            $serieFormation             .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetFormation             . " , drilldown: '" . 'formation'           . $centrale[0] . $year . "'},";           
             $serieNonDefini             .="{name: '" . $centrale[0] . "',color:'". couleurGraphLib($centrale[0])."', y: " . $nbprojetNonDefini             . " , drilldown: '" . 'undefined'           . $centrale[0] . $year . "'},";
+            
         }
         $serieAcademique .="]},";
         $serieAcademiquePartenariat .="]},";

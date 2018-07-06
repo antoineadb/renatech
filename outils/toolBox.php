@@ -466,9 +466,9 @@ function filterEditorWithoutStripTags($string) {
  * @return type
  */
 function clean($string) {
-    if (is_file('../class/Manager.php')) {
+    if (is_file('../class/Securite.php')) {
         include_once '../class/Securite.php';
-    } else {
+    } else{
         include_once 'class/Securite.php';
     }
     return filterEditor(filterEditor2(Securite::bdd(trim(ltrim(rtrim(str_replace(array(chr(13)), '', removeDoubleQuote($string))))))));

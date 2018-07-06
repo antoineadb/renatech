@@ -18,11 +18,12 @@ if (isset($_SESSION['pseudo'])) {
 /* VERIFICATION EN CAS DE MODIFICATION MANUEL D'URL */
 include_once 'class/Manager.php';
 $db = BD::connecter();
-$manager = new Manager($db); 
+$manager = new Manager($db);
+
 if(isset($_GET['numProjet'])){
     $idprojet=$manager->getSingle2('select idprojet from projet where numero =?',$_GET['numProjet']);
-}elseif (isset ($_SESSION['numProjet'])) {
-    $idprojet=$manager->getSingle2('select idprojet from projet where numero =?',$_SESSION['numProjet']);
+}elseif (isset ($_GET['idprojet'])) {
+    $idprojet=$_GET['idprojet'];
 }
 if(!check_URL($_SESSION['pseudo'], $idprojet)){
          header('Location: /' . REPERTOIRE . '/Login_Error/' . $lang);

@@ -34,7 +34,7 @@ if(isset($_GET['message'])&& $_GET['message']=='ok'){?>
         <?php }?>
     </legend>
     <div style="font-size: 1.2em">
-        <?php if($typeuser!=ADMINNATIONNAL){ ?>    
+        <?php if($typeuser!=ADMINNATIONNAL && $typeuser!=ADMINSYSTEM ){ ?>    
         <p>
             <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET0'))).
             '<br>'.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET1'))) ;?>
@@ -61,14 +61,14 @@ if(isset($_GET['message'])&& $_GET['message']=='ok'){?>
                 '<a href="/'.REPERTOIRE.'/controler/controleSuiviProjetRespCentrale.php?lang='.$_GET['lang'].'"
                 style="text-decoration: none">'." ".stripslashes(removeDoubleQuote(strtolower(TXT_VUESUIVIPROJETCENTRALE))).'</a>';
             }
-        }
-        ?>
+        }        
+        ?>        
         <p><?php echo stripslashes(removeDoubleQuote(affiche('TXT_MODIFPROFIL'))).
             ' '.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETUSER1'))) ;?>
             <a href="<?php echo '/'.REPERTOIRE ?>/moncompte/<?php echo $lang;?>" style="text-decoration: none">
                 <?php echo strtolower(stripslashes(removeDoubleQuote(TXT_MONCOMPTE))); ?></a>
         </p>
-        <?php }elseif($typeuser==ADMINNATIONNAL){ ?> 
+        <?php }elseif($typeuser==ADMINNATIONNAL ){ ?> 
         <p><?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN'))).', '. stripslashes(removeDoubleQuote(affiche('TXT_PROJETADMIN')));?></p>
         <p>
             <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN0'))) ;?>
@@ -88,7 +88,17 @@ if(isset($_GET['message'])&& $_GET['message']=='ok'){?>
             <a href="moncompte/<?php echo $lang ?>" style="text-decoration: none">
                 <?php echo strtolower(stripslashes(removeDoubleQuote(TXT_MONCOMPTE))); ?></a>
         </p>
-        <?php }?>   
+        <?php }?>
+        <?php if($typeuser == ADMINSYSTEM){?>
+             <p><?php echo affiche('TXT_ACCUEILPROJETADMIN').', Vous êtes l\'administrateur système de l\'application';?></p>
+             <p><?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN0'))) ;?>
+            <a href="liste/<?php echo $lang;?>" style="text-decoration: none">
+                <?php echo stripslashes(removeDoubleQuote(TXT_LISTE)).' ,';?></a>
+             <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN2'))) ;?>
+            <a href="<?php echo '/'.REPERTOIRE ?>/compteadmin/<?php echo $lang;?>" style="text-decoration: none">
+                <?php echo stripslashes(removeDoubleQuote(TXT_GESTIONCOMPTE));?></a></p>
+        <?php }?>
+        
     </div>
 </fieldset>
 <br>

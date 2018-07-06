@@ -1,6 +1,6 @@
 <?php
 
-include_once 'class/Securite.php';
+//include_once '../class/Securite.php';
 $db = BD::connecter();
 $manager = new Manager($db);
 ?>

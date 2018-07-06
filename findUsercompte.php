@@ -261,7 +261,7 @@ and lower(nom) like lower(?) lower(prenom) like lower(?) ";
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //																																																														ADMINISTRATEUR NATIONNAL
 //------------------------------------------------------------------------------------------------------------------------------------------------
-    } elseif ($typeUser == ADMINNATIONNAL) {
+    } elseif ($typeUser == ADMINNATIONNAL || $typeUser == ADMINSYSTEM) {
         $interne = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword 
 and u.idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is not null ";
@@ -382,7 +382,6 @@ FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword AND
 //------------------------------------------------------------------------------------------------------------------------------
             } elseif (!empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
                 $req = $externeprenom . " union " . $industrielprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $prenom, ADMINNATIONNAL, $prenom);
                 $param = array($prenom, $prenom);
 //------------------------------------------------------------------------------------------------------------------------------
 //									CAS OU ON A COCHE ACADEMIQUE EXTERNE
@@ -396,14 +395,12 @@ FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword AND
 //------------------------------------------------------------------------------------------------------------------------------
             } elseif (!empty($_POST['academiqueinterne'])) {
                 $req = $interneprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $prenom);
                 $param = array($prenom);
 //------------------------------------------------------------------------------------------------------------------------------
 //									CAS OU ON A COCHE INDUSTRIEL
 //------------------------------------------------------------------------------------------------------------------------------
             } elseif (!empty($_POST['industriel'])) {
                 $req = $industrielprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $prenom);
                 $param = array($prenom);
             }
 //------------------------------------------------------------------------------------------------------------------------------
@@ -417,7 +414,6 @@ FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword AND
 //									CAS OU ON A COCHE ACADEMIQUE INTERNE EXTERNE ET INDUSTRIEL
 //------------------------------------------------------------------------------------------------------------------------------
                 $req = $internenomprenom . " union " . $externenomprenom . " union " . $industrielnomprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $nom, $prenom, ADMINNATIONNAL, $nom, $prenom, ADMINNATIONNAL, $nom, $prenom);
                 $param = array($nom,$prenom,$nom,$prenom,$nom,$prenom);
 //------------------------------------------------------------------------------------------------------------------------------
 //									CAS OU ON A COCHE ACADEMIQUE INTERNE ET EXTERNE

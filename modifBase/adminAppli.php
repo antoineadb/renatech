@@ -21,16 +21,44 @@ BD::deconnecter();
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // Création du fichier de configuration
 //------------------------------------------------------------------------------------------------------------------------------------------------
-$bdd = $repertoire[1];
-$crnl  = "\r\n" ;
-$data  = "<?php".$crnl ;
-$data .= "define('TXT_LOGIN_BD','".$_POST['login']."');".$crnl;
-$data .= "define('TXT_MDP','".$_POST['password']."');".$crnl;
-$data .= "define('TXT_PORT','".$_POST['port']."');".$crnl;
-$data .= "define('TXT_HOST','".$_POST['host']."');".$crnl;
-$data .= '?>'.$crnl ;
+
 try{
-    $handle =fopen('../class/secure/config.php','w+');     
+    switch ($_POST['bdd']){
+        case 'renatech_test':
+        $crnl  = "\r\n" ;
+        $data  = "<?php".$crnl ;
+        $data .= "define('TXT_LOGIN_BD_0','".$_POST['login']."');".$crnl;
+        $data .= "define('TXT_MDP_0','".$_POST['password']."');".$crnl;
+        $data .= "define('TXT_PORT_0','".$_POST['port']."');".$crnl;
+        $data .= "define('TXT_HOST_0','".$_POST['host']."');".$crnl;
+        $data .= "define('TXT_BDD_0','".$_POST['bdd']."');".$crnl;
+        $data .= '?>'.$crnl ;    
+        $handle =fopen('../class/secure/config_0.php','w+');
+        break;
+        case 'renatech_preprod':
+        $crnl  = "\r\n" ;
+        $data  = "<?php".$crnl ;
+        $data .= "define('TXT_LOGIN_BD_1','".$_POST['login']."');".$crnl;
+        $data .= "define('TXT_MDP_1','".$_POST['password']."');".$crnl;
+        $data .= "define('TXT_PORT_1','".$_POST['port']."');".$crnl;
+        $data .= "define('TXT_HOST_1','".$_POST['host']."');".$crnl;
+        $data .= "define('TXT_BDD_1','".$_POST['bdd']."');".$crnl;
+        $data .= '?>'.$crnl ;    
+        $handle =fopen('../class/secure/config_1.php','w+');     
+        break;
+        case 'renatech':
+        $crnl  = "\r\n" ;
+        $data  = "<?php".$crnl ;
+        $data .= "define('TXT_LOGIN_BD_2','".$_POST['login']."');".$crnl;
+        $data .= "define('TXT_MDP_2','".$_POST['password']."');".$crnl;
+        $data .= "define('TXT_PORT_2','".$_POST['port']."');".$crnl;
+        $data .= "define('TXT_HOST_2','".$_POST['host']."');".$crnl;
+        $data .= "define('TXT_BDD_2','".$_POST['bdd']."');".$crnl;
+        $data .= '?>'.$crnl ;    
+        $handle =fopen('../class/secure/config_2.php','w+');   
+        break;
+    }
+    
 } catch (Exception $ex) {
     echo $ex->getCode().'<br>'.$ex->getMessage();
     die;

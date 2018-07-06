@@ -19,6 +19,8 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 define('REPERTOIRE', $repertoire[1]);
 define('ADMINLOCAL', $manager->getSingle2("SELECT idtypeutilisateur FROM typeutilisateur WHERE libelletype=? ", 'Administrateur local'));
 define('ADMINNATIONNAL', $manager->getSingle2("SELECT idtypeutilisateur FROM typeutilisateur WHERE libelletype=? ", 'Administrateur national'));
+define('ADMINSYSTEM', $manager->getSingle2("SELECT idtypeutilisateur FROM typeutilisateur WHERE libelletype=? ", 'Administrateur système'));
+
 define('UTILISATEUR', $manager->getSingle2("SELECT idtypeutilisateur FROM typeutilisateur WHERE libelletype=? ", 'utilisateur'));
 define('ENATTENTEPHASE2', $manager->getSingle2("SELECT idstatutprojet FROM statutprojet WHERE libellestatutprojet=? ", 'En Attente'));
 define('ENATTENTE', $manager->getSingle2("SELECT idstatutprojet FROM statutprojet WHERE libellestatutprojet=? ", 'En Attente'));
@@ -201,3 +203,6 @@ $string = $_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
  $domain = explode("/", $string)[0];
 $url = "https://".$domain.'/'.explode("/", $string)[1];
 define('ADRESSESITE',$url);
+define('TXT_ID_RENATECH','1');
+define('TXT_ID_RENATECH_PREPROD','2');
+define('TXT_ID_RENATECH_TEST','3');

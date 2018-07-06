@@ -37,7 +37,7 @@ include 'html/header.html';
                         </td>
                         <td><div style="margin-left:10px"  title="<?php echo TXT_AIDEDOWNLOAD;?>"><?php echo TXT_MANUEL;?></div></td>
                     </tr>
-                    <?php if($_SESSION['idTypeUser']==ADMINLOCAL || $_SESSION['idTypeUser']==ADMINNATIONNAL){?>
+                    <?php if($_SESSION['idTypeUser']==ADMINLOCAL || $_SESSION['idTypeUser']==ADMINNATIONNAL || $_SESSION['idTypeUser']==ADMINSYSTEM){?>
                     <tr>
                         <td>
                             <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/Manuel_administrateur_local.pdf' ?>" download="Manuel_admin_local">

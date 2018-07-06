@@ -9,7 +9,9 @@ include_once '../outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 //RECUPERATION DES DONNEES DE LA BASE DE DONNEES POUR  COMPARER AUX DONNEES SAISIES
+$idprojet = $_GET['idprojet'];
 $arraydonneeBDD = $manager->getList2("select titre,acronyme,confidentiel,contexte,description,attachement from projet where idprojet=?", $idprojet);
+
 $titreBDD =  str_replace("– "," - ",$arraydonneeBDD[0]['titre']);
 if (!empty($arraydonneeBDD[0]['acronyme'])) {
     $acronymeBDD = $arraydonneeBDD[0]['acronyme']; //CHAMP FACULTATIF
@@ -28,7 +30,7 @@ if (!empty($arraydonneeBDD[0]['attachement'])) {
     $attachementBDD = $arraydonneeBDD[0]['attachement']; //CHAMP FACULTATIF
 }
 
-$idprojet = $_GET['idprojet'];
+
 $statut = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
 if (!empty($_POST['contextValeur'])) {
     $contexte = clean($_POST['contextValeur']);

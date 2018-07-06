@@ -25,14 +25,14 @@ if (is_file('../outils/toolBox.php')) {
 } elseif (is_file('outils/toolBox.php')) {
     include_once 'outils/toolBox.php';
 }
-if (!is_file('PHPMailer_5.2.4/class.phpmailer.php')) {
-    include_once '../PHPMailer_5.2.4/class.phpmailer.php';
-} else {
+if (is_file('PHPMailer_5.2.4/class.phpmailer.php')) {
     include_once 'PHPMailer_5.2.4/class.phpmailer.php';
+} elseif (is_file('../PHPMailer_5.2.4/class.phpmailer.php')) { 
+    include_once '../PHPMailer_5.2.4/class.phpmailer.php';
 }
 
 
-showError($_SERVER['PHP_SELF']);
+//showError($_SERVER['PHP_SELF']);
 
 /**
  * 

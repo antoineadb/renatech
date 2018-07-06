@@ -62,7 +62,7 @@ if (!empty($_GET['page_precedente']) && $_GET['page_precedente'] == 'gestioncomp
     $anciendroit = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM utilisateur WHERE idutilisateur =?", $idutilisateur);
     if (!empty($_GET['role']) && $_GET['role'] != 'tu' . $anciendroit) {// ON VERIFIE QUE L'ON A SELECTIONNE UN DROIT
         $idtypeutilisateur = substr($_GET['role'], 2);
-        if ($idtypeutilisateur == UTILISATEUR || $idtypeutilisateur == ADMINNATIONNAL) {//CAS UTILISATEUR ou ADMINNATIONNAL
+        if ($idtypeutilisateur == UTILISATEUR || $idtypeutilisateur == ADMINNATIONNAL|| $idtypeutilisateur == ADMINSYSTEM) {//CAS UTILISATEUR ou ADMINNATIONNAL
             $typeuser = new UtilisateurType($idutilisateur, $idtypeutilisateur);
             $manager->updateUtilisateurType($typeuser, $idutilisateur);
         } elseif ($idtypeutilisateur == ADMINLOCAL) {//ADMINISTRATEUR LOCAL

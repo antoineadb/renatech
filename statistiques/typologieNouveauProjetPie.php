@@ -51,11 +51,33 @@ if (IDTYPEUSER == ADMINLOCAL) {
     }
 } 
 if(empty($nbformation)){$nbformation=0;}
-$string0 = '["' . TXT_ACADEMIQUE . '",' . $nbprojetAcademique . '],';
-$string3 = '["' . TXT_ACADEMICPARTENARIAT . '",' . $nbprojetAcademiquepartenariat  . '],';
-$string4 = '["' . TXT_FORMATION . '",' . $nbformation . '],';
-$string5 = '["' . TXT_INDUSTRIEL . '",' . $nbprojetindustriel  . '],';
-$string6 = '["' . "Non défini" . '",' . $nbNonDefini  . '],';
+
+if($nbprojetAcademique!=0){
+    $string0 = '["' . TXT_ACADEMIQUE . '",' . $nbprojetAcademique . '],';
+}else{
+    $string0 = '';
+}
+if($nbprojetAcademiquepartenariat!=0){
+    $string3 = '["' . TXT_ACADEMICPARTENARIAT . '",' . $nbprojetAcademiquepartenariat  . '],';
+}else{
+    $string3 = '';
+}
+
+if($nbformation!=0){
+    $string4 = '["' . TXT_FORMATION . '",' . $nbformation . '],';    $string5 = '["' . TXT_INDUSTRIEL . '",' . $nbprojetindustriel  . '],';
+}else{
+    $string4 = '';
+}
+if($nbprojetindustriel!=0){
+    $string5 = '["' . TXT_INDUSTRIEL . '",' . $nbprojetindustriel  . '],';
+}else{
+    $string5 = '';
+}
+if($nbNonDefini!=0){
+    $string6 = '["' . "Non défini" . '",' . $nbNonDefini  . '],';
+}else{
+    $string6 = '';
+}
 $string = substr($string0 . $string3 . $string4 . $string5 .$string6, 0, -1);
 $nbtotalprojet = $nbprojetAcademique + $nbprojetAcademiquepartenariat + $nbprojetindustriel + $nbformation + $nbNonDefini;
 $xasisTitle = "";

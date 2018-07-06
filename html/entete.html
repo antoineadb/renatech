@@ -56,7 +56,17 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 <img src="<?php echo '/'.REPERTOIRE ?>/styles/img/fr_disabled.jpg" width="25px" height="17px">
 <?php }?>
 </div>
-<table style="width: 850px; margin-top: 15px;">
+<?php 
+if(!empty($_SESSION['pseudo'])){
+    $pseudo =$_SESSION['pseudo'];
+    $droit  =  $manager->getSingle2("SELECT t.idtypeutilisateur FROM  typeutilisateur t, utilisateur u,loginpassword l WHERE t.idtypeutilisateur = u.idtypeutilisateur_typeutilisateur AND l.idlogin = u.idlogin_loginpassword AND l.pseudo=?",$pseudo);
+
+
+if($droit==ADMINSYSTEM){?>
+    <table style="width: 768px; margin-top: 15px;">
+<?php }else{ ?>
+    <table style="width: 850px; margin-top: 15px;">
+<?php }?>
     <tr>
         <td style="width:400px">
             <?php
@@ -83,8 +93,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
             ?>
         </td>
         <?php
-        if(!empty($pseudo)){
-            $droit  =  $manager->getSingle2("SELECT t.idtypeutilisateur FROM  typeutilisateur t, utilisateur u,loginpassword l WHERE t.idtypeutilisateur = u.idtypeutilisateur_typeutilisateur AND l.idlogin = u.idlogin_loginpassword AND l.pseudo=?",$pseudo);
+        if(!empty($pseudo)){            
             if(!empty($droit)){
                 if($droit==ADMINLOCAL) {?>
                     <td style="width:100px"></td>
@@ -103,11 +112,14 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                     $_SESSION['responsableCentrale'] = 'true';
                 }elseif($idTypeUser==ADMINNATIONNAL){
                     include 'include/menuadminnationnal.php';
+                }elseif($idTypeUser==ADMINSYSTEM){
+                    include 'include/menuadminsysteme.php';
                 }elseif($droit==UTILISATEUR) {// si on est pas connecté on affiche le login projet sinon on affiche le suivi
                     include 'include/menuutilisateur.php';
                 }
             } 
         }
+            }
             }?>
         </td>
     </tr></table><?php if(!empty($_SESSION['pseudo'])&& !empty($droit)){?>
