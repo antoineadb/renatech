@@ -40,7 +40,8 @@ if(isset($_GET['message'])&& $_GET['message']=='ok'){?>
             '<br>'.stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJET1'))) ;?>
             <a href="<?php echo '/'.REPERTOIRE ?>/new_project/<?php echo $lang;?>" style="text-decoration: none">
                 <?php echo html_entity_decode(stripslashes(removeDoubleQuote(TXT_DEMANDEPROJET))); ?></a>
-            , <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/ModeEmploiDemandeProjetRENATECH.pdf' ?>" download="ModeEmploiDemandeProjetRENATECH" style="text-decoration: none">
+            , <a href="<?php echo '/'.REPERTOIRE.'/downloadManual/ModeEmploiDemandeProjetRENATECH.pdf' ?>" 
+                 download="ModeEmploiDemandeProjetRENATECH" style="text-decoration: none">
                 <?php echo '('.TXT_DOWNLOADUSERMANUAL; ?> <?php echo TXT_DOWNLOADUSERMANUAL1.')'; ?></a>
         </p>
         <p>
@@ -89,14 +90,11 @@ if(isset($_GET['message'])&& $_GET['message']=='ok'){?>
                 <?php echo strtolower(stripslashes(removeDoubleQuote(TXT_MONCOMPTE))); ?></a>
         </p>
         <?php }?>
-        <?php if($typeuser == ADMINSYSTEM){?>
+        <?php if($typeuser == ADMINSYSTEM){ ?>
              <p><?php echo affiche('TXT_ACCUEILPROJETADMIN').', Vous êtes l\'administrateur système de l\'application';?></p>
-             <p><?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN0'))) ;?>
-            <a href="liste/<?php echo $lang;?>" style="text-decoration: none">
-                <?php echo stripslashes(removeDoubleQuote(TXT_LISTE)).' ,';?></a>
-             <?php echo stripslashes(removeDoubleQuote(affiche('TXT_ACCUEILPROJETADMIN2'))) ;?>
-            <a href="<?php echo '/'.REPERTOIRE ?>/compteadmin/<?php echo $lang;?>" style="text-decoration: none">
-                <?php echo stripslashes(removeDoubleQuote(TXT_GESTIONCOMPTE));?></a></p>
+             <p>            
+                <?php echo "Vous pouvez accéder à l'administration des paramètres de l'application ";
+                echo 'et à la gestion des comptes utilisateurs';?></p>
         <?php }?>
         
     </div>

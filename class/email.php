@@ -6,10 +6,10 @@ if (is_file('../class/secure/Cryptage.php')) {
     include_once 'class/secure/Cryptage.php';
 }
 
-if (is_file('../class/secure/configMail.php')) {
-    include_once '../class/secure/configMail.php';
-} elseif (is_file('class/secure/configMail.php')) {
-    include_once 'class/secure/configMail.php';
+if (is_file('../class/secure/config_email.php')) {
+    include_once '../class/secure/config_email.php';
+} elseif (is_file('class/secure/config_email.php')) {
+    include_once 'class/secure/config_email.php';
 }
 
 
@@ -48,12 +48,12 @@ function envoieEmail($body, $sujet, $email, $cc) {
     $mail->IsSMTP(true); // telling the class to use SMTP
     try {
 
-        $mail->Host = HOST;
-        $mail->SMTPAuth = SMTPAUTH;
-        $mail->SMTPSecure = SMTPSECURE;
-        $mail->Port = PORT;
-        $mail->Username = USERNAME;
-        $mail->Password = PASSWORD;
+        $mail->Host = TXT_HOST_MSG;
+        $mail->SMTPAuth = TRUE;
+        $mail->SMTPSecure = TXT_BDD_CHIFFREMENT_MSG;
+        $mail->Port = TXT_PORT_MSG;
+        $mail->Username = TXT_LOGIN_MSG;
+        $mail->Password = TXT_MDP_MSG;
 
         if (!empty($email)) {
             for ($i = 0; $i < count($email); $i++) {

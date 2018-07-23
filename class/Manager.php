@@ -144,7 +144,7 @@ include_once 'TypePartenaire.php';
 include_once 'ProjetTypePartenaire.php';
 include_once 'Params.php';
 
-//showError($_SERVER['PHP_SELF']);
+showError($_SERVER['PHP_SELF']);
 
 class Manager {
 
