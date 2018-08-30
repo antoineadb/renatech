@@ -40,28 +40,8 @@ if (IDTYPEUSER == ADMINLOCAL) {
         $serie01 = str_replace("},]", "}]", $serie1);
         $serieX = substr($serie01, 0, -1);
     }
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
-$serie3 = '';
-foreach ($years as $key => $year) {
-        $nbByYear = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,centrale,concerne WHERE idcentrale_centrale = idcentrale AND idprojet_projet = idprojet AND idcentrale=? "
-                . "and extract(year from dateprojet)<=? and  trashed != ? and idstatutprojet_statutprojet=? ", array(IDCENTRALEUSER,$year[0],TRUE,ENCOURSREALISATION));
-        if (empty($nbByYear)) {$nbByYear = 0;}
-        if($year[0]==2013){
-            $serie3.="{id: '" . $year[0] . "',name: '" . TXT_INFERIEUR2013 . "'" . ',data: [';
-        }else{
-            $serie3.="{id: '" . $year[0] . "',name: '" . $year[0] . "'" . ',data: [';
-        }
-        for ($mois = 1; $mois < 13; $mois++) {
-            $nbByYearByMonth = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,statutprojet WHERE idprojet_projet = idprojet AND idstatutprojet_statutprojet = idstatutprojet "
-                    . "AND idcentrale_centrale = ? AND  extract(year from dateprojet)=? and idstatutprojet=? and  trashed != ? and extract(month from dateprojet)=?", 
-                    array(IDCENTRALEUSER,$year[0],ENCOURSREALISATION,TRUE, $mois));
-            if (empty($nbByYearByMonth)) {$nbByYearByMonth = 0;}
-            $serie3.= '["' . showMonth($mois, $lang) . '",' . $nbByYearByMonth . '],';
-        }$serie3.=']},';       
-    }
-$serieY0 = str_replace("},]}", "}]}", $serie3);
-$serieY1 =  str_replace("],]", "]]",$serieY0);
-$serieY=  substr($serieY1, 0,-1);
+        $serieY = "";
+    
 $subtitle = TXT_CLICDETAIL;
 $title = TXT_NBRUNNINGPROJET;
 $xasisTitle = TXT_PROJETDATESTATUT;

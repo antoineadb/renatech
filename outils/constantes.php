@@ -55,10 +55,10 @@ define('ABSPATH', dirname(__FILE__) . '/');
 define('STATCENTRALETYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Projet par centrale et par type'));
 define('STATUSERDATE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistiqueen=?", 'Number of users since the beginning by category'));
 define('IDSTATNOUVEAUPROJET', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Cumul du nombre de projets déposés'));
-define('IDSTATPROJETDATETYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de projets déposés de 2014 à 2017 par typologie'));
+define('IDSTATPROJETDATETYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de projets déposés entre 2014 et 2017 par typologie'));
 define('IDSTATTYPOLOGIENOUVEAUPROJET', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Cumul des nouveaux projets par typologie'));
 define('IDSTATTYPOLOGIEPROJETENCOURS', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de projet en cours par typologie'));
-define('IDREPARTIONPROJETENCOURSTYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", "Répartition des projets en cours par type, cumul par année"));
+define('IDREPARTIONPROJETENCOURSTYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", "Répartition des projets en cours par type"));
 define('IDSTATPROJETCENTRALETYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Projet par centrale et par type'));
 define('IDSTATSF', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Origine des financements des projets en cours'));
 define('IDDUREEPROJETENCOURS', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Durée des projets en cours'));
@@ -66,11 +66,9 @@ define('IDNEWUSERBYDATE', $manager->getSingle2("SELECT idstatistique FROM statis
 define('IDPERMANENTNONPERMANENTBYDATE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Origine des nouveaux porteurs de projet, cumul par année'));
 define('IDNEWUSERBYTYPE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Utilisateurs par type'));
 define('IDSTATRESSOURCE', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Répartition par ressources technologiques des projets en cours'));
-
-define('IDSTATPARTINDUSENCOURS', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Origine des partenaires industriels des projets en cours'));
-
+define('IDSTATPARTINDUSENCOURS', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Origine des partenaires des projets en cours'));
 define('IDORIGINEPORTPORTEURPROJETENCOURS', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Origine des porteurs de projet en cours, cumul par année'));
-    define('IDPARTHORSRENATECH', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Cumul du nombre de partenaires hors RENATECH intéréssés par les projets en cours'));
+define('IDPARTHORSRENATECH', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Cumul du nombre de partenaires hors RENATECH intéréssés par les projets en cours'));
 define('IDNBUSERCLEANROOMNEWPROJET', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de personnes ayant travaillé en salle blanche depuis 2014'));
 define('IDNBUSERCLEANROOMRUNNINGPROJET', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de personnes travaillant en salle blanche'));
 define('IDNBRUNNINGPROJECT', $manager->getSingle2("SELECT idstatistique FROM statistique WHERE libellestatistique=?", 'Nombre de projet en cours'));

@@ -36,7 +36,8 @@ $serie02 = '';
 $serie02 .="{id: '" . LIBELLECENTRALEUSER . "',name: '" . LIBELLECENTRALEUSER . "',data: [";
 foreach ($years as $key => $year) {  
     $nbByYear = $manager->getSinglebyArray("SELECT count(distinct idutilisateur) FROM concerne co,loginpassword,utilisateur,creer cr,projet WHERE idlogin = idlogin_loginpassword AND idutilisateur = idutilisateur_utilisateur 
-        AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? and EXTRACT(YEAR from datecreation)<=? and  trashed != ?", 
+        AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? 
+        and EXTRACT(YEAR from datecreation)<=? and  trashed != ?", 
             array(IDCENTRALEUSER,ENCOURSREALISATION,$year[0],TRUE));
     if (empty($nbByYear)) {$nbByYear = 0;}
     if($year[0]==2013){
@@ -47,32 +48,9 @@ foreach ($years as $key => $year) {
 }$serie02 .="]},";        
 
 $serieX = str_replace("},]}", "}]}", $serie02);
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-$serie3 = "";
-foreach ($years as $key => $year) {
-    if($year[0]==2013){
-        $serie3.="{id: '" . IDCENTRALEUSER . $year[0] . "',name: '" . TXT_INFERIEUR2013 . "'" . ',data: [';
-    }else{
-        $serie3.="{id: '" . IDCENTRALEUSER . $year[0] . "',name: '" . $year[0] . "'" . ',data: [';
-    }
-    $nbByYearByStatut=$manager->getSinglebyArray("SELECT count(distinct idutilisateur) FROM concerne co,loginpassword,utilisateur,creer cr,projet WHERE idlogin = idlogin_loginpassword AND "
-                . "idutilisateur = idutilisateur_utilisateur AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? "
-                . "and EXTRACT(YEAR from datecreation)<=?  and  trashed != ?", array(IDCENTRALEUSER,ENCOURSREALISATION,$year[0]-1,TRUE));
-    for ($mois = 1; $mois < 13; $mois++) {
-        $nbByYearByStatut = $manager->getSinglebyArray("SELECT count(distinct idutilisateur) FROM concerne co,loginpassword,utilisateur,creer cr,projet WHERE idlogin = idlogin_loginpassword AND "
-                . "idutilisateur = idutilisateur_utilisateur AND cr.idprojet_projet = idprojet   AND cr.idprojet_projet = co.idprojet_projet AND  co.idcentrale_centrale=? and co.idstatutprojet_statutprojet=? "
-                . "and EXTRACT(YEAR from datecreation)=?  and extract(month from datecreation)=? and  trashed != ?", array( IDCENTRALEUSER,ENCOURSREALISATION,$year[0],$mois,TRUE));
-        if (empty($nbByYearByStatut)) {$nbByYearByStatut = 0;}
-        $serie3.= '["' . removeDoubleQuote(showMonth($mois, $lang)) . '",' . $nbByYearByStatut . '],';
-    }
-    $serie3.=']},';
-}
-$serie03 = substr($serie3, 0, -1);
-$serieY = str_replace("],]}", "]]}", $serie03);
+$serieY = "";
 $subtitle = TXT_CLICDETAIL;
 $title = TXT_NBPORTEURPROJETENCOURS;
 $xasisTitle = TXT_NOMBREOCCURRENCE;
 }
-
-
 include_once 'commun/scriptBar.php'; 

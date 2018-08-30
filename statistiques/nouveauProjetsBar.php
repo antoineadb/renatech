@@ -43,6 +43,19 @@ $centrales = $manager->getList2("select libellecentrale,idcentrale from centrale
     }
 
     $annee = anneeStatistique($anneeDepart, $anneeFin);
+    if ($lang == 'fr') {
+        if ($anneeDepart == $anneeFin) {
+            $title = TXT_PROJETDATESTATUTANNEE . ' ' . $anneeDepart;
+        } else {
+            $title = TXT_PROJETDATESTATUTANNEE . ' ' . $anneeDepart . " à " . $anneeFin;
+        }
+    } else {
+        if ($anneeDepart == $anneeFin) {
+            $title = TXT_PROJETDATESTATUTANNEE . ' ' . $anneeDepart;
+        } else {
+            $title = TXT_PROJETDATESTATUTANNEE . ' ' . $anneeDepart . " to " . $anneeFin;
+        }
+    }
     ?>
     <table class="filterDate">    
         <tr>
@@ -97,7 +110,6 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
             if (empty($nbByYear)) {
                 $nbByYear = 0;
             }
-
                 $nbByYear = $manager->getSinglebyArray("SELECT count(distinct idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                         . "and extract(year from dateprojet)<=? and  trashed != ?", array($centrale[1], $year, TRUE));
                 $serie3 .= "{id: '" . $centrale[0] . $year . "',name: '" . $centrale[0] . ' ' . $year . "'" . ',data: [';
@@ -117,19 +129,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     $serie03 = substr($serie2 . $serie3, 0, -1);
     $serieY = str_replace("],]}", "]]}", $serie03);
     $subtitle = TXT_CLICDETAIL;
-    if ($lang == 'fr') {
-        if ($anneeDepart == $anneeFin) {
-            $title = TXT_PROJETDATESTATUTANNEE . ' ' . $anneeDepart;
-        } else {
-            $title = TXT_PROJETDATESTATUTANNEE . ' ' . $anneeDepart . " à " . $anneeFin;
-        }
-    } else {
-        if ($anneeDepart == $anneeFin) {
-            $title = TXT_PROJETDATESTATUTANNEE . ' ' . $anneeDepart;
-        } else {
-            $title = TXT_PROJETDATESTATUTANNEE . ' ' . $anneeDepart . " to " . $anneeFin;
-        }
-    }
+    
     $xasisTitle = TXT_NOMBREOCCURRENCE;
 } elseif (IDTYPEUSER == ADMINLOCAL) {
     $serie = "";
@@ -176,7 +176,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     $serieY1 = str_replace("],]", "]]", $serieY0);
     $serieY = substr($serieY1, 0, -1);
     $subtitle = TXT_CLICDETAIL;
-    $title = TXT_PROJETDATESTATUT;
+    
     $xasisTitle = TXT_PROJETDATESTATUT;
 }
 

@@ -167,14 +167,21 @@ include 'html/header.html';
             if (!empty($_GET['iduser']) && !empty($_GET['idqualiteaca']) && empty($_GET['idqualiteindust'])) {
                 $iduser = $_GET['iduser'];
                 $row = $manager->getList2("
-SELECT u.nom,u.prenom,u.adresse,u.ville,u.codepostal,u.telephone,u.fax,u.idpays_pays,u.idqualitedemandeuraca_qualitedemandeuraca,l.pseudo,l.mail,l.actif,qa.libellequalitedemandeuraca,n.libelleemployeur,n.idemployeur,an.libelleautrenomemployeur,at.libelleautrestutelle,t.idtutelle,t.libelletutelle,d.libellediscipline,d.iddiscipline,ad.libelleautrediscipline,
-at.idautrestutelle,an.idautrenomemployeur,ad.idautrediscipline,u.nomresponsable,u.mailresponsable,u.idtypeutilisateur_typeutilisateur,u.administrateur,u.entrepriselaboratoire,u.acronymelaboratoire,l.nomequipe
-FROM utilisateur u,loginpassword l,qualitedemandeuraca qa,nomemployeur n,autrenomemployeur an,autrestutelle at,tutelle t,autrecodeunite ac,disciplinescientifique d,autredisciplinescientifique ad
-WHERE l.idlogin = u.idlogin_loginpassword AND qa.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca AND
-n.idemployeur = u.idemployeur_nomemployeur AND an.idautrenomemployeur = u.idautrenomemployeur_autrenomemployeur AND 
-at.idautrestutelle = u.idautrestutelle_autrestutelle AND  ad.idautrediscipline = u.idautrediscipline_autredisciplinescientifique and
-t.idtutelle = u.idtutelle_tutelle /*AND ac.idautrecodeunite = u.idautrecodeunite_autrecodeunite*/ and 
-d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $iduser);
+                SELECT u.nom,u.prenom,u.adresse,u.ville,u.codepostal,u.telephone,u.fax,u.idpays_pays,u.idqualitedemandeuraca_qualitedemandeuraca,l.pseudo,l.mail,l.actif,qa.libellequalitedemandeuraca,
+                n.libelleemployeur,n.idemployeur,an.libelleautrenomemployeur,at.libelleautrestutelle,t.idtutelle,t.libelletutelle,d.libellediscipline,d.iddiscipline,ad.libelleautrediscipline,at.idautrestutelle,
+                an.idautrenomemployeur,ad.idautrediscipline,u.nomresponsable,u.mailresponsable,u.idtypeutilisateur_typeutilisateur,u.administrateur,u.entrepriselaboratoire,u.acronymelaboratoire,l.nomequipe, 
+                u.idcentrale_centrale
+                FROM 
+                utilisateur u,loginpassword l,qualitedemandeuraca qa,nomemployeur n,autrenomemployeur an,autrestutelle at,tutelle t,autrecodeunite ac,disciplinescientifique d,autredisciplinescientifique ad
+                WHERE 
+                l.idlogin = u.idlogin_loginpassword AND qa.idqualitedemandeuraca = u.idqualitedemandeuraca_qualitedemandeuraca 
+                AND n.idemployeur = u.idemployeur_nomemployeur 
+                AND an.idautrenomemployeur = u.idautrenomemployeur_autrenomemployeur 
+                AND at.idautrestutelle = u.idautrestutelle_autrestutelle 
+                AND ad.idautrediscipline = u.idautrediscipline_autredisciplinescientifique and
+                t.idtutelle = u.idtutelle_tutelle 
+                AND d.iddiscipline = u.iddiscipline_disciplinescientifique 
+                AND idutilisateur=?", $iduser);
                 for ($i = 0; $i < count($iduser); $i++) {
                     $nom = $row[$i]['nom'];
                     $prenom = $row[$i]['prenom'];
@@ -203,6 +210,7 @@ d.iddiscipline = u.iddiscipline_disciplinescientifique and idutilisateur=?", $id
                     $acronymelaboratoire = $row[$i]['acronymelaboratoire'];
                     $entrepriselaboratoire = $row[$i]['entrepriselaboratoire'];
                     $nomEquipe = $row[$i]['nomequipe'];
+                    $centrale = $row[$i]['idcentrale_centrale'];
                 }
                 if (empty($actif)) {
                     $valeuractif = TXT_NONACTIF;

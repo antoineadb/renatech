@@ -14,7 +14,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
             . "and  trashed != ?  and idstatutprojet_statutprojet=? and idcentrale_centrale!=?",array(TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
     for ($i = 0; $i < count($arraylibellecentrale); $i++) {
         $donneeProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
-                . " and  trashed != ?  and idstatutprojet_statutprojet=? and idcentrale_centrale!=?",array($arraylibellecentrale[$i]['idcentrale'],TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
+                . " and  trashed != ?  and idstatutprojet_statutprojet=? and  EXTRACT(YEAR from dateprojet)>2012 and idcentrale_centrale!=?",array($arraylibellecentrale[$i]['idcentrale'],TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
         if ($nbtotalprojet != 0) {
             $string0.='["' . $arraylibellecentrale[$i]['libellecentrale'] . '",' . $donneeProjet . '],';
             

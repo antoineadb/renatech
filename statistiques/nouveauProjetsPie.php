@@ -22,15 +22,15 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     }    
     if($lang=='fr'){
            if($anneeDepart==$anneeFin){
-                $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart;
+                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
            }else{
-                $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
+                $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
            }
     }else{
         if($anneeDepart==$anneeFin){
-            $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart;
+            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart;
         }else{
-            $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
+            $title = TXT_PROJETDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
         }
     }
     $subtitle = TXT_NBPROJET . ' <b>' . $nb . '</b>';
@@ -49,19 +49,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
         }
     }
         
-    if($lang=='fr'){
-           if($anneeDepart==$anneeFin){
-                $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart;
-           }else{
-                $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart. " à ".$anneeFin;
-           }
-    }else{
-        if($anneeDepart==$anneeFin){
-            $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart;
-        }else{
-            $title = TXT_PROJETNOMBREDATESTATUTANNEE.' '.$anneeDepart. " to ".$anneeFin;
-        }
-    }
+  
     $subtitle = TXT_NBPROJET . ' <b>' . $nb . '</b>';
 }
 $string = substr($string0, 0, -1);

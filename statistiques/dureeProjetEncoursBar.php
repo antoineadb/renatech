@@ -42,7 +42,6 @@ $donneeProjetInfUnAn = $manager->getListbyArray(""
             and trashed != ?
             and extract(year from datedebutprojet)>2013
             ", array(ENCOURSREALISATION,1,365,0,TRUE,ENCOURSREALISATION,2,12,0,TRUE,ENCOURSREALISATION,3,1,0,TRUE));
-
 //1 = jours
 $nbdonneeProjetInfUnAn = count($donneeProjetInfUnAn);
 //periodetime = 2 mois
@@ -51,7 +50,7 @@ $donneeProjetInfTroisAns = $manager->getListbyArray(""
             where idprojet=idprojet_projet 
             and idstatutprojet_statutprojet=?
             and periodestime =?
-            and dureeestime >=  ? and dureeestime <=?
+            and dureeestime >=? and dureeestime <?
             and trashed != ?
             and extract(year from datedebutprojet)>2013
             union
@@ -59,7 +58,7 @@ $donneeProjetInfTroisAns = $manager->getListbyArray(""
             where idprojet=idprojet_projet 
             and idstatutprojet_statutprojet=? 
             and periodestime =?
-            and dureeestime >=? and dureeestime <= ?            
+            and dureeestime >=? and dureeestime < ? 
             and trashed != ?
             and extract(year from datedebutprojet)>2013
             union
@@ -67,7 +66,7 @@ $donneeProjetInfTroisAns = $manager->getListbyArray(""
             where idprojet=idprojet_projet 
             and idstatutprojet_statutprojet=? 
             and periodestime =?
-            and dureeestime >=? and dureeestime <=?
+            and dureeestime >=? and dureeestime <?
             and trashed != ?
             ", array(ENCOURSREALISATION,1,365,1095 ,TRUE,ENCOURSREALISATION,2,12,36,TRUE,ENCOURSREALISATION,3,1,3,TRUE));
 $nbdonneeProjetInfTroisAns = count($donneeProjetInfTroisAns);
@@ -76,7 +75,7 @@ $donneeProjetSupTroisAns = $manager->getListbyArray(""
             where idprojet=idprojet_projet 
             and idstatutprojet_statutprojet=?
             and periodestime =?
-            and dureeestime >?
+            and dureeestime >=?
             and trashed != ?
             and extract(year from datedebutprojet)>2013
             union
@@ -84,7 +83,7 @@ $donneeProjetSupTroisAns = $manager->getListbyArray(""
             where idprojet=idprojet_projet 
             and idstatutprojet_statutprojet=?
             and periodestime =?  
-            and dureeestime > ?
+            and dureeestime >= ?
             and trashed != ?
             and extract(year from datedebutprojet)>2013
             union
@@ -92,7 +91,7 @@ $donneeProjetSupTroisAns = $manager->getListbyArray(""
             where idprojet=idprojet_projet 
             and idstatutprojet_statutprojet=?
             and periodestime =?  
-            and dureeestime >?            
+            and dureeestime >=?            
             and trashed != ?
             and extract(year from datedebutprojet)>2013
             ", array(ENCOURSREALISATION,1,1095, TRUE,ENCOURSREALISATION,2,36, TRUE,ENCOURSREALISATION,3,3,TRUE));
@@ -139,8 +138,8 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
 
     $serieRang1 = "{id: '" . 'rang 1' . "',name: '" . ' < 1 an' . "',data: ["; 
-    $serieRang2 = "{id: '" . 'rang 2' . "',name: '" . ' >= 1 an et <= 3 ans' . "',data: [";
-    $serieRang3 = "{id: '" . 'rang 3' . "',name: '" . ' > 3 ans' . "',data: [";
+    $serieRang2 = "{id: '" . 'rang 2' . "',name: '" . ' >= 1 an et < 3 ans' . "',data: [";
+    $serieRang3 = "{id: '" . 'rang 3' . "',name: '" . ' >= 3 ans' . "',data: [";
     foreach ($centrales as $key => $centrale) {
         $nbprojetRang1 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=?", array(1, $centrale[1]));
         $nbprojetRang2 = $manager->getSinglebyArray("select count(idprojet) from tmpprojet where rang=? and idcentrale_centrale=?", array(2, $centrale[1]));
@@ -181,19 +180,16 @@ if (IDTYPEUSER == ADMINLOCAL) {
     $serie003 = str_replace("},]", "}]", $serie03);
     $serieX = substr($serie001 . $serie002 . $serie003, 0, -1);
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//                                              FIN  DE LA DE LA'ABCISSE DES X
+//                                              FIN  DE L'ABCISSE DES X
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
 
     $serieRang1 = "{id: '" . 'rang1' . "',name: '" . ' < 1 an' . "',data: [";
-    $serieRang2 = "{id: '" . 'rang2' . "',name: '" . ' >= 1 an et <= 3 ans' . "',data: [";
-    $serieRang3 = "{id: '" . 'rang3' . "',name: '" . ' > 3 ans' . "',data: [";
+    $serieRang2 = "{id: '" . 'rang2' . "',name: '" . ' >= 1 an et < 3 ans' . "',data: [";
+    $serieRang3 = "{id: '" . 'rang3' . "',name: '" . ' >= 3 ans' . "',data: [";
     
     $serieRang1 .= "]},";
     $serieRang2 .= "]},";
     $serieRang3 .= "]},";
-
-
-
     
     $serie0 = $serieRang1 . $serieRang2 . $serieRang3;
     $serie = str_replace("},]", "}]", $serie0);

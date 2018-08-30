@@ -196,7 +196,7 @@ $emailUser = $manager->getSingle2("SELECT mail from loginpassword WHERE pseudo=?
                             $('#resultatVerifKoMSG').show();
                             $('#subButtonMsg').hide();
                             $('#resultatVerifKo').show();
-                            $('#resultatVerifKo').text(code_html);                                
+                            $('#resultatVerifKo').text(code_html);                             
                         }
                     },
                 });
@@ -282,7 +282,7 @@ $emailUser = $manager->getSingle2("SELECT mail from loginpassword WHERE pseudo=?
             </div>            
             <div id="resultatVerifOk" style="display: none;margin-top: -28px;margin-left: 259px;color: green;">Connexion établie</div>
             <div id="resultatVerifOkMSG" style="display: none;margin-top: -28px;margin-left: 259px;color: green;">Connexion établie/ Email envoyé</div>
-            <div id="resultatVerifKo" style="display: none;margin-top: -28px;margin-left: 259px;color: red;"></div>
+            <div id="resultatVerifKo" style="display: none;margin-top: -28px;margin-left: 259px;color: red;">toto</div>
             <div id="resultatModifOk"  style="display: none;margin-top: -28px;margin-left: 259px;color: green;"><?php echo 'Les données de configuration de la base de donnée ont été mise à jour';?></div>
             <div id="resultatModifOkMSG"  style="display: none;margin-top: -28px;margin-left: 259px;color: green;"><?php echo 'Les données de configuration de la messagerie ont été mise à jour';?></div>
             <div id="resultatModifKo"  style="display: none;margin-top: -28px;margin-left: 259px;color: red;"><?php echo "Les données de configuration de la base de donnée n'ont pas été mise à jour!";?></div>

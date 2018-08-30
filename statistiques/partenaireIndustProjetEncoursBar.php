@@ -13,7 +13,7 @@ $manager->exeRequete("DROP TABLE  IF EXISTS tmporiginecentrale;");
 $manager->exeRequete("DROP TABLE  IF EXISTS tmpgrandcompte;");
 $manager->exeRequete("DROP TABLE  IF EXISTS tmpporteur;");
 $tableorigine_centrale = $manager->getRequete("
-        CREATE TABLE tmporiginecentrale as (SELECT count(libelletypepartenairefr),tp.libelletypepartenairefr,idtypepartenaire,c.idcentrale_centrale
+        CREATE TABLE tmporiginecentrale as (SELECT count(TRIM(libelletypepartenairefr)),tp.libelletypepartenairefr,idtypepartenaire,c.idcentrale_centrale
         FROM partenaireprojet p 
         LEFT JOIN projetpartenaire pp  ON pp.idpartenaire_partenaireprojet= p.idpartenaire
         LEFT JOIN concerne c ON c.idprojet_projet = pp.idprojet_projet 
@@ -23,7 +23,7 @@ $tableorigine_centrale = $manager->getRequete("
         Order by libelletypepartenairefr asc)",array(ENCOURSREALISATION,IDETI,IDGE));
 $tablegrandcompte = $manager->getRequete("
         CREATE TABLE tmpgrandcompte AS(
-        SELECT COUNT(libelletypeentreprise),c.idcentrale_centrale as idcentrale,t.libelletypeentreprise AS libelle,CASE t.idtypeentreprise WHEN 1 THEN 100 END AS typeentreprise
+        SELECT COUNT(TRIM(libelletypeentreprise)),c.idcentrale_centrale as idcentrale,t.libelletypeentreprise AS libelle,CASE t.idtypeentreprise WHEN 1 THEN 100 END AS typeentreprise
         FROM  utilisateurporteurprojet u
         JOIN concerne c ON c.idprojet_projet = u.idprojet_projet
         JOIN appartient a ON a.idutilisateur_utilisateur = u.idutilisateur_utilisateur
@@ -31,7 +31,7 @@ $tablegrandcompte = $manager->getRequete("
         WHERE c.idstatutprojet_statutprojet = ? AND t.idtypeentreprise=?
         GROUP BY idcentrale,typeentreprise,libelle
         UNION
-	SELECT count(libelletypepartenairefr),c.idcentrale_centrale as idcentrale,'GRAND COMPTE' as libelle, 100 AS  typeentreprise
+	SELECT count(TRIM(libelletypepartenairefr)),c.idcentrale_centrale as idcentrale,'GRAND COMPTE' as libelle, 100 AS  typeentreprise
 	FROM partenaireprojet p 
 	JOIN projetpartenaire pp  ON pp.idpartenaire_partenaireprojet= p.idpartenaire
 	JOIN concerne c ON c.idprojet_projet = pp.idprojet_projet 

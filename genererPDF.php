@@ -285,9 +285,11 @@ ob_start();
                      <tr><td><strong><?php echo TXT_CENTRALEPART.': ';?></strong><?php echo '<br />'; ?></td></tr>
                      <tr><td><?php  if(!empty($centraleSpecifique)){echo $centraleSpecifique;}?></td></tr>
                      <tr><td><strong><?php  echo TXT_DESCRIPTCENTRALEROXIMITE; ?></strong><?php echo '<br />'.$descriptionCentraleProximite; ?></td></tr>
+                     <?php  if(!empty($centraleInternationnal)){?>
                      <tr><td><strong><?php  echo TXT_CENTRALESPECIFIQUES; ?></strong></td></tr>
-                     <tr><td><?php  if(!empty($centraleInternationnal)){echo $centraleInternationnal;}?> </td></tr>                     
-                     <?php } ?>
+                     <tr><td><?php  echo $centraleInternationnal;?> </td></tr>                     
+                     <?php } 
+                     }?>
                       <?php if(!empty($attachement)){?>
                     <tr><td><strong><?php echo  TXT_PIECEJOINTE .': ';?></strong><?php echo $attachement; ?></td></tr><tr><td></td></tr>
                     <?php }  ?>
@@ -398,13 +400,7 @@ ob_start();
                         <?php if(!empty($descriptionautrecentrale)){?>
                             <tr><td><strong><?php echo  TXT_DESCRIPTETAPE  .' <br />';?></strong><?php echo $descriptionautrecentrale; ?></td></tr><tr><td></td></tr>
                         <?php }  ?>
-                    <?php }  ?>
-                    <?php if(!empty($arraycentraleproximite)){?>
-                    <tr><td><strong><?php echo  TXT_CENTRALEPROXIMITE  .': ';?></strong><?php echo $scentraleProximite; ?></td></tr><tr><td></td></tr>
-                        <?php if(!empty($descriptioncentraleproximite)){?>
-                            <tr><td><strong><?php echo  TXT_DESCRIPTCENTRALEROXIMITE  .': <br />';?></strong><?php echo $descriptioncentraleproximite; ?></td></tr><tr><td></td></tr>
-                        <?php }  ?>
-                    <?php }  ?>
+                    <?php }  ?>                    
                        <?php if(!empty($nbplaque)){?>
                     <tr><td><strong><?php echo  TXT_NBPLAQUE  .': ';?></strong><?php echo $nbplaque; ?></td></tr><tr><td></td></tr>
                     <?php }  ?>

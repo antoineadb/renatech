@@ -2,7 +2,6 @@
 session_start();
 include_once '../outils/constantes.php';
 include_once '../outils/toolBox.php';
-include_once '../class/Manager.php';
 include_once '../class/secure/Cryptage.php';
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //SAUVEGARDE DE SECOURS DES INFOS EN BASE DE DONNEES
@@ -12,13 +11,7 @@ $mdp = Cryptage::crypt($_POST['password']);
 $host = Cryptage::crypt($_POST['host']);
 $port = Cryptage::crypt($_POST['port']);
 $chiffrement = Cryptage::crypt($_POST['chiffrement']);
-$db = BD::connecter();
-$manager = new Manager($db);
-$datetime =  Date('Y-m-d');
-$param = new Params("Paramètre de configuration de la messagerie", $login, $mdp, $host, $port,$datetime);
-$manager->addParams($param);
-$repertoire = explode('/', $_SERVER['PHP_SELF']);
-BD::deconnecter();
+
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // Création du fichier de configuration
 //------------------------------------------------------------------------------------------------------------------------------------------------

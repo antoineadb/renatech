@@ -15,7 +15,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
     foreach ($sourcefinancements as $key => $sourcefinancement) {        
         $nbBySF = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
                 . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
-                . " and s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=? and extract(year from datedebutprojet)=?", array(  $sourcefinancement[0], ENCOURSREALISATION,date('Y')));
+                . " and s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=?", array(  $sourcefinancement[0], ENCOURSREALISATION));
         if (empty($nbBySF)) {$nbBySF = 0;}
         if ($lang == 'fr') {
              $serie .= '{name: "' . $sourcefinancement[1] . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbBySF . ',drilldown: "' . $sourcefinancement[0] . '"},]},';  
@@ -33,8 +33,8 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
         foreach ($centrales as $key => $centrale) {
             $nbBySF = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
                 . " WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
-                . " and s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=? AND co.idcentrale_centrale=? and extract(year from datedebutprojet)=?",
-                    array($value['idsourcefinancement'], ENCOURSREALISATION,$centrale[1],date('Y')));
+                . " and s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=? AND co.idcentrale_centrale=?",
+                    array($value['idsourcefinancement'], ENCOURSREALISATION,$centrale[1]));
             if (empty($nbBySF)) {$nbBySF = 0;}
             $serie02 .="{name: '" . $centrale[0] .  "',color:'". couleurGraphLib($centrale[0])."', y: ". $nbBySF . " , drilldown: '" . $centrale[0] . $value['idsourcefinancement'] . "'},";
             
@@ -56,8 +56,8 @@ if (IDTYPEUSER == ADMINLOCAL) {
     foreach ($sourcefinancements as $key => $sourcefinancement) {        
         $nbBySF = $manager->getSinglebyArray("SELECT count(s.idsourcefinancement) FROM projet p,sourcefinancement s,projetsourcefinancement ps,concerne co "
                 . "WHERE ps.idsourcefinancement_sourcefinancement = s.idsourcefinancement AND ps.idprojet_projet = p.idprojet AND co.idprojet_projet = p.idprojet  "
-                . " and s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=? AND co.idcentrale_centrale=? and extract(year from datedebutprojet)=?",
-                array($sourcefinancement[0], ENCOURSREALISATION,IDCENTRALEUSER,date('Y')));
+                . " and s.idsourcefinancement=? AND co.idstatutprojet_statutprojet=? AND co.idcentrale_centrale=?",
+                array($sourcefinancement[0], ENCOURSREALISATION,IDCENTRALEUSER));
         if (empty($nbBySF)) {$nbBySF = 0;}
         if ($lang == 'fr') {
              $serie .= '{name: "' . $sourcefinancement[1] . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbBySF . ',drilldown: "' . $sourcefinancement[0] . '"},]},';  
