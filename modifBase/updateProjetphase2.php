@@ -636,17 +636,8 @@ if (isset($_POST['page_precedente'])) {
             $dureeestime = '';
             $_SESSION['dureeestimemodif'] = '';
         }
-        if (!empty($_POST['choix2'])) {
-            $periodestime = (int) substr($_POST['choix2'], 2);
-            if ($idperiodestimeBDD != $periodestime) {
-                $_SESSION['periodestimemodif'] = $periodestime;
-            } else {
-                $_SESSION['periodestimemodif'] = '';
-            }
-        } else {
-            $periodestime = $manager->getSingle2("select periodestime from projet where idprojet = ?", $idprojet);
-            $_SESSION['periodestimemodif'] = '';
-        }
+        
+  
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              PERSONNE CENTRALE
 //---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1090,12 +1081,10 @@ if (isset($_POST['page_precedente'])) {
         $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],2,2);
     }else{
         $idtypecentralepartenaire=null;
-    }
-    
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite_periodicite, $centralepartenaireprojet, $idthematique_thematique,
-            $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, 
-            $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire);
-    
+    }    
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique,
+            $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime,
+            $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //------------------------------------------------------------------------------------------------------------------------
     //                  GESTION DES CAS OU LE DEMANDEUR EST ADMINISTRATEUR DE PROJET

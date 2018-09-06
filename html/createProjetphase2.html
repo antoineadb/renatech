@@ -141,25 +141,9 @@
     <table>
         <tr>            
             <td>
-                <label for="dureeprojet" style="width: 200px;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.':*'; ?></label>
+                <label for="dureeprojet" style="width: auto;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.':*'; ?></label>
                 <input id="dureeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeprojet"  autocomplete="on"
-                       required="required" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;" >
-                <select name="choix" id="choix" data-dojo-type="dijit/form/Select" >
-                    <?php
-                    $rowperiodicite=$manager->getList2("select idperiodicite,libelleperiodicite,libelleperiodiciteen from period WHERE idperiodicite!=?",MOIS);
-                    if($lang=='fr'){
-                        echo "<option value='pe".MOIS."'  selected='selected' >".TXT_MOIS."</option>";
-                        for($i=0;$i<count($rowperiodicite);$i++){
-                            echo "<option value='".'pe'.$rowperiodicite[$i]['idperiodicite']."'>".$rowperiodicite[$i]['libelleperiodicite']."</option>";
-                        }
-                    }elseif($lang=='en'){
-                        echo "<option value='pe".MOIS."'  selected='selected' >".TXT_MOIS."</option>";
-                        for($i=0;$i<count($rowperiodicite);$i++){
-                            echo "<option value='".'pe'.$rowperiodicite[$i]['idperiodicite']."'>".$rowperiodicite[$i]['libelleperiodiciteen']."</option>";
-                        }
-                    }
-                    ?>
-                </select>
+                       required="required" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;" >                
             </td>
         </tr>							
         <tr>
@@ -514,26 +498,7 @@
         <tr><td>
                 <label for="dureeestimeprojet" style="margin-bottom: 5px; margin-left: 20px;width: 600px;margin-top: 15px;"><?php echo TXT_DUREETRAVAUXTECNO.':*'; ?></label>
                 <input id="dureeestimeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeestimeprojet"  autocomplete="on"
-                       value=""  required="true" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;margin-bottom: 20px" disabled="<?php echo $bool; ?>" />
-                <?php
-                    $libelleperiodestime=TXT_MOIS;
-                ?>
-                <select name="choix2" id="choix2" data-dojo-type="dijit/form/Select"  disabled="<?php echo $bool; ?>" style="margin-bottom: 20px;" >
-                    <?php
-                        $rowperiodicite=$manager->getList2("select idperiodicite,libelleperiodicite,libelleperiodiciteen from period WHERE idperiodicite!=?",MOIS);
-                    if($lang=='fr'){
-                        echo "<option value='pe".MOIS."'  selected='selected' >".TXT_MOIS."</option>";
-                        for($i=0;$i<count($rowperiodicite);$i++){
-                            echo "<option value='".'pe'.$rowperiodicite[$i]['idperiodicite']."'>".$rowperiodicite[$i]['libelleperiodicite']."</option>";
-                        }
-                    }elseif($lang=='en'){
-                        echo "<option value='pe".MOIS."'  selected='selected' >".TXT_MOIS."</option>";
-                        for($i=0;$i<count($rowperiodicite);$i++){
-                            echo "<option value='".'pe'.$rowperiodicite[$i]['idperiodicite']."'>".$rowperiodicite[$i]['libelleperiodiciteen']."</option>";
-                        }
-                    }
-                    ?>
-                </select>
+                       value=""  required="true" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;margin-bottom: 20px" disabled="<?php echo $bool; ?>" />              
             </td></tr>
         <tr>
         <td>

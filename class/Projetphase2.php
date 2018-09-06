@@ -8,7 +8,7 @@ class Projetphase2 {
     private $_nbHeure;
     private $_dateDebutTravaux;
     private $_dureeprojet;
-    private $_idperiodicite_periodicite;
+    private $_dureeestime;
     private $_centralepartenaireprojet;
     private $_idthematique_thematique;
     private $_idautrethematique_autrethematique;
@@ -25,9 +25,7 @@ class Projetphase2 {
     private $_nbeleve;
     private $_nomformateur;
     private $_partenaire1;
-    private $_porteurprojet;
-    private $_dureeestime;
-    private $_periodestime;
+    private $_porteurprojet;    
     private $_descriptionautrecentrale;
     private $_etapeautrecentrale;
     private $_centraleproximite;
@@ -36,13 +34,12 @@ class Projetphase2 {
     private $_internationalnational;
     private $_idtypecentralepartenaire;
 
-    public function __construct($contactscentral, $idtypeprojet, $nbHeure, $datedebut, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique, $idautrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifiee, $nbplaque, $nbrun, $envoidevis, $emailrespdevis, $reussite, $refinterneprojet, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centraleproximite, $descriptioncentraleproximite, $interneExterne, $internationalNational,$idtypecentralepartenaire) {
+    public function __construct($contactscentral, $idtypeprojet, $nbHeure, $datedebut, $dureeprojet,  $centralepartenaireprojet, $idthematique, $idautrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifiee, $nbplaque, $nbrun, $envoidevis, $emailrespdevis, $reussite, $refinterneprojet, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime,  $descriptionautrecentrale, $etapeautrecentrale, $centraleproximite, $descriptioncentraleproximite, $interneExterne, $internationalNational,$idtypecentralepartenaire) {
         $this->setContactscentralaccueil($contactscentral);
         $this->setIdtypeprojet_typeprojet($idtypeprojet);
         $this->setNbHeure($nbHeure);
         $this->setDateDebutTravaux($datedebut);
-        $this->setDureeprojet($dureeprojet);
-        $this->setIdperiodicite_periodicite($idperiodicite);
+        $this->setDureeprojet($dureeprojet);        
         $this->setCentralepartenaireprojet($centralepartenaireprojet);
         $this->setIdthematique_thematique($idthematique);
         $this->setIdautrethematique_autrethematique($idautrethematique);
@@ -59,9 +56,7 @@ class Projetphase2 {
         $this->setNbeleve($nbeleve);
         $this->setNomformateur($nomformateur);
         $this->setPartenaire1($partenaire1);
-        $this->setPorteurprojet($porteurprojet);
-        $this->setDureestime($dureeestime);
-        $this->setPeriodestime($periodestime);
+        $this->setPorteurprojet($porteurprojet);                
         $this->setDescriptionautrecentrale($descriptionautrecentrale);
         $this->setEtapeautrecentrale($etapeautrecentrale);
         $this->setCentraleproximite($centraleproximite);
@@ -69,6 +64,7 @@ class Projetphase2 {
         $this->setInterneExterne($interneExterne);
         $this->setInternationalNational($internationalNational);
         $this->setIdtypecentralepartenaire($idtypecentralepartenaire);
+        $this->setDureeestime($dureeestime);
     }
 
     public function getInternationalNational() {
@@ -78,6 +74,15 @@ class Projetphase2 {
     public function setInternationalNational($internationalNational) {
         $this->_internationalnational = $internationalNational;
     }
+    
+    public function getDureeestime() {
+        return $this->_dureeestime;
+    }
+
+    public function setDureeestime($dureeestime) {
+        $this->_dureeestime = $dureeestime;
+    }
+    
     public function getIdtypecentralepartenaire() {
         return $this->_idtypecentralepartenaire;
     }
@@ -149,19 +154,7 @@ class Projetphase2 {
     public function setDureeprojet($dureeprojet) {
         $this->_dureeprojet = (int) $dureeprojet;
     }
-
-    public function getIdperiodicite_periodicite() {
-        return $this->_idperiodicite_periodicite;
-    }
-
-    public function setIdperiodicite_periodicite($id) {
-        $periodicite = (int) $id;
-        if ($periodicite >= 1) {
-            $this->_idperiodicite_periodicite = $id;
-        } else {
-            $this->_idperiodicite_periodicite = 1;
-        }
-    }
+ 
 
     public function getCentralepartenaireprojet() {
         return $this->_centralepartenaireprojet;
@@ -314,15 +307,6 @@ class Projetphase2 {
     public function setDureestime($dureestime) {
         $this->_dureeestime = (int) $dureestime;
     }
-
-    public function getPeriodestime() {
-        return $this->_periodestime;
-    }
-
-    public function setPeriodestime($idperiodestime) {
-        $this->_periodestime = (int) $idperiodestime;
-    }
-
     public function getDescriptionautrecentrale() {
         return $this->_descriptionautrecentrale;
     }

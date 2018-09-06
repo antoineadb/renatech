@@ -167,9 +167,6 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     } else {
         $dureeprojet = '';
     }
-    if (!empty($_POST['choix'])) {
-        $idperiodicite = substr($_POST['choix'], 2);
-    }
     if (!empty($_POST['centralepartenaireprojet'])) {
         $centralepartenaireprojet = stripslashes(Securite::bdd($_POST['centralepartenaireprojet']));
     } else {
@@ -326,7 +323,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $partenaire1 = '';
     }*/
     $partenaire1='';
-    $porteurprojet = $_POST['porteurprojet'];
+    $porteurprojet = $_POST['porteurprojet'];    
     if (!empty($_POST['dureeestimeprojet'])) {
         $dureeestime = stripslashes(Securite::bdd($_POST['dureeestimeprojet']));
     } else {
@@ -456,9 +453,9 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DU PROJETPHASE2
 //------------------------------------------------------------------------------------------------------------    
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $idperiodicite, $centralepartenaireprojet, $idthematique_thematique, 
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet,  $centralepartenaireprojet, $idthematique_thematique, 
             $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, 
-            $partenaire1, $porteurprojet, $dureeestime, $periodestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire);
+            $partenaire1, $porteurprojet,  $dureeestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     $admin = $manager->getSingle2("select administrateur from utilisateur where idutilisateur=?", $idutilisateur_utilisateur);
     //TRAITEMENT DU CAS OU L'UTLISATEUR QUI CREER LE PROJET EST DEJA ADMINISTRATEUR DE PROJET
