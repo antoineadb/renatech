@@ -383,10 +383,18 @@ $date  = $date->format('d-m-Y');
                 </td>
                 <td><script>
                         require(["dojo/parser", "dijit/Editor"]);
-                        function test() {                            
+                        function test() {
+                            if(dijit.byId('question_non')){
                                 dijit.byId('question_non').set('checked', true);
                                 dijit.byId('question_oui').set('checked', false);
                                 showHideCentrale('questionCentraleRenatech','block');
+                            }
+                            if(dijit.byId('question_non1')){
+                                dijit.byId('question_non1').set('checked', true);
+                                dijit.byId('question_oui1').set('checked', false);
+                                showHideCentrale('questionCentraleRenatech1','block');
+                            }
+                            
                             }
                     </script>
                     <?php if($porteurProjet=='TRUE'){?>
@@ -397,6 +405,7 @@ $date  = $date->format('d-m-Y');
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet" id="porteurprojet_non" value="FALSE"  class="btRadio" disabled="<?php echo $bool; ?>"
                            onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '');
                            showHideCentrale('questionCentraleRenatech','block');showHideCentrale('ouiNonSpan','block');
+                           showHideCentrale('questionCentraleRenatech1','block');showHideCentrale('ouiNonSpan1','block');
                            test();
                            ">
                     <?php echo TXT_NON ?>
@@ -466,20 +475,20 @@ $date  = $date->format('d-m-Y');
                 <!- ---------------------------------------------------------------------------------------------------------------------------------------------------  -->
                     <tr>
                         <td>
-                            <span id="questionCentraleRenatech" style="    width: 400px;margin-top: 5px;margin-left: 20px;display: none;margin-right: 5px;"><?php echo TXT_CENTRALE_RESEAU_PARTENAIRE; ?></span>
+                            <span id="questionCentraleRenatech1" style="    width: 400px;margin-top: 5px;margin-left: 20px;display: none;margin-right: 5px;"><?php echo TXT_CENTRALE_RESEAU_PARTENAIRE; ?></span>
                         </td>
                         <td>
-                            <span id="ouiNonSpan" style="display: none">                               
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui' name="question_centrale"  value="TRUE" class="btRadio"  
-                                           onclick="showHideCentrale('centraleRenatech','block');showHideCentrale('questionCentraleRenatech','block');" >
+                            <span id="ouiNonSpan1" style="display: none">                               
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui1' name="question_centrale"  value="TRUE" class="btRadio"  
+                                           onclick="showHideCentrale('centraleRenatech1','block');showHideCentrale('questionCentraleRenatech1','block');" >
                                    <?php echo TXT_OUI; ?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="TRUE" class="btRadio"  checked="checked" 
-                                           onclick="showHideCentrale('centraleRenatech','none')" >
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non1' name="question_centrale"  value="TRUE" class="btRadio"  checked="checked" 
+                                           onclick="showHideCentrale('centraleRenatech1','none')" >
                                    <?php echo TXT_NON; ?>                                                       
                             </span>
                         </td>
                         <td>
-                            <select dojoType="dijit.form.Select" name="centraleRenatech" id="centraleRenatech"  class='centraleRenatech'  style="margin-left: 22px;display: none" >
+                            <select dojoType="dijit.form.Select" name="centraleRenatech1" id="centraleRenatech1"  class='centraleRenatech'  style="margin-left: 22px;display: none" >
                                 <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>
                                  <?php
                                         $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and masquecentrale!=TRUE order by idcentrale asc",'Autres');                                        

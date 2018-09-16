@@ -526,11 +526,20 @@ if (isset($_POST['page_precedente'])) {
 //------------------------------------------------------------------------------------------------------------
 //              Traitement des centrale partenaire du projet
 //------------------------------------------------------------------------------------------------------------        
-        if(strlen($_POST['centraleRenatech'])==3){
-            $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,1));
-        }else{
-            $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
+        if(isset($_POST['centraleRenatech'])){
+            if(strlen($_POST['centraleRenatech'])==3){
+                $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,1));
+            }else{
+                $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
+            }
         }
+       if(isset($_POST['centraleRenatech1'])){
+            if(strlen($_POST['centraleRenatech1'])==3){
+                $centraleRenatech= intval(substr($_POST['centraleRenatech1'],2,1));
+           }else{
+                $centraleRenatech= intval(substr($_POST['centraleRenatech1'],2,2));
+           }
+       }       
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
 //------------------------------------------------------------------------------
