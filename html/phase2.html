@@ -396,7 +396,7 @@ $date  = $date->format('d-m-Y');
                     <?php echo TXT_OUI;?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet" id="porteurprojet_non" value="FALSE"  class="btRadio" disabled="<?php echo $bool; ?>"
                            onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '');
-                           showHideCentrale('questionCentraleRenatech','block');showHideCentrale('ouiNonSpan','block');showHideCentrale('centraleRenatech','block'); 
+                           showHideCentrale('questionCentraleRenatech','block');showHideCentrale('ouiNonSpan','block');
                            test();
                            ">
                     <?php echo TXT_NON ?>
@@ -429,8 +429,8 @@ $date  = $date->format('d-m-Y');
                                            onclick="showHideCentrale('centraleRenatech','none')" >
                                    <?php echo TXT_NON; ?>
                                 <?php }else{?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui' name="question_centrale"  value="TRUE" class="btRadio"  onclick="showHideCentrale('centraleRenatech','block');
-                                       showHideCentrale('questionCentraleRenatech','block');" >
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui' name="question_centrale"  value="TRUE" class="btRadio"  
+                                           onclick="showHideCentrale('centraleRenatech','block');showHideCentrale('questionCentraleRenatech','block');" >
                                    <?php echo TXT_OUI; ?>
                                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="TRUE" class="btRadio"  checked="checked" 
                                            onclick="showHideCentrale('centraleRenatech','none')" >
@@ -457,36 +457,42 @@ $date  = $date->format('d-m-Y');
                             </select>  
                         </td>
                     </tr>
-                <tr>
+                   
+            <tr>
                 <td>
                     <label id='msgporteurProjet' style="width: 350px;margin-left:20px;display: none;"  ><?php echo TXT_MSGPORTEURPROJET ?></label>
                 </td>
                 <?php }?>
+                <!- ---------------------------------------------------------------------------------------------------------------------------------------------------  -->
+                    <tr>
+                        <td>
+                            <span id="questionCentraleRenatech" style="    width: 400px;margin-top: 5px;margin-left: 20px;display: none;margin-right: 5px;"><?php echo TXT_CENTRALE_RESEAU_PARTENAIRE; ?></span>
+                        </td>
+                        <td>
+                            <span id="ouiNonSpan" style="display: none">                               
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui' name="question_centrale"  value="TRUE" class="btRadio"  
+                                           onclick="showHideCentrale('centraleRenatech','block');showHideCentrale('questionCentraleRenatech','block');" >
+                                   <?php echo TXT_OUI; ?>
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="TRUE" class="btRadio"  checked="checked" 
+                                           onclick="showHideCentrale('centraleRenatech','none')" >
+                                   <?php echo TXT_NON; ?>                                                       
+                            </span>
+                        </td>
+                        <td>
+                            <select dojoType="dijit.form.Select" name="centraleRenatech" id="centraleRenatech"  class='centraleRenatech'  style="margin-left: 22px;display: none" >
+                                <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>
+                                 <?php
+                                        $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and masquecentrale!=TRUE order by idcentrale asc",'Autres');                                        
+                                        for($i=0;$i<count($rowcentrale);$i++){ 
+                                            echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
+                                        }
+                                    ?>
+                            </select>  
+                        </td>
+                    </tr>
+            <!- ---------------------------------------------------------------------------------------------------------------------------------------------------  -->
+                    
             </tr>
-          <!--  <tr>
-            <td>
-                <span id="questionCentraleRenatech" style="margin-top:25px;margin-left: 20px;width: 430px;display: none"><?php echo TXT_CENTRALE_RESEAU_PARTENAIRE; ?></span>
-            </td>
-            <td>
-                <span style="display: none" id="ouiNonSpan">
-                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="question_centrale"  value="TRUE" class="btRadio"  onclick="showHideCentrale('centraleRenatech','block')" >
-                       <?php echo TXT_OUI; ?>
-                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="question_centrale" value="FALSE"  class="btRadio" checked="checked" onclick="showHideCentrale('centraleRenatech','none')" >
-                       <?php echo TXT_NON; ?>
-                </span>
-                </td>
-            <td>
-                <select name="centraleRenatech" id="centraleRenatech"  class='#centraleRenatech' style="margin-left: 22px;display: none" data-dojo-type="dijit/form/Select" >
-                    <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>
-                     <?php
-                        $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and masquecentrale!=TRUE order by idcentrale asc",'Autres');
-                        for($i=0;$i<count($rowcentrale);$i++){                    
-                            echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
-                        }
-                        ?>
-                </select>  
-            </td>
-        </tr> -->
         </table>
         <input id="reponsenomlabo" value='' style="display: none" >
         <fieldset id="dev" style="border-color: #5D8BA2;width:966px;padding-top: 0px;margin-top:20px;margin-left: 20px;padding-left:0px;">
