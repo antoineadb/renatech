@@ -451,13 +451,14 @@ $date  = $date->format('d-m-Y');
                             <select dojoType="dijit.form.Select" name="centraleRenatech" id="centraleRenatech"  class='centraleRenatech'  style="margin-left: 22px;" >
                                 <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>
                                  <?php
-                                        if($arrayCentraleRenatech[0]['partenaire_centrale_id']!=-1){
+                                        if($arrayCentraleRenatech[0]['partenaire_centrale_id']!=null){
                                             $rowcentrale =$manager->getListbyArray("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and idcentrale!=?
                                             and masquecentrale!=TRUE order by idcentrale asc",array('Autres',$arrayCentraleRenatech[0]['partenaire_centrale_id']));
                                             $libelle = $manager->getSingle2('SELECT libellecentrale FROM centrale WHERE idcentrale=? ',$arrayCentraleRenatech[0]['partenaire_centrale_id']);
                                             echo "<option value='".'ce'.$arrayCentraleRenatech[0]['partenaire_centrale_id']."' selected='selected' >".$libelle."</option>";
                                         }else{
-                                            $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and masquecentrale!=TRUE order by idcentrale asc",'Autres');
+                                            $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=? 
+                                            and masquecentrale!=TRUE order by idcentrale asc",'Autres');
                                         }
                                         for($i=0;$i<count($rowcentrale);$i++){ 
                                             echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
@@ -471,7 +472,7 @@ $date  = $date->format('d-m-Y');
                 <td>
                     <label id='msgporteurProjet' style="width: 350px;margin-left:20px;display: none;"  ><?php echo TXT_MSGPORTEURPROJET ?></label>
                 </td>
-                <?php }?>
+                <?php } ?>
                 <!- ---------------------------------------------------------------------------------------------------------------------------------------------------  -->
                     <tr>
                         <td>
@@ -489,9 +490,9 @@ $date  = $date->format('d-m-Y');
                         </td>
                         <td>
                             <select dojoType="dijit.form.Select" name="centraleRenatech1" id="centraleRenatech1"  class='centraleRenatech'  style="margin-left: 22px;display: none" >
-                                <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>
+                                <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>                                
                                  <?php
-                                        $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and masquecentrale!=TRUE order by idcentrale asc",'Autres');                                        
+                                        $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and masquecentrale!=TRUE order by idcentrale asc",'Autres');
                                         for($i=0;$i<count($rowcentrale);$i++){ 
                                             echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
                                         }

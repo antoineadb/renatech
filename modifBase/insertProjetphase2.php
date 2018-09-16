@@ -172,7 +172,11 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     } else {
         $centralepartenaireprojet = '';
     }
-    
+    if (!empty($_POST['partenaire_centrale'])) {
+        $partenaire_projetBDD = 'TRUE';
+    } else {
+        $partenaire_projetBDD = 'FALSE';
+    }
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              TYPEPARTENAIRE 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -465,12 +469,14 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //------------------------------------------------------------------------------------------------------------
 //              Traitement des centrale partenaire du projet
 //------------------------------------------------------------------------------------------------------------        
-        if(strlen($_POST['centraleRenatech'])==3){
-            $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,1));
-        }else{
-            $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
+        if(isset($_POST['centraleRenatech'])&& $_POST['centraleRenatech']!=-1){
+            if(strlen($_POST['centraleRenatech'])==3){
+                $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,1));
+            }else{
+                $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
+            }
         }
-    
+
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DU PROJETPHASE2
 //------------------------------------------------------------------------------------------------------------    
