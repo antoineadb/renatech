@@ -72,7 +72,9 @@ if (isset($_POST['page_precedente'])) {
         }else{
             $maj=null;
         }
-        $cas = gestionCas::choixCas($save, $chgstatut, $etapeautrecentrale, $majcentrale, $sendmail, $emailNon, $maj);
+        $result = gestionCas::choixCas($save, $chgstatut, $etapeautrecentrale, $majcentrale, $sendmail, $emailNon, $maj);
+        $cas= $result[0];
+        $cas1 = $result[1];        
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 //                            FIN AFFECTATION D'UNE VARIABLE $CAS
 //----------------------------------------------------------------------------------------------------------------------------------------------------------            
@@ -97,7 +99,7 @@ if (isset($_POST['page_precedente'])) {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------   
         $rowprojet = $manager->getList2("select contactscentraleaccueil,idtypeprojet_typeprojet,typeFormation,emailrespdevis,idthematique_thematique,attachementdesc,idautrethematique_autrethematique,nbheure,porteurprojet,"
                 . "envoidevis,nbeleve,datedebuttravaux,dureeprojet,descriptiftechnologique,idperiodicite_periodicite,centralepartenaireprojet,nbplaque,nbrun,nomformateur,refinterneprojet,partenaire1,dureeestime,periodestime,"
-                . "devtechnologique,verrouidentifiee,descriptionautrecentrale,descriptioncentraleproximite,reussite from projet where idprojet=?", $idprojet);
+                . "devtechnologique,verrouidentifiee,descriptionautrecentrale,descriptioncentraleproximite,reussite,partenaire_centrale,partenaire_centrale_id from projet where idprojet=?", $idprojet);
         $contactscentraleaccueilBDD = $rowprojet[0]['contactscentraleaccueil'];
         $typeprojetBDD = (int) $rowprojet[0]['idtypeprojet_typeprojet'];
         if (!empty($rowprojet[0]['typeFormation'])) {
@@ -135,6 +137,13 @@ if (isset($_POST['page_precedente'])) {
         } else {
             $porteurprojetBDD = 'FALSE';
         }
+        if ($rowprojet[0]['partenaire_centrale']) {
+            $partenaire_projetBDD = 'TRUE';
+        } else {
+            $partenaire_projetBDD = 'FALSE';
+        }
+        
+        
         if (!empty($rowprojet[0]['centralepartenaireprojet'])) {
             $centralepartenaireprojetBDD = $rowprojet[0]['centralepartenaireprojet'];
         } else {
@@ -498,6 +507,30 @@ if (isset($_POST['page_precedente'])) {
             $manager->updatepartenairefromprojet($partenairefromprojet, $idprojet);
         }
         $partenaire1='';
+        
+//------------------------------------------------------------------------------------------------------------
+//              Traitement de la question des centrale partenaire du projet
+//------------------------------------------------------------------------------------------------------------        
+        $partenaire_projet = $_POST['question_centrale'];
+        if ($partenaire_projetBDD != $partenaire_projet) {
+            if ($partenaire_projet == 'TRUE') {
+                $_SESSION['partenairerprojetmodif'] = TXT_OUI;
+                $partenaire_projetBDD = TXT_OUI;
+            } else {
+                $_SESSION['partenairerprojetmodif'] = TXT_NON;
+                $partenaire_projetBDD = TXT_NON;
+            }
+        } else {
+            $_SESSION['partenairerprojetmodif'] = '';
+        }
+//------------------------------------------------------------------------------------------------------------
+//              Traitement des centrale partenaire du projet
+//------------------------------------------------------------------------------------------------------------        
+        if(strlen($_POST['centraleRenatech'])==3){
+            $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,1));
+        }else{
+            $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
+        }
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
 //------------------------------------------------------------------------------
@@ -532,7 +565,7 @@ if (isset($_POST['page_precedente'])) {
         if ($_POST['nombrePartenaire'] > 1) {
             for ($i = 0; $i < $_POST['nombrePartenaire'] - 1; $i++) {
                 if (!empty($_POST['' . 'nomLaboEntreprise' . $i . ''])) {
-                    $nomLaboEntreprise = stripslashes(Securite::bdd(($_POST['' . 'nomLaboEntreprise' . $i . ''])));
+                    $nomLaboEntreprise = stripslashes(Securite::bdd($_POST['' . 'nomLaboEntreprise' . $i . '']));
                 }                
                 $idpartenaire = $manager->getSingle("select max (idpartenaire) from partenaireprojet") + 1;
                 $idtypepartenaire = substr($_POST['tp'.$i], 2,2);                
@@ -1077,14 +1110,16 @@ if (isset($_POST['page_precedente'])) {
             }
         }
     }
+
     if(isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])){
         $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],2,2);
     }else{
         $idtypecentralepartenaire=null;
-    }    
+    }
     $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique,
-            $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime,
-            $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire);
+            $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, 
+            $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational, $idtypecentralepartenaire, $partenaire_projet,
+            $centraleRenatech);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //------------------------------------------------------------------------------------------------------------------------
     //                  GESTION DES CAS OU LE DEMANDEUR EST ADMINISTRATEUR DE PROJET
@@ -1185,7 +1220,7 @@ if (isset($_POST['page_precedente'])) {
         }
     }
     
-    
+
     if ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' || $cas == 'chgstatutAutCentraleEmailDejaEnvoye' || $cas == 'chgstatut' || $cas == 'chgstatutAutCentraleEmailDejaEnvoyeNon') {        
         if(!empty(IDCENTRALEUSER)){
                $idcentrale = IDCENTRALEUSER;
@@ -1217,14 +1252,13 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateConcerne($concerne1, $idprojet);
             effaceCache(LIBELLECENTRALEUSER);
           
-            miseAnullStatutcloturerFin($idprojet,$manager,$datemodifstatut);            
-            
-            if($cas1 !='noEmail'){
+            miseAnullStatutcloturerFin($idprojet,$manager,$datemodifstatut);                     
+            if($cas1 !=='noEmail' && $cas1!=='chgstatutnoEmail'){
                 include '../EmailProjetEncoursrealisation.php';
             }
-            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail') {
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail'&& $cas1!='chgstatutnoEmail'){
                 include '../emailAutreCentrales.php';
-            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' && $cas1 !='noEmail') {
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye' && $cas1 !='noEmail'&& $cas1!='chgstatutnoEmail'){
                 include '../outils/envoiEmailAutreCentrale.php';
             }
             header('Location: /' . REPERTOIRE . '/myproject/' . $lang . '/' . $idprojet);
@@ -1243,7 +1277,7 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateConcerne($concerne, $idprojet);
             effaceCache(LIBELLECENTRALEUSER);
             // ENVOI D'UN EMAIL
-            if($cas1 !='noEmail'){
+            if($cas1 !='noEmail' &&  $cas1!='chgstatutnoEmail'){
                 include '../EmailProjetfini.php';
             }
             //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
@@ -1275,14 +1309,14 @@ if (isset($_POST['page_precedente'])) {
             $concerne = new Concerne($idcentrale, $idprojet, CLOTURE, "");
             $manager->updateConcerne($concerne, $idprojet);
             effaceCache(LIBELLECENTRALEUSER);
-            if($cas1!='noEmail'){
+            if($cas1 !='noEmail' &&  $cas1!='chgstatutnoEmail'){
                 include '../EmailProjetcloture.php';
             }
 
             //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
-            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1!='noEmail') {
+            if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1!='noEmail' &&  $cas1!='chgstatutnoEmail') {
                 include '../emailAutreCentrales.php';
-            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye'&& $cas1!='noEmail') {
+            } elseif ($cas == 'chgstatutAutCentraleEmailJammaisEnvoye'&& $cas1!='noEmail' &&  $cas1!='chgstatutnoEmail')  {
                 include '../outils/envoiEmailAutreCentrale.php';
             }
             //vide le cache
@@ -1303,7 +1337,7 @@ if (isset($_POST['page_precedente'])) {
             $manager->updateDateStatutRefuser($daterefus, $idprojet, $idcentrale);
             effaceCache(LIBELLECENTRALEUSER);
             $libelleCentrale = $manager->getSingle2("select libellecentrale from centrale where idcentrale=?", $idcentrale);
-            if($cas1!='noEmail'){
+            if($cas1!='noEmail' && $cas1!='chgstatutnoEmail'){
                 include_once '../emailprojetphase2/emailRefuse.php';
                 include '../EmailProjetphase2.php'; //ENVOIE D'UN EMAIL AU DEMANDEUR AVEC COPIE DU CHAMP COMMENTAIRE
             }

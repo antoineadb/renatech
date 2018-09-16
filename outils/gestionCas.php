@@ -36,14 +36,15 @@ Class gestionCas{
         } elseif ($chgstatut == 'oui' && $etapeautrecentrale == 'TRUE' && $majcentrale == 'non' && $sendmail == FALSE) {
             //CHANGEMENT DE STATUT AVEC AJOUT D'UNE ETAPE DANS UNE AUTRES CENTRALE POUR LA 1ER FOIS  
             $cas = 'chgstatutAutCentraleEmailJammaisEnvoye';
-        } elseif ($chgstatut == 'oui' && $etapeautrecentrale == 'FALSE') {
+        } elseif ($chgstatut == 'oui' && $etapeautrecentrale == 'FALSE' && $emailNon=='oui') {
             //CHANGEMENT DE STATUT, PAS D'ETAPE DANS UNE AUTRE CENTRALE
             $cas = 'chgstatut';
-        }elseif($emailNon=='non'){
-            $cas1 = 'noEmail';
-        }      
-       
-        return $cas;
+        } elseif ($chgstatut == 'oui' && $etapeautrecentrale == 'FALSE' && $emailNon=='non') {
+            $cas = 'chgstatut';
+            $cas1 = 'chgstatutnoEmail';
+        }
+        $result=array($cas,$cas1);
+        return $result;
     }
 }
 

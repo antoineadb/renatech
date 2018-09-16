@@ -1073,3 +1073,4 @@ define('TXT_TYPE_COMPTE','Type de compte');
 define('TXT_ADMINNATIONAL','Administrateur national');
 define('TXT_ADMINLOCAL','Administrateur local');
 define('TXT_UTILISATEUR','Utilisateur');
+define('TXT_CENTRALE_RESEAU_PARTENAIRE','Une des centrales du réseau Renatech est-elle partenaire du projet?');

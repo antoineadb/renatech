@@ -88,12 +88,12 @@ function sendEmail($body, $sujet, $email) { // envoi sans copie
     setlocale(LC_CTYPE, "fr_FR.UTF-8");
     $mail->IsSMTP(true); // telling the class to use SMTP
     try {
-        $mail->Host = HOST;
-        $mail->SMTPAuth = SMTPAUTH;
-        $mail->SMTPSecure = SMTPSECURE;
-        $mail->Port = PORT;
-        $mail->Username = USERNAME;
-        $mail->Password = PASSWORD;
+        $mail->Host = TXT_HOST_MSG;
+        $mail->SMTPAuth = TRUE;
+        $mail->SMTPSecure = TXT_BDD_CHIFFREMENT_MSG;
+        $mail->Port = TXT_PORT_MSG;
+        $mail->Username = TXT_LOGIN_MSG;
+        $mail->Password = TXT_MDP_MSG;
         $mail->AddAddress($email);
         $mail->SetFrom(ADRESSEMAILPROJET, 'RENATECH');
         $mail->Subject = $sujet;
@@ -124,12 +124,12 @@ function envoieEmailAttachement($body, $sujet, $email, $cc,$path,$filename) {
     setlocale(LC_CTYPE, "fr_FR.UTF-8");
     $mail->IsSMTP(true); // telling the class to use SMTP
     try {
-        $mail->Host = HOST;
-        $mail->SMTPAuth = SMTPAUTH;
-        $mail->SMTPSecure = SMTPSECURE;
-        $mail->Port = PORT;
-        $mail->Username = USERNAME;
-        $mail->Password = PASSWORD;
+        $mail->Host = TXT_HOST_MSG;
+        $mail->SMTPAuth = TRUE;
+        $mail->SMTPSecure = TXT_BDD_CHIFFREMENT_MSG;
+        $mail->Port = TXT_PORT_MSG;
+        $mail->Username = TXT_LOGIN_MSG;
+        $mail->Password = TXT_MDP_MSG;
 
         if (!empty($email)) {
             for ($i = 0; $i < count($email); $i++) {

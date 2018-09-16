@@ -1399,3 +1399,6 @@ a.infoBulle:hover span{
     font-size: 18px;
     text-align: center;
 }
+.claro .dijitSelectLabel{
+    width: 245px; 
+}

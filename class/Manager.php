@@ -144,7 +144,6 @@ include_once 'TypePartenaire.php';
 include_once 'ProjetTypePartenaire.php';
 
 showError($_SERVER['PHP_SELF']);
-
 class Manager {
 
     private $_db; //instance de PDO
@@ -1246,14 +1245,16 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
 //------------------------------------------------------------------------------------------------------------
 //                                       PROJET PHASE 2
 //------------------------------------------------------------------------------------------------------------
-    public function updateProjetphase2(Projetphase2 $projet2, $idprojet) {
-        try {
+    public function updateProjetphase2(Projetphase2 $projet2, $idprojet) {        
+        try {//echo '<pre>';print_r($projet2);die;
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
             $requete = $this->_db->prepare("update projet set contactscentraleaccueil=?, idtypeprojet_typeprojet=?,nbHeure=?,
             dateDebutTravaux=?,dureeprojet=?,centralepartenaireprojet=?,idthematique_thematique=?,idautrethematique_autrethematique=?,descriptifTechnologique=?,
             attachementdesc=?,verrouidentifiee=?,nbplaque=?,nbrun=?,envoidevis=?,emailrespdevis=?,reussite=?,refinterneprojet=?,devtechnologique=?,nbeleve=?,nomformateur=?,partenaire1=?,
-            porteurprojet =?,dureeestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=?,interneexterne=?,internationalnational=?,idtypecentralepartenaire=?   where idprojet=?");
+            porteurprojet =?,dureeestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=?,interneexterne=?,internationalnational=?,idtypecentralepartenaire=?,
+            partenaire_centrale=?,partenaire_centrale_id=?
+            where idprojet=?");
             $contactscentralaccueil = $projet2->getContactscentralaccueil();
             $idtypeprojet = $projet2->getIdtypeprojet_typeprojet();
             $nbheure = $projet2->getNbHeure();
@@ -1284,6 +1285,9 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $interneexterne = $projet2->getInterneExterne();
             $internationalnational = $projet2->getInternationalNational();
             $idtypecentralepartenaire = $projet2->getIdtypecentralepartenaire();
+            $partenaire_centrale = $projet2->getPartenaireCentrale();
+            $partenaire_centrale_id = $projet2->getPartenaireCentraleId();
+
             $requete->bindParam(1, $contactscentralaccueil, PDO::PARAM_STR);
             $requete->bindParam(2, $idtypeprojet, PDO::PARAM_INT);
             $requete->bindParam(3, $nbheure, PDO::PARAM_INT);
@@ -1313,12 +1317,14 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $requete->bindParam(27, $descriptioncentraleproximite, PDO::PARAM_STR);
             $requete->bindParam(28, $interneexterne, PDO::PARAM_STR);
             $requete->bindParam(29, $internationalnational, PDO::PARAM_STR);
-            $requete->bindParam(30, $idtypecentralepartenaire, PDO::PARAM_INT);
-            $requete->bindParam(31, $idprojet, PDO::PARAM_INT);
+            $requete->bindParam(30, $idtypecentralepartenaire, PDO::PARAM_INT);                        
+            $requete->bindParam(31, $partenaire_centrale, PDO::PARAM_BOOL);
+            $requete->bindParam(32, $partenaire_centrale_id, PDO::PARAM_INT);
+            $requete->bindParam(33, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {
-            echo TXT_ERRUPDATEPROJET . '<br>' . $exc->getLine();
+            echo TXT_ERRUPDATEPROJET . '<br>' . $exc->getLine() . '<br>' . $exc->getMessage();
             $this->_db->rollBack();
         }
     }

@@ -1076,3 +1076,4 @@ define('TXT_TYPE_COMPTE','Type of account');
 define('TXT_ADMINNATIONAL','National Administrator');
 define('TXT_ADMINLOCAL','Local Administrator');
 define('TXT_UTILISATEUR','User');
+define('TXT_CENTRALE_RESEAU_PARTENAIRE',"Is one of the Renatech network's plants a partner in the project?");

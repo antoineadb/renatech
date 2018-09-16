@@ -447,15 +447,37 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 
     $interneexterne = null;
     $internationalNational = null;
+//------------------------------------------------------------------------------------------------------------
+//              Traitement de la question des centrale partenaire du projet
+//------------------------------------------------------------------------------------------------------------        
+        $partenaire_projet = $_POST['question_centrale'];
+        if ($partenaire_projetBDD != $partenaire_projet) {
+            if ($partenaire_projet == 'TRUE') {
+                $_SESSION['partenairerprojetmodif'] = TXT_OUI;
+                $partenaire_projetBDD = TXT_OUI;
+            } else {
+                $_SESSION['partenairerprojetmodif'] = TXT_NON;
+                $partenaire_projetBDD = TXT_NON;
+            }
+        } else {
+            $_SESSION['partenairerprojetmodif'] = '';
+        }
+//------------------------------------------------------------------------------------------------------------
+//              Traitement des centrale partenaire du projet
+//------------------------------------------------------------------------------------------------------------        
+        if(strlen($_POST['centraleRenatech'])==3){
+            $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,1));
+        }else{
+            $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
+        }
     
-    
-   
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DU PROJETPHASE2
 //------------------------------------------------------------------------------------------------------------    
     $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet,  $centralepartenaireprojet, $idthematique_thematique, 
             $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, 
-            $partenaire1, $porteurprojet,  $dureeestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire);
+            $partenaire1, $porteurprojet,  $dureeestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire
+            , $partenaire_projet,$centraleRenatech);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     $admin = $manager->getSingle2("select administrateur from utilisateur where idutilisateur=?", $idutilisateur_utilisateur);
     //TRAITEMENT DU CAS OU L'UTLISATEUR QUI CREER LE PROJET EST DEJA ADMINISTRATEUR DE PROJET

@@ -17,7 +17,7 @@ if (!empty($_POST['page_precedente']) && $_POST['page_precedente'] == 'motpasseo
     if (!empty($_POST['pseudo']) && empty($_POST['mail'])) {
         $email = $manager->getSingle2("select mail from loginpassword where pseudo =?", $_POST['pseudo']);
         if (!empty($email)) {
-            $passe = genPasse(3); //GENERATION D'UN NOUVEAU MOT DE PASSE
+            $passe = genPasse(3); //GENERATION D'UN NOUVEAU MOT DE PASSE            
             $loginpassword = new LoginPassword(sha1($passe), $_POST['pseudo']); //MISE A JOUR DU MOT DE PASSE DANS LA BASE DE DONNEE
             $manager->updateloginpassword($loginpassword);
             $motpasseenvoye = new LoginMotpasseEnvoye('TRUE', $_POST['pseudo']); //MISE A JOUR DU BOOLEAN DANS LOGINPASSWORD QUI FORCERA LA MISE A JOUR DU MOT DE PASSE APRES CONNEXION
@@ -27,7 +27,14 @@ if (!empty($_POST['page_precedente']) && $_POST['page_precedente'] == 'motpasseo
             $body1 = htmlentities(TXT_MOTPASSEMAIL, ENT_QUOTES, 'UTF-8') . '<br>';
             $body2 = htmlentities(TXT_VOTREPSEUDO, ENT_QUOTES, 'UTF-8') . ' : ' . $_POST['pseudo'] . '<br>';
             $body3 = htmlentities(TXT_VOTREMOTPASSE, ENT_QUOTES, 'UTF-8') . ' : ' . $passe . '<br>';
-            sendEmail($body1 . $body2 . $body3, $messagemotpasse, $email);            
+           
+            try {
+                 sendEmail($body1 . $body2 . $body3, $messagemotpasse, $email);
+            } catch (Exception $exc) {
+                echo $exc->getMessage().'<br>'.$exc->getTraceAsString();
+                
+            }
+
             header('Location: /' . REPERTOIRE . '/message_password/' . $lang);
         } else {            
             header('Location: /' . REPERTOIRE . '/msg_nologinaccount/' . $lang);

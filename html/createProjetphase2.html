@@ -152,6 +152,14 @@
             </td>
         </tr>
     </table>
+    <script>
+                require(["dojo/parser", "dijit/Editor"]);
+                function test() {                            
+                    dijit.byId('question_non').set('checked', true);
+                    dijit.byId('question_oui').set('checked', false);
+                    showHideCentrale('questionCentraleRenatech','block');
+                }
+            </script>
     <table style="margin-top: 10px">
         <tr>
             <td>
@@ -160,22 +168,46 @@
             </td>           
             <td>
                 <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet"  value="TRUE" class="btRadio" checked="checked" 
-                       onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '')">
+                       onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '');showHideCentrale('questionCentraleRenatech','none');
+                       showHideCentrale('ouiNonSpan','none');showHideCentrale('centraleRenatech','none'); test()">
                 <?php echo TXT_OUI; ?>
-                <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="porteurprojet" value="FALSE"  class="btRadio"
-                       onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '')">
+                <input type= "radio"    data-dojo-type="dijit/form/RadioButton" name="porteurprojet" value="FALSE"  class="btRadio"
+                       onclick="disablednomlabo('/<?php echo REPERTOIRE; ?>/outils/disabledNomlabo.php?lang=<?php echo $lang;?>&porteur=' + this.value + '');showHideCentrale('questionCentraleRenatech','block');
+                       showHideCentrale('ouiNonSpan','block'); test() ">
                 <?php echo TXT_NON; ?>
-            </td>            
-        </tr>
-        <tr>
+            </td>
             <td>
-                <label id='msgporteurProjet' style="width: 350px;margin-left:20px;display: block;"  ><?php echo TXT_MSGPORTEURPROJET; ?>
+                <label id='msgporteurProjet' style="width: 350px;margin-left:20px;display: none;"  ><?php echo TXT_MSGPORTEURPROJET; ?>
                 </label>
             </td>            
-        </tr>
+        </tr>        
+        <tr>
+            <td>
+                <span id="questionCentraleRenatech" style="margin-top:25px;margin-left: 20px;width: 430px;display: none"><?php echo TXT_CENTRALE_RESEAU_PARTENAIRE; ?></span>
+            </td>
+            
+            <td>
+                <span style="display: none" id="ouiNonSpan">
+                    <input type= "radio" id='question_oui' data-dojo-type="dijit/form/RadioButton" name="question_centrale"  value="TRUE" class="btRadio"  onclick="showHideCentrale('centraleRenatech','block')" >
+                       <?php echo TXT_OUI; ?>
+                    <input type= "radio" id='question_non' data-dojo-type="dijit/form/RadioButton" name="question_centrale" value="FALSE"  class="btRadio" checked="checked" onclick="showHideCentrale('centraleRenatech','none')" >
+                       <?php echo TXT_NON; ?>
+                </span>
+                </td>
+            <td>
+                <select name="centraleRenatech" id="centraleRenatech"   style="margin-left: 22px;width: 320px;display: none" data-dojo-type="dijit/form/Select" >
+                    <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>
+                     <?php
+                        $rowcentrale =$manager->getList2("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and masquecentrale!=TRUE order by idcentrale asc",'Autres');
+                        for($i=0;$i<count($rowcentrale);$i++){                    
+                            echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
+                        }
+                        ?>
+                </select>  
+            </td>
+        </tr>         
     </table>
     <input id="reponsenomlabo" value='' style="display: none" >
-  
     <script>
         dojo.ready(function() {
             var spinner = dijit.byId("integerspinner2");
