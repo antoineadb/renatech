@@ -6,36 +6,38 @@ include_once '../class/secure/Cryptage.php';
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //SAUVEGARDE DE SECOURS DES INFOS EN BASE DE DONNEES
 //------------------------------------------------------------------------------------------------------------------------------------------------
+
 $login = Cryptage::crypt($_POST['login']);
-$mdp = Cryptage::crypt($_POST['password']);
-$host = Cryptage::crypt($_POST['host']);
+$password =Cryptage::crypt($_POST['password']);
 $port = Cryptage::crypt($_POST['port']);
+$host = Cryptage::crypt($_POST['host']);
+$bdd = $_POST['bdd'];
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
 // Création du fichier de configuration
 //------------------------------------------------------------------------------------------------------------------------------------------------
 
 try{
-    switch ($_POST['bdd']){
+    switch ($bdd){
         case 'renatech_test':
         $crnl  = "\r\n" ;
         $data  = "<?php".$crnl ;
-        $data .= "define('TXT_LOGIN_BD_0','".$_POST['login']."');".$crnl;
-        $data .= "define('TXT_MDP_0','".$_POST['password']."');".$crnl;
-        $data .= "define('TXT_PORT_0','".$_POST['port']."');".$crnl;
-        $data .= "define('TXT_HOST_0','".$_POST['host']."');".$crnl;
-        $data .= "define('TXT_BDD_0','".$_POST['bdd']."');".$crnl;
+        $data .= "define('TXT_LOGIN_BD_0','".$login."');".$crnl;
+        $data .= "define('TXT_MDP_0','".$password."');".$crnl;
+        $data .= "define('TXT_PORT_0','".$port."');".$crnl;
+        $data .= "define('TXT_HOST_0','".$host."');".$crnl;
+        $data .= "define('TXT_BDD_0','".Cryptage::crypt($bdd)."');".$crnl;
         $data .= '?>'.$crnl ;    
         $handle =fopen('../class/secure/config_0.php','w+');
         break;
         case 'renatech_preprod':
         $crnl  = "\r\n" ;
         $data  = "<?php".$crnl ;
-        $data .= "define('TXT_LOGIN_BD_1','".$_POST['login']."');".$crnl;
-        $data .= "define('TXT_MDP_1','".$_POST['password']."');".$crnl;
-        $data .= "define('TXT_PORT_1','".$_POST['port']."');".$crnl;
-        $data .= "define('TXT_HOST_1','".$_POST['host']."');".$crnl;
-        $data .= "define('TXT_BDD_1','".$_POST['bdd']."');".$crnl;
+        $data .= "define('TXT_LOGIN_BD_1','".$login."');".$crnl;
+        $data .= "define('TXT_MDP_1','".$password."');".$crnl;
+        $data .= "define('TXT_PORT_1','".$port."');".$crnl;
+        $data .= "define('TXT_HOST_1','".$host."');".$crnl;
+        $data .= "define('TXT_BDD_1','".Cryptage::crypt($bdd)."');".$crnl;
         $data .= '?>'.$crnl ;    
         $handle =fopen('../class/secure/config_1.php','w+');     
         break;
@@ -44,9 +46,9 @@ try{
         $data  = "<?php".$crnl ;
         $data .= "define('TXT_LOGIN_BD_2','".$_POST['login']."');".$crnl;
         $data .= "define('TXT_MDP_2','".$_POST['password']."');".$crnl;
-        $data .= "define('TXT_PORT_2','".$_POST['port']."');".$crnl;
-        $data .= "define('TXT_HOST_2','".$_POST['host']."');".$crnl;
-        $data .= "define('TXT_BDD_2','".$_POST['bdd']."');".$crnl;
+        $data .= "define('TXT_PORT_2','".$port."');".$crnl;
+        $data .= "define('TXT_HOST_2','".$host."');".$crnl;
+        $data .= "define('TXT_BDD_2','".Cryptage::crypt($bdd)."');".$crnl;
         $data .= '?>'.$crnl ;    
         $handle =fopen('../class/secure/config_2.php','w+');   
         break;

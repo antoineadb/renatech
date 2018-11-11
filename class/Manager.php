@@ -1245,21 +1245,21 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
 //------------------------------------------------------------------------------------------------------------
 //                                       PROJET PHASE 2
 //------------------------------------------------------------------------------------------------------------
-    public function updateProjetphase2(Projetphase2 $projet2, $idprojet) {        
-        try {//echo '<pre>';print_r($projet2);die;
+    public function updateProjetphase2(Projetphase2 $projet2, $idprojet) { //  echo '<pre>';print_r($projet2);die;     
+        try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare("update projet set contactscentraleaccueil=?, idtypeprojet_typeprojet=?,nbHeure=?,
+            $requete = $this->_db->prepare("update projet set idtypeprojet_typeprojet=?,contactscentraleaccueil=?, nbHeure=?,
             dateDebutTravaux=?,dureeprojet=?,centralepartenaireprojet=?,idthematique_thematique=?,idautrethematique_autrethematique=?,descriptifTechnologique=?,
             attachementdesc=?,verrouidentifiee=?,nbplaque=?,nbrun=?,envoidevis=?,emailrespdevis=?,reussite=?,refinterneprojet=?,devtechnologique=?,nbeleve=?,nomformateur=?,partenaire1=?,
             porteurprojet =?,dureeestime=?,descriptionautrecentrale=?,etapeautrecentrale=?,centraleproximite=?,descriptioncentraleproximite=?,interneexterne=?,internationalnational=?,idtypecentralepartenaire=?,
             partenaire_centrale=?,partenaire_centrale_id=?
             where idprojet=?");
-            $contactscentralaccueil = $projet2->getContactscentralaccueil();
             $idtypeprojet = $projet2->getIdtypeprojet_typeprojet();
+            $contactscentralaccueil = $projet2->getContactscentralaccueil();
             $nbheure = $projet2->getNbHeure();
             $datedebuttravaux = $projet2->getDateDebutTravaux();
-            $dureeprojet = $projet2->getDureeprojet();           
+            $dureeprojet = $projet2->getDureeprojet();
             $centralepartenaireprojet = $projet2->getCentralepartenaireprojet();
             $idthematique = $projet2->getIdthematique_thematique();
             $idautrethematique = $projet2->getIdautrethematique_autrethematique();
@@ -1273,11 +1273,11 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $reussite = $projet2->getReussite();
             $refinterneprojet = $projet2->getRefinterneprojet();
             $devtechnologique = $projet2->getDevtechnologique();
-            $nbeleve = $projet2->getNbeleve();
+            $nbeleve = $projet2->getNbeleve();var_dump($nbeleve);
             $nomformateur = $projet2->getNomformateur();
             $partenaire1 = $projet2->getPartenaire1();
             $porteurprojet = $projet2->getPorteurprojet();
-            $dureestime = $projet2->getDureestime();           
+            $dureestime = $projet2->getDureestime();
             $descriptionautrecentrale = $projet2->getDescriptionautrecentrale();
             $etapeautrecentrale = $projet2->getEtapeautrecentrale();
             $centraleproximite = $projet2->getCentraleproximite();
@@ -1287,9 +1287,8 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $idtypecentralepartenaire = $projet2->getIdtypecentralepartenaire();
             $partenaire_centrale = $projet2->getPartenaireCentrale();
             $partenaire_centrale_id = $projet2->getPartenaireCentraleId();
-
-            $requete->bindParam(1, $contactscentralaccueil, PDO::PARAM_STR);
-            $requete->bindParam(2, $idtypeprojet, PDO::PARAM_INT);
+            $requete->bindParam(1, $idtypeprojet, PDO::PARAM_INT);
+            $requete->bindParam(2, $contactscentralaccueil, PDO::PARAM_STR);
             $requete->bindParam(3, $nbheure, PDO::PARAM_INT);
             $requete->bindParam(4, $datedebuttravaux, PDO::PARAM_STR);
             $requete->bindParam(5, $dureeprojet, PDO::PARAM_INT);            

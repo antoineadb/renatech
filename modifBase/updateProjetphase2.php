@@ -138,9 +138,9 @@ if (isset($_POST['page_precedente'])) {
             $porteurprojetBDD = 'FALSE';
         }
         if ($rowprojet[0]['partenaire_centrale']) {
-            $partenaire_projetBDD = 'TRUE';
+            $partenaire_centraleBDD = 'TRUE';
         } else {
-            $partenaire_projetBDD = 'FALSE';
+            $partenaire_centraleBDD = 'FALSE';
         }
         
         
@@ -263,13 +263,13 @@ if (isset($_POST['page_precedente'])) {
                 $_SESSION['contactcentralaccueilmodif'] = $contactCentralAccueil;
             } else {
                 $_SESSION['contactcentralaccueilmodif'] = '';
-            }
-        } elseif (!empty($rowprojet[0]['contactscentraleaccueil'])) {
-            $contactCentralAccueil = $rowprojet[0]['contactscentraleaccueil'];
-            $_SESSION['contactcentralaccueilmodif'] = '';
+            }        
         } else {
-            $contactCentralAccueil = '';
-            $_SESSION['contactcentralaccueilmodif'] = '';
+            foreach ($conmpteacceuilDefault as $key => $value) {
+            if ($idcentrale == $key) {
+                $contactCentralAccueil = ucfirst ($manager->getSingle2("SELECT  initcap(lower(CONCAT(prenom,'  ',nom))) FROM utilisateur WHERE idutilisateur=?", $value));
+            }
+        }
         }
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DES TYPES DE PROJET
@@ -511,18 +511,18 @@ if (isset($_POST['page_precedente'])) {
 //------------------------------------------------------------------------------------------------------------
 //              Traitement de la question des centrale partenaire du projet
 //------------------------------------------------------------------------------------------------------------        
-        $partenaire_projet = $_POST['question_centrale'];
-        if ($partenaire_projetBDD != $partenaire_projet) {
-            if ($partenaire_projet == 'TRUE') {
+        $partenaire_centrale = $_POST['question_centrale'];
+        if ($partenaire_centraleBDD != $partenaire_centrale) {
+            if ($partenaire_centrale == 'TRUE') {
                 $_SESSION['partenairerprojetmodif'] = TXT_OUI;
-                $partenaire_projetBDD = TXT_OUI;
+                $partenaire_centraleBDD = TXT_OUI;
             } else {
                 $_SESSION['partenairerprojetmodif'] = TXT_NON;
-                $partenaire_projetBDD = TXT_NON;
+                $partenaire_centraleBDD = TXT_NON;
             }
         } else {
             $_SESSION['partenairerprojetmodif'] = '';
-        }
+        }      
 //------------------------------------------------------------------------------------------------------------
 //              Traitement des centrale partenaire du projet
 //------------------------------------------------------------------------------------------------------------        
@@ -532,14 +532,16 @@ if (isset($_POST['page_precedente'])) {
             }else{
                 $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
             }
-        }
-       if(isset($_POST['centraleRenatech1'])&&$_POST['centraleRenatech1']!=-1){
+        }elseif(isset($_POST['centraleRenatech1'])&&$_POST['centraleRenatech1']!=-1){
             if(strlen($_POST['centraleRenatech1'])==3){
                 $centraleRenatech= intval(substr($_POST['centraleRenatech1'],2,1));
            }else{
                 $centraleRenatech= intval(substr($_POST['centraleRenatech1'],2,2));
            }
+       }else{
+           $centraleRenatech= null;
        }
+      
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
 //------------------------------------------------------------------------------
@@ -1127,7 +1129,7 @@ if (isset($_POST['page_precedente'])) {
     }
     $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique,
             $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, 
-            $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational, $idtypecentralepartenaire, $partenaire_projet,
+            $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational, $idtypecentralepartenaire, $partenaire_centrale,
             $centraleRenatech);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     //------------------------------------------------------------------------------------------------------------------------

@@ -48,16 +48,32 @@ if (!empty($_POST['descriptifValeur'])) {
         $_SESSION['descriptionmodif'] = '';
     }
 }
-if (!empty($_POST['acronyme'])) {
-    $acronyme = $_POST['acronyme'];
+$idcentrale = $manager->getSingle2("SELECT idcentrale_centrale from concerne LEFT JOIN projet ON idprojet_projet=idprojet WHERE numero=? ", $_GET['numProjet']);
+
+if ($_POST['acronyme'] == $_GET['numProjet']) {
+    foreach ($acronymeDefault as $key => $value) {
+        if ($idcentrale == $key) {
+            if ($value == 'numprojet') {
+                $acronyme = $_GET['numProjet'];
+            } elseif ($value == 'refinterneprojet') {
+                if (!empty($_POST['refinterne'])) {
+                    $acronyme = $_POST['refinterne'];
+                } else {
+                    $acronyme = $_GET['numProjet'];
+                }
+            }
+        }
+    }
+    $_SESSION['acronymemodif'] = $acronyme;
+} elseif($_POST['acronyme']!='') {
+    $acronyme = stripslashes(Securite::bdd($_POST['acronyme']));
     if ($acronymeBDD != $acronyme) {
         $_SESSION['acronymemodif'] = $acronyme;
     } else {
         $_SESSION['acronymemodif'] = '';
     }
-} else {
-    $acronyme = $manager->getSingle2("select acronyme from projet where idprojet=? ", $idprojet);
-    $_SESSION['acronymemodif'] = '';
+}else{
+    $acronyme = $_GET['numProjet'];
 }
 if (!empty($_POST['titreProjet'])) {
     $titre = $_POST['titreProjet'];

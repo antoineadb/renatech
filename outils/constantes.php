@@ -204,3 +204,13 @@ define('ADRESSESITE',$url);
 define('TXT_ID_RENATECH','1');
 define('TXT_ID_RENATECH_PREPROD','2');
 define('TXT_ID_RENATECH_TEST','3');
+
+/**
+ * array('idcentrale'=>"valeur de l'acronyme");
+ **/
+
+$acronymeDefault = array('1'=>'numprojet','2'=>'numprojet','3'=>'numprojet','4'=>'numprojet','6'=>'refinterneprojet');
+/**
+ * array('idcentrale'=>'idutilisateur du compte accueil centrale');
+ **/
+$conmpteacceuilDefault = array('1'=>7,'3'=>37,'6'=>8,'4'=>45,'8'=>29);

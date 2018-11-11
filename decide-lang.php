@@ -2,8 +2,10 @@
 
 if (isset($_GET['lang'])) {
     $lang = $_GET['lang'];
-} else {// si aucune langue n'est déclarée on tente de reconnaitre la langue par défaut du navigateur
+} elseif(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {// si aucune langue n'est déclarée on tente de reconnaitre la langue par défaut du navigateur
     $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+}else{
+    $lang ='fr';
 }
 
 if ($lang == 'fr') {

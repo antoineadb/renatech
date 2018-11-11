@@ -29,12 +29,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     if (!empty($_POST['descriptifValeur'])) {
         $descriptif = clean($_POST['descriptifValeur']);
     }
-    if (!empty($_POST['acronyme'])) {
-        $acronyme = stripslashes(Securite::bdd($_POST['acronyme']));
-    } else {
-        $acronyme = "";
-    }
-
+        
     if (empty($_POST['confid'])) {
         $confidentiel = "FALSE";
     } else {
@@ -59,6 +54,12 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $numProjet = 'P-' . date("y") . '-' . '00001'; //CAS DU 1ER PROJET
     }
     $_SESSION['numprojet'] = $numProjet; //A GARDER BESOIN SUR L'EMAIL
+    
+    if (!empty($_POST['acronyme'])) {
+        $acronyme = stripslashes(Securite::bdd($_POST['acronyme']));
+    } else {
+        $acronyme=$numProjet;
+    }
 //INSERSION EN BASE DE DONNEE
     $idprojet = $manager->getSingle("select max(idprojet) from projet") + 1;
     if (isset($_POST['centrale']) && !empty($_POST['centrale'])) {
@@ -114,11 +115,17 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //------------------------------------------------------------------------------------------------------------
 //                          CHAMPS  SANS TRAITEMENT
 //------------------------------------------------------------------------------------------------------------   
+    
     if (!empty($_POST['contactCentralAccueil'])) {
         $contactCentralAccueil = stripslashes(Securite::bdd($_POST['contactCentralAccueil']));
     } else {
-        $contactCentralAccueil = '';
+        foreach ($conmpteacceuilDefault as $key => $value) {
+            if ($idcentrale == $key) {
+                $contactCentralAccueil = $manager->getSingle2(" SELECT  initcap(lower(CONCAT(prenom,'  ',nom))) FROM utilisateur WHERE idutilisateur=?", $value);
+            }
+        }
     }
+
     if (!empty($_POST['typeProjet'])) {
         $idtypeprojet_typeprojet = substr($_POST['typeProjet'], 2);
         $idlibelleFormation = $manager->getSingle2("select idtypeprojet from typeprojet where libelletype=?", "Formation");
@@ -321,6 +328,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $idthematique_thematique = null;
         $idautrethematique_autrethematique = null;
     }
+    
     /*if (!empty($_POST['nomPartenaire01'])) {
         $partenaire1 = stripslashes(Securite::bdd(($_POST['nomPartenaire01'])));
     } else {
@@ -331,7 +339,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     if (!empty($_POST['dureeestimeprojet'])) {
         $dureeestime = stripslashes(Securite::bdd($_POST['dureeestimeprojet']));
     } else {
-        $dureeestime = '';
+        $dureeestime = null;
     }
 
     if (!empty($_POST['choix2'])) {
@@ -475,6 +483,8 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
             }else{
                 $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
             }
+        }else{
+            $centraleRenatech= null;
         }
 
 //------------------------------------------------------------------------------------------------------------

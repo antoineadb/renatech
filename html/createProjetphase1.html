@@ -228,6 +228,7 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         enableCheckBoxAutrecentrale(id);
         var selectObject = dijit.byId(id);
         var selectedCentrale =dijit.byId(id).get('displayedValue').replace('-','');
+       // dijit.byId('acronyme').set('value',selectedCentrale);
         var libellecentrale = 'lbl'+selectedCentrale;
         for (var i = 0; i < selectObject.options.length; i++) {
             if (selectObject.options[i].selected) {
@@ -251,7 +252,7 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
     function disableCheckBoxAutrecentrale1(id){
         enableCheckBoxAutrecentrale1(id);
         var nbCentrale = parseInt('<?php echo $manager->getSingle2("select count(idcentrale) from centrale where masquecentrale!=TRUE and idcentrale!=?",IDAUTRECENTRALE) ?>');        
-        var selectedCentrale =dijit.byId(id).attr('displayedValue').replace("-",'');;
+        var selectedCentrale = dijit.byId(id).attr('displayedValue').replace("-",'');;        
         var libellecentrale = 'lbl'+selectedCentrale;
         for (var i = 0; i < nbCentrale; i++) {
            dijit.byId(selectedCentrale).set('disabled',true);
@@ -259,6 +260,7 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
         }
         modifCentraleAffectation('/<?php echo REPERTOIRE; ?>/modifBase/modifCentraleAffectation.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
         afficheCentraleProximite('/<?php echo REPERTOIRE; ?>/modifBase/afficheCentraleProximite.php?lang=<?php echo $lang; ?>&centrale=' + dijit.byId(id).get('displayedValue') +'');
+        
     }    
     
      function enableCheckBoxAutrecentrale1(id){        
@@ -295,7 +297,8 @@ $idlogin=$manager->getSingle2("select idlogin from loginpassword where pseudo=?"
             </select>
             <?php }else{?>
                  
-            <select name="centrale" id="centrale" data-dojo-type="dijit/form/FilteringSelect" style="margin-left: 20px;" required="required"  onchange="disableCheckBoxAutrecentrale1(this.id)" 
+            <select name="centrale" id="centrale" data-dojo-type="dijit/form/FilteringSelect" style="margin-left: 20px;" required="required"  
+                    onchange="disableCheckBoxAutrecentrale1(this.id)" 
                     data-dojo-props="name: 'centrale',value: '',required:true, placeHolder: '<?php echo TXT_SELECTCENTRALE; ?>'"
                     >
                 <?php

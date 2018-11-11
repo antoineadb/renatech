@@ -27,7 +27,7 @@ if (!empty($idprojet)) {
     } else {
         $libelletype = '';
     }
-    
+
     if(!empty($row[0]['idtypecentralepartenaire'])){
         $idtypecentralepartenaire  =   $row[0]['idtypecentralepartenaire'];
         $typecentralepartenairefr = $manager->getSingle2("SELECT libelletypepartenairefr from typepartenaire where idtypepartenaire=?", $idtypecentralepartenaire);
@@ -49,10 +49,17 @@ if (!empty($idprojet)) {
         $acronyme = '';
     }
     if (!empty($row[0]['contactscentraleaccueil'])) {
-        $contactscentraleaccueil = $row[0]['contactscentraleaccueil'];
-    } else {
-        $contactscentraleaccueil = '';
+        $contactCentralAccueil = $row[0]['contactscentraleaccueil'];
+    }elseif (empty($_POST['contactscentraleaccueil'])) {
+        foreach ($conmpteacceuilDefault as $key => $value) {
+            if (isset($_GET['idcentrale'])&& $_GET['idcentrale'] == $key) {
+                $contactCentralAccueil = $manager->getSingle2(" SELECT  initcap(lower(CONCAT(prenom,'  ',nom))) FROM utilisateur WHERE idutilisateur=?", $value);                
+            }
+        }
+    }else{
+        $contactCentralAccueil=$_POST['contactscentraleaccueil'];
     }
+
     if (!empty($row[0]['typeformation'])) {
         $typeformation = $row[0]['typeformation'];
     } else {

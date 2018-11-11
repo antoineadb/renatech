@@ -15,13 +15,14 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
         $numero  = $_GET['numProjet'];
     }elseif(isset($_GET['idprojet'])){
         $numero = $manager->getSingle2("select numero from projet where idprojet=?",$_GET['idprojet']);
-    }
+    }   
     $datedebutProjet = $manager->getSingle2("select datedebutprojet from projet where numero =? ",$numero);
     if(!empty($datedebutProjet)){
         $date = new DateTime($datedebutProjet);
-        $date  = $date->format('Y-m-d');
+    $date  = $date->format('Y-m-d');
+    }
 }
-}
+
 ?>
 <fieldset>
     <legend style="width: 850px;padding-left: 20px">
@@ -198,15 +199,15 @@ $date  = $date->format('d-m-Y');
         <?php } ?>
         <fieldset class="identre" >
             <legend style="margin-left: 20px;font-weight: bold"><?php echo TXT_CADREPROJETSCIENTIFIQUE;?></legend>
-        <table>            
+        <table>        
             <tr>
-                <td><?php $contactscentraleaccueil = stripslashes(str_replace("''","'",$contactscentraleaccueil)); ?>
+                <td>
                     <label for="contactCentralAccueil" id='lblContactCentraleAccueil' style="margin-left:20px"><?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
                     <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
-                    <input  value="<?php echo $contactscentraleaccueil ;?>"  type="text"  maxlength="100" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  
+                    <input  value=""  type="text"  maxlength="100" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  
                            autocomplete="on" data-dojo-props="<?php echo REGEX_TYPE; ?>"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" <?php echo $disabled ?> >
                            <?php }else{?>
-                           <input style="margin-left:20px" value="<?php echo $contactscentraleaccueil ;?>"  type="text" maxlength="100"   data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on"
+                           <input style="margin-left:20px" value="<?php echo $contactCentralAccueil ;?>"  type="text" maxlength="100"   data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on"
                             data-dojo-props="<?php echo REGEX_TYPE; ?>"  disabled="<?php echo $bool; ?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
                     <?php }?>
                 </td>
