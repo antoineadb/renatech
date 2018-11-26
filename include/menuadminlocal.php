@@ -33,6 +33,7 @@ $faisabilite= '/'.REPERTOIRE.'/new_request/'.$lang;
 $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
 $custmEmail =  '/'.REPERTOIRE.'/custom_email/'.$lang;
 $gestionCentraleProximite = '/'.REPERTOIRE.'/admin_centrale_proximite/'.$lang;
+$param_projet = '/'.REPERTOIRE.'/param_projet/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -50,6 +51,7 @@ $gestionCentraleProximite = '/'.REPERTOIRE.'/admin_centrale_proximite/'.$lang;
                 <li><a href="<?php echo $adminprojet; ?>" class="messages"  ><?php echo TXT_GESTIONADMIN; ?></a></li>
                 <li><a href="<?php echo $useradminprojet; ?>" class="messages"  ><?php echo TXT_VUEADMINPROJET; ?></a></li>
                 <li><a href="<?php echo $nbfaisabilite;?>" class="messages"  ><?php echo TXT_REQUESTVIEW;?></a></li>
+                <li><a href="<?php echo $param_projet;?>" class="messages"  ><?php echo TXT_PARAM_PROJET;?></a></li>
             </ul>
 
         </li>

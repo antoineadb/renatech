@@ -331,3 +331,18 @@ function effaceFigure(cheminEtFichierPhp) {
 function callbackEffaceFigure(reponse) {
     document.getElementById('response').style.display='block';
 }
+
+function adminAcronyme(cheminEtFichierPhp) {
+    var xhr2 = getXMLHttpRequest();
+    xhr2.onreadystatechange = function() {
+        if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
+            afficheInfoAdminAcronyme(xhr2.responseText);
+        }
+    };
+    xhr2.open("GET", cheminEtFichierPhp, true);
+    xhr2.send(null);
+}
+
+function afficheInfoAdminAcronyme(response) {
+    document.getElementById('imgConfigAcronyme').style.display = "block";   
+}

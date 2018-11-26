@@ -142,6 +142,7 @@ include_once 'DescriptionCentraleProximiteProjet.php';
 include_once 'DemandeFaisabilite.php';
 include_once 'TypePartenaire.php';
 include_once 'ProjetTypePartenaire.php';
+include_once 'ConfigAcronyme.php';
 
 showError($_SERVER['PHP_SELF']);
 class Manager {
@@ -3783,6 +3784,51 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         }
     }
 
+    //-----------------------------------------------------------------------------------------------------------
+//             Demande de faisabilite
+//-----------------------------------------------------------------------------------------------------------
+    public function addConfigAcronyme(ConfigAcronyme $configAcronyme) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('INSERT INTO config_acronyme (id_acronyme,idcentrale,ref_interne,num_projet)  VALUES  (?,?,?,?)');
+            $idacronyme = $configAcronyme->get_id_acronyme();
+            $idcentrale = $configAcronyme->get_id_centrale();
+            $ref_interne = $configAcronyme->get_ref_interne();
+            $num_projet = $configAcronyme->get_num_projet();
+            $requete->bindParam(1, $idacronyme, PDO::PARAM_INT);
+            $requete->bindParam(2, $idcentrale, PDO::PARAM_INT);
+            $requete->bindParam(3, $ref_interne, PDO::PARAM_BOOL);
+            $requete->bindParam(4, $num_projet, PDO::PARAM_BOOL);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    
+        public function updateConfigAcronyme(ConfigAcronyme $configAcronyme, $idacronyme) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE config_acronyme SET idcentrale=?,ref_interne=?, num_projet= ? WHERE id_acronyme=?');            
+            $idcentrale = $configAcronyme->get_id_centrale();
+            $ref_interne = $configAcronyme->get_ref_interne();
+            $num_projet = $configAcronyme->get_num_projet();            
+            $requete->bindParam(1, $idcentrale, PDO::PARAM_INT);
+            $requete->bindParam(2, $ref_interne, PDO::PARAM_BOOL);
+            $requete->bindParam(3, $num_projet, PDO::PARAM_BOOL);
+            $requete->bindParam(4, $idacronyme);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+
+    
     
 //-----------------------------------------------------------------------------------------------------------
 //             Envoi Email pour relance de mise à jour
@@ -4061,8 +4107,8 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         $requete = $this->_db->prepare($request);
         $requete->execute();
     }
-
-    /**
+    
+   /**
      * 
      * @param type $request
      * @return type

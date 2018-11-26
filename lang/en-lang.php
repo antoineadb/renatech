@@ -1077,3 +1077,7 @@ define('TXT_ADMINNATIONAL','National Administrator');
 define('TXT_ADMINLOCAL','Local Administrator');
 define('TXT_UTILISATEUR','User');
 define('TXT_CENTRALE_RESEAU_PARTENAIRE',"Is one of the Renatech network's plants a partner in the project?");
+define('TXT_PARAM_PROJET','Project Settings');
+define('TXT_PARAM_ACRONYME','Settings acronym');
+define('TXT_PARAM_CONTACT_CENTRALE_ACCUEIL','Settings central contact home');
+define("TXT_CHX_ACRONYME","Choose the default value for the acronym");

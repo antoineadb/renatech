@@ -483,3 +483,4 @@ RewriteRule   updateprojet/([a-z]+)/([0-9]+)/([A-Z\-0-9]+)                      
 RewriteRule   adminApplication/([a-z]+)/([a-z]+)                                adminApplication.php?lang=$1&t=$2   [L]
 RewriteRule   adminApplication/([a-z]+)                                         adminApplication.php?lang=$1   [L]
 RewriteRule   exportLims/([a-z]+)                                               exportLims.php?lang=$1   [L]
+RewriteRule   param_projet/([a-z]+)                                             paramProjet.php?lang=$1   [L]

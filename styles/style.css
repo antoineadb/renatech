@@ -555,6 +555,18 @@ a.infoBulle:hover span{
     width: 1017px;
 
 }
+#paramProjet{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 95px;
+    margin-top: 30px;
+    padding: 35px 10px 0px 10px;
+    width: 1017px;
+}
+
+}
 #requetparam{
     border: 1px solid #5d8ba2;
     border-radius: 5px;

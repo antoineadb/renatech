@@ -1,41 +1,24 @@
 <?php
-session_start();
-include_once '../outils/toolBox.php';
+header("Content-type: application/json");
 include_once '../class/Manager.php';
 include_once '../outils/constantes.php';
-include_once '../decide-lang.php';
-
-/*if (isset($_SESSION['pseudo'])) {
-    check_authent($_SESSION['pseudo']);
-} else {  
-    header('Location: /' . REPERTOIRE . '/Login_Error/'.$lang);
-}*/
-$resultat =$manager->getListbyArray("SELECT * FROM PROJET WHERE datedebutprojet BETWEEN ? AND ?",array('2018-09-01','2018-10-10'));
-$data = json_encode($resultat);
-var_dump($manager->getListbyArray("SELECT * FROM loginpassword  order by idlogin asc limit ?",array(2)));die;
-
- $url="https://www.renatech.org/projet-dev/webService/server.php";
-// 3.- fire
-$result = sendRequest($data,$url);
- 
-// 4.- dump result
-echo $result;
-die();
-
-function sendRequest($data,$url)
-{
-    $postdata = http_build_query(array('data'=>$data));
-    $opts = array('http' =>
-      array(
-          'method'  => 'POST',
-          'header'  => "Content-type: application/x-www-form-urlencoded \r\n",
-          'content' => $postdata,
-          'ignore_errors' => true,
-          'timeout' =>  10,
-      )
-    );
-    $context  = stream_context_create($opts);
-    return file_get_contents($url, false, $context);
+$datas = $manager->getList("SELECT acronyme,idprojet,"
+        . " idutilisateur_utilisateur as iddemandeur,titre,"
+        . " numero as numero_projet,dateprojet as date_demande,libellecentrale as centrale ,datedebutprojet,idstatutprojet as statut, dureeprojet as duree_projet_mois,"
+        . " datedebutprojet + interval  '1 month' * dureeprojet as date_fin_projet, datestatutfini as date_statut_fini"
+        . " FROM PROJET "
+        . " LEFT JOIN concerne co on co.idprojet_projet=idprojet "
+        . " LEFT JOIN creer c on c.idprojet_projet=idprojet "
+        . " LEFT JOIN centrale on idcentrale_centrale =idcentrale "
+        . " LEFT JOIN statutprojet on idstatutprojet_statutprojet =idstatutprojet "
+        . " WHERE datedebutprojet BETWEEN '2017-01-01' AND '2018-12-31' AND confidentiel is not TRUE ");
+for($i=0;$i<count($datas);$i++){
+    foreach($datas[$i] as $key=>$value){
+        if(is_int($key)){
+            unset($datas[$i][$key]);
+        }
+    }
 }
-
-$manager->getListbyArray("SELECT * FROM loginpassword  order by idlogin asc limit ?",array(2));
+$jsonData = utf8_encode(json_encode($datas));
+echo $jsonData;
+//exit();

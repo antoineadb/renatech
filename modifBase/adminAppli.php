@@ -6,7 +6,6 @@ include_once '../class/secure/Cryptage.php';
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //SAUVEGARDE DE SECOURS DES INFOS EN BASE DE DONNEES
 //------------------------------------------------------------------------------------------------------------------------------------------------
-
 $login = Cryptage::crypt($_POST['login']);
 $password =Cryptage::crypt($_POST['password']);
 $port = Cryptage::crypt($_POST['port']);
@@ -44,12 +43,12 @@ try{
         case 'renatech':
         $crnl  = "\r\n" ;
         $data  = "<?php".$crnl ;
-        $data .= "define('TXT_LOGIN_BD_2','".$_POST['login']."');".$crnl;
-        $data .= "define('TXT_MDP_2','".$_POST['password']."');".$crnl;
+        $data .= "define('TXT_LOGIN_BD_2','".$login."');".$crnl;
+        $data .= "define('TXT_MDP_2','".$password."');".$crnl;
         $data .= "define('TXT_PORT_2','".$port."');".$crnl;
         $data .= "define('TXT_HOST_2','".$host."');".$crnl;
         $data .= "define('TXT_BDD_2','".Cryptage::crypt($bdd)."');".$crnl;
-        $data .= '?>'.$crnl ;    
+        $data .= '?>'.$crnl ;  
         $handle =fopen('../class/secure/config_2.php','w+');   
         break;
     }

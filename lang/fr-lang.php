@@ -1074,3 +1074,7 @@ define('TXT_ADMINNATIONAL','Administrateur national');
 define('TXT_ADMINLOCAL','Administrateur local');
 define('TXT_UTILISATEUR','Utilisateur');
 define('TXT_CENTRALE_RESEAU_PARTENAIRE','Une des centrales du réseau Renatech est-elle partenaire du projet?');
+define('TXT_PARAM_PROJET','Paramétrages projets');
+define('TXT_PARAM_ACRONYME','Paramétrages acronyme');
+define('TXT_PARAM_CONTACT_CENTRALE_ACCUEIL','Paramétrages contact centrale accueil');
+define("TXT_CHX_ACRONYME","Choisissez la valeur par défaut de l'acronyme");

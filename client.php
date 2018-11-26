@@ -15,7 +15,7 @@ $db = BD::connecter();
 $manager = new Manager($db);
 $result =$manager->getListbyArray("SELECT * FROM PROJET WHERE datedebutprojet BETWEEN ? AND ?",array('2018-09-01','2018-10-10'));
 $jsonData = json_encode($result);
-echo '<pre>';print_r($jsonData);echo '</pre>';
+print_r($jsonData);
 $nom =$number = mt_rand(1, 5000);
 $fpfile = fopen("temp/test".$nom.".json", 'w');
 fwrite($fpfile, $jsonData);
