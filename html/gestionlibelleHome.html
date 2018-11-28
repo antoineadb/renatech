@@ -63,12 +63,12 @@ if(isset($_GET['msgupdateaccueil'])){?>
                 <td valign="middle" style="width:450px"> 
                     <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo removeDoubleApp($bienvenue[0]['libellefrancais']); ?>"
                            onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenuefr"
-                           name="bienvenuefr" data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
+                           name="bienvenuefr" data-dojo-props="<?php echo REGEX_ACCUEIL1 ?>" >
                 </td>
                 <td valign="middle" style="width:450px">
                     <input data-dojo-type="dijit/form/ValidationTextBox"  value="<?php echo removeDoubleApp($bienvenue[0]['libelleanglais']); ?>"
                            onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenueen" name="bienvenueen"
-                           data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
+                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
                 </td>
             </tr>
             <tr>
