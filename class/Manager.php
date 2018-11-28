@@ -1247,7 +1247,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
 //------------------------------------------------------------------------------------------------------------
 //                                       PROJET PHASE 2
 //------------------------------------------------------------------------------------------------------------
-    public function updateProjetphase2(Projetphase2 $projet2, $idprojet) { //  echo '<pre>';print_r($projet2);die;     
+    public function updateProjetphase2(Projetphase2 $projet2, $idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
