@@ -1364,3 +1364,7 @@ function mailAutresCentrale($manager,$idprojet){
     }
     return $emailAutresCentrales;
 }
+
+function removeDoubleApp($str){
+    return str_replace("''","'",str_replace("’’","’",$str));
+}

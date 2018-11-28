@@ -14,6 +14,9 @@ $db = BD::connecter();
 $manager = new Manager($db);
 ?>
 <script src="<?php echo '/'.REPERTOIRE ?>/js/ajax.js"></script>
+<script src="<?php echo '/'.REPERTOIRE ?>/js/jquery.js"></script>
+<script src="<?php echo '/'.REPERTOIRE ?>/js/script_autocomplete.js"></script>
+
 <div id="global">
     <?php include 'html/entete.html'; ?>
     <input name="page_precedente" type="hidden" value="<?php echo basename(__FILE__); ?>">     
@@ -60,23 +63,42 @@ $manager = new Manager($db);
                         </script>
                     </button>
                 </td>
-                <td><span style="display: none;margin-left: 20px;" id="imgConfigAcronyme"><img src="/<?php echo REPERTOIRE; ?>/styles/img/valide.png" alt="Flowers in Chania"></span></td></td>
+                <td><span style="display: none;margin-left: 20px;" id="imgConfigAcronyme"><img src="/<?php echo REPERTOIRE; ?>/styles/img/valide.png" ></span></td></td>
                 </tr>
                 <tr><td></tr>
             </table>
           
         </fieldset>
     </form>
-    <form data-dojo-type="dijit/form/Form" name="paramContact" id="paramContact" method="post"  action="<?php echo '/' . REPERTOIRE; ?>/modifBase/updateParamProjet.php?lang=<?php echo $lang; ?>"  >
-        <fieldset id="paramProjet" style=""  >
+    <?php 
+        $contactCentralAccueil = $manager->getList2("SELECT u.nom,u.prenom,cad.idutilisateur FROM config_accueil_defaut cad "
+                . "LEFT JOIN utilisateur u ON u.idutilisateur = cad.idutilisateur "
+                . "WHERE cad.idcentrale=?  ", IDCENTRALEUSER);
+    ?>
+    <form data-dojo-type="dijit/form/Form" name="paramContact"  method="post"  action="<?php echo '/' . REPERTOIRE; ?>/modifBase/updateParamProjet.php?lang=<?php echo $lang; ?>"  >
+        <fieldset id="paramContact" >
             <legend style="color: #5D8BA2;font-size: 1.2em"><b><?php echo TXT_PARAM_CONTACT_CENTRALE_ACCUEIL; ?></b></legend>
             <table>
                 <tr>
                     <td>
-                        <input data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:200px;margin-left:20px"  placeholder="<?php echo TXT_NOM; ?>">
+                        <input readonly  data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:350px;margin-left:20px"  
+                               value='<?php echo ucfirst($contactCentralAccueil[0]['nom']) .' - ' .ucfirst($contactCentralAccueil[0]['prenom']) ;?>'   
+                               placeholder="<?php echo "Saisir les 3 premiers caractères"; ?>"  onkeyup="autocomplet()">                                
+                    </td>                    
+                    <td>
+                        <button data-dojo-type="dijit/form/Button" type="button">
+                        Changer
+                            <script type="dojo/on" data-dojo-event="click">                            
+                                require(["dojo/dom"], function(dom){
+                                   dijit.byId("nom").set('readOnly',false);
+                                   dijit.byId("nom").set('value','');
+                                });
+                            </script>
+                        </button>
                     </td>
-                </tr>
+                </tr>                
             </table>
+            <ul id="nom_list_id"></ul>
         </fieldset>
     </form>
     <?php include 'html/footer.html'; ?>

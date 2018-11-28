@@ -14,33 +14,22 @@ include_once 'decide-lang.php';
         }
     </script>
     <fieldset class="accueil" style=" padding:  2% 3% 0% 5%; margin-top: -10px;">
-        <div style="font: 1.3em/18px 'Lucida Grande', 'Lucida Sans Unicode', Arial, Verdana, sans-serif;margin-bottom: 12px;margin-top: 40px;width: 946px;" class="loginlabel"><?php echo affiche('TXT_BIENVENUE');?></div>
-        <div style="width: 970px;;font-size:14px;margin-bottom:20px" class="loginlabel">
-            <?php if($lang=='fr'){ ?>
-                <div style="font: 14px/18px 'Lucida Grande', 'Lucida Sans Unicode', Arial, Verdana, sans-serif;margin-bottom: 20px;margin-top: 25px;width: 970px;" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL1'),0,365)))); ?>
-                    <a href="#" id="acceuil1" style="text-decoration:none" onmouseover="document.getElementById('textecache1fr').style.display='block'" onmouseout="document.getElementById('textecache1fr').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
-                        <div style="display: none" id="textecache1fr">
-                            <p style="width:970px;font-size:14px;"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL1'),366,500)))); ?></p>
-                            <br style="clear:both;">
-                        </div>
-                </div>
-            <?php }elseif($lang=='en'){ ?>
-                <div style=" font: 14px/18px 'Lucida Grande', 'Lucida Sans Unicode', Arial, Verdana, sans-serif;margin-bottom: 20px;margin-top: 25px;width: 970px;" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL1'),0,312)))); ?>
-                    <a href="#" id="acceuil1" style="text-decoration:none" onmouseover="document.getElementById('textecache1en').style.display='block'" onmouseout="document.getElementById('textecache1en').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
-                        <div style="display: none" id="textecache1en">
-                            <p style="width:970px;font-size:14px;"><?php echo substr(affiche('TXT_ACCUEIL1'),313,500); ?></p>
-                            <br style="clear:both;">
-                        </div>
-                </div>
-            <?php } ?>
-            <p><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",affiche('TXT_ACCUEIL2'))));?></p>
+        <div style="font: 1.3em/18px 'Lucida Grande', 'Lucida Sans Unicode', Arial, Verdana, sans-serif;margin-bottom: 12px;margin-top: 40px;width: 946px;" class="loginlabel">
+            <?php echo removeDoubleApp(affiche('TXT_BIENVENUE'));?>
+        </div>
+        <div style="width: 970px;;font-size:14px;margin-bottom:20px" class="loginlabel">            
+                <div style="font: 14px/18px 'Lucida Grande', 'Lucida Sans Unicode', Arial, Verdana, sans-serif;margin-bottom: 20px;margin-top: 25px;width: 970px;" class="loginlabel">
+                    <?php echo stripslashes(removeDoubleApp(affiche('TXT_ACCUEIL1'))); ?>                    
+                </div>            
+            <p><?php echo stripslashes(removeDoubleApp(affiche('TXT_ACCUEIL2')));?></p>
              <?php if($lang=='fr'){ ?>
-            <div style="width: 980px;font-size:14px;margin-bottom:20px;" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),0,25)))); ?>
-                    <a href="#" id="acceuil3" style="text-decoration:none" onmouseover="document.getElementById('textecache2fr').style.display='block'" onmouseout="document.getElementById('textecache2fr').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
-                        <div style="display: none" id="textecache2fr">
-                            <p style="width:980px;font-size:14px;"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),26,600)))); ?></p>
+            <div style="width: 980px;font-size:14px;margin-bottom:20px;" class="loginlabel"><?php echo stripslashes(removeDoubleApp(substr(affiche('TXT_ACCUEIL3'),0,33))); ?>
+                    <a href="#" id="acceuil3" style="text-decoration:none" onmouseover="document.getElementById('textecache2fr').style.display='block'" 
+                       onmouseout="document.getElementById('textecache2fr').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
+                        <span style="display: none" id="textecache2fr">
+                            <p style="width:980px;font-size:14px;"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),33,606)))); ?></p>
                                 <br style="clear:both;">
-                        </div>
+                        </span>
            </div>
              <?php }elseif($lang=='en'){ ?>
                 <div style="width: 980px;font-size:14px;margin-bottom:20px;" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),0,28)))); ?>

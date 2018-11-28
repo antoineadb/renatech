@@ -33,20 +33,21 @@ if(isset($_GET['msgupdateaccueil'])){?>
         $acceuil1 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL1');
         $acceuil2 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL2');
         $acceuil3 = $manager->getList2('select libellefrancais,libelleanglais from libelleapplication where reflibelle=?','TXT_ACCUEIL3');        
+
         ?>
         <a class="infoBulle" href="#"><img src="<?Php echo '/'.REPERTOIRE; ?>/styles/img/preview.jpg" height="23px" width="23px" style="margin-left:20px"/>
             <span style="text-align: left;padding:10px;width: 945px;height:240px;border-radius:5px;margin-top: 5px;margin-left:20px;font-size: 0.9em" >
                 <?php
                 if($lang=='fr'){
-                echo  stripslashes(removeDoubleQuote(str_replace("’’","'",$bienvenue[0]['libellefrancais']))).'<br>'.
-                stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil1[0]['libellefrancais']))).'<br>'.
-                stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil2[0]['libellefrancais']))).
-                '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil3[0]['libellefrancais'])));
+                echo stripslashes(removeDoubleApp($bienvenue[0]['libellefrancais'])).'<br>'.
+                stripslashes(removeDoubleApp($acceuil1[0]['libellefrancais'])).'<br>'.
+                stripslashes(removeDoubleApp($acceuil2[0]['libellefrancais'])).
+                '<br>'.stripslashes(removeDoubleApp($acceuil3[0]['libellefrancais']));
                 }elseif($lang=='en'){
-                echo  stripslashes(removeDoubleQuote(str_replace("’’","'",$bienvenue[0]['libelleanglais']))).'<br>'.
-                stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil1[0]['libelleanglais']))).'<br>'.
-                stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil2[0]['libelleanglais']))).
-                '<br>'.stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil3[0]['libelleanglais'])));
+                echo  stripslashes(removeDoubleApp($bienvenue[0]['libelleanglais'])).'<br>'.
+                stripslashes(removeDoubleApp($acceuil1[0]['libelleanglais'])).'<br>'.
+                stripslashes(removeDoubleApp($acceuil2[0]['libelleanglais'])).
+                '<br>'.stripslashes(removeDoubleApp($acceuil3[0]['libelleanglais']));
                 }
                 ?>
             </span>
@@ -59,87 +60,73 @@ if(isset($_GET['msgupdateaccueil'])){?>
                         <?php echo TXT_ANGLAIS;?></div></td>
             </tr>
             <tr>
-                <td valign="middle" style="width:450px"> <input data-dojo-type="dijit/form/ValidationTextBox"
-                                                                value="<?php echo strip_tags($bienvenue[0]['libellefrancais']); ?>"				onfocus="enablemodifhome()"
-                                                                style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenuefr" name="bienvenuefr"
-                                                                data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
-
+                <td valign="middle" style="width:450px"> 
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo removeDoubleApp($bienvenue[0]['libellefrancais']); ?>"
+                           onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenuefr"
+                           name="bienvenuefr" data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
                 </td>
                 <td valign="middle" style="width:450px">
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo strip_tags($bienvenue[0]['libelleanglais']); ?>"				onfocus="enablemodifhome()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenueen" name="bienvenueen"
+                    <input data-dojo-type="dijit/form/ValidationTextBox"  value="<?php echo removeDoubleApp($bienvenue[0]['libelleanglais']); ?>"
+                           onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="bienvenueen" name="bienvenueen"
                            data-dojo-props="<?php echo REGEX_ACCUEIL; ?>" >
+                </td>
+            </tr>
+            <tr>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleacceuil1= stripslashes(removeDoubleApp($acceuil1[0]['libellefrancais'])); ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo removeDoubleApp($libelleacceuil1); ?>"
+                           onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  
+                           id="acceuil1fr" name="acceuil1fr" data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
+                </td>
+                <td valign="middle" style="width:450px">
+                    <?php $libelleacceuil1en=stripslashes(removeDoubleApp($acceuil1[0]['libelleanglais'])); ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo removeDoubleApp($libelleacceuil1en); ?>'	
+                           onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  
+                           id="acceuil1en" name="acceuil1en" data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
 
                 </td>
             </tr>
             <tr>
                 <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil1= stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil1[0]['libellefrancais'])));
-                    ?>
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo strip_tags($libelleacceuil1); ?>"			onfocus="enablemodifhome()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil1fr" name="acceuil1fr"
-                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
-
+                    <?php $libelleacceuil2= stripslashes(removeDoubleApp($acceuil2[0]['libellefrancais']));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox"  value="<?php echo removeDoubleApp($libelleacceuil2); ?>"
+                           onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  
+                           id="acceuil2fr" name="acceuil2fr" data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
                 </td>
                 <td valign="middle" style="width:450px">
-                    <?php 
-                    $libelleacceuil1en=stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil1[0]['libelleanglais'])));
-                    ?>
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value='<?php echo strip_tags($libelleacceuil1en); ?>'	onfocus="enablemodifhome()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil1en" name="acceuil1en"
-                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
-
+                    <?php $libelleacceuil2= stripslashes(removeDoubleApp($acceuil2[0]['libelleanglais'])); ?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value='<?php echo removeDoubleApp($libelleacceuil2); ?>'		
+                           onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  
+                           id="acceuil2en" name="acceuil2en" data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
                 </td>
             </tr>
             <tr>
                 <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil2= stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil2[0]['libellefrancais'])));?>
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo strip_tags($libelleacceuil2); ?>"			onfocus="enablemodifhome()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil2fr" name="acceuil2fr"
-                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
+                    <?php $libelleacceuil3= stripslashes(removeDoubleApp($acceuil3[0]['libellefrancais']));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo removeDoubleApp($libelleacceuil3); ?>"
+                           onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  
+                           id="acceuil3fr" name="acceuil3fr"  id="acceuil1fr" name="acceuil1fr"  data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>">
+
 
                 </td>
                 <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil2= stripslashes(removeDoubleQuote(str_replace('’’','"',$acceuil2[0]['libelleanglais']))); ?>
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value='<?php echo strip_tags($libelleacceuil2); ?>'		onfocus="enablemodifhome()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil2en" name="acceuil2en"
-                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
-
-                </td>
-            </tr>
-            <tr>
-                <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil3= stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil3[0]['libellefrancais'])));?>
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo strip_tags($libelleacceuil3); ?>"			onfocus="enablemodifhome()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil3fr" name="acceuil3fr"
-                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
-
-                </td>
-                <td valign="middle" style="width:450px">
-                    <?php $libelleacceuil3en= stripslashes(removeDoubleQuote(str_replace("’’","'",$acceuil3[0]['libelleanglais'])));?>
-                    <input data-dojo-type="dijit/form/ValidationTextBox"
-                           value="<?php echo strip_tags($libelleacceuil3en); ?>"		onfocus="enablemodifhome()"
-                           style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  id="acceuil3en" name="acceuil3en"
-                           data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>" >
+                    <?php $libelleacceuil3en= stripslashes(removeDoubleApp($acceuil3[0]['libelleanglais']));?>
+                    <input data-dojo-type="dijit/form/ValidationTextBox" value="<?php echo removeDoubleApp($libelleacceuil3en); ?>"
+                           onfocus="enablemodifhome()" style="color: #5D8BA2;text-align: left;width:480px;height:30px;margin-left:10px"  
+                           id="acceuil3en" name="acceuil3en"   id="acceuil1fr" name="acceuil1fr"  data-dojo-props="<?php echo REGEX_ACCUEIL1; ?>">
                 </td>
             </tr>
 
         </table>
     </fieldset>    
-      <table>
+    <table>
         <tr><td>&nbsp;</td></tr>
         <tr><td>
                 <input style="text-align: left;margin-left: 10px"  type="submit" id ="modifsitehome" name="modifsitehome"
                        label="<?php echo TXT_MODIFIER ;?>"   data-dojo-type="dijit/form/Button" disabled="disabled"				>
             </td>
         </tr>
-        
+
     </table>
     <input type="hidden" id="aideCentralePfrValeur" name="aideCentralePfrValeur" >
     <input type="hidden" id="aideCentralePenValeur" name="aideCentralePenValeur" >     
@@ -152,24 +139,24 @@ if(isset($_GET['msgupdateaccueil'])){?>
     <fieldset id="gestionhome" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;">
         <legend><?php echo "Mise à jour du mode d'emploi d'une demande de projet"; ?></legend>
         <table>
-            
+
             <tr>
                 <td>
                     <div style="margin-left:25px;margin-top: 30px">
                         <?php
-                            $filename ="downloadManual/ModeEmploiDemandeProjetRENATECH.pdf";
-                            if (file_exists($filename)) {
-                                echo TXT_DATEDOC . date (" d/m/Y H:i:s.", filemtime($filename));
-                            }else{
-                                echo TXT_NODOC;
-                            }
+                        $filename ="downloadManual/ModeEmploiDemandeProjetRENATECH.pdf";
+                        if (file_exists($filename)) {
+                        echo TXT_DATEDOC . date (" d/m/Y H:i:s.", filemtime($filename));
+                        }else{
+                        echo TXT_NODOC;
+                        }
                         ?>
                     </div>
                 </td>
                 <td>
                     <div style="float: right;margin-top: 30px;margin-left:5px">                
                         <a class="infoBulle" href="javascript:window.location.reload()">&nbsp;<img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/refresh.png' >
-                    <span style="width: 130px;border-radius: 4px;text-align:center; "><?php echo TXT_REFRESDOC ?></span></a>
+                            <span style="width: 130px;border-radius: 4px;text-align:center; "><?php echo TXT_REFRESDOC ?></span></a>
                     </div>
                 </td>
             </tr>
@@ -205,24 +192,24 @@ if(isset($_GET['msgupdateaccueil'])){?>
     <fieldset id="gestionRapport" style="margin-top: 10px;padding-bottom: 40px;padding-top: 10px;">
         <legend><?php echo "Mise à jour du fichier d'aide de création d'un rapport"; ?></legend>
         <table>
-            
+
             <tr>
                 <td>
                     <div style="margin-left:25px;margin-top: 30px">
                         <?php
-                            $filenameR ="downloadManual/ModeEmploiRapportRENATECH.pdf";
-                            if (file_exists($filenameR)) {
-                                echo TXT_DATEDOCR . date (" d/m/Y H:i:s.", filemtime($filenameR));
-                            }else{
-                                echo TXT_NODOC;
-                            }
+                        $filenameR ="downloadManual/ModeEmploiRapportRENATECH.pdf";
+                        if (file_exists($filenameR)) {
+                        echo TXT_DATEDOCR . date (" d/m/Y H:i:s.", filemtime($filenameR));
+                        }else{
+                        echo TXT_NODOC;
+                        }
                         ?>
                     </div>
                 </td>
                 <td>
                     <div style="float: right;margin-top: 30px;margin-left:5px">                
                         <a class="infoBulle" href="javascript:window.location.reload()">&nbsp;<img    src='<?php echo "/" . REPERTOIRE; ?>/styles/img/refresh.png' >
-                    <span style="width: 130px;border-radius: 4px;text-align:center; "><?php echo TXT_REFRESDOC ?></span></a>
+                            <span style="width: 130px;border-radius: 4px;text-align:center; "><?php echo TXT_REFRESDOC ?></span></a>
                     </div>
                 </td>
             </tr>
@@ -297,24 +284,24 @@ if(isset($_GET['msgupdateaccueil'])){?>
         });
     });
 
-    function uploadFichierModeEmploi(id,param) {
+    function uploadFichierModeEmploi(id, param) {
         var file = document.getElementById(id).files[0];
         var data = new FormData();
         data.append('file', file);
         var ajax = new XMLHttpRequest();
-        if(param==1){
+        if (param == 1) {
             ajax.upload.addEventListener("progress", progressHandler, false);
             ajax.addEventListener("load", completeHandler, false);
             ajax.addEventListener("error", errorHandler, false);
             ajax.addEventListener("abort", abortHandler, false);
-        }else if(param==2){
+        } else if (param == 2) {
             ajax.upload.addEventListener("progress", progressHandler1, false);
             ajax.addEventListener("load", completeHandler1, false);
             ajax.addEventListener("error", errorHandler1, false);
             ajax.addEventListener("abort", abortHandler1, false);
         }
-        
-        ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/outils/uploadModeEmploi.php?param="+param);        
+
+        ajax.open("POST", "<?php echo '/'.REPERTOIRE; ?>/outils/uploadModeEmploi.php?param=" + param);
         ajax.send(data);
     }
     function progressHandler(event) {
@@ -352,7 +339,7 @@ if(isset($_GET['msgupdateaccueil'])){?>
     function errorHandler1() {
         document.getElementById('status1').innerHTML = "The upload failed !";
     }
-    function abortHandler1() {
+function abortHandler1() {
         document.getElementById('status1').innerHTML = "The upload was canceled !";
     }
 

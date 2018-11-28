@@ -143,8 +143,9 @@ include_once 'DemandeFaisabilite.php';
 include_once 'TypePartenaire.php';
 include_once 'ProjetTypePartenaire.php';
 include_once 'ConfigAcronyme.php';
+include_once 'ConfigAccueilDefault.php';
 
-showError($_SERVER['PHP_SELF']);
+//showError($_SERVER['PHP_SELF']);
 class Manager {
 
     private $_db; //instance de PDO
@@ -3820,6 +3821,24 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $requete->bindParam(2, $ref_interne, PDO::PARAM_BOOL);
             $requete->bindParam(3, $num_projet, PDO::PARAM_BOOL);
             $requete->bindParam(4, $idacronyme);
+            $requete->execute();
+            $this->_db->commit();
+        } catch (Exception $exc) {
+            echo TXT_ERR . '<br>Ligne ' . $exc->getLine() . '<br>' . $exc->getMessage();
+            $this->_db->rollBack();
+        }
+    }
+    public function updateConfigAccueil(ConfigAccueilDefault $configAccueil, $id) {
+        try {
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->beginTransaction();
+            $requete = $this->_db->prepare('UPDATE config_acceuil_defaut  SET idutilisateur=?,idcentrale=?, WHERE id=?');            
+            $id = $configAccueil->get_id_utilisateur();
+            $idUtilisateur = $configAccueil->get_id_utilisateur();
+            $idCentrale = $configAccueil->get_idcentrale();
+            $requete->bindParam(1, $idUtilisateur, PDO::PARAM_INT);
+            $requete->bindParam(2, $idCentrale, PDO::PARAM_BOOL);
+            $requete->bindParam(3, $id);
             $requete->execute();
             $this->_db->commit();
         } catch (Exception $exc) {

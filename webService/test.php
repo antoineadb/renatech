@@ -11,7 +11,7 @@ $datas = $manager->getList("SELECT acronyme,idprojet,"
         . " LEFT JOIN creer c on c.idprojet_projet=idprojet "
         . " LEFT JOIN centrale on idcentrale_centrale =idcentrale "
         . " LEFT JOIN statutprojet on idstatutprojet_statutprojet =idstatutprojet "
-        . " WHERE datedebutprojet BETWEEN '2017-01-01' AND '2018-12-31' AND confidentiel is not TRUE ");
+        . " WHERE datedebutprojet BETWEEN '2017-01-01' AND '2018-12-31' AND confidentiel is not TRUE AND idprojet IN(2024,1006) ");
 for($i=0;$i<count($datas);$i++){
     foreach($datas[$i] as $key=>$value){
         if(is_int($key)){

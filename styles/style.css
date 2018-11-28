@@ -555,24 +555,34 @@ a.infoBulle:hover span{
     width: 1017px;
 
 }
-#paramProjet{
-    border: 1px solid #5d8ba2;
-    border-radius: 5px;
-    color: midnightblue;
-    font-family: verdana;
-    height: 95px;
-    margin-top: 30px;
-    padding: 35px 10px 0px 10px;
-    width: 1017px;
-}
-
-}
 #requetparam{
     border: 1px solid #5d8ba2;
     border-radius: 5px;
     color: midnightblue;
     font-family: verdana;
     height: auto;
+    margin-top: 40px;
+    padding: 45px 20px 0 10px;
+    width: 1017px;
+
+}
+#paramContact{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 95px;
+    margin-top: 40px;
+    padding: 45px 20px 0 10px;
+    width: 1017px;
+
+}
+#paramProjet{
+    border: 1px solid #5d8ba2;
+    border-radius: 5px;
+    color: midnightblue;
+    font-family: verdana;
+    height: 95px;
     margin-top: 40px;
     padding: 45px 20px 0 10px;
     width: 1017px;
@@ -1257,18 +1267,18 @@ a.infoBulle:hover span{
 }
 
 .tblRelance {
-        border-collapse:collapse;width:100%;
-    }
+    border-collapse:collapse;width:100%;
+}
 .thRelance , tdRelance {
-        border:1px solid black;width:20%;
-    }
+    border:1px solid black;width:20%;
+}
 .tdRelance td{
-        text-align:center;
-    }
+    text-align:center;
+}
 
 .thRelance th{
-        background-color:#BBC4CC;color:midnightblue;
-    }
+    background-color:#BBC4CC;color:midnightblue;
+}
 #aideStatNouveauProjet {
     background-color: white;
     float: right;
@@ -1413,4 +1423,11 @@ a.infoBulle:hover span{
 }
 .claro .dijitSelectLabel{
     width: 245px; 
+}
+#nom_list_id{
+    background: white;
+    width: 180px;
+    z-index: 4000;
+    position: absolute;
+    border: 1px solid grey;    
 }
