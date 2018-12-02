@@ -333,13 +333,17 @@ function callbackEffaceFigure(reponse) {
 }
 
 function adminParamProjet(cheminEtFichierPhp,str,str2=null) {
-    var xhr2 = getXMLHttpRequest();
+    var xhr2 = getXMLHttpRequest();console.log(str2);
     xhr2.onreadystatechange = function() {
         if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
             if(str=='acronyme'){
                 afficheInfoAcronyme(xhr2.responseText);
             }else if(str=='accueil'){
-                afficheInfoAccueil(xhr2.responseText);
+                if(str2!=-1){
+                    afficheInfoAccueil(xhr2.responseText);
+                }else{
+                    afficheErrInfoAccueil(xhr2.responseText);
+                }
             }
         }
     };
@@ -351,4 +355,8 @@ function afficheInfoAcronyme(response) {
 }
 function afficheInfoAccueil(response) {
     document.getElementById('imgConfigAccueil').style.display = "block";
+    document.getElementById('errConfigAccueil').style.display = "none";
+}
+function afficheErrInfoAccueil(response) {
+    document.getElementById('errConfigAccueil').style.display = "block";
 }

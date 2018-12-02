@@ -1436,7 +1436,7 @@ a.infoBulle:hover span{
 }
 #nom_list_id{
     background: white;
-    width: 180px;
+    width: 350px;
     z-index: 4000;
     position: absolute;
     border: 1px solid grey;    

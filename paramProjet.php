@@ -73,8 +73,9 @@ $manager = new Manager($db);
         </fieldset>
     </form>
     <?php 
-        $contactCentralAccueil = $manager->getList2("SELECT u.nom,u.prenom,cad.idutilisateur FROM config_accueil_defaut cad "
+        $contactCentralAccueil = $manager->getList2("SELECT u.nom,u.prenom,cad.idutilisateur,l.mail FROM config_accueil_defaut cad "
                 . "LEFT JOIN utilisateur u ON u.idutilisateur = cad.idutilisateur "
+                . "LEFT JOIN loginpassword l ON u.idlogin_loginpassword = l.idlogin "
                 . "WHERE cad.idcentrale=?  ", IDCENTRALEUSER);
     ?>
     <form data-dojo-type="dijit/form/Form" name="paramContact"  method="post"  action="<?php echo '/' . REPERTOIRE; ?>/modifBase/updateParamProjet.php?lang=<?php echo $lang; ?>"  >
@@ -84,7 +85,7 @@ $manager = new Manager($db);
                 <tr>
                     <td>
                         <input  data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:350px;margin-left:20px"  
-                               value='<?php echo ucfirst($contactCentralAccueil[0]['nom']) .' - ' .ucfirst($contactCentralAccueil[0]['prenom']) ;?>'   
+                               value='<?php if($contactCentralAccueil[0]['idutilisateur']!=null) {echo ucfirst($contactCentralAccueil[0]['nom']) .' - ' .ucfirst($contactCentralAccueil[0]['prenom']).' ('.$contactCentralAccueil[0]['mail'].' )' ;} ?>'   
                                placeholder="<?php echo "Saisir 1 caractère"; ?>"  onkeyup="autocomplet()"
                                onclick="document.getElementById('imgConfigAcronyme').style.display = 'none';document.getElementById('imgConfigAccueil').style.display = 'none';">    
                         <input type="hidden" name="iduserCentraleAccueil" id="iduserCentraleAccueil" />
@@ -106,8 +107,8 @@ $manager = new Manager($db);
                             </script>
                         </button>
                     </td>
-                    <td><span style="display: none;margin-left: 20px;" id="imgConfigAccueil"><img src="/<?php echo REPERTOIRE; ?>/styles/img/valide.png" ></span></td>
-                    <td><span style="display: none;margin-left: 20px;color: red" id="errConfigAccueil">Vous devez soit sélectionner un nom dans la liste avant de cliquer sur valider!</span></td>
+                    <td><span style="display: none;margin-left: 20px;" id="imgConfigAccueil"><img src="/<?php echo REPERTOIRE; ?>/styles/img/valide.png" > Modification executée avec succés</span></td>
+                    <td><span style="display: none;margin-left: 20px;color: red" id="errConfigAccueil">Vous devez cliquer sur un nom dans la liste avant de cliquer sur valider!</span></td>
                 </tr>                
             </table>
             <ul id="nom_list_id"></ul>
