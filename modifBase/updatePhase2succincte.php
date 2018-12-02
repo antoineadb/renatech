@@ -12,15 +12,15 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 $idprojet = $_GET['idprojet'];
 $arraydonneeBDD = $manager->getList2("select titre,acronyme,confidentiel,contexte,description,attachement from projet where idprojet=?", $idprojet);
 
-$titreBDD =  str_replace("– "," - ",$arraydonneeBDD[0]['titre']);
+$titreBDD = str_replace("– ", " - ", $arraydonneeBDD[0]['titre']);
 if (!empty($arraydonneeBDD[0]['acronyme'])) {
     $acronymeBDD = $arraydonneeBDD[0]['acronyme']; //CHAMP FACULTATIF
-}else{
-    $acronymeBDD ='';
+} else {
+    $acronymeBDD = '';
 }
-if($arraydonneeBDD[0]['confidentiel']){
+if ($arraydonneeBDD[0]['confidentiel']) {
     $confidentielBDD = 'TRUE';
-}  else {
+} else {
     $confidentielBDD = 'FALSE';
 }
 
@@ -50,31 +50,25 @@ if (!empty($_POST['descriptifValeur'])) {
 }
 $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale from concerne LEFT JOIN projet ON idprojet_projet=idprojet WHERE numero=? ", $_GET['numProjet']);
 
-if ($_POST['acronyme'] == $_GET['numProjet']) {
-    foreach ($acronymeDefault as $key => $value) {
-        if ($idcentrale == $key) {
-            if ($value == 'numprojet') {
+
+foreach ($acronymeDefault as $key => $value) {
+    if ($key==$idcentrale) {
+        if ($value == 'num_projet') {
+            if (!empty($_POST['acronyme'])) {
+                $acronyme = $_POST['acronyme'];
+            } else {
                 $acronyme = $_GET['numProjet'];
-            } elseif ($value == 'refinterneprojet') {
-                if (!empty($_POST['refinterne'])) {
-                    $acronyme = $_POST['refinterne'];
-                } else {
-                    $acronyme = $_GET['numProjet'];
-                }
+            }
+        } elseif ($value == 'refinterneprojet') {
+            if (!empty($_POST['acronyme'])) {
+                $acronyme = $_POST['acronyme'];
+            } else {
+                $acronyme = $_POST['refinterne'];
             }
         }
-    }
-    $_SESSION['acronymemodif'] = $acronyme;
-} elseif($_POST['acronyme']!='') {
-    $acronyme = stripslashes(Securite::bdd($_POST['acronyme']));
-    if ($acronymeBDD != $acronyme) {
-        $_SESSION['acronymemodif'] = $acronyme;
-    } else {
-        $_SESSION['acronymemodif'] = '';
-    }
-}else{
-    $acronyme = $_GET['numProjet'];
+    }    
 }
+
 if (!empty($_POST['titreProjet'])) {
     $titre = $_POST['titreProjet'];
     if ($titreBDD != $titre) {
@@ -89,11 +83,11 @@ if (!empty($_POST['titreProjet'])) {
 
 if (!empty($_FILES['fichierProjet']['name'])) {
     $attachement = stripslashes(Securite::bdd($_FILES['fichierProjet']['name']));
-        if ($arraydonneeBDD[0]['attachement'] != $attachement) {
-            $_SESSION['attachementmodif'] = $attachement;
-        } else {
-            $_SESSION['attachementmodif'] = '';
-        }
+    if ($arraydonneeBDD[0]['attachement'] != $attachement) {
+        $_SESSION['attachementmodif'] = $attachement;
+    } else {
+        $_SESSION['attachementmodif'] = '';
+    }
 } else {
     $attachement = $manager->getSingle2("select attachement from projet where idprojet = ?", $idprojet);
     if (empty($attachement)) {
@@ -111,9 +105,9 @@ if (!empty($_POST['centrale'])) {
 }
 
 $confidentiel = $_POST['confid'];
-if ($confidentielBDD != $confidentiel) {    
-        $_SESSION['confidentielmodif'] = $confidentiel;
-}else{    
+if ($confidentielBDD != $confidentiel) {
+    $_SESSION['confidentielmodif'] = $confidentiel;
+} else {
     $_SESSION['confidentielmodif'] = '';
 }
 $projetcontextedescriptif = new Projetcontextedescriptif($idprojet, $descriptif, $contexte, $confidentiel, $titre, $acronyme, $attachement);
@@ -121,72 +115,67 @@ $manager->updateprojetcontextedescriptif($projetcontextedescriptif, $idprojet);
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              CENTRALE DE PROXIMITE
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
-    $centrale_proximiteBDD = $manager->getList2("SELECT idcentraleproximite FROM centraleproximiteprojet where idprojet=?", $idprojet);
-    $centraleProximiteBDD = array();
-    for ($i = 0; $i < count($centrale_proximiteBDD); $i++) {
-        array_push($centraleProximiteBDD, 'cp' . $centrale_proximiteBDD[$i]['idcentraleproximite']);
-    }
-    $centrale_proximite = stripslashes(Securite::bdd($_POST['centrale_proximite']));
-    if (!empty($_POST['descriptioncentraleproximite'])) {
-        $descriptioncentraleproximiteBDD = $_POST['descriptioncentraleproximite'];
-    }else{
-        $descriptioncentraleproximiteBDD = '';
-    }
+$centrale_proximiteBDD = $manager->getList2("SELECT idcentraleproximite FROM centraleproximiteprojet where idprojet=?", $idprojet);
+$centraleProximiteBDD = array();
+for ($i = 0; $i < count($centrale_proximiteBDD); $i++) {
+    array_push($centraleProximiteBDD, 'cp' . $centrale_proximiteBDD[$i]['idcentraleproximite']);
+}
+$centrale_proximite = stripslashes(Securite::bdd($_POST['centrale_proximite']));
+if (!empty($_POST['descriptioncentraleproximite'])) {
+    $descriptioncentraleproximiteBDD = $_POST['descriptioncentraleproximite'];
+} else {
+    $descriptioncentraleproximiteBDD = '';
+}
 
-    if ($_POST['centrale_proximite'] == 'TRUE') {
-        if (!empty($_POST['centrale_Proximite'])) {
-            if ($centraleProximiteBDD != $_POST['centrale_Proximite']) {
-                $_SESSION['centraleproximitemodif'] = $_POST['centrale_Proximite'];
-            } else {
-                $_SESSION['centraleproximitemodif'] = '';
-            }
-            
-            $manager->deletecentraleproximiteprojet($idprojet);
-            
-            for ($i = 0; $i < count($_POST['centrale_Proximite']); $i++) {
-                $idcentrale_proximite = substr($_POST['centrale_Proximite'][$i], 2);
-                $centraleproximite = new CentraleProximiteProjet($idcentrale_proximite, $idprojet);
-                $manager->addCentraleProximiteProjet($centraleproximite);
-                 //Controle si il y un email dans la centrale de proximité
-                $idresponsable = (int)$manager->getSingle2("SELECT id_responsable_centrale_proximite FROM centraleproximite WHERE idcentraleproximite=?", $idcentrale_proximite);
-                $emailCP=$manager->getSingle2("SELECT mail FROM utilisateur,loginpassword  WHERE idlogin=idlogin_loginpassword AND idutilisateur=?", $idresponsable);
-                if(null!=$emailCP){//AFFECTATION COMME ADMINISTRATEUR LE RESPONSABLE DE LA CENTRALE DE PROXIMITE
-                    //Vérification que l'id du reponsable n'as pas déjà été sété dans la BD
-                    $oldIdResponsableCP = (int)$manager->getSinglebyArray("SELECT idutilisateur FROM utilisateuradministrateur WHERE idprojet=? AND idutilisateur=?", array($idprojet,$idresponsable));                 
-                    if($oldIdResponsableCP != $idresponsable){
-                        $dateaffectation = date("Y-m-d");
-                        $utilisateuradminprojet = new UtilisateurAdmin($idresponsable, $idprojet, $dateaffectation);
-                        $manager->addUtilisateurAdmin($utilisateuradminprojet);
-                    }
-                }
-                
-                
-            }
+if ($_POST['centrale_proximite'] == 'TRUE') {
+    if (!empty($_POST['centrale_Proximite'])) {
+        if ($centraleProximiteBDD != $_POST['centrale_Proximite']) {
+            $_SESSION['centraleproximitemodif'] = $_POST['centrale_Proximite'];
         } else {
             $_SESSION['centraleproximitemodif'] = '';
         }
-        if (!empty($_POST['centraleproximitevaleur'])) {
-            $descriptioncentraleproximite = clean($_POST['centraleproximitevaleur']);
-            if ($descriptioncentraleproximiteBDD != $descriptioncentraleproximite) {
-                $_SESSION['descriptioncentraleproximitemodif'] = $descriptioncentraleproximite;
-            } else {
-                $_SESSION['descriptioncentraleproximitemodif'] = '';
-                $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
+
+        $manager->deletecentraleproximiteprojet($idprojet);
+
+        for ($i = 0; $i < count($_POST['centrale_Proximite']); $i++) {
+            $idcentrale_proximite = substr($_POST['centrale_Proximite'][$i], 2);
+            $centraleproximite = new CentraleProximiteProjet($idcentrale_proximite, $idprojet);
+            $manager->addCentraleProximiteProjet($centraleproximite);
+            //Controle si il y un email dans la centrale de proximité
+            $idresponsable = (int) $manager->getSingle2("SELECT id_responsable_centrale_proximite FROM centraleproximite WHERE idcentraleproximite=?", $idcentrale_proximite);
+            $emailCP = $manager->getSingle2("SELECT mail FROM utilisateur,loginpassword  WHERE idlogin=idlogin_loginpassword AND idutilisateur=?", $idresponsable);
+            if (null != $emailCP) {//AFFECTATION COMME ADMINISTRATEUR LE RESPONSABLE DE LA CENTRALE DE PROXIMITE
+                //Vérification que l'id du reponsable n'as pas déjà été sété dans la BD
+                $oldIdResponsableCP = (int) $manager->getSinglebyArray("SELECT idutilisateur FROM utilisateuradministrateur WHERE idprojet=? AND idutilisateur=?", array($idprojet, $idresponsable));
+                if ($oldIdResponsableCP != $idresponsable) {
+                    $dateaffectation = date("Y-m-d");
+                    $utilisateuradminprojet = new UtilisateurAdmin($idresponsable, $idprojet, $dateaffectation);
+                    $manager->addUtilisateurAdmin($utilisateuradminprojet);
+                }
             }
+        }
+    } else {
+        $_SESSION['centraleproximitemodif'] = '';
+    }
+    if (!empty($_POST['centraleproximitevaleur'])) {
+        $descriptioncentraleproximite = clean($_POST['centraleproximitevaleur']);
+        if ($descriptioncentraleproximiteBDD != $descriptioncentraleproximite) {
+            $_SESSION['descriptioncentraleproximitemodif'] = $descriptioncentraleproximite;
         } else {
             $_SESSION['descriptioncentraleproximitemodif'] = '';
             $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
         }
-    }else{        
-            $descriptioncentraleproximite='_';
-            $manager->deletecentraleproximiteprojet($idprojet);
+    } else {
+        $_SESSION['descriptioncentraleproximitemodif'] = '';
+        $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
     }
+} else {
+    $descriptioncentraleproximite = '_';
+    $manager->deletecentraleproximiteprojet($idprojet);
+}
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              FIN DES CENTRALES DE PROXIMITE
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
-
-
-
 //MISE A JOUR DE LA PIECE JOINTE
 $dossier1 = '../upload/';
 $fichierPhase1 = basename($_FILES['fichierProjet']['name']);

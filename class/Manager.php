@@ -1275,7 +1275,7 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $reussite = $projet2->getReussite();
             $refinterneprojet = $projet2->getRefinterneprojet();
             $devtechnologique = $projet2->getDevtechnologique();
-            $nbeleve = $projet2->getNbeleve();var_dump($nbeleve);
+            $nbeleve = $projet2->getNbeleve();
             $nomformateur = $projet2->getNomformateur();
             $partenaire1 = $projet2->getPartenaire1();
             $porteurprojet = $projet2->getPorteurprojet();
@@ -3832,12 +3832,11 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare('UPDATE config_acceuil_defaut  SET idutilisateur=?,idcentrale=?, WHERE id=?');            
-            $id = $configAccueil->get_id_utilisateur();
+            $requete = $this->_db->prepare('UPDATE config_accueil_defaut  SET idutilisateur=?,idcentrale=? WHERE id=?');                        
             $idUtilisateur = $configAccueil->get_id_utilisateur();
             $idCentrale = $configAccueil->get_idcentrale();
             $requete->bindParam(1, $idUtilisateur, PDO::PARAM_INT);
-            $requete->bindParam(2, $idCentrale, PDO::PARAM_BOOL);
+            $requete->bindParam(2, $idCentrale, PDO::PARAM_INT);
             $requete->bindParam(3, $id);
             $requete->execute();
             $this->_db->commit();

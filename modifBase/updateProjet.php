@@ -15,14 +15,23 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'modifProje
         $titreProjet = stripslashes(Securite::bdd($_POST['titreProjet']));
         $_SESSION['titreProjet'] = $titreProjet;
     }
-    if (!empty($_POST['acronyme'])) {
-        $acronyme = stripslashes(Securite::bdd($_POST['acronyme']));
-        $_SESSION['acronyme'] = $acronyme;
-    } elseif (!empty($_SESSION['acronyme'])) {
-        $acronyme = stripslashes($_SESSION['acronyme']);
-    } else {
-        $acronyme = "";
-    }
+    foreach ($acronymeDefault as $key => $value) {
+        if ($key == $idcentrale) {
+            if ($value == 'num_projet') {
+                if (!empty($_POST['acronyme'])) {
+                    $acronyme = $_POST['acronyme'];
+                } else {
+                    $acronyme = $_GET['numProjet'];
+                }
+            } elseif ($value == 'refinterneprojet') {
+                if (!empty($_POST['acronyme'])) {
+                    $acronyme = $_POST['acronyme'];
+                } else {
+                    $acronyme = $_POST['refinterne'];
+                }
+            }
+        }
+    }$_SESSION['acronyme'] = $acronyme;
     $idprojet = $_GET['idprojet'];
     $numProjet = $manager->getSingle2("select numero from projet where idprojet=?", $idprojet);
 

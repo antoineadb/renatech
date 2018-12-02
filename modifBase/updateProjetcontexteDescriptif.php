@@ -27,11 +27,26 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'vueModifPr
     if (!empty($_POST['descriptifValeur'])) {
         $descriptif = filterEditor(Securite::bdd(trim($_POST['descriptifValeur'])));
     }
-    if (!empty($_POST['acronyme'])) {
-        $acronyme = $_POST['acronyme'];
-    } else {
-        $acronyme = $manager->getSingle2("select acronyme from projet where idprojet=? ", $idprojet);
+
+    foreach ($acronymeDefault as $key => $value) {
+        if ($key == $idcentrale) {
+            if ($value == 'num_projet') {
+                if (!empty($_POST['acronyme'])) {
+                    $acronyme = $_POST['acronyme'];
+                } else {
+                    $acronyme = $_GET['numProjet'];
+                }
+            } elseif ($value == 'refinterneprojet') {
+                if (!empty($_POST['acronyme'])) {
+                    $acronyme = $_POST['acronyme'];
+                } else {
+                    $acronyme = $_POST['refinterne'];
+                }
+            }
+        }
     }
+
+
     if (!empty($_POST['titreProjet'])) {
         $titre = $_POST['titreProjet'];
     } else {

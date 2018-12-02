@@ -17,13 +17,15 @@ include_once 'decide-lang.php';
         <div style="font: 1.3em/18px 'Lucida Grande', 'Lucida Sans Unicode', Arial, Verdana, sans-serif;margin-bottom: 12px;margin-top: 40px;width: 946px;inline-size: auto;Line-Height: 20pt;" class="loginlabel">
             <?php echo removeDoubleApp(affiche('TXT_BIENVENUE'));?>
         </div>
-        <div style="width: 970px;;font-size:14px;margin-bottom:20px" class="loginlabel">            
-                <div style="font: 14px/18px 'Lucida Grande', 'Lucida Sans Unicode', Arial, Verdana, sans-serif;margin-bottom: 20px;margin-top: 25px;width: 970px;" class="loginlabel">
+        <div class="txtAccueil">
+            <p>
+                <div class="txtAccueil">
                     <?php echo stripslashes(removeDoubleApp(affiche('TXT_ACCUEIL1'))); ?>                    
-                </div>            
+                </div>
+            </p>            
             <p><?php echo stripslashes(removeDoubleApp(affiche('TXT_ACCUEIL2')));?></p>
              <?php if($lang=='fr'){ ?>
-            <div style="width: 980px;font-size:14px;margin-bottom:20px;" class="loginlabel"><?php echo stripslashes(removeDoubleApp(substr(affiche('TXT_ACCUEIL3'),0,33))); ?>
+            <div  class="txtAccueil"><?php echo stripslashes(removeDoubleApp(substr(affiche('TXT_ACCUEIL3'),0,33))); ?>
                     <a href="#" id="acceuil3" style="text-decoration:none" onmouseover="document.getElementById('textecache2fr').style.display='block'" 
                        onmouseout="document.getElementById('textecache2fr').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
                         <span style="display: none" id="textecache2fr">
@@ -32,7 +34,7 @@ include_once 'decide-lang.php';
                         </span>
            </div>
              <?php }elseif($lang=='en'){ ?>
-                <div style="width: 980px;font-size:14px;margin-bottom:20px;" class="loginlabel"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),0,28)))); ?>
+                <div  class="txtAccueil"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),0,28)))); ?>
                     <a href="#" id="acceuil3" style="text-decoration:none" onmouseover="document.getElementById('textecache2en').style.display='block'" onmouseout="document.getElementById('textecache2en').style.display='none'"><?php echo "  ...".TXT_LASUITE." ...    " ;?></a>
                         <div style="display: none" id="textecache2en">
                             <p style="width:980px;font-size:14px;"><?php echo stripslashes(str_replace("''","'",str_replace("’’","’",substr(affiche('TXT_ACCUEIL3'),32,600)))); ?></p>
@@ -42,7 +44,7 @@ include_once 'decide-lang.php';
              <?php } ?>
         </div>
         <?php if(internetExplorer()!='incompatible'){?>
-        <div style="font: 0.9em/18px 'Lucida Grande', 'Lucida Sans Unicode', Arial, Verdana, sans-serif;width: 820px;" class="loginlabel"><?php echo affiche('TXT_NONINSCRIT').' '. affiche('TXT_CLICK');?>
+        <div class="txtAccueil"><?php echo affiche('TXT_NONINSCRIT').' '. affiche('TXT_CLICK');?>
             <button type="button" label="<?php echo strtolower(TXT_INSCRIPTION); ?>" data-dojo-Type="dijit/form/Button">
                 <script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
                     require(["dojo/dom"], function(dom){

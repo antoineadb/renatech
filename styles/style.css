@@ -190,6 +190,16 @@ a:hover, a:focus {
     alignment-baseline: middle;
     margin-bottom: 25px;
 }
+
+.txtAccueil{
+    color:midnightblue;
+    alignment-baseline: middle;    
+    width: 980px;font:14px/18px 'Lucida Grande', 'Lucida Sans Unicode';
+    margin-bottom:20px;
+}
+
+
+
 .passelabel{
     font-size:14px;
     width:120px;

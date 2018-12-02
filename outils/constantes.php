@@ -1,5 +1,5 @@
 <?php
-    
+
 $repertoire = explode("/", $_SERVER["PHP_SELF"]);
 if ($repertoire[1] == 'projet-dev') {
     include_once '/var/www/rtb/html/' . $repertoire[1] . '/class/Manager.php';
@@ -87,130 +87,158 @@ define('IDAUTRESOURCEFINANCEMENT', $manager->getSingle2("SELECT idsourcefinancem
 define('NBSOURCEDEFINACEMENT', $manager->getSingle("SELECT count(idsourcefinancement) FROM sourcefinancement"));
 define('NBRESSOURCE', $manager->getSingle("SELECT count(idressource) FROM ressource"));
 define('TXT_REGEXPASS', "regExp:'^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$");
-define('IDCENTRALEINTERNATIONNAL', $manager->getSingle2("SELECT idregion FROM region WHERE libelleregion=?",'Centrale internationale'));
-define('ADRESSEMAILPROJET','projets@renatech.org');
+define('IDCENTRALEINTERNATIONNAL', $manager->getSingle2("SELECT idregion FROM region WHERE libelleregion=?", 'Centrale internationale'));
+define('ADRESSEMAILPROJET', 'projets@renatech.org');
 
-define ('IDFEMTO',$manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'FEMTO-ST'));
-define ('IDIEMN',$manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'IEMN'));
-define ('IDLAAS',$manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'LAAS'));
-define ('IDLTM',$manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'LTM'));
-define ('IDC2N',$manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'C2N'));
-define ('FEMTO',$manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDFEMTO));
-define ('IEMN',$manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDIEMN));
-define ('LAAS',$manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDLAAS));
-define ('LTM',$manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDLTM));
-define ('C2N',$manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDC2N));
+define('IDFEMTO', $manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'FEMTO-ST'));
+define('IDIEMN', $manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'IEMN'));
+define('IDLAAS', $manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'LAAS'));
+define('IDLTM', $manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'LTM'));
+define('IDC2N', $manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'C2N'));
+define('FEMTO', $manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDFEMTO));
+define('IEMN', $manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDIEMN));
+define('LAAS', $manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDLAAS));
+define('LTM', $manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDLTM));
+define('C2N', $manager->getSingle2("SELECT libellecentrale FROM centrale WHERE idcentrale=?", IDC2N));
 
-define('IDINTEGRATION',$manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_INTEGRATION));
-define('IDCARACTERISATION',$manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_CHARACTERISATIONMETROLOGY));
-define('IDGRAVURE',$manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_GRAVURE));
-define('IDDEPOT',$manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_DEPOT));
-define('IDCROISSANCE',$manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_CROISSANCE));
-define('IDLITHOGRAPHY',$manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_LITHOGRAPHY));
-if($lang=='fr'){
-    define('IDGRANDCOMPTE',$manager->getSingle2("SELECT idtypeentreprise FROM typeentreprise WHERE libelletypeentreprise=?", TXT_GRAND_COMPTE));
-}else{
-    define('IDGRANDCOMPTE',$manager->getSingle2("SELECT idtypeentreprise FROM typeentreprise WHERE libelletypeentrepriseen=?", TXT_GRAND_COMPTE));
+define('IDINTEGRATION', $manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_INTEGRATION));
+define('IDCARACTERISATION', $manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_CHARACTERISATIONMETROLOGY));
+define('IDGRAVURE', $manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_GRAVURE));
+define('IDDEPOT', $manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_DEPOT));
+define('IDCROISSANCE', $manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_CROISSANCE));
+define('IDLITHOGRAPHY', $manager->getSingle2("SELECT idressource FROM ressource WHERE libelleressource=?", TXT_LITHOGRAPHY));
+if ($lang == 'fr') {
+    define('IDGRANDCOMPTE', $manager->getSingle2("SELECT idtypeentreprise FROM typeentreprise WHERE libelletypeentreprise=?", TXT_GRAND_COMPTE));
+} else {
+    define('IDGRANDCOMPTE', $manager->getSingle2("SELECT idtypeentreprise FROM typeentreprise WHERE libelletypeentrepriseen=?", TXT_GRAND_COMPTE));
 }
-if($lang=='fr'){
-    define('IDGE',$manager->getSingle2("SELECT idtypepartenaire FROM typepartenaire WHERE libelletypepartenairefr=?", TXT_GE));
-}else{
-    define('IDGE',$manager->getSingle2("SELECT idtypepartenaire FROM typepartenaire WHERE libelletypepartenaireen=?", TXT_GE));
+if ($lang == 'fr') {
+    define('IDGE', $manager->getSingle2("SELECT idtypepartenaire FROM typepartenaire WHERE libelletypepartenairefr=?", TXT_GE));
+} else {
+    define('IDGE', $manager->getSingle2("SELECT idtypepartenaire FROM typepartenaire WHERE libelletypepartenaireen=?", TXT_GE));
 }
-if($lang=='fr'){
-    define('IDETI',$manager->getSingle2("SELECT idtypepartenaire FROM typepartenaire WHERE libelletypepartenairefr=?", TXT_ETI));
-}else{
-    define('IDETI',$manager->getSingle2("SELECT idtypepartenaire FROM typepartenaire WHERE libelletypepartenaireen=?", TXT_ETI));
+if ($lang == 'fr') {
+    define('IDETI', $manager->getSingle2("SELECT idtypepartenaire FROM typepartenaire WHERE libelletypepartenairefr=?", TXT_ETI));
+} else {
+    define('IDETI', $manager->getSingle2("SELECT idtypepartenaire FROM typepartenaire WHERE libelletypepartenaireen=?", TXT_ETI));
 }
 
 if (isset($_SESSION['pseudo'])) {
     define('IDCENTRALEUSER', $manager->getSingle2("SELECT idcentrale_centrale FROM utilisateur, loginpassword WHERE idlogin_loginpassword=idlogin and pseudo=? ", $_SESSION['pseudo']));
     define('LIBELLECENTRALEUSER', $manager->getSingle2("SELECT libellecentrale FROM centrale,utilisateur, loginpassword WHERE idlogin_loginpassword=idlogin and idcentrale_centrale=idcentrale and pseudo=? ", $_SESSION['pseudo']));
-    define('IDTYPEUSER', $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']));                                                
+    define('IDTYPEUSER', $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM  loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo=?", $_SESSION['pseudo']));
     define('NOMUSER', $manager->getSingle2("SELECT nom FROM utilisateur,loginpassword  WHERE idlogin=idlogin_loginpassword and pseudo=? ", $_SESSION['pseudo']));
     define('PRENOMUSER', $manager->getSingle2("SELECT prenom FROM utilisateur,loginpassword  WHERE idlogin=idlogin_loginpassword and pseudo=? ", $_SESSION['pseudo']));
 }
 
 define('NOW', strtotime(date("d-m-Y H:i:s")));
 define('REGEX_TYPE', "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\\133\\134\\135\\042\'’/=°()_ ,.-]+'");
-define('REGEX_TYPESTRING', "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:\'’/=°()_ ,.-]+'");                            
+define('REGEX_TYPESTRING', "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:\'’/=°()_ ,.-]+'");
 define('REGEX_TYPESTRINGLISTE', "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\'’/=°()_ ><,.-]+'");
 define('REGEX_TEL', "regExp:'[a-zA-Z0-9àáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\\133\\134\\135\\042\'’/=°/+()_ ,.-]+'");
-define('REGEX_ACCUEIL1',"regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$!\²\°\&\_\«\»\’’ ,\.\'\-\:\/]+'");                         
-define("REGEX_ACCUEIL","regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,°\²\.\•\'\-\:\/]+'");
-define("REGEX_ACCUEIL_CENTRALE","regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-]+");
+define('REGEX_ACCUEIL1', "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9€$!\²\°\&\_\«\»\’’ ,\.\'\-\:\/]+'");
+define("REGEX_ACCUEIL", "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð0-9_ ,°\²\.\•\'\-\:\/]+'");
+define("REGEX_ACCUEIL_CENTRALE", "regExp:'[a-zA-ZàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð%&:0-9\042\'()_ ,.-]+");
 
-function couleurGraph($idcentrale){
-    if ($idcentrale== IDFEMTO){
-        return $couleur='#7cb5ec';
-    }elseif ($idcentrale== IDIEMN){
-        return $couleur='#FFBC75';
-    }elseif ($idcentrale== IDLAAS){
-        return $couleur= '#A9FF97';
-    }elseif ($idcentrale== IDLTM){
-        return $couleur='#90B1D8';
-    }elseif ($idcentrale== IDC2N){                    
-        return $couleur='#C3FFFF';
-    }  
-}
-function couleurGraphLib($libcentrale){
-    if ($libcentrale== FEMTO || $libcentrale== FEMTO){
-        return $couleur='#7cb5ec';
-    }elseif ($libcentrale== IEMN){
-        return $couleur='#FFBC75';
-    }elseif ($libcentrale== LAAS){
-        return $couleur= '#A9FF97';
-    }elseif ($libcentrale== LTM){
-        return $couleur='#90B1D8';
-    }elseif ($libcentrale== C2N){                    
-        return $couleur='#C3FFFF';
-    }  
-}
-
-function couleurRessource($idressource){
-    if ($idressource== IDINTEGRATION){
-        return $couleur='#ff0000';
-    }elseif ($idressource== IDCARACTERISATION){
-        return $couleur='#dd33dd';
-    }elseif ($idressource== IDGRAVURE){
-        return $couleur= '#050e5e';
-    }elseif ($idressource== IDDEPOT){
-        return $couleur='#edef4f';
-    }elseif ($idressource== IDCROISSANCE){          
-        return $couleur='#0f7a0d';
-    }elseif ($idressource== IDLITHOGRAPHY){
-        return $couleur='#00ffc3';
+function couleurGraph($idcentrale) {
+    if ($idcentrale == IDFEMTO) {
+        return $couleur = '#7cb5ec';
+    } elseif ($idcentrale == IDIEMN) {
+        return $couleur = '#FFBC75';
+    } elseif ($idcentrale == IDLAAS) {
+        return $couleur = '#A9FF97';
+    } elseif ($idcentrale == IDLTM) {
+        return $couleur = '#90B1D8';
+    } elseif ($idcentrale == IDC2N) {
+        return $couleur = '#C3FFFF';
     }
-        
 }
 
-function anneeStatistique($d,$f){
-    $annee= array();
+function couleurGraphLib($libcentrale) {
+    if ($libcentrale == FEMTO || $libcentrale == FEMTO) {
+        return $couleur = '#7cb5ec';
+    } elseif ($libcentrale == IEMN) {
+        return $couleur = '#FFBC75';
+    } elseif ($libcentrale == LAAS) {
+        return $couleur = '#A9FF97';
+    } elseif ($libcentrale == LTM) {
+        return $couleur = '#90B1D8';
+    } elseif ($libcentrale == C2N) {
+        return $couleur = '#C3FFFF';
+    }
+}
+
+function couleurRessource($idressource) {
+    if ($idressource == IDINTEGRATION) {
+        return $couleur = '#ff0000';
+    } elseif ($idressource == IDCARACTERISATION) {
+        return $couleur = '#dd33dd';
+    } elseif ($idressource == IDGRAVURE) {
+        return $couleur = '#050e5e';
+    } elseif ($idressource == IDDEPOT) {
+        return $couleur = '#edef4f';
+    } elseif ($idressource == IDCROISSANCE) {
+        return $couleur = '#0f7a0d';
+    } elseif ($idressource == IDLITHOGRAPHY) {
+        return $couleur = '#00ffc3';
+    }
+}
+
+function anneeStatistique($d, $f) {
+    $annee = array();
     $depart = intval($d);
     $fin = intval($f);
-    if($depart==$fin){
+    if ($depart == $fin) {
         array_push($annee, $depart);
-    }else{                
-        for ($i = 0; $i < ($fin-$depart)+1; $i++) {
-            array_push($annee, ($depart+$i));
+    } else {
+        for ($i = 0; $i < ($fin - $depart) + 1; $i++) {
+            array_push($annee, ($depart + $i));
         }
     }
     return $annee;
 }
-$string = $_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
- $domain = explode("/", $string)[0];
-$url = "https://".$domain.'/'.explode("/", $string)[1];
-define('ADRESSESITE',$url);
-define('TXT_ID_RENATECH','1');
-define('TXT_ID_RENATECH_PREPROD','2');
-define('TXT_ID_RENATECH_TEST','3');
 
-/**
- * array('idcentrale'=>"valeur de l'acronyme");
- **/
+$string = $_SERVER['SERVER_NAME'] . $_SERVER["REQUEST_URI"];
+$domain = explode("/", $string)[0];
+$url = "https://" . $domain . '/' . explode("/", $string)[1];
+define('ADRESSESITE', $url);
+define('TXT_ID_RENATECH', '1');
+define('TXT_ID_RENATECH_PREPROD', '2');
+define('TXT_ID_RENATECH_TEST', '3');
 
-$acronymeDefault = array('1'=>'numprojet','2'=>'numprojet','3'=>'numprojet','4'=>'numprojet','6'=>'refinterneprojet');
 /**
  * array('idcentrale'=>'idutilisateur du compte accueil centrale');
- **/
-$conmpteacceuilDefault = array('1'=>7,'3'=>36,'6'=>8,'4'=>45,'8'=>27);
+ * */
+//$conmpteacceuilDefault = array('1'=>7,'3'=>36,'6'=>8,'4'=>45,'8'=>27);
+$compteacceuil = $manager->getList("SELECT idutilisateur,idcentrale FROM config_accueil_defaut");
+
+for ($i = 0; $i < count($compteacceuil); $i++) {
+    foreach ($compteacceuil[$i] as $key => $value) {
+        if (is_int($key)) {
+            unset($compteacceuil[$i][$key]);
+        }
+    }
+}
+foreach ($compteacceuil as $key => $value) {
+    $array[$compteacceuil[$key]['idcentrale']] = $compteacceuil[$key]['idutilisateur'];
+}
+$conmpteacceuilDefault = $array;
+/**
+ * array('idcentrale'=>"valeur de l'acronyme");
+ * */
+$acronyme = $manager->getList("SELECT ref_interne,num_projet,idcentrale FROM config_acronyme");
+for ($i = 0; $i < count($acronyme); $i++) {
+    foreach ($acronyme[$i] as $key => $value) {
+        if (is_int($key)) {
+            unset($acronyme[$i][$key]);
+        }
+    }
+}
+foreach ($acronyme as $key => $value) {
+    if ($acronyme[$key]['num_projet']) {
+        $arrayacronymeDefault[$acronyme[$key]['idcentrale']] = 'num_projet';
+    } else {
+        $arrayacronymeDefault[$acronyme[$key]['idcentrale']] = 'refinterneprojet';
+    }
+}
+$acronymeDefault = $arrayacronymeDefault;

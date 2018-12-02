@@ -27,7 +27,7 @@ if (is_file('../outils/toolBox.php')) {
 }
 if (is_file('PHPMailer_5.2.4/class.phpmailer.php')) {
     include_once 'PHPMailer_5.2.4/class.phpmailer.php';
-} elseif (is_file('../PHPMailer_5.2.4/class.phpmailer.php')) { 
+} elseif (is_file('../PHPMailer_5.2.4/class.phpmailer.php')) {
     include_once '../PHPMailer_5.2.4/class.phpmailer.php';
 }
 
@@ -83,6 +83,7 @@ function envoieEmail($body, $sujet, $email, $cc) {
         echo "Message not Sent</p>";
     }
 }
+
 function sendEmail($body, $sujet, $email) { // envoi sans copie    
     $mail = new PHPMailer(true); // the true param means it will throw exceptions on errors, which we need to catch
     setlocale(LC_CTYPE, "fr_FR.UTF-8");
@@ -113,13 +114,10 @@ function sendEmail($body, $sujet, $email) { // envoi sans copie
         echo $e->getMessage(); //Boring error messages from anything else!
         echo $e->getCode();
         $mail->ErrorInfo;
-        }
-        
-        
+    }
 }
 
-function envoieEmailAttachement($body, $sujet, $email, $cc,$path,$filename) {
-
+function envoieEmailAttachement($body, $sujet, $email, $cc, $path, $filename) {
     $mail = new PHPMailer(true); // the true param means it will throw exceptions on errors, which we need to catch
     setlocale(LC_CTYPE, "fr_FR.UTF-8");
     $mail->IsSMTP(true); // telling the class to use SMTP
@@ -132,20 +130,17 @@ function envoieEmailAttachement($body, $sujet, $email, $cc,$path,$filename) {
         $mail->Password = TXT_MDP_MSG;
 
         if (!empty($email)) {
-            for ($i = 0; $i < count($email); $i++) {
-                $mail->AddAddress($email[$i]);
-            }
+            $mail->AddAddress($email[0]);
         }
-        if (!empty($cc)) {
-            for ($i = 0; $i < count($cc); $i++) {
-                $mail->AddCC($cc[$i]);
-            }
-        }
+        
+        $mail->AddCC($cc);
+        
         $mail->SetFrom(ADRESSEMAILPROJET, 'RENATECH');
         $mail->Subject = $sujet;
         $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
-        $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire
-        $mail->AddAttachment($path,$filename);        
+        $mail->Body = wordwrap($body, 50); //Autorise les lignes > 998 caractères et évite l'affichage de ! aléatoire        
+        
+        $mail->AddAttachment($path.'/'.$filename);
         $mail->Send();
         return true;
         $mail->SmtpClose();

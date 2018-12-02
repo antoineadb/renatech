@@ -47,9 +47,11 @@ $manager = new Manager($db);
                         <label for="porteurProjet"  style="width: auto; margin-left: 20px;margin-right: 20px;font-size: 15px;"><?php echo TXT_CHX_ACRONYME . ' : *'; ?></label>
                     </td>
                     <td>	 
-                    <input type="radio" data-dojo-type="dijit/form/RadioButton" name="configAcronyme" id="ref_interne" <?php echo $checkRefInterne; ?> /> 
+                    <input type="radio" data-dojo-type="dijit/form/RadioButton" name="configAcronyme" id="ref_interne" <?php echo $checkRefInterne; ?> 
+                           onclick="document.getElementById('imgConfigAcronyme').style.display = 'none';document.getElementById('imgConfigAccueil').style.display = 'none';"/> 
                         <span style="font-size:15px"><?php echo TXT_REFINTERNE ?></span>
-                    <input type="radio" data-dojo-type="dijit/form/RadioButton" name="configAcronyme" id="num_projet" <?php echo $checkNumprojet; ?>  /> 
+                    <input type="radio" data-dojo-type="dijit/form/RadioButton" name="configAcronyme" id="num_projet" <?php echo $checkNumprojet; ?>  
+                           onclick="document.getElementById('imgConfigAcronyme').style.display = 'none';document.getElementById('imgConfigAccueil').style.display = 'none';"/>
                         <span style="font-size:15px"><?php echo TXT_NUMPROJECT ?></span>
                     </td>
                 <td>&nbsp;&nbsp;&nbsp;</td>
@@ -58,7 +60,8 @@ $manager = new Manager($db);
                         Valider le choix
                         <script type="dojo/on" data-dojo-event="click">                            
                             require(["dojo/dom"], function(dom){
-                               adminAcronyme('/<?php echo REPERTOIRE; ?>/outils/adminConfiAcronyme.php?lang=<?php echo $lang;?>&id_centrale=' +<?php echo IDCENTRALEUSER ?> + '&ref_interne='+ dijit.byId('ref_interne').get('value')+'&num_projet='+ dijit.byId('num_projet').get('value')+'');
+                               adminParamProjet('/<?php echo REPERTOIRE; ?>/outils/adminConfigAcronyme.php?lang=<?php echo $lang;?>&id_centrale=' +<?php echo IDCENTRALEUSER ?> 
+                               + '&ref_interne='+ dijit.byId('ref_interne').get('value')+'&num_projet='+ dijit.byId('num_projet').get('value')+'','acronyme',null);                                
                             });
                         </script>
                     </button>
@@ -67,7 +70,6 @@ $manager = new Manager($db);
                 </tr>
                 <tr><td></tr>
             </table>
-          
         </fieldset>
     </form>
     <?php 
@@ -81,21 +83,31 @@ $manager = new Manager($db);
             <table>
                 <tr>
                     <td>
-                        <input readonly  data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:350px;margin-left:20px"  
+                        <input  data-dojo-type='dijit/form/ValidationTextBox' name='nom' id='nom' style="width:350px;margin-left:20px"  
                                value='<?php echo ucfirst($contactCentralAccueil[0]['nom']) .' - ' .ucfirst($contactCentralAccueil[0]['prenom']) ;?>'   
-                               placeholder="<?php echo "Saisir les 3 premiers caractères"; ?>"  onkeyup="autocomplet()">                                
+                               placeholder="<?php echo "Saisir 1 caractère"; ?>"  onkeyup="autocomplet()"
+                               onclick="document.getElementById('imgConfigAcronyme').style.display = 'none';document.getElementById('imgConfigAccueil').style.display = 'none';">    
+                        <input type="hidden" name="iduserCentraleAccueil" id="iduserCentraleAccueil" />
                     </td>                    
                     <td>
                         <button data-dojo-type="dijit/form/Button" type="button">
-                        Changer
-                            <script type="dojo/on" data-dojo-event="click">                            
+                        Valider
+                            <script type="dojo/on" data-dojo-event="click">
                                 require(["dojo/dom"], function(dom){
-                                   dijit.byId("nom").set('readOnly',false);
-                                   dijit.byId("nom").set('value','');
+                                    var iduserCentraleAccueil;
+                                    if($('#iduserCentraleAccueil').attr('value')){
+                                        iduserCentraleAccueil = $('#iduserCentraleAccueil').attr('value');
+                                    }else{
+                                        iduserCentraleAccueil=-1;
+                                    }
+                                    adminParamProjet('/<?php echo REPERTOIRE; ?>/outils/adminConfigAccueil.php?lang=<?php echo $lang;?>&idcentrale=' +<?php echo IDCENTRALEUSER ?> 
+                                    + '&idutilisateur='+ iduserCentraleAccueil,'accueil',iduserCentraleAccueil);
                                 });
                             </script>
                         </button>
                     </td>
+                    <td><span style="display: none;margin-left: 20px;" id="imgConfigAccueil"><img src="/<?php echo REPERTOIRE; ?>/styles/img/valide.png" ></span></td>
+                    <td><span style="display: none;margin-left: 20px;color: red" id="errConfigAccueil">Vous devez soit sélectionner un nom dans la liste avant de cliquer sur valider!</span></td>
                 </tr>                
             </table>
             <ul id="nom_list_id"></ul>

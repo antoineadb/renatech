@@ -29,13 +29,12 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     if (!empty($_POST['descriptifValeur'])) {
         $descriptif = clean($_POST['descriptifValeur']);
     }
-        
+
     if (empty($_POST['confid'])) {
         $confidentiel = "FALSE";
     } else {
         $confidentiel = $_POST['confid'];
     }
-
     date_default_timezone_set('Europe/London');
     $dateprojet = date("m,d,Y");
 //RECUPERATION DE L'IDUTILISATEUR
@@ -48,25 +47,36 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     $idtypeprojet_typeprojet = $manager->getSingle2("select idtypeprojet from typeprojet where libelletype =?", 'n/a'); //"n/a" par défaut
 // NUMERO DE PROJET
     $numero = $manager->getSingle("select max(numero) from projet");
-    if (!empty($numero)) {
-        $numProjet = createNumProjet($numero);
-    } else {
-        $numProjet = 'P-' . date("y") . '-' . '00001'; //CAS DU 1ER PROJET
-    }
-    $_SESSION['numprojet'] = $numProjet; //A GARDER BESOIN SUR L'EMAIL
-    
-    if (!empty($_POST['acronyme'])) {
-        $acronyme = stripslashes(Securite::bdd($_POST['acronyme']));
-    } else {
-        $acronyme=$numProjet;
-    }
-//INSERSION EN BASE DE DONNEE
     $idprojet = $manager->getSingle("select max(idprojet) from projet") + 1;
     if (isset($_POST['centrale']) && !empty($_POST['centrale'])) {
         $idcentrale = (int) substr($_POST['centrale'], -1);
     } else {
         $idcentrale = AUTRECENTRALE;
     }
+    
+    if (!empty($numero)) {
+        $numProjet = createNumProjet($numero);
+    } else {
+        $numProjet = 'P-' . date("y") . '-' . '00001'; //CAS DU 1ER PROJET
+    }
+    $_SESSION['numprojet'] = $numProjet; //A GARDER BESOIN SUR L'EMAIL
+
+    if ($_POST['acronyme'] == "") {
+        foreach ($acronymeDefault as $key => $value) {
+            if ($key == $idcentrale) {
+                if ($value == 'num_projet') {
+                    $acronyme = $numProjet;
+                } elseif ($value == 'refinterneprojet') {
+                    $acronyme = "";
+                }
+            }
+        }
+    } else {
+        $acronyme = stripslashes(Securite::bdd($_POST['acronyme']));
+    }
+
+//INSERSION EN BASE DE DONNEE
+    
 
     if (!empty($_FILES['fichierProjet']['name'])) {
         $attachement = stripslashes(Securite::bdd($_FILES['fichierProjet']['name']));
@@ -115,7 +125,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //------------------------------------------------------------------------------------------------------------
 //                          CHAMPS  SANS TRAITEMENT
 //------------------------------------------------------------------------------------------------------------   
-    
+
     if (!empty($_POST['contactCentralAccueil'])) {
         $contactCentralAccueil = stripslashes(Securite::bdd($_POST['contactCentralAccueil']));
     } else {
@@ -187,49 +197,49 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              TYPEPARTENAIRE 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    if($_POST['nombrePartenaire']!=0){
+    if ($_POST['nombrePartenaire'] != 0) {
         $arrayidtypepartenaire = array();
         for ($i = 0; $i < 9; $i++) {
-            $j=$i+1;
-            if(!empty($_POST['tp'.$i])){
-                if(strlen($_POST['tp'.$i])==3){
-                    $tp = (int)substr($_POST['tp'.$i],-1);            
-                }else{
-                    $tp = (int)substr($_POST['tp'.$i],0);
+            $j = $i + 1;
+            if (!empty($_POST['tp' . $i])) {
+                if (strlen($_POST['tp' . $i]) == 3) {
+                    $tp = (int) substr($_POST['tp' . $i], -1);
+                } else {
+                    $tp = (int) substr($_POST['tp' . $i], 0);
                 }
-                $rang = (int)substr($_POST['rang'.$j],-1);           
-                if ($tp!=0) {
+                $rang = (int) substr($_POST['rang' . $j], -1);
+                if ($tp != 0) {
                     $arrayidtypepartenaire[$i]['typepartenaire'] = $tp;
-                    $arrayidtypepartenaire[$j]['rang'] = $rang;               
-                }
-            }
-        }        
-        $arrayIdTypepartenaire = (array_values($arrayidtypepartenaire));   
-        if(!empty($arrayIdTypepartenaire)){
-            $manager->deleteProjetTypePartenaire($idprojet);
-            for ($i = 0; $i < count($arrayIdTypepartenaire); $i++) {
-                $j=$i+1;
-                if(!empty($arrayIdTypepartenaire[$i]['typepartenaire'])){
-                    $projetTP = new ProjetTypePartenaire($arrayIdTypepartenaire[$i]['typepartenaire'], $idprojet, $arrayIdTypepartenaire[$j]['rang']);               
-                $manager->insertProjetTypePartenaire($projetTP);
+                    $arrayidtypepartenaire[$j]['rang'] = $rang;
                 }
             }
         }
-    }else{
-        $manager->deleteProjetTypePartenaire($idprojet);    
-        $_POST['typecentralepartenaire']=null;
+        $arrayIdTypepartenaire = (array_values($arrayidtypepartenaire));
+        if (!empty($arrayIdTypepartenaire)) {
+            $manager->deleteProjetTypePartenaire($idprojet);
+            for ($i = 0; $i < count($arrayIdTypepartenaire); $i++) {
+                $j = $i + 1;
+                if (!empty($arrayIdTypepartenaire[$i]['typepartenaire'])) {
+                    $projetTP = new ProjetTypePartenaire($arrayIdTypepartenaire[$i]['typepartenaire'], $idprojet, $arrayIdTypepartenaire[$j]['rang']);
+                    $manager->insertProjetTypePartenaire($projetTP);
+                }
+            }
+        }
+    } else {
+        $manager->deleteProjetTypePartenaire($idprojet);
+        $_POST['typecentralepartenaire'] = null;
     }
-    
-    
-    
-    
-    
-    if(isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])){
-        $idtypecentralepartenaire= (int)substr($_POST['typecentralepartenaire'],2,2);
-    }else{
-        $idtypecentralepartenaire=null;
+
+
+
+
+
+    if (isset($_POST['typecentralepartenaire']) && !empty($_POST['typecentralepartenaire'])) {
+        $idtypecentralepartenaire = (int) substr($_POST['typecentralepartenaire'], 2, 2);
+    } else {
+        $idtypecentralepartenaire = null;
     }
-    
+
     if (!empty(strip_tags($_POST['desTechno']))) {
         $descriptifTechnologique = clean($_POST['desTechno']);
     } else {
@@ -239,7 +249,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $verrouidentifie = clean($_POST['verrouide']);
     } else {
         $verrouidentifie = '_';
-    }    
+    }
     if (!empty(strip_tags($_POST['reussit']))) {
         $reussite = clean($_POST['reussit']);
     } else {
@@ -328,14 +338,14 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
         $idthematique_thematique = null;
         $idautrethematique_autrethematique = null;
     }
-    
-    /*if (!empty($_POST['nomPartenaire01'])) {
-        $partenaire1 = stripslashes(Securite::bdd(($_POST['nomPartenaire01'])));
-    } else {
-        $partenaire1 = '';
-    }*/
-    $partenaire1='';
-    $porteurprojet = $_POST['porteurprojet'];    
+
+    /* if (!empty($_POST['nomPartenaire01'])) {
+      $partenaire1 = stripslashes(Securite::bdd(($_POST['nomPartenaire01'])));
+      } else {
+      $partenaire1 = '';
+      } */
+    $partenaire1 = '';
+    $porteurprojet = $_POST['porteurprojet'];
     if (!empty($_POST['dureeestimeprojet'])) {
         $dureeestime = stripslashes(Securite::bdd($_POST['dureeestimeprojet']));
     } else {
@@ -380,7 +390,7 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     $centrale_proximite = stripslashes(Securite::bdd($_POST['centrale_proximite']));
     if (!empty($_POST['descriptioncentraleproximite'])) {
         $descriptioncentraleproximiteBDD = $_POST['descriptioncentraleproximite'];
-    }else{
+    } else {
         $descriptioncentraleproximiteBDD = '';
     }
     if ($_POST['centrale_proximite'] == 'TRUE') {
@@ -390,19 +400,19 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
             } else {
                 $_SESSION['centraleproximitemodif'] = '';
             }
-            $manager->deletecentraleproximiteprojet($idprojet);           
+            $manager->deletecentraleproximiteprojet($idprojet);
             for ($i = 0; $i < count($_POST['centrale_Proximite']); $i++) {
                 $idcentrale_proximite = substr($_POST['centrale_Proximite'][$i], 2);
                 $centraleproximite = new CentraleProximiteProjet($idcentrale_proximite, $idprojet);
                 $manager->addCentraleProximiteProjet($centraleproximite);
                 //Controle si il y un email dans la centrale de proximité
-                $idresponsable = (int)$manager->getSingle2("SELECT id_responsable_centrale_proximite FROM centraleproximite WHERE idcentraleproximite=?", $idcentrale_proximite);
-                $emailCP=$manager->getSingle2("SELECT mail FROM utilisateur,loginpassword  WHERE idlogin=idlogin_loginpassword AND idutilisateur=?", $idresponsable);
-                if(null!=$emailCP){//AFFECTATION COMME ADMINISTRATEUR LE RESPONSABLE DE LA CENTRALE DE PROXIMITE
+                $idresponsable = (int) $manager->getSingle2("SELECT id_responsable_centrale_proximite FROM centraleproximite WHERE idcentraleproximite=?", $idcentrale_proximite);
+                $emailCP = $manager->getSingle2("SELECT mail FROM utilisateur,loginpassword  WHERE idlogin=idlogin_loginpassword AND idutilisateur=?", $idresponsable);
+                if (null != $emailCP) {//AFFECTATION COMME ADMINISTRATEUR LE RESPONSABLE DE LA CENTRALE DE PROXIMITE
                     //Vérification que l'id du reponsable n'as pas déjà été sété dans la BD
-                    $oldIdResponsableCP = (int)$manager->getSinglebyArray("SELECT idutilisateur FROM utilisateuradministrateur WHERE idprojet=? AND idutilisateur=?", array($idprojet,$idresponsable));
-                 
-                    if($oldIdResponsableCP != $idresponsable){
+                    $oldIdResponsableCP = (int) $manager->getSinglebyArray("SELECT idutilisateur FROM utilisateuradministrateur WHERE idprojet=? AND idutilisateur=?", array($idprojet, $idresponsable));
+
+                    if ($oldIdResponsableCP != $idresponsable) {
                         $dateaffectation = date("Y-m-d");
                         $utilisateuradminprojet = new UtilisateurAdmin($idresponsable, $idprojet, $dateaffectation);
                         $manager->addUtilisateurAdmin($utilisateuradminprojet);
@@ -424,14 +434,14 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
             $_SESSION['descriptioncentraleproximitemodif'] = '';
             $descriptioncentraleproximite = $descriptioncentraleproximiteBDD;
         }
-    }else{
+    } else {
         $_SESSION['descriptioncentraleproximitemodif'] = '';
         $descriptioncentraleproximite = '_';
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              FIN DES CENTRALES DE PROXIMITE
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
-   
+
     if (!empty($_FILES['fichierphase2']['name'])) {
         $attachementdesc = stripslashes(Securite::bdd($_FILES['fichierphase2']['name']));
         $dossier = '../uploaddesc/';
@@ -462,38 +472,36 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //------------------------------------------------------------------------------------------------------------
 //              Traitement de la question des centrale partenaire du projet
 //------------------------------------------------------------------------------------------------------------        
-        $partenaire_projet = $_POST['question_centrale'];
-        if ($partenaire_projetBDD != $partenaire_projet) {
-            if ($partenaire_projet == 'TRUE') {
-                $_SESSION['partenairerprojetmodif'] = TXT_OUI;
-                $partenaire_projetBDD = TXT_OUI;
-            } else {
-                $_SESSION['partenairerprojetmodif'] = TXT_NON;
-                $partenaire_projetBDD = TXT_NON;
-            }
+    $partenaire_projet = $_POST['question_centrale'];
+    if ($partenaire_projetBDD != $partenaire_projet) {
+        if ($partenaire_projet == 'TRUE') {
+            $_SESSION['partenairerprojetmodif'] = TXT_OUI;
+            $partenaire_projetBDD = TXT_OUI;
         } else {
-            $_SESSION['partenairerprojetmodif'] = '';
+            $_SESSION['partenairerprojetmodif'] = TXT_NON;
+            $partenaire_projetBDD = TXT_NON;
         }
+    } else {
+        $_SESSION['partenairerprojetmodif'] = '';
+    }
 //------------------------------------------------------------------------------------------------------------
 //              Traitement des centrale partenaire du projet
 //------------------------------------------------------------------------------------------------------------        
-        if(isset($_POST['centraleRenatech'])&& $_POST['centraleRenatech']!=-1){
-            if(strlen($_POST['centraleRenatech'])==3){
-                $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,1));
-            }else{
-                $centraleRenatech= intval(substr($_POST['centraleRenatech'],2,2));
-            }
-        }else{
-            $centraleRenatech= null;
+    if (isset($_POST['centraleRenatech']) && $_POST['centraleRenatech'] != -1) {
+        if (strlen($_POST['centraleRenatech']) == 3) {
+            $centraleRenatech = intval(substr($_POST['centraleRenatech'], 2, 1));
+        } else {
+            $centraleRenatech = intval(substr($_POST['centraleRenatech'], 2, 2));
         }
+    } else {
+        $centraleRenatech = null;
+    }
 
 //------------------------------------------------------------------------------------------------------------
 //                              TRAITEMENT DU PROJETPHASE2
 //------------------------------------------------------------------------------------------------------------    
-    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet,  $centralepartenaireprojet, $idthematique_thematique, 
-            $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, 
-            $partenaire1, $porteurprojet,  $dureeestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational,$idtypecentralepartenaire
-            , $partenaire_projet,$centraleRenatech);
+    $projetphase2 = new Projetphase2($contactCentralAccueil, $idtypeprojet_typeprojet, $nbHeure, $dateDebutTravaux, $dureeprojet, $centralepartenaireprojet, $idthematique_thematique, $idautrethematique_autrethematique, $descriptifTechnologique, $attachementdesc, $verrouidentifie, $nbPlaque, $nbRun, $devis, $mailresp, $reussite, $refinterne, $devtechnologique, $nbeleve, $nomformateur, $partenaire1, $porteurprojet, $dureeestime, $descriptionautrecentrale, $etapeautrecentrale, $centrale_proximite, $descriptioncentraleproximite, $interneexterne, $internationalNational, $idtypecentralepartenaire
+            , $partenaire_projet, $centraleRenatech);
     $manager->updateProjetphase2($projetphase2, $idprojet);
     $admin = $manager->getSingle2("select administrateur from utilisateur where idutilisateur=?", $idutilisateur_utilisateur);
     //TRAITEMENT DU CAS OU L'UTLISATEUR QUI CREER LE PROJET EST DEJA ADMINISTRATEUR DE PROJET
@@ -515,25 +523,24 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
 //------------------------------------------------------------------------------
 //                          PARTENAIRE PROJET
 //------------------------------------------------------------------------------    
-    
+
     if (!empty($_POST['nombrePartenaire']) && $_POST['nombrePartenaire'] != 0) {//SI LE NOMBRE DE PARTENAIRE EST >0
-        $nombrePartenaire = $_POST['nombrePartenaire'];        
+        $nombrePartenaire = $_POST['nombrePartenaire'];
         for ($i = 0; $i < $nombrePartenaire - 1; $i++) {
-            $nomLaboEntreprise = $_POST['nomLaboEntreprise' . $i];            
-            $idtypepartenaire = substr($_POST['tp'.$i], 2,2);
+            $nomLaboEntreprise = $_POST['nomLaboEntreprise' . $i];
+            $idtypepartenaire = substr($_POST['tp' . $i], 2, 2);
             if (!empty($_POST[$_POST['nomLaboEntreprise' . $i]])) {
-                $nomLaboEntreprise = stripslashes(Securite::bdd(($_POST[$_POST['nomLaboEntreprise' . $i]])));                
+                $nomLaboEntreprise = stripslashes(Securite::bdd(($_POST[$_POST['nomLaboEntreprise' . $i]])));
             }
-            
-            $idpartenaire = $manager->getSingle("select max (idpartenaire) from partenaireprojet") + 1;             
-           
-            $newpartenaireprojet = new Partenaireprojet($idpartenaire,  $nomLaboEntreprise);
+
+            $idpartenaire = $manager->getSingle("select max (idpartenaire) from partenaireprojet") + 1;
+
+            $newpartenaireprojet = new Partenaireprojet($idpartenaire, $nomLaboEntreprise);
             $manager->addpartenaireprojet($newpartenaireprojet);
-            
-            
+
+
             $newprojetpartenaire = new Projetpartenaire($idpartenaire, $idprojet, $idtypepartenaire);
             $manager->addprojetpartenaire($newprojetpartenaire);
-            
         }
     } else {
         //IL N'A PAS DE PARTENAIRE SELECTIONNE IL FAUT SUPPRIMER LES PARTENAIRES PROJET DANS LES TABLE PARTENAIREPROJET ET PROJETPARTENAIRE
@@ -568,12 +575,12 @@ if (isset($_POST['page_precedente']) && $_POST['page_precedente'] == 'createProj
     if (!empty($_POST['ressource'])) {
         $ressource = $_POST['ressource'];
         foreach ($ressource as $chkbx) {
-            if($lang=='fr'){
+            if ($lang == 'fr') {
                 $arrayressource = $manager->getListbyArray("SELECT idressource FROM ressource where libelleressource =?", array($chkbx));
-            }else{
+            } else {
                 $arrayressource = $manager->getListbyArray("SELECT idressource FROM ressource where libelleressourceen =?", array($chkbx));
             }
-            $ressources .=$chkbx . ',';
+            $ressources .= $chkbx . ',';
             for ($i = 0; $i < count($arrayressource); $i++) {
                 $idressource_ressource = $arrayressource[$i]['idressource'];
                 $ressourceprojet = new Ressourceprojet($idprojet, $idressource_ressource);

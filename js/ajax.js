@@ -332,17 +332,23 @@ function callbackEffaceFigure(reponse) {
     document.getElementById('response').style.display='block';
 }
 
-function adminAcronyme(cheminEtFichierPhp) {
+function adminParamProjet(cheminEtFichierPhp,str,str2=null) {
     var xhr2 = getXMLHttpRequest();
     xhr2.onreadystatechange = function() {
         if (xhr2.readyState === 4 && (xhr2.status === 200 || xhr2.status === 0)) {
-            afficheInfoAdminAcronyme(xhr2.responseText);
+            if(str=='acronyme'){
+                afficheInfoAcronyme(xhr2.responseText);
+            }else if(str=='accueil'){
+                afficheInfoAccueil(xhr2.responseText);
+            }
         }
     };
     xhr2.open("GET", cheminEtFichierPhp, true);
     xhr2.send(null);
 }
-
-function afficheInfoAdminAcronyme(response) {
-    document.getElementById('imgConfigAcronyme').style.display = "block";   
+function afficheInfoAcronyme(response) {
+    document.getElementById('imgConfigAcronyme').style.display = "block";
+}
+function afficheInfoAccueil(response) {
+    document.getElementById('imgConfigAccueil').style.display = "block";
 }
