@@ -2,7 +2,7 @@
 function autocomplet() {
     var keyword = $('#nom').val();
     $.ajax({
-        url: 'https://www.renatech.org/projet-dev/ajax_refresh.php',
+        url: 'https://www.renatech.org/projet/ajax_refresh.php',
         type: 'POST',
         data: {keyword: keyword},
         success: function (data) {
