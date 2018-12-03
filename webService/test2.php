@@ -6,6 +6,8 @@ include_once '../outils/constantes.php';
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
 }else{
+     $numargs = func_num_args();
+    echo "Nombre d'arguments : $numargs\n";
     echo "L'authentification ne fonctionne pas!";  
     exit();
     

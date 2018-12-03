@@ -3,6 +3,7 @@ session_start();
 include_once 'outils/toolBox.php';
 include_once 'outils/constantes.php';
 include 'decide-lang.php';
+
 if (isset($_SESSION['pseudo'])) {
     check_authent($_SESSION['pseudo']);
 } else {
@@ -78,7 +79,7 @@ $manager = new Manager($db);
                 . "LEFT JOIN loginpassword l ON u.idlogin_loginpassword = l.idlogin "
                 . "WHERE cad.idcentrale=?  ", IDCENTRALEUSER);
     ?>
-    <form data-dojo-type="dijit/form/Form" name="paramContact"  method="post"  action="<?php echo '/' . REPERTOIRE; ?>/modifBase/updateParamProjet.php?lang=<?php echo $lang; ?>"  >
+    <form data-dojo-type="dijit/form/Form" name="paramContact"  method="post"  action="<?php echo '/' . REPERTOIRE; ?>/adminConfigAccueil.php?lang=<?php echo $lang; ?>"  >
         <fieldset id="paramContact" >
             <legend style="color: #5D8BA2;font-size: 1.2em"><b><?php echo TXT_PARAM_CONTACT_CENTRALE_ACCUEIL; ?></b></legend>
             <table>

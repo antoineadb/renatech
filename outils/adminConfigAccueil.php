@@ -8,7 +8,7 @@ include_once '../outils/toolBox.php';
 showError($_SERVER['PHP_SELF']);
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
-$bool=FALSE;var_dump($_GET);die;
+$bool=FALSE;
 if ($_GET['idutilisateur']!='-1') {
     $idutilisateur = $_GET['idutilisateur'];
     $bool= TRUE;
