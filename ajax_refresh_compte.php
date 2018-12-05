@@ -12,7 +12,7 @@ if (isset($_POST['keyword']) && !empty($_POST['keyword'])) {
     foreach ($list as $rs) {
         $nom = str_replace($_POST['keyword'], $_POST['keyword'], $rs['nom']);
         echo '<li  style="margin-left:20px" onclick="set_item(\'' . $rs['nom'] . '\');'
-                . 'set_id(\'' . $rs['idutilisateur'] . '\');">' . $nom.' <i>('.$rs['mail'] .' )</i>'. '</li>';
+                . '">' . $nom.' - '.$rs['prenom'] . '</li>';
     }
 }
 ?>
