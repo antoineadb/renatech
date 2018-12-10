@@ -207,7 +207,7 @@ $date  = $date->format('d-m-Y');
                     <input  value=""  type="text"  maxlength="100" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  
                            autocomplete="on" data-dojo-props="<?php echo REGEX_TYPE; ?>"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" <?php echo $disabled ?> >
                            <?php }else{?>
-                           <input style="margin-left:20px" value="<?php echo $contactCentralAccueil ;?>"  type="text" maxlength="100"   data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on"
+                           <input style="margin-left:20px" value="<?php if(isset($contactCentralAccueil)){echo $contactCentralAccueil;} ?>"  type="text" maxlength="100"   data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  autocomplete="on"
                             data-dojo-props="<?php echo REGEX_TYPE; ?>"  disabled="<?php echo $bool; ?>" data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" />
                     <?php }?>
                 </td>
@@ -1375,7 +1375,7 @@ function masqueetapeautrecentrale(){
                         <td>
                             <div style='float: left'>                   
                                 <?php  if($idstatut==ENATTENTEPHASE2){?>                            
-                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" 
+                                <input id='btnValiderEnvoyer' type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" 
                                        data-dojo-props="
                                         onClick:function(){
                                             ctrlPersonneCentrale();
@@ -1395,30 +1395,37 @@ function masqueetapeautrecentrale(){
                                             onClick:function(){
                                                 if(dijit.byId('modifProjet').validate()){
                                                     repautrecentrale.show();
+                                                    this.setAttribute('disabled', true);
                                                 }
                                             }"><?php echo TXT_MAJENVOYER ;?>
                                         </button>
                                  <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                     <span style="text-align: left;padding:10px;width: 300px;border-radius:5px"><?php echo TXT_MAJTRANSMISSION;?></span>
-                                </a>
-                                        
-                                        <?php }else{?>
-                                <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){rep2.show();}}" id='btnMajEnvoye' disabled="<?php echo $bool; ?>" 
+                                </a><?php }else{?>
+                                <button data-dojo-type="dijit/form/Button"  type="button" 
+                                        data-dojo-props="onClick:function(){
+                                            if(dijit.byId('modifProjet').validate()){rep2.show();}}" id='btnMajEnvoye' disabled="<?php echo $bool; ?>" 
                                            style="margin-top:15px"  ><?php echo TXT_MAJENVOYER ;?></button>
                                  <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                     <span style="text-align: left;padding:10px;width: 300px;border-radius:5px"><?php echo TXT_MAJTRANSMISSION;?></span>
                                 </a>
                                 <?php }?>
                                   <?php }?>
-                            </div>                        
-                            </td>
+                            </div>
+                        </td>
                     </tr>
                 </table>
                 <table>            
                     <tr>
                         <td id='btnSave'>
                             <button data-dojo-type="dijit/form/Button" id='btnsave' type="button" data-dojo-props="
-                                    onClick:function(){if(dijit.byId('modifProjet').validate()){save();}ctrlPersonneCentrale()}"  
+                                    onClick:function(){
+                                        if(dijit.byId('modifProjet').validate()){
+                                            save();
+                                            this.setAttribute('disabled', true)
+                                            dijit.byId('btnMajEnvoye').setAttribute('disabled', true);
+                                            };ctrlPersonneCentrale();
+                                        }"
                                     disabled="<?php echo $bool; ?>" 
                                     style="margin-top:15px"><?php echo TXT_SAVEPROJECT ;?></button>
                         </td>
@@ -1427,23 +1434,52 @@ function masqueetapeautrecentrale(){
                     <tr><td><div style="margin-top: 5px"></div></td></tr>
                 </table>
                 <?php }?>
-        <div data-dojo-type="dijit/Dialog" data-dojo-id='rep' title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;" execute="">
+        <div data-dojo-type="dijit/Dialog" data-dojo-id='rep' title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" 
+             style="width: 500px;margin-left: 20px;" execute="">
            <table class="dijitDialogPaneContentArea">
                <tr>
-                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui"  data-dojo-props="onClick:function(){valide();}">
-                           <?php echo TXT_OUI ;?></button></td>                           
-                   <td><button data-dojo-type="dijit/form/Button" type="button" data-dojo-props="onClick:function(){rep.hide();}" id="submitcancel"><?php echo TXT_ANNULE;?></button></td>
+                   <td>
+                       <button type="submit" data-dojo-type="dijit/form/Button"  id="oui"  
+                               data-dojo-props="onClick:function(){                                    
+                                    valide();
+                               }">
+                           <?php echo TXT_OUI ;?>
+                       </button>
+                   </td>                           
+                   <td>
+                       <button data-dojo-type="dijit/form/Button" type="button" 
+                               data-dojo-props="
+                                onClick:function(){                                    
+                                    rep.hide();
+                                }"
+                               id="submitcancel"><?php echo TXT_ANNULE;?>
+                       </button>
+                   </td>
                </tr>
            </table>
        </div>
         <div data-dojo-type="dijit/Dialog" data-dojo-id="rep2" title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;   ">
            <table class="dijitDialogPaneContentArea">
                <tr>
-                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui2"  data-dojo-props="onClick:function(){maj();}"><?php echo TXT_OUI ;?></button></td><td>
-                   <td><button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="onClick:function(){rep2.hide();}" id="submitCancel2"><?php echo TXT_ANNULE;?></button></td>
+                   <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui2"  
+                               data-dojo-props="onClick:function(){
+                               dijit.byId('btnMajEnvoye').setAttribute('disabled', true);
+                               dijit.byId('btnsave').setAttribute('disabled', true);
+                               maj();}"
+                               >
+                           <?php echo TXT_OUI ;?>
+                       </button>
+                   </td>
+                   <td>
+                       <button data-dojo-type="dijit/form/Button" type="submit" data-dojo-props="
+                                onClick:function(){
+                                    rep2.hide();
+                                    dijit.byId('btnMajEnvoye').setAttribute('disabled', false);
+                               }"
+                               id="submitCancel2"><?php echo TXT_ANNULE;?></button></td>
                </tr>
            </table>
-        </div>                                                                       <!---  Vous avez déja envoyer un email aux autres centrales, est ce que vous souhaiter les informer des modifications du projet?-->
+        </div><!---  Vous avez déja envoyer un email aux autres centrales, est ce que vous souhaiter les informer des modifications du projet?-->
         <div data-dojo-type="dijit/Dialog" data-dojo-id="repautrecentrale" title="<?php echo TXT_RESULTMESSAGECONFIRMAUTRECENTRALE;?>" style="width: 500px;margin-left: 20px;   ">
           <table class="dijitDialogPaneContentArea">
               <tr>
@@ -1456,6 +1492,8 @@ function masqueetapeautrecentrale(){
           function valide(){
                 document.getElementById('save').value='non';
                 document.getElementById('maj').value = 'non';
+                dijit.byId('btnValiderEnvoyer').setAttribute('disabled', true);
+                dijit.byId('btnsave').setAttribute('disabled', true);
                 modifProjet.submit();
             }
         
@@ -1610,7 +1648,11 @@ if($idstatut!=ENATTENTEPHASE2){
             <input type="text" name="datemodifstatut" id="datemodifstatut" value="<?php echo date('Y-m-d');?>" data-dojo-type="dijit/form/DateTextBox"  autocomplete="on" >
 
                 <input data-dojo-type="dijit/form/Button"  type="button"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" 
-                       data-dojo-props="onClick:function(){if(dijit.byId('modifProjet').validate()){repstatut0.show();}}" >
+                       data-dojo-props="onClick:function(){
+                            if(dijit.byId('modifProjet').validate()){                                
+                                repstatut0.show();
+                                }
+                            }" >
         </td>
     </tr>
     <?php  
@@ -1619,7 +1661,8 @@ if($idstatut!=ENATTENTEPHASE2){
     ?>
     <tr>
         <td id="validestatut" style="display: none;margin-top: 32px;">
-            <input type="submit"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>" >
+            <input type="submit"  label="<?php echo TXT_VALIDER ;?>" data-dojo-type="dijit/form/Button" disabled="<?php echo $bool; ?>"onclick="dijit.byId('btnMajEnvoye').setAttribute('disabled', true);
+            dijit.byId('btnsave').setAttribute('disabled', true);" >
         </td>
     </tr>
     </table>
@@ -1653,7 +1696,7 @@ if($idstatut!=ENATTENTEPHASE2){
             document.getElementById('save').value='non';
             document.getElementById('maj').value = 'non';   
             document.getElementById('majcentrale').value = 'oui';
-            document.getElementById('emailNon').value='oui';
+            document.getElementById('emailNon').value='oui';            
             modifProjet.submit();
         }
         function repStatutNon(){

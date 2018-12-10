@@ -1,4 +1,3 @@
-
 <script src="<?php echo '/'.REPERTOIRE ?>/js/ajax.js"></script>
 <script>require(["dojo/parser", "dijit/form/NumberTextBox"]);</script>
 <script>    
@@ -770,7 +769,7 @@
                     <table style='margin-top:35px;width:1030px'>
                         <tr>
                             <td style='margin-right: 20px;float: left;margin-top:15px'>
-                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" 
+                                <input type="button"  label="<?php echo TXT_VALIDERENVOYER ;?>" data-dojo-type="dijit/form/Button" id='btnValiderEnvoyer'
                                        data-dojo-props="onClick:function(){ctrlPersonneCentrale();afficheMenu();}">
                                 <a class="infoBulle" href="#" style='margin-bottom: 20px;'><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                 <span style="text-align: left;padding:7px;width: 430px;border-radius:5px" ><?php echo TXT_VALIDETRANSMISSION;?></span>
@@ -781,7 +780,13 @@
                     <table>
                         <tr>
                             <td id='btnSave'>
-                            <button data-dojo-type="dijit/form/Button"  type="button" data-dojo-props="onClick:function(){save()}"  disabled="<?php echo $bool; ?>" 
+                            <button data-dojo-type="dijit/form/Button"  type="button" id='btnsave'
+                                    data-dojo-props="
+                                    onClick:function(){
+                                        save();
+                                        this.setAttribute('disabled', true)
+                                        dijit.byId('btnValiderEnvoyer').setAttribute('disabled', true);
+                                    }"  disabled="<?php echo $bool; ?>" 
                                     style="margin-top:15px"><?php echo TXT_SAVEPROJECT ;?></button>
                             </td>
                             <td id="infoSave"><?php echo TXT_SAVEDATA;?></td>                        
@@ -791,10 +796,15 @@
                     </table>
                     <input type="text"  id="enregistre" name="enregistre" style='display: none' value='non' >
                     <input type="text"  id="creerprojetphase2" name="creerprojetphase2" style='display: none' value='non' >
-                    <div data-dojo-type="dijit/Dialog" data-dojo-id="rep" title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;" execute="">
+                    <div data-dojo-type="dijit/Dialog" data-dojo-id="rep" title="<?php echo TXT_RESULTMESSAGECONFIRMPHASE;?>" style="width: 500px;margin-left: 20px;" execute="" >
                         <table class="dijitDialogPaneContentArea">
                             <tr>
-                                <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui"  data-dojo-props="onClick:function(){valide();}">
+                                <td><button type="submit" data-dojo-type="dijit/form/Button"  id="oui"  data-dojo-props="
+                                            onClick:function(){                                               
+                                                dijit.byId('btnsave').setAttribute('disabled', true);
+                                                dijit.byId('btnValiderEnvoyer').setAttribute('disabled', true);
+                                                 valide();
+                                            }">
                                         <?php echo TXT_OUI ;?></button></td>                                      
                                 <td><button data-dojo-type="dijit/form/Button" type="button" data-dojo-props="onClick:function(){rep.hide();}" id="submitcancel"><?php echo TXT_ANNULE;?></button></td>
                             </tr>

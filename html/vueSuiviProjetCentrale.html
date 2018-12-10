@@ -28,6 +28,7 @@ dojo.ready(function(){
         {name: "<?php echo TXT_DEMANDEUR; ?>", field: "demandeur"},
         {name: " ", field: "imprime", width: "34px",formatter:hrefFormatterPDF},
         {name: "<?php echo TXT_PORTEURS; ?>", field: "porteur"}
+        
     ]];
     var grid = new dojox.grid.EnhancedGrid({
         id: 'grid',
@@ -91,7 +92,8 @@ dojo.ready(function(){
                         if (item) {
                             var datefin = grid.store.getValue(item, "calcfinprojet", null);
                             var datefinProche = grid.store.getValue(item, "calcfinproche", null);
-                            if(!empty(datefin)){
+                            var statutprojet = grid.store.getValue(item, "idstatutprojet", null);
+                            if(statutprojet==8){
                                 var now = new Date();
                                 var curr_month = now.getMonth();
                                 if(curr_month<10){
@@ -103,7 +105,7 @@ dojo.ready(function(){
                                 var maint = maintenant;
                                 var fin = dateFin;
                                 var finp =datefinproche;
-
+                                            
                                 if(maint>fin){
                                     row.customStyles += "color:red";
                                 }else  if(maint >=finp){
