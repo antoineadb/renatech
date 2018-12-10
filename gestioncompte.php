@@ -143,12 +143,7 @@ include 'html/header.html';
                     }
                 }
             </script>
-            <?php
-            if (!isset($_POST['nom']) || !isset($_POST['prenom'])) {
-                if (!isset($_GET['iduser'])) {
-                    include 'html/footer.html';
-                }
-            }
+            <?php            
             if (!empty($_POST['nom']) || !empty($_POST['prenom']) || isset($_GET['idutilisateur'])) {
                 if (isset($_GET['erreur'])) {
                     echo "<div id='erreur' style='width:525px; margin-top:15px;text-align:center;color:red'>" . $_GET['erreur'] . "</div>";
@@ -161,7 +156,7 @@ include 'html/header.html';
                 include 'findUsercompte.php';
                 ?>
                 </fieldset><?php
-                include 'html/footer.html';
+                include 'html/footer.html';// le bon footer ne pas supprimer
             }
             /*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
              *          CAS ACADEMIQUE
@@ -806,7 +801,7 @@ include 'html/header.html';
                             })
                         </script>
                         <?php
-                        include 'html/footer.html';
+                       include 'html/footer.html';
                         /*  ----------------------------------------------------------------------------------------------------------------------------------------------------------------
                          *  CAS INDUSTRIEL
                          *  ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1085,7 +1080,7 @@ include 'html/header.html';
                             </div>
                             <button id="progButtonNodeindust" data-dojo-type="dijit/form/Button" type="submit" name="submitButton" ></button>
                         <?php include_once 'outils/deleteAccount.php'; ?>
-                        </fieldset> <?php include 'html/footer.html'; ?>
+                        </fieldset> <?php //include 'html/footer.html'; ?>
                         </form>
                     </div><!-- navigation -->
                     </div>
