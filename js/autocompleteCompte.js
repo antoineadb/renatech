@@ -5,8 +5,12 @@ function autocomplete() {
     var url_cible;
     if(val=='comptes'){
         url_cible = window.location.href.replace('comptes/fr', 'ajax_refresh_compte.php')
-    }else if(val=='compteadmin'){
+    }else if(val=='compteadmin' ){
         url_cible = window.location.href.replace('compteadmin/fr', 'ajax_refresh_compte.php')
+    }else if(val=='compteadminaca' ){
+        url_cible = window.location.href.replace('compteadminaca', 'ajax_refresh_compte.php')
+    }else if(val=='compteadminindust' ){
+        url_cible = window.location.href.replace('compteadminindust/fr', 'ajax_refresh_compte.php')
     }
     var keyword = $('#nom').val();
     $.ajax({

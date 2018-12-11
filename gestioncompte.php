@@ -24,7 +24,8 @@ include 'html/header.html';
     </div>
     <table>
         <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
-        <?php if (!empty($_GET['msgerrcentrale'])) {
+        <?php
+        if (!empty($_GET['msgerrcentrale'])) {
             ;
             ?>
             <tr>
@@ -66,16 +67,16 @@ include 'html/header.html';
                     <tr><td><br></td></tr>
                     <tr>
                         <td valign="top" style="width: 80px;"><input type="text" style="width: 500px;border-radius: 8px;padding: 3px;" 
-                         placeholder="<?php echo TXT_SAISIRUNELETTRE; ?>" name="nom" onkeyup="autocomplete()"  id="nom" 
-                         data-dojo-type="dijit/form/ValidationTextBox" autocomplete="off"/>
+                        placeholder="<?php echo TXT_SAISIRUNELETTRE; ?>" name="nom" onkeyup="autocomplete()"  id="nom" 
+                        data-dojo-type="dijit/form/ValidationTextBox" autocomplete="off"/>
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                         <td>&nbsp;&nbsp;</td>
                         <td valign="bottom" >
                             <input name ="rechercheUser" type="submit" ondragover="tous"  value="<?php echo TXT_BOUTONRECHERCHE; ?>"  class="maj" onclick="
-                                if (document.getElementById('nom').value === '') {
-                                    document.getElementById('nom').value = '*';
-                                }"/>
+                            if (document.getElementById('nom').value === '') {
+                                document.getElementById('nom').value = '*';
+                            }"/>
                         </td>
                     </tr>
                 </table>
@@ -88,38 +89,41 @@ include 'html/header.html';
                         <?php } else { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueinterne' name='academiqueinterne' value="true"  onclick="disableOher(0)" />
                                 <label for='academiqueinterne' class='opt' ><?php echo TXT_ACADEMIQUEINTERNE; ?></label>
-                        <?php }
-                            if (isset($_POST['academiqueexterne'])) {?>
+                            <?php }
+                            if (isset($_POST['academiqueexterne'])) {
+                                ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne' value="true" checked   onclick="disableOher(0)"  />
                                 <label for='academiqueexterne' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
                             <?php } else { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='academiqueexterne' name='academiqueexterne' value="true"  onclick="disableOher(0)"  />
                                 <label for='academiqueexterne' class='opt' ><?php echo TXT_ACADEMIQUEEXTERNE; ?></label>
-                            <?php
+                                <?php
                             }
-                            if (isset($_POST['industriel'])) { ?>
+                            if (isset($_POST['industriel'])) {
+                                ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true" checked   onclick="disableOher(0)"  />
                                 <label for='industriel' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
                             <?php } else { ?>
                                 <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='industriel' name='industriel' value="true"  onclick="disableOher(0)"  />
                                 <label for='industriel' class='opt' ><?php echo TXT_INDUSTRIEL; ?></label>
                             <?php } ?>
-                            <?php if ($_SESSION['idTypeUser'] == ADMINNATIONNAL) { ?>
-                                    <br/><br/>
-                                    <?php if (isset($_POST['admin_national'])) {?>
-                                            <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_national' name='admin_national' value="true" checked  onclick="disableOher(1)"  />
-                                            <label for='admin_national' class='opt' ><?php echo TXT_ADMINNATIONAL; ?></label>
-                                    <?php } else { ?>
-                                            <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_national' name='admin_national' value="true"  onclick="disableOher(1)"  />
-                                            <label for='admin_national' class='opt' ><?php echo TXT_ADMINNATIONAL; ?></label>
-                                    <?php }
-                                        if (isset($_POST['admin_local'])) { ?>
-                                            <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_local' name='admin_local' value="true" checked onclick="disableOher(2)"/>
-                                            <label for='admin_local' class='opt' ><?php echo TXT_ADMINLOCAL; ?></label>
-                                    <?php } else { ?>
-                                            <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_local' name='admin_local' value="true" onclick="disableOher(2)"   />
-                                            <label for='admin_local' class='opt' ><?php echo TXT_ADMINLOCAL; ?></label>
-                                    <?php } ?>
+                        <?php if ($_SESSION['idTypeUser'] == ADMINNATIONNAL) { ?>
+                                <br/><br/>
+                                <?php if (isset($_POST['admin_national'])) { ?>
+                                    <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_national' name='admin_national' value="true" checked  onclick="disableOher(1)"  />
+                                    <label for='admin_national' class='opt' ><?php echo TXT_ADMINNATIONAL; ?></label>
+                                <?php } else { ?>
+                                    <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_national' name='admin_national' value="true"  onclick="disableOher(1)"  />
+                                    <label for='admin_national' class='opt' ><?php echo TXT_ADMINNATIONAL; ?></label>
+                                <?php }
+                                if (isset($_POST['admin_local'])) {
+                                    ?>
+                                    <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_local' name='admin_local' value="true" checked onclick="disableOher(2)"/>
+                                    <label for='admin_local' class='opt' ><?php echo TXT_ADMINLOCAL; ?></label>
+                                <?php } else { ?>
+                                    <input  class='opt'  type='checkbox' data-dojo-type='dijit/form/CheckBox' id='admin_local' name='admin_local' value="true" onclick="disableOher(2)"   />
+                                    <label for='admin_local' class='opt' ><?php echo TXT_ADMINLOCAL; ?></label>
+                                <?php } ?>
                             <?php } ?>                                
                         </td></tr>
                 </table>
@@ -143,7 +147,7 @@ include 'html/header.html';
                     }
                 }
             </script>
-            <?php            
+            <?php
             if (!empty($_POST['nom']) || !empty($_POST['prenom']) || isset($_GET['idutilisateur'])) {
                 if (isset($_GET['erreur'])) {
                     echo "<div id='erreur' style='width:525px; margin-top:15px;text-align:center;color:red'>" . $_GET['erreur'] . "</div>";
@@ -156,9 +160,9 @@ include 'html/header.html';
                 include 'findUsercompte.php';
                 ?>
                 </fieldset><?php
-                include 'html/footer.html';// le bon footer ne pas supprimer
+                include 'html/footer.html'; // le bon footer ne pas supprimer
             }
-            /*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
              *          CAS ACADEMIQUE
              * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
              */
@@ -180,6 +184,16 @@ include 'html/header.html';
                 t.idtutelle = u.idtutelle_tutelle 
                 AND d.iddiscipline = u.iddiscipline_disciplinescientifique 
                 AND idutilisateur=?", $iduser);
+
+                $projetCompte = $manager->getList2("SELECT p.numero FROM utilisateur u"
+                        . " LEFT JOIN creer c ON c.idutilisateur_utilisateur= u.idutilisateur"
+                        . " LEFT JOIN projet p ON c.idprojet_projet= p.idprojet"
+                        . " WHERE u.idutilisateur=? ", $iduser);
+                $numero = "";
+                foreach ($projetCompte as $key => $value) {
+                    $numero .= $value['numero'] . " ,";
+                }
+                $numero = substr($numero, 0, -1);
                 for ($i = 0; $i < count($iduser); $i++) {
                     $nom = $row[$i]['nom'];
                     $prenom = $row[$i]['prenom'];
@@ -214,15 +228,16 @@ include 'html/header.html';
                     $valeuractif = TXT_NONACTIF;
                 } else {
                     $valeuractif = TXT_ACTIF;
-                }?>
-            <br>
-                <fieldset id="compteuser" style="border-color: #5D8BA2;width: 1008px;padding-bottom:10px;padding-top:8px;font-size:1.2em;" >
-                    <legend><?php echo TXT_COMPTE; ?></legend>
-                <?php
-                if (isset($_GET['update']) && $_GET['update'] == 'ok') {
-                    echo '<table style="width:500px" align:center><tr><td  align=center><div  style="height:20px "><b>' . TXT_COMPTEMAJ . '</b></div></td><tr></table>';
                 }
                 ?>
+                <br>
+                <fieldset id="compteuser" style="border-color: #5D8BA2;width: 1008px;padding-bottom:10px;padding-top:8px;font-size:1.2em;" >
+                    <legend><?php echo TXT_COMPTE; ?></legend>
+    <?php
+    if (isset($_GET['update']) && $_GET['update'] == 'ok') {
+        echo '<table style="width:500px" align:center><tr><td  align=center><div  style="height:20px "><b>' . TXT_COMPTEMAJ . '</b></div></td><tr></table>';
+    }
+    ?>
                     <div id="compteutilisateuraca" >
                         <table>
                             <tr>
@@ -317,13 +332,13 @@ include 'html/header.html';
                                     ?>
                                     <select name="qualitedemandeuraca" id="qualitedemandeuraca" data-dojo-type="dijit/form/Select" style="width: 318px;margin-left: 50px" 
                                             onChange="if (dijit.byId(this.id).get('value') === '<?php echo 'qa' . NONPERMANENT ?>') {
-                                                            document.getElementById('trnomresponsable').style.display = 'table-row';
-                                                            document.getElementById('trmailresponsable').style.display = 'table-row';
-                                                        } else {
-                                                            document.getElementById('trnomresponsable').style.display = 'none';
-                                                            document.getElementById('trmailresponsable').style.display = 'none';
-                                                        }
-                                                        ;" >
+                                                        document.getElementById('trnomresponsable').style.display = 'table-row';
+                                                        document.getElementById('trmailresponsable').style.display = 'table-row';
+                                                    } else {
+                                                        document.getElementById('trnomresponsable').style.display = 'none';
+                                                        document.getElementById('trmailresponsable').style.display = 'none';
+                                                    }
+                                                    ;" >
                                                 <?php
                                                 for ($i = 0; $i < count($rowqualite); $i++) {
                                                     if ($idqualitedemandeuraca == $rowqualite[$i]['idqualitedemandeuraca']) {
@@ -381,11 +396,11 @@ include 'html/header.html';
                                             <?php $rowlibelleemployeur = $manager->getList('SELECT idemployeur,libelleemployeur FROM nomemployeur order by idemployeur asc;'); ?>
                                     <select name="libelleemployeur" id="libelleemployeur" data-dojo-type="dijit/form/Select" style="width: 318px;margin-left: 50px"
                                             onChange="if (dijit.byId(this.id).get('displayedValue') === 'Autres') {
-                                                            document.getElementById('trAutrenom').style.display = ''
-                                                        } else {
-                                                            document.getElementById('trAutrenom').style.display = 'none'
-                                                        }
-                                                        ;" >
+                                                        document.getElementById('trAutrenom').style.display = ''
+                                                    } else {
+                                                        document.getElementById('trAutrenom').style.display = 'none'
+                                                    }
+                                                    ;" >
                                                 <?php
                                                 for ($i = 0; $i < count($rowlibelleemployeur); $i++) {
                                                     if ($libelleemployeur == $rowlibelleemployeur[$i]['libelleemployeur']) {
@@ -421,11 +436,11 @@ include 'html/header.html';
                                             <?php $rowtutelle = $manager->getList('SELECT idtutelle,libelletutelle FROM tutelle order by idtutelle asc;'); ?>
                                     <select name="libelletutelle" id="libelletutelle" data-dojo-type="dijit/form/Select" style="width: 318px;margin-left: 50px"
                                             onChange="if (dijit.byId(this.id).get('displayedValue') === 'Autres') {
-                                                            document.getElementById('trAutretutelle').style.display = ''
-                                                        } else {
-                                                            document.getElementById('trAutretutelle').style.display = 'none'
-                                                        }
-                                                        ;" >
+                                                        document.getElementById('trAutretutelle').style.display = ''
+                                                    } else {
+                                                        document.getElementById('trAutretutelle').style.display = 'none'
+                                                    }
+                                                    ;" >
                                                 <?php
                                                 for ($i = 0; $i < count($rowtutelle); $i++) {
                                                     if ($libelletutelle == $rowtutelle[$i]['libelletutelle']) {
@@ -452,11 +467,11 @@ include 'html/header.html';
                                 <td><?php $rowDiscipline = $manager->getList('SELECT iddiscipline,libellediscipline,libelledisciplineen FROM disciplinescientifique where masquediscipline!=TRUE order by iddiscipline asc;'); ?>
                                     <select name="libellediscipline" id="libellediscipline" data-dojo-type="dijit/form/Select" style="width: 318px;margin-left: 50px"
                                             onChange="if (dijit.byId(this.id).get('DisplayedValue') === 'Autres') {
-                                                            document.getElementById('trDiscipline').style.display = ''
-                                                        } else {
-                                                            document.getElementById('trDiscipline').style.display = 'none'
-                                                        }
-                                                        ;" >
+                                                        document.getElementById('trDiscipline').style.display = ''
+                                                    } else {
+                                                        document.getElementById('trDiscipline').style.display = 'none'
+                                                    }
+                                                    ;" >
                                                 <?php
                                                 for ($i = 0; $i < count($rowDiscipline); $i++) {
                                                     if ($libellediscipline == $rowDiscipline[$i]['libellediscipline']) {
@@ -586,56 +601,59 @@ include 'html/header.html';
                                         <td>
                                             <select name="centrale" id="centrale"   data-dojo-type="dijit/form/Select" style="width: 318px;margin-left: 50px" data-dojo-props="value:'<?php echo $libellecentrale; ?>',placeHolder:'<?php echo TXT_SELECTCENTRALE; ?>'"  >
                                                 <option ><?php echo $libellecentrale; ?></option>
-            <?php
-            for ($i = 0; $i < count($rowcentrale); $i++) {
-                echo '<option value="' . 'ce' . ($rowcentrale[$i]['idcentrale']) . '">' . $rowcentrale[$i]['libellecentrale'] . '</option>';
-            }
-            ?>
+                                            <?php
+                                            for ($i = 0; $i < count($rowcentrale); $i++) {
+                                                echo '<option value="' . 'ce' . ($rowcentrale[$i]['idcentrale']) . '">' . $rowcentrale[$i]['libellecentrale'] . '</option>';
+                                            }
+                                            ?>
                                             </select>
                                         </td>
                                             <?php } else { ?>
                                         <td>
                                             <select name="centrale" required="true"  id="centrale" data-dojo-type="dijit/form/FilteringSelect" style="width: 318px;margin-left: 50px" data-dojo-props="value:'',placeHolder:'<?php echo TXT_SELECTCENTRALE; ?>'"  >
-            <?php
-            for ($i = 0; $i < count($rowcentrale2); $i++) {
-                echo '<option value="' . 'ce' . ($rowcentrale2[$i]['idcentrale']) . '">' . $rowcentrale2[$i]['libellecentrale'] . '</option>';
-            }
-            ?>
+                                            <?php
+                                            for ($i = 0; $i < count($rowcentrale2); $i++) {
+                                                echo '<option value="' . 'ce' . ($rowcentrale2[$i]['idcentrale']) . '">' . $rowcentrale2[$i]['libellecentrale'] . '</option>';
+                                            }
+                                            ?>
                                             </select>
                                         </td>
                                 <?php } ?>
                                 </tr>                        
                             <?php } ?>
 
-                            <?php 
-                            /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                            <?php /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                              *          CAS ACADEMIQUE INTERNE
                              * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
                              */ ?>
-    <?php
-    if (!empty($libellecentrale)) {
-        $vueprojetcentrale = $manager->getSingle2("select vueprojetcentrale from utilisateur where idutilisateur=?", $_GET['iduser']);
-        ?>
+                            <?php 
+                                if (!empty($libellecentrale)) {
+                                    $vueprojetcentrale = $manager->getSingle2("select vueprojetcentrale from utilisateur where idutilisateur=?", $_GET['iduser']);?>
                                 <tr>
                                     <th style="text-align: left"><?php echo TXT_VUEPROJETDELACENTRALE; ?><a class="infoBulle" href="#"><img src='<?php echo "/" . REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                                             <span style="text-align: left;padding:10px;width: 420px;border-radius:5px" ><?php echo affiche('TXT_AIDEVUEPROJETCENTRALE'); ?></span>
                                         </a></th><td></td>
                                     <td>
                                         <div style="margin-left: 50px">
-                                            <?php if ($vueprojetcentrale == TRUE) { ?>
+                                <?php if ($vueprojetcentrale == TRUE) { ?>
                                                 <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id ="vueOui" checked="true"  class="btRadio" ><?php echo TXT_OUI; ?>
                                                 <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id="vueNon"  class="btRadio"> <?php echo TXT_NON; ?>
-        <?php } else { ?>
+                                <?php } else { ?>
                                                 <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id ="vueOui"   class="btRadio" ><?php echo TXT_OUI; ?>
                                                 <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="vueprojetcentrale" id="vueNon" checked="true"  class="btRadio"> <?php echo TXT_NON; ?>
-        <?php } ?>
+                                <?php } ?>
                                         </div>
-                                    </td>
+                                        </td>
                                 </tr>
-    <?php } ?>
+                                <?php } ?>
+                                <tr>
+                                    <th style="text-align: left"><?php echo TXT_PROJECT.'(s)'; ?></th>
+                                    <td></td>
+                                    <td><textarea style="margin-left: 50px;margin-top: 20px;margin: 20px 0px 0px 50px; width: 314px; height: 75px;" readonly="true" ><?php echo $numero;?></textarea></td>
+                                </tr>
                         </table>
                         <button id="progButtonNode" data-dojo-type="dijit/form/Button" type="submit" name="submitButtonThree" value="Submit"></button>                        
-    <?php include_once 'outils/deleteAccount.php'; ?>
+                        <?php include_once 'outils/deleteAccount.php'; ?>
                         <script>
                             require(["dijit/form/Button", "dojo/dom", "dojo/domReady!"], function (Button, dom) {
                                 // Create a button programmatically:
@@ -801,7 +819,7 @@ include 'html/header.html';
                             })
                         </script>
                         <?php
-                       include 'html/footer.html';
+                        include 'html/footer.html';
                         /*  ----------------------------------------------------------------------------------------------------------------------------------------------------------------
                          *  CAS INDUSTRIEL
                          *  ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -815,6 +833,16 @@ include 'html/header.html';
         WHERE l.idlogin = u.idlogin_loginpassword AND q.idqualitedemandeurindust = u.idqualitedemandeurindust_qualitedemandeurindust AND
         i.idutilisateur_utilisateur = u.idutilisateur AND a.idutilisateur_utilisateur = u.idutilisateur AND s.idsecteuractivite = i.idsecteuractivite_secteuractivite
 	AND t.idtypeentreprise = a.idtypeentreprise_typeentreprise and idutilisateur=?", array($iduser));
+                        
+                        $projetCompte = $manager->getList2("SELECT p.numero FROM utilisateur u"
+                        . " LEFT JOIN creer c ON c.idutilisateur_utilisateur= u.idutilisateur"
+                        . " LEFT JOIN projet p ON c.idprojet_projet= p.idprojet"
+                        . " WHERE u.idutilisateur=? ", $iduser);
+                        $numero = "";
+                        foreach ($projetCompte as $key => $value) {
+                            $numero .= $value['numero'] . " ,";
+                        }
+                        $numero = substr($numero, 0, -1);
                         for ($i = 0; $i < count($rowindust); $i++) {
                             $nomuserindust = $rowindust[$i]['nom'];
                             $prenomuserindust = $rowindust[$i]['prenom'];
@@ -845,11 +873,11 @@ include 'html/header.html';
                         ?>
                         <fieldset id="compteuserindust" style="border-color: #5D8BA2;width: 1008px;padding-bottom:10px;padding-top:8px;font-size:1.2em" >
                             <legend><?php echo TXT_COMPTE; ?></legend>
-                        <?php
-                        if (isset($_GET['update']) && $_GET['update'] == 'ok') {
-                            echo '<table style="width:500px" align:center><tr><td  align=center><div  style="height:20px "><b>' . TXT_COMPTEMAJ . '</b></div></td><tr></table>';
-                        }
-                        ?>
+                            <?php
+                            if (isset($_GET['update']) && $_GET['update'] == 'ok') {
+                                echo '<table style="width:500px" align:center><tr><td  align=center><div  style="height:20px "><b>' . TXT_COMPTEMAJ . '</b></div></td><tr></table>';
+                            }
+                            ?>
                             <div id="compteutilisateurindust" >
                                 <table>
                                     <tr>
@@ -954,13 +982,13 @@ include 'html/header.html';
                                             ?>
                                             <select name="qualitedemandeurindust" id="qualitedemandeurindust" data-dojo-type="dijit/form/Select" style="width: 318px;margin-left: 50px" 
                                                     onChange="if (dijit.byId(this.id).get('value') === '<?php echo 'qa' . NONPERMANENTINDUST ?>') {
-                                                                    document.getElementById('trnomresponsableindust').style.display = 'table-row';
-                                                                    document.getElementById('trmailresponsableindust').style.display = 'table-row';
-                                                                } else {
-                                                                    document.getElementById('trnomresponsableindust').style.display = 'none';
-                                                                    document.getElementById('trmailresponsableindust').style.display = 'none';
-                                                                }
-                                                                ;" >
+                                                                document.getElementById('trnomresponsableindust').style.display = 'table-row';
+                                                                document.getElementById('trmailresponsableindust').style.display = 'table-row';
+                                                            } else {
+                                                                document.getElementById('trnomresponsableindust').style.display = 'none';
+                                                                document.getElementById('trmailresponsableindust').style.display = 'none';
+                                                            }
+                                                            ;" >
                                                         <?php
                                                         for ($i = 0; $i < count($rowqualite); $i++) {
                                                             if ($idqualitedemandeurindust == $rowqualite[$i]['idqualitedemandeurindust']) {
@@ -976,13 +1004,10 @@ include 'html/header.html';
                                                         ?>
                                             </select>
                                         </td>
-                                    </tr>
-                                    <!-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+                                    </tr>                                    
                                     <?php if (!empty($nomresponsable)) {
                                         $nomResponsable = removeDoubleQuote($nomresponsable);
-                                    ?>                                
+                                        ?>                                
                                         <tr  id="trnomresponsableindust">
                                             <td valign="top"><?php echo TXT_NOMRESPONSABLE; ?> </td><td></td>
                                             <td>
@@ -997,7 +1022,7 @@ include 'html/header.html';
                                                        style="width: 318px;margin-left: 50px"  invalidMessage="<?php echo TXT_EMAILNONVALIDE ?>" autocomplete="on"  value="<?php echo $mailresponsable; ?>"/>
                                             </td>
                                         </tr>                                        
-                                     <?php } else { ?>
+                                    <?php } else { ?>
                                         <tr  id="trnomresponsableindust" style="display: none">
                                             <td valign="top"><?php echo TXT_NOMRESPONSABLE; ?> </td><td></td>
                                             <td>
@@ -1070,17 +1095,22 @@ include 'html/header.html';
                                         </td>
                                     </tr>
                                     <tr>
-                                    <?php $libelledroit = $manager->getSingle2("select libelletype FROM typeutilisateur where idtypeutilisateur=?", $iddroit); ?>
+                                        <?php $libelledroit = $manager->getSingle2("select libelletype FROM typeutilisateur where idtypeutilisateur=?", $iddroit); ?>
                                         <th style="text-align: left"><?php echo TXT_DROITACTUEL; ?></th><td></td>
                                         <td>
                                             <input name ="rechercheUser" type="text" data-dojo-type="dijit/form/ValidationTextBox" disabled="disabled" value="<?php echo $libelledroit; ?>"   style="width: 318px;margin-left: 50px"  >
                                         </td>
                                     </tr>
+                                    <tr>
+                                    <th style="text-align: left"><?php echo TXT_PROJECT.'(s)'; ?></th>
+                                    <td></td>
+                                    <td><textarea style="margin-left: 50px;margin-top: 20px;margin: 20px 0px 0px 50px; width: 314px; height: 75px;" readonly="true" ><?php echo $numero;?></textarea></td>
+                                </tr>
                                 </table>
                             </div>
                             <button id="progButtonNodeindust" data-dojo-type="dijit/form/Button" type="submit" name="submitButton" ></button>
-                        <?php include_once 'outils/deleteAccount.php'; ?>
-                        </fieldset> <?php //include 'html/footer.html'; ?>
+                            <?php include_once 'outils/deleteAccount.php'; ?>
+                        </fieldset> 
                         </form>
                     </div><!-- navigation -->
                     </div>

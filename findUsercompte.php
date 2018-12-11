@@ -21,141 +21,141 @@ if (!empty($_SESSION['pseudo'])) {
     if ($typeUser == ADMINLOCAL) {
         $idcentrale_centrale = IDCENTRALEUSER;
         $localinterne = "
-            SELECT 
+            SELECT
+                count(c.idprojet_projet) as nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif 
             FROM 
-                loginpassword l,utilisateur u 
+                loginpassword l
+                LEFT JOIN utilisateur u ON l.idlogin = u.idlogin_loginpassword
+                LEFT JOIN creer c ON c.idutilisateur_utilisateur = u.idutilisateur
             WHERE 
                 l.idlogin = u.idlogin_loginpassword 
                 AND idtypeutilisateur_typeutilisateur <> ? 
                 AND u.idqualitedemandeuraca_qualitedemandeuraca is not null 
                 AND u.idcentrale_centrale is not null 
                 AND idtypeutilisateur_typeutilisateur <>? 
-                AND idcentrale_centrale=? ";
+                AND idcentrale_centrale=? 
+                GROUP BY u.idutilisateur,l.pseudo,u.idcentrale_centrale,
+                u.idtypeutilisateur_typeutilisateur,
+                u.idqualitedemandeurindust_qualitedemandeurindust,
+                u.idqualitedemandeuraca_qualitedemandeuraca,
+                u.idutilisateur,
+                u.prenom,
+                u.nom, 
+                u.datecreation,l.actif  
+                ";
         $localexterne = "
-            SELECT 
+            SELECT
+                count(c.idprojet_projet) as nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif
             FROM 
-                loginpassword l,utilisateur u 
+                loginpassword l
+                LEFT JOIN utilisateur u ON l.idlogin = u.idlogin_loginpassword
+                LEFT JOIN creer c ON c.idutilisateur_utilisateur = u.idutilisateur
             WHERE 
                 l.idlogin = u.idlogin_loginpassword 
             AND idtypeutilisateur_typeutilisateur <> ? 
             AND idcentrale_centrale is null
             AND u.idqualitedemandeurindust_qualitedemandeurindust is null  
-            AND idtypeutilisateur_typeutilisateur <>?";
+            AND idtypeutilisateur_typeutilisateur <>?
+            GROUP BY u.idutilisateur,l.pseudo,u.idcentrale_centrale,
+                u.idtypeutilisateur_typeutilisateur,
+                u.idqualitedemandeurindust_qualitedemandeurindust,
+                u.idqualitedemandeuraca_qualitedemandeuraca,
+                u.idutilisateur,
+                u.prenom,
+                u.nom, 
+                u.datecreation,l.actif  ";
         $localindustriel = "
-            SELECT 
+            SELECT  
+                count(c.idprojet_projet) as nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif
             FROM 
-            loginpassword l,utilisateur u
+            loginpassword l
+                LEFT JOIN utilisateur u ON l.idlogin = u.idlogin_loginpassword
+                LEFT JOIN creer c ON c.idutilisateur_utilisateur = u.idutilisateur            
             WHERE l.idlogin = u.idlogin_loginpassword 
-            AND idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL";
+            AND idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL
+            GROUP BY u.idutilisateur,l.pseudo,u.idcentrale_centrale,
+                u.idtypeutilisateur_typeutilisateur,
+                u.idqualitedemandeurindust_qualitedemandeurindust,
+                u.idqualitedemandeuraca_qualitedemandeuraca,
+                u.idutilisateur,
+                u.prenom,
+                u.nom, 
+                u.datecreation,l.actif ";
         $localinternenom = "
             SELECT 
+                count(c.idprojet_projet) as nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
-                u.datecreation,l.actif FROM loginpassword l,utilisateur u
-            WHERE 
-                l.idlogin = u.idlogin_loginpassword 
-                AND idtypeutilisateur_typeutilisateur <> ? 
+                u.datecreation,l.actif 
+            FROM loginpassword l
+            	LEFT JOIN utilisateur u ON l.idlogin = u.idlogin_loginpassword
+                LEFT JOIN creer c ON c.idutilisateur_utilisateur = u.idutilisateur	
+            WHERE idtypeutilisateur_typeutilisateur <> ? 
                 AND u.idqualitedemandeuraca_qualitedemandeuraca is not null 
                 AND u.idcentrale_centrale is not null and lower(nom) like lower(?) 
                 AND idtypeutilisateur_typeutilisateur <>? 
-                AND idcentrale_centrale=? ";
+                AND idcentrale_centrale=? 
+                GROUP BY u.idutilisateur,l.pseudo,u.idcentrale_centrale,
+                u.idtypeutilisateur_typeutilisateur,
+                u.idqualitedemandeurindust_qualitedemandeurindust,
+                u.idqualitedemandeuraca_qualitedemandeuraca,
+                u.idutilisateur,
+                u.prenom,
+                u.nom, 
+                u.datecreation,l.actif                 ";
+        
+        
+        
         $localexternenom = "
-            SELECT 
+            SELECT
+                count(c.idprojet_projet) as nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif
             FROM 
-                loginpassword l,utilisateur u 
+                loginpassword l
+                LEFT JOIN utilisateur u ON l.idlogin = u.idlogin_loginpassword
+                LEFT JOIN creer c ON c.idutilisateur_utilisateur = u.idutilisateur
             WHERE 
                 l.idlogin = u.idlogin_loginpassword 
                 AND idtypeutilisateur_typeutilisateur <> ? 
                 AND idcentrale_centrale is null
                 AND u.idqualitedemandeurindust_qualitedemandeurindust is null 
                 AND lower(nom) like lower(?) 
-                AND idtypeutilisateur_typeutilisateur <>?";
+                AND idtypeutilisateur_typeutilisateur <>?
+                GROUP BY u.idutilisateur,l.pseudo,u.idcentrale_centrale,
+                u.idtypeutilisateur_typeutilisateur,
+                u.idqualitedemandeurindust_qualitedemandeurindust,
+                u.idqualitedemandeuraca_qualitedemandeuraca,
+                u.idutilisateur,
+                u.prenom,
+                u.nom, 
+                u.datecreation,l.actif ";
         $localindustrielnom = "
-            SELECT 
+            SELECT
+                count(c.idprojet_projet) as nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif
             FROM 
-                loginpassword l,utilisateur u
+                loginpassword l
+                LEFT JOIN utilisateur u ON l.idlogin = u.idlogin_loginpassword
+                LEFT JOIN creer c ON c.idutilisateur_utilisateur = u.idutilisateur
             WHERE 
                 l.idlogin = u.idlogin_loginpassword 
                 AND idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL
-                AND lower(nom) like lower(?) ";
-        $localinterneprenom = "
-            SELECT 
-                l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
-                u.datecreation,l.actif FROM loginpassword l,utilisateur u
-            WHERE 
-                l.idlogin = u.idlogin_loginpassword 
-                AND idtypeutilisateur_typeutilisateur <> ? 
-                AND u.idqualitedemandeuraca_qualitedemandeuraca is not null 
-                AND u.idcentrale_centrale is not null AND lower(prenom) like lower(?) 
-                AND idtypeutilisateur_typeutilisateur <>? 
-                AND idcentrale_centrale=? ";
-        $localexterneprenom = "
-            SELECT 
-                l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
-                u.datecreation,l.actif
-            FROM 
-                loginpassword l,utilisateur u 
-            WHERE 
-                l.idlogin = u.idlogin_loginpassword 
-                AND idtypeutilisateur_typeutilisateur <> ? 
-                AND idcentrale_centrale is null
-                AND u.idqualitedemandeurindust_qualitedemandeurindust is null 
-                AND lower(prenom) like lower(?) 
-                AND idtypeutilisateur_typeutilisateur <>?";
-        $localindustrielprenom = "
-            SELECT 
-                l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
-                u.datecreation,l.actif
-            FROM 
-                loginpassword l,utilisateur u
-            WHERE 
-                l.idlogin = u.idlogin_loginpassword 
-                AND idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL
-                AND lower(prenom) like lower(?) ";
-        $localinternenomprenom = "
-            SELECT 
-                l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
-                u.datecreation,l.actif FROM loginpassword l,utilisateur u
-            WHERE 
-                l.idlogin = u.idlogin_loginpassword 
-                AND idtypeutilisateur_typeutilisateur <> ? 
-                AND u.idqualitedemandeuraca_qualitedemandeuraca is not null
-                AND u.idcentrale_centrale is not null 
-                AND lower(nom) like lower(?) lower(prenom) like lower(?) 
-                AND idtypeutilisateur_typeutilisateur <>? 
-                AND idcentrale_centrale=? ";
-        $localexternenomprenom = "
-            SELECT 
-                .pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
-                u.datecreation,l.actif
-            FROM 
-                loginpassword l,utilisateur u 
-            WHERE 
-                l.idlogin = u.idlogin_loginpassword 
-                AND idtypeutilisateur_typeutilisateur <> ? 
-                AND idcentrale_centrale is null
-                AND u.idqualitedemandeurindust_qualitedemandeurindust is null 
-                AND lower(nom) like lower(?) lower(prenom) like lower(?) 
-                AND idtypeutilisateur_typeutilisateur <>?";
-        $localindustrielnomprenom = "
-            SELECT 
-                l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
-                u.datecreation,l.actif
-            FROM 
-                loginpassword l,utilisateur u
-            WHERE 
-                l.idlogin = u.idlogin_loginpassword 
-                AND idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL
-                AND lower(nom) like lower(?) lower(prenom) like lower(?) ";
+                AND lower(nom) like lower(?) 
+                GROUP BY u.idutilisateur,l.pseudo,u.idcentrale_centrale,
+                u.idtypeutilisateur_typeutilisateur,
+                u.idqualitedemandeurindust_qualitedemandeurindust,
+                u.idqualitedemandeuraca_qualitedemandeuraca,
+                u.idutilisateur,
+                u.prenom,
+                u.nom, 
+                u.datecreation,l.actif ";
         
         if (!empty($_POST['nom']) && $_POST['nom'] != '*') {// CAS OU ON SAISIE UN NOM
             $nom = pg_escape_string($_POST['nom']); 
@@ -224,237 +224,56 @@ and u.idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_cen
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword 
 and idcentrale_centrale is null and u.idqualitedemandeurindust_qualitedemandeurindust is null and lower(nom) like lower(?)";
         $industrielnom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword  and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL and lower(nom) like lower(?)";
-        $interneprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword 
-and u.idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is not null and lower(prenom) like lower(?)";
-        $externeprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword 
-and idcentrale_centrale is null and u.idqualitedemandeurindust_qualitedemandeurindust is null and lower(prenom) like lower(?)";
-        $industrielprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL and lower(prenom) like lower(?)";
-        $internenomprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword 
-and u.idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is not null and lower(nom) like lower(?) and lower(prenom) like lower(?)";
-        $externenomprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword 
-and idcentrale_centrale is null and u.idqualitedemandeurindust_qualitedemandeurindust is null and lower(nom) like lower(?) and lower(prenom) like lower(?)";
-        $industrielnomprenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword  and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL and lower(nom) like lower(?) and lower(prenom) like lower(?)";
+FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword  and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL and lower(nom) like lower(?)";        
 $admin_national_local_user ="SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword AND idtypeutilisateur_typeutilisateur=?
 ";
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON SAISIE UN NOM
-//------------------------------------------------------------------------------------------------------------------------------
-        if (!empty($_POST['nom']) && $_POST['nom'] != '*') {
+        if (!empty($_POST['nom']) && $_POST['nom'] != '*') {//CAS OU ON SAISIE UN NOM
             $nom = pg_escape_string($_POST['nom']);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE EXTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-            if (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
-                $req = $internenom . " union " . $externenom . " union " . $industrielnom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $nom, ADMINNATIONNAL, $nom, ADMINNATIONNAL, $nom);
+            if (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {//CAS OU ON A COCHE ACADEMIQUE INTERNE EXTERNE ET INDUSTRIEL
+                $req = $internenom . " union " . $externenom . " union " . $industrielnom . " order by datecreation asc ";                
                 $param = array($nom, $nom,$nom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE ET EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne'])) {
+            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne'])) {//CAS OU ON A COCHE ACADEMIQUE INTERNE ET EXTERNE
                 $req = $internenom . " union " . $externenom . " order by datecreation asc";
                 //$param = array(ADMINNATIONNAL, $nom, ADMINNATIONNAL, $nom);
                 $param = array($nom, $nom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['industriel'])) {
+            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['industriel'])) {//CAS OU ON A COCHE ACADEMIQUE INTERNE ET INDUSTRIEL
                 $req = $internenom . " union " . $industrielnom . " order by datecreation asc";
                 //$param = array(ADMINNATIONNAL, $nom, ADMINNATIONNAL, $nom);
                 $param = array($nom, $nom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE EXTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
+            } elseif (!empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {//CAS OU ON A COCHE ACADEMIQUE EXTERNE ET INDUSTRIEL
                 $req = $externenom . " union " . $industrielnom . " order by datecreation asc";
-                //$param = array(ADMINNATIONNAL, $nom, ADMINNATIONNAL, $nom);
                 $param = array($nom, $nom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueexterne'])) {
+            } elseif (!empty($_POST['academiqueexterne'])) {//CAS OU ON A COCHE ACADEMIQUE EXTERNE
                 $req = $externenom . " order by datecreation asc";
-                //$param = array(ADMINNATIONNAL, $nom);
                 $param = array($nom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueinterne'])) {
+            } elseif (!empty($_POST['academiqueinterne'])) {//CAS OU ON A COCHE ACADEMIQUE INTERNE
                 $req = $internenom . " order by datecreation asc";
                 $param = array(ADMINNATIONNAL, $nom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['industriel'])) {
-                $req = $industrielnom . " order by datecreation asc";
-                //$param = array(ADMINNATIONNAL, $nom);
+            } elseif (!empty($_POST['industriel'])) {//CAS OU ON A COCHE ACADEMIQUE INDUSTRIEL
+                $req = $industrielnom . " order by datecreation asc";            
                 $param = array($nom);
             }
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON SAISIE UN PRENOM SEUL
-//------------------------------------------------------------------------------------------------------------------------------
-        } elseif (!empty($_POST['prenom']) && $_POST['prenom'] != '*') {
-            $prenom = pg_escape_string($_POST['prenom']);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE EXTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-            if (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
-                $req = $interneprenom . " union " . $externeprenom . " union " . $industrielprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $prenom, ADMINNATIONNAL, $prenom, ADMINNATIONNAL, $prenom);
-                $param = array($prenom, $prenom, $prenom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE ET EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne'])) {
-                $req = $interneprenom . " union " . $externeprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $prenom, ADMINNATIONNAL, $prenom);
-                $param = array($prenom, $prenom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['industriel'])) {
-                $req = $interneprenom . " union " . $industrielprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $prenom, ADMINNATIONNAL, $prenom);
-                $param = array($prenom, $prenom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE EXTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
-                $req = $externeprenom . " union " . $industrielprenom . " order by datecreation asc ";
-                $param = array($prenom, $prenom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueexterne'])) {
-                $req = $externeprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $prenom);
-                $param = array($prenom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueinterne'])) {
-                $req = $interneprenom . " order by datecreation asc ";
-                $param = array($prenom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['industriel'])) {
-                $req = $industrielprenom . " order by datecreation asc ";
-                $param = array($prenom);
-            }
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON SAISIE UN NOM ET UN PRENOM
-//------------------------------------------------------------------------------------------------------------------------------
-        } elseif (!empty($_POST['nom']) && !empty($_POST['prenom'])) {
-            $nom = pg_escape_string($_POST['nom']);
-            $prenom = pg_escape_string($_POST['prenom']);
-            if (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE EXTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-                $req = $internenomprenom . " union " . $externenomprenom . " union " . $industrielnomprenom . " order by datecreation asc ";
-                $param = array($nom,$prenom,$nom,$prenom,$nom,$prenom);
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE ET EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE ET EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-                $req = $internenomprenom . " union " . $externenomprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $nom, $prenom, ADMINNATIONNAL, $nom, $prenom);
-                $param = array($nom,$prenom,$nom,$prenom);
-            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['industriel'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-                $req = $internenomprenom . " union " . $industrielnomprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $nom, $prenom, ADMINNATIONNAL, $nom, $prenom);
-                $param = array($nom,$prenom,$nom,$prenom);
-            } elseif (!empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE EXTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-                $req = $externenomprenom . " union " . $industrielnomprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $nom, $prenom, ADMINNATIONNAL, $nom, $prenom);
-                $param = array($nom,$prenom,$nom,$prenom);
-            } elseif (!empty($_POST['academiqueexterne'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-                $req = $externenomprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $nom, $prenom);
-                $param = array($nom,$prenom);
-            } elseif (!empty($_POST['industriel'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-                $req = $industrielnomprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $nom, $prenom);
-                $param = array($nom,$prenom);
-            } elseif (!empty($_POST['academiqueinterne'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE
-//------------------------------------------------------------------------------------------------------------------------------
-                $req = $internenomprenom . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, $nom, $prenom);
-                $param = array($nom,$prenom);
-            }
-        } else {//NOM ET PRENOM NE SONT PAS SAISIE
-            if (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE EXTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
-                $req = $interne . " union " . $externe . " union " . $industriel . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, ADMINNATIONNAL, ADMINNATIONNAL);
+        } else {// RIEN DE SAISIE
+            if (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {//CAS OU ON A COCHE ACADEMIQUE INTERNE EXTERNE ET INDUSTRIEL
+                $req = $interne . " union " . $externe . " union " . $industriel . " order by datecreation asc ";                
                 $param = array();
-            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE  EXTERNE ET EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
+            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['academiqueexterne'])) {//CAS OU ON A COCHE ACADEMIQUE  EXTERNE ET EXTERNE
                 $req = $interne . " union " . $externe . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, ADMINNATIONNAL);
                 $param = array('');
-            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['industriel'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE  ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
+            } elseif (!empty($_POST['academiqueinterne']) && !empty($_POST['industriel'])) {//CAS OU ON A COCHE ACADEMIQUE INTERNE  ET INDUSTRIEL
                 $req = $interne . " union " . $industriel . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, ADMINNATIONNAL);
                 $param = array('');
-            } elseif (!empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE  EXTERNE ET INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
+            } elseif (!empty($_POST['academiqueexterne']) && !empty($_POST['industriel'])) {//CAS OU ON A COCHE ACADEMIQUE  EXTERNE ET INDUSTRIEL
                 $req = $externe . " union " . $industriel . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL, ADMINNATIONNAL);
                 $param = array('');
-            } elseif (!empty($_POST['academiqueexterne'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE EXTERNE
-//------------------------------------------------------------------------------------------------------------------------------
+            } elseif (!empty($_POST['academiqueexterne'])) {//CAS OU ON A COCHE ACADEMIQUE EXTERNE
                 $req = $externe . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL);
                 $param = array('');
-            } elseif (!empty($_POST['industriel'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE INDUSTRIEL
-//------------------------------------------------------------------------------------------------------------------------------
+            } elseif (!empty($_POST['industriel'])) {//CAS OU ON A COCHE INDUSTRIEL
                 $req = $industriel . " order by datecreation asc ";
-                //$param = array(ADMINNATIONNAL);
                 $param = array('');
-            } elseif (!empty($_POST['academiqueinterne'])) {
-//------------------------------------------------------------------------------------------------------------------------------
-//									CAS OU ON A COCHE ACADEMIQUE INTERNE 
-//------------------------------------------------------------------------------------------------------------------------------            
+            } elseif (!empty($_POST['academiqueinterne'])) {//CAS OU ON A COCHE ACADEMIQUE INTERNE 
                 $req = $interne . " order by datecreation asc ";
                 //$param = array(ADMINNATIONNAL);
                 $param = array('');
@@ -467,11 +286,7 @@ FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword AND
             }elseif (!empty($_POST['user'])) {
                 $req = $admin_national_local_user . " order by datecreation asc ";
                 $param = array(UTILISATEUR);
-            }
-            
-            
-            
-            elseif (empty($_POST['academiqueinterne']) && empty($_POST['academiqueexterne']) && empty($_POST['industriel'])&&empty($_POST['admin_national']) && empty($_POST['admin_local']) && empty($_POST['user'])) {
+            }elseif (empty($_POST['academiqueinterne']) && empty($_POST['academiqueexterne']) && empty($_POST['industriel'])&&empty($_POST['admin_national']) && empty($_POST['admin_local']) && empty($_POST['user'])) {
                 echo $msgerreur = TXT_TYPENONSELECTIONNE;
                 exit();
             }
@@ -479,7 +294,8 @@ FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword AND
     }
 }
 if (!empty($_GET['iduser'])) {
-    $req = "select nom,prenom,idtypeutilisateur_typeutilisateur,idutilisateur,datecreation from utilisateur where idutilisateur =? and idtypeutilisateur_typeutilisateur <>" . ADMINNATIONNAL . " and idtypeutilisateur_typeutilisateur <>" . ADMINLOCAL . " and idcentrale_centrale=?";
+    $req = "select nom,prenom,idtypeutilisateur_typeutilisateur,idutilisateur,datecreation from utilisateur where idutilisateur =? "
+            . "and idtypeutilisateur_typeutilisateur <>" . ADMINNATIONNAL . " and idtypeutilisateur_typeutilisateur <>" . ADMINLOCAL . " and idcentrale_centrale=?";
     $param = array($_GET['iduser'], $idcentrale_centrale);
 }
 
@@ -494,8 +310,6 @@ if($param==array('')){
 }else{
     $row = $manager->getListbyArray($req, $param);
 }
-
-
 $fprow = fopen('tmp/userCompte'.$aleatoire.'.json', 'w');
 $datausercompte = "";
 fwrite($fprow, '{"items": [');
@@ -513,7 +327,7 @@ for ($i = 0; $i < count($row); $i++) {
         $libelletypeuser = TXT_ACADEMIQUEEXTERNE;
     }
     $libellecentrale = $manager->getSingle2("SELECT libellecentrale from centrale where idcentrale=?",$row[$i]['idcentrale_centrale']);
-    $typecompte = $manager->getSingle2("select libelletype from typeutilisateur where idtypeutilisateur =?", $row[$i]['idtypeutilisateur_typeutilisateur']);;
+    $typecompte = $manager->getSingle2("select libelletype from typeutilisateur where idtypeutilisateur =?", $row[$i]['idtypeutilisateur_typeutilisateur']);
     $datausercompte = "" . '{"pseudo":' . '"' . $row[$i]['pseudo'] . '"' . "," . '"datecreation":' . '"' . $row[$i]['datecreation'] . '"' . "," .
             '"idqualitedemandeurindust_qualitedemandeurindust":' . '"' . $row[$i]['idqualitedemandeurindust_qualitedemandeurindust'] . '"' . "," .
             '"idqualitedemandeuraca_qualitedemandeuraca":' . '"' . $row[$i]['idqualitedemandeuraca_qualitedemandeuraca'] . '"' . "," .
@@ -523,7 +337,8 @@ for ($i = 0; $i < count($row); $i++) {
             '"actif":' . '"' . $actif . '"' . "," .
             '"typecompte":' . '"' . $typecompte . '"' . "," .
             '"centrale":' . '"' . $libellecentrale . '"' . "," .
-            '"libelletypeuser":' . '"' . $libelletypeuser . '"' . "},";
+            '"libelletypeuser":' . '"' . $libelletypeuser . '"' . "," .
+            '"nb":' . '"' . $row[$i]['nb'] . '"' . "},";
     fputs($fprow, $datausercompte);
     fwrite($fprow, '');
 }
@@ -598,9 +413,10 @@ if ($i == 0) {
                         {name: "<?php echo TXT_NOM; ?>", field: "nom", width: "auto", formatter: hrefFormatterNom},
                         {name: "<?php echo TXT_PRENOM; ?>", field: "prenom", width: "auto", formatter: hrefFormatterPrenom},
                         {name: "<?php echo TXT_TYPE_COMPTE; ?>", field: "typecompte", width: "auto"},
-                        {name: "<?php echo TXT_COMPTE; ?>", field: "actif", width: "auto"},                        
+                        {name: "<?php echo TXT_COMPTE; ?>", field: "actif", width: "60px"},                        
                         {name: "<?php echo TXT_TYPEUTILISATEUR; ?>", field: "libelletypeuser", width: "auto"},
-                        {name: "<?php echo TXT_CENTRALEASSOCIE; ?>", field: "centrale", width: "auto"}
+                        {name: "<?php echo TXT_CENTRALEASSOCIE; ?>", field: "centrale", width: "auto"},
+                        {name: "<?php echo TXT_NBPROJET; ?>", field: "nb", width: "auto"},
                     ]
                 }, "grideusercompte");
                 grideusercompte.startup();
