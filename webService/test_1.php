@@ -11,7 +11,7 @@ $datas = $manager->getList("SELECT acronyme,idprojet,"
         . " LEFT JOIN creer c on c.idprojet_projet=idprojet "
         . " LEFT JOIN centrale on idcentrale_centrale =idcentrale "
         . " LEFT JOIN statutprojet on idstatutprojet_statutprojet =idstatutprojet "
-        . " WHERE datedebutprojet BETWEEN '2017-01-01' AND '2018-12-31' AND confidentiel is not TRUE ");
+        . " WHERE datedebutprojet BETWEEN '2017-01-01' AND '2018-12-31' AND confidentiel is not TRUE LIMIT 2");
 for($i=0;$i<count($datas);$i++){
     foreach($datas[$i] as $key=>$value){
         if(is_int($key)){            
@@ -24,7 +24,7 @@ $jsonData = json_encode($datas);
 <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-            var text1='<?php echo $jsonData; ?>';
+            var text1=<?php echo $jsonData; ?>;
             var jsonData = {
                 field1: text1
             };
@@ -35,7 +35,6 @@ $jsonData = json_encode($datas);
                 contentType: "application/json",
                 dataType: "json",
                 success: function (response) {
-                    response.setRequestHeader("Content-Type", "application/json");
                     $("#response").html(JSON.stringify(response));                    
                 },
                 failure: function (error) {

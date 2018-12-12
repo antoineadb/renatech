@@ -416,7 +416,7 @@ if ($i == 0) {
                         {name: "<?php echo TXT_COMPTE; ?>", field: "actif", width: "60px"},                        
                         {name: "<?php echo TXT_TYPEUTILISATEUR; ?>", field: "libelletypeuser", width: "auto"},
                         {name: "<?php echo TXT_CENTRALEASSOCIE; ?>", field: "centrale", width: "auto"},
-                        {name: "<?php echo TXT_NBPROJET; ?>", field: "nb", width: "auto"},
+                        {name: "<?php echo TXT_NOMBREPROJET; ?>", field: "nb", width: "auto"},
                     ]
                 }, "grideusercompte");
                 grideusercompte.startup();
