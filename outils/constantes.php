@@ -226,19 +226,19 @@ $conmpteacceuilDefault = $array;
 /**
  * array('idcentrale'=>"valeur de l'acronyme");
  * */
-$acronyme = $manager->getList("SELECT ref_interne,num_projet,idcentrale FROM config_acronyme");
-for ($i = 0; $i < count($acronyme); $i++) {
-    foreach ($acronyme[$i] as $key => $value) {
+$acronymeProjet = $manager->getList("SELECT ref_interne,num_projet,idcentrale FROM config_acronyme");
+for ($i = 0; $i < count($acronymeProjet); $i++) {
+    foreach ($acronymeProjet[$i] as $key => $value) {
         if (is_int($key)) {
-            unset($acronyme[$i][$key]);
+            unset($acronymeProjet[$i][$key]);
         }
     }
 }
-foreach ($acronyme as $key => $value) {
-    if ($acronyme[$key]['num_projet']) {
-        $arrayacronymeDefault[$acronyme[$key]['idcentrale']] = 'num_projet';
+foreach ($acronymeProjet as $key => $value) {
+    if ($acronymeProjet[$key]['num_projet']) {
+        $arrayacronymeDefault[$acronymeProjet[$key]['idcentrale']] = 'num_projet';
     } else {
-        $arrayacronymeDefault[$acronyme[$key]['idcentrale']] = 'refinterneprojet';
+        $arrayacronymeDefault[$acronymeProjet[$key]['idcentrale']] = 'refinterneprojet';
     }
 }
 $acronymeDefault = $arrayacronymeDefault;
