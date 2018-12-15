@@ -30,7 +30,6 @@ if (!empty($arraydonneeBDD[0]['attachement'])) {
     $attachementBDD = $arraydonneeBDD[0]['attachement']; //CHAMP FACULTATIF
 }
 
-
 $statut = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
 if (!empty($_POST['contextValeur'])) {
     $contexte = clean($_POST['contextValeur']);
@@ -49,8 +48,7 @@ if (!empty($_POST['descriptifValeur'])) {
     }
 }
 $idcentrale = $manager->getSingle2("SELECT idcentrale_centrale from concerne LEFT JOIN projet ON idprojet_projet=idprojet WHERE numero=? ", $_GET['numProjet']);
-
-
+$acronyme="";
 foreach ($acronymeDefault as $key => $value) {
     if ($key==$idcentrale) {
         if ($value == 'num_projet') {
@@ -68,7 +66,6 @@ foreach ($acronymeDefault as $key => $value) {
         }
     }    
 }
-
 if (!empty($_POST['titreProjet'])) {
     $titre = $_POST['titreProjet'];
     if ($titreBDD != $titre) {
@@ -100,9 +97,16 @@ if (!empty($_POST['centrale'])) {
     $idcentrale = substr($_POST['centrale'], -1);
     $idstatutprojet = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
     $manager->deleteconcerneprojet($idprojet);
-    $concerne = new Concerne($idcentrale, $idprojet, $idstatutprojet, '');
+    $concerne = new Concerne($idcentrale, $idprojet, $idstatutprojet, "");    
     $manager->addConcerne($concerne);
 }
+
+if(isset($_POST['commentaireValeur'])&& !empty($_POST['commentaireValeur'])){
+    $commentaire = stripslashes(Securite::bdd($_POST['commentaireValeur']));    
+    $concerne = new Concerne($idcentrale, $idprojet, $idstatutprojet, $commentaire);    
+    $manager->updateConcerne($concerne, $idprojet);
+}
+   
 
 $confidentiel = $_POST['confid'];
 if ($confidentielBDD != $confidentiel) {
@@ -126,6 +130,8 @@ if (!empty($_POST['descriptioncentraleproximite'])) {
 } else {
     $descriptioncentraleproximiteBDD = '';
 }
+
+
 
 if ($_POST['centrale_proximite'] == 'TRUE') {
     if (!empty($_POST['centrale_Proximite'])) {

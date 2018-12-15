@@ -28,13 +28,17 @@ if (!empty($_GET['numProjet'])) {
             $idstatutprojet = $manager->getSingle2("select idstatutprojet_statutprojet from concerne where idprojet_projet=?", $idprojet);
         }
     }
+    if(!$idstatutprojet){
+       $idstatutprojet = $manager->getSingle2("SELECT idstatutprojet_statutprojet FROM concerne WHERE idprojet_projet=?", $idprojet);
+    }
+    
     if (!empty($_SESSION['idTypeUser'])) {
         $idtypeuser = $_SESSION['idTypeUser'];
     } else {
         $idutilisateur = $manager->getSingle2('select idutilisateur_utilisateur from creer where idprojet_projet=?', $idprojet);
         $idtypeuser = $manager->getSingle2("select idtypeutilisateur_typeutilisateur from utilisateur where idutilisateur=?", $idutilisateur);
     }
-    
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                  SI PROJET EN SOUS TRAITANCE
 //-----------------------------------------------------------------------------------------------------------------------------------------------

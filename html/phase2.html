@@ -25,6 +25,7 @@ if($statut==ENCOURSREALISATION || $statut ==FINI || $statut==CLOTURE){
 
 ?>
 <fieldset>
+    <input type="hidden" name="idstatut" value="<?php echo $statut;?>" />
     <legend style="width: 850px;padding-left: 20px">
         <b><?php echo TXT_NUMPROJET.' : '.$numProjet;?></b> - <b><?php echo TXT_ACRONYMEPROJET.' : '.stripslashes(str_replace("''","'",$acronyme));  ?></b>        
     </legend>
