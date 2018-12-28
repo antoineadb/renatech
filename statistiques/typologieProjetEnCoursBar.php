@@ -11,70 +11,94 @@ $string0 = '';
 $string1 = '';
 $centrales = $manager->getList2("select libellecentrale,idcentrale from centrale where idcentrale!=?  and masquecentrale!=TRUE  order by idcentrale asc", IDAUTRECENTRALE);
 $uneDateUneCentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet  and idtypeprojet=? and idcentrale_centrale=?"
-        . " AND idstatutprojet_statutprojet=?";
-$touscentraleunedate = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=?  AND idstatutprojet_statutprojet=?";
+        . " AND idstatutprojet_statutprojet=? AND EXTRACT(YEAR from dateprojet)>2012 ";
+$touscentraleunedate = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=?  AND idstatutprojet_statutprojet=?"
+        . " AND EXTRACT(YEAR from dateprojet)>2012";
 $toutesdateCentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=?  "
-        . " AND idstatutprojet_statutprojet=?  and idcentrale_centrale=?  AND trashed!= ?";
-?>
-
-    <?php
+        . " AND idstatutprojet_statutprojet=?  and idcentrale_centrale=?  AND trashed!= ? AND EXTRACT(YEAR from dateprojet)>2012 ";
+function reqAdminNationnal($typeprojet,$manager){
+	return $manager->getSinglebyArray("
+	SELECT count(idprojet) 
+	FROM projet
+	LEFT JOIN concerne ON idprojet_projet = idprojet
+	LEFT JOIN typeprojet  ON idtypeprojet_typeprojet = idtypeprojet 
+	WHERE idstatutprojet_statutprojet=?  AND EXTRACT(YEAR from dateprojet)>?
+	and idtypeprojet=?",array(ENCOURSREALISATION,2012,$typeprojet));
+}	
     if (IDTYPEUSER == ADMINNATIONNAL) {
         $serieX = "";
-        $nbprojetacademique = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-                . " AND idstatutprojet_statutprojet=?", array(ACADEMIC,  ENCOURSREALISATION));
-        $nbprojetAcademiquepartenariat = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-                . " AND idstatutprojet_statutprojet=?", array(ACADEMICPARTENARIAT,  ENCOURSREALISATION));
-      
-        $nbprojetindustriel = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-                . " AND idstatutprojet_statutprojet=?", array(INDUSTRIEL,  ENCOURSREALISATION));
-        $formation = $manager->getSinglebyArray("SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-                . " AND idstatutprojet_statutprojet=?", array(FORMATION,  ENCOURSREALISATION));
+        $nbProjetacademique = reqAdminNationnal(ACADEMIC,$manager);
+        $nbProjetAcademiquepartenariat = reqAdminNationnal(ACADEMICPARTENARIAT,$manager);
+        $nbProjetIndustriel = reqAdminNationnal(INDUSTRIEL,$manager);
+        $nbProjetFormation = reqAdminNationnal(FORMATION,$manager);
+        $nbProjetMaintenance= reqAdminNationnal(MAINTENANCE,$manager);
+        $service= reqAdminNationnal(SERVICE,$manager);
 
-        $serieX .= '{name: "' . ucfirst(TXT_ACADEMIQUE) . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetacademique . ',drilldown: "' . "academic" . 'EnCours' . '"}]},';
-        $serieX .= '{name: "' . TXT_ACADEMICPARTENARIAT . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetAcademiquepartenariat . ',drilldown: "' . 'academicPartenariat' . 'EnCours' . '"}]},';
-        $serieX .= '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetindustriel . ',drilldown: "' . 'industriel' . 'EnCours' . '"}]},';
-        $serieX .= '{name: "' . TXT_FORMATION . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $formation . ',drilldown: "' . 'formation' . 'EnCours' . '"}]}';
+        $serieX .= '{name: "' . ucfirst(TXT_ACADEMIQUE) . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetacademique . ',drilldown: "' . "academic"  . '"}]},';
+        $serieX .= '{name: "' . TXT_ACADEMICPARTENARIAT . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetAcademiquepartenariat . ',drilldown: "' . 'academicPartenariat'  . '"}]},';
+        $serieX .= '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetIndustriel . ',drilldown: "' . 'industriel'  . '"}]},';
+        $serieX .= '{name: "' . TXT_FORMATION . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetFormation . ',drilldown: "' . 'formation'  . '"}]},';
+        $serieX .= '{name: "' . TXT_MAINTENANCE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetMaintenance . ',drilldown: "' . 'maintenance'  . '"}]},';
+        $serieX .= '{name: "' . TXT_SERVICE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $service . ',drilldown: "' . 'service'. '"}]}';
 
-        $serieAcademique = "{id: '" . 'academic' . 'EnCours' . "',name: '" . ucfirst(TXT_ACADEMIQUE) . "',data: [";
-        $serieAcademiquePartenariat = "{id: '" . 'academicPartenariat' . 'EnCours' . "',name: '" . TXT_ACADEMICPARTENARIAT . "',data: [";
-        $serieIndustriel = "{id: '" . 'industriel' . 'EnCours' . "',name: '" . TXT_INDUSTRIEL . "',data: [";
-        $serieFormation = "{id: '" . 'formation' . 'EnCours' . "',name: '" . TXT_FORMATION . "',data: [";
+        $serieAcademique = "{id: '" . 'academic'  . "',name: '" . ucfirst(TXT_ACADEMIQUE) . "',data: [";
+        $serieAcademiquePartenariat = "{id: '" . 'academicPartenariat'  . "',name: '" . TXT_ACADEMICPARTENARIAT . "',data: [";
+        $serieIndustriel = "{id: '" . 'industriel'  . "',name: '" . TXT_INDUSTRIEL . "',data: [";
+        $serieFormation = "{id: '" . 'formation'  . "',name: '" . TXT_FORMATION . "',data: [";
+        $serieMaintenance = "{id: '" . 'maintenance' .  "',name: '" . TXT_MAINTENANCE . "',data: [";
+        $serieService = "{id: '" . 'service' .  "',name: '" . TXT_SERVICE . "',data: [";
 
-        $nbprojetAcademique = $manager->getSinglebyArray($touscentraleunedate, array( ACADEMIC, ENCOURSREALISATION));
-        $nbprojetAcademiquePartenariat = $manager->getSinglebyArray($touscentraleunedate, array( ACADEMICPARTENARIAT, ENCOURSREALISATION));
-        $nbprojetIndustriel = $manager->getSinglebyArray($touscentraleunedate, array( INDUSTRIEL, ENCOURSREALISATION));
-        $nbprojetFormation = $manager->getSinglebyArray($touscentraleunedate, array( FORMATION, ENCOURSREALISATION));
+        $nbProjetAcademique = $manager->getSinglebyArray($touscentraleunedate, array( ACADEMIC, ENCOURSREALISATION));
+        $nbProjetAcademiquePartenariat = $manager->getSinglebyArray($touscentraleunedate, array( ACADEMICPARTENARIAT, ENCOURSREALISATION));
+        $nbProjetIndustriel = $manager->getSinglebyArray($touscentraleunedate, array( INDUSTRIEL, ENCOURSREALISATION));
+        $nbProjetFormation = $manager->getSinglebyArray($touscentraleunedate, array( FORMATION, ENCOURSREALISATION));
+        $nbProjetMaintenance = $manager->getSinglebyArray($touscentraleunedate, array( MAINTENANCE, ENCOURSREALISATION));
+        $nbProjetService = $manager->getSinglebyArray($touscentraleunedate, array( SERVICE, ENCOURSREALISATION));
 
-        $serieAcademique .= "{name: '" . 'EnCours' . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . 'EnCours' . "'},";
-        $serieAcademiquePartenariat .= "{name: '" . 'EnCours' . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . 'EnCours' . "'},";
-        $serieIndustriel .= "{name: '" . 'EnCours' . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . 'EnCours' . "'},";
-        $serieFormation .= "{name: '" . 'EnCours' . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . 'EnCours' . "'},";
+        $serieAcademique .= "{name: '"  . "', y: " . $nbProjetAcademique . " , drilldown: '" . 'academic'  . "'},";
+        $serieAcademiquePartenariat .= "{name: '"  . "', y: " . $nbProjetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat'  . "'},";
+        $serieIndustriel .= "{name: '"  . "', y: " . $nbProjetIndustriel . " , drilldown: '" . 'industriel'  . "'},";
+        $serieFormation .= "{name: '"  . "', y: " . $nbProjetFormation . " , drilldown: '" . 'formation'  . "'},";
+        $serieMaintenance .= "{name: '"  . "', y: " . $nbProjetMaintenance . " , drilldown: '" . 'maintenance'  . "'},";
+        $serieService .= "{name: '"  . "', y: " . $nbProjetService . " , drilldown: '" . 'service'  . "'},";
 
         $serieAcademique .= "]},";
         $serieAcademiquePartenariat .= "]},";
         $serieIndustriel .= "]},";
         $serieFormation .= "]},";
+        $serieMaintenance .= "]},";
+        $serieService .= "]},";
 
-        $serieAcademique .= "{id: '" . 'academic' . 'EnCours' . "',name: '" . ucfirst(TXT_ACADEMIQUE) . "',data: [";
-        $serieAcademiquePartenariat .= "{id: '" . 'academicPartenariat' . 'EnCours' . "',name: '" . TXT_ACADEMICPARTENARIAT . "',data: [";
-        $serieIndustriel .= "{id: '" . 'industriel' . 'EnCours' . "',name: '" . TXT_INDUSTRIEL . "',data: [";
-        $serieFormation .= "{id: '" . 'formation' . 'EnCours' . "',name: '" . TXT_FORMATION . "',data: [";
+        $serieAcademique .= "{id: '" . 'academic'  . "',name: '" . ucfirst(TXT_ACADEMIQUE) . "',data: [";
+        $serieAcademiquePartenariat .= "{id: '" . 'academicPartenariat'  . "',name: '" . TXT_ACADEMICPARTENARIAT . "',data: [";
+        $serieIndustriel .= "{id: '" . 'industriel'  . "',name: '" . TXT_INDUSTRIEL . "',data: [";
+        $serieFormation .= "{id: '" . 'formation'  . "',name: '" . TXT_FORMATION . "',data: [";
+        $serieMaintenance .= "{id: '" . 'maintenance'  . "',name: '" . TXT_MAINTENANCE . "',data: [";
+        $serieService .= "{id: '" . 'service'  . "',name: '" . TXT_SERVICE . "',data: [";
+		
         foreach ($centrales as $key => $centrale) {
-            $nbprojetAcademique = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMIC, $centrale[1],  ENCOURSREALISATION));            
-            $nbprojetAcademiquePartenariat = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMICPARTENARIAT, $centrale[1],  ENCOURSREALISATION));
-            $nbprojetIndustriel = $manager->getSinglebyArray($uneDateUneCentrale, array(INDUSTRIEL, $centrale[1],  ENCOURSREALISATION));
-            $nbprojetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION, $centrale[1],  ENCOURSREALISATION));
-            $serieAcademique .= "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbprojetAcademique . " , drilldown: '" . 'academic' . $centrale[0] . 'EnCours' . "'},";
-            $serieAcademiquePartenariat .= "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbprojetAcademiquePartenariat . " , drilldown: '" . 'academicPartenariat' . $centrale[0] . 'EnCours' . "'},";
-            $serieIndustriel .= "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbprojetIndustriel . " , drilldown: '" . 'industriel' . $centrale[0] . 'EnCours' . "'},";
-            $serieFormation .= "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbprojetFormation . " , drilldown: '" . 'formation' . $centrale[0] . 'EnCours' . "'},";
+            $nbProjetAcademique = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMIC, $centrale[1],  ENCOURSREALISATION));  
+            $nbProjetAcademiquePartenariat = $manager->getSinglebyArray($uneDateUneCentrale, array(ACADEMICPARTENARIAT, $centrale[1],  ENCOURSREALISATION));
+            $nbProjetIndustriel = $manager->getSinglebyArray($uneDateUneCentrale, array(INDUSTRIEL, $centrale[1],  ENCOURSREALISATION));
+            $nbProjetFormation = $manager->getSinglebyArray($uneDateUneCentrale, array(FORMATION, $centrale[1],  ENCOURSREALISATION));
+            $nbProjetMaintenance = $manager->getSinglebyArray($uneDateUneCentrale, array(MAINTENANCE, $centrale[1],  ENCOURSREALISATION));
+            $nbProjetService = $manager->getSinglebyArray($uneDateUneCentrale, array(SERVICE, $centrale[1],  ENCOURSREALISATION));
+			
+            $serieAcademique .=             "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbProjetAcademique . " ,              drilldown: '" . 'academic' . $centrale[0]  . "'},";
+            $serieAcademiquePartenariat .=  "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbProjetAcademiquePartenariat . " ,   drilldown: '" . 'academicPartenariat' . $centrale[0]  . "'},";
+            $serieIndustriel .=             "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbProjetIndustriel . " ,              drilldown: '" . 'industriel' . $centrale[0]  . "'},";
+            $serieFormation .=              "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbProjetFormation . " ,               drilldown: '" . 'formation' . $centrale[0]  . "'},";
+            $serieMaintenance .=            "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbProjetMaintenance . " ,             drilldown: '" . 'maintenance' . $centrale[0]  . "'},";
+            $serieService .=                "{name: '" . $centrale[0] . "',color:'" . couleurGraphLib($centrale[0]) . "', y: " . $nbProjetService . " ,                 drilldown: '" . 'service' . $centrale[0]  . "'},";
         }
         $serieAcademique .= "]},";
         $serieAcademiquePartenariat .= "]},";
         $serieIndustriel .= "]},";
         $serieFormation .= "]},";
+        $serieMaintenance .= "]},";
+        $serieService .= "]},";
 
-        $serie0 = $serieAcademique . $serieAcademiquePartenariat . $serieIndustriel . $serieFormation;
+        $serie0 = $serieAcademique . $serieAcademiquePartenariat . $serieIndustriel . $serieFormation. $serieMaintenance. $serieService;
         $serie = str_replace("},]", "}]", $serie0);
         $serieY = substr(str_replace("],]", "]]", $serie), 0, -1);
        
@@ -83,29 +107,39 @@ $toutesdateCentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WH
     }
     if (IDTYPEUSER == ADMINLOCAL) {
 
-        $nbprojetAcademique = $manager->getSinglebyArray($toutesdateCentrale, array(ACADEMIC, ENCOURSREALISATION, IDCENTRALEUSER,  TRUE));
-        $nbprojetAcademiquepartenariat = $manager->getSinglebyArray($toutesdateCentrale, array(ACADEMICPARTENARIAT, ENCOURSREALISATION, IDCENTRALEUSER,  TRUE));
-        $nbprojetindustriel = $manager->getSinglebyArray($toutesdateCentrale, array(INDUSTRIEL, ENCOURSREALISATION, IDCENTRALEUSER,  TRUE));
-        $formation = $manager->getSinglebyArray($toutesdateCentrale, array(FORMATION, ENCOURSREALISATION, IDCENTRALEUSER,  TRUE));
+        $nbProjetAcademique = $manager->getSinglebyArray($toutesdateCentrale, array(ACADEMIC, ENCOURSREALISATION, IDCENTRALEUSER,TRUE));
+        $nbProjetAcademiquepartenariat = $manager->getSinglebyArray($toutesdateCentrale, array(ACADEMICPARTENARIAT,ENCOURSREALISATION,IDCENTRALEUSER,TRUE));
+        $nbProjetIndustriel = $manager->getSinglebyArray($toutesdateCentrale, array(INDUSTRIEL, ENCOURSREALISATION,IDCENTRALEUSER,  TRUE));
+        $nbProjetFormation = $manager->getSinglebyArray($toutesdateCentrale, array(FORMATION, ENCOURSREALISATION, IDCENTRALEUSER,TRUE));		
+        $nbProjetMaintenance = $manager->getSinglebyArray($toutesdateCentrale, array(MAINTENANCE, ENCOURSREALISATION, IDCENTRALEUSER,TRUE));
+        $service = $manager->getSinglebyArray($toutesdateCentrale, array(SERVICE, ENCOURSREALISATION, IDCENTRALEUSER,TRUE));
+				
         $serieX = "";
-        $serieX .= '{name: "' . ucfirst(TXT_ACADEMIQUE) . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetAcademique . ',drilldown: "' . "academic" . '"}]},';
-        $serieX .= '{name: "' . TXT_ACADEMICPARTENARIAT . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetAcademiquepartenariat . ',drilldown: "' . 'academicPartenariat' . '"}]},';
-        $serieX .= '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetindustriel . ',drilldown: "' . 'industriel' . '"}]},';
-        $serieX .= '{name: "' . TXT_FORMATION . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $formation . ',drilldown: "' . 'formation' . '"}]}';
+        $serieX .= '{name: "' . ucfirst(TXT_ACADEMIQUE) . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetAcademique . ',drilldown: "' . "academic" . '"}]},';
+        $serieX .= '{name: "' . TXT_ACADEMICPARTENARIAT . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetAcademiquepartenariat . ',drilldown: "' . 'academicPartenariat' . '"}]},';
+        $serieX .= '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetIndustriel . ',drilldown: "' . 'industriel' . '"}]},';
+        $serieX .= '{name: "' . TXT_FORMATION . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetFormation . ',drilldown: "' . 'formation' . '"}]},';
+		
+        $serieX .= '{name: "' . TXT_MAINTENANCE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetMaintenance . ',drilldown: "' . 'maintenance' . '"}]},';
+        $serieX .= '{name: "' . TXT_SERVICE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbProjetFormation . ',drilldown: "' . 'service' . '"}]}';
         
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
         $serieAcademique = "{id: '" . '' . "',name: '" . '' . "',data: [";
         $serieAcademiquePartenariat = "{id: '" . '' . "',name: '" . '' . "',data: [";
         $serieIndustriel = "{id: '" . '' . "',name: '" . '' . "',data: [";
         $serieFormation = "{id: '" . '' . "',name: '" . '' . "',data: [";
+        $serieMaintenance = "{id: '" . '' . "',name: '" . '' . "',data: [";
+        $serieService = "{id: '" . '' . "',name: '" . '' . "',data: [";
         
         $serieAcademique .= "]},";
         $serieAcademiquePartenariat .= "]},";
         $serieIndustriel .= "]},";
         $serieFormation .= "]},";
-
+        $serieMaintenance.= "]},";
+        $serieService.= "]},";
 //---------------------------------------------------------------------------------------   -----------------------------------------------------------------------------------------------------------------------------------        
-        $serie0 = $serieAcademique . $serieAcademiquePartenariat . $serieIndustriel . $serieFormation;
+        $serie0 = $serieAcademique . $serieAcademiquePartenariat . $serieIndustriel . $serieFormation. $serieMaintenance. $serieService;
+        
         $serie = str_replace("},]", "}]", $serie0);
         $serieY = substr(str_replace("],]", "]]", $serie), 0, -1);
         $subtitle = '';

@@ -37,7 +37,7 @@ $nbtotalprojet=0;
         }
     }
     $title = TXT_REPARTITIONPORTEURPROJETENCOURS;
-    $subtitle = TXT_NBPROJET . ' <b>' . $nbtotalprojet . '</b>';
+    $subtitle = TXT_NBTTOTALPORTEUR . ' <b>' . $nbtotalprojet . '</b>';
 }
 
 $string = substr($string0, 0, -1);

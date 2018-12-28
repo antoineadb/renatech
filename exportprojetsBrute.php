@@ -68,7 +68,8 @@ $data = utf8_decode("Id du projet;Date du projet;Titre du projet;référence int
         . "Description de l'(ou des) étape(s):;Utilisez-vous dans votre projet une centrale de proximité? ;Centrales de proximité;Descriptions de la demande;"
         . "email responsable devis;Réussite escompté;"
         ."".$s_personnesalleblanche.""     
-        ."Date statut fini"
+        ."Date statut fini;"
+        ."Date début de projet"
         );
 $data .= "\n";
 if (isset($_SESSION['pseudo'])) {
@@ -100,16 +101,25 @@ if(IDTYPEUSER==ADMINLOCAL){
 //récupération du type utilisateur
 //VERIFICATION QU'IL Y A BIEN DES PROJETS DANS LA BASE DE DONNEES
 $donnee = array($idcentrale, $datedebut, $datefin,REFUSE);
-$sql = "SELECT distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentraleproximite,p.centraleproximite,p.devtechnologique,p.etapeautrecentrale,p.porteurprojet,u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,p.attachement,p.attachementdesc,p.emailrespdevis,
-            u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
-            u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,u.idautrediscipline_autredisciplinescientifique,
-            u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,
-            p.acronyme,p.description,p.contexte,p.reussite,p.verrouidentifiee,p.commentaire,p.confidentiel,p.numero,p.dureeprojet,p.datedebuttravaux,p.dateprojet,p.contactscentraleaccueil,p.centralepartenaire,p.nbplaque,p.nbrun,
-            p.refinterneprojet,p.idtypeprojet_typeprojet,p.idthematique_thematique,p.idperiodicite_periodicite,p.typeformation,p.dureeestime,p.periodestime,
-            p.nbheure,p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtechnologique,p.centralepartenaireprojet, co.idstatutprojet_statutprojet,p.nbeleve,p.nomformateur,p.idtypecentralepartenaire,p.datestatutfini
-            FROM projet p,creer c,utilisateur u,concerne co 
-            WHERE p.idprojet = co.idprojet_projet AND c.idprojet_projet = p.idprojet AND u.idutilisateur = c.idutilisateur_utilisateur AND
-            co.idcentrale_centrale =? and dateprojet between ? and ?  and co.idstatutprojet_statutprojet !=? order by p.idprojet asc";
+$sql = "SELECT 
+        distinct p.idprojet,p.descriptionautrecentrale,p.descriptioncentraleproximite,p.centraleproximite,p.devtechnologique,p.etapeautrecentrale,p.porteurprojet,
+        u.nom,u.prenom,u.adresse,u.datecreation, u.ville, u.codepostal,u.telephone,u.nomentreprise,u.mailresponsable,p.attachement,p.attachementdesc,p.emailrespdevis,
+        u.nomresponsable, u.idtypeutilisateur_typeutilisateur,u.idpays_pays,u.idlogin_loginpassword,u.iddiscipline_disciplinescientifique,u.idcentrale_centrale,
+        u.idqualitedemandeuraca_qualitedemandeuraca,u.idautrestutelle_autrestutelle,u.idemployeur_nomemployeur,u.idtutelle_tutelle,
+        u.idautrediscipline_autredisciplinescientifique,u.idautrenomemployeur_autrenomemployeur,u.idqualitedemandeurindust_qualitedemandeurindust,
+        u.entrepriselaboratoire,u.idautrecodeunite_autrecodeunite, p.titre,p.acronyme,p.description,p.contexte,p.reussite,p.verrouidentifiee,p.commentaire,p.confidentiel,
+        p.numero,p.dureeprojet,p.datedebuttravaux,p.dateprojet,p.contactscentraleaccueil,p.centralepartenaire,p.nbplaque,p.nbrun,p.refinterneprojet,
+        p.idtypeprojet_typeprojet,p.idthematique_thematique,p.idperiodicite_periodicite,p.typeformation,p.dureeestime,p.periodestime,p.nbheure,
+        p.idautrethematique_autrethematique,p.descriptiftechnologique,p.devtechnologique,p.centralepartenaireprojet, co.idstatutprojet_statutprojet,p.nbeleve,p.nomformateur,
+        p.idtypecentralepartenaire,p.datestatutfini, p.datedebutprojet
+        FROM projet p
+        LEFT JOIN creer c ON c.idprojet_projet = p.idprojet
+        LEFT JOIN concerne co ON p.idprojet = co.idprojet_projet
+        LEFT JOIN utilisateur u ON u.idutilisateur = c.idutilisateur_utilisateur
+        WHERE co.idcentrale_centrale =? 
+        AND dateprojet BETWEEN ? AND ?
+        AND co.idstatutprojet_statutprojet !=?
+        ORDER BY p.idprojet ASC";
 $row = $manager->getListbyArray($sql, $donnee);
 
 $nbrow = count($row);
@@ -206,6 +216,7 @@ if ($nbrow != 0) {
         }
         $titre = cleanForExportOther($row[$i]['titre']);
         $dateprojet = $row[$i]['dateprojet'];
+        $datedebutprojet = $row[$i]['datedebutprojet'];
         if($row[$i]['idstatutprojet_statutprojet']!= REFUSE){
             $dateStatutFini = $row[$i]['datestatutfini'];
         }else{
@@ -826,7 +837,8 @@ if ($nbrow != 0) {
                 $emailrespdevis . ";" .
                 stripslashes(utf8_decode($reussite)) .";".
                 $salleBlanche.
-                $dateStatutFini . "\n";
+                $dateStatutFini .";".
+                $datedebutprojet . "\n";
         
     }
     $libcentrale = $manager->getSingle2("SELECT libellecentrale FROM loginpassword,centrale,utilisateur WHERE idlogin_loginpassword = idlogin AND idcentrale_centrale = idcentrale AND pseudo=?", $_SESSION['pseudo']);

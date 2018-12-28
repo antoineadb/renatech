@@ -11,7 +11,7 @@ $string0 = '';
 $arraystatutprojet = $manager->getList2("select libellestatutprojet,libellestatutprojeten,idstatutprojet from statutprojet where idstatutprojet!=? order by idstatutprojet asc", TRANSFERERCENTRALE);
 if (IDTYPEUSER == ADMINNATIONNAL) {  
     $nbtotalprojet = $manager->getSinglebyArray("select count(idprojet) from  projet,concerne where idprojet_projet=idprojet AND idcentrale_centrale is not null "
-            . "and  trashed != ?  and idstatutprojet_statutprojet=? and idcentrale_centrale!=?",array(TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
+            . "and  trashed != ? AND EXTRACT(YEAR FROM dateprojet)>2012 and idstatutprojet_statutprojet=? and idcentrale_centrale!=?",array(TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
     for ($i = 0; $i < count($arraylibellecentrale); $i++) {
         $donneeProjet = $manager->getSinglebyArray("SELECT count(idprojet) FROM projet,concerne WHERE idprojet_projet = idprojet AND idcentrale_centrale=? "
                 . " and  trashed != ?  and idstatutprojet_statutprojet=? and  EXTRACT(YEAR from dateprojet)>2012 and idcentrale_centrale!=?",array($arraylibellecentrale[$i]['idcentrale'],TRUE,ENCOURSREALISATION,IDCENTRALEAUTRE));
@@ -21,7 +21,7 @@ if (IDTYPEUSER == ADMINNATIONNAL) {
         }
     }
     $title = TXT_NBRUNNINGPROJET;
-    $subtitle = TXT_NBPROJET . ' <b>' . $nbtotalprojet . '</b>';
+    $subtitle = TXT_NBPROJET_SUP2012 . ' <b>' . $nbtotalprojet . '</b>';
 }
 if (IDTYPEUSER == ADMINLOCAL) {
   $years = $manager->getList("select distinct EXTRACT(YEAR from dateprojet)as year from projet where   EXTRACT(YEAR from dateprojet)>2012 order by year asc");  
@@ -36,7 +36,7 @@ if (IDTYPEUSER == ADMINLOCAL) {
     }
        
     $title = TXT_NBRUNNINGPROJET;
-    $subtitle = TXT_NBPROJET . ' <b>' . $nbtotalprojet . '</b>';
+    $subtitle = TXT_NBPROJET_SUP2012 . ' <b>' . $nbtotalprojet . '</b>';
 }
 
 $string = substr($string0, 0, -1);

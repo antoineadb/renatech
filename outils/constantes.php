@@ -76,6 +76,9 @@ define('IDNBPORTEURRUNNINGPROJECT', $manager->getSingle2("SELECT idstatistique F
 define('IDCENTRALEAUTRE', $manager->getSingle2("SELECT idcentrale FROM centrale WHERE libellecentrale=?", 'Autres'));
 define('ACADEMIC', $manager->getSingle2("SELECT idtypeprojet  FROM typeprojet WHERE libelletype=?", 'Académique'));
 define('FORMATION', $manager->getSingle2("SELECT idtypeprojet FROM typeprojet WHERE libelletype=?", 'Formation'));
+define('SERVICE', $manager->getSingle2("SELECT idtypeprojet FROM typeprojet WHERE libelletype=?", 'Service'));
+define('MAINTENANCE', $manager->getSingle2("SELECT idtypeprojet FROM typeprojet WHERE libelletype=?", 'Maintenance'));
+
 define('ACADEMICPARTENARIAT', $manager->getSingle2("SELECT idtypeprojet  FROM typeprojet WHERE libelletype=?", 'Académique en partenariat avec un industriel'));
 define('INDUSTRIEL', $manager->getSingle2("SELECT idtypeprojet  FROM typeprojet WHERE libelletype=?", 'Industriel'));
 define('AUTRECENTRALE', $manager->getSingle2("SELECT idcentrale  FROM centrale WHERE libellecentrale=?", 'Autres'));

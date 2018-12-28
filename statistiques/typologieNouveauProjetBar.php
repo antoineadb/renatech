@@ -10,22 +10,51 @@ $datay = array();
 $arraylibelle = array();
 $string0 = '';
 $string1 = '';
-$centrales = $manager->getList2("select libellecentrale,idcentrale from centrale where idcentrale!=? and masquecentrale!=TRUE order by idcentrale asc", IDAUTRECENTRALE);
+$centrales = $manager->getList2("select libellecentrale,idcentrale from centrale where idcentrale!=? AND masquecentrale!=TRUE order by idcentrale asc", IDAUTRECENTRALE);
 $years = $manager->getList("select distinct EXTRACT(YEAR from dateprojet)as year from projet where   EXTRACT(YEAR from dateprojet)>2012 order by year asc");
 $nbprojet = 0;
 $yearMin = "2014";
 $yearMax = $manager->getSingle("select max(EXTRACT(YEAR from dateprojet)) as year from projet");
-$uneDateUneCentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet  and idtypeprojet=? and idcentrale_centrale=?"
-. " AND EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>=?  and  trashed != ?";
-$touscentraleunedate = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet AND EXTRACT(YEAR from dateprojet)<=?"
-        . " and EXTRACT(YEAR from dateprojet)>=?   and idtypeprojet=?"
-. " and idcentrale_centrale!=? and  trashed != ?";
+$uneDateUneCentrale = 
+        "   SELECT count(idprojet)
+            FROM projet 
+            LEFT JOIN concerne ON idprojet_projet = idprojet
+            LEFT JOIN typeprojet ON idtypeprojet_typeprojet = idtypeprojet
+            WHERE  idtypeprojet=? 
+            AND idcentrale_centrale=?
+            AND EXTRACT(YEAR from dateprojet)<=? 
+            AND EXTRACT(YEAR from dateprojet)>=?  
+            AND  trashed != ?";
+$touscentraleunedate = 
+         " SELECT count(idprojet) 
+           FROM projet
+           LEFT JOIN concerne ON idprojet_projet = idprojet
+           LEFT JOIN typeprojet ON idtypeprojet_typeprojet = idtypeprojet
+           WHERE EXTRACT(YEAR from dateprojet)<=?
+           AND EXTRACT(YEAR from dateprojet)>=?   
+           AND idtypeprojet=?"
+. " AND idcentrale_centrale!=? AND  trashed != ?";
+$toutesdateCentrale = 
+        " SELECT count(idprojet) 
+          FROM projet 
+          LEFT JOIN concerne ON idprojet_projet = idprojet
+          LEFT JOIN typeprojet ON idtypeprojet_typeprojet = idtypeprojet
+          WHERE idtypeprojet=?
+          AND idcentrale_centrale=? 
+          AND  trashed != ?
+          AND EXTRACT(YEAR from dateprojet)<=? 
+          AND EXTRACT(YEAR from dateprojet)>=?";
 
-$toutesdateCentrale = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? and idcentrale_centrale=? and  trashed != ?"
-        . " AND EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>=?";
-
-$touscentraletoutesdate = "SELECT count(idprojet) FROM concerne,projet,typeprojet WHERE idprojet_projet = idprojet and idtypeprojet_typeprojet = idtypeprojet and idtypeprojet=? "
-        . " and idcentrale_centrale!=? and  trashed != ? AND EXTRACT(YEAR from dateprojet)<=? and EXTRACT(YEAR from dateprojet)>=? ";?>
+$touscentraletoutesdate = 
+        "   SELECT count(idprojet) 
+            FROM projet 
+            LEFT JOIN concerne ON idprojet_projet = idprojet
+            LEFT JOIN typeprojet ON idtypeprojet_typeprojet = idtypeprojet
+            WHERE idtypeprojet=? 
+            AND idcentrale_centrale!=? 
+            AND  trashed != ? 
+            AND EXTRACT(YEAR from dateprojet)<=? AND EXTRACT(YEAR from dateprojet)>=? ";
+        ?>
 
 
      
@@ -86,6 +115,9 @@ $touscentraletoutesdate = "SELECT count(idprojet) FROM concerne,projet,typeproje
     $nbprojetAcademiquepartenariat = $manager->getSinglebyArray($touscentraletoutesdate,array(ACADEMICPARTENARIAT,IDCENTRALEAUTRE,TRUE,$anneeFin,$anneeDepart));
     $nbprojetindustriel = $manager->getSinglebyArray($touscentraletoutesdate,array(INDUSTRIEL,IDCENTRALEAUTRE,TRUE,$anneeFin,$anneeDepart));
     $formation = $manager->getSinglebyArray($touscentraletoutesdate,array(FORMATION,IDCENTRALEAUTRE,TRUE,$anneeFin,$anneeDepart));
+    $service = $manager->getSinglebyArray($touscentraletoutesdate,array(SERVICE,IDCENTRALEAUTRE,TRUE,$anneeFin,$anneeDepart));
+    $maintenance = $manager->getSinglebyArray($touscentraletoutesdate,array(MAINTENANCE,IDCENTRALEAUTRE,TRUE,$anneeFin,$anneeDepart));
+    
     $nbprojetNonDefini = $manager->getSinglebyArray($touscentraletoutesdate,array(1,IDCENTRALEAUTRE,TRUE,$anneeFin,$anneeDepart));
     
     $serieX = "";
@@ -93,6 +125,10 @@ $touscentraletoutesdate = "SELECT count(idprojet) FROM concerne,projet,typeproje
     $serieX .= '{name: "' . TXT_ACADEMICPARTENARIAT . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetAcademiquepartenariat . ',drilldown: "' . 'academicPartenariat' . '"}]},';
     $serieX .= '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetindustriel . ',drilldown: "' . 'industriel' . '"}]},';
     $serieX .= '{name: "' . TXT_FORMATION . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $formation . ',drilldown: "' . 'formation' . '"}]},';
+    $serieX .= '{name: "' . TXT_SERVICE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $service . ',drilldown: "' . 'service' . '"}]},';
+    $serieX .= '{name: "' . TXT_MAINTENANCE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $maintenance . ',drilldown: "' . 'maintenance' . '"}]},';
+    
+    
     $serieX .= '{name: "' . "Non défini" . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetNonDefini . ',drilldown: "' . 'undefined' . '"}]}';
     
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
@@ -175,11 +211,17 @@ if (IDTYPEUSER == ADMINLOCAL) {
     $nbprojetindustriel = $manager->getSinglebyArray($toutesdateCentrale, array(INDUSTRIEL,IDCENTRALEUSER, TRUE,$anneeFin,$anneeDepart));
     $formation = $manager->getSinglebyArray($toutesdateCentrale, array(FORMATION,IDCENTRALEUSER, TRUE,$anneeFin,$anneeDepart));
     $nbprojetnondefini = $manager->getSinglebyArray($toutesdateCentrale, array(1,IDCENTRALEUSER, TRUE,$anneeFin,$anneeDepart));
+    $service = $manager->getSinglebyArray($toutesdateCentrale,array(SERVICE,IDCENTRALEUSER,TRUE,$anneeFin,$anneeDepart));
+    $maintenance = $manager->getSinglebyArray($toutesdateCentrale,array(MAINTENANCE,IDCENTRALEUSER,TRUE,$anneeFin,$anneeDepart));
+    
     $serieX = "";
     $serieX .= '{name: "' . ucfirst(TXT_ACADEMIQUE) . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetAcademique . ',drilldown: "' . "academic" . '"}]},';
     $serieX .= '{name: "' . TXT_ACADEMICPARTENARIAT . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetAcademiquepartenariat . ',drilldown: "' . 'academicPartenariat' . '"}]},';
     $serieX .= '{name: "' . TXT_INDUSTRIEL . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetindustriel . ',drilldown: "' . 'industriel' . '"}]},';
     $serieX .= '{name: "' . TXT_FORMATION . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $formation . ',drilldown: "' . 'formation' . '"}]},';
+    $serieX .= '{name: "' . TXT_SERVICE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $formation . ',drilldown: "' . 'service' . '"}]},';
+    $serieX .= '{name: "' . TXT_MAINTENANCE . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $service . ',drilldown: "' . 'maintenance' . '"}]},';
+    
     $serieX .= '{name: "' . "Non défini" . '", data: [{name: "' . TXT_DETAILS . '",y: ' . $nbprojetnondefini . ',drilldown: "' . 'undefined' . '"}]}';
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
     $serieAcademique = "{id: '" . 'academic' . "',name: '" . ucfirst(TXT_ACADEMIQUE) . "',data: [";
