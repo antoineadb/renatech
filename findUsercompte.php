@@ -327,6 +327,7 @@ for ($i = 0; $i < count($row); $i++) {
         $libelletypeuser = TXT_ACADEMIQUEEXTERNE;
     }
     $libellecentrale = $manager->getSingle2("SELECT libellecentrale from centrale where idcentrale=?",$row[$i]['idcentrale_centrale']);
+    $nb_admin = $manager->getSingle2("SELECT count(idprojet) from utilisateuradministrateur where idutilisateur=?",$row[$i]['idutilisateur']);
     $typecompte = $manager->getSingle2("select libelletype from typeutilisateur where idtypeutilisateur =?", $row[$i]['idtypeutilisateur_typeutilisateur']);
     $datausercompte = "" . '{"pseudo":' . '"' . $row[$i]['pseudo'] . '"' . "," . '"datecreation":' . '"' . $row[$i]['datecreation'] . '"' . "," .
             '"idqualitedemandeurindust_qualitedemandeurindust":' . '"' . $row[$i]['idqualitedemandeurindust_qualitedemandeurindust'] . '"' . "," .
@@ -338,6 +339,7 @@ for ($i = 0; $i < count($row); $i++) {
             '"typecompte":' . '"' . $typecompte . '"' . "," .
             '"centrale":' . '"' . $libellecentrale . '"' . "," .
             '"libelletypeuser":' . '"' . $libelletypeuser . '"' . "," .
+            '"nb_admin":' . '"' . $nb_admin . '"' . "," .
             '"nb":' . '"' . $row[$i]['nb'] . '"' . "},";
     fputs($fprow, $datausercompte);
     fwrite($fprow, '');
@@ -409,14 +411,15 @@ if ($i == 0) {
                     store: dataStore,
                     query: {id: "*"},
                     structure: [
-                        {name: "<?php echo TXT_CREATEDATE; ?>", field: "datecreation", width: "auto", formatter: hrefFormatterDate},
+                        {name: "<?php echo TXT_CREATEDATE; ?>", field: "datecreation", width: "100px", formatter: hrefFormatterDate},
                         {name: "<?php echo TXT_NOM; ?>", field: "nom", width: "auto", formatter: hrefFormatterNom},
                         {name: "<?php echo TXT_PRENOM; ?>", field: "prenom", width: "auto", formatter: hrefFormatterPrenom},
                         {name: "<?php echo TXT_TYPE_COMPTE; ?>", field: "typecompte", width: "auto"},
-                        {name: "<?php echo TXT_COMPTE; ?>", field: "actif", width: "60px"},                        
+                        {name: "<?php echo TXT_COMPTE; ?>", field: "actif", width: "auto"},                        
                         {name: "<?php echo TXT_TYPEUTILISATEUR; ?>", field: "libelletypeuser", width: "auto"},
                         {name: "<?php echo TXT_CENTRALEASSOCIE; ?>", field: "centrale", width: "auto"},
                         {name: "<?php echo TXT_NOMBREPROJET; ?>", field: "nb", width: "auto"},
+                        {name: "<?php echo TXT_NBPROJECT_AMINISTERED; ?>", field: "nb_admin", width: "115px"},
                     ]
                 }, "grideusercompte");
                 grideusercompte.startup();
