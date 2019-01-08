@@ -10,7 +10,7 @@ if (isset($_POST['keyword']) && !empty($_POST['keyword'])) {
     $list = $manager->getListbyArray(""
             . "SELECT * FROM utilisateur LEFT JOIN loginpassword  ON idlogin_loginpassword = idlogin WHERE UPPER(nom) LIKE UPPER(?) AND idcentrale_centrale=?"
             . " UNION "
-            . " SELECT * FROM utilisateur LEFT JOIN loginpassword  ON idlogin_loginpassword = idlogin WHERE UPPER(nom) LIKE UPPER(?) AND idcentrale_centrale IS NULL", 
+            . " SELECT * FROM utilisateur LEFT JOIN loginpassword  ON idlogin_loginpassword = idlogin WHERE UPPER(nom) LIKE UPPER(?) AND idcentrale_centrale IS NULL ORDER BY nom asc", 
             array($keyword,IDCENTRALEUSER,$keyword));
     foreach ($list as $rs) {
         $nom = str_replace($_POST['keyword'], $_POST['keyword'], $rs['nom']);

@@ -183,7 +183,7 @@ include 'html/header.html';
                 AND ad.idautrediscipline = u.idautrediscipline_autredisciplinescientifique and
                 t.idtutelle = u.idtutelle_tutelle 
                 AND d.iddiscipline = u.iddiscipline_disciplinescientifique 
-                AND idutilisateur=?", $iduser);
+                AND idutilisateur=? ", $iduser);
 
                 $projetCompte = $manager->getList2("SELECT p.numero FROM utilisateur u"
                         . " LEFT JOIN creer c ON c.idutilisateur_utilisateur= u.idutilisateur"
