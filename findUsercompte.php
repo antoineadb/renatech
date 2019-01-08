@@ -22,7 +22,7 @@ if (!empty($_SESSION['pseudo'])) {
         $idcentrale_centrale = IDCENTRALEUSER;
         $localinterne = "
             SELECT
-                count(c.idprojet_projet) as nb,
+                COUNT(u.idutilisateur) AS nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif 
             FROM 
@@ -47,7 +47,7 @@ if (!empty($_SESSION['pseudo'])) {
                 ";
         $localexterne = "
             SELECT
-                count(c.idprojet_projet) as nb,
+                COUNT(u.idutilisateur) AS nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif
             FROM 
@@ -70,7 +70,7 @@ if (!empty($_SESSION['pseudo'])) {
                 u.datecreation,l.actif  ";
         $localindustriel = "
             SELECT  
-                count(c.idprojet_projet) as nb,
+                COUNT(u.idutilisateur) AS nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif
             FROM 
@@ -89,7 +89,7 @@ if (!empty($_SESSION['pseudo'])) {
                 u.datecreation,l.actif ";
         $localinternenom = "
             SELECT 
-                count(c.idprojet_projet) as nb,
+                COUNT(u.idutilisateur) AS nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif 
             FROM loginpassword l
@@ -107,13 +107,10 @@ if (!empty($_SESSION['pseudo'])) {
                 u.idutilisateur,
                 u.prenom,
                 u.nom, 
-                u.datecreation,l.actif                 ";
-        
-        
-        
+                u.datecreation,l.actif ";        
         $localexternenom = "
             SELECT
-                count(c.idprojet_projet) as nb,
+                COUNT(u.idutilisateur) AS nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif
             FROM 
@@ -137,7 +134,7 @@ if (!empty($_SESSION['pseudo'])) {
                 u.datecreation,l.actif ";
         $localindustrielnom = "
             SELECT
-                count(c.idprojet_projet) as nb,
+                COUNT(u.idutilisateur) AS nb,
                 l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,
                 u.datecreation,l.actif
             FROM 
@@ -209,12 +206,34 @@ if (!empty($_SESSION['pseudo'])) {
             }
         }
     } elseif ($typeUser == ADMINNATIONNAL || $typeUser == ADMINSYSTEM) {
-        $interne = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword 
-and u.idqualitedemandeuraca_qualitedemandeuraca is not null and u.idcentrale_centrale is not null ";
-        $externe = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur ,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
-FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword 
-and idcentrale_centrale is null and u.idqualitedemandeurindust_qualitedemandeurindust is null";
+        $interne = "
+            SELECT l.pseudo,u.idcentrale_centrale,
+                   u.idtypeutilisateur_typeutilisateur,
+                   u.idqualitedemandeurindust_qualitedemandeurindust,
+                   u.idqualitedemandeuraca_qualitedemandeuraca,
+                   u.idutilisateur,
+                   u.prenom,
+                   u.nom,
+                   u.datecreation,l.actif
+                   FROM loginpassword l
+                   LEFT JOIN utilisateur u ON l.idlogin = u.idlogin_loginpassword                                     
+                   WHERE u.idqualitedemandeuraca_qualitedemandeuraca is not null 
+                   and u.idcentrale_centrale is not null ";
+        $externe = "
+            SELECT l.pseudo,
+            u.idcentrale_centrale,
+            u.idtypeutilisateur_typeutilisateur ,
+            u.idqualitedemandeurindust_qualitedemandeurindust,
+            u.idqualitedemandeuraca_qualitedemandeuraca,
+            u.idutilisateur,
+            u.prenom,
+            u.nom,
+            u.datecreation,
+            l.actif
+            FROM loginpassword l,utilisateur u 
+            WHERE l.idlogin = u.idlogin_loginpassword 
+            AND idcentrale_centrale is null 
+            AND u.idqualitedemandeurindust_qualitedemandeurindust is null";
         $industriel = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
 FROM loginpassword l,utilisateur u WHERE l.idlogin = u.idlogin_loginpassword  and idqualitedemandeurindust_qualitedemandeurindust IS NOT NULL ";
         $internenom = "SELECT l.pseudo,u.idcentrale_centrale,u.idtypeutilisateur_typeutilisateur,u.idqualitedemandeurindust_qualitedemandeurindust,u.idqualitedemandeuraca_qualitedemandeuraca,u.idutilisateur,u.prenom,u.nom,u.datecreation,l.actif
@@ -326,6 +345,12 @@ for ($i = 0; $i < count($row); $i++) {
     } else {
         $libelletypeuser = TXT_ACADEMIQUEEXTERNE;
     }
+    if(isset($row[$i]['nb'])){
+        $nb=$row[$i]['nb'];
+    }else{
+        $nb = $manager->getSingle2("SELECT count(idprojet_projet) from creer where idutilisateur_utilisateur=?",$row[$i]['idutilisateur']);;
+    }
+    
     $libellecentrale = $manager->getSingle2("SELECT libellecentrale from centrale where idcentrale=?",$row[$i]['idcentrale_centrale']);
     $nb_admin = $manager->getSingle2("SELECT count(idprojet) from utilisateuradministrateur where idutilisateur=?",$row[$i]['idutilisateur']);
     $typecompte = $manager->getSingle2("select libelletype from typeutilisateur where idtypeutilisateur =?", $row[$i]['idtypeutilisateur_typeutilisateur']);
@@ -340,7 +365,7 @@ for ($i = 0; $i < count($row); $i++) {
             '"centrale":' . '"' . $libellecentrale . '"' . "," .
             '"libelletypeuser":' . '"' . $libelletypeuser . '"' . "," .
             '"nb_admin":' . '"' . $nb_admin . '"' . "," .
-            '"nb":' . '"' . $row[$i]['nb'] . '"' . "},";
+            '"nb":' . '"' . $nb . '"' . "},";
     fputs($fprow, $datausercompte);
     fwrite($fprow, '');
 }
