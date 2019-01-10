@@ -345,7 +345,7 @@ for ($i = 0; $i < count($row); $i++) {
     } else {
         $libelletypeuser = TXT_ACADEMIQUEEXTERNE;
     }
-    if(isset($row[$i]['nb'])){
+    if(isset($row[$i]['nb']) && $row[$i]['nb']!=0){
         $nb=$row[$i]['nb'];
     }else{
         $nb = $manager->getSingle2("SELECT count(idprojet_projet) from creer where idutilisateur_utilisateur=?",$row[$i]['idutilisateur']);;
