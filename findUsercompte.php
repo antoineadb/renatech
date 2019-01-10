@@ -345,14 +345,23 @@ for ($i = 0; $i < count($row); $i++) {
     } else {
         $libelletypeuser = TXT_ACADEMIQUEEXTERNE;
     }
-    if(isset($row[$i]['nb']) && $row[$i]['nb']!=0){
-        $nb=$row[$i]['nb'];
-    }else{
-        $nb = $manager->getSingle2("SELECT count(idprojet_projet) from creer where idutilisateur_utilisateur=?",$row[$i]['idutilisateur']);;
-    }
+    $nb = $manager->getSingle2(""
+                . " SELECT COUNT(idprojet) "
+                . " FROM creer "
+                . " LEFT JOIN projet on idprojet=idprojet_projet "
+                . " WHERE idutilisateur_utilisateur=?"
+                . " AND trashed !=TRUE "
+                . " ",$row[$i]['idutilisateur']);
+    
     
     $libellecentrale = $manager->getSingle2("SELECT libellecentrale from centrale where idcentrale=?",$row[$i]['idcentrale_centrale']);
-    $nb_admin = $manager->getSingle2("SELECT count(idprojet) from utilisateuradministrateur where idutilisateur=?",$row[$i]['idutilisateur']);
+    $nb_admin = $manager->getSingle2(
+             " SELECT count(p.idprojet) "
+           . " FROM utilisateuradministrateur ua "
+           . " LEFT JOIN projet p on p.idprojet=ua.idprojet "
+           . " WHERE idutilisateur=?"
+           . " AND p.trashed !=TRUE ",
+            $row[$i]['idutilisateur']);
     $typecompte = $manager->getSingle2("select libelletype from typeutilisateur where idtypeutilisateur =?", $row[$i]['idtypeutilisateur_typeutilisateur']);
     $datausercompte = "" . '{"pseudo":' . '"' . $row[$i]['pseudo'] . '"' . "," . '"datecreation":' . '"' . $row[$i]['datecreation'] . '"' . "," .
             '"idqualitedemandeurindust_qualitedemandeurindust":' . '"' . $row[$i]['idqualitedemandeurindust_qualitedemandeurindust'] . '"' . "," .

@@ -188,7 +188,7 @@ include 'html/header.html';
                 $projetCompte = $manager->getList2("SELECT p.numero FROM utilisateur u"
                         . " LEFT JOIN creer c ON c.idutilisateur_utilisateur= u.idutilisateur"
                         . " LEFT JOIN projet p ON c.idprojet_projet= p.idprojet"
-                        . " WHERE u.idutilisateur=? ", $iduser);
+                        . " WHERE u.idutilisateur=? and p.trashed !=TRUE ", $iduser);
                 $numero = "";
                 foreach ($projetCompte as $key => $value) {
                     $numero .= $value['numero'] . " ,";
