@@ -449,7 +449,7 @@ $date  = $date->format('d-m-Y');
                                            onclick="showHideCentrale('centraleRenatech','block');showHideCentrale('questionCentraleRenatech','block');" >
                                    <?php echo TXT_OUI; ?>
                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="FALSE" class="btRadio"  checked="checked" 
-                                           onclick="showHideCentrale('centraleRenatech','none');dijit.byId('centraleRenatech').set('value',0)" >
+                                           onclick="showHideCentrale('centraleRenatech','none')" onfocus="dijit.byId('centraleRenatech').set('value',0)" >
                                    <?php echo TXT_NON; ?>                                
                                 <?php }?>                                
                             </span>
