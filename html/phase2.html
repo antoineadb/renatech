@@ -429,19 +429,20 @@ $date  = $date->format('d-m-Y');
                         <td>
                             <span id="questionCentraleRenatech" style="margin-top: 5px;margin-left: 20px;display: block;margin-right: 5px;"><?php echo TXT_CENTRALE_RESEAU_PARTENAIRE; ?></span>
                         </td>
-                        <?php   if(!$arrayCentraleRenatech[0]['partenaire_centrale']){ 
+                        <?php   if($arrayCentraleRenatech[0]['partenaire_centrale']){ 
+                                    $display="block";
+                                }else{
                                     $display="none";
-                                }
+                                }                                
                         ?>
                         <td>                            
                             <span id="ouiNonSpan">
                                 <?php if($arrayCentraleRenatech[0]['partenaire_centrale']){ ?>
                                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui' name="question_centrale"  value="TRUE" class="btRadio" checked="checked" 
-                                        onclick="showHideCentrale('centraleRenatech','block');
-                                        showHideCentrale('questionCentraleRenatech','block');" >
+                                        onclick="showHideCentrale('centraleRenatech','block'); showHideCentrale('questionCentraleRenatech','block');" >
                                    <?php echo TXT_OUI; ?>
                                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="FALSE" class="btRadio"  
-                                           onclick="showHideCentrale('centraleRenatech','none');dijit.byId('centraleRenatech').set('value',0)" >
+                                           onclick="showHideCentrale('centraleRenatech','none')" onfocus="dijit.byId('centraleRenatech').set('value',0)">
                                    <?php echo TXT_NON; ?>
                                 <?php }else{?>
                                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui' name="question_centrale"  value="TRUE" class="btRadio"  
@@ -455,8 +456,8 @@ $date  = $date->format('d-m-Y');
                             </td>
                         <td>
 
-                            <select dojoType="dijit.form.Select" name="centraleRenatech" id="centraleRenatech"  class='centraleRenatech'  
-                                    style="margin-left: 22px;display:<?php echo $display; ?>" >
+                            <select dojoType="dijit.form.Select" name="centraleRenatech" id="centraleRenatech"  class='centraleRenatech' onchange="dijit.byId('question_oui').set('value','TRUE')"
+                                    style="margin-left: 22px;display: <?php echo $display; ?>" >
                                 <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>
                                  <?php
                                         if($arrayCentraleRenatech[0]['partenaire_centrale_id']!=0 || $arrayCentraleRenatech[0]['partenaire_centrale_id']!=NULL){
