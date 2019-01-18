@@ -429,31 +429,37 @@ $date  = $date->format('d-m-Y');
                         <td>
                             <span id="questionCentraleRenatech" style="margin-top: 5px;margin-left: 20px;display: block;margin-right: 5px;"><?php echo TXT_CENTRALE_RESEAU_PARTENAIRE; ?></span>
                         </td>
-                        <td>
+                        <?php   if(!$arrayCentraleRenatech[0]['partenaire_centrale']){ 
+                                    $display="none";
+                                }
+                        ?>
+                        <td>                            
                             <span id="ouiNonSpan">
                                 <?php if($arrayCentraleRenatech[0]['partenaire_centrale']){ ?>
                                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui' name="question_centrale"  value="TRUE" class="btRadio" checked="checked" 
-                                           onclick="showHideCentrale('centraleRenatech','block');
-                                       showHideCentrale('questionCentraleRenatech','block');" >
+                                        onclick="showHideCentrale('centraleRenatech','block');
+                                        showHideCentrale('questionCentraleRenatech','block');" >
                                    <?php echo TXT_OUI; ?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="TRUE" class="btRadio"  
-                                           onclick="showHideCentrale('centraleRenatech','none')" >
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="FALSE" class="btRadio"  
+                                           onclick="showHideCentrale('centraleRenatech','none');dijit.byId('centraleRenatech').set('value',0)" >
                                    <?php echo TXT_NON; ?>
                                 <?php }else{?>
                                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui' name="question_centrale"  value="TRUE" class="btRadio"  
                                            onclick="showHideCentrale('centraleRenatech','block');showHideCentrale('questionCentraleRenatech','block');" >
                                    <?php echo TXT_OUI; ?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="TRUE" class="btRadio"  checked="checked" 
-                                           onclick="showHideCentrale('centraleRenatech','none')" >
-                                   <?php echo TXT_NON; ?>
+                                   <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non' name="question_centrale"  value="FALSE" class="btRadio"  checked="checked" 
+                                           onclick="showHideCentrale('centraleRenatech','none');dijit.byId('centraleRenatech').set('value',0)" >
+                                   <?php echo TXT_NON; ?>                                
                                 <?php }?>                                
                             </span>
                             </td>
                         <td>
-                            <select dojoType="dijit.form.Select" name="centraleRenatech" id="centraleRenatech"  class='centraleRenatech'  style="margin-left: 22px;" >
+
+                            <select dojoType="dijit.form.Select" name="centraleRenatech" id="centraleRenatech"  class='centraleRenatech'  
+                                    style="margin-left: 22px;display:<?php echo $display; ?>" >
                                 <option value="-1"><?php echo TXT_SELECTCENTRALE ?></option>
                                  <?php
-                                        if($arrayCentraleRenatech[0]['partenaire_centrale_id']!=null){
+                                        if($arrayCentraleRenatech[0]['partenaire_centrale_id']!=0 || $arrayCentraleRenatech[0]['partenaire_centrale_id']!=NULL){
                                             $rowcentrale =$manager->getListbyArray("select idcentrale,libellecentrale from centrale where  libellecentrale!=? and idcentrale!=?
                                             and masquecentrale!=TRUE order by idcentrale asc",array('Autres',$arrayCentraleRenatech[0]['partenaire_centrale_id']));
                                             $libelle = $manager->getSingle2('SELECT libellecentrale FROM centrale WHERE idcentrale=? ',$arrayCentraleRenatech[0]['partenaire_centrale_id']);
@@ -466,7 +472,8 @@ $date  = $date->format('d-m-Y');
                                             echo "<option value='".'ce'.$rowcentrale[$i]['idcentrale']."'>".$rowcentrale[$i]['libellecentrale']."</option>";
                                         }
                                     ?>
-                            </select>  
+                            </select> 
+                            
                         </td>
                     </tr>
                    
@@ -485,7 +492,7 @@ $date  = $date->format('d-m-Y');
                                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_oui1' name="question_centrale"  value="TRUE" class="btRadio"  
                                            onclick="showHideCentrale('centraleRenatech1','block');showHideCentrale('questionCentraleRenatech1','block');" >
                                    <?php echo TXT_OUI; ?>
-                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non1' name="question_centrale"  value="TRUE" class="btRadio"  checked="checked" 
+                                    <input type= "radio" data-dojo-type="dijit/form/RadioButton" id='question_non1' name="question_centrale"  value="FALSE" class="btRadio"  checked="checked" 
                                            onclick="showHideCentrale('centraleRenatech1','none')" >
                                    <?php echo TXT_NON; ?>                                                       
                             </span>

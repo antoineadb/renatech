@@ -471,7 +471,8 @@ function clean($string) {
     } else{
         include_once 'class/Securite.php';
     }
-    return filterEditor(filterEditor2(Securite::bdd(trim(ltrim(rtrim(str_replace(array(chr(13)), '', removeDoubleQuote($string))))))));
+    $str =filterEditor(filterEditor2(Securite::bdd(trim(ltrim(rtrim(str_replace(array(chr(13)), '', removeDoubleQuote($string))))))));
+    return str_replace("br />", "",$str);
 }
 
 function cleanREPORTPDF($string) {

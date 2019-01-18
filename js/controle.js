@@ -349,6 +349,7 @@ if(!dijit.byId('dureeestimeprojet').value){
 }
 }
 function showHideCentrale(id,value){
+    
     if(document.getElementById(id)){
         document.getElementById(id).style.display=value;
     }

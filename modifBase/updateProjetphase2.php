@@ -511,18 +511,18 @@ if (isset($_POST['page_precedente'])) {
 //------------------------------------------------------------------------------------------------------------
 //              Traitement de la question des centrale partenaire du projet
 //------------------------------------------------------------------------------------------------------------        
+        //var_dump($_POST['question_centrale']);die;
         $partenaire_centrale = $_POST['question_centrale'];
-        if ($partenaire_centraleBDD != $partenaire_centrale) {
-            if ($partenaire_centrale == 'TRUE') {
-                $_SESSION['partenairerprojetmodif'] = TXT_OUI;
-                $partenaire_centraleBDD = TXT_OUI;
-            } else {
-                $_SESSION['partenairerprojetmodif'] = TXT_NON;
-                $partenaire_centraleBDD = TXT_NON;
-            }
+    
+        if ($partenaire_centrale == 'TRUE') {
+            $_SESSION['partenairerprojetmodif'] = TXT_OUI;    
         } else {
-            $_SESSION['partenairerprojetmodif'] = '';
-        }      
+            $manager->deleteCentralePartenaireProjet($idprojet);
+            $_SESSION['partenairerprojetmodif'] = TXT_NON;
+            $partenaire_centraleBDD = TXT_NON;
+        }        
+        
+        
 //------------------------------------------------------------------------------------------------------------
 //              Traitement des centrale partenaire du projet
 //------------------------------------------------------------------------------------------------------------        
@@ -826,7 +826,7 @@ if (isset($_POST['page_precedente'])) {
         $descriptionautrecentraleBDD = $rowprojet[0]['descriptionautrecentrale'];
     } else {
         $descriptionautrecentraleBDD = "";
-    }////
+    }
     if ($_POST['etapeautrecentrale'] == 'TRUE') {//-->ON  SELECTIONNE AUTRE CENTRALE
         $etapeautrecentrale = 'TRUE';
         if (!empty($_POST['autrecentrale'])) {            
@@ -861,143 +861,29 @@ if (isset($_POST['page_precedente'])) {
         $manager->deleteprojetautrecentrale($idprojet);
         $descriptionautrecentrale = '';
     }
-    $sautrecentrale = '';
-    if (!empty($_POST['autrecentrale'])) {
-        if ($arrayAutreCentraleBDD != $_POST['autrecentrale']) {
-            for ($i = 0; $i < count($_POST['autrecentrale']); $i++) {
-                $sautrecentrale .= $_POST['autrecentrale'][$i] . ' - ';
-            }
-            $_SESSION['autrecentralemodif'] = substr($sautrecentrale, 0, -2);
-        } else {
-            $_SESSION['autrecentralemodif'] = '';
+   if(isset($_POST['autrecentrale'])){
+       $sautrecentrale = '';
+        for ($i = 0; $i < count($_POST['autrecentrale']); $i++) {
+            $sautrecentrale .= $_POST['autrecentrale'][$i] . ' - ';
         }
-    } else {
-        $sautrecentrale = '';
-    }
-
-
-    if (!empty(strip_tags($_POST['desTechno']))) {
-        $descriptifTechnologique = clean($_POST['desTechno']);
-        if ($descriptiftechnologiqueBDD != $descriptifTechnologique) {
-            $_SESSION['descriptifTechnologiquemodif'] = $descriptifTechnologique;
-        } else {
-            $_SESSION['descriptifTechnologiquemodif'] = '';
-        }
-    } else {
-        $descriptifTechnologique = clean($manager->getSingle2("select descriptiftechnologique from projet where idprojet = ?", $idprojet));
-        $_SESSION['descriptifTechnologiquemodif'] = '';
-        if (empty($descriptifTechnologique)) {
-            $descriptifTechnologique = '_';
-            $_SESSION['descriptifTechnologiquemodif'] = '';
-        }
-    }
-    if (!empty($rowprojet[0]['verrouidentifiee'])) {
-        $verrouidentifieBDD = $rowprojet[0]['verrouidentifiee'];
-    } else {
-        $verrouidentifieBDD = '';
-    }
-    if (!empty(strip_tags($_POST['verrouide']))) {
-        $verrouidentifie = clean(trim($_POST['verrouide']));
-        if ($verrouidentifieBDD != $verrouidentifie) {
-            $_SESSION['verrouidentifiemodif'] = $verrouidentifie;
-        } else {
-            $_SESSION['verrouidentifiemodif'] = '';
-        }
-    } else {
-        $_SESSION['verrouidentifiemodif'] = '';
-        $verrouidentifie = clean($manager->getSingle2("select verrouidentifiee from projet where idprojet = ?", $idprojet));
-        if (empty($verrouidentifie)) {
-            $verrouidentifie = '_';
-            $_SESSION['verrouidentifiemodif'] = '';
-        }
-    }
-    $reussiteBDD = $rowprojet[0]['reussite'];
-    if (!empty(strip_tags($_POST['reussit']))) {
-        $reussite = clean($_POST['reussit']);
-        if ($reussiteBDD != $reussite) {
-            $_SESSION['reussitemodif'] = $reussite;
-        } else {
-            $_SESSION['reussitemodif'] = '';
-        }
-    } else {
-        $reussite = clean($manager->getSingle2("select reussite from projet where idprojet =?", $idprojet));
-        $_SESSION['reussitemodif'] = '';
-        if (empty($reussite)) {
-            $reussite = '_';
-            $_SESSION['reussitemodif'] = '';
-        }
-    }
-    $nbPlaqueBDD = $rowprojet[0]['nbplaque'];
-
-    if (!empty($_POST['nbPlaque']) || $_POST['nbPlaque'] != 0) {
-        $nbPlaque = Securite::bdd($_POST['nbPlaque']);
-        if ($nbPlaqueBDD != $nbPlaque) {
-            $_SESSION['nbplaquemodif'] = $nbPlaque;
-        } else {
-            $_SESSION['nbplaquemodif'] = '';
-        }
-    } elseif (!empty($rowprojet[0]['nbplaque']) || $rowprojet[0]['nbplaque'] != 0) {
-        $nbPlaque = $rowprojet[0]['nbplaque'];
-        $_SESSION['nbplaquemodif'] = '';
-    } else {
-        $nbPlaque = 0;
-        $_SESSION['nbplaquemodif'] = '';
-    }
-    $nbrunBDD = $rowprojet[0]['nbrun'];
-    if (!empty($_POST['nbRun']) || $_POST['nbRun'] != 0) {
-        $nbRun = Securite::bdd($_POST['nbRun']);
-        if ($nbrunBDD != $nbRun) {
-            $_SESSION['nbRunmodif'] = $nbRun;
-        } else {
-            $_SESSION['nbRunmodif'] = '';
-        }
-    } elseif (!empty($rowprojet[0]['nbrun'])) {
-        $nbRun = $rowprojet[0]['nbrun'];
-        $_SESSION['nbRunmodif'] = '';
-    } else {
-        $nbRun = 0;
-        $_SESSION['nbRunmodif'] = '';
-    }
-
-    if (!empty($_POST['devis'])) {
-        $devis = Securite::bdd($_POST['devis']);
-    } elseif (!empty($rowprojet[0]['envoidevis'])) {
-        $devis = $rowprojet[0]['envoidevis'];
-    } else {
-        $devis = '';
-    }
-    $emailrespdevisBDD = $rowprojet[0]['emailrespdevis'];
-
-    if (!empty($_POST['mailresp'])) {
-        $mailresp = Securite::bdd(($_POST['mailresp']));
-        if ($emailrespdevisBDD != $mailresp) {
-            $_SESSION['emailrespdevismodif)'] = $mailresp;
-        } else {
-            $_SESSION['emailrespdevismodif)'] = '';
-        }
-    } elseif (!empty($rowprojet[0]['emailrespdevis'])) {
-        $mailresp = $rowprojet[0]['emailrespdevis'];
-        $_SESSION['emailrespdevismodif)'] = '';
-    } else {
-        $mailresp = '';
-        $_SESSION['emailrespdevismodif)'] = '';
-    }
-
-    $refinterneBDD = $rowprojet[0]['refinterneprojet'];
-    if (!empty($_POST['refinterne'])) {
-        $refinterne = stripslashes(Securite::bdd(($_POST['refinterne'])));
-        if ($refinterneBDD != $refinterne) {
-            $_SESSION['refinternemodif'] = $refinterne;
-        } else {
-            $_SESSION['refinternemodif'] = '';
-        }
-    } elseif (!empty($rowprojet[0]['refinterneprojet'])) {
-        $refinterne = $rowprojet[0]['refinterneprojet'];
-        $_SESSION['refinternemodif'] = '';
-    } else {
-        $refinterne = '';
-        $_SESSION['refinternemodif'] = '';
-    }
+        $_SESSION['autrecentralemodif'] = substr($sautrecentrale, 0, -2);
+   }
+    
+    $descriptifTechnologique = clean($_POST['desTechno']);
+    $_SESSION['descriptifTechnologiquemodif'] = $descriptifTechnologique;
+    $verrouidentifie = clean(trim($_POST['verrouide']));
+     $_SESSION['verrouidentifiemodif'] = $verrouidentifie;
+    $reussite = clean($_POST['reussit']);
+    $_SESSION['reussitemodif'] = $reussite;
+    $nbPlaque = Securite::bdd($_POST['nbPlaque']);
+    $_SESSION['nbplaquemodif'] = $nbPlaque;
+    $nbRun = Securite::bdd($_POST['nbRun']);
+    $_SESSION['nbRunmodif'] = $nbRun;
+    $devis = Securite::bdd($_POST['devis']);
+    $mailresp = Securite::bdd(($_POST['mailresp']));
+    $_SESSION['emailrespdevismodif)'] = $mailresp;        
+    $refinterne = stripslashes(Securite::bdd(($_POST['refinterne'])));
+    $_SESSION['refinternemodif'] = $refinterne;    
 //------------------------------------------------------------------------------------------------------------------------
 //			 MISE A JOUR DES FICHIERS UPLOADES ON VERIFIE L'ECART ENTRE LES NOMS INSCRIT DANS LA TABLE PROJET
 //			 ET LES FICHIERS PRESENTS SUR LE SERVEUR, ON EFFACE CEUX QUI NE SONT PAS REFERENCES DANS LA TABLE

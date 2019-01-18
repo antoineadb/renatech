@@ -1374,12 +1374,12 @@ idpays_pays, idlogin_loginpassword,idqualitedemandeurindust_qualitedemandeurindu
             $this->_db->rollBack();
         }
     }
-
-    public function deleteprojetsourcefinancement($idprojet) {
+    
+    public function deleteCentralePartenaireProjet($idprojet) {
         try {
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->beginTransaction();
-            $requete = $this->_db->prepare("delete from projetsourcefinancement where idprojet_projet=? ");
+            $requete = $this->_db->prepare("UPDATE projet SET partenaire_centrale_id = 0 WHERE idprojet=? ");
             $requete->bindParam(1, $idprojet, PDO::PARAM_INT);
             $requete->execute();
             $this->_db->commit();
