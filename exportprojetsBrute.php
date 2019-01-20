@@ -119,6 +119,7 @@ $sql = "SELECT
         WHERE co.idcentrale_centrale =? 
         AND dateprojet BETWEEN ? AND ?
         AND co.idstatutprojet_statutprojet !=?
+        AND trashed != TRUE
         ORDER BY p.idprojet ASC";
 $row = $manager->getListbyArray($sql, $donnee);
 
