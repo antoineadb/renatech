@@ -329,7 +329,7 @@ function stripTaggsbr($string) {
  * @return type
  */
 function filterEditor2($string0) {
-    $string = strip_tags($string0,'<br>');
+    $string = strip_tags($string0);   
     $nb2 = mb_substr_count($string, "<style");
     if ($nb2 > 0) {
         for ($i = 0; $i <= $nb2; $i++) {

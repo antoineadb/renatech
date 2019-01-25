@@ -1864,10 +1864,10 @@ if($idstatut!=ENATTENTEPHASE2){
                                             document.getElementById('msgerrdescriptechno').style.display = 'none';
                                         }
                                     });
-                                    dojo.connect(editor1, "onLoad", this, function(event) {
+                                    //dojo.connect(editor1, "onLoad", this, function(event) {
                                         dojo.byId("desTechno").value = editor1.get("value");
                                         document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("desTechno").value),'').length;              
-                                    });	
+                                    //});	
             
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              VERROU 
@@ -1899,11 +1899,11 @@ if($idstatut!=ENATTENTEPHASE2){
                                             document.getElementById('msgerrverrou').style.display = 'none';
                                         }
                                     });
-                                    dojo.connect(editor2, "onLoad", this, function(event) {
+                                    ///dojo.connect(editor2, "onLoad", this, function(event) {
                                         document.getElementById('cptverrou').style.display = 'block';
                                         dojo.byId("verrouide").value = editor2.get("value");
                                         document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("verrouide").value),'').length;
-                                    });
+                                    //});
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              ETAPE AUTRE CENTRALE 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1934,11 +1934,11 @@ if($idstatut!=ENATTENTEPHASE2){
                                             document.getElementById('msgerretapeautrecentrale').style.display = 'none';
                                         }
                                     });
-                                    dojo.connect(editor5, "onLoad", this, function(event) {
+                                    //dojo.connect(editor5, "onLoad", this, function(event) {
                                         document.getElementById('cptetapeautrecentrale').style.display = 'block';
                                         dojo.byId("etautrecentrale").value = editor5.get("value");
                                         document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
-                                    });
+                                    //});
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              REUSSITE
@@ -1970,10 +1970,10 @@ if($idstatut!=ENATTENTEPHASE2){
                                             document.getElementById('msgerrreussite').style.display = 'none';
                                         }
                                     });
-                                    dojo.connect(editor3, "onLoad", this, function(event) {
+                                    //dojo.connect(editor3, "onLoad", this, function(event) {
                                         dojo.byId("reussit").value = editor3.get("value");
                                         document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("reussit").value),'').length;
-                                    });
+                                    //});
 
                                 });
                             })
