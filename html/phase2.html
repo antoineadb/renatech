@@ -1817,6 +1817,29 @@ if($idstatut!=ENATTENTEPHASE2){
                                     dojo.connect(editor3, "onChange", this, function(event) {
                                         dojo.byId("reussit").value = editor3.get("value");
                                     });
+                                    //SAFARI
+                                    dojo.byId("reussit").value = editor3.get("value");
+                                    document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("reussit").value),'').length;
+                                    if (trim(strip_tags(editor3.get("value")),'').length > 3000) {
+                                        document.getElementById('msgerrreussite').style.display = 'block';
+                                    } else {
+                                        document.getElementById('msgerrreussite').style.display = 'none';
+                                    }
+                                    dojo.byId("desTechno").value = editor1.get("value");
+                                    document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("desTechno").value),'').length;
+                                    if (trim(strip_tags(editor1.get("value")),'').length > 3000) {
+                                        document.getElementById('msgerrdescriptechno').style.display = 'block';
+                                    } else {
+                                        document.getElementById('msgerrdescriptechno').style.display = 'none';
+                                    }
+                                    dojo.byId("verrouide").value = editor2.get("value");
+                                    document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("verrouide").value),'').length;
+                                    if (trim(strip_tags(editor2.get("value")),'').length > 3000) {
+                                        document.getElementById('msgerrverrou').style.display = 'block';
+                                    } else {
+                                        document.getElementById('msgerrverrou').style.display = 'none';
+                                    }
+                                        
                                     dojo.connect(editor4, "onChange", this, function(event) {
                                         dojo.byId("commentaireRefusValeur").value = editor4.get("value");
                                     });
@@ -1864,10 +1887,10 @@ if($idstatut!=ENATTENTEPHASE2){
                                             document.getElementById('msgerrdescriptechno').style.display = 'none';
                                         }
                                     });
-                                    //dojo.connect(editor1, "onLoad", this, function(event) {
+                                    dojo.connect(editor1, "onLoad", this, function(event) {
                                         dojo.byId("desTechno").value = editor1.get("value");
                                         document.getElementById('cptdescriptechno').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("desTechno").value),'').length;              
-                                    //});	
+                                    });	
             
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              VERROU 
@@ -1899,11 +1922,11 @@ if($idstatut!=ENATTENTEPHASE2){
                                             document.getElementById('msgerrverrou').style.display = 'none';
                                         }
                                     });
-                                    ///dojo.connect(editor2, "onLoad", this, function(event) {
+                                    dojo.connect(editor2, "onLoad", this, function(event) {
                                         document.getElementById('cptverrou').style.display = 'block';
                                         dojo.byId("verrouide").value = editor2.get("value");
                                         document.getElementById('cptverrou').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("verrouide").value),'').length;
-                                    //});
+                                    });
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              ETAPE AUTRE CENTRALE 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1934,11 +1957,11 @@ if($idstatut!=ENATTENTEPHASE2){
                                             document.getElementById('msgerretapeautrecentrale').style.display = 'none';
                                         }
                                     });
-                                    //dojo.connect(editor5, "onLoad", this, function(event) {
+                                    dojo.connect(editor5, "onLoad", this, function(event) {
                                         document.getElementById('cptetapeautrecentrale').style.display = 'block';
                                         dojo.byId("etautrecentrale").value = editor5.get("value");
                                         document.getElementById('cptetapeautrecentrale').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("etautrecentrale").value),'').length;
-                                    //});
+                                    });
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 //                                                                              REUSSITE
@@ -1970,14 +1993,14 @@ if($idstatut!=ENATTENTEPHASE2){
                                             document.getElementById('msgerrreussite').style.display = 'none';
                                         }
                                     });
-                                    //dojo.connect(editor3, "onLoad", this, function(event) {
+                                    dojo.connect(editor3, "onLoad", this, function(event) {
                                         dojo.byId("reussit").value = editor3.get("value");
                                         document.getElementById('cptreussite').innerHTML = "<?php echo TXT_NBCARACT.' : '; ?>"+ strip_tags(trim(dojo.byId("reussit").value),'').length;
-                                    //});
+                                    });
 
                                 });
                             })
-                        </script>
+                        </script>                        
                         <?php
                         //RECUPERATION DES RESSOURCES SELECTIONNEES
                         $row =$manager->getListbyArray("SELECT DISTINCT libelleressource,idressource FROM ressource,ressourceprojet,projet
