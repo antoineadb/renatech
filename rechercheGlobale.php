@@ -7,6 +7,7 @@ include_once './outils/constantes.php';
 $db = BD::connecter(); //CONNEXION A LA BASE DE DONNEE
 $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
 ?>
+<script src="<?php echo '/' . REPERTOIRE ?>/js/jquery-1.11.3.min.js"></script>
 <div id="global">
     <?php include 'html/entete.html'; ?><div style="padding-top: 60px;"><?php include 'outils/bandeaucentrale.php'; ?></div>
     <div id="rech">
@@ -15,26 +16,26 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
         $idtypeutilisateur = $manager->getSingle2("SELECT idtypeutilisateur_typeutilisateur FROM loginpassword,utilisateur WHERE idlogin = idlogin_loginpassword and pseudo= ?", $pseudo);
         if (isset($_POST['rechercheglobale'])) {
             $rechercheglobale = trim($_POST['rechercheglobale']);
-        }        
-        if (!empty($rechercheglobale) && strlen($rechercheglobale) > 2 || !empty($_POST['rechAvance']) && strlen($_POST['rechAvance'])>2) {
+        }
+        if (!empty($rechercheglobale) && strlen($rechercheglobale) > 2 || !empty($_POST['rechAvance']) && strlen($_POST['rechAvance']) > 2) {
             $idcentrale = $manager->getSingle2("SELECT idcentrale FROM loginpassword, centrale,utilisateur WHERE idlogin = idlogin_loginpassword AND
                     idcentrale = idcentrale_centrale and pseudo=?", $pseudo);
-            
-            if(!empty($_POST['rechAvance'])){
-                    $s_statut = "";
-                    $recherche = $_POST['rechAvance'];
-                    foreach ($_POST['statut'] as $value) {
-                        $s_statut .=$value.",";
-                    }
-                    $reqStatut =" AND idstatutprojet_statutprojet in(".substr($s_statut,0,-1).") ";
-                }else{
-                    $reqStatut ="";
+
+            if (!empty($_POST['rechAvance'])) {
+                $s_statut = "";
+                $recherche = $_POST['rechAvance'];
+                foreach ($_POST['statut'] as $value) {
+                    $s_statut .= $value . ",";
                 }
-                if(!empty($_POST['rechercheglobale'])){
-                    $recherche = $_POST['rechercheglobale'];
-                }
-            
-            
+                $reqStatut = " AND idstatutprojet_statutprojet in(" . substr($s_statut, 0, -1) . ") ";
+            } else {
+                $reqStatut = "";
+            }
+            if (!empty($_POST['rechercheglobale'])) {
+                $recherche = $_POST['rechercheglobale'];
+            }
+
+
             if ($idtypeutilisateur == ADMINLOCAL) {
                 $manager->exeRequete("drop table if exists TMPRECHERCHE");
                 $manager->getRequete("CREATE TABLE TMPRECHERCHE AS (
@@ -42,177 +43,177 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(p.numero) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(p.numero) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(p.numero) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(p.numero) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(p.titre) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(p.titre) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(p.titre) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(p.titre) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(p.description) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(p.description) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(p.description) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(p.description) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(u.nom) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(u.nom) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(u.prenom) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(u.prenom) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(u.nom) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(u.nom) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                         FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                         WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                         concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                        AND ce.idcentrale =? and lower(p.refinterneprojet) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(p.refinterneprojet) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =? and lower(p.refinterneprojet) like lower(?)  AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =? and lower(p.refinterneprojet) like lower(?)  AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =?  AND  lower(u.nom) like lower(?) AND trashed =FALSE  ".$reqStatut."
+                        AND ce.idcentrale =?  AND  lower(u.nom) like lower(?) AND trashed =FALSE  " . $reqStatut . "
                         union
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                         FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                         WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                         AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                        AND ce.idcentrale =?  AND  lower(u.prenom) like lower(?) AND trashed =FALSE  ".$reqStatut." );
+                        AND ce.idcentrale =?  AND  lower(u.prenom) like lower(?) AND trashed =FALSE  " . $reqStatut . " );
                     ", array(
-                        $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%',$idcentrale, '%'. $recherche . '%', 
-                        $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%',$idcentrale, '%'. $recherche . '%', 
-                        $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%',$idcentrale, "%". $recherche . "%",
-                        $idcentrale, "%".  $recherche . "%", $idcentrale, '%' . $recherche . '%',$idcentrale, '%'. $recherche . '%', 
-                        $idcentrale, "%".  $recherche . "%")
+                    $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%',
+                    $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%',
+                    $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%', $idcentrale, "%" . $recherche . "%",
+                    $idcentrale, "%" . $recherche . "%", $idcentrale, '%' . $recherche . '%', $idcentrale, '%' . $recherche . '%',
+                    $idcentrale, "%" . $recherche . "%")
                 );
             } elseif ($idtypeutilisateur == ADMINNATIONNAL) {
                 $manager->exeRequete("drop table if exists TMPRECHERCHE");
-                if(!empty($_POST['rechAvance'])){
+                if (!empty($_POST['rechAvance'])) {
                     $s_statut = "";
                     $recherche = $_POST['rechAvance'];
                     foreach ($_POST['statut'] as $value) {
-                        $s_statut .=$value.",";
+                        $s_statut .= $value . ",";
                     }
-                    $reqStatut =" AND idstatutprojet_statutprojet in(".substr($s_statut,0,-1).") ";
-                }else{
-                    $reqStatut ="";
+                    $reqStatut = " AND idstatutprojet_statutprojet in(" . substr($s_statut, 0, -1) . ") ";
+                } else {
+                    $reqStatut = "";
                 }
-                if(!empty($_POST['rechercheglobale'])){
+                if (!empty($_POST['rechercheglobale'])) {
                     $recherche = $_POST['rechercheglobale'];
-                }               
+                }
                 $manager->getRequete("CREATE TABLE TMPRECHERCHE AS (
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(p.numero) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND lower(p.numero) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.numero) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND  lower(p.numero) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.titre) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND  lower(p.titre) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.titre) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND  lower(p.titre) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.description) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND  lower(p.description) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(p.description) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND lower(p.description) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(u.nom) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND lower(u.nom) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(u.prenom) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND lower(u.prenom) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(u.nom) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND lower(u.nom) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM utilisateurporteurprojet up,utilisateur u,projet p,concerne co,loginpassword l,centrale ce,statutprojet s 
                             WHERE up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet 
-                            AND l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale	AND  lower(u.nom) like lower(?) AND trashed =FALSE ".$reqStatut."
+                            AND l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale	AND  lower(u.nom) like lower(?) AND trashed =FALSE " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM utilisateurporteurprojet up,utilisateur u,projet p,concerne co,loginpassword l,centrale ce,statutprojet s 
                             WHERE up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur AND co.idprojet_projet = p.idprojet AND co.idstatutprojet_statutprojet = s.idstatutprojet 
-                            AND l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale	AND  lower(u.prenom) like  lower(?)  ".$reqStatut."
+                            AND l.idlogin = u.idlogin_loginpassword AND ce.idcentrale = co.idcentrale_centrale	AND  lower(u.prenom) like  lower(?)  " . $reqStatut . "
                         );", array(
                     '%' . $recherche . '%', '%' . $recherche . '%', '%' . $recherche . '%',
                     '%' . $recherche . '%', '%' . $recherche . '%', '%' . $recherche . '%',
@@ -221,108 +222,108 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                     '%' . $recherche . "%")
                 );
             } elseif ($idtypeutilisateur == UTILISATEUR) {
-                if(!empty($_POST['rechAvance'])){
+                if (!empty($_POST['rechAvance'])) {
                     $s_statut = "";
                     $recherche = $_POST['rechAvance'];
                     foreach ($_POST['statut'] as $value) {
-                        $s_statut .=$value.",";
+                        $s_statut .= $value . ",";
                     }
-                    $reqStatut =" AND idstatutprojet_statutprojet in(".substr($s_statut,0,-1).") ";
-                }else{
-                    $reqStatut ="";
+                    $reqStatut = " AND idstatutprojet_statutprojet in(" . substr($s_statut, 0, -1) . ") ";
+                } else {
+                    $reqStatut = "";
                 }
-                if(!empty($_POST['rechercheglobale'])){
+                if (!empty($_POST['rechercheglobale'])) {
                     $recherche = $_POST['rechercheglobale'];
-                }       
-                
+                }
+
                 $manager->exeRequete("drop table if exists TMPRECHERCHE");
                 $manager->getRequete("CREATE TABLE TMPRECHERCHE AS (
                         SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(p.numero) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND lower(p.numero) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.numero) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND  lower(p.numero) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.titre) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND  lower(p.titre) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.titre) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND  lower(p.titre) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur,null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.description) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND  lower(p.description) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(p.description) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND lower(p.description) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(u.nom) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND lower(u.nom) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND lower(u.prenom) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND lower(u.prenom) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(u.nom) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND lower(u.nom) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND lower(u.prenom) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND lower(u.prenom) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,u.nom||' -  '|| u.prenom as demandeur, null as porteur
                             FROM projet p,creer c,utilisateur u,concerne,loginpassword l,centrale ce,statutprojet s
                             WHERE p.idprojet = c.idprojet_projet AND c.idutilisateur_utilisateur = u.idutilisateur AND concerne.idprojet_projet = p.idprojet AND
                             concerne.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword AND s.idstatutprojet = concerne.idstatutprojet_statutprojet
-                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                             union
                             SELECT p.titre,p.idprojet,p.numero,u.idutilisateur,p.refinterneprojet,p.dateprojet,ce.libellecentrale,s.libellestatutprojet,null as demandeur,u.nom||' -  '|| u.prenom as porteur
                             FROM projet p ,utilisateur u,concerne c,loginpassword l ,centrale ce,statutprojet s,utilisateurporteurprojet up
                             WHERE c.idprojet_projet = p.idprojet AND c.idcentrale_centrale = ce.idcentrale AND l.idlogin = u.idlogin_loginpassword
                             AND s.idstatutprojet = c.idstatutprojet_statutprojet AND up.idprojet_projet = p.idprojet AND up.idutilisateur_utilisateur = u.idutilisateur
-                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE and l.pseudo=?  ".$reqStatut."
+                            AND  lower(p.refinterneprojet) like lower(?) AND trashed =FALSE and l.pseudo=?  " . $reqStatut . "
                         )", array(
-                             '%' . $recherche . '%' , $pseudo,
-                             '%' . $recherche . '%' , $pseudo,
-                             '%' . $recherche . '%' , $pseudo,
-                             '%' . $recherche . '%' , $pseudo,
-                             '%' . $recherche . '%' , $pseudo,
-                             '%' . $recherche . '%' , $pseudo,
-                             '%' . $recherche . '%' , $pseudo, 
-                             '%' . $recherche . '%' , $pseudo,
-                             '%' . $recherche . '%' , $pseudo,
-                             '%' . $recherche . '%' , $pseudo, 
-                             '%' . $recherche . '%' , $pseudo, 
-                             '%' . $recherche . '%' , $pseudo
-                            )
-                        );
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo,
+                    '%' . $recherche . '%', $pseudo
+                        )
+                );
             }
             $porteur = '';
             $arrayporteur1 = $manager->getList("select distinct numero from tmprecherche");
@@ -331,31 +332,31 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                 $arrayporteur = $manager->getList2("select distinct porteur from tmprecherche where  numero=?", $value[0]);
                 foreach ($arrayporteur as $key1 => $value1) {
                     if (!empty($value1[0])) {
-                        $porteur.= $value1[0] . ' / ';
-                    }                    
-                    if(!empty($porteur)){
-                        $porteur=substr($porteur, 0,-1);
-                        $numero = $value[0];                        
+                        $porteur .= $value1[0] . ' / ';
+                    }
+                    if (!empty($porteur)) {
+                        $porteur = substr($porteur, 0, -1);
+                        $numero = $value[0];
                         $tmprecherche = new Tmprecherche($porteur, $numero);
                         $manager->updateRecherche1($tmprecherche, $numero);
                     }
                 }
                 $porteur = '';
             }
-            
+
             $arrayRecherche = $manager->getList("select * from tmprecherche");
-            $nbarray=count($arrayRecherche);
-            
+            $nbarray = count($arrayRecherche);
+
             for ($i = 0; $i < $nbarray; $i++) {
-                $demandeur= $manager->getSingle2("select nom||' -  '|| prenom from creer,utilisateur where idutilisateur = idutilisateur_utilisateur and idprojet_projet=?", $arrayRecherche[$i]['idprojet']);
-                $manager->getRequete("update tmprecherche set demandeur = ? where idprojet=?",array($demandeur,$arrayRecherche[$i]['idprojet']));
+                $demandeur = $manager->getSingle2("select nom||' -  '|| prenom from creer,utilisateur where idutilisateur = idutilisateur_utilisateur and idprojet_projet=?", $arrayRecherche[$i]['idprojet']);
+                $manager->getRequete("update tmprecherche set demandeur = ? where idprojet=?", array($demandeur, $arrayRecherche[$i]['idprojet']));
             }
-            
-            
-            $rand=  rand(0, 100000);
+
+
+            $rand = rand(0, 100000);
             $row = $manager->getList("select distinct on(numero) * from (select  * from tmprecherche where demandeur is not null "
                     . "union select * from tmprecherche where porteur is not null ) as toto");
-            $fprow = fopen('tmp/resultatrechercheprojet'.$rand.'.json', 'w');
+            $fprow = fopen('tmp/resultatrechercheprojet' . $rand . '.json', 'w');
             $datausercompte = "";
             fwrite($fprow, '{"items": [');
             for ($i = 0; $i < count($row); $i++) {
@@ -367,7 +368,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                         . '"libellestatutprojet":' . '"' . str_replace("''", "'", $row[$i]['libellestatutprojet']) . '"' . ","
                         . '"idutilisateur":' . '"' . $row[$i]['idutilisateur'] . '"' . ","
                         . '"demandeur":' . '"' . ucfirst($row[$i]['demandeur']) . '"' . ","
-                        . '"porteur":' . '"' . substr(ucfirst($row[$i]['porteur']),0,-1) . '"' . ","                        
+                        . '"porteur":' . '"' . substr(ucfirst($row[$i]['porteur']), 0, -1) . '"' . ","
                         . '"imprime":' . '"' . TXT_PDF . '"' . ","
                         . '"idprojet":' . '"' . $row[$i]['idprojet'] . '"' . ","
                         . '"libellecentrale":' . '"' . $row[$i]['libellecentrale'] . '"' . "},";
@@ -375,12 +376,12 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                 fwrite($fprow, '');
             }
             fwrite($fprow, ']}');
-            $json_filerecherche = "tmp/resultatrechercheprojet".$rand.".json";
+            $json_filerecherche = "tmp/resultatrechercheprojet" . $rand . ".json";
             $json_fileRecherche1 = file_get_contents($json_filerecherche);
             $json_fileRecherche = str_replace('},]}', '}]}', $json_fileRecherche1);
             file_put_contents($json_filerecherche, $json_fileRecherche);
             fclose($fprow);
-            chmod('tmp/resultatrechercheprojet'.$rand.'.json', 0777);
+            chmod('tmp/resultatrechercheprojet' . $rand . '.json', 0777);
             if (count($row) == 0) {
                 echo '<fieldset id="recherche" style="border-color: #5D8BA2;margin-left:-32px;padding-left:10px;width: 1028px;">
           <legend style="color: #5D8BA2;">' . TXT_NORESULT . '</legend>';
@@ -399,10 +400,10 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                             "dojo/data/ObjectStore",
                             "dojo/request",
                             "dojo/domReady!"
-                        ], function(DataGrid, Memory, ObjectStore, request) {
-                            request.get("<?php echo '/' . REPERTOIRE.'/tmp/resultatrechercheprojet'.$rand.'.json'?>", {
+                        ], function (DataGrid, Memory, ObjectStore, request) {
+                            request.get("<?php echo '/' . REPERTOIRE . '/tmp/resultatrechercheprojet' . $rand . '.json' ?>", {
                                 handleAs: "json"
-                            }).then(function(data) {
+                            }).then(function (data) {
                                 store = new Memory({data: data.items});
                                 dataStore = new ObjectStore({objectStore: store});
 
@@ -418,7 +419,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                                         {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "75px"},
                                         {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet", width: "75px"},
                                         {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "220px  "},
-                                        {name: " ", field: "imprime", width: "30px", formatter: hrefFormatterPDF},                                        
+                                        {name: " ", field: "imprime", width: "30px", formatter: hrefFormatterPDF},
                                         {name: "<?php echo TXT_REFINTERNE; ?>", field: "refinterneprojet", width: "90px"},
                                         {name: "<?php echo TXT_STATUTPROJETS; ?>", field: "libellestatutprojet", width: "105px"},
                                         {name: "<?php echo TXT_DEMANDEUR; ?>", field: "demandeur", width: "160px"},
@@ -432,14 +433,14 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                 </div>
                 </fieldset>
                 <br>
-            <?php } else {?>
+            <?php } else { ?>
                 <div id="gridrechercheglobale" >
                     <script>
                         var gridrechercheglobale, dataStore, store;
-                        require(["dojox/grid/DataGrid","dojo/store/Memory","dojo/data/ObjectStore","dojo/request","dojo/domReady!"], function(DataGrid, Memory, ObjectStore, request) {                           
-                           request.get("<?php echo '/' . REPERTOIRE.'/tmp/resultatrechercheprojet'.$rand.'.json'?>", {
+                        require(["dojox/grid/DataGrid", "dojo/store/Memory", "dojo/data/ObjectStore", "dojo/request", "dojo/domReady!"], function (DataGrid, Memory, ObjectStore, request) {
+                            request.get("<?php echo '/' . REPERTOIRE . '/tmp/resultatrechercheprojet' . $rand . '.json' ?>", {
                                 handleAs: "json"
-                            }).then(function(data) {
+                            }).then(function (data) {
                                 store = new Memory({data: data.items});
                                 dataStore = new ObjectStore({objectStore: store});
                                 function hrefFormatterNumero(numero, idx) {
@@ -459,7 +460,7 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                                         {name: "<?php echo TXT_NUMERO; ?>", field: "numero", width: "75px", formatter: hrefFormatterNumero},
                                         {name: "<?php echo TXT_DATEDEMANDE; ?>", field: "dateprojet", width: "75px"},
                                         {name: "<?php echo TXT_TITREPROJET; ?>", field: "titre", width: "220px  "},
-                                        {name: " ", field: "imprime", width: "30px", formatter: hrefFormatterPDF},                                        
+                                        {name: " ", field: "imprime", width: "30px", formatter: hrefFormatterPDF},
                                         {name: "<?php echo TXT_REFINTERNE; ?>", field: "refinterneprojet", width: "90px"},
                                         {name: "<?php echo TXT_STATUTPROJETS; ?>", field: "libellestatutprojet", width: "105px"},
                                         {name: "<?php echo TXT_DEMANDEUR; ?>", field: "demandeur", width: "160px"},
@@ -469,9 +470,10 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
                                 gridrechercheglobale.startup();
                             });
                         });
+
                     </script>
-                </div>
-               </fieldset>
+                </div>               
+                </fieldset>
                 <br>
             <?php } ?>
             <?php include 'html/footer.html'; ?>
@@ -482,3 +484,9 @@ $manager = new Manager($db); //CREATION D'UNE INSTANCE DU MANAGER
     echo '<fieldset id="recherche" style="border-color: #5D8BA2;margin-left:-32px;padding-left:10px;width: 1028px;">
           <legend style="color: #5D8BA2;font-size:1.1em">' . TXT_RECHERCHEGLOBALE . '</legend></fieldset>';
 }
+?>
+<script>
+    $(document).ready(function () {
+        $('.dojoxGridSortNode').click();
+    });
+</script>

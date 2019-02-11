@@ -139,18 +139,8 @@ if (isset($_SESSION['pseudo'])) {
             $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN calcfinprojet date;");
             $manager->exeRequete("ALTER TABLE tmptous ADD COLUMN finprojetproche date;");
             for ($i = 0; $i < $nbProjet; $i++) {
-                if ($arrayprojet[$i]['idstatutprojet'] != REFUSE && $arrayprojet[$i]['idstatutprojet'] != FINI && $arrayprojet[$i]['idstatutprojet'] != CLOTURE && $arrayprojet[$i]['idstatutprojet'] != ACCEPTE && $arrayprojet[$i]['idstatutprojet'] != ENATTENTEPHASE2) {
-                    if ($arrayprojet[$i]['idperiodicite_periodicite'] == JOUR) {
-                        $datedepart = strtotime($arrayprojet[$i]['datedebutprojet']);
-                        $duree = ($arrayprojet[$i]['dureeprojet']);
-                        $dateFin = date('Y-m-d', strtotime('+' . $duree . 'day', $datedepart));
-                        $dureeproche = $duree - 15;
-                        $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-                        $annee = (int) date('Y', strtotime($dateFinproche));
-                        if ($annee > 1970) {
-                            $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojet[$i]['idprojet']));
-                        }
-                    } elseif ($arrayprojet[$i]['idperiodicite_periodicite'] == MOIS) {
+                if ($arrayprojet[$i]['idstatutprojet'] != REFUSE && $arrayprojet[$i]['idstatutprojet'] != FINI 
+                        && $arrayprojet[$i]['idstatutprojet'] != CLOTURE && $arrayprojet[$i]['idstatutprojet'] != ACCEPTE && $arrayprojet[$i]['idstatutprojet'] != ENATTENTEPHASE2) {
                         $datedepart = strtotime($arrayprojet[$i]['datedebutprojet']);
                         $duree = ($arrayprojet[$i]['dureeprojet']);
                         $dateFin = date('Y-m-d', strtotime('+' . $duree . 'month', $datedepart));
@@ -160,17 +150,6 @@ if (isset($_SESSION['pseudo'])) {
                         if ($annee > 1970) {
                             $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojet[$i]['idprojet']));
                         }
-                    } elseif ($arrayprojet[$i]['idperiodicite_periodicite'] == ANNEE) {
-                        $datedepart = strtotime($arrayprojet[$i]['datedebutprojet']);
-                        $duree = ($arrayprojet[$i]['dureeprojet']);
-                        $dateFin = date('Y-m-d', strtotime('+' . $duree . 'year', $datedepart));
-                        $dureeproche = ($duree * 365) - 15;
-                        $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-                        $annee = (int) date('Y', strtotime($dateFinproche));
-                        if ($annee > 1970) {
-                            $manager->getRequete("update tmptous set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojet[$i]['idprojet']));
-                        }
-                    }
                 }
             }
             $_SESSION['nbprojet'] = $manager->getSingle("select count(distinct idprojet) from tmptous");
@@ -287,32 +266,14 @@ order by idprojet asc);", array($libellecentrale, ENCOURSREALISATION, $libellece
         $arrayprojetrealisation = $manager->getList("select distinct on(idprojet) idprojet,datemaj,acronyme,idperiodicite_periodicite,dureeprojet,refinterneprojet,libellestatutprojet,libellestatutprojeten,idstatutprojet,
             numero,titre,datedebutprojet,dateprojet,nom,nomentreprise,entrepriselaboratoire,nomaffecte,prenomaffecte,libellecentrale,calcfinprojet,finprojetproche from tmpencoursrealisation");
         $nbProjetreal = count($arrayprojetrealisation);
-        for ($i = 0; $i < $nbProjetreal; $i++) {
-            if ($arrayprojetrealisation[$i]['idperiodicite_periodicite'] == JOUR) {
-                $datedepart = strtotime($arrayprojetrealisation[$i]['datedebutprojet']);
-                $duree = ($arrayprojetrealisation[$i]['dureeprojet']);
-                $dateFin = date('Y-m-d', strtotime('+' . $duree . 'day', $datedepart));
-                $dureeproche = $duree - 15;
-                $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-                $annee = (int) date('Y', strtotime($dateFinproche));
-                $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
-            } elseif ($arrayprojetrealisation[$i]['idperiodicite_periodicite'] == MOIS) {
-                $datedepart = strtotime($arrayprojetrealisation[$i]['datedebutprojet']);
-                $duree = ($arrayprojetrealisation[$i]['dureeprojet']);
-                $dateFin = date('Y-m-d', strtotime('+' . $duree . 'month', $datedepart));
-                $dureeproche = ($duree * 30) - 15;
-                $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-                $annee = (int) date('Y', strtotime($dateFinproche));
-                $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
-            } elseif ($arrayprojetrealisation[$i]['idperiodicite_periodicite'] == ANNEE) {
-                $datedepart = strtotime($arrayprojetrealisation[$i]['datedebutprojet']);
-                $duree = ($arrayprojetrealisation[$i]['dureeprojet']);
-                $dateFin = date('Y-m-d', strtotime('+' . $duree . 'year', $datedepart));
-                $dureeproche = ($duree * 365) - 15;
-                $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
-                $annee = (int) date('Y', strtotime($dateFinproche));
-                $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojetrealisation[$i]['idprojet']));
-            }
+        for ($i = 0; $i < $nbProjetreal; $i++) {                
+            $datedepart = strtotime($arrayprojetrealisation[$i]['datedebutprojet']);
+            $duree = ($arrayprojetrealisation[$i]['dureeprojet']);
+            $dateFin = date('Y-m-d', strtotime('+' . $duree . 'month', $datedepart));
+            $dureeproche = ($duree * 30) - 15;
+            $dateFinproche = date('Y-m-d', strtotime('+' . $dureeproche . 'day', $datedepart));
+            $annee = (int) date('Y', strtotime($dateFinproche));
+            $manager->getRequete("update tmpencoursrealisation set calcfinprojet=?,finprojetproche=? where idprojet=? ", array($dateFin, $dateFinproche, $arrayprojetrealisation[$i]['idprojet']));            
         }
         $rowProjetEncoursRealisation = $manager->getList("
     select  finprojetproche,datemaj,calcfinprojet,idprojet,acronyme,refinterneprojet,libellestatutprojet,libellestatutprojeten,idstatutprojet,numero,titre,datedebutprojet,dateprojet,nom,nomentreprise,entrepriselaboratoire,nomaffecte,prenomaffecte,libellecentrale from tmpencoursrealisation
