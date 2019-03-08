@@ -876,6 +876,7 @@ define ('TXT_EXPORTPROJETCIDESSOUS','Export to csv of all the proojects of the a
 define ('TXT_EXPORTPROJETREFUSE','Export to csv of the 2 views');
 define("TXT_VALIDERENVOYER","Validate and send");
 define('TXT_EXPORTAPPLISULTAN',"Export for Sultan application");
+define('TXT_EXPORTJSON',"Export to JSON format");
 define('TXT_EXPORTREPORT',"Export reports");
 define('TXT_CENTRALEACCEUIL',"Central Home");
 define("TXT_RESULTMESSAGECONFIRMPHASE","You are going to submit the resquet to the selected central <br><i>(If necessary to the other Central)</i> you confirm?");

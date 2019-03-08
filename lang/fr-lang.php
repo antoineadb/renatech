@@ -874,6 +874,7 @@ define ('TXT_EXPORTPROJETCIDESSOUS','Export en csv de tous les projets du tablea
 define ('TXT_EXPORTPROJETREFUSE','Export en csv des 2 vues des projets');
 define("TXT_VALIDERENVOYER","Valider et envoyer");
 define('TXT_EXPORTAPPLISULTAN',"Export pour l'application sultan");
+define('TXT_EXPORTJSON',"Export au format JSON");
 define('TXT_EXPORTREPORT',"Export des rapports");
 define('TXT_CENTRALEACCEUIL',"Centrale d'accueil");
 define("TXT_RESULTMESSAGECONFIRMPHASE","Vous allez soumettre une demande a la centrale sélectionnée<br> <i>(le cas échéant  aux autres centrales)</i> vous confirmez?");

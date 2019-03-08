@@ -32,6 +32,9 @@ LEFT JOIN personneaccueilcentrale pa ON pa.idpersonneaccueilcentrale = pp.idpers
 WHERE co.idcentrale_centrale = ? AND idstatutprojet_statutprojet in (?,?,?)
 GROUP BY idprojet,idstatutprojet_statutprojet ;
 ", array(IDCENTRALEUSER, ENCOURSREALISATION, FINI, CLOTURE));
+if(is_file("./tmp/data.json")){
+    unlink("./tmp/data.json");
+}
 
 $fp = fopen('tmp/data.json', 'w');
 fwrite($fp, '[');
@@ -85,8 +88,6 @@ function skip_accents($str, $charset = 'utf-8') {
 }
 
 $repertoire = explode('/', $_SERVER['PHP_SELF']);
-$repertoire[1] = "projet-dev";
-$_SERVER['SERVER_NAME'] = "www.renatech.org";
 $url_distant = "https://" . $_SERVER['SERVER_NAME'] . '/' . $repertoire[1] . '/tmp/data.json';
 
 $fichier = file_get_contents($url_distant);
