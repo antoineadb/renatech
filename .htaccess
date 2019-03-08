@@ -484,3 +484,4 @@ RewriteRule   adminApplication/([a-z]+)/([a-z]+)                                
 RewriteRule   adminApplication/([a-z]+)                                         adminApplication.php?lang=$1   [L]
 RewriteRule   exportLims/([a-z]+)                                               exportLims.php?lang=$1   [L]
 RewriteRule   param_projet/([a-z]+)                                             paramProjet.php?lang=$1   [L]
+RewriteRule   export_json/([a-z]+)                                              ExportJsonC2N.php?lang=$1   [L]

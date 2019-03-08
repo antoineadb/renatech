@@ -34,6 +34,7 @@ $nbfaisabilite= '/'.REPERTOIRE.'/nb_request/'.$lang;
 $custmEmail =  '/'.REPERTOIRE.'/custom_email/'.$lang;
 $gestionCentraleProximite = '/'.REPERTOIRE.'/admin_centrale_proximite/'.$lang;
 $param_projet = '/'.REPERTOIRE.'/param_projet/'.$lang;
+$export_json = '/'.REPERTOIRE.'/export_json/'.$lang;
 ?>
 <div style="z-index: 5;">
     <ul class="menu" style="width:630px;margin-left:58px">
@@ -63,6 +64,7 @@ $param_projet = '/'.REPERTOIRE.'/param_projet/'.$lang;
                 <li><a href="<?php echo $exportUtilisateurcentrale; ?>" class="messages" ><?php echo TXT_EXPORTTOUSUTILISATEUR; ?></a></li>
                 <li><a href="<?php echo $exportRapportWord; ?>" class="messages" ><?php echo TXT_EXPORTREPORT; ?></a></li>
                 <li><a href="<?php echo $exportSultan; ?>" class="messages" ><?php echo TXT_EXPORTAPPLISULTAN; ?></a></li>
+                <li><a href="<?php echo $export_json; ?>" class="messages" ><?php echo TXT_EXPORTJSON; ?></a></li>
             </ul>
 
         </li>
