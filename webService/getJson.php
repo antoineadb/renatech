@@ -35,21 +35,32 @@ if (isset($_POST['login']) && isset($_POST['pass'])) {
     echo "L'authentification ne fonctionne pas!";
     exit();
 }
-if(is_file("./tmp/donnees.json")){
-   // unlink("./tmp/donnees.json");
+if(is_file("../tmp/donnees.json")){
+   //unlink("../tmp/donnees.json");
 }
 
 $fp = fopen('../tmp/donnees.json', 'w');
 fwrite($fp, '[');
 $datas = $manager->getListbyArray("
         SELECT acronyme,idprojet,idutilisateur_utilisateur as iddemandeur,titre,numero as numero_projet,dateprojet as date_demande,libellecentrale as centrale ,datedebutprojet,
-        idstatutprojet as statut, dureeprojet as duree_projet_mois,datedebutprojet + interval  '1 month' * dureeprojet as date_fin_projet, datestatutfini as date_statut_fini
+        idstatutprojet as statut, dureeprojet as duree_projet_mois,datedebutprojet + interval  '1 month' * dureeprojet as date_fin_projet, datestatutfini as date_statut_fini,'TRUE' as centrale_renatech,'FALSE' as autre_centrale
         FROM PROJET
         LEFT JOIN concerne co on co.idprojet_projet=idprojet
         LEFT JOIN creer c on c.idprojet_projet=idprojet 
         LEFT JOIN centrale on idcentrale_centrale =idcentrale
+        LEFT JOIN statutprojet on idstatutprojet_statutprojet =idstatutprojet
+
+        WHERE  confidentiel is not TRUE AND idstatutprojet !=? AND idcentrale=?
+        UNION
+        SELECT p.acronyme,p.idprojet,c.idutilisateur_utilisateur as iddemandeur,p.titre,p.numero as numero_projet,p.dateprojet as date_demande,ce.libellecentrale as centrale,
+        p.datedebutprojet,idstatutprojet as statut, p.dureeprojet as duree_projet_mois,p.datedebutprojet + interval  '1 month' * dureeprojet as date_fin_projet, p.datestatutfini as date_statut_fini,'FALSE' as centrale_renatech,'TRUE' as autre_centrale
+        FROM projetautrecentrale pa
+        LEFT JOIN projet p ON p.idprojet = pa.idprojet
+        LEFT JOIN concerne co on co.idprojet_projet= p.idprojet
+        LEFT JOIN creer c on c.idprojet_projet=p.idprojet 
+        LEFT JOIN centrale ce on co.idcentrale_centrale =ce.idcentrale
         LEFT JOIN statutprojet on idstatutprojet_statutprojet =idstatutprojet 
-        WHERE  confidentiel is not TRUE AND idstatutprojet !=? AND idcentrale=? LIMIT 10", array(CLOTURE,$idcentrale));
+        WHERE  p.confidentiel is not TRUE AND idstatutprojet !=? AND pa.idcentrale=?", array(CLOTURE,$idcentrale,CLOTURE,$idcentrale));
 for ($i = 0; $i < count($datas); $i++) {
     $donnee = ""
             . '{"acronyme":' . '"' . $datas[$i]['acronyme'] . '"'. ","
@@ -62,7 +73,9 @@ for ($i = 0; $i < count($datas); $i++) {
             . '"datedebutprojet":' . '"' . $datas[$i]['datedebutprojet'] . '"'. ","
             . '"statut":' . '"' . $datas[$i]['statut'] . '"'. ","
             . '"duree_projet_mois":' . '"' . $datas[$i]['duree_projet_mois'] . '"'. ","
-            . '"date_fin_projet":' . '"' . $datas[$i]['date_fin_projet'] . '"'. ","
+            . '"date_fin_projet":' . '"' . $datas[$i]['date_fin_projet'] . '"'. ","            
+            . '"centrale_renatech":' . '"' . $datas[$i]['centrale_renatech'] . '"'. ","
+            . '"autre_centrale":' . '"' . $datas[$i]['autre_centrale'] . '"'. ","            
             . '"date_statut_fini":' . '"' . $datas[$i]['date_statut_fini'] . '"}'.",";
     fputs($fp, $donnee);
     fwrite($fp, '');
