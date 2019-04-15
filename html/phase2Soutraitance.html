@@ -136,7 +136,7 @@ removeDoubleQuote(	$typeformation))?>
         <table>            
             <tr><script>require(["dojo/parser", "dijit/form/NumberTextBox"]);</script>
             <td>
-                <label for="dureeprojet" style="width: 200px;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.':*'; ?></label>
+                <label for="dureeprojet" style="width: 200px;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.': *'; ?></label>
                 <input id="dureeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeprojet"  autocomplete="on"
                        value="<?php echo $dureeprojet; ?>"  required="true" style="margin-left: 20px;;background-color:#FCFAF2;" readonly="true">
                 <select name="choix" id="choix" data-dojo-type="dijit/form/Select" style="background-color:#FCFAF2;" readonly="true">
@@ -228,7 +228,7 @@ if (!empty($idprojet)) {//RECUPERE ET COCHE LES  SOURCE DE FINANCEMENTS
         <table>
             <tr>
                 <td>
-                    <label for="porteurProjet"  style="width: 350px;margin-left: 20px;margin-top:15px"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?></label>
+                    <label for="porteurProjet"  style="width: 350px;margin-left: 20px;margin-top:15px"><?php echo TXT_QUESTIONPORTEURPROJET.'* :'; ?></label>
                 </td>
                 <td>
                     <?php if($porteurprojet==TRUE){?>
@@ -400,7 +400,7 @@ removeDoubleQuote(	$autrethematique)) ;?>
                 </td>
             </tr>            
             <tr><td>
-                <label for="dureeestimeprojet" style="margin-bottom: 5px; margin-left: 20px;width: 600px;margin-top: 15px;"><?php echo TXT_DUREETRAVAUXTECNO.':*'; ?></label>
+                <label for="dureeestimeprojet" style="margin-bottom: 5px; margin-left: 20px;width: 600px;margin-top: 15px;"><?php echo TXT_DUREETRAVAUXTECNO.'* :'; ?></label>
                 <input id="dureeestimeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeestimeprojet"  
                        value="<?php echo $dureeestime; ?>"  style="margin-left: 20px;margin-bottom: 20px;background-color:#FCFAF2;" readonly="true" >
                 <?php

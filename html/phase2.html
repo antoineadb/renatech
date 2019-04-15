@@ -203,7 +203,7 @@ $date  = $date->format('d-m-Y');
         <table>        
             <tr>
                 <td>
-                    <label for="contactCentralAccueil" id='lblContactCentraleAccueil' style="margin-left:20px"><?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
+                    <label for="contactCentralAccueil" id='lblContactCentraleAccueil' style="margin-left:20px"><?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo '* :';?></label>
                     <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
                     <input  value=""  type="text"  maxlength="100" data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  
                            autocomplete="on" data-dojo-props="<?php echo REGEX_TYPE; ?>"  data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" <?php echo $disabled ?> >
@@ -330,7 +330,7 @@ $date  = $date->format('d-m-Y');
         <table>            
             <tr><script>require(["dojo/parser", "dijit/form/NumberTextBox"]);</script>
             <td>
-                <label for="dureeprojet" style="width: auto;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.':*'; ?></label>
+                <label for="dureeprojet" style="width: auto;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.'* :'; ?></label>
                 <input id="dureeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeprojet"  autocomplete="on"
                        value="<?php echo $dureeprojet; ?>"  required="true" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;" disabled="<?php echo $bool; ?>" />              
             </tr>            
@@ -381,7 +381,7 @@ $date  = $date->format('d-m-Y');
             <table style="margin-top: 10px">
             <tr>
                 <td>
-                    <label for="porteurProjet"  style="width: 445px;margin-left: 20px;"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?></label>
+                    <label for="porteurProjet"  style="width: 445px;margin-left: 20px;"><?php echo TXT_QUESTIONPORTEURPROJET.'* :'; ?></label>
                 </td>
                 <td><script>
                         require(["dojo/parser", "dijit/Editor"]);
@@ -903,7 +903,7 @@ $date  = $date->format('d-m-Y');
                 </td>
             </tr>            
             <tr><td>
-                <label for="dureeestimeprojet" style="margin-bottom: 5px; margin-left: 20px;width: 600px;margin-top: 15px;"><?php echo TXT_DUREETRAVAUXTECNO.':*'; ?></label>
+                <label for="dureeestimeprojet" style="margin-bottom: 5px; margin-left: 20px;width: 600px;margin-top: 15px;"><?php echo TXT_DUREETRAVAUXTECNO.'* :'; ?></label>
                 <input id="dureeestimeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeestimeprojet"  autocomplete="on"
                        value="<?php echo $dureeestime; ?>"  required="true" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;margin-bottom: 20px" disabled="<?php echo $bool; ?>" />
             </td></tr>

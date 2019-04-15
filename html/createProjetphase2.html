@@ -12,7 +12,7 @@
     <tr>
         <td style='float: left;'>
             <label for="contactCentralAccueil" id='lblContactCentraleAccueil'  style="margin-left: 20px">
-                    <?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo ' :';?></label>
+                    <?php echo TXT_CONTACTCENTRALACCUEIL;?><?php echo '* :';?></label>
                 <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== FALSE) {?>
                 <input data-dojo-type="dijit/form/ValidationTextBox" name= "contactCentralAccueil"  id="contactCentralAccueil" autocomplete="on"  maxlength="100" style="margin-left:20px"
                        data-dojo-props="<?php echo REGEX_TYPE; ?>"	 data-dojo-invalidMessage="<?php echo TXT_ERRSTRING ;?>" >
@@ -140,7 +140,7 @@
     <table>
         <tr>            
             <td>
-                <label for="dureeprojet" style="width: auto;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.':*'; ?></label>
+                <label for="dureeprojet" style="width: auto;margin-left: 20px;margin-top:10px"><?php echo TXT_DUREEPROJET.'* :'; ?></label>
                 <input id="dureeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeprojet"  autocomplete="on"
                        required="required" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;" >                
             </td>
@@ -162,7 +162,7 @@
     <table style="margin-top: 10px">
         <tr>
             <td>
-                <label for="porteurProjet"  style="width: 450px;margin-left: 20px;"><?php echo TXT_QUESTIONPORTEURPROJET.' : *'; ?>
+                <label for="porteurProjet"  style="width: 450px;margin-left: 20px;"><?php echo TXT_QUESTIONPORTEURPROJET.'* :'; ?>
                 </label>
             </td>           
             <td>
@@ -527,7 +527,7 @@
             </td>
         </tr>
         <tr><td>
-                <label for="dureeestimeprojet" style="margin-bottom: 5px; margin-left: 20px;width: 600px;margin-top: 15px;"><?php echo TXT_DUREETRAVAUXTECNO.':*'; ?></label>
+                <label for="dureeestimeprojet" style="margin-bottom: 5px; margin-left: 20px;width: 600px;margin-top: 15px;"><?php echo TXT_DUREETRAVAUXTECNO.'* :'; ?></label>
                 <input id="dureeestimeprojet" type="text" data-dojo-type="dijit/form/NumberTextBox" name= "dureeestimeprojet"  autocomplete="on"
                        value=""  required="true" data-dojo-props="invalidMessage:'valeur non valide.'" style="margin-left: 20px;margin-bottom: 20px" disabled="<?php echo $bool; ?>" />              
             </td></tr>

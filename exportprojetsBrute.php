@@ -280,20 +280,7 @@ if ($nbrow != 0) {
         $dureeEstimeProjet = '';
         if (!empty($row[$i]['dureeestime'])) {
             $duree = $row[$i]['dureeestime'];
-            $idperiodicite = $row[$i]['periodestime'];
-            switch ($idperiodicite) {
-                case 1://jour
-                    $dureeEstimeProjet = ceil($duree / 30);
-                    break;
-                case 2://Mois
-                    $dureeEstimeProjet = ceil($duree);
-                    break;
-                case 3://Année
-                    $dureeEstimeProjet = ceil($duree * 12);
-                    break;
-                default:
-                    break;
-            }
+            $dureeEstimeProjet = ceil($duree); 
         }else{
             $dureeEstimeProjet='';
         }       

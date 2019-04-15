@@ -112,7 +112,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
         </tr>
         <tr> <td>&nbsp;</td></tr>
         <tr><td>
-                <label for="acronyme" ><?php echo TXT_ACRONYME."*";?>
+                <label for="acronyme" ><?php echo TXT_ACRONYME."* :";?>
                     <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                         <span id="aideAcronyme" >
                             <?php //MISE EN CACHE DES AIDES
@@ -134,7 +134,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                 $_SESSION['confid']=$confid;
                 if ($confid== TRUE){
                 ?>
-                <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.' *:';?>
+                <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.'* :';?>
                     <a class="infoBulle" href="#">&nbsp;
                         <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                         <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >                            
@@ -152,7 +152,7 @@ $iddemandeur = $manager->getSingle2("SELECT idutilisateur FROM utilisateur, proj
                 <label id='nda' style="width: 400px;display: none;"  ><?php echo TXT_NDA; ?></label>
             <label id='donneeConfid' style="width: 450px;display: none;"  ><?php echo TXT_DONNECONFID;?></label>            
                 <?php } else { ?>
-                <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.' *:';?><a class="infoBulle" href="#">&nbsp;
+                <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.'* :';?><a class="infoBulle" href="#">&nbsp;
                         <img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
                         <span style="text-align: left;padding:10px;width: 600px;border-radius:5px" >
                             <?php //MISE EN CACHE DES AIDES

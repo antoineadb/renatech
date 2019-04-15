@@ -46,7 +46,22 @@ $manager->exeRequete("drop table if exists tmpprojet;");
             AND trashed != ?
             AND extract(year from dateprojet)>=?) 
 ", array(ENCOURSREALISATION,12,0,TRUE,2013,ENCOURSREALISATION,12,36,TRUE,2013,ENCOURSREALISATION,36,TRUE,2013));
-
+/*
+        SELECT count(idprojet) as nb, idcentrale_centrale,
+        CASE 
+            WHEN dureeestime < 12 AND dureeestime is not null THEN 1
+            WHEN dureeestime >= 12  AND dureeestime < 36 THEN 2
+            WHEN dureeestime >= 36  THEN 3
+        END AS rang
+        FROM projet
+        LEFT JOIN concerne ON  idprojet=idprojet_projet 
+        WHERE idstatutprojet_statutprojet=8
+        AND dureeestime is not null
+        AND trashed != TRUE            
+        AND extract(year from dateprojet)>=2013   
+        GROUP BY idcentrale_centrale,rang
+        order by idcentrale_centrale ASC
+ */
      
 if (IDTYPEUSER == ADMINNATIONNAL) {
     $title = TXT_DUREEPROJETENCOURS;

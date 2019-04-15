@@ -122,7 +122,7 @@ define("TXT_DEMANDEPROJET","Project request");
 define("TXT_DEMANDEUR","Project applicant");
 define("TXT_DEPOT","Deposition");
 define("TXT_DESCRIPTIFTECHNOLOGIQUE","Description technological");
-define("TXT_DESCRIPTIFTRAVAIL","Description of work required");
+define("TXT_DESCRIPTIFTRAVAIL","Description of the required work");
 define("TXT_DESCRIPTION","Description");
 define("TXT_DESCRIPTIONDETAILLE","Detailed description");
 define("TXT_DESCRIPTIONSOMMAIRE","Brief description of the research project");
@@ -1088,3 +1088,6 @@ define('TXT_SAISIRUNELETTRE',"Enter the first letter (s) of the name ");
 define ('TXT_NBTTOTALPORTEUR',"Total number of project leaders");
 define ("TXT_NBPROJET_SUP2012","Total project above 2012: ");
 define("TXT_NBPROJECT_AMINISTERED","Number of projects administered");
+define("TXT_AIDEPARAMACRONYME","After creating backup or validation of a project,The chosen parameter will be assigned to the acronym field if you have not entered an acronym beforehand");
+define("TXT_AIDEPARAMCONTACTCENTRALEACUEIL","After creating backup or validation of a project, the chosen contact will be assigned to the central contact contact field if you have not entered a person beforehand, 
+delete the person in the field and enter one or more letters to select a new person");

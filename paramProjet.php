@@ -41,11 +41,14 @@ $manager = new Manager($db);
     ?>
     <form id="myform">
         <fieldset id="paramProjet">
-            <legend style="color: #5D8BA2;font-size: 1.2em"><b><?php echo TXT_PARAM_ACRONYME; ?></b></legend>
+            <legend style="color: #5D8BA2;font-size: 1.2em"><b><?php echo TXT_PARAM_ACRONYME; ?></b>
+            <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                    <span style="text-align: left;padding:10px;width: 250px;border-radius:5px" ><?php echo TXT_AIDEPARAMACRONYME;?></span>
+                </a></legend>
             <table>
                 <tr>
                     <td>
-                        <label for="porteurProjet"  style="width: auto; margin-left: 20px;margin-right: 20px;font-size: 15px;"><?php echo TXT_CHX_ACRONYME . ' : *'; ?></label>
+                        <label for="porteurProjet"  style="width: auto; margin-left: 20px;margin-right: 20px;font-size: 15px;"><?php echo TXT_CHX_ACRONYME . '* :'; ?></label>
                     </td>
                     <td>	 
                     <input type="radio" data-dojo-type="dijit/form/RadioButton" name="configAcronyme" id="ref_interne" <?php echo $checkRefInterne; ?> 
@@ -81,7 +84,10 @@ $manager = new Manager($db);
     ?>
     <form data-dojo-type="dijit/form/Form" name="paramContact"  method="post"  action="<?php echo '/' . REPERTOIRE; ?>/adminConfigAccueil.php?lang=<?php echo $lang; ?>"  >
         <fieldset id="paramContact" >
-            <legend style="color: #5D8BA2;font-size: 1.2em"><b><?php echo TXT_PARAM_CONTACT_CENTRALE_ACCUEIL; ?></b></legend>
+            <legend style="color: #5D8BA2;font-size: 1.2em"><b><?php echo TXT_PARAM_CONTACT_CENTRALE_ACCUEIL; ?></b>            
+            <a class="infoBulle" href="#"><img src='<?php echo "/".REPERTOIRE; ?>/styles/img/help.gif' height="13px" width="13px"/>
+                    <span style="text-align: left;padding:10px;width: 250px;border-radius:5px" ><?php echo TXT_AIDEPARAMCONTACTCENTRALEACUEIL;?></span>
+                </a></legend>
             <table>
                 <tr>
                     <td>

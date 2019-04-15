@@ -51,7 +51,7 @@ removeDoubleQuote($rowResult[0]['entrepriselaboratoire']));
         </tr>
         <tr> <td>&nbsp;</td></tr>
         <tr><td>
-                <label for="acronyme" ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'.' :';?></label>
+                <label for="acronyme" ><?php echo TXT_ACRONYME.'* :';?></label>
                 <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>" readonly="true" data-dojo-type="dijit.form.ValidationTextBox"  style="background-color:#FCFAF2;" />
             </td>
         </tr>
@@ -63,12 +63,12 @@ removeDoubleQuote($rowResult[0]['entrepriselaboratoire']));
                 $_SESSION['confid']=$confid;
                 if ($confid== TRUE){
                 ?>
-                    <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.' *:';?></label>
+                    <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.'* :';?></label>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  checked="checked" value="TRUE" class="btRadio" readonly="true"> <?php echo TXT_OUI; ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="FALSE" class="btRadio" readonly="true" >                     
                     <?php echo TXT_NON; ?>                
                 <?php } else { ?>
-                    <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.' *:';?></label>
+                    <label for="confid" ><?php echo TXT_PROJETCONFIDENTIEL.'* :';?></label>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="TRUE" class="btRadio" readonly="true">  <?php echo TXT_OUI; ?>                
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"  value="FALSE" checked="checked" class="btRadio" readonly="true" >  <?php echo TXT_NON; ?>                
                 <?php }?>

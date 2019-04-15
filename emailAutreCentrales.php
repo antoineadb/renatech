@@ -28,9 +28,9 @@ for ($i = 0; $i < count($arrayid); $i++) {
         }
     }
 }
-if($mailRespCentrale!=null){
+/*if($mailRespCentrale!=null){
     $mailRespCentrale  =  recupMailAdminProjet($idprojet); 
-}
+}*/
 
 
 $idstatutprojet = $manager->getSinglebyArray("select idstatutprojet_statutprojet from concerne where idprojet_projet=? and idcentrale_centrale=?",array($idprojet,IDCENTRALEUSER));

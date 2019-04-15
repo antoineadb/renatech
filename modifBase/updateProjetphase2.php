@@ -881,8 +881,12 @@ if (isset($_POST['page_precedente'])) {
     $_SESSION['nbRunmodif'] = $nbRun;
     $devis = Securite::bdd($_POST['devis']);
     $mailresp = Securite::bdd(($_POST['mailresp']));
-    $_SESSION['emailrespdevismodif)'] = $mailresp;        
-    $refinterne = stripslashes(Securite::bdd(($_POST['refinterne'])));
+    $_SESSION['emailrespdevismodif)'] = $mailresp;
+    if(isset($_POST['refinterne'])){
+        $refinterne = stripslashes(Securite::bdd(($_POST['refinterne'])));
+    }else{
+        $refinterne= null;
+    }
     $_SESSION['refinternemodif'] = $refinterne;    
 //------------------------------------------------------------------------------------------------------------------------
 //			 MISE A JOUR DES FICHIERS UPLOADES ON VERIFIE L'ECART ENTRE LES NOMS INSCRIT DANS LA TABLE PROJET
@@ -1177,6 +1181,7 @@ if (isset($_POST['page_precedente'])) {
             if($cas1 !='noEmail' &&  $cas1!='chgstatutnoEmail'){
                 include '../EmailProjetfini.php';
             }
+            
             //VERIFIER QUE L'ON A DEJA ENVOYE OU PAS L'EMAIL AUX AUTRES CENTRALES 
             if ($cas == 'chgstatutAutCentraleEmailDejaEnvoye' && $cas1 !='noEmail') {
                 include '../emailAutreCentrales.php';

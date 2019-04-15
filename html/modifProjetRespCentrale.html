@@ -123,7 +123,7 @@ removeDoubleQuote(	$titre)) ?>
             <tr><td>&nbsp;</td></tr>
             <tr><td><?php $acronyme = stripslashes(
 removeDoubleQuote(	$acronyme)) ?>
-                    <label for="acronyme"  ><?php echo TXT_ACRONYME;?><?php echo '('.TXT_DISPO.')'; ?><?php echo ' :';?></label>
+                    <label for="acronyme"  ><?php echo TXT_ACRONYME.'* :';?></label>
                     <input id="acronyme" type="text" name="acronyme" value="<?php echo $acronyme ;?>" disabled="<?php echo $bool; ?>"
                            data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-invalidMessage="acronyme non valide." />
                 </td></tr>
@@ -136,11 +136,11 @@ removeDoubleQuote(	$acronyme)) ?>
                     $_SESSION['confid']=$confid;
                     if ($confid== 't'){
                     ?>
-                    <label for="confid" style="width:200px"><?php echo TXT_PROJETCONFIDENTIEL.' *:';?></label>
+                    <label for="confid" style="width:200px"><?php echo TXT_PROJETCONFIDENTIEL.'* :';?></label>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" checked="checked"  value="TRUE" class="btRadio" disabled="<?php echo $bool; ?>"  > <?php echo TXT_OUI; ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE"  class="btRadio" disabled="<?php echo $bool; ?>" > <?php echo TXT_NON; ?>
                     <?php } else { ?>
-                    <label for="confid" style="width:200px"><?php echo TXT_PROJETCONFIDENTIEL.' *:';?></label>
+                    <label for="confid" style="width:200px"><?php echo TXT_PROJETCONFIDENTIEL.'* :';?></label>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid"   value="TRUE" class="btRadio" disabled="<?php echo $bool; ?>"  > <?php echo TXT_OUI; ?>
                     <input type= "radio" data-dojo-type="dijit/form/RadioButton" name="confid" value="FALSE" checked="checked" class="btRadio" disabled="<?php echo $bool; ?>" > <?php echo TXT_NON; ?>
                     <?php }?>

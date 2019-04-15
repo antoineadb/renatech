@@ -1085,3 +1085,6 @@ define('TXT_SAISIRUNELETTRE',"Saisir la (ou les) première(s) lettre du nom ");
 define ('TXT_NBTTOTALPORTEUR',"Nombre total de porteur de projet");
 define ("TXT_NBPROJET_SUP2012","Nombre total de projet après 2012: ");
 define("TXT_NBPROJECT_AMINISTERED","Nombre de projet administré");
+define("TXT_AIDEPARAMACRONYME","Aprés création sauvegarde ou validation d'un projet, le paramètre choisi sera affecté au champ acronyme dans le cas où vous n'avez pas saisi d'acronyme au préalable");
+define("TXT_AIDEPARAMCONTACTCENTRALEACUEIL","Aprés création sauvegarde ou validation d'un projet, le contact choisi sera affecté au champs contact centrale accueil dans le cas où vous n'avez pas saisi de personne au préalable, "
+        . " supprimer la personne dans le champ et saisir une ou plusieurs lettres pour sélectionner une nouvelle personne ");

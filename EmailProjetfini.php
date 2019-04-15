@@ -18,8 +18,20 @@ if (isset($_GET['idprojet'])) {
     $idprojet = $manager->getSingle2("select idprojet from projet where numero=?", $_GET['numProjet']);
 }
 
-if(isset($_POST['autrecentrale'])&& $_POST['autrecentrale'] !=null){
-    $emailAutreCentrale = $manager->getList2("SELECT email1,email2,email3,email4,email5,libellecentrale FROM centrale,concerne where idcentrale_centrale=idcentrale and libellecentrale=?", $_POST['autrecentrale']);
+if(isset($_POST['autrecentrale'])&& $_POST['autrecentrale'] !=null){    
+    if(count($_POST['autrecentrale']==1)){
+        $emailAutreCentrale = $manager->getList2(""
+            . " SELECT email1,email2,email3,email4,email5,libellecentrale "
+            . " FROM centrale,concerne "
+            . " WHERE idcentrale_centrale=idcentrale and libellecentrale=?", $_POST['autrecentrale'][0]);
+    }else{
+        foreach($_POST['autrecentrale'] as $key => $value){
+            $emailAutreCentrale = $manager->getList2(""
+            . " SELECT email1,email2,email3,email4,email5,libellecentrale "
+            . " FROM centrale,concerne "
+            . " WHERE idcentrale_centrale=idcentrale and libellecentrale=?", $_POST['autrecentrale'][$key]);
+        }
+    }    
 }
 
 //TRAITEMENT DU LIBELLE DANS L'EMAIL
