@@ -1634,7 +1634,7 @@ if($idstatut!=ENATTENTEPHASE2){
                     <label for="centraletrs" style="width: auto;margin-top: 16px"><?php echo TXT_CENTRALE.'* :'; ?> </label>
                     <?php                     
                     $libellecentrale = $manager->getList("select idcentrale,libellecentrale from centrale where libellecentrale!='Autres' and
-                    idcentrale!=$idcentraleconnecte order by libellecentrale asc"); ?>
+                    idcentrale!=$idcentraleconnecte and masquecentrale!= TRUE  order by libellecentrale asc"); ?>
                     <select id="centraletrs" name="centraletrs" data-dojo-type="dijit/form/Select" style="width: 220px;margin-left: 5px"
                             data-dojo-props="  value: '' , placeHolder: '<?php echo TXT_SELECTCENTRALE;?>',
                             onChange: function(value){
